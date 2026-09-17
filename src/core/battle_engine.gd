@@ -233,6 +233,7 @@ func _resolve_ops(ops: Array, card_instance: int, source_name: String, ctx: Dict
 			_gain_energy(int(op.get("amount", 0)), "card")
 			_ev(T.EV_CARD_GAINED_ENERGY, {
 				"instance_id": card_instance,
+				"def_id": state.def_id_of(card_instance),
 				"amount": int(op.get("amount", 0)),
 			})
 		elif kind == CardDB.OP_GAIN_SHIELD:

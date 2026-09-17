@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1224" height="810" viewBox="0 0 1224 810">
+<rect width="1224" height="810" fill="#171310"/>
+<text x="36" y="45.6" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="27" font-weight="bold" fill="#ece3d4" text-anchor="start">战斗界面布局 · Battle Layout</text>
+<text x="36" y="69.2" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="14" font-weight="normal" fill="#a79883" text-anchor="start">1600 × 900 设计空间等比缩放；每个区域的坐标都是实现中的真实值</text>
+<line x1="36" y1="82" x2="1188" y2="82" stroke="#57493b" stroke-width="1"/>
+<rect x="277.92" y="151.52" width="668.16" height="390.24" rx="6" fill="#171310" stroke="#7d6a53" stroke-width="2" stroke-dasharray="7 5"/>
+<text x="285.92" y="169.92" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="13" font-weight="bold" fill="#a79883" text-anchor="start">中央场地区（无实心面板）</text>
+<text x="285.92" y="186.52" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="10" font-weight="normal" fill="#a79883" text-anchor="start">直接露出石室背景 · 角色站在其中 · 飘字在此</text>
+<rect x="316.8" y="240.8" width="216" height="302.4" rx="6" fill="#232122" stroke="#9fb0d0" stroke-width="2" stroke-dasharray="4 4"/>
+<text x="324.8" y="259.2" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="13" font-weight="bold" fill="#ece3d4" text-anchor="start">玩家角色</text>
+<text x="324.8" y="275.8" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="10" font-weight="normal" fill="#a79883" text-anchor="start">冒险者 300 × 420</text>
+<rect x="676.8" y="226.4" width="244.8" height="316.8" rx="6" fill="#28221c" stroke="#d0b09f" stroke-width="2" stroke-dasharray="4 4"/>
+<text x="684.8" y="244.8" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="13" font-weight="bold" fill="#ece3d4" text-anchor="start">敌人角色</text>
+<text x="684.8" y="261.4" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="10" font-weight="normal" fill="#a79883" text-anchor="start">练习魔像 340 × 440</text>
+<rect x="36" y="104" width="1152" height="38.88" rx="6" fill="#332a22" stroke="#57493b" stroke-width="2"/>
+<text x="44" y="122.4" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="13" font-weight="bold" fill="#ece3d4" text-anchor="start">顶栏</text>
+<text x="44" y="139" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="10" font-weight="normal" fill="#a79883" text-anchor="start">战斗名称 · 回合数 · 玩法说明 / 快速开关</text>
+<rect x="50.4" y="151.52" width="216" height="241.92" rx="6" fill="#332a22" stroke="#57493b" stroke-width="2"/>
+<text x="58.4" y="169.92" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="13" font-weight="bold" fill="#ece3d4" text-anchor="start">左侧玩家区</text>
+<text x="58.4" y="186.52" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="10" font-weight="normal" fill="#a79883" text-anchor="start">生命 · 护盾 · 能量 0~10</text>
+<rect x="50.4" y="400.64" width="216" height="141.12" rx="6" fill="#332a22" stroke="#57493b" stroke-width="2"/>
+<text x="58.4" y="419.04" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="13" font-weight="bold" fill="#ece3d4" text-anchor="start">左下随从区</text>
+<text x="58.4" y="435.64" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="10" font-weight="normal" fill="#a79883" text-anchor="start">两个固定槽位 · 攻击/生命 · 就绪 · 嘲讽</text>
+<rect x="396" y="163.04" width="432" height="74.88" rx="6" fill="#332a22" stroke="#d9a441" stroke-width="2"/>
+<text x="404" y="181.44" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="13" font-weight="bold" fill="#f2dc9e" text-anchor="start">场景牌区</text>
+<text x="404" y="198.04" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="10" font-weight="normal" fill="#a79883" text-anchor="start">名称 · 效果 · 剩余触发次数</text>
+<rect x="957.6" y="151.52" width="216" height="241.92" rx="6" fill="#332a22" stroke="#57493b" stroke-width="2"/>
+<text x="965.6" y="169.92" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="13" font-weight="bold" fill="#ece3d4" text-anchor="start">右侧敌人区</text>
+<text x="965.6" y="186.52" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="10" font-weight="normal" fill="#a79883" text-anchor="start">名称 · 生命 · 护盾 · 当前意图</text>
+<rect x="957.6" y="284" width="216" height="109.44" rx="6" fill="#2a2829" stroke="#7d6a53" stroke-width="2" stroke-dasharray="5 4"/>
+<text x="965.6" y="302.4" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="13" font-weight="bold" fill="#a79883" text-anchor="start">敌人点击热区</text>
+<text x="965.6" y="319" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="10" font-weight="normal" fill="#a79883" text-anchor="start">单体牌需点击此处确认</text>
+<rect x="957.6" y="400.64" width="216" height="141.12" rx="6" fill="#332a22" stroke="#57493b" stroke-width="2"/>
+<text x="965.6" y="419.04" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="13" font-weight="bold" fill="#ece3d4" text-anchor="start">结算日志（可折叠）</text>
+<text x="965.6" y="435.64" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="10" font-weight="normal" fill="#a79883" text-anchor="start">最近结算记录</text>
+<rect x="50.4" y="550.4" width="115.2" height="188.64" rx="6" fill="#332a22" stroke="#57493b" stroke-width="2"/>
+<text x="58.4" y="568.8" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="13" font-weight="bold" fill="#ece3d4" text-anchor="start">牌堆区</text>
+<text x="58.4" y="585.4" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="10" font-weight="normal" fill="#a79883" text-anchor="start">抽牌堆 / 弃牌堆</text>
+<rect x="177.12" y="550.4" width="855.36" height="188.64" rx="6" fill="#100d0b" stroke="#7d6a53" stroke-width="2" stroke-dasharray="6 4"/>
+<text x="185.12" y="568.8" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="13" font-weight="bold" fill="#ece3d4" text-anchor="start">手牌区</text>
+<text x="185.12" y="585.4" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="10" font-weight="normal" fill="#a79883" text-anchor="start">最多 10 张 · 重叠排列 · 悬停展开</text>
+<rect x="1044" y="550.4" width="129.6" height="188.64" rx="6" fill="#332a22" stroke="#57493b" stroke-width="2"/>
+<text x="1052" y="568.8" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="13" font-weight="bold" fill="#ece3d4" text-anchor="start">控制区</text>
+<text x="1052" y="585.4" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="10" font-weight="normal" fill="#a79883" text-anchor="start">提示 · 结束回合 · 重开</text>
+<rect x="396" y="511.52" width="432" height="28.8" rx="6" fill="#3f372c" stroke="#f2dc9e" stroke-width="2"/>
+<text x="404" y="529.92" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="13" font-weight="bold" fill="#f2dc9e" text-anchor="start">保留操作条</text>
+<text x="404" y="546.52" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="10" font-weight="normal" fill="#a79883" text-anchor="start">保留并结束 / 不保留 / 取消　（仅保留阶段显示）</text>
+<text x="36" y="780.4" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="13" font-weight="normal" fill="#a79883" text-anchor="start">绘制顺序（从下到上）：1 石室背景 → 2 场景中的角色 → 3 暗角 → 4 全部 UI 面板 → 5 飘字。暗角夹在角色与 UI 之间，让四周沉下去但不压暗任何 UI。</text>
+<text x="36" y="800.4" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="13" font-weight="normal" fill="#a79883" text-anchor="start">卡牌 148 × 208；随从槽 130 × 146；敌人点击热区 300 × 152；手牌区 1188 × 262。全部坐标见 src/ui/battle_scene.gd 的 _build_ui()。</text>
+</svg>

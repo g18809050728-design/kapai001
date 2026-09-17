@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="430" viewBox="0 0 1100 430">
+<rect width="1100" height="430" fill="#171310"/>
+<text x="36" y="45.6" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="27" font-weight="bold" fill="#ece3d4" text-anchor="start">Buff / Debuff 图标集 · Status Icons</text>
+<text x="36" y="69.2" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="14" font-weight="normal" fill="#a79883" text-anchor="start">与「升级路线图」第一步/第二步配套；图标用几何形表达，不依赖颜色单独辨识</text>
+<line x1="36" y1="82" x2="1064" y2="82" stroke="#57493b" stroke-width="1"/>
+<rect x="75.3333" y="108" width="108" height="108" rx="14" fill="#4c341c" stroke="#c98a4b" stroke-width="2"/>
+<polygon points="129.333,132 107.333,168 121.333,168 121.333,190 137.333,190 137.333,168 151.333,168" fill="#c98a4b" stroke="none" stroke-width="0"/>
+<text x="129.333" y="241.6" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="17" font-weight="bold" fill="#ece3d4" text-anchor="middle">力量</text>
+<text x="129.333" y="260.8" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="11" font-weight="normal" fill="#a79883" text-anchor="middle">攻击牌伤害 +X</text>
+<text x="129.333" y="277.8" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="11" font-weight="normal" fill="#a79883" text-anchor="middle">本场战斗</text>
+<rect x="242" y="108" width="108" height="108" rx="14" fill="#55401c" stroke="#e0a94a" stroke-width="2"/>
+<polygon points="276,142 296,129 316,142 316,150 296,137 276,150" fill="#e0a94a" stroke="none" stroke-width="0"/>
+<polygon points="276,160 296,147 316,160 316,168 296,155 276,168" fill="#e0a94a" stroke="none" stroke-width="0"/>
+<polygon points="276,178 296,165 316,178 316,186 296,173 276,186" fill="#e0a94a" stroke="none" stroke-width="0"/>
+<text x="296" y="241.6" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="17" font-weight="bold" fill="#ece3d4" text-anchor="middle">蓄势</text>
+<text x="296" y="260.8" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="11" font-weight="normal" fill="#a79883" text-anchor="middle">下一张伤害技能 +X</text>
+<text x="296" y="277.8" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="11" font-weight="normal" fill="#a79883" text-anchor="middle">触发后清除</text>
+<rect x="408.667" y="108" width="108" height="108" rx="14" fill="#30343d" stroke="#7f8aa3" stroke-width="2"/>
+<polygon points="462.667,192 440.667,156 454.667,156 454.667,134 470.667,134 470.667,156 484.667,156" fill="#7f8aa3" stroke="none" stroke-width="0"/>
+<text x="462.667" y="241.6" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="17" font-weight="bold" fill="#ece3d4" text-anchor="middle">虚弱</text>
+<text x="462.667" y="260.8" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="11" font-weight="normal" fill="#a79883" text-anchor="middle">下一次攻击伤害 -25%</text>
+<text x="462.667" y="277.8" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="11" font-weight="normal" fill="#a79883" text-anchor="middle">之后移除</text>
+<rect x="575.333" y="108" width="108" height="108" rx="14" fill="#2e3a22" stroke="#7a9a5a" stroke-width="2"/>
+<polygon points="629.333,132 649.333,168 609.333,168" fill="#7a9a5a" stroke="none" stroke-width="0"/>
+<circle cx="629.333" cy="168" r="20" fill="#7a9a5a" stroke="none" stroke-width="0"/>
+<text x="629.333" y="241.6" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="17" font-weight="bold" fill="#ece3d4" text-anchor="middle">中毒</text>
+<text x="629.333" y="260.8" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="11" font-weight="normal" fill="#a79883" text-anchor="middle">敌方阶段开始损失生命</text>
+<text x="629.333" y="277.8" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="11" font-weight="normal" fill="#a79883" text-anchor="middle">每层每轮</text>
+<rect x="742" y="108" width="108" height="108" rx="14" fill="#482016" stroke="#c0553b" stroke-width="2"/>
+<polygon points="796,132 820,146 820,170 796,192 772,170 772,146" fill="#903f2c" stroke="none" stroke-width="0"/>
+<line x1="792" y1="136" x2="802" y2="158" stroke="#171310" stroke-width="3"/>
+<line x1="802" y1="158" x2="790" y2="172" stroke="#171310" stroke-width="3"/>
+<line x1="790" y1="172" x2="800" y2="190" stroke="#171310" stroke-width="3"/>
+<text x="796" y="241.6" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="17" font-weight="bold" fill="#ece3d4" text-anchor="middle">易伤</text>
+<text x="796" y="260.8" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="11" font-weight="normal" fill="#a79883" text-anchor="middle">下一次受伤 +50%</text>
+<text x="796" y="277.8" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="11" font-weight="normal" fill="#a79883" text-anchor="middle">触发后移除</text>
+<rect x="908.667" y="108" width="108" height="108" rx="14" fill="#22404c" stroke="#5aa9c9" stroke-width="2"/>
+<line x1="942.667" y1="148" x2="982.667" y2="176" stroke="#5aa9c9" stroke-width="6"/>
+<line x1="942.667" y1="176" x2="982.667" y2="148" stroke="#5aa9c9" stroke-width="6"/>
+<polygon points="984.667,180 968.667,176 978.667,166" fill="#5aa9c9" stroke="none" stroke-width="0"/>
+<polygon points="940.667,144 956.667,148 946.667,158" fill="#5aa9c9" stroke="none" stroke-width="0"/>
+<text x="962.667" y="241.6" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="17" font-weight="bold" fill="#ece3d4" text-anchor="middle">反击</text>
+<text x="962.667" y="260.8" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="11" font-weight="normal" fill="#a79883" text-anchor="middle">每次被攻击反打 X</text>
+<text x="962.667" y="277.8" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="11" font-weight="normal" fill="#a79883" text-anchor="middle">全被挡也触发</text>
+<text x="36" y="366.4" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="13" font-weight="normal" fill="#a79883" text-anchor="start">设计约束：图标为 108 × 108 圆角方（内边距 14），几何形 + 字数 ≤ 3 的名称 + 两行规则摘要；</text>
+<text x="36" y="386.4" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="13" font-weight="normal" fill="#ece3d4" text-anchor="start">状态图标统一出现在：玩家/敌人血条下方、以及被作用目标的头顶飘字。</text>
+</svg>

@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="420" viewBox="0 0 1100 420">
+<rect width="1100" height="420" fill="#171310"/>
+<text x="36" y="45.6" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="27" font-weight="bold" fill="#ece3d4" text-anchor="start">五类卡牌 · Card Types</text>
+<text x="36" y="69.2" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="14" font-weight="normal" fill="#a79883" text-anchor="start">同一套版式，靠类型色 + 类型文字区分；下图取自卡表真实数值</text>
+<line x1="36" y1="82" x2="1064" y2="82" stroke="#57493b" stroke-width="1"/>
+<rect x="38" y="110" width="184" height="259" rx="12" fill="#e9dcc3" stroke="#a8442f" stroke-width="2"/>
+<rect x="40" y="112" width="180" height="54.39" rx="12" fill="#a8442f" stroke="none" stroke-width="0"/>
+<rect x="40" y="154.39" width="180" height="12" rx="0" fill="#a8442f" stroke="none" stroke-width="0"/>
+<text x="50.512" y="141.045" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="21" font-weight="bold" fill="#ece3d4" text-anchor="start">斩击</text>
+<circle cx="191.456" cy="142.277" r="18.032" fill="#17120c" stroke="#d9a441" stroke-width="2"/>
+<text x="191.456" y="148.927" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="19" font-weight="bold" fill="#e0a94a" text-anchor="middle">0</text>
+<text x="50.512" y="182.842" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="14" font-weight="normal" fill="#6b5b45" text-anchor="start">攻击</text>
+<text x="50.512" y="204.385" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="16" font-weight="normal" fill="#3b3024" text-anchor="start">获得 1 能量，然后造</text>
+<text x="50.512" y="227.585" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="16" font-weight="normal" fill="#3b3024" text-anchor="start">成 5 伤害</text>
+<rect x="78.48" y="380" width="103.04" height="24" rx="6" fill="#a8442f" stroke="none" stroke-width="0"/>
+<text x="130" y="391.2" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="14" font-weight="bold" fill="#ece3d4" text-anchor="middle">攻击</text>
+<rect x="248" y="110" width="184" height="259" rx="12" fill="#e9dcc3" stroke="#4a6f8f" stroke-width="2"/>
+<rect x="250" y="112" width="180" height="54.39" rx="12" fill="#4a6f8f" stroke="none" stroke-width="0"/>
+<rect x="250" y="154.39" width="180" height="12" rx="0" fill="#4a6f8f" stroke="none" stroke-width="0"/>
+<text x="260.512" y="141.045" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="21" font-weight="bold" fill="#ece3d4" text-anchor="start">格挡</text>
+<circle cx="401.456" cy="142.277" r="18.032" fill="#17120c" stroke="#d9a441" stroke-width="2"/>
+<text x="401.456" y="148.927" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="19" font-weight="bold" fill="#e0a94a" text-anchor="middle">0</text>
+<text x="260.512" y="182.842" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="14" font-weight="normal" fill="#6b5b45" text-anchor="start">防御</text>
+<text x="260.512" y="204.385" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="16" font-weight="normal" fill="#3b3024" text-anchor="start">获得 6 护盾</text>
+<rect x="288.48" y="380" width="103.04" height="24" rx="6" fill="#4a6f8f" stroke="none" stroke-width="0"/>
+<text x="340" y="391.2" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="14" font-weight="bold" fill="#ece3d4" text-anchor="middle">防御</text>
+<rect x="458" y="110" width="184" height="259" rx="12" fill="#e9dcc3" stroke="#7a5a8f" stroke-width="2"/>
+<rect x="460" y="112" width="180" height="54.39" rx="12" fill="#7a5a8f" stroke="none" stroke-width="0"/>
+<rect x="460" y="154.39" width="180" height="12" rx="0" fill="#7a5a8f" stroke="none" stroke-width="0"/>
+<text x="470.512" y="141.045" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="21" font-weight="bold" fill="#ece3d4" text-anchor="start">能量冲击</text>
+<circle cx="611.456" cy="142.277" r="18.032" fill="#17120c" stroke="#d9a441" stroke-width="2"/>
+<text x="611.456" y="148.927" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="19" font-weight="bold" fill="#e0a94a" text-anchor="middle">3</text>
+<text x="470.512" y="182.842" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="14" font-weight="normal" fill="#6b5b45" text-anchor="start">技能</text>
+<text x="470.512" y="204.385" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="16" font-weight="normal" fill="#3b3024" text-anchor="start">造成 12 伤害</text>
+<rect x="498.48" y="380" width="103.04" height="24" rx="6" fill="#7a5a8f" stroke="none" stroke-width="0"/>
+<text x="550" y="391.2" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="14" font-weight="bold" fill="#ece3d4" text-anchor="middle">技能</text>
+<rect x="668" y="110" width="184" height="259" rx="12" fill="#e9dcc3" stroke="#b08a3c" stroke-width="2"/>
+<rect x="670" y="112" width="180" height="54.39" rx="12" fill="#b08a3c" stroke="none" stroke-width="0"/>
+<rect x="670" y="154.39" width="180" height="12" rx="0" fill="#b08a3c" stroke="none" stroke-width="0"/>
+<text x="680.512" y="141.045" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="21" font-weight="bold" fill="#ece3d4" text-anchor="start">能量涌泉</text>
+<circle cx="821.456" cy="142.277" r="18.032" fill="#17120c" stroke="#d9a441" stroke-width="2"/>
+<text x="821.456" y="148.927" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="19" font-weight="bold" fill="#e0a94a" text-anchor="middle">2</text>
+<text x="680.512" y="182.842" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="14" font-weight="normal" fill="#6b5b45" text-anchor="start">场景</text>
+<text x="680.512" y="204.385" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="16" font-weight="normal" fill="#3b3024" text-anchor="start">接下来 3 个玩家回合</text>
+<text x="680.512" y="227.585" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="16" font-weight="normal" fill="#3b3024" text-anchor="start">开始时额外获得 1 能</text>
+<text x="680.512" y="250.785" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="16" font-weight="normal" fill="#3b3024" text-anchor="start">量</text>
+<rect x="708.48" y="380" width="103.04" height="24" rx="6" fill="#b08a3c" stroke="none" stroke-width="0"/>
+<text x="760" y="391.2" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="14" font-weight="bold" fill="#ece3d4" text-anchor="middle">场景</text>
+<rect x="878" y="110" width="184" height="259" rx="12" fill="#e9dcc3" stroke="#5f8a5a" stroke-width="2"/>
+<rect x="880" y="112" width="180" height="54.39" rx="12" fill="#5f8a5a" stroke="none" stroke-width="0"/>
+<rect x="880" y="154.39" width="180" height="12" rx="0" fill="#5f8a5a" stroke="none" stroke-width="0"/>
+<text x="890.512" y="141.045" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="21" font-weight="bold" fill="#ece3d4" text-anchor="start">守卫</text>
+<circle cx="1031.46" cy="142.277" r="18.032" fill="#17120c" stroke="#d9a441" stroke-width="2"/>
+<text x="1031.46" y="148.927" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="19" font-weight="bold" fill="#e0a94a" text-anchor="middle">3</text>
+<text x="890.512" y="182.842" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="14" font-weight="normal" fill="#6b5b45" text-anchor="start">随从</text>
+<text x="890.512" y="204.385" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="16" font-weight="normal" fill="#3b3024" text-anchor="start">召唤 2 攻击 / 7 生命</text>
+<text x="890.512" y="227.585" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="16" font-weight="normal" fill="#3b3024" text-anchor="start">嘲讽随从</text>
+<rect x="918.48" y="380" width="103.04" height="24" rx="6" fill="#5f8a5a" stroke="none" stroke-width="0"/>
+<text x="970" y="391.2" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="14" font-weight="bold" fill="#ece3d4" text-anchor="middle">随从</text>
+</svg>

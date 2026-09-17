@@ -16,6 +16,9 @@ const Palette = preload("res://src/ui/palette.gd")
 
 const VIEW := Vector2(1600, 900)
 const SLOT_SIZE := Vector2(130, 146)
+## 中央场地区。这一版不再铺实心面板（石室背景与角色直接露出），
+## 该范围仍用于标注、飘字锚点与后续多敌人站位参考。
+const FIELD_RECT := Rect2(336, 66, 928, 542)
 
 var engine = null
 
@@ -64,6 +67,10 @@ var _log_box: VBoxContainer
 var _false_btn: Button
 
 var _bg_catcher: Control
+var _bg_tex: TextureRect
+var _vignette: TextureRect
+var _char_player: TextureRect
+var _char_enemy: TextureRect
 var _float_layer: Control
 var _keep_bar: HBoxContainer
 var _keep_confirm_btn: Button
@@ -111,12 +118,17 @@ func _random_seed() -> int:
 # ══════════════════════════════════════════════════════════
 
 func _panel(rect: Rect2, bg: Color, radius: int = 10, border: int = 0,
-		border_c: Color = Palette.BORDER) -> PanelContainer:
+		border_c: Color = Palette.BORDER, alpha: float = 0.84) -> PanelContainer:
 	var p = PanelContainer.new()
 	p.position = rect.position
 	p.size = rect.size
 	p.custom_minimum_size = rect.size
-	p.add_theme_stylebox_override("panel", Palette.box(bg, radius, border, border_c))
+	# 不透明色统一降为半透明石材面板：让背景的火光与石纹透出来，画面才有空气感。
+	# 已经带透明度的调用（如敌人热区）保持原样。
+	var c := bg
+	if c.a >= 0.999:
+		c.a = alpha
+	p.add_theme_stylebox_override("panel", Palette.box(c, radius, border, border_c))
 	p.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(p)
 	return p
@@ -144,24 +156,30 @@ func _label(text: String, size: int = 15, color: Color = Palette.TEXT) -> Label:
 	return l
 
 
+## 给按钮套上暖色石材样式。未套样式的按钮会用 Godot 默认灰主题，和整体色调冲突。
+func _style_button(b: Button, accent: Color, size: int = 14) -> Button:
+	b.add_theme_font_size_override("font_size", size)
+	for st in ["normal", "hover", "pressed", "disabled", "focus"]:
+		var s = Palette.box(accent, 8, 1, accent.lightened(0.30), false)
+		if st == "hover":
+			s.bg_color = accent.lightened(0.14)
+		elif st == "pressed":
+			s.bg_color = accent.darkened(0.18)
+		elif st == "disabled":
+			s.bg_color = accent.darkened(0.60)
+		b.add_theme_stylebox_override(st, s)
+	b.add_theme_color_override("font_color", Palette.TEXT)
+	b.add_theme_color_override("font_disabled_color", Palette.TEXT_DIM)
+	return b
+
+
 func _button(text: String, rect: Rect2, accent: Color, size: int = 16) -> Button:
 	var b = Button.new()
 	b.text = text
 	b.position = rect.position
 	b.size = rect.size
 	b.custom_minimum_size = rect.size
-	b.add_theme_font_size_override("font_size", size)
-	for st in ["normal", "hover", "pressed", "disabled", "focus"]:
-		var s = Palette.box(accent, 8, 1, accent.lightened(0.35))
-		if st == "hover":
-			s.bg_color = accent.lightened(0.14)
-		elif st == "pressed":
-			s.bg_color = accent.darkened(0.18)
-		elif st == "disabled":
-			s.bg_color = accent.darkened(0.62)
-		b.add_theme_stylebox_override(st, s)
-	b.add_theme_color_override("font_color", Palette.TEXT)
-	b.add_theme_color_override("font_disabled_color", Palette.TEXT_DIM)
+	_style_button(b, accent, size)
 	return b
 
 
@@ -193,11 +211,26 @@ func _build_ui() -> void:
 	_bg_catcher.mouse_filter = Control.MOUSE_FILTER_STOP
 	_bg_catcher.gui_input.connect(_on_background_input)
 	add_child(_bg_catcher)
-	var bg = ColorRect.new()
-	bg.color = Palette.BG
-	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
-	bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(bg)
+
+	# ── 绘制顺序（从下到上必须严格是这样）────────────────
+	# 1) 石室背景  2) 场景中的角色  3) 暗角  4) 全部 UI 面板  5) 飘字
+	# 暗角夹在角色与 UI 之间：让四周沉下去、视线集中在中间，同时不压暗任何 UI。
+
+	_bg_tex = TextureRect.new()
+	_bg_tex.texture = load(Palette.ART_BG)
+	_bg_tex.position = Vector2.ZERO
+	_bg_tex.size = VIEW
+	_bg_tex.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_bg_tex)
+
+	_build_characters()
+
+	_vignette = TextureRect.new()
+	_vignette.texture = load(Palette.ART_VIGNETTE)
+	_vignette.position = Vector2.ZERO
+	_vignette.size = VIEW
+	_vignette.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_vignette)
 
 	_build_top_bar()
 	_build_player_panel()
@@ -245,17 +278,17 @@ func _build_player_panel() -> void:
 	var col = _content(p, 14)
 	col.add_child(_label("玩家", 18, Palette.TEXT))
 
-	_player_hp_bar = _bar(Rect2(0, 0, 264, 26), Palette.HP_COLOR)
+	_player_hp_bar = _bar(Rect2(0, 0, 264, 26), Palette.HP)
 	col.add_child(_player_hp_bar)
 
 	_player_hp_text = _label("60 / 60", 15)
 	_player_hp_text.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	col.add_child(_player_hp_text)
 
-	_player_shield_label = _label("护盾 0", 14, Palette.SHIELD_COLOR)
+	_player_shield_label = _label("护盾 0", 14, Palette.SHIELD)
 	col.add_child(_player_shield_label)
 
-	_energy_label = _label("能量 0 / 10", 15, Palette.ENERGY_COLOR)
+	_energy_label = _label("能量 0 / 10", 15, Palette.ENERGY)
 	col.add_child(_energy_label)
 
 	var pips = HBoxContainer.new()
@@ -271,7 +304,7 @@ func _build_player_panel() -> void:
 		_energy_pips.append(pip)
 
 	var ph = Label.new()
-	ph.text = "（图形占位角色）"
+	ph.text = ""
 	ph.add_theme_font_size_override("font_size", 13)
 	ph.add_theme_color_override("font_color", Palette.TEXT_DIM)
 	ph.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -306,14 +339,14 @@ func _build_enemy_panel() -> void:
 	_enemy_name_label = _label("练习魔像", 18)
 	col.add_child(_enemy_name_label)
 
-	_enemy_hp_bar = _bar(Rect2(0, 0, 264, 26), Palette.HP_COLOR)
+	_enemy_hp_bar = _bar(Rect2(0, 0, 264, 26), Palette.HP)
 	col.add_child(_enemy_hp_bar)
 
 	_enemy_hp_text = _label("35 / 35", 15)
 	_enemy_hp_text.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	col.add_child(_enemy_hp_text)
 
-	_enemy_shield_label = _label("护盾 0", 14, Palette.SHIELD_COLOR)
+	_enemy_shield_label = _label("护盾 0", 14, Palette.SHIELD)
 	col.add_child(_enemy_shield_label)
 
 	_intent_box = PanelContainer.new()
@@ -354,13 +387,34 @@ func _build_enemy_panel() -> void:
 	add_child(_enemy_hit_area)
 
 
+func _build_characters() -> void:
+	# 角色站在场景里，而不是被塞进状态面板：这样环境、光影和角色才是一体的。
+	# 位置与尺寸必须与 tools/verify_art_assets.py 的 PLACEMENT 保持一致。
+	_char_player = TextureRect.new()
+	_char_player.texture = load(Palette.ART_ADVENTURER)
+	_char_player.position = Vector2(390, 190)
+	_char_player.size = Vector2(300, 420)
+	_char_player.stretch_mode = TextureRect.STRETCH_SCALE
+	_char_player.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_char_player)
+
+	_char_enemy = TextureRect.new()
+	_char_enemy.texture = load(Palette.ART_GOLEM)
+	_char_enemy.position = Vector2(890, 170)
+	_char_enemy.size = Vector2(340, 440)
+	_char_enemy.stretch_mode = TextureRect.STRETCH_SCALE
+	_char_enemy.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_char_enemy)
+
+
 func _build_field() -> void:
-	_panel(Rect2(336, 66, 928, 542), Palette.BG_FIELD, 10, 1)
+	# 中央场地不再铺实心面板 —— 直接露出石室背景，角色站在其中。
+	# 只保留场景牌区与图例这两块必要的信息载体。
 
 	# 场景牌展示区（§4.2 中央场地区）
-	var sp = _panel(Rect2(500, 82, 600, 104), Palette.PANEL, 8, 1, Color("#b8912a"))
+	var sp = _panel(Rect2(500, 82, 600, 104), Palette.PANEL, 10, 1, Palette.GOLD)
 	var col = _content(sp, 10)
-	_scene_name = _label("无场景牌", 16, Color("#e0c15a"))
+	_scene_name = _label("无场景牌", 16, Palette.SELECT)
 	col.add_child(_scene_name)
 	_scene_desc = _label("", 13, Palette.TEXT_DIM)
 	_scene_desc.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -369,7 +423,7 @@ func _build_field() -> void:
 	col.add_child(_scene_triggers)
 
 	var legend = _label(
-		"卡牌颜色：攻击·红   防御·蓝   技能·紫   场景·金   随从·绿（同时显示类型文字）",
+		"卡牌类型：攻击·赭红   防御·石青   技能·紫藤   场景·金褐   随从·苔绿（同时显示类型文字）",
 		13, Palette.TEXT_DIM)
 	legend.position = Vector2(352, 588)
 	legend.size = Vector2(900, 20)
@@ -390,6 +444,7 @@ func _build_log_panel() -> void:
 	fold.add_theme_font_size_override("font_size", 12)
 	fold.custom_minimum_size = Vector2(56, 24)
 	fold.pressed.connect(_on_log_fold)
+	_style_button(fold, Palette.PANEL_HI, 12)
 	head.add_child(fold)
 
 	_log_scroll = ScrollContainer.new()
@@ -468,6 +523,7 @@ func _build_keep_bar() -> void:
 	_keep_confirm_btn.custom_minimum_size = Vector2(120, 36)
 	_keep_confirm_btn.add_theme_font_size_override("font_size", 14)
 	_keep_confirm_btn.pressed.connect(_on_keep_confirm)
+	_style_button(_keep_confirm_btn, Palette.GOOD.darkened(0.35), 14)
 	_keep_bar.add_child(_keep_confirm_btn)
 
 	var nb = Button.new()
@@ -475,6 +531,7 @@ func _build_keep_bar() -> void:
 	nb.custom_minimum_size = Vector2(88, 36)
 	nb.add_theme_font_size_override("font_size", 14)
 	nb.pressed.connect(_on_keep_none)
+	_style_button(nb, Palette.PANEL_HI, 14)
 	_keep_bar.add_child(nb)
 
 	var cb = Button.new()
@@ -482,6 +539,7 @@ func _build_keep_bar() -> void:
 	cb.custom_minimum_size = Vector2(72, 36)
 	cb.add_theme_font_size_override("font_size", 14)
 	cb.pressed.connect(_on_keep_cancel)
+	_style_button(cb, Palette.PANEL_HI, 14)
 	_keep_bar.add_child(cb)
 
 
@@ -537,6 +595,7 @@ func _build_help_overlay() -> void:
 	b.custom_minimum_size = Vector2(0, 40)
 	b.add_theme_font_size_override("font_size", 16)
 	b.pressed.connect(_on_help_close)
+	_style_button(b, Palette.PANEL_HI, 16)
 	col.add_child(b)
 
 
@@ -560,6 +619,7 @@ func _build_result_overlay() -> void:
 	_result_btn.custom_minimum_size = Vector2(0, 52)
 	_result_btn.add_theme_font_size_override("font_size", 19)
 	_result_btn.pressed.connect(_on_restart_pressed)
+	_style_button(_result_btn, Palette.GOLD, 19)
 	col.add_child(_result_btn)
 
 
@@ -583,6 +643,7 @@ func _build_deck_overlay() -> void:
 	b.text = "关闭"
 	b.custom_minimum_size = Vector2(0, 40)
 	b.pressed.connect(func(): _deck_overlay.visible = false)
+	_style_button(b, Palette.PANEL_HI, 14)
 	col.add_child(b)
 
 
@@ -640,7 +701,7 @@ func _refresh_player() -> void:
 	_energy_label.text = "能量 %d / %d" % [st.energy, st.max_energy]
 	for i in range(_energy_pips.size()):
 		var pip: ColorRect = _energy_pips[i]
-		pip.color = Palette.ENERGY_COLOR if i < st.energy else Color(1, 1, 1, 0.12)
+		pip.color = Palette.ENERGY if i < st.energy else Color(1, 1, 1, 0.12)
 
 
 func _refresh_enemy() -> void:
@@ -657,7 +718,7 @@ func _refresh_enemy() -> void:
 		return
 	var atk = int(view["kind"]) == T.IntentKind.ATTACK
 	_intent_label.text = "意图：" + String(view["text"])
-	var c = Color("#ff8a7a") if atk else Palette.SHIELD_COLOR
+	var c = Color("#ff8a7a") if atk else Palette.SHIELD
 	_intent_label.add_theme_color_override("font_color", c)
 	_intent_box.add_theme_stylebox_override("panel",
 		Palette.box(Color("#3a2020") if atk else Color("#1e2f42"), 8, 1, c))
@@ -1016,10 +1077,11 @@ func _show_result() -> void:
 # ══════════════════════════════════════════════════════════
 
 func _anchor_for_target(target: int, slot: int) -> Vector2:
+	# 浮字锚点跟着场景里的角色走，而不是跟着状态面板走
 	if target == T.Side.PLAYER:
-		return Vector2(170, 250)
+		return Vector2(540, 300)
 	if target == T.Side.ENEMY:
-		return Vector2(1430, 250)
+		return Vector2(1060, 300)
 	if target == T.Side.MINION:
 		var x = 97.0 if slot == 0 else 235.0
 		return Vector2(x, 500)
@@ -1041,7 +1103,7 @@ func _play_events(events: Array) -> void:
 			var hp_loss = int(ev.get("hp_loss", 0))
 			var absorbed = int(ev.get("absorbed", 0))
 			if absorbed > 0:
-				_float("护盾 -%d" % absorbed, pos + Vector2(0, 0), Palette.SHIELD_COLOR, 20)
+				_float("护盾 -%d" % absorbed, pos + Vector2(0, 0), Palette.SHIELD, 20)
 			if hp_loss > 0:
 				_float("-%d" % hp_loss, pos + Vector2(0, -30), Color("#ff6b6b"), 30)
 			_refresh_all()
@@ -1049,13 +1111,13 @@ func _play_events(events: Array) -> void:
 		elif etype == T.EV_SHIELD_GAINED:
 			var side = int(ev.get("side", -1))
 			var pos2 = Vector2(170, 250) if side == T.Side.PLAYER else Vector2(1430, 250)
-			_float("护盾 +%d" % int(ev.get("amount", 0)), pos2, Palette.SHIELD_COLOR, 22)
+			_float("护盾 +%d" % int(ev.get("amount", 0)), pos2, Palette.SHIELD, 22)
 			_refresh_all()
 			paced = true
 		elif etype == T.EV_ENERGY_CHANGED:
 			var d = int(ev.get("delta", 0))
 			if d != 0:
-				_float(("能量 +%d" % d) if d > 0 else ("能量 %d" % d), Vector2(170, 330), Palette.ENERGY_COLOR, 20)
+				_float(("能量 +%d" % d) if d > 0 else ("能量 %d" % d), Vector2(170, 330), Palette.ENERGY, 20)
 				_refresh_all()
 				paced = true
 		elif etype == T.EV_CARDS_DRAWN:

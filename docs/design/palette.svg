@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="780" viewBox="0 0 1100 780">
+<rect width="1100" height="780" fill="#171310"/>
+<text x="36" y="45.6" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="27" font-weight="bold" fill="#ece3d4" text-anchor="start">色彩系统 · Color System</text>
+<text x="36" y="69.2" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="14" font-weight="normal" fill="#a79883" text-anchor="start">与 src/ui/palette.gd 完全一致 —— 设计图即实现，不各自维护一套色值</text>
+<line x1="36" y1="82" x2="1064" y2="82" stroke="#57493b" stroke-width="1"/>
+<text x="36" y="116.8" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="16" font-weight="bold" fill="#ece3d4" text-anchor="start">界面底色：暖石灰岩，4 级明度</text>
+<rect x="36" y="132" width="128" height="62" rx="8" fill="#171310" stroke="#57493b" stroke-width="1"/>
+<text x="44" y="209.6" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="12" font-weight="normal" fill="#ece3d4" text-anchor="start">最外层</text>
+<text x="44" y="224.8" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="11" font-weight="normal" fill="#a79883" text-anchor="start">#171310</text>
+<rect x="176" y="132" width="128" height="62" rx="8" fill="#2a231c" stroke="#57493b" stroke-width="1"/>
+<text x="184" y="209.6" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="12" font-weight="normal" fill="#ece3d4" text-anchor="start">石墙</text>
+<text x="184" y="224.8" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="11" font-weight="normal" fill="#a79883" text-anchor="start">#2A231C</text>
+<rect x="316" y="132" width="128" height="62" rx="8" fill="#241e18" stroke="#57493b" stroke-width="1"/>
+<text x="324" y="209.6" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="12" font-weight="normal" fill="#ece3d4" text-anchor="start">地面</text>
+<text x="324" y="224.8" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="11" font-weight="normal" fill="#a79883" text-anchor="start">#241E18</text>
+<rect x="456" y="132" width="128" height="62" rx="8" fill="#332a22" stroke="#57493b" stroke-width="1"/>
+<text x="464" y="209.6" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="12" font-weight="normal" fill="#ece3d4" text-anchor="start">面板</text>
+<text x="464" y="224.8" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="11" font-weight="normal" fill="#a79883" text-anchor="start">#332A22</text>
+<rect x="596" y="132" width="128" height="62" rx="8" fill="#40352a" stroke="#57493b" stroke-width="1"/>
+<text x="604" y="209.6" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="12" font-weight="normal" fill="#ece3d4" text-anchor="start">面板强调</text>
+<text x="604" y="224.8" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="11" font-weight="normal" fill="#a79883" text-anchor="start">#40352A</text>
+<text x="36" y="262.8" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="16" font-weight="bold" fill="#ece3d4" text-anchor="start">描边与文字</text>
+<rect x="36" y="278" width="128" height="62" rx="8" fill="#57493b" stroke="#57493b" stroke-width="1"/>
+<text x="44" y="355.6" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="12" font-weight="normal" fill="#ece3d4" text-anchor="start">描边</text>
+<text x="44" y="370.8" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="11" font-weight="normal" fill="#a79883" text-anchor="start">#57493B</text>
+<rect x="176" y="278" width="128" height="62" rx="8" fill="#7d6a53" stroke="#57493b" stroke-width="1"/>
+<text x="184" y="355.6" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="12" font-weight="normal" fill="#ece3d4" text-anchor="start">高光描边</text>
+<text x="184" y="370.8" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="11" font-weight="normal" fill="#a79883" text-anchor="start">#7D6A53</text>
+<rect x="316" y="278" width="128" height="62" rx="8" fill="#ece3d4" stroke="#57493b" stroke-width="1"/>
+<text x="324" y="355.6" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="12" font-weight="normal" fill="#ece3d4" text-anchor="start">主文字</text>
+<text x="324" y="370.8" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="11" font-weight="normal" fill="#a79883" text-anchor="start">#ECE3D4</text>
+<rect x="456" y="278" width="128" height="62" rx="8" fill="#a79883" stroke="#57493b" stroke-width="1"/>
+<text x="464" y="355.6" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="12" font-weight="normal" fill="#ece3d4" text-anchor="start">次要文字</text>
+<text x="464" y="370.8" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="11" font-weight="normal" fill="#a79883" text-anchor="start">#A79883</text>
+<rect x="596" y="278" width="128" height="62" rx="8" fill="#3b3024" stroke="#57493b" stroke-width="1"/>
+<text x="604" y="355.6" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="12" font-weight="normal" fill="#ece3d4" text-anchor="start">纸面墨色</text>
+<text x="604" y="370.8" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="11" font-weight="normal" fill="#a79883" text-anchor="start">#3B3024</text>
+<text x="36" y="408.8" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="16" font-weight="bold" fill="#ece3d4" text-anchor="start">状态与强调</text>
+<rect x="36" y="424" width="128" height="62" rx="8" fill="#b0432f" stroke="#57493b" stroke-width="1"/>
+<text x="44" y="501.6" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="12" font-weight="normal" fill="#ece3d4" text-anchor="start">生命</text>
+<text x="44" y="516.8" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="11" font-weight="normal" fill="#a79883" text-anchor="start">#B0432F</text>
+<rect x="176" y="424" width="128" height="62" rx="8" fill="#6f8fa8" stroke="#57493b" stroke-width="1"/>
+<text x="184" y="501.6" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="12" font-weight="normal" fill="#ece3d4" text-anchor="start">护盾</text>
+<text x="184" y="516.8" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="11" font-weight="normal" fill="#a79883" text-anchor="start">#6F8FA8</text>
+<rect x="316" y="424" width="128" height="62" rx="8" fill="#e0a94a" stroke="#57493b" stroke-width="1"/>
+<text x="324" y="501.6" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="12" font-weight="normal" fill="#ece3d4" text-anchor="start">能量</text>
+<text x="324" y="516.8" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="11" font-weight="normal" fill="#a79883" text-anchor="start">#E0A94A</text>
+<rect x="456" y="424" width="128" height="62" rx="8" fill="#d9a441" stroke="#57493b" stroke-width="1"/>
+<text x="464" y="501.6" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="12" font-weight="normal" fill="#ece3d4" text-anchor="start">金 / 描边</text>
+<text x="464" y="516.8" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="11" font-weight="normal" fill="#a79883" text-anchor="start">#D9A441</text>
+<rect x="596" y="424" width="128" height="62" rx="8" fill="#f2dc9e" stroke="#57493b" stroke-width="1"/>
+<text x="604" y="501.6" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="12" font-weight="normal" fill="#ece3d4" text-anchor="start">选中 / 高亮</text>
+<text x="604" y="516.8" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="11" font-weight="normal" fill="#a79883" text-anchor="start">#F2DC9E</text>
+<rect x="736" y="424" width="128" height="62" rx="8" fill="#7a9a5a" stroke="#57493b" stroke-width="1"/>
+<text x="744" y="501.6" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="12" font-weight="normal" fill="#ece3d4" text-anchor="start">就绪</text>
+<text x="744" y="516.8" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="11" font-weight="normal" fill="#a79883" text-anchor="start">#7A9A5A</text>
+<rect x="876" y="424" width="128" height="62" rx="8" fill="#c98a4b" stroke="#57493b" stroke-width="1"/>
+<text x="884" y="501.6" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="12" font-weight="normal" fill="#ece3d4" text-anchor="start">不可用原因</text>
+<text x="884" y="516.8" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="11" font-weight="normal" fill="#a79883" text-anchor="start">#C98A4B</text>
+<text x="36" y="554.8" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="16" font-weight="bold" fill="#ece3d4" text-anchor="start">卡牌类型色（土性颜料）</text>
+<rect x="36" y="570" width="128" height="62" rx="8" fill="#a8442f" stroke="#57493b" stroke-width="1"/>
+<text x="44" y="647.6" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="12" font-weight="normal" fill="#ece3d4" text-anchor="start">攻击</text>
+<text x="44" y="662.8" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="11" font-weight="normal" fill="#a79883" text-anchor="start">#A8442F</text>
+<rect x="176" y="570" width="128" height="62" rx="8" fill="#4a6f8f" stroke="#57493b" stroke-width="1"/>
+<text x="184" y="647.6" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="12" font-weight="normal" fill="#ece3d4" text-anchor="start">防御</text>
+<text x="184" y="662.8" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="11" font-weight="normal" fill="#a79883" text-anchor="start">#4A6F8F</text>
+<rect x="316" y="570" width="128" height="62" rx="8" fill="#7a5a8f" stroke="#57493b" stroke-width="1"/>
+<text x="324" y="647.6" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="12" font-weight="normal" fill="#ece3d4" text-anchor="start">技能</text>
+<text x="324" y="662.8" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="11" font-weight="normal" fill="#a79883" text-anchor="start">#7A5A8F</text>
+<rect x="456" y="570" width="128" height="62" rx="8" fill="#b08a3c" stroke="#57493b" stroke-width="1"/>
+<text x="464" y="647.6" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="12" font-weight="normal" fill="#ece3d4" text-anchor="start">场景</text>
+<text x="464" y="662.8" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="11" font-weight="normal" fill="#a79883" text-anchor="start">#B08A3C</text>
+<rect x="596" y="570" width="128" height="62" rx="8" fill="#5f8a5a" stroke="#57493b" stroke-width="1"/>
+<text x="604" y="647.6" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="12" font-weight="normal" fill="#ece3d4" text-anchor="start">随从</text>
+<text x="604" y="662.8" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="11" font-weight="normal" fill="#a79883" text-anchor="start">#5F8A5A</text>
+<text x="36" y="702.4" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="13" font-weight="normal" fill="#a79883" text-anchor="start">界面底色用同一色系的 4 级明度拉开层级（而不是靠色相），卡牌类型是唯一允许较高饱和的地方；类型识别始终同时给颜色与类型文字，不依赖颜色单独传达（规格 §4.1）。</text>
+</svg>

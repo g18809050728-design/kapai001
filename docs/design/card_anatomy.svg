@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="700" viewBox="0 0 1100 700">
+<rect width="1100" height="700" fill="#171310"/>
+<text x="36" y="45.6" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="27" font-weight="bold" fill="#ece3d4" text-anchor="start">卡牌元素解剖 · Card Anatomy</text>
+<text x="36" y="69.2" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="14" font-weight="normal" fill="#a79883" text-anchor="start">手牌区单卡 148 × 208 px；下图放大 2.2 倍绘制，标注每个元素的字号与作用</text>
+<line x1="36" y1="82" x2="1064" y2="82" stroke="#57493b" stroke-width="1"/>
+<rect x="110" y="118" width="325.6" height="457.6" rx="22" fill="#e9dcc3" stroke="#7a5a8f" stroke-width="4"/>
+<rect x="114" y="122" width="317.6" height="96.096" rx="22" fill="#7a5a8f" stroke="none" stroke-width="0"/>
+<rect x="114" y="196.096" width="317.6" height="22" rx="0" fill="#7a5a8f" stroke="none" stroke-width="0"/>
+<text x="132.141" y="173.568" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="38" font-weight="bold" fill="#ece3d4" text-anchor="start">能量冲击</text>
+<circle cx="381.55" cy="175.077" r="31.9088" fill="#17120c" stroke="#d9a441" stroke-width="4"/>
+<text x="381.55" y="186.977" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="34" font-weight="bold" fill="#e0a94a" text-anchor="middle">3</text>
+<text x="132.141" y="247.709" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="26" font-weight="normal" fill="#6b5b45" text-anchor="start">技能</text>
+<text x="132.141" y="285.344" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="29" font-weight="normal" fill="#3b3024" text-anchor="start">造成 12 伤害</text>
+<line x1="449.6" y1="164.187" x2="509.6" y2="164.187" stroke="#f2dc9e" stroke-width="1" stroke-dasharray="4 3"/>
+<circle cx="509.6" cy="164.187" r="3" fill="#f2dc9e" stroke="none" stroke-width="0"/>
+<text x="525.6" y="167.187" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="15" font-weight="bold" fill="#ece3d4" text-anchor="start">① 卡牌名称</text>
+<text x="525.6" y="183.787" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="12" font-weight="normal" fill="#a79883" text-anchor="start">17 px 粗体，左上角，单行</text>
+<line x1="449.6" y1="149.909" x2="509.6" y2="149.909" stroke="#f2dc9e" stroke-width="1" stroke-dasharray="4 3"/>
+<circle cx="509.6" cy="149.909" r="3" fill="#f2dc9e" stroke="none" stroke-width="0"/>
+<text x="525.6" y="152.909" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="15" font-weight="bold" fill="#ece3d4" text-anchor="start">② 费用徽章</text>
+<text x="525.6" y="169.509" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="12" font-weight="normal" fill="#a79883" text-anchor="start">免费牌也显示 0；能量不足时置灰并给出原因</text>
+<line x1="449.6" y1="205.787" x2="509.6" y2="205.787" stroke="#f2dc9e" stroke-width="1" stroke-dasharray="4 3"/>
+<circle cx="509.6" cy="205.787" r="3" fill="#f2dc9e" stroke="none" stroke-width="0"/>
+<text x="525.6" y="208.787" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="15" font-weight="bold" fill="#ece3d4" text-anchor="start">③ 类型文字</text>
+<text x="525.6" y="225.387" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="12" font-weight="normal" fill="#a79883" text-anchor="start">12 px，与类型色同现，不只靠颜色区分</text>
+<line x1="449.6" y1="231.787" x2="509.6" y2="231.787" stroke="#f2dc9e" stroke-width="1" stroke-dasharray="4 3"/>
+<circle cx="509.6" cy="231.787" r="3" fill="#f2dc9e" stroke="none" stroke-width="0"/>
+<text x="525.6" y="234.787" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="15" font-weight="bold" fill="#ece3d4" text-anchor="start">④ 分隔线</text>
+<text x="525.6" y="251.387" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="12" font-weight="normal" fill="#a79883" text-anchor="start">1 px，22% 白色，分隔头部与效果区</text>
+<line x1="449.6" y1="301.04" x2="509.6" y2="301.04" stroke="#f2dc9e" stroke-width="1" stroke-dasharray="4 3"/>
+<circle cx="509.6" cy="301.04" r="3" fill="#f2dc9e" stroke="none" stroke-width="0"/>
+<text x="525.6" y="304.04" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="15" font-weight="bold" fill="#ece3d4" text-anchor="start">⑤ 完整效果描述</text>
+<text x="525.6" y="320.64" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="12" font-weight="normal" fill="#a79883" text-anchor="start">13 px，自动换行，不截断、不用省略号</text>
+<line x1="449.6" y1="474.928" x2="509.6" y2="474.928" stroke="#f2dc9e" stroke-width="1" stroke-dasharray="4 3"/>
+<circle cx="509.6" cy="474.928" r="3" fill="#f2dc9e" stroke="none" stroke-width="0"/>
+<text x="525.6" y="477.928" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="15" font-weight="bold" fill="#ece3d4" text-anchor="start">⑥ 不可用原因</text>
+<text x="525.6" y="494.528" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="12" font-weight="normal" fill="#a79883" text-anchor="start">12 px 警告色；仅在该牌当前不可用时出现</text>
+<text x="36" y="632" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="13" font-weight="normal" fill="#a79883" text-anchor="start">交互尺寸（规格 §5.1）：整张卡为点击热区 148 × 208；悬停放大到 1.14 倍并提升 z 序；相邻卡重叠时，悬停卡始终在最上层。</text>
+<text x="36" y="654" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="13" font-weight="normal" fill="#ece3d4" text-anchor="start">文字层级：名称 17px / 费用 15px / 类型 12px / 效果 13px / 原因 12px。</text>
+</svg>

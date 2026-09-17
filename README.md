@@ -3,8 +3,14 @@
 按 `docs/PVE卡牌战斗Demo场景与构建规格.md`（v0.2）实现的单人 PVE 回合制卡牌战斗 Demo。
 玩家扮演进入遗迹的冒险者，在「遗迹入口」与练习魔像战斗，击败魔像即完成 Demo。
 
+> 📄 **现状 + 后续升级计划**见 `docs/PVE卡牌Demo_开发文档.md`（单一入口文档）。
+> 🎨 **元素与 UI 设计说明（含配图）**见 `docs/PVE卡牌Demo_元素设计文档.md`，配图在 `docs/design/`。
+> **设计决策表见 `docs/设计元素表.xlsx`**（13 张表：游戏基本信息 / 实体 / 卡牌 / 游戏机制 / 配色 / 字号 / 布局 / 尺寸 / 美术资源 / 配图）
+> —— 要改任何设计元素或玩法数值，在「你的决定」列里填即可；助手用 `python tools\read_design_workbook.py` 读回。
+> 升级方案工作簿见 `docs/PVE卡牌Demo_升级方案.xlsx`。本文是面向开发者的运行与架构说明。
+
 - 引擎：**Godot 4.7.2**（GDScript）
-- 设计分辨率：1600 × 900，窗口默认 1280 × 720，拉伸模式 `canvas_items` + `keep`
+- 设计分辨率与**默认窗口均为 1600 × 900**，拉伸模式 `canvas_items` + `keep`
 - 启动后**直接进入战斗**（无主菜单、无路线选择）
 
 ---
@@ -55,7 +61,17 @@ tests/
   run_tests.gd               规则层验收测试（对应 §12 的 A01–A25）
   ui_smoke.gd                界面冒烟测试（含 A19 / A22 的界面行为）
   ui_input.gd                真实鼠标输入测试（push_input 走完整 GUI 事件路由）
+  event_trace.gd             事件链示例：逐条打印规则层产生的事件（见「事件链」一节）
   probe.gd、smoke.gd         早期语法/环境探针，保留备用
+tools/
+  make_upgrade_xlsx.py       生成升级方案工作簿
+  verify_xlsx.py             读回校验工作簿结构
+  make_design_assets.py      生成元素设计文档的配图（PNG + SVG）
+  verify_design_assets.py    校验配图边界 / 墨迹 / 中文字形 / 坐标与实现一致
+  verify_doc.py              把开发文档的事实性声明反向核回源码
+  make_design_workbook.py    生成《设计元素表》Excel（含嵌入配图）
+  read_design_workbook.py    读回设计元素表，只报告被改动的项
+docs/design/                 元素设计配图（9 张 × PNG 预览 + SVG 源）
 ```
 
 ---
@@ -96,10 +112,37 @@ engine.restart(seed)             # 重新挑战
 & $godot --headless --path . --script res://tests/run_tests.gd   # 规则层 157 项断言
 & $godot --headless --path . --script res://tests/ui_smoke.gd    # 界面  53 项断言
 & $godot --headless --path . --script res://tests/ui_input.gd    # 真实输入 9 项断言
+& $godot --headless --path . --script res://tests/event_trace.gd # 事件链示例（只打印，不做断言）
 ```
 
 三套测试均以**退出码**表示结果（0 = 全部通过）。当前状态：全部通过（各跑 8 轮稳定）。
 `ui_smoke.gd` 每轮使用随机种子，存在与手牌相关的分支，因此断言只依赖「实例所在区域」这类与抽牌无关的量。
+
+### 事件链
+
+`event_trace.gd` 会把规则层产生的事件逐条打印出来，是理解「逻辑怎么跑」最快的方式：
+
+```powershell
+& $godot --headless --path . --script res://tests/event_trace.gd
+```
+
+它跑三个场景：**A** 规格 §8.2 的第一回合手把手指例（可与文档逐步对照）；
+**B** 嘲讽随从实时改变意图目标 → 随从击杀魔像 → 终局截断后续事件；
+**C** 回合开始的固定顺序（先「回合 +1 能量」再「场景 +1 能量」）。
+
+事件是一条**有序、只读的记录**：规则层改完状态后按发生顺序追加，界面照着播即可。
+典型的一条链（打出一张攻击牌）：
+
+```
+card_moved        斩击  手牌 → 结算区     ← §6.3 普通牌先进结算区
+card_played       打出「斩击」
+attack_card_used  本回合已成功使用攻击牌 1 张
+energy_changed    delta=+1 → 2（来源 卡牌效果） ← 效果声明「先回能，后伤害」
+card_gained_energy「斩击」作为卡牌效果回能 1
+damage            魔像 受到 5 伤害（护盾吸收 0，生命 -5）→ 剩余生命 30
+card_moved        斩击  结算区 → 弃牌堆
+```
+
 
 ### 为什么单独有 ui_input.gd
 

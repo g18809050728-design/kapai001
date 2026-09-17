@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="540" viewBox="0 0 1100 540">
+<rect width="1100" height="540" fill="#171310"/>
+<text x="36" y="45.6" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="27" font-weight="bold" fill="#ece3d4" text-anchor="start">界面状态流转 · UI State Flow</text>
+<text x="36" y="69.2" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="14" font-weight="normal" fill="#a79883" text-anchor="start">对应规格 §10.1 状态机；方块下标注该阶段输入是否可用</text>
+<line x1="36" y1="82" x2="1064" y2="82" stroke="#57493b" stroke-width="1"/>
+<rect x="36" y="112" width="150" height="56" rx="8" fill="#1e2128" stroke="#6d7690" stroke-width="2"/>
+<text x="111" y="134" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="15" font-weight="bold" fill="#ece3d4" text-anchor="middle">初始化</text>
+<text x="111" y="152" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="10" font-weight="normal" fill="#a79883" text-anchor="middle">无输入</text>
+<line x1="186" y1="140" x2="246" y2="140" stroke="#57493b" stroke-width="2"/>
+<polygon points="246,140 240,131 252,131" fill="#57493b" stroke="none" stroke-width="0"/>
+<rect x="252" y="112" width="170" height="56" rx="8" fill="#3e2f14" stroke="#e0a94a" stroke-width="2"/>
+<text x="337" y="134" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="15" font-weight="bold" fill="#ece3d4" text-anchor="middle">玩家回合开始</text>
+<text x="337" y="152" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="10" font-weight="normal" fill="#a79883" text-anchor="middle">无输入（自动）</text>
+<line x1="422" y1="140" x2="482" y2="140" stroke="#57493b" stroke-width="2"/>
+<polygon points="482,140 476,131 488,131" fill="#57493b" stroke="none" stroke-width="0"/>
+<rect x="488" y="112" width="150" height="56" rx="8" fill="#222b19" stroke="#7a9a5a" stroke-width="2"/>
+<text x="563" y="134" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="15" font-weight="bold" fill="#ece3d4" text-anchor="middle">玩家行动</text>
+<text x="563" y="152" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="10" font-weight="normal" fill="#a79883" text-anchor="middle">可出牌 / 可结束</text>
+<rect x="700" y="108" width="176" height="64" rx="8" fill="#2f130d" stroke="#a8442f" stroke-width="2"/>
+<text x="788" y="130" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="15" font-weight="bold" fill="#ece3d4" text-anchor="middle">使用卡牌 → 效果结算</text>
+<text x="788" y="148" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="10" font-weight="normal" fill="#a79883" text-anchor="middle">输入锁定</text>
+<line x1="638" y1="124" x2="700" y2="124" stroke="#57493b" stroke-width="2"/>
+<polygon points="700,124 694,115 706,115" fill="#57493b" stroke="none" stroke-width="0"/>
+<text x="669" y="112.8" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="11" font-weight="normal" fill="#a79883" text-anchor="middle">出牌</text>
+<line x1="700" y1="156" x2="638" y2="156" stroke="#57493b" stroke-width="2"/>
+<polygon points="638,156 632,147 644,147" fill="#57493b" stroke="none" stroke-width="0"/>
+<text x="669" y="144.8" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="11" font-weight="normal" fill="#a79883" text-anchor="middle">回到行动</text>
+<rect x="700" y="218" width="176" height="64" rx="8" fill="#433d2c" stroke="#f2dc9e" stroke-width="2"/>
+<text x="788" y="240" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="15" font-weight="bold" fill="#ece3d4" text-anchor="middle">保留选择</text>
+<text x="788" y="258" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="10" font-weight="normal" fill="#a79883" text-anchor="middle">可保留 / 取消</text>
+<line x1="563" y1="168" x2="640" y2="240" stroke="#57493b" stroke-width="2"/>
+<polygon points="640,240 634,231 646,231" fill="#57493b" stroke="none" stroke-width="0"/>
+<text x="601.5" y="156.8" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="11" font-weight="normal" fill="#a79883" text-anchor="middle">结束回合且手牌非空</text>
+<line x1="640" y1="250" x2="563" y2="176" stroke="#57493b" stroke-width="2"/>
+<polygon points="563,176 557,167 569,167" fill="#57493b" stroke="none" stroke-width="0"/>
+<text x="601.5" y="238.8" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="11" font-weight="normal" fill="#a79883" text-anchor="middle">取消</text>
+<rect x="700" y="318" width="176" height="56" rx="8" fill="#1a2619" stroke="#5f8a5a" stroke-width="2"/>
+<text x="788" y="340" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="15" font-weight="bold" fill="#ece3d4" text-anchor="middle">随从自动攻击</text>
+<text x="788" y="358" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="10" font-weight="normal" fill="#a79883" text-anchor="middle">输入锁定</text>
+<line x1="788" y1="282" x2="788" y2="318" stroke="#57493b" stroke-width="2"/>
+<polygon points="788,318 782,309 794,309" fill="#57493b" stroke="none" stroke-width="0"/>
+<rect x="488" y="318" width="150" height="56" rx="8" fill="#141f28" stroke="#4a6f8f" stroke-width="2"/>
+<text x="563" y="340" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="15" font-weight="bold" fill="#ece3d4" text-anchor="middle">敌方阶段</text>
+<text x="563" y="358" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="10" font-weight="normal" fill="#a79883" text-anchor="middle">输入锁定</text>
+<line x1="700" y1="346" x2="638" y2="346" stroke="#57493b" stroke-width="2"/>
+<polygon points="638,346 632,337 644,337" fill="#57493b" stroke="none" stroke-width="0"/>
+<line x1="488" y1="346" x2="430" y2="346" stroke="#57493b" stroke-width="2"/>
+<polygon points="430,346 424,337 436,337" fill="#57493b" stroke="none" stroke-width="0"/>
+<line x1="430" y1="346" x2="430" y2="196" stroke="#57493b" stroke-width="2"/>
+<polygon points="430,196 424,205 436,205" fill="#57493b" stroke="none" stroke-width="0"/>
+<text x="430" y="271.85" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="11" font-weight="normal" fill="#a79883" text-anchor="middle">新回合</text>
+<rect x="908" y="318" width="160" height="56" rx="8" fill="#31120d" stroke="#b0432f" stroke-width="2"/>
+<text x="988" y="340" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="15" font-weight="bold" fill="#ece3d4" text-anchor="middle">终局</text>
+<text x="988" y="358" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="10" font-weight="normal" fill="#a79883" text-anchor="middle">锁定全部输入</text>
+<text x="908" y="300" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="10" font-weight="normal" fill="#a79883" text-anchor="start">任何生命变化后检查</text>
+<rect x="36" y="420" width="1032" height="92" rx="8" fill="#332a22" stroke="#57493b" stroke-width="1"/>
+<text x="52" y="445.2" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="14" font-weight="bold" fill="#ece3d4" text-anchor="start">输入可用性约定</text>
+<text x="52" y="467.6" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="12" font-weight="normal" fill="#a79883" text-anchor="start">· 仅「玩家行动」阶段接受出牌与结束回合；保留选择只接受保留操作，可取消返回。</text>
+<text x="52" y="487.6" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="12" font-weight="normal" fill="#a79883" text-anchor="start">· 效果结算、随从自动攻击、敌方阶段全程锁定输入；动画播放期间同样锁定（_busy）。</text>
+<text x="52" y="507.6" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="12" font-weight="normal" fill="#a79883" text-anchor="start">· 终局后禁止出牌与结束回合；玩法说明弹窗与结算弹窗期间，背景不可操作。</text>
+</svg>

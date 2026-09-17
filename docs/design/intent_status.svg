@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="560" viewBox="0 0 1100 560">
+<rect width="1100" height="560" fill="#171310"/>
+<text x="36" y="45.6" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="27" font-weight="bold" fill="#ece3d4" text-anchor="start">意图与状态元素 · Intent &amp; Status</text>
+<text x="36" y="69.2" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="14" font-weight="normal" fill="#a79883" text-anchor="start">意图显示「实际数值 + 目标」（规格 §4.2）；玩家状态含生命 / 护盾 / 能量</text>
+<line x1="36" y1="82" x2="1064" y2="82" stroke="#57493b" stroke-width="1"/>
+<text x="36" y="117.6" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="17" font-weight="bold" fill="#ece3d4" text-anchor="start">敌人意图框（三种）</text>
+<rect x="36" y="136" width="320" height="62" rx="8" fill="#3a2020" stroke="#ff8a7a" stroke-width="2"/>
+<text x="52" y="165.6" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="17" font-weight="bold" fill="#ff8a7a" text-anchor="start">意图：攻击玩家：6</text>
+<text x="52" y="187.6" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="12" font-weight="normal" fill="#a79883" text-anchor="start">目标 = 玩家</text>
+<rect x="376" y="136" width="320" height="62" rx="8" fill="#3a2020" stroke="#ff8a7a" stroke-width="2"/>
+<text x="392" y="165.6" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="17" font-weight="bold" fill="#ff8a7a" text-anchor="start">意图：攻击守卫：10</text>
+<text x="392" y="187.6" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="12" font-weight="normal" fill="#a79883" text-anchor="start">有嘲讽随从时改指向它</text>
+<rect x="716" y="136" width="320" height="62" rx="8" fill="#1e2f42" stroke="#6f8fa8" stroke-width="2"/>
+<text x="732" y="165.6" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="17" font-weight="bold" fill="#6f8fa8" text-anchor="start">意图：防御：获得 8 护盾</text>
+<text x="732" y="187.6" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="12" font-weight="normal" fill="#a79883" text-anchor="start">本轮不攻击</text>
+<text x="36" y="224.4" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="13" font-weight="normal" fill="#a79883" text-anchor="start">数值在公开后锁定；玩家召唤嘲讽随从时目标立即更新，但数值不变（规格 §6.6、A18）。</text>
+<text x="36" y="263.6" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="17" font-weight="bold" fill="#ece3d4" text-anchor="start">玩家状态元素</text>
+<text x="36" y="294.4" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="13" font-weight="normal" fill="#a79883" text-anchor="start">生命</text>
+<rect x="36" y="304" width="300" height="26" rx="6" fill="#3a2620" stroke="none" stroke-width="0"/>
+<rect x="36" y="304" width="300" height="26" rx="6" fill="#b0432f" stroke="none" stroke-width="0"/>
+<text x="186" y="316" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="15" font-weight="bold" fill="#ece3d4" text-anchor="middle">60 / 60</text>
+<text x="380" y="294.4" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="13" font-weight="normal" fill="#a79883" text-anchor="start">受伤后（41 / 60）</text>
+<rect x="380" y="304" width="300" height="26" rx="6" fill="#3a2620" stroke="none" stroke-width="0"/>
+<rect x="380" y="304" width="205" height="26" rx="6" fill="#b0432f" stroke="none" stroke-width="0"/>
+<text x="530" y="316" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="15" font-weight="bold" fill="#ece3d4" text-anchor="middle">41 / 60</text>
+<text x="724" y="294.4" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="13" font-weight="normal" fill="#a79883" text-anchor="start">护盾（与生命并列显示）</text>
+<rect x="724" y="304" width="340" height="26" rx="6" fill="#1f282f" stroke="none" stroke-width="0"/>
+<text x="894" y="316" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="15" font-weight="bold" fill="#6f8fa8" text-anchor="middle">护盾 8</text>
+<text x="36" y="366.4" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="13" font-weight="normal" fill="#a79883" text-anchor="start">能量 0 ~ 10（当前 3）</text>
+<rect x="36" y="378" width="22" height="12" rx="3" fill="#e0a94a" stroke="none" stroke-width="0"/>
+<rect x="61" y="378" width="22" height="12" rx="3" fill="#e0a94a" stroke="none" stroke-width="0"/>
+<rect x="86" y="378" width="22" height="12" rx="3" fill="#e0a94a" stroke="none" stroke-width="0"/>
+<rect x="111" y="378" width="22" height="12" rx="3" fill="#2e3240" stroke="none" stroke-width="0"/>
+<rect x="136" y="378" width="22" height="12" rx="3" fill="#2e3240" stroke="none" stroke-width="0"/>
+<rect x="161" y="378" width="22" height="12" rx="3" fill="#2e3240" stroke="none" stroke-width="0"/>
+<rect x="186" y="378" width="22" height="12" rx="3" fill="#2e3240" stroke="none" stroke-width="0"/>
+<rect x="211" y="378" width="22" height="12" rx="3" fill="#2e3240" stroke="none" stroke-width="0"/>
+<rect x="236" y="378" width="22" height="12" rx="3" fill="#2e3240" stroke="none" stroke-width="0"/>
+<rect x="261" y="378" width="22" height="12" rx="3" fill="#2e3240" stroke="none" stroke-width="0"/>
+<text x="296" y="390" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="15" font-weight="bold" fill="#e0a94a" text-anchor="start">能量 3 / 10</text>
+<text x="36" y="443.6" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="17" font-weight="bold" fill="#ece3d4" text-anchor="start">飘字规范（伤害与效果反馈）</text>
+<text x="36" y="494" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="30" font-weight="bold" fill="#b0432f" text-anchor="start">-5</text>
+<text x="36" y="518" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="10" font-weight="normal" fill="#a79883" text-anchor="start">生命伤害，最大字号，向上飘 58px 并淡出</text>
+<text x="296" y="486" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="20" font-weight="bold" fill="#6f8fa8" text-anchor="start">护盾 -6</text>
+<text x="296" y="508" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="10" font-weight="normal" fill="#a79883" text-anchor="start">护盾吸收量，叠在伤害上方</text>
+<text x="556" y="486" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="20" font-weight="bold" fill="#e0a94a" text-anchor="start">能量 +1</text>
+<text x="556" y="508" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="10" font-weight="normal" fill="#a79883" text-anchor="start">所有回能（回合开始 / 卡牌 / 承伤）</text>
+<text x="816" y="487.6" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="22" font-weight="bold" fill="#6f8fa8" text-anchor="start">护盾 +8</text>
+<text x="816" y="510" font-family="Microsoft YaHei, Microsoft YaHei UI, SimHei, sans-serif" font-size="10" font-weight="normal" fill="#a79883" text-anchor="start">获得护盾</text>
+</svg>
