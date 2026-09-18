@@ -93,12 +93,26 @@ func _run() -> void:
 	inst._on_card_clicked(hand_id)
 	eq("点击手牌进入选中态", inst._selected, hand_id)
 	check("右侧提示已更新", inst._hint_label.text.contains("已选中"), inst._hint_label.text)
-	var hand_tt = int(CardDB.get_card(inst.engine.state.def_id_of(hand_id)).get("target", -1))
-	check("选中手牌后出现「确认使用」按钮", inst._confirm_btn.visible)
+	var hand_def: String = inst.engine.state.def_id_of(hand_id)
+	var hand_tt = int(CardDB.get_card(hand_def).get("target", -1))
+	check("选中手牌后显示融牌按钮", inst._fuse_btn.visible)
+	check("卡面显示点数（点数与费用分开标记）",
+		inst._hand_area.get_child(0).points == inst.engine.state.effective_points(hand_id),
+		"points=%s" % str(inst._hand_area.get_child(0).points))
+	if hand_tt == T.TargetType.OTHER_HAND and inst._card_has_op(hand_def, CardDB.OP_MODIFY_POINT):
+		check("调律选中后显示 +1 / -1 方向按钮（S01）", inst._delta_row.visible)
+	else:
+		check("选中手牌后出现「确认使用」按钮", inst._confirm_btn.visible)
 	if hand_tt == T.TargetType.SINGLE_ENEMY:
 		check("单体牌需点击敌人确认：确认按钮禁用", inst._confirm_btn.disabled)
 		check("单体牌选中时高亮合法敌人",
 			inst._enemy_hit_area.get_theme_stylebox("panel").border_color == Palette.SELECT)
+	elif hand_tt == T.TargetType.OTHER_HAND or hand_tt == T.TargetType.READY_MINION:
+		check("需要目标的牌在选好目标前不能确认",
+			(not inst._confirm_btn.visible) or inst._confirm_btn.disabled)
+		check("提示要求先选择目标",
+			inst._hint_label.text.contains("另一张手牌") or inst._hint_label.text.contains("仆从"),
+			inst._hint_label.text)
 	else:
 		check("无目标牌可直接确认：确认按钮可用", not inst._confirm_btn.disabled)
 	inst._cancel_selection()
@@ -110,7 +124,8 @@ func _run() -> void:
 	for iid in inst.engine.state.hand:
 		var def_id: String = inst.engine.state.def_id_of(int(iid))
 		var tt: int = int(CardDB.get_card(def_id).get("target", -1))
-		if tt == T.TargetType.NONE or tt == T.TargetType.SELF:
+		# 排除「检索」：它打出后会进入待选择状态，单独在下面验证
+		if (tt == T.TargetType.NONE or tt == T.TargetType.SELF) and def_id != "search":
 			no_target_id = int(iid)
 			break
 	if no_target_id != -1:
@@ -149,13 +164,18 @@ func _run() -> void:
 	inst._deck_overlay.visible = false
 
 	# ── 结束回合 + 保留一张牌 ─────────────────────────────
+	inst._selected = -1
+	if inst.engine.state.hand.is_empty():
+		inst.engine._draw_cards(1)
+		inst._refresh_all()
+	await settle(inst)
 	var turn_now: int = inst.engine.state.turn
 	inst._on_end_turn_pressed()
 	check("有手牌时进入保留选择模式", inst._keep_mode)
 	check("保留操作条可见", inst._keep_bar.visible)
 	if inst.engine.state.hand.size() > 0:
 		inst._on_card_clicked(int(inst.engine.state.hand[0]))
-		check("已选定保留目标", inst._keep_choice != -1)
+		check("已选定保留目标", not inst._keep_set.is_empty())
 	inst._on_keep_confirm()
 	await settle(inst)
 	eq("回合推进", inst.engine.state.turn, turn_now + 1)
@@ -166,6 +186,87 @@ func _run() -> void:
 
 	# 随从/场景槽位渲染仍正常
 	eq("随从槽位仍为 2", inst._minion_views.size(), 2)
+
+	# ── 新体系界面：融牌（弃进弃牌堆）/ 点数链 ─────────────
+	inst.engine.state.energy = 4
+	inst._refresh_all()
+	var fuse_id := -1
+	for iid in inst.engine.state.hand:
+		if inst.engine.state.is_temp(int(iid)):
+			continue
+		inst._selected = -1
+		inst._on_card_clicked(int(iid))
+		if inst._selected == int(iid):
+			fuse_id = int(iid)
+			break
+	if fuse_id == -1:
+		check("融牌界面（本局没有可选中融掉的手牌，跳过）", true)
+	if fuse_id != -1:
+		check("融牌按钮可用（非临时牌即可，与能不能打出无关）", not inst._fuse_btn.disabled)
+		var energy_before_fuse: int = inst.engine.state.energy
+		inst._on_fuse_pressed()
+		await settle(inst)
+		eq("融牌后能量 +1", inst.engine.state.energy, energy_before_fuse + 1)
+		eq("融牌后卡牌进入弃牌堆", inst.engine.state.zone_of(fuse_id), T.Zone.DISCARD)
+		check("弃牌堆计数已刷新", inst._discard_count.text != "0 张", inst._discard_count.text)
+		inst._open_deck("discard")
+		check("弃牌堆查看器能看到刚融掉的牌", inst._deck_list.get_child_count() >= 1,
+			"n=%d" % inst._deck_list.get_child_count())
+		inst._deck_overlay.visible = false
+		check("点数状态已在玩家面板显示", inst._points_label.text.contains("本回合点数"),
+			inst._points_label.text)
+		check("三类链状态已显示", inst._chain_label.text.contains("倍数") and inst._chain_label.text.contains("同点"),
+			inst._chain_label.text)
+
+	# ── 打不出去的牌也必须能选中并融掉（用费用不足的能量冲击确定复现）──
+	inst._selected = -1
+	inst.engine.state.energy = 0
+	var blocked_id := -1
+	for iid in inst.engine.state.draw_pile:
+		if inst.engine.state.def_id_of(int(iid)) == "energy_blast":
+			blocked_id = int(iid)
+			break
+	if blocked_id != -1:
+		inst.engine.state.draw_pile.erase(blocked_id)
+		inst.engine.state.hand.push_front(blocked_id)
+		inst.engine.state.set_zone(blocked_id, T.Zone.HAND)
+		inst._refresh_all()
+		check("能量冲击在 0 能量下确实打不出去", not bool(inst.engine.can_play(blocked_id)["ok"]))
+		inst._on_card_clicked(blocked_id)
+		eq("打不出去的牌也能被选中", inst._selected, blocked_id)
+		check("它同样可以融牌（按钮可用）", not inst._fuse_btn.disabled)
+		check("提示说明当前不能用但可以融", inst._hint_label.text.contains("融牌"), inst._hint_label.text)
+		inst._cancel_selection()
+	else:
+		check("牌库里没有能量冲击，跳过「打不出去的牌可融」检查", true)
+	# ── 检索（S04）：打出后弹出选择弹窗 ───────────────────
+	var se_id := -1
+	for iid in inst.engine.state.draw_pile:
+		if inst.engine.state.def_id_of(int(iid)) == "search":
+			se_id = int(iid)
+			break
+	if se_id != -1:
+		inst.engine.state.draw_pile.erase(se_id)
+		inst.engine.state.hand.push_front(se_id)
+		inst.engine.state.set_zone(se_id, T.Zone.HAND)
+		inst.engine.state.energy = 10
+		inst._selected = -1
+		inst._refresh_all()
+		inst._on_card_clicked(se_id)
+		inst._on_card_clicked(se_id)
+		await settle(inst)
+		check("S04 打出检索后弹出选择弹窗", inst._tutor_overlay.visible)
+		check("S04 弹窗列出查看的牌", inst._tutor_list.get_child_count() >= 1,
+			"n=%d" % inst._tutor_list.get_child_count())
+		check("S04 待选择期间锁定输入", inst._busy)
+		if inst._tutor_list.get_child_count() > 0:
+			inst._on_tutor_pick(0)
+			await settle(inst)
+		check("S04 选择后弹窗关闭", not inst._tutor_overlay.visible)
+		check("S04 选择后解锁输入", not inst._busy)
+		check("S04 待选择已清空", inst.engine.state.pending_choice.is_empty())
+	else:
+		check("S04 检索弹窗（本局牌库没有检索，跳过）", true)
 
 	# ── A19 连续点击再来一局 ──────────────────────────────
 	inst.engine.state.player_hp = 10

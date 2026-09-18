@@ -28,6 +28,7 @@ TYPE_MAP = {
 TARGET_MAP = {
     "SINGLE_ENEMY": "单个敌人", "SELF": "自身", "NONE": "无",
     "SCENE_SLOT": "场景槽", "MINION_SLOT": "空随从槽",
+    "OTHER_HAND": "另一张手牌", "READY_MINION": "已就绪仆从",
 }
 
 problems = []
@@ -57,6 +58,8 @@ CARD_RE = re.compile(
     r'"name": "(?P<name>[^"]+)",\s*'
     r'"type": T\.CardType\.(?P<type>\w+),\s*'
     r'"cost": (?P<cost>\d+),\s*'
+    r'"points": (?P<points>\d+),\s*'
+    r'(?:"temp": true,\s*)?'
     r'"target": T\.TargetType\.(?P<target>\w+),\s*'
     r'"desc": "(?P<desc>[^"]*)",\s*'
     r'"count": (?P<count>\d+),'
@@ -69,6 +72,7 @@ for m in CARD_RE.finditer(cards_src):
         m.group("name"),
         TYPE_MAP.get(m.group("type"), m.group("type")),
         m.group("cost"),
+        m.group("points"),
         TARGET_MAP.get(m.group("target"), m.group("target")),
         m.group("desc"),
         m.group("count"),
@@ -87,7 +91,7 @@ for line in sec62.splitlines():
     if not line.strip().startswith("|"):
         continue
     cols = [c.strip() for c in line.strip().strip("|").split("|")]
-    if len(cols) != 7:
+    if len(cols) != 8:
         continue
     if "---" in cols[3] or cols[0] == "ID":
         continue
@@ -103,7 +107,7 @@ else:
     if all(d == s for d, s in zip(doc_cards, src_cards)):
         ok("每张卡的 名称/类型/费用/目标/效果/数量 全部一致")
 
-total = sum(int(c[5]) for c in src_cards)
+total = sum(int(c[6]) for c in src_cards)
 if total == 20:
     ok("初始牌组合计 20 张")
 else:

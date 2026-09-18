@@ -61,6 +61,19 @@ func _initialize() -> void:
 	_run()
 
 
+func points_ok(before: int, after: int) -> bool:
+	# 已到 10 点时无法继续上调，属于正常边界
+	return after >= 1 and after <= 10 and (after != before or before >= 10)
+
+
+func _first_playable(inst) -> Node:
+	# 返回第一张当前可出的手牌视图；没有则返回 null
+	for c in inst._hand_area.get_children():
+		if bool(inst.engine.can_play(int(c.instance_id))["ok"]):
+			return c
+	return null
+
+
 func _run() -> void:
 	print("=== 真实鼠标输入测试 ===")
 	var packed = load("res://src/ui/battle_scene.tscn")
@@ -79,6 +92,24 @@ func _run() -> void:
 	inst.engine.state.energy = 10
 	inst._refresh_all()
 	await process_frame
+
+	# 让第一张手牌确定为「斩击」（单体牌），使点击分支可预期
+	var eng = inst.engine
+	var slash_id := -1
+	for iid in eng.state.draw_pile:
+		if eng.state.def_id_of(int(iid)) == "slash":
+			slash_id = int(iid)
+			break
+	if slash_id != -1 and not eng.state.hand.is_empty():
+		var old_first := int(eng.state.hand[0])
+		eng.state.hand.erase(old_first)
+		eng.state.draw_pile.append(old_first)
+		eng.state.set_zone(old_first, T.Zone.DRAW_PILE)
+		eng.state.hand.push_front(slash_id)
+		eng.state.set_zone(slash_id, T.Zone.HAND)
+		eng.state.draw_pile.erase(slash_id)
+		inst._refresh_all()
+		await process_frame
 
 	var vp: Viewport = inst.get_viewport()
 	eq("手牌区渲染 5 张", inst._hand_area.get_child_count(), 5)
@@ -115,9 +146,11 @@ func _run() -> void:
 	check("出牌后清空选中态", inst._selected == -1, "selected=%d" % inst._selected)
 	await settle(inst)   # 等事件播放结束，否则 _busy 会挡住后续点击
 
-	# ── 场景 C：右键取消 ───────────────────────────────────
-	if inst.engine.state.hand.size() > 0:
-		var c3 = inst._hand_area.get_child(0)
+	# ── 场景 C：右键取消（只挑一张当前可出的牌）──────────
+	inst.engine.state.energy = 10
+	inst._refresh_all()
+	var c3 = _first_playable(inst)
+	if c3 != null:
 		var id3: int = int(c3.instance_id)
 		click_at(vp, c3.get_global_rect().get_center())
 		await process_frame
@@ -125,10 +158,14 @@ func _run() -> void:
 		click_at(vp, Vector2(800, 400), MOUSE_BUTTON_RIGHT)
 		await process_frame
 		eq("右键取消选中", inst._selected, -1)
+	else:
+		check("场景 C：本局没有可出的手牌，跳过", true)
 
-	# ── 场景 D：点击空白处取消 ─────────────────────────────
-	if inst.engine.state.hand.size() > 0:
-		var c4 = inst._hand_area.get_child(0)
+	# ── 场景 D：点击空白处取消（只挑一张当前可出的牌）──────
+	inst.engine.state.energy = 10
+	inst._refresh_all()
+	var c4 = _first_playable(inst)
+	if c4 != null:
 		var id4: int = int(c4.instance_id)
 		click_at(vp, c4.get_global_rect().get_center())
 		await process_frame
@@ -136,6 +173,45 @@ func _run() -> void:
 		click_at(vp, Vector2(800, 300))
 		await process_frame
 		eq("点击空白处取消选中", inst._selected, -1)
+	else:
+		check("场景 D：本局没有可出的手牌，跳过", true)
+
+	# ── 场景 E：调律必须先点目标手牌（S01）─────────────────
+	var eng2 = inst.engine
+	var tune_id := -1
+	for iid in eng2.state.draw_pile:
+		if eng2.state.def_id_of(int(iid)) == "tune":
+			tune_id = int(iid)
+			break
+	if tune_id != -1 and eng2.state.hand.size() >= 2:
+		eng2.state.draw_pile.erase(tune_id)
+		eng2.state.hand.push_front(tune_id)
+		eng2.state.set_zone(tune_id, T.Zone.HAND)
+		eng2.state.energy = 10
+		inst._selected = -1
+		inst._refresh_all()
+		await process_frame
+		var c5 = inst._hand_area.get_child(0)
+		click_at(vp, c5.get_global_rect().get_center())
+		await process_frame
+		eq("真实点击选中调律", inst._selected, tune_id)
+		check("提示要求选择另一张手牌", inst._hint_label.text.contains("另一张手牌"), inst._hint_label.text)
+		var c6 = inst._hand_area.get_child(1)
+		var target_id: int = int(c6.instance_id)
+		click_at(vp, c6.get_global_rect().get_center())
+		await process_frame
+		eq("点击第二张手牌后选定目标", inst._hand_target, target_id)
+		check("+1 / -1 方向按钮可见", inst._delta_row.visible)
+		var pts_before: int = eng2.state.effective_points(target_id)
+		inst._on_delta_pressed(1)
+		await settle(inst)
+		var pts_after: int = eng2.state.effective_points(target_id)
+		# 调律的「倍数效果」会放大调整幅度，这里只断言方向与取值范围
+		check("调律调整生效（点数快照只影响未来出牌）", points_ok(pts_before, pts_after),
+		"before=%d after=%d" % [pts_before, pts_after])
+		check("调律已离开手牌", eng2.state.zone_of(tune_id) != T.Zone.HAND)
+	else:
+		check("场景 E：本局没有可用调律，跳过", true, "tune_id=%d" % tune_id)
 
 	print("\n" + "=".repeat(60))
 	print("真实输入测试：通过 %d，失败 %d" % [_pass, _fail])

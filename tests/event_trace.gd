@@ -19,6 +19,7 @@ func _initialize() -> void:
 	_scenario_a()
 	_scenario_b()
 	_scenario_c()
+	_scenario_d()
 	print("")
 	print("═".repeat(78))
 	quit(0)
@@ -38,13 +39,13 @@ func _scenario_a() -> void:
 	_force_hand(e, ["slash", "follow_up", "energy_blast", "block", "meditate"])
 	_line("构造手牌", "斩击 / 追击 / 能量冲击 / 格挡 / 调息　（能量 %d）" % e.state.energy)
 
-	_step("使用「斩击」——「先回能、后造成伤害」的顺序写在卡牌效果里")
+	_step("使用「斩击」（2 点）—— 攻击牌不再自带回能，点数建立比较基准")
 	_call("play_card(斩击)", e.play_card(_hand_id(e, "slash")))
 
-	_step("使用「追击」—— 读取本回合此前已用攻击牌数（1 → 打 6 而不是 3）")
+	_step("使用「追击」（4 点）—— 2→4 是倍数关系：基础 3 改 6，再吃倍数第 1 层强化 +3")
 	_call("play_card(追击)", e.play_card(_hand_id(e, "follow_up")))
 
-	_step("使用「能量冲击」—— 技能不计入攻击牌，也不回能")
+	_step("使用「能量冲击」（6 点）—— 4→6 无倍因关系：三条链归零，技能也不回能")
 	_call("play_card(能量冲击)", e.play_card(_hand_id(e, "energy_blast")))
 
 	_step("使用「格挡」")
@@ -101,6 +102,41 @@ func _scenario_b() -> void:
 # ══════════════════════════════════════════════════════════
 #  场景 C：回合开始的固定顺序（§6.2 步骤 3 → 步骤 4）
 # ══════════════════════════════════════════════════════════
+
+# ══════════════════════════════════════════════════════════
+#  场景 D：新体系 —— 融牌弃牌 / 点数三链 / 累计点数
+# ══════════════════════════════════════════════════════════
+func _scenario_d() -> void:
+	_banner("场景 D　融牌与点数三链：1→2→4→8 建立倍数 3 层，弃牌与累计点数独立结算")
+	var e = BattleEngine.new()
+	e.start_battle(4242)
+	e.state.energy = 9
+
+	_force_hand(e, ["meditate", "slash", "tune", "tactical_draw", "block"])
+	_line("构造手牌", "调息(1 点) / 斩击(2 点) / 调律(4 点) / 战术整理(8 点) / 格挡(3 点)")
+
+	_step("融掉「格挡」——融牌不是出牌：不计点、不断链，只把这张牌弃进弃牌堆换 1 能量")
+	_call("fuse_card(格挡)", e.fuse_card(_hand_id(e, "block")))
+	_line("解读", "只有 card_fused 与 energy_changed(+1)；没有 points/chain 事件，上一张点数仍为空，牌直接进弃牌堆")
+
+	_step("1 → 2 → 4 → 8：连续倍数关系，只强化本次命中的「倍数效果」")
+	_call("play_card(调息 1 点)", e.play_card(_hand_id(e, "meditate")))
+	_call("play_card(斩击 2 点)", e.play_card(_hand_id(e, "slash")))
+	var tune_id := _hand_id(e, "tune")
+	var target_id := _hand_id(e, "block")
+	_call("play_card(调律 4 点 → 目标格挡 +1 点)", e.play_card(tune_id, {"hand_target": target_id, "point_delta": 1}))
+	_call("play_card(战术整理 8 点)", e.play_card(_hand_id(e, "tactical_draw")))
+	_line("解读", "倍数 1 → 2 → 3 层；因数/同点保持 0；累计 1+2+4+8=15 点，跨过 12 触发 1 次累计奖励")
+
+	_step("结束回合：临时点数修正与三类链清空（融掉的牌早已在弃牌堆里）")
+	_force_hand(e, [])
+	_call("confirm_end_turn(-1)", e.confirm_end_turn(-1))
+	_line("解读", "turn_started 之后依次出现 energy_changed(+1, turn_start) → 抽牌；\n" +
+		"　　　第 2 回合 last_point / 三条链 / 累计点数都归零，链层不跨回合保留。")
+
+	_footer(e, "对照《设计元素表》：M21 融牌独立于出牌、M23~M26 三类链独立叠层与断链、\n" +
+		"　　　M28 累计点数独立统计；设计表把 12 点阈值标为「示例」，此处按原型阈值实现。")
+
 
 func _scenario_c() -> void:
 	_banner("场景 C　回合开始固定顺序：先「回合 +1 能量」，再「场景触发 +1 能量」")
@@ -188,8 +224,50 @@ func _fmt(t: String, ev: Dictionary) -> String:
 		return "打出「%s」" % ev["name"]
 	if t == T.EV_CARD_GAINED_ENERGY:
 		return "「%s」作为卡牌效果回能 %d" % [CardDB.card_name(String(ev.get("def_id", ""))), int(ev["amount"])]
-	if t == T.EV_ATTACK_CARD_USED:
-		return "本回合已成功使用攻击牌 %d 张" % int(ev["count"])
+	if t == T.EV_POINTS_TOTAL_CHANGED:
+		return "点数 %d → 本回合累计 %d（阈值 %d，已到档 %d 次）" % [
+			int(ev["point"]), int(ev["total"]), int(ev["threshold"]), int(ev["triggers"])]
+	if t == T.EV_CHAIN_UPDATED:
+		var rel := int(ev["relation"])
+		var lv := int(ev["level"])
+		var rel_text := "无关系：三条链归零" if lv == 0 else "%s第 %d 层" % [String(T.CHAIN_NAME.get(rel, "")), lv]
+		return "上一张 %d → 本次 %d：%s（倍数 %d ｜ 因数 %d ｜ 同点 %d）" % [
+			int(ev["last_point"]), int(ev["point"]), rel_text,
+			int(ev["mult_level"]), int(ev["factor_level"]), int(ev["same_level"])]
+	if t == T.EV_CUMULATIVE_TRIGGERED:
+		return "累计点数到档 %d：下回合额外抽 %d 张（不贡献相邻链层）" % [
+			int(ev["threshold"]), int(ev["bonus_draw"])]
+	if t == T.EV_CARD_FUSED:
+		if int(ev["energy_gained"]) > 0:
+			return "融牌「%s」（%d 点）弃进弃牌堆 → 能量 +%d；不算出牌、不断链" % [
+				ev["name"], int(ev["point"]), int(ev["energy_gained"])]
+		return "融牌「%s」（%d 点）弃进弃牌堆；能量已满，不获得能量" % [ev["name"], int(ev["point"])]
+	if t == T.EV_POINT_MODIFIED:
+		return "手牌点数修正「%s」%d → %d（本回合有效，不追溯已出牌）" % [
+			ev.get("name", ""), int(ev["before"]), int(ev["after"])]
+	if t == T.EV_TEMP_CARD_ADDED:
+		return "生成临时牌「%s」（%d 点，不可融 / 不可保留）" % [ev["name"], int(ev["points"])]
+	if t == T.EV_TEMP_CARD_EXPIRED:
+		return "临时牌「%s」回合结束离场" % ev.get("name", "")
+	if t == T.EV_CARD_EXILED:
+		return "临时牌「%s」用后移出战斗" % ev.get("name", "")
+	if t == T.EV_FIRST_TRIGGER:
+		return "场上监听「%s」触发：%s" % [ev["name"], ev["desc"]]
+	if t == T.EV_MINION_SHIELD_GAINED:
+		return "仆从「%s」获得 %d 护盾 → 共 %d（下个玩家回合清除）" % [
+			ev["name"], int(ev["amount"]), int(ev["shield"])]
+	if t == T.EV_MINION_SHIELD_CLEARED:
+		return "仆从槽位 %d 护盾 %d 清除" % [int(ev["slot"]), int(ev["amount"])]
+	if t == T.EV_MINION_BUFFED:
+		return "随从「%s」本轮攻击 +%d → %d" % [ev["name"], int(ev["amount"]), int(ev["attack"])]
+	if t == T.EV_MINION_HEALED:
+		return "随从「%s」恢复 %d 生命 → %d" % [ev["name"], int(ev["amount"]), int(ev["hp"])]
+	if t == T.EV_MINION_COMMANDED:
+		return "指令：随从「%s」立即攻击 %d" % [ev["name"], int(ev["attack"])]
+	if t == T.EV_TUTOR_OPENED:
+		return "检索：查看牌库顶 %d 张（%s）" % [ev["instance_ids"].size(), "、".join(ev["names"])]
+	if t == T.EV_TUTOR_RESOLVED:
+		return "检索选择「%s」%s" % [ev["name"], "加入手牌" if bool(ev["to_hand"]) else "进入弃牌堆"]
 	if t == T.EV_DAMAGE:
 		return "%s 受到 %d 伤害（护盾吸收 %d，生命 -%d）→ 剩余生命 %d" % [
 			_side_name(int(ev["target"])), int(ev["amount"]),
@@ -290,7 +368,11 @@ func _force_hand(e, def_ids: Array) -> void:
 			if iid != -1:
 				break
 		if iid == -1:
-			continue
+			# 牌组外的候选池卡（count = 0）现场创建，便于逐条演示
+			if CardDB.has_card(String(d)):
+				iid = e.state.create_instance(String(d), T.Zone.HAND)
+			else:
+				continue
 		e.state.draw_pile.erase(iid)
 		e.state.discard_pile.erase(iid)
 		e.state.hand.append(iid)

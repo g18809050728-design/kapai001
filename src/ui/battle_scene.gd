@@ -30,6 +30,12 @@ var _keep_mode: bool = false
 var _keep_choice: int = -1
 var _fast: bool = false
 var _restarting: bool = false
+## 特殊功能牌的目标选择（S01 调律 / S04 映片 / S07 指令）
+var _target_kind: int = -1
+var _hand_target: int = -1
+var _minion_target: int = -1
+## 保留选择（封存可保留多张）
+var _keep_set: Array = []
 
 # ── 节点引用 ───────────────────────────────────────────────
 var _title_label: Label
@@ -74,6 +80,15 @@ var _char_enemy: TextureRect
 var _float_layer: Control
 var _keep_bar: HBoxContainer
 var _keep_confirm_btn: Button
+var _points_label: Label
+var _chain_label: Label
+var _fuse_btn: Button
+var _delta_row: HBoxContainer
+var _delta_minus_btn: Button
+var _delta_plus_btn: Button
+var _tutor_overlay: Control
+var _tutor_title: Label
+var _tutor_list: VBoxContainer
 
 var _help_overlay: Control
 var _result_overlay: Control
@@ -250,6 +265,7 @@ func _build_ui() -> void:
 	_build_help_overlay()
 	_build_result_overlay()
 	_build_deck_overlay()
+	_build_tutor_overlay()
 
 
 func _build_top_bar() -> void:
@@ -303,15 +319,19 @@ func _build_player_panel() -> void:
 		pips.add_child(pip)
 		_energy_pips.append(pip)
 
-	var ph = Label.new()
-	ph.text = ""
-	ph.add_theme_font_size_override("font_size", 13)
-	ph.add_theme_color_override("font_color", Palette.TEXT_DIM)
-	ph.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	ph.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	ph.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	ph.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	col.add_child(ph)
+	var sep := ColorRect.new()
+	sep.color = Color(1, 1, 1, 0.08)
+	sep.custom_minimum_size = Vector2(0, 1)
+	sep.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	col.add_child(sep)
+
+	# 新体系：点数（累计 / 阈值）与三类相邻链状态（§11）
+	_points_label = _label("本回合点数 0 / 12", 14, Palette.SELECT)
+	col.add_child(_points_label)
+	_chain_label = _label("上一张：—", 12, Palette.TEXT_DIM)
+	_chain_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_chain_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	col.add_child(_chain_label)
 
 
 func _build_minion_panel() -> void:
@@ -328,6 +348,7 @@ func _build_minion_panel() -> void:
 		mv.slot = s
 		mv.custom_minimum_size = SLOT_SIZE
 		mv.size = SLOT_SIZE
+		mv.minion_clicked.connect(_on_minion_clicked)
 		row.add_child(mv)
 		_minion_views.append(mv)
 
@@ -474,6 +495,7 @@ func _build_bottom() -> void:
 	_discard_count = _label("0 张", 14, Palette.TEXT_DIM)
 	col.add_child(_discard_count)
 
+
 	# 手牌区（§4.2）
 	_hand_area = Control.new()
 	_hand_area.position = Vector2(196, 620)
@@ -488,6 +510,24 @@ func _build_bottom() -> void:
 	_hint_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_hint_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	ccol.add_child(_hint_label)
+
+	# 融牌（M21）：独立于出牌的资源操作
+	_fuse_btn = _button("融牌 +1 能量", Rect2(0, 0, 158, 34), Color("#6b4a2f"), 15)
+	_fuse_btn.pressed.connect(_on_fuse_pressed)
+	ccol.add_child(_fuse_btn)
+	_fuse_btn.visible = false
+
+	# 调律的调整方向（S01）：+1 / -1 都直接确认出牌
+	_delta_row = HBoxContainer.new()
+	_delta_row.add_theme_constant_override("separation", 6)
+	_delta_row.visible = false
+	ccol.add_child(_delta_row)
+	_delta_minus_btn = _button("点数 -1", Rect2(0, 0, 76, 32), Color("#4a5a86"), 13)
+	_delta_minus_btn.pressed.connect(_on_delta_pressed.bind(-1))
+	_delta_row.add_child(_delta_minus_btn)
+	_delta_plus_btn = _button("点数 +1", Rect2(0, 0, 76, 32), Color("#4a5a86"), 13)
+	_delta_plus_btn.pressed.connect(_on_delta_pressed.bind(1))
+	_delta_row.add_child(_delta_plus_btn)
 
 	_confirm_btn = _button("确认使用", Rect2(0, 0, 158, 44), Color("#3b5a86"), 16)
 	_confirm_btn.pressed.connect(_on_confirm_pressed)
@@ -576,9 +616,19 @@ func _build_help_overlay() -> void:
 
 	var text = """【抽牌】每个玩家回合开始时抽 5 张牌。保留的牌不会减少抽牌数量。手牌上限 10 张，超出的牌仍从牌库移出后进入弃牌堆。牌库不足时会把弃牌堆洗入牌库继续抽取。
 
-【免费牌】普通攻击牌和防御牌费用为 0，可以任意张数连续使用，没有行动点，也没有每回合出牌次数上限。技能牌需要消耗能量。
+【点数】每张牌有 1~10 点（卡头左上是方形点数徽章，右上是圆形费用徽章）。点数与费用无关，只用于相邻关系与累计点数。
 
-【能量】回合开始 +1（上限 10，可跨回合保留）。成功使用一张普通攻击牌 +1，与被护盾挡下多少无关。敌人的一次行动造成玩家生命伤害时 +1（伤害被护盾完全吸收则不触发）。能量只由规则层结算，动画不影响数值。
+【相邻三类关系】每次出牌只与「上一张」比较：点数相等是同点；大于且能整除是倍数；小于且能整除是因数。三类分别连续叠层，切换关系从第 1 层重新开始，不匹配则三条链全部归零。相等只算同点，不算倍数或因数；相差 1 没有额外奖励。只有本次命中的那一类会强化本牌对应效果（卡面第二行标出本牌的强化）。
+
+【累计点数】本回合成功打出的点数会累加，达到 12 的整数倍时触发一次累计奖励（原型奖励：下回合额外抽 1 张）。累计与相邻三类链互相独立，不贡献也不消耗链层数。
+
+【融牌】选中任意一张手牌后点「融牌」：把这张牌弃进弃牌堆，并尽量获得 1 能量。任何手牌都能融 —— 包括费用不够、没有合法目标、当前根本打不出去的牌。融牌不算出牌：不计点数、不改变上一张、不断链。能量已满时同样可以融，只是这次不获得能量（等于单纯弃掉这张牌、腾出手牌位）。临时衍生牌不能融。
+
+【能量】回合开始 +1（上限 10，可跨回合保留）。攻击牌与调息不再自带回能，能量主要来自融牌；敌人的一次行动造成玩家生命伤害时 +1（被护盾完全吸收则不触发）。能量只由规则层结算，动画不影响数值。
+
+【特殊功能牌】调律（4 点）：把另一张手牌点数 +1 或 -1；封存（3 点）：本回合结束可多保留 1 张；检索（6 点）：查看牌库顶 3 张选 1 张；指令（8 点）：让一只已就绪的仆从立即攻击。它们同样付费、计点、参与相邻关系。
+
+【临时衍生牌】由场景或仆从生成（如镜像回廊生成「映片」、战术号手生成「短令」）。有费用有点数，但不能融牌、不能保留、不能被回收；用掉或回合结束时移出战斗，不进弃牌堆。
 
 【敌人意图】每回合开始时公开：攻击 N 表示本轮敌方阶段会对你造成 N 点伤害；防御 N 表示魔像会获得 N 点护盾且本轮不攻击。数值在展示后锁定，但如果你召唤了嘲讽随从，目标会立即改由该随从承受。
 
@@ -648,6 +698,25 @@ func _build_deck_overlay() -> void:
 
 
 # ══════════════════════════════════════════════════════════
+func _build_tutor_overlay() -> void:
+	# 检索（S04）：查看牌库顶若干张，选 1 张加入手牌（待选择状态在规则层）
+	var o = _make_overlay()
+	_tutor_overlay = o["overlay"]
+	var p = _centered_panel(_tutor_overlay, 640, 460)
+	var col = _content(p, 18)
+	_tutor_title = _label("检索：选择 1 张加入手牌", 18, Palette.SELECT)
+	col.add_child(_tutor_title)
+	var sc = ScrollContainer.new()
+	sc.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	sc.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	col.add_child(sc)
+	_tutor_list = VBoxContainer.new()
+	_tutor_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_tutor_list.add_theme_constant_override("separation", 6)
+	sc.add_child(_tutor_list)
+
+
+# ══════════════════════════════════════════════════════════
 #  开局 / 重开
 # ══════════════════════════════════════════════════════════
 
@@ -659,8 +728,14 @@ func _start_new_battle(seed_value: int) -> void:
 	_keep_mode = false
 	_keep_choice = -1
 	_restarting = false
+	_target_kind = -1
+	_hand_target = -1
+	_minion_target = -1
+	_keep_set = []
 	_result_btn.disabled = false
 	_restart_btn.disabled = false
+	if _tutor_overlay != null:
+		_tutor_overlay.visible = false
 	_clear(_float_layer)
 	_clear(_hand_area)
 	_help_overlay.visible = false
@@ -702,6 +777,12 @@ func _refresh_player() -> void:
 	for i in range(_energy_pips.size()):
 		var pip: ColorRect = _energy_pips[i]
 		pip.color = Palette.ENERGY if i < st.energy else Color(1, 1, 1, 0.12)
+	# 新体系：本回合累计点数与三类相邻链状态（§11）
+	_points_label.text = "本回合点数 %d / %d（到档 %d 次）" % [
+		st.points_total, T.POINTS_THRESHOLD, st.cumulative_triggers]
+	_chain_label.text = "上一张：%s\n倍数 %d ｜ 因数 %d ｜ 同点 %d" % [
+		("—" if st.last_point == 0 else "%d 点" % st.last_point),
+		st.mult_level, st.factor_level, st.same_level]
 
 
 func _refresh_enemy() -> void:
@@ -729,10 +810,13 @@ func _refresh_minions() -> void:
 		var m = engine.state.minion_at_slot(s)
 		var mv = _minion_views[s]
 		if m.is_empty() or int(m["hp"]) <= 0:
+			mv.selectable = false
+			mv.set_selected(false)
 			mv.show_minion({}, "", "")
 		else:
 			var def_id = engine.state.def_id_of(int(m["card_instance"]))
-			mv.show_minion(m, def_id, CardDB.card_name(def_id))
+			var mon = CardDB.monitor(def_id)
+			mv.show_minion(m, def_id, CardDB.card_name(def_id), String(mon.get("desc", "")))
 
 
 func _refresh_scene() -> void:
@@ -745,12 +829,17 @@ func _refresh_scene() -> void:
 	var def_id = st.def_id_of(int(st.scene["card_instance"]))
 	_scene_name.text = "场景：" + CardDB.card_name(def_id)
 	_scene_desc.text = String(CardDB.get_card(def_id).get("desc", ""))
-	_scene_triggers.text = "剩余触发次数：%d" % int(st.scene["triggers"])
+	var trig := int(st.scene["triggers"])
+	if trig < 0:
+		_scene_triggers.text = "本战常驻直到被替换；只有打出时计点，触发不计点。"
+	else:
+		_scene_triggers.text = "剩余触发次数：%d" % trig
 
 
 func _refresh_piles() -> void:
 	_draw_count.text = "%d 张" % engine.state.draw_pile.size()
 	_discard_count.text = "%d 张" % engine.state.discard_pile.size()
+
 
 
 func _refresh_hand() -> void:
@@ -771,12 +860,16 @@ func _refresh_hand() -> void:
 		var def_id: String = engine.state.def_id_of(iid)
 		var v = engine.can_play(iid)
 		var cv = CardView.new()
-		cv.setup(def_id, iid, bool(v["ok"]), String(v["reason"]))
+		cv.setup(def_id, iid, bool(v["ok"]), String(v["reason"]),
+			engine.state.effective_points(iid), _card_chain_hint(iid),
+			engine.state.is_temp(iid), _point_delta_of(iid))
 		cv.position = Vector2(x0 + step * i, (_hand_area.size.y - CardView.CARD_SIZE.y) * 0.5)
 		cv.card_clicked.connect(_on_card_clicked)
 		_hand_area.add_child(cv)
-		var active_sel = _keep_choice if _keep_mode else _selected
-		cv.set_selected(iid == active_sel)
+		if _keep_mode:
+			cv.set_selected(_keep_set.has(iid))
+		else:
+			cv.set_selected(iid == _selected or iid == _hand_target)
 
 
 func _refresh_log() -> void:
@@ -809,36 +902,133 @@ func _refresh_controls() -> void:
 	var sel_tt = -1
 	if _selected != -1:
 		sel_tt = int(CardDB.get_card(st.def_id_of(_selected)).get("target", T.TargetType.NONE))
-	_confirm_btn.visible = (_selected != -1 and not _keep_mode and not _busy and not st.battle_over())
-	_confirm_btn.disabled = (sel_tt == T.TargetType.SINGLE_ENEMY)
+	var sel_def := ""
+	if _selected != -1:
+		sel_def = st.def_id_of(_selected)
+	var selecting: bool = (_selected != -1 and not _keep_mode and not _busy and not st.battle_over())
+	var play_ok: bool = false
+	if selecting:
+		play_ok = bool(engine.can_play(_selected, _build_options())["ok"])
+	_confirm_btn.visible = selecting
+	# 需要目标的牌：选好目标才允许确认（S01 / S04 / S07）；打不出去的牌禁止确认
+	_confirm_btn.disabled = (not play_ok) or (sel_tt == T.TargetType.SINGLE_ENEMY) \
+		or ((sel_tt == T.TargetType.OTHER_HAND or sel_tt == T.TargetType.READY_MINION) \
+			and not _target_chosen())
+	if _card_has_op(sel_def, CardDB.OP_MODIFY_POINT):
+		_confirm_btn.visible = false
+		_delta_row.visible = selecting
+		_delta_plus_btn.disabled = not play_ok
+		_delta_minus_btn.disabled = not play_ok
+	else:
+		_delta_row.visible = false
+	# 融牌按钮（M21）：任何手牌都能融，与能不能打出无关
+	_fuse_btn.visible = selecting
+	if selecting:
+		var fv = engine.can_fuse(_selected)
+		_fuse_btn.disabled = not bool(fv["ok"])
+		_fuse_btn.tooltip_text = String(fv["reason"])
+		var e_full: bool = st.energy >= st.max_energy
+		_fuse_btn.text = "融牌（能量已满，弃掉）" if e_full else "融牌 +1 能量"
+	# 随从槽位在需要仆从目标时可点击
+	var minion_selecting: bool = selecting and sel_tt == T.TargetType.READY_MINION
+	for mv in _minion_views:
+		mv.selectable = minion_selecting
+		mv.set_selected(minion_selecting and int(mv.slot) == _minion_target)
 	var hl = (sel_tt == T.TargetType.SINGLE_ENEMY)
 	_enemy_hit_area.add_theme_stylebox_override("panel", Palette.box(Color(1, 1, 1, 0.03) if not hl else Color(0.95, 0.82, 0.42, 0.10), 8, 3 if hl else 1, Palette.SELECT if hl else Palette.BORDER))
 
 	if _keep_confirm_btn != null:
-		_keep_confirm_btn.disabled = (_keep_choice == -1)
+		_keep_confirm_btn.disabled = _keep_set.is_empty()
 
 	if st.battle_over():
 		_hint_label.text = "战斗已结束。点击「再来一局」重新挑战。"
+	elif not st.pending_choice.is_empty():
+		_hint_label.text = "检索：请在上方弹窗中选择 1 张加入手牌。"
 	elif _keep_mode:
-		if _keep_choice == -1:
-			_hint_label.text = "结束回合：请点击一张手牌作为要保留的牌，或点「不保留」。"
+		var allowed := 1 + int(st.extra_keep)
+		if _keep_set.is_empty():
+			_hint_label.text = "结束回合：最多保留 %d 张（点手牌选择，或点「不保留」）。" % allowed
 		else:
-			_hint_label.text = "将保留「%s」，其余手牌进入弃牌堆。" % CardDB.card_name(st.def_id_of(_keep_choice))
+			var names: Array = []
+			for k in _keep_set:
+				names.append(CardDB.card_name(st.def_id_of(int(k))))
+			_hint_label.text = "将保留「%s」（%d/%d）。" % ["、".join(names), _keep_set.size(), allowed]
 	elif _busy:
 		_hint_label.text = "结算中…（期间锁定输入）"
 	elif _selected != -1:
-		var def_id = st.def_id_of(_selected)
-		var tt = int(CardDB.get_card(def_id).get("target", T.TargetType.NONE))
-		if tt == T.TargetType.SINGLE_ENEMY:
-			_hint_label.text = "已选中「%s」：点击魔像确认使用；右键 / Esc / 点击空白处取消。" % CardDB.card_name(def_id)
-		elif tt == T.TargetType.MINION_SLOT:
-			_hint_label.text = "已选中「%s」：再次点击卡牌或点「确认使用」召唤。" % CardDB.card_name(def_id)
-		else:
-			_hint_label.text = "已选中「%s」：再次点击卡牌或点「确认使用」。" % CardDB.card_name(def_id)
+		_hint_label.text = _selection_hint(sel_tt, sel_def)
 	elif st.turn == 1:
 		_hint_label.text = String(EnemyDB.encounter()["first_turn_hint"])
 	else:
 		_hint_label.text = "点击手牌出牌，然后点「结束回合」。"
+
+
+## 本牌本次出牌会命中的关系提示（组合预览，§11）。
+func _card_chain_hint(instance_id: int) -> String:
+	if _keep_mode:
+		return ""
+	if instance_id != _selected:
+		return ""
+	var pv = engine.preview_chain(instance_id)
+	var level := int(pv["level"])
+	if level > 0:
+		return "本次命中：%s第 %d 层（只强化本牌对应效果）" % [
+			String(T.CHAIN_NAME.get(int(pv["relation"]), "")), level]
+	if int(pv["last_point"]) > 0:
+		return "与上一张 %d 点无关系：三条链归零" % int(pv["last_point"])
+	return "本回合首张：只建立比较基准"
+
+
+## 临时点数修正量（用于卡面显示 N (±d)）。
+func _point_delta_of(instance_id: int) -> int:
+	var rec = engine.state.record(instance_id)
+	return int(rec.get("point_mod", 0))
+
+
+func _card_has_op(def_id: String, kind: String) -> bool:
+	if def_id == "":
+		return false
+	for op in CardDB.get_card(def_id).get("ops", []):
+		if String(op.get("op", "")) == kind:
+			return true
+	return false
+
+
+## 需要目标的功能牌是否已经选好目标。
+func _target_chosen() -> bool:
+	if _target_kind == T.TargetType.OTHER_HAND:
+		return _hand_target != -1
+	if _target_kind == T.TargetType.READY_MINION:
+		return _minion_target != -1
+	return true
+
+
+func _selection_hint(sel_tt: int, def_id: String) -> String:
+	var cname := CardDB.card_name(def_id)
+	# 打不出去的牌也要能被选中并融掉，这里先说清原因
+	var pv_ok = engine.can_play(_selected, _build_options())
+	if not bool(pv_ok["ok"]):
+		return "已选中「%s」：当前不能用（%s）。可以点「融牌」把它弃进弃牌堆。" % [cname, String(pv_ok["reason"])]
+	if sel_tt == T.TargetType.SINGLE_ENEMY:
+		return "已选中「%s」：点击魔像确认使用；右键 / Esc / 点击空白处取消。" % cname
+	if sel_tt == T.TargetType.OTHER_HAND:
+		if _hand_target == -1:
+			return "已选中「%s」：请点击另一张手牌作为目标。" % cname
+		var tname := CardDB.card_name(engine.state.def_id_of(_hand_target))
+		if _card_has_op(def_id, CardDB.OP_MODIFY_POINT):
+			return "目标「%s」当前 %d 点：点「点数 +1 / -1」确认出牌。" % [
+				tname, engine.state.effective_points(_hand_target)]
+		return "目标「%s」当前 %d 点：点「确认使用」改成「%s」的点数。" % [
+			tname, engine.state.effective_points(_hand_target), cname]
+	if sel_tt == T.TargetType.READY_MINION:
+		if _minion_target == -1:
+			return "已选中「%s」：请点击一只已就绪的仆从作为目标。" % cname
+		return "目标为随从槽位 %d：点「确认使用」让它立即攻击（消耗其本轮攻击机会）。" % (_minion_target + 1)
+	var pv = engine.preview_chain(_selected)
+	var extra := ""
+	if int(pv["level"]) > 0:
+		extra = "本次命中 %s第 %d 层。" % [String(T.CHAIN_NAME.get(int(pv["relation"]), "")), int(pv["level"])]
+	return "已选中「%s」（%d 点）：再次点击卡牌或点「确认使用」。%s" % [cname, int(pv["point"]), extra]
 
 
 # ══════════════════════════════════════════════════════════
@@ -849,42 +1039,82 @@ func _on_card_clicked(instance_id: int) -> void:
 	if _busy or engine.state.battle_over():
 		return
 	if _keep_mode:
-		_keep_choice = instance_id
+		# 封存（S03）可保留多张：在额度内点击切换
+		var allowed := 1 + int(engine.state.extra_keep)
+		if _keep_set.has(instance_id):
+			_keep_set.erase(instance_id)
+		elif _keep_set.size() < allowed:
+			_keep_set.append(instance_id)
+		else:
+			_float("本回合最多保留 %d 张" % allowed, Vector2(VIEW.x * 0.5, 620), Palette.WARN, 19)
 		_update_selection_visuals()
 		_refresh_controls()
 		return
 
-	var v = engine.can_play(instance_id)
-	if not v["ok"]:
-		_float(String(v["reason"]), Vector2(VIEW.x * 0.5, 620), Palette.WARN, 19)
+	# 已选中需要手牌目标的牌时，本点击用于指定目标（S01 调律 / 映片）
+	if _selected != -1 and _target_kind == T.TargetType.OTHER_HAND and instance_id != _selected:
+		if engine.state.zone_of(instance_id) != T.Zone.HAND:
+			return
+		_hand_target = instance_id
+		_refresh_hand()
+		_refresh_controls()
 		return
 
+	var v = engine.can_play(instance_id)
 	var def_id = engine.state.def_id_of(instance_id)
 	var tt = int(CardDB.get_card(def_id).get("target", T.TargetType.NONE))
+	var cname := CardDB.card_name(def_id)
 
 	if _selected == instance_id:
-		# 再次点击：无目标牌直接生效；单体牌仍需点击敌人（§5.1）
-		if tt != T.TargetType.SINGLE_ENEMY:
-			_confirm_play(instance_id)
-		else:
+		# 再次点击：出不了牌就不结算，但说明原因（这张牌依然可以融掉）
+		if not bool(v["ok"]):
+			_float(String(v["reason"]), Vector2(VIEW.x * 0.5, 620), Palette.WARN, 19)
+			_hint_label.text = "「%s」当前不能用：%s。可以直接点「融牌」把它弃掉。" % [cname, String(v["reason"])]
+			return
+		# 单体牌仍需点击敌人（§5.1）；需要目标的牌必须先选好目标
+		if tt == T.TargetType.SINGLE_ENEMY:
 			_hint_label.text = "请点击魔像确认使用。"
+			return
+		if tt == T.TargetType.OTHER_HAND and _hand_target == -1:
+			_float("请先点击另一张手牌作为目标", Vector2(VIEW.x * 0.5, 620), Palette.WARN, 19)
+			return
+		if tt == T.TargetType.READY_MINION and _minion_target == -1:
+			_float("请点击一只已就绪的仆从作为目标", Vector2(VIEW.x * 0.5, 620), Palette.WARN, 19)
+			return
+		_confirm_play(instance_id, _build_options())
 		return
 
+	# 首次点击：能不能打出都先选中 —— 打不出去的牌同样必须能融掉
 	_selected = instance_id
-	_update_selection_visuals()
+	_target_kind = tt
+	_hand_target = -1
+	_minion_target = -1
+	_refresh_hand()
 	_refresh_controls()
+	if not bool(v["ok"]):
+		_float(String(v["reason"]), Vector2(VIEW.x * 0.5, 620), Palette.WARN, 19)
 
 
-func _confirm_play(instance_id: int) -> void:
-	var r = engine.play_card(instance_id)
+func _confirm_play(instance_id: int, options: Dictionary = {}) -> void:
+	var token = _token
+	var r = engine.play_card(instance_id, options)
 	if not r["ok"]:
 		_float(String(r["reason"]), Vector2(VIEW.x * 0.5, 620), Palette.WARN, 19)
 		_refresh_all()
 		return
 	_selected = -1
+	_target_kind = -1
+	_hand_target = -1
+	_minion_target = -1
 	_refresh_all()
 	await _play_events(r["events"])
-	if _token == 0:
+	if token != _token:
+		return
+	if bool(r.get("pending", false)):
+		# 检索（S04）：等待玩家从查看的牌中选 1 张
+		_busy = true
+		_refresh_controls()
+		_show_tutor_choice()
 		return
 	if engine.state.battle_over():
 		_show_result()
@@ -908,19 +1138,119 @@ func _on_enemy_clicked() -> void:
 	_confirm_play(_selected)
 
 
+## 仆从被点击：只有在选中「指令 / 短令」且仆从已就绪时才作为目标（S07）。
+func _on_minion_clicked(slot: int) -> void:
+	if _busy or _selected == -1 or engine.state.battle_over():
+		return
+	if _target_kind != T.TargetType.READY_MINION:
+		return
+	if not engine.state.ready_minion_slots().has(slot):
+		_float("该仆从不是「已就绪且本轮未攻击」", Vector2(VIEW.x * 0.5, 620), Palette.WARN, 19)
+		return
+	_minion_target = slot
+	_refresh_minions()
+	_refresh_controls()
+
+
+## 融牌（M21）：把选中的手牌换成能量，不算出牌、不计点数、不改变上一张。
+func _on_fuse_pressed() -> void:
+	if _busy or _selected == -1 or engine.state.battle_over():
+		return
+	var token = _token
+	var r = engine.fuse_card(_selected)
+	if not r["ok"]:
+		_float(String(r["reason"]), Vector2(VIEW.x * 0.5, 620), Palette.WARN, 19)
+		return
+	_selected = -1
+	_target_kind = -1
+	_hand_target = -1
+	_refresh_all()
+	await _play_events(r["events"])
+
+
+## 调律的方向确认（S01）。
+func _on_delta_pressed(sign: int) -> void:
+	if _busy or _selected == -1 or engine.state.battle_over():
+		return
+	if _hand_target == -1:
+		_float("请先点击另一张手牌作为目标", Vector2(VIEW.x * 0.5, 620), Palette.WARN, 19)
+		return
+	var options := _build_options()
+	options["point_delta"] = sign
+	_confirm_play(_selected, options)
+
+
+func _build_options() -> Dictionary:
+	var options := {}
+	if _hand_target != -1:
+		options["hand_target"] = _hand_target
+	if _minion_target != -1:
+		options["minion_slot"] = _minion_target
+	return options
+
+
+## 检索（S04）的待选择弹窗：查看的牌由规则层给出，界面只负责让玩家选 1 张。
+func _show_tutor_choice() -> void:
+	_clear(_tutor_list)
+	var pc: Dictionary = engine.state.pending_choice
+	if pc.is_empty():
+		return
+	var ids: Array = pc.get("revealed", [])
+	_tutor_title.text = "检索：查看牌库顶 %d 张，选择 1 张加入手牌" % ids.size()
+	for i in range(ids.size()):
+		var iid := int(ids[i])
+		var def_id: String = engine.state.def_id_of(iid)
+		var ctype := CardDB.card_type(def_id)
+		var b = Button.new()
+		b.text = "%s（%s · %d 点）" % [
+			CardDB.card_name(def_id), String(T.CARD_TYPE_NAME.get(ctype, "")),
+			CardDB.card_points(def_id)]
+		b.custom_minimum_size = Vector2(0, 40)
+		_style_button(b, Palette.card_color(ctype).darkened(0.2), 15)
+		b.pressed.connect(_on_tutor_pick.bind(i))
+		_tutor_list.add_child(b)
+	_tutor_overlay.visible = true
+	_refresh_controls()
+
+
+func _on_tutor_pick(index: int) -> void:
+	if engine.state.pending_choice.is_empty():
+		return
+	var token = _token
+	var r = engine.resolve_tutor_choice(index)
+	_tutor_overlay.visible = false
+	if not r["ok"]:
+		_float(String(r["reason"]), Vector2(VIEW.x * 0.5, 620), Palette.WARN, 19)
+		return
+	_refresh_all()
+	await _play_events(r["events"])
+	if token != _token:
+		return
+	if engine.state.battle_over():
+		_show_result()
+
+
 ## 只更新现有卡牌的选中外观，不重建节点（§5.1 出牌交互）。
 ## 重建会销毁正在处理点击事件的卡牌，导致 accept_event() 失效、事件继续冒泡到 _unhandled_input。
 func _update_selection_visuals() -> void:
-	var active = _keep_choice if _keep_mode else _selected
 	for c in _hand_area.get_children():
-		if c.has_method("set_selected"):
-			c.set_selected(int(c.instance_id) == active)
+		if not c.has_method("set_selected"):
+			continue
+		var iid := int(c.instance_id)
+		if _keep_mode:
+			c.set_selected(_keep_set.has(iid))
+		else:
+			c.set_selected(iid == _selected or iid == _hand_target)
 
 func _cancel_selection() -> void:
 	if _selected == -1:
 		return
 	_selected = -1
-	_update_selection_visuals()
+	_target_kind = -1
+	_hand_target = -1
+	_minion_target = -1
+	_refresh_hand()
+	_refresh_minions()
 	_refresh_controls()
 
 
@@ -951,16 +1281,18 @@ func _on_end_turn_pressed() -> void:
 		_finish_end_turn(-1)
 		return
 	_keep_mode = true
-	_keep_choice = -1
+	_keep_set = []
 	_selected = -1
+	_target_kind = -1
+	_hand_target = -1
 	_refresh_hand()
 	_refresh_controls()
 
 
 func _on_keep_confirm() -> void:
-	if _keep_choice == -1:
+	if _keep_set.is_empty():
 		return
-	_finish_end_turn(_keep_choice)
+	_finish_end_turn(int(_keep_set[0]), _keep_set.slice(1))
 
 
 func _on_keep_none() -> void:
@@ -973,17 +1305,17 @@ func _on_keep_cancel() -> void:
 		_float(String(r["reason"]), Vector2(VIEW.x * 0.5, 620), Palette.WARN, 19)
 		return
 	_keep_mode = false
-	_keep_choice = -1
+	_keep_set = []
 	_refresh_all()
 
 
-func _finish_end_turn(keep: int) -> void:
+func _finish_end_turn(keep: int, extra: Array = []) -> void:
 	var token = _token
 	_busy = true
 	_keep_mode = false
-	_keep_choice = -1
+	_keep_set = []
 	_refresh_controls()
-	var r = engine.confirm_end_turn(keep)
+	var r = engine.confirm_end_turn(keep, extra)
 	_refresh_all()
 	if bool(r["ok"]):
 		await _play_events(r["events"])
@@ -1021,7 +1353,13 @@ func _on_confirm_pressed() -> void:
 	if tt == T.TargetType.SINGLE_ENEMY:
 		_hint_label.text = "请点击魔像确认使用。"
 		return
-	_confirm_play(_selected)
+	if tt == T.TargetType.OTHER_HAND and _hand_target == -1:
+		_float("请先点击另一张手牌作为目标", Vector2(VIEW.x * 0.5, 620), Palette.WARN, 19)
+		return
+	if tt == T.TargetType.READY_MINION and _minion_target == -1:
+		_float("请点击一只已就绪的仆从作为目标", Vector2(VIEW.x * 0.5, 620), Palette.WARN, 19)
+		return
+	_confirm_play(_selected, _build_options())
 
 func _on_restart_pressed() -> void:
 	# §9：按钮执行初始化期间禁用，避免重复创建战斗
@@ -1037,6 +1375,7 @@ func _on_restart_pressed() -> void:
 func _open_deck(kind: String) -> void:
 	var st = engine.state
 	_clear(_deck_list)
+
 	if kind == "draw":
 		_deck_title.text = "抽牌堆 · %d 张（只显示组成与数量，不暴露抽取顺序）" % st.draw_pile.size()
 		var counts = {}
@@ -1155,6 +1494,57 @@ func _play_events(events: Array) -> void:
 			_float("护盾清除 %d" % int(ev.get("amount", 0)), pos3, Palette.TEXT_DIM, 18)
 			_refresh_all()
 			paced = true
+		elif etype == T.EV_CARD_FUSED:
+			var fname := String(ev.get("name", ""))
+			var gained := int(ev.get("energy_gained", 0))
+			if gained > 0:
+				_float("融牌「%s」→ 弃牌堆，能量 +%d" % [fname, gained],
+					Vector2(VIEW.x * 0.5, 500), Palette.ENERGY, 20)
+			else:
+				_float("弃掉「%s」（能量已满，不获得能量）" % fname,
+					Vector2(VIEW.x * 0.5, 500), Palette.TEXT_DIM, 20)
+			_refresh_all()
+			paced = true
+		elif etype == T.EV_CUMULATIVE_TRIGGERED:
+			_float("累计点数 %d：下回合额外抽 %d 张" % [
+				int(ev.get("threshold", 0)), int(ev.get("bonus_draw", 1))],
+				Vector2(VIEW.x * 0.5, 200), Palette.SELECT, 20)
+			_refresh_all()
+			paced = true
+		elif etype == T.EV_TEMP_CARD_ADDED:
+			_float("生成临时牌「%s」" % String(ev.get("name", "")),
+				Vector2(VIEW.x * 0.5, 470), Palette.WARN, 20)
+			_refresh_all()
+			paced = true
+		elif etype == T.EV_POINT_MODIFIED:
+			_float("点数 %d → %d" % [int(ev.get("before", 0)), int(ev.get("after", 0))],
+				Vector2(VIEW.x * 0.5, 560), Palette.SELECT, 19)
+			_refresh_all()
+			paced = true
+		elif etype == T.EV_FIRST_TRIGGER:
+			_float("场上监听：%s" % String(ev.get("desc", "")),
+				Vector2(VIEW.x * 0.5, 430), Palette.GOOD, 19)
+			_refresh_all()
+			paced = true
+		elif etype == T.EV_MINION_SHIELD_GAINED:
+			_float("仆从护盾 +%d" % int(ev.get("amount", 0)),
+				_anchor_for_target(T.Side.MINION, int(ev.get("slot", 0))) + Vector2(0, -24),
+				Palette.SHIELD, 20)
+			_refresh_all()
+			paced = true
+		elif etype == T.EV_MINION_BUFFED:
+			_float("本轮攻击 +%d" % int(ev.get("amount", 0)),
+				_anchor_for_target(T.Side.MINION, int(ev.get("slot", 0))), Palette.GOOD, 20)
+			_refresh_all()
+			paced = true
+		elif etype == T.EV_MINION_HEALED:
+			_float("恢复 %d 生命" % int(ev.get("amount", 0)),
+				_anchor_for_target(T.Side.MINION, int(ev.get("slot", 0))), Palette.GOOD, 20)
+			_refresh_all()
+			paced = true
+		elif etype == T.EV_TEMP_CARD_EXPIRED or etype == T.EV_CARD_EXILED \
+		or etype == T.EV_TUTOR_OPENED:
+			_refresh_all()
 
 		if paced:
 			await _delay(0.3)
