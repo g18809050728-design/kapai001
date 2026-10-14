@@ -1,0 +1,488 @@
+{
+  "kind": "content_deferred",
+  "schema_version": 1,
+  "source": "《交大四年：DDL战争》统一设计文档 v1.0 §4/§5/§8/§10.2 + 《项目计划书》§3.1",
+  "note": "MVP 内容账本。landed = 曾经阻塞、现已由引擎增量（t9 卡牌 op / t10 被动+hook+事件 op / t12 精力代价）实现并启用的条目，保留卡面原文与当时的缺口描述以便考古；manifest_holdback = 现在仍未启用、并写明原因的条目；manifest_next_segment = 下一段要做的清单变更。口径：不写近似效果，缺项一律记账。",
+  "landed": {
+    "note": "以下条目全部已落地并已在 mvp.json 启用（event 组除外，见 manifest_holdback）。原始缺口描述保留原文。引擎侧落点：t9 = tests/suites/test_battle_ops.gd + 文档《常量与规则配置》§5/《战斗模块契约》§19；t10 = tests/suites/test_relic_hooks.gd + §8/§21。",
+    "card": [
+      {
+        "id": "K05",
+        "name_key": "card.k05.name",
+        "doc": "§5.1",
+        "doc_line": "细心写 | 2·工作·白 | 完成14；本回合打过K04则额外完成4，合并为同一段 | 基础18",
+        "missing": "complete 的条件系统：按「本回合是否打出过指定牌」加值。bonus_if 目前只认 status/min_stacks。",
+        "proposed": {
+          "op": "complete",
+          "amount": 14,
+          "bonus_if": {
+            "played_definition": "K04",
+            "scope": "round",
+            "amount": 4,
+            "same_segment": true
+          }
+        },
+        "trigger": "出牌 resolve 的 complete 金额计算前；计数按原始卡实例的打出记录，跨场/回收不重置（沿用 CardRules.instance_owner 归属）",
+        "upgrade": {
+          "effects": [
+            {
+              "op": "complete",
+              "amount": 18
+            }
+          ]
+        }
+      },
+      {
+        "id": "K07",
+        "name_key": "card.k07.name",
+        "doc": "§5.1",
+        "doc_line": "复盘 | 1·策略·蓝 | 选弃牌堆1张加入手牌；耗尽；无目标不可用 | 费用0",
+        "missing": "op recall_from_discard：从弃牌堆选 1 张加入手牌；复用现有 resolution.choice 机制（kind=recall）。弃牌堆为空时该牌必须不可用（预览与 validate_play 都要拦）。",
+        "proposed": {
+          "op": "recall_from_discard",
+          "amount": 1,
+          "zone_from": "discard",
+          "zone_to": "hand"
+        },
+        "trigger": "出牌 resolve 时开启一次 effect 内选择；选择确认后继续队列",
+        "upgrade": {
+          "cost": 0
+        }
+      },
+      {
+        "id": "K12",
+        "name_key": "card.k12.name",
+        "doc": "§5.1",
+        "doc_line": "转换思路 | 1·策略·白 | 弃至多2张，抽实际弃牌数+1 | 获得2放松后再执行",
+        "missing": "discard 的「至多」语义（min_count 0 / max_count 2，现在强制 min==max）与「按实际弃置张数动态决定抽牌数」。",
+        "proposed": [
+          {
+            "op": "discard",
+            "amount": 2,
+            "up_to": true
+          },
+          {
+            "op": "draw",
+            "amount": 1,
+            "per_discarded": 1
+          }
+        ],
+        "trigger": "选择结算完成后（confirm_choice 游标 +1 时）按实际选中的张数决定后续 draw 值",
+        "upgrade": {
+          "pre_effects": [
+            {
+              "op": "relax",
+              "amount": 2
+            }
+          ]
+        }
+      },
+      {
+        "id": "K16",
+        "name_key": "card.k16.name",
+        "doc": "§5.2",
+        "doc_line": "调试 | 1·策略·蓝 | 净化2层负面，获得1编译 | 编译2",
+        "missing": "remove_status 的「按类清除」：一次清除 2 层负面（anxiety / procrastination / drowsiness）并可跨状态累计。现有 remove_status 只按单个 status 清。",
+        "proposed": {
+          "op": "remove_status",
+          "category": "negative",
+          "amount": 2
+        },
+        "trigger": "出牌 resolve 时",
+        "upgrade": {
+          "effects": [
+            {
+              "op": "remove_status",
+              "category": "negative",
+              "amount": 2
+            },
+            {
+              "op": "gain_status",
+              "status": "compile",
+              "stacks": 2
+            }
+          ]
+        }
+      },
+      {
+        "id": "K19",
+        "name_key": "card.k19.name",
+        "doc": "§5.2",
+        "doc_line": "版本控制 | 1·策略·白 | 获得5放松，保留另一张手牌 | 放松8",
+        "missing": "「保留另一张手牌」的 op：让本回合回合末的保留上限与指定手牌挂钩（现在 base_retention_count 只能由规则值给）。",
+        "proposed": {
+          "op": "retain_hand_card",
+          "amount": 1
+        },
+        "trigger": "立刻生效；round_end 的手牌保留结算时计入保留上限",
+        "upgrade": {
+          "effects": [
+            {
+              "op": "relax",
+              "amount": 8
+            },
+            {
+              "op": "retain_hand_card",
+              "amount": 1
+            }
+          ]
+        }
+      },
+      {
+        "id": "K59",
+        "name_key": "card.k59.name",
+        "doc": "§5.7",
+        "doc_line": "临时抱佛脚 | 2·工作·紫 | 完成12；当前DDL≤3时同段+10 | 基础16",
+        "missing": "complete 的 DDL 阈值条件（读战斗共享 DDL）。",
+        "proposed": {
+          "op": "complete",
+          "amount": 12,
+          "bonus_if": {
+            "ddl_lte": 3,
+            "amount": 10,
+            "same_segment": true
+          }
+        },
+        "trigger": "出牌 resolve 的 complete 金额计算前",
+        "upgrade": {
+          "effects": [
+            {
+              "op": "complete",
+              "amount": 16
+            }
+          ]
+        }
+      },
+      {
+        "id": "X01",
+        "name_key": "card.x01.name",
+        "doc": "§5.8",
+        "doc_line": "X01 分心消息 | 临时，不可打出；回合末正常弃置，无被动扣费",
+        "missing": "卡定义的「不可打出」闸门：validate_play 与 make_view.playable 都要拒绝（错误码建议 error.play.unplayable）。X01 还要能作为 task intent add_card 的目标存在（现在 _add_temporary_card 要求卡定义存在，且要求 effects 非空）。",
+        "proposed": {
+          "id": "X01",
+          "type": "strategy",
+          "rarity": "white",
+          "tags": [
+            "special",
+            "temporary"
+          ],
+          "cost": 0,
+          "target": "self",
+          "exhaust": false,
+          "unplayable": true,
+          "effects": []
+        },
+        "trigger": "出牌预检 / 预览",
+        "blocking": [
+          "N03（C语言练习）意图 B 的 add_card 指向 X01；X01 未落地前 N03 不进任何清单"
+        ],
+        "landed_note": "e1 已落地：unplayable 闸门 + rarity=null（不进随机品质池，满足《游戏规则书》「基础/特殊牌不进普通随机池」）。proposed 里的 rarity=white 改成 null：给 white 会让 X01 进奖励/商店池。X01 已在 mvp.json 启用，N03 的 add_card 前置解除。"
+      },
+      {
+        "id": "N03",
+        "name_key": "task.n03.name",
+        "doc": "§9.1",
+        "doc_line": "N03 | C语言练习 | 1～3 | 30/8 | A压力6 → B加入X01至弃牌堆并压力4",
+        "missing": "不新增 op：N03 已按文档写进 data/definitions/tasks.json（add_card {card:X01, count:1, zone:discard}），只等 X01 落地后启用。",
+        "proposed": null,
+        "trigger": "enemy_skill 阶段执行 add_card，随后 enemy_pressure 阶段结算压力 4",
+        "blocking": [
+          "X01"
+        ],
+        "landed_note": "X01 前置已由 e1 解除（X01 已在 mvp.json 启用）；N03 自身不新增 op，只等 content 扩容清单。"
+      }
+    ],
+    "character": [
+      {
+        "id": "P04",
+        "name_key": "character.p04.name",
+        "doc": "§4",
+        "doc_line": "P04 唐以宁·小组协调者 | 被动：每回合首张合作牌结算后获得2放松，考试备考面也触发 | 额外起始牌 K43、K44 | 初始饰品 A04",
+        "missing": "被动 trigger cooperation_card_resolved：battle_engine 现在硬编码只识别 work_card_resolved 一种 trigger。需要与 work_card_resolved 同构的「计数 + limit」处理，且合作牌的考试备考面（cooperation → relax 备考面）也要算作一次合作牌结算。",
+        "proposed": {
+          "trigger": "cooperation_card_resolved",
+          "count": 1,
+          "limit": {
+            "per": "round",
+            "times": 1
+          },
+          "effects": [
+            {
+              "op": "relax",
+              "amount": 2
+            }
+          ]
+        },
+        "trigger": "合作牌结算完成后（含考试独立作答时的备考面）",
+        "blocking": [
+          "P04 不进清单：被动不触发会让玩家以为游戏坏了（队长裁决 ④）"
+        ],
+        "content_status": "已按文档写进 data/definitions/characters.json；在引擎支持前不加入任何 manifest"
+      }
+    ],
+    "relic": [
+      {
+        "id": "A05",
+        "name_key": "relic.a05.name",
+        "doc": "§8",
+        "doc_line": "A05 老妈的饭 | 白 | 每场战斗第3、6回合开始恢复3精力",
+        "missing": "饰品 hook：回合开始（player_prepare）按回合序号的定次触发 heal。现有饰品只支持通用 work_flat_bonus 与硬编码 A04。",
+        "proposed": {
+          "hooks": [
+            {
+              "at": "round_start",
+              "rounds": [
+                3,
+                6
+              ],
+              "effects": [
+                {
+                  "op": "heal",
+                  "amount": 3
+                }
+              ]
+            }
+          ]
+        },
+        "trigger": "每战第 3、6 回合开始"
+      },
+      {
+        "id": "A07",
+        "name_key": "relic.a07.name",
+        "doc": "§8",
+        "doc_line": "A07 课堂笔记 | 蓝 | 第1回合额外抽2，受手牌上限限制",
+        "missing": "饰品 hook：第 1 回合抽牌阶段额外 +2 抽（受 hand_limit 裁切）。",
+        "proposed": {
+          "hooks": [
+            {
+              "at": "draw",
+              "rounds": [
+                1
+              ],
+              "effects": [
+                {
+                  "op": "draw",
+                  "amount": 2
+                }
+              ]
+            }
+          ]
+        },
+        "trigger": "每战第 1 回合抽牌阶段"
+      },
+      {
+        "id": "A08",
+        "name_key": "relic.a08.name",
+        "doc": "§8",
+        "doc_line": "A08 咖啡杯 | 白 | 每战首张K10免除精力支付，其他效果正常",
+        "missing": "饰品 hook：指定牌（K10）首张打出时跳过 lose_vitality 的精力支付，其余效果照常。",
+        "proposed": {
+          "hooks": [
+            {
+              "at": "card_play",
+              "definition_id": "K10",
+              "per": "battle",
+              "times": 1,
+              "skip_vitality_cost": true
+            }
+          ]
+        },
+        "trigger": "每战首次打出 K10 时的费用结算"
+      },
+      {
+        "id": "A11",
+        "name_key": "relic.a11.name",
+        "doc": "§8",
+        "doc_line": "A11 计划本 | 白 | 每回合首张策略牌结算后获得2放松",
+        "missing": "饰品 hook：每回合首张 type=strategy 的牌结算后 relax 2（与 A01 的 work_flat_bonus 时点不同，是结算后）。",
+        "proposed": {
+          "hooks": [
+            {
+              "at": "card_resolved",
+              "card_type": "strategy",
+              "per": "round",
+              "times": 1,
+              "effects": [
+                {
+                  "op": "relax",
+                  "amount": 2
+                }
+              ]
+            }
+          ]
+        },
+        "trigger": "每回合首张策略牌结算后"
+      },
+      {
+        "id": "A15",
+        "name_key": "relic.a15.name",
+        "doc": "§8",
+        "doc_line": "A15 校园卡 | 白 | 商店卡牌和饰品价格×0.8向上取整，不影响删牌与餐食",
+        "missing": "饰品 hook + run 层价格修正：商店卡牌与饰品报价 ×0.8 向上取整（删牌费与餐食价不受影响）。",
+        "proposed": {
+          "hooks": [
+            {
+              "at": "shop_price",
+              "kinds": [
+                "card",
+                "relic"
+              ],
+              "multiplier_percent": 80,
+              "rounding": "ceil"
+            }
+          ]
+        },
+        "trigger": "结算商店报价时（RunService.make_view 与购买校验都要用同一套）",
+        "blocking": [
+          "V10 的 return 选项要发 A15；A15 落地前 V10 不进清单"
+        ]
+      },
+      {
+        "id": "A18",
+        "name_key": "relic.a18.name",
+        "doc": "§8",
+        "doc_line": "A18 室友零食 | 白 | 每战前3回合开始恢复1精力",
+        "missing": "饰品 hook：前 3 个回合开始各恢复 1 精力（与 A05 同族，参数不同）。",
+        "proposed": {
+          "hooks": [
+            {
+              "at": "round_start",
+              "rounds": [
+                1,
+                2,
+                3
+              ],
+              "effects": [
+                {
+                  "op": "heal",
+                  "amount": 1
+                }
+              ]
+            }
+          ]
+        },
+        "trigger": "每战第 1～3 回合开始"
+      },
+      {
+        "id": "A04",
+        "name_key": "relic.a04.name",
+        "doc": "§8",
+        "doc_line": "A04 小组通讯录 | 初始 | 每战首张合作牌费用-1，备考面同样适用",
+        "missing": "不缺行为：行为已经在引擎里硬编码（card_rules.cost_quote 的 relic:A04 分支 + battle_engine 的 counter 递增），行为正确。缺的是「数据驱动」：ContentDB 要求 relics.effects 非空，而该效果没有对应 op，所以现在用 amount 0 的 work_flat_bonus 占位（无副作用）。数据驱动由 e2 补齐。",
+        "proposed": {
+          "op": "cost_discount",
+          "card_type": "cooperation",
+          "amount": 1,
+          "per": "battle",
+          "times": 1,
+          "exam_face_too": true
+        },
+        "trigger": "出牌费用报价时",
+        "content_status": "已在 data/definitions/relics.json 落定义；行为正确，占位 effect 需由 e2 换成语义化 op"
+      }
+    ],
+    "event": [
+      {
+        "id": "V03",
+        "option_id": "consult",
+        "doc": "§10.2",
+        "doc_line": "V03 选课咨询/1～3 | 从K14/K24/K34中选1；或删1张基础牌并支付5精力",
+        "missing": "gain_card 的「显式卡池三选一」：现有 gain_card 只支持 card_id（单张直发）或 rarity（按品质冻结候选）。MVP 按《项目计划书》§3.1 用 K14/K05/K60 做明确标识的测试替代池。",
+        "proposed": {
+          "op": "gain_card",
+          "card_pool": [
+            "K14",
+            "K05",
+            "K60"
+          ],
+          "selection_count": 1,
+          "fallback_money": 20
+        },
+        "trigger": "进入事件节点时冻结候选；选择时按 selection_ids 取 1 张"
+      },
+      {
+        "id": "V03",
+        "option_id": "drop",
+        "doc": "§10.2",
+        "doc_line": "V03 ... 或删1张基础牌并支付5精力",
+        "missing": "remove_card 的目标过滤：只能选 tag=basic 的牌。现在 remove_card 只校验「牌在牌组里 + 牌组下限」。",
+        "proposed": {
+          "op": "remove_card",
+          "tag_filter": "basic"
+        },
+        "trigger": "事件选项选择校验（_event_option_error / 预览阻断）"
+      },
+      {
+        "id": "V04",
+        "option_id": "pay",
+        "doc": "§10.2",
+        "doc_line": "V04 宿舍断电/1～4 | 提前休息恢复10；或支付6精力，升级1张工作牌",
+        "missing": "upgrade_card 的目标过滤：只能选 type=work 的牌。现在 upgrade_card 只校验升级次数上限。",
+        "proposed": {
+          "op": "upgrade_card",
+          "type_filter": "work"
+        },
+        "trigger": "事件选项选择校验（_event_option_error / 预览阻断）"
+      },
+      {
+        "id": "V10",
+        "option_id": "return",
+        "doc": "§10.2",
+        "doc_line": "V10 捡到校园卡/1～8 | 归还：获得A15，已持有则20生活费；或交服务台：恢复6精力",
+        "missing": "不新增字段：gain_relic relic_id + fallback_money 现有 op 就能表达（已持有走 fallback_money=20），阻塞点在 A15 本身的饰品 hook（见 relic 组）。",
+        "proposed": null,
+        "trigger": "事件选项结算时",
+        "blocking": [
+          "A15"
+        ]
+      }
+    ],
+    "ops": [
+      "complete.bonus_if{played_definition,scope:round}",
+      "complete.bonus_if{ddl_lte}",
+      "recall_from_discard{zone_from:discard,zone_to:hand}",
+      "discard{up_to:true}",
+      "draw{per_discarded}",
+      "remove_status{category:negative}",
+      "retain_hand_card",
+      "unplayable"
+    ],
+    "hooks": [
+      "relics[].hooks[].at=round_start（rounds 过滤 + effects）",
+      "relics[].hooks[].at=draw（rounds 过滤 + effects，受手牌上限）",
+      "relics[].hooks[].at=card_resolved（card_type 过滤 + limit + effects）",
+      "relics[].hooks[].at=cost_quote（discount / skip_vitality_cost + limit）",
+      "relics[].hooks[].at=shop_price（kinds + multiplier_percent + rounding）",
+      "characters[].passive.trigger=cooperation_card_resolved",
+      "events[].effects[].gain_card{card_pool, selection_count}",
+      "events[].effects[].remove_card{tag_filter}",
+      "events[].effects[].upgrade_card{type_filter}"
+    ]
+  },
+  "manifest_holdback": {
+    "note": "现在没有任何条目被阻塞：MVP 范围（《项目计划书》§3.1）的全部内容都已在 data/manifests/mvp.json 启用。判据由 tests/suites/test_content_mvp.gd 固化：每个类别的「出厂已启用 ∪ 本账本 holdback」必须等于 §3.1 的精确清单，且 holdback 里的 id 不得已在清单里。",
+    "ids": {
+      "card": [],
+      "character": [],
+      "relic": [],
+      "task": [],
+      "encounter": [],
+      "event": []
+    },
+    "reasons": {}
+  },
+  "manifest_next_segment": {
+    "note": "第②段已完成（commit 见仓库历史）：event 组已接进出厂清单，mvp.json content_version = mvp-0.6。t19 先把地图路线回归改成「从数据派生期望」，因此启用事件不再弄红主套件。",
+    "event": [],
+    "done_steps": [
+      "mvp.json 的 enabled 增加 event: [V01,V03,V04,V10]（V10→A15 已在同一份清单启用，满足 _require）",
+      "test_content_mvp.gd 的 ENABLED_EVENTS / CONTENT_VERSION 跟到 4 个事件 + mvp-0.6，且断言改成经 ContentDB 读",
+      "verifier 的 E 组可从夹具 data/manifests/test_events.json 切到 mvp 复跑（同一批 op，清单换成出厂）"
+    ]
+  },
+  "outside_mvp": {
+    "note": "不影响 MVP（《项目计划书》§3.1 范围）但完整 v1.0 需要补的已知引擎缺口，留给后续版本。",
+    "plagiarism_shield": "查重护盾（STATUS_PLAGIARISM_SHIELD）尚未接线「屏障吸收」，ContentDB 会在加载期以 CONTENT_INVALID + 缺口说明拒绝引用它的定义；受影响的是 N06 查重护盾8 等 §9.1 学期 3 起的任务，不在 MVP。"
+  }
+}

@@ -1,0 +1,81 @@
+{
+  "kind": "relic",
+  "schema_version": 1,
+  "source": "《交大四年：DDL战争》统一设计文档 v1.0 §8 饰品重设计",
+  "note": "初始饰品是获取限制，不是新品质（《常量与规则配置》§4）：availability=starter，不进随机掉落池；A01～A04 只随人物获得，A05 起进掉落池。《统一设计文档》§8 的「所有『首次』都有明确周期；同名唯一」由 hooks[].limit 与 RunState 的同名/6 槽校验落地。hook 的 JSON 写法见 docs/项目设计/常量与规则配置.md §8：at ∈ round_start / draw / card_resolved / cost_quote / shop_price，限次必须写 limit（per=round/instance_round/battle + times），引擎只认 TriggerCounter 组合键。",
+  "definitions": [
+    {
+      "id": "A01",
+      "name_key": "relic.a01.name",
+      "availability": "starter",
+      "rarity": null,
+      "tags": ["starter"],
+      "limit": {"per": "round", "times": 1},
+      "effects": [{"op": "work_flat_bonus", "amount": 1, "segment": "first"}]
+    },
+    {
+      "id": "A04",
+      "name_key": "relic.a04.name",
+      "availability": "starter",
+      "rarity": null,
+      "tags": ["starter"],
+      "hooks": [
+        {"at": "cost_quote", "card_type": "cooperation", "discount": 1, "limit": {"per": "battle", "times": 1}}
+      ]
+    },
+    {
+      "id": "A05",
+      "name_key": "relic.a05.name",
+      "rarity": "white",
+      "tags": [],
+      "hooks": [
+        {"at": "round_start", "rounds": [3, 6], "effects": [{"op": "heal", "amount": 3}]}
+      ]
+    },
+    {
+      "id": "A07",
+      "name_key": "relic.a07.name",
+      "rarity": "blue",
+      "tags": [],
+      "hooks": [
+        {"at": "draw", "rounds": [1], "effects": [{"op": "draw", "amount": 2}]}
+      ]
+    },
+    {
+      "id": "A08",
+      "name_key": "relic.a08.name",
+      "rarity": "white",
+      "tags": [],
+      "hooks": [
+        {"at": "cost_quote", "definition_id": "K10", "skip_vitality_cost": true, "limit": {"per": "battle", "times": 1}}
+      ]
+    },
+    {
+      "id": "A11",
+      "name_key": "relic.a11.name",
+      "rarity": "white",
+      "tags": [],
+      "hooks": [
+        {"at": "card_resolved", "card_type": "strategy", "limit": {"per": "round", "times": 1}, "effects": [{"op": "relax", "amount": 2}]}
+      ]
+    },
+    {
+      "id": "A15",
+      "name_key": "relic.a15.name",
+      "rarity": "white",
+      "tags": [],
+      "hooks": [
+        {"at": "shop_price", "kinds": ["card", "relic"], "multiplier_percent": 80, "rounding": "ceil"}
+      ]
+    },
+    {
+      "id": "A18",
+      "name_key": "relic.a18.name",
+      "rarity": "white",
+      "tags": [],
+      "hooks": [
+        {"at": "round_start", "rounds": [1, 2, 3], "effects": [{"op": "heal", "amount": 1}]}
+      ]
+    }
+  ]
+}

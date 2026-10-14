@@ -1,0 +1,26 @@
+{
+  "kind": "scene",
+  "schema_version": 1,
+  "source": "《交大四年：DDL战争》统一设计文档 v1.0 §7 场景重设计",
+  "note": "开始效果从建立后的下一个玩家准备阶段生效；battle_limit 为本战触发次数上限（换场再换回不刷新）。modifiers 为持续修正。",
+  "definitions": [
+    {"id": "L01", "name_key": "scene.l01.name", "prepare_effects": [{"op": "heal", "amount": 2}], "battle_limit": 3},
+    {"id": "L02", "name_key": "scene.l02.name",
+     "prepare_random": {"options": [
+       {"effects": [{"op": "heal", "amount": 1}]},
+       {"effects": [{"op": "gain_focus", "amount": 1}]},
+       {"effects": [{"op": "draw", "amount": 1}]},
+       {"effects": [{"op": "complete", "amount": 3}]}
+     ]}},
+    {"id": "L03", "name_key": "scene.l03.name", "modifiers": {"first_work_cost_discount": 1}},
+    {"id": "L04", "name_key": "scene.l04.name",
+     "prepare_effects": [{"op": "gain_status", "status": "experiment_data", "stacks": 1}],
+     "anxiety_after_every": 2},
+    {"id": "L05", "name_key": "scene.l05.name",
+     "prepare_effects": [{"op": "draw", "amount": 1}],
+     "modifiers": {"heal_percent": 50}},
+    {"id": "L06", "name_key": "scene.l06.name",
+     "modifiers": {"work_first_segment_bonus": 2},
+     "round_end_effects": [{"op": "lose_vitality", "amount": 2}]}
+  ]
+}

@@ -1,0 +1,131 @@
+{
+  "kind": "task",
+  "schema_version": 1,
+  "source": "《交大四年：DDL战争》统一设计文档 v1.0 §9.1 普通任务 / §9.2 精英 / §9.3 首领",
+  "note": "ddl 为该任务单场使用的 DDL；双任务组合时 DDL 取较大值 +2（§9.1）。意图 index 从 1 开始，循环使用。压力在 enemy_pressure 阶段结算，屏障/额外要求/加牌在 enemy_skill 阶段结算。N03 的意图 B 要往弃牌堆加入 X01，而 X01 因缺「不可打出」闸门尚未落定义（见 data/manifests/content_deferred.json），故 N03 暂不进任何清单。",
+  "definitions": [
+    {
+      "id": "N01",
+      "name_key": "task.n01.name",
+      "terms": [1, 2],
+      "ddl": 8,
+      "phases": [
+        {
+          "phase_key": "A",
+          "work": 24,
+          "intents": [
+            {"index": 1, "pressure": 5, "text_key": "task.n01.intent.a"},
+            {"index": 2, "pressure": 7, "text_key": "task.n01.intent.b"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "N02",
+      "name_key": "task.n02.name",
+      "terms": [1, 2],
+      "ddl": 8,
+      "phases": [
+        {
+          "phase_key": "A",
+          "work": 28,
+          "intents": [
+            {"index": 1, "shield": 5, "text_key": "task.n02.intent.a"},
+            {"index": 2, "pressure": 8, "text_key": "task.n02.intent.b"}
+          ]
+        }
+      ]
+    },    {
+      "id": "N03",
+      "name_key": "task.n03.name",
+      "terms": [1, 3],
+      "ddl": 8,
+      "phases": [
+        {
+          "phase_key": "A",
+          "work": 30,
+          "intents": [
+            {"index": 1, "pressure": 6, "text_key": "task.n03.intent.a"},
+            {
+              "index": 2,
+              "add_card": {"card": "X01", "count": 1, "zone": "discard"},
+              "pressure": 4,
+              "text_key": "task.n03.intent.b"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "N04",
+      "name_key": "task.n04.name",
+      "terms": [2, 3],
+      "ddl": 8,
+      "phases": [
+        {
+          "phase_key": "A",
+          "work": 32,
+          "intents": [
+            {
+              "index": 1,
+              "gain_status": {"status": "anxiety", "stacks": 1, "target": "player"},
+              "text_key": "task.n04.intent.a"
+            },
+            {"index": 2, "pressure": 9, "text_key": "task.n04.intent.b"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "Q01",
+      "name_key": "task.q01.name",
+      "terms": [1, 2],
+      "ddl": 6,
+      "phases": [
+        {
+          "phase_key": "A",
+          "work": 38,
+          "intents": [
+            {"index": 1, "pressure": 7, "text_key": "task.q01.intent.a"},
+            {"index": 2, "shield": 6, "text_key": "task.q01.intent.b"},
+            {"index": 3, "pressure": 10, "text_key": "task.q01.intent.c"}
+          ]
+        }
+      ]
+    },    {
+      "id": "B01",
+      "name_key": "task.b01.name",
+      "terms": [1, 1],
+      "ddl": 10,
+      "phases": [
+        {
+          "phase_key": "limit",
+          "work": 20,
+          "intents": [
+            {"index": 1, "pressure": 7, "text_key": "task.b01.limit.1"},
+            {"index": 2, "shield": 5, "text_key": "task.b01.limit.2"},
+            {"index": 3, "pressure": 9, "text_key": "task.b01.limit.3"}
+          ]
+        },
+        {
+          "phase_key": "integral",
+          "work": 25,
+          "intents": [
+            {"index": 1, "pressure": 7, "text_key": "task.b01.integral.1"},
+            {"index": 2, "shield": 5, "text_key": "task.b01.integral.2"},
+            {"index": 3, "pressure": 9, "text_key": "task.b01.integral.3"}
+          ]
+        },
+        {
+          "phase_key": "proof",
+          "work": 25,
+          "intents": [
+            {"index": 1, "pressure": 7, "text_key": "task.b01.proof.1"},
+            {"index": 2, "shield": 5, "text_key": "task.b01.proof.2"},
+            {"index": 3, "pressure": 9, "text_key": "task.b01.proof.3"}
+          ]
+        }
+      ]
+    }
+  ]
+}

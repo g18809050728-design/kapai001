@@ -1,0 +1,387 @@
+{
+  "kind": "card",
+  "schema_version": 1,
+  "source": "《交大四年：DDL战争》统一设计文档 v1.0 §5.1 通用基础与策略 / §5.2 代码路线 / §5.5 合作牌 / §5.6 场景牌 / §5.7 复习与考试 / §5.8 特殊牌",
+  "note": "数值逐条抄自《统一设计文档》，不做手感调整。upgrade 内的字段是整体替换，未列出的字段继承基础值。本文件只落引擎已实现 op 的牌；MVP 范围点名但引擎尚未实现的牌不落定义（缺口见 data/manifests/content_deferred.json）。K05/K07/K12/K16/K19/K59/X01 已由引擎增量一（t9）落地，缺口账本里的对应条目已转为 landed 记录。",
+  "definitions": [
+    {
+      "id": "K01",
+      "name_key": "card.k01.name",
+      "type": "work",
+      "rarity": "white",
+      "tags": ["basic"],
+      "cost": 1,
+      "target": "task",
+      "exhaust": false,
+      "effects": [{"op": "complete", "amount": 6}],
+      "upgrade": {"effects": [{"op": "complete", "amount": 8}]}
+    },
+    {
+      "id": "K02",
+      "name_key": "card.k02.name",
+      "type": "strategy",
+      "rarity": "white",
+      "tags": ["basic"],
+      "cost": 1,
+      "target": "self",
+      "exhaust": false,
+      "effects": [{"op": "relax", "amount": 5}],
+      "upgrade": {"effects": [{"op": "relax", "amount": 8}]}
+    },
+    {
+      "id": "K03",
+      "name_key": "card.k03.name",
+      "type": "strategy",
+      "rarity": "white",
+      "tags": ["basic"],
+      "cost": 1,
+      "target": "self",
+      "exhaust": false,
+      "effects": [{"op": "draw", "amount": 2}, {"op": "discard", "amount": 1}],
+      "upgrade": {"effects": [{"op": "draw", "amount": 3}, {"op": "discard", "amount": 1}]}
+    },
+    {
+      "id": "K04",
+      "name_key": "card.k04.name",
+      "type": "strategy",
+      "rarity": "white",
+      "tags": ["basic"],
+      "cost": 1,
+      "target": "self",
+      "exhaust": false,
+      "effects": [{"op": "gain_status", "status": "inspiration", "stacks": 2}, {"op": "draw", "amount": 1}],
+      "upgrade": {"effects": [{"op": "gain_status", "status": "inspiration", "stacks": 3}, {"op": "draw", "amount": 1}]}
+    },    {
+      "id": "K05",
+      "name_key": "card.k05.name",
+      "type": "work",
+      "rarity": "white",
+      "tags": [],
+      "cost": 2,
+      "target": "task",
+      "exhaust": false,
+      "effects": [
+        {"op": "complete", "amount": 14, "bonus_if": {"played_definition": "K04", "scope": "round", "amount": 4}}
+      ],
+      "upgrade": {
+        "effects": [
+          {"op": "complete", "amount": 18, "bonus_if": {"played_definition": "K04", "scope": "round", "amount": 4}}
+        ]
+      }
+    },
+    {
+      "id": "K06",
+      "name_key": "card.k06.name",
+      "type": "work",
+      "rarity": "blue",
+      "tags": [],
+      "cost": 0,
+      "target": "task",
+      "exhaust": true,
+      "effects": [{"op": "complete", "amount": 3}, {"op": "gain_focus", "amount": 1}],
+      "upgrade": {"effects": [{"op": "complete", "amount": 5}, {"op": "gain_focus", "amount": 1}]}
+    },
+    {
+      "id": "K07",
+      "name_key": "card.k07.name",
+      "type": "strategy",
+      "rarity": "blue",
+      "tags": [],
+      "cost": 1,
+      "target": "self",
+      "exhaust": true,
+      "effects": [
+        {"op": "recall_from_discard", "amount": 1, "zone_from": "discard", "zone_to": "hand"}
+      ],
+      "upgrade": {"cost": 0}
+    },
+    {
+      "id": "K08",
+      "name_key": "card.k08.name",
+      "type": "strategy",
+      "rarity": "blue",
+      "tags": [],
+      "cost": 1,
+      "target": "self",
+      "exhaust": true,
+      "effects": [
+        {"op": "heal", "amount": 3},
+        {"op": "relax", "amount": 3},
+        {"op": "remove_status", "status": "anxiety", "amount": 1}
+      ],
+      "upgrade": {
+        "effects": [
+          {"op": "heal", "amount": 5},
+          {"op": "relax", "amount": 3},
+          {"op": "remove_status", "status": "anxiety", "amount": 1}
+        ]
+      }
+    },
+    {
+      "id": "K10",
+      "name_key": "card.k10.name",
+      "type": "strategy",
+      "rarity": "blue",
+      "tags": [],
+      "cost": 0,
+      "vitality_cost": 4,
+      "target": "self",
+      "exhaust": true,
+      "effects": [{"op": "gain_focus", "amount": 2}],
+      "upgrade": {"vitality_cost": 3}
+    },    {
+      "id": "K12",
+      "name_key": "card.k12.name",
+      "type": "strategy",
+      "rarity": "white",
+      "tags": [],
+      "cost": 1,
+      "target": "self",
+      "exhaust": false,
+      "effects": [
+        {"op": "discard", "amount": 2, "up_to": true},
+        {"op": "draw", "amount": 1, "per_discarded": 1}
+      ],
+      "upgrade": {
+        "pre_effects": [
+          {"op": "relax", "amount": 2}
+        ]
+      }
+    },
+    {
+      "id": "K13",
+      "name_key": "card.k13.name",
+      "type": "strategy",
+      "rarity": "white",
+      "cost": 0,
+      "target": "self",
+      "exhaust": false,
+      "limit": {"per": "instance_round", "times": 1},
+      "effects": [{"op": "gain_status", "status": "compile", "stacks": 1}],
+      "upgrade": {"effects": [{"op": "gain_status", "status": "compile", "stacks": 2}]}
+    },
+    {
+      "id": "K14",
+      "name_key": "card.k14.name",
+      "type": "work",
+      "rarity": "white",
+      "cost": 1,
+      "target": "task",
+      "exhaust": false,
+      "effects": [
+        {
+          "op": "complete",
+          "amount": 5,
+          "bonus_if": {"status": "compile", "min_stacks": 1, "amount": 3}
+        }
+      ],
+      "upgrade": {
+        "effects": [
+          {
+            "op": "complete",
+            "amount": 7,
+            "bonus_if": {"status": "compile", "min_stacks": 1, "amount": 3}
+          }
+        ]
+      }
+    },
+    {
+      "id": "K15",
+      "name_key": "card.k15.name",
+      "type": "work",
+      "rarity": "white",
+      "cost": 1,
+      "target": "task",
+      "exhaust": false,
+      "effects": [{"op": "complete", "amount": 4}, {"op": "draw", "amount": 1}],
+      "upgrade": {"effects": [{"op": "complete", "amount": 6}, {"op": "draw", "amount": 1}]}
+    },    {
+      "id": "K16",
+      "name_key": "card.k16.name",
+      "type": "strategy",
+      "rarity": "blue",
+      "tags": [],
+      "cost": 1,
+      "target": "self",
+      "exhaust": false,
+      "effects": [
+        {"op": "remove_status", "category": "negative", "amount": 2},
+        {"op": "gain_status", "status": "compile", "stacks": 1}
+      ],
+      "upgrade": {
+        "effects": [
+          {"op": "remove_status", "category": "negative", "amount": 2},
+          {"op": "gain_status", "status": "compile", "stacks": 2}
+        ]
+      }
+    },
+    {
+      "id": "K19",
+      "name_key": "card.k19.name",
+      "type": "strategy",
+      "rarity": "white",
+      "tags": [],
+      "cost": 1,
+      "target": "self",
+      "exhaust": false,
+      "effects": [
+        {"op": "relax", "amount": 5},
+        {"op": "retain_hand_card", "amount": 1}
+      ],
+      "upgrade": {
+        "effects": [
+          {"op": "relax", "amount": 8},
+          {"op": "retain_hand_card", "amount": 1}
+        ]
+      }
+    },
+    {
+      "id": "K43",
+      "name_key": "card.k43.name",
+      "type": "cooperation",
+      "rarity": "white",
+      "tags": [],
+      "cost": 1,
+      "target": "self",
+      "exhaust": true,
+      "effects": [{"op": "summon_unit", "unit": "F01"}],
+      "upgrade": {"unit_bonus": {"max_vitality": 3}}
+    },
+    {
+      "id": "K44",
+      "name_key": "card.k44.name",
+      "type": "cooperation",
+      "rarity": "white",
+      "tags": [],
+      "cost": 2,
+      "target": "self",
+      "exhaust": true,
+      "effects": [{"op": "summon_unit", "unit": "F02"}],
+      "upgrade": {"unit_bonus": {"cooperation": 2}}
+    },
+    {
+      "id": "K45",
+      "name_key": "card.k45.name",
+      "type": "cooperation",
+      "rarity": "blue",
+      "tags": [],
+      "cost": 1,
+      "target": "self",
+      "exhaust": true,
+      "effects": [{"op": "summon_unit", "unit": "F03"}],
+      "upgrade": {"unit_bonus": {"max_vitality": 3}}
+    },
+    {
+      "id": "K46",
+      "name_key": "card.k46.name",
+      "type": "cooperation",
+      "rarity": "blue",
+      "tags": [],
+      "cost": 2,
+      "target": "self",
+      "exhaust": true,
+      "effects": [{"op": "summon_unit", "unit": "F04"}],
+      "upgrade": {"unit_bonus": {"max_vitality": 4}}
+    },    {
+      "id": "K51",
+      "name_key": "card.k51.name",
+      "type": "scene",
+      "rarity": "blue",
+      "tags": [],
+      "cost": 1,
+      "target": "self",
+      "exhaust": true,
+      "effects": [{"op": "establish_scene", "scene": "L01"}],
+      "upgrade": {"cost": 0}
+    },
+    {
+      "id": "K52",
+      "name_key": "card.k52.name",
+      "type": "scene",
+      "rarity": "white",
+      "tags": [],
+      "cost": 1,
+      "target": "self",
+      "exhaust": true,
+      "effects": [{"op": "establish_scene", "scene": "L02"}],
+      "upgrade": {"pre_effects": [{"op": "relax", "amount": 3}]}
+    },
+    {
+      "id": "K53",
+      "name_key": "card.k53.name",
+      "type": "scene",
+      "rarity": "purple",
+      "tags": [],
+      "cost": 2,
+      "target": "self",
+      "exhaust": true,
+      "effects": [{"op": "establish_scene", "scene": "L03"}],
+      "upgrade": {"pre_effects": [{"op": "relax", "amount": 4}]}
+    },
+    {
+      "id": "K56",
+      "name_key": "card.k56.name",
+      "type": "scene",
+      "rarity": "purple",
+      "tags": [],
+      "cost": 1,
+      "target": "self",
+      "exhaust": true,
+      "effects": [{"op": "establish_scene", "scene": "L06"}],
+      "upgrade": {"pre_effects": [{"op": "relax", "amount": 4}]}
+    },
+    {
+      "id": "K59",
+      "name_key": "card.k59.name",
+      "type": "work",
+      "rarity": "purple",
+      "tags": [],
+      "cost": 2,
+      "target": "task",
+      "exhaust": false,
+      "effects": [
+        {"op": "complete", "amount": 12, "bonus_if": {"ddl_lte": 3, "amount": 10}}
+      ],
+      "upgrade": {
+        "effects": [
+          {"op": "complete", "amount": 16, "bonus_if": {"ddl_lte": 3, "amount": 10}}
+        ]
+      }
+    },
+    {
+      "id": "K60",
+      "name_key": "card.k60.name",
+      "type": "strategy",
+      "rarity": "white",
+      "tags": [],
+      "cost": 1,
+      "target": "task",
+      "exhaust": false,
+      "effects": [
+        {"op": "relax", "amount": 4},
+        {"op": "draw", "amount": 1},
+        {"op": "remove_status", "status": "extra_requirements", "target": "task", "amount": 1}
+      ],
+      "upgrade": {
+        "effects": [
+          {"op": "relax", "amount": 7},
+          {"op": "draw", "amount": 1},
+          {"op": "remove_status", "status": "extra_requirements", "target": "task", "amount": 1}
+        ]
+      }
+    },
+    {
+      "id": "X01",
+      "name_key": "card.x01.name",
+      "type": "strategy",
+      "rarity": null,
+      "tags": ["special", "temporary"],
+      "cost": 0,
+      "target": "self",
+      "exhaust": false,
+      "unplayable": true,
+      "unplayable_note": "《统一设计文档》§5.8：临时，不可打出；回合末正常弃置，无被动扣费。rarity=null 是不进随机品质池的显式标记（奖励/商店池按品质过滤，见《游戏规则书》「基础/特殊牌不进普通随机池」）。",
+      "effects": []
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "kind": "character",
+  "schema_version": 1,
+  "source": "《交大四年：DDL战争》统一设计文档 v1.0 §4 人物重设计",
+  "note": "额外起始牌固定 2 张；初始饰品只随人物获得，不进掉落池。被动 trigger 目前引擎只识别 work_card_resolved（battle_engine._on_card_resolved）：P04 的合作牌 trigger 已按文档如实声明，但要等引擎支持才会触发，缺口见 data/manifests/content_deferred.json 的 G2。",
+  "definitions": [
+    {
+      "id": "P01",
+      "name_key": "character.p01.name",
+      "starter_cards": ["K13", "K14"],
+      "starter_relic_id": "A01",
+      "passive": {
+        "id": "p01_third_work_compile",
+        "name_key": "character.p01.passive",
+        "trigger": "work_card_resolved",
+        "count": 3,
+        "limit": {"per": "round", "times": 1},
+        "effects": [{"op": "gain_status", "status": "compile", "stacks": 1}]
+      }
+    },
+    {
+      "id": "P04",
+      "name_key": "character.p04.name",
+      "starter_cards": ["K43", "K44"],
+      "starter_relic_id": "A04",
+      "passive": {
+        "id": "p04_first_cooperation_relax",
+        "name_key": "character.p04.passive",
+        "trigger": "cooperation_card_resolved",
+        "count": 1,
+        "limit": {"per": "round", "times": 1},
+        "effects": [{"op": "relax", "amount": 2}]
+      }
+    }
+  ]
+}

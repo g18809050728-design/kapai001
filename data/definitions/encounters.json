@@ -1,0 +1,50 @@
+{
+  "kind": "encounter",
+  "schema_version": 1,
+  "source": "《交大四年：DDL战争》统一设计文档 v1.0 §9.1（普通遭遇默认单任务）/ §9.2 精英 / §9.3 首领",
+  "note": "encounter.kind 必须等于地图节点类型（normal/elite/boss），RunService 按此过滤。普通遭遇与任务同编号；exam_limits 里的 independent_answer 会触发考试独立作答限制。",
+  "definitions": [
+    {
+      "id": "N01",
+      "name_key": "encounter.n01.name",
+      "kind": "normal",
+      "tasks": ["N01"],
+      "exam_limits": []
+    },
+    {
+      "id": "N02",
+      "name_key": "encounter.n02.name",
+      "kind": "normal",
+      "tasks": ["N02"],
+      "exam_limits": []
+    },
+    {
+      "id": "N03",
+      "name_key": "encounter.n03.name",
+      "kind": "normal",
+      "tasks": ["N03"],
+      "exam_limits": []
+    },
+    {
+      "id": "N04",
+      "name_key": "encounter.n04.name",
+      "kind": "normal",
+      "tasks": ["N04"],
+      "exam_limits": []
+    },
+    {
+      "id": "Q01",
+      "name_key": "encounter.q01.name",
+      "kind": "elite",
+      "tasks": ["Q01"],
+      "exam_limits": ["independent_answer"]
+    },
+    {
+      "id": "B01",
+      "name_key": "encounter.b01.name",
+      "kind": "boss",
+      "tasks": ["B01"],
+      "exam_limits": ["independent_answer", "fixed_exam_room"]
+    }
+  ]
+}

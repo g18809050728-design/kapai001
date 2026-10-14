@@ -1,0 +1,15 @@
+{
+  "kind": "manifest",
+  "schema_version": 1,
+  "manifest_id": "test_minimal",
+  "content_version": "test-minimal-1",
+  "ruleset_id": "campus_v1",
+  "note": "冻结的测试夹具清单（队长裁决 ①）：RunService 的行为断言只依赖这一份稳定内容——单候选遭遇 N01、非 basic 奖励池 2 张（K13/K14）、无饰品掉落池（A01 是初始饰品）、起始牌组 12 张。mvp.json 会随内容演进，run-service 断言不得再依赖它；MVP 内容事实钉在 tests/suites/test_content_mvp.gd。",
+  "enabled": {
+    "character": ["P01"],
+    "card": ["K01", "K02", "K03", "K04", "K13", "K14"],
+    "relic": ["A01"],
+    "task": ["N01"],
+    "encounter": ["N01"]
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "kind": "unit",
+  "schema_version": 1,
+  "source": "《交大四年：DDL战争》统一设计文档 v1.0 §6 单位重设计",
+  "note": "协作=合作阶段基础完成量；每次协作后自身失去1精力（绕过放松）。support 为支援技能声明：kind=relax/self_relax/cleanse_or_relax/gain_status_on_actions/heal。guard=true 表示入场获得护卫。",
+  "definitions": [
+    {"id": "F01", "name_key": "unit.f01.name", "vitality": 10, "cooperation": 2, "guard": true, "support": null},
+    {"id": "F02", "name_key": "unit.f02.name", "vitality": 4, "cooperation": 6, "guard": false, "support": null},
+    {"id": "F03", "name_key": "unit.f03.name", "vitality": 6, "cooperation": 1, "guard": false,
+     "support": {"kind": "cleanse_or_relax", "status": "anxiety", "amount": 1, "fallback_relax": 2}},
+    {"id": "F04", "name_key": "unit.f04.name", "vitality": 12, "cooperation": 2, "guard": true,
+     "support": {"kind": "self_relax", "amount": 2}},
+    {"id": "F05", "name_key": "unit.f05.name", "vitality": 6, "cooperation": 3, "guard": false,
+     "support": {"kind": "gain_status_on_actions", "status": "experiment_data", "actions": [1, 3], "stacks": 1}},
+    {"id": "F06", "name_key": "unit.f06.name", "vitality": 6, "cooperation": 3, "guard": false,
+     "support": {"kind": "gain_status_on_actions", "status": "citation", "actions": [1, 3], "stacks": 1}},
+    {"id": "F07", "name_key": "unit.f07.name", "vitality": 7, "cooperation": 4, "guard": false,
+     "support": {"kind": "gain_status_on_actions", "status": "compile", "actions": [1, 3], "stacks": 1}},
+    {"id": "F08", "name_key": "unit.f08.name", "vitality": 8, "cooperation": 2, "guard": false,
+     "support": {"kind": "relax", "amount": 3}}
+  ]
+}
