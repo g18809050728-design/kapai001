@@ -1,0 +1,7 @@
+Mode: g0_readiness
+Checks: 772
+Document errors: 0
+G0 blockers: 0
+Exit code: 0
+Evidence: E:\desktop\项目设计\项目设计\artifacts\verification\g0-20261015-040006-920098
+Document assertions and registered semantic review only; no Godot, game JSON or UI tests.

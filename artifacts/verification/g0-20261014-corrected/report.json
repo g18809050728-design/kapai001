@@ -1,0 +1,13 @@
+{
+  "run_id": "g0-20261014-corrected",
+  "mode": "g0_readiness",
+  "checks": 721,
+  "errors": [
+    "BINDING statuses.compile.cap: value absent/different in content contract"
+  ],
+  "g0_blockers": [],
+  "exit_code": 1,
+  "documents_passed": false,
+  "g0_ready": false,
+  "limits": "Document assertions and registered semantic review only; no Godot, game JSON or UI tests."
+}

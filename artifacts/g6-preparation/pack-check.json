@@ -1,0 +1,157 @@
+{
+  "status": "passed",
+  "scope": "planning pack and offline slicing only; no generated game art",
+  "created_at": "2026-10-15T09:40:23.680867+00:00",
+  "command": [
+    "C:\\Users\\Dev.LI\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+    "artifacts/g6-preparation/check_pack.py"
+  ],
+  "environment": {
+    "python": "3.14.2 (tags/v3.14.2:df79316, Dec  5 2025, 17:18:21) [MSC v.1944 64 bit (AMD64)]",
+    "pillow": "12.1.0",
+    "platform": "Windows-11-10.0.26200-SP0"
+  },
+  "counts": {
+    "masters": 46,
+    "batches": 6,
+    "frozen_pairs": 66,
+    "ui_requirements": 16,
+    "prompts": 12,
+    "svg_guides": 6
+  },
+  "output_sizes": {
+    "G6-01": {
+      "high": [
+        [
+          793,
+          992
+        ]
+      ],
+      "standard": [
+        [
+          396,
+          496
+        ]
+      ]
+    },
+    "G6-02": {
+      "high": [
+        [
+          662,
+          662
+        ]
+      ],
+      "standard": [
+        [
+          330,
+          330
+        ]
+      ]
+    },
+    "G6-03": {
+      "high": [
+        [
+          662,
+          662
+        ]
+      ],
+      "standard": [
+        [
+          330,
+          330
+        ]
+      ]
+    },
+    "G6-04": {
+      "high": [
+        [
+          844,
+          844
+        ]
+      ],
+      "standard": [
+        [
+          422,
+          422
+        ]
+      ]
+    },
+    "G6-05": {
+      "high": [
+        [
+          1841,
+          1036
+        ]
+      ],
+      "standard": [
+        [
+          920,
+          517
+        ]
+      ]
+    },
+    "G6-06": {
+      "high": [
+        [
+          1841,
+          1036
+        ]
+      ],
+      "standard": [
+        [
+          920,
+          517
+        ]
+      ]
+    }
+  },
+  "synthetic_cli_runs": [
+    {
+      "command": [
+        "C:\\Users\\Dev.LI\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+        "E:\\desktop\\项目设计\\项目设计\\tools\\slice_g6_atlas.py",
+        "--catalog",
+        "E:\\desktop\\项目设计\\项目设计\\assets\\g6\\catalog.json",
+        "--batch",
+        "G6-02",
+        "--input",
+        "C:\\Users\\Dev.LI\\AppData\\Local\\Temp\\g6-preparation-j1ud3uin\\synthetic.png",
+        "--output-dir",
+        "C:\\Users\\Dev.LI\\AppData\\Local\\Temp\\g6-preparation-j1ud3uin\\slices",
+        "--variant",
+        "high"
+      ],
+      "exit_code": 0,
+      "stdout": "{\n  \"schema_version\": 1,\n  \"created_at\": \"2026-10-15T09:40:23.335598+00:00\",\n  \"batch_id\": \"G6-02\",\n  \"variant\": \"high\",\n  \"dry_run\": false,\n  \"resource_status\": \"candidate_unreviewed\",\n  \"catalog_file\": \"E:\\\\desktop\\\\项目设计\\\\项目设计\\\\assets\\\\g6\\\\catalog.json\",\n  \"catalog_sha256\": \"9b1349d7bdc558c7df792bec6cc54047da5835b4804bf26de3d4f503c45bc7cc\",\n  \"source_file\": \"C:\\\\Users\\\\Dev.LI\\\\AppData\\\\Local\\\\Temp\\\\g6-preparation-j1ud3uin\\\\synthetic.png\",\n  \"source_sha256\": \"82013ffe8ae6c7877ae41a95685fda4b46e6ebc8356f418fa3f39223f359f80f\",\n  \"source_size\": [\n    3840,\n    2160\n  ],\n  \"expected_size\": {\n    \"width\": 3840,\n    \"height\": 2160\n  },\n  \"output_dir\": \"C:\\\\Users\\\\Dev.LI\\\\AppData\\\\Local\\\\Temp\\\\g6-preparation-j1ud3uin\\\\slices\",\n  \"grid\": {\n    \"columns\": 4,\n    \"rows\": 3\n  },\n  \"crop\": {\n    \"inset_ratio\": 0.04,\n    \"aspect_ratio\": [\n      1,\n      1\n    ]\n  },\n  \"rounding\": {\n    \"grid\": \"floor(index * size / count)\",\n    \"inset\": \"ceil per side\",\n    \"aspect\": \"floor; centered; odd remainder on right/bottom\",\n    \"boxes\": \"[left, top, right, bottom), input pixel coordinates\"\n  },\n  \"source_mode\": \"RGB\",\n  \"source_has_alpha_channel\": false,\n  \"source_has_transparency_metadata\": false,\n  \"source_contains_transparent_pixels\": false,\n  \"output_mode\": \"RGB\",\n  \"background_removed\": false,\n  \"resized\": false,\n  \"warnings\": [],\n  \"slices\": [\n    {\n      \"asset_id\": \"K01\",\n      \"row\": 0,\n      \"column\": 0,\n      \"cell_box\": [\n        0,\n        0,\n        960,\n        720\n      ],\n      \"crop_box\": [\n        149,\n        29,\n        811,\n        691\n      ],\n      \"output_file\": \"cards/K01_v1.png\",\n      \"width\": 662,\n      \"height\": 662,\n      \"sha256\": \"b81ad7ee95e95ff37957a1c8101dcc5a12f444b7a81e95233cbfacc859b76cbd\",\n      \"contains_transparent_pixels\": false\n    },\n    {\n      \"asset_id\": \"K02\",\n      \"row\": 0,\n      \"column\": 1,\n      \"cell_box\": [\n        960,\n        0,\n        1920,\n        720\n      ],\n      \"crop_box\": [\n        1109,\n        29,\n        1771,\n        691\n      ],\n      \"output_file\": \"cards/K02_v1.png\",\n      \"width\": 662,\n      \"height\": 662,\n      \"sha256\": \"df0eb2f9ceb08159bb9cb7fb78b50d092888b0301039d9506a860b82af567ecc\",\n      \"contains_transparent_pixels\": false\n    },\n    {\n      \"asset_id\": \"K03\",\n      \"row\": 0,\n      \"column\": 2,\n      \"cell_box\": [\n        1920,\n        0,\n        2880,\n        720\n      ],\n      \"crop_box\": [\n        2069,\n        29,\n        2731,\n        691\n      ],\n      \"output_file\": \"cards/K03_v1.png\",\n      \"width\": 662,\n      \"height\": 662,\n      \"sha256\": \"aac63f5996e9e4807087630c611ca38ef7d9cc51562f3e00f34819011e8e6204\",\n      \"contains_transparent_pixels\": false\n    },\n    {\n      \"asset_id\": \"K04\",\n      \"row\": 0,\n      \"column\": 3,\n      \"cell_box\": [\n        2880,\n        0,\n        3840,\n        720\n      ],\n      \"crop_box\": [\n        3029,\n        29,\n        3691,\n        691\n      ],\n      \"output_file\": \"cards/K04_v1.png\",\n      \"width\": 662,\n      \"height\": 662,\n      \"sha256\": \"a064ad99375175bef11f70c0e125fd6a03205ee83b1bba1e0d084f34766a036c\",\n      \"contains_transparent_pixels\": false\n    },\n    {\n      \"asset_id\": \"K05\",\n      \"row\": 1,\n      \"column\": 0,\n      \"cell_box\": [\n        0,\n        720,\n        960,\n        1440\n      ],\n      \"crop_box\": [\n        149,\n        749,\n        811,\n        1411\n      ],\n      \"output_file\": \"cards/K05_v1.png\",\n      \"width\": 662,\n      \"height\": 662,\n      \"sha256\": \"d8202472d204b42b78840602b75fff7916dd96cc78b4f68edef63501a782bfde\",\n      \"contains_transparent_pixels\": false\n    },\n    {\n      \"asset_id\": \"K06\",\n      \"row\": 1,\n      \"column\": 1,\n      \"cell_box\": [\n        960,\n        720,\n        1920,\n        1440\n      ],\n      \"crop_box\": [\n        1109,\n        749,\n        1771,\n        1411\n      ],\n      \"output_file\": \"cards/K06_v1.png\",\n      \"width\": 662,\n      \"height\": 662,\n      \"sha256\": \"80889c759582f4a48c05288fc4382733ff01df2ac183097937770f74059b0bdf\",\n      \"contains_transparent_pixels\": false\n    },\n    {\n      \"asset_id\": \"K07\",\n      \"row\": 1,\n      \"column\": 2,\n      \"cell_box\": [\n        1920,\n        720,\n        2880,\n        1440\n      ],\n      \"crop_box\": [\n        2069,\n        749,\n        2731,\n        1411\n      ],\n      \"output_file\": \"cards/K07_v1.png\",\n      \"width\": 662,\n      \"height\": 662,\n      \"sha256\": \"e4b0095ff90293bef2e6d163dc13ea6a8738c2049f9c2c70f623d943e8c9fe81\",\n      \"contains_transparent_pixels\": false\n    },\n    {\n      \"asset_id\": \"K08\",\n      \"row\": 1,\n      \"column\": 3,\n      \"cell_box\": [\n        2880,\n        720,\n        3840,\n        1440\n      ],\n      \"crop_box\": [\n        3029,\n        749,\n        3691,\n        1411\n      ],\n      \"output_file\": \"cards/K08_v1.png\",\n      \"width\": 662,\n      \"height\": 662,\n      \"sha256\": \"f25495c9ebc39c7c6b3fcb77ba6af58226b1a0fbf099c002ab6584028578d274\",\n      \"contains_transparent_pixels\": false\n    },\n    {\n      \"asset_id\": \"K10\",\n      \"row\": 2,\n      \"column\": 0,\n      \"cell_box\": [\n        0,\n        1440,\n        960,\n        2160\n      ],\n      \"crop_box\": [\n        149,\n        1469,\n        811,\n        2131\n      ],\n      \"output_file\": \"cards/K10_v1.png\",\n      \"width\": 662,\n      \"height\": 662,\n      \"sha256\": \"f66b1569c09d9824d6d642452ef469833655c8556511d959e092702fe552abb0\",\n      \"contains_transparent_pixels\": false\n    },\n    {\n      \"asset_id\": \"K12\",\n      \"row\": 2,\n      \"column\": 1,\n      \"cell_box\": [\n        960,\n        1440,\n        1920,\n        2160\n      ],\n      \"crop_box\": [\n        1109,\n        1469,\n        1771,\n        2131\n      ],\n      \"output_file\": \"cards/K12_v1.png\",\n      \"width\": 662,\n      \"height\": 662,\n      \"sha256\": \"5cae89f682154b51df108e9b6fc0f20e3d2977b94e872f53e51ef6b802a61acc\",\n      \"contains_transparent_pixels\": false\n    },\n    {\n      \"asset_id\": \"K13\",\n      \"row\": 2,\n      \"column\": 2,\n      \"cell_box\": [\n        1920,\n        1440,\n        2880,\n        2160\n      ],\n      \"crop_box\": [\n        2069,\n        1469,\n        2731,\n        2131\n      ],\n      \"output_file\": \"cards/K13_v1.png\",\n      \"width\": 662,\n      \"height\": 662,\n      \"sha256\": \"6185a4cd7fdb7141213b16827fe0c9f96361c2f6172481e73fb79cbb28316b84\",\n      \"contains_transparent_pixels\": false\n    },\n    {\n      \"asset_id\": \"K14\",\n      \"row\": 2,\n      \"column\": 3,\n      \"cell_box\": [\n        2880,\n        1440,\n        3840,\n        2160\n      ],\n      \"crop_box\": [\n        3029,\n        1469,\n        3691,\n        2131\n      ],\n      \"output_file\": \"cards/K14_v1.png\",\n      \"width\": 662,\n      \"height\": 662,\n      \"sha256\": \"2c095c1920df5cebe55f9b418bd09b3b6bd8cd4478bebd179a967746da550f55\",\n      \"contains_transparent_pixels\": false\n    }\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "C:\\Users\\Dev.LI\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+        "E:\\desktop\\项目设计\\项目设计\\tools\\slice_g6_atlas.py",
+        "--catalog",
+        "E:\\desktop\\项目设计\\项目设计\\assets\\g6\\catalog.json",
+        "--batch",
+        "G6-02",
+        "--input",
+        "C:\\Users\\Dev.LI\\AppData\\Local\\Temp\\g6-preparation-j1ud3uin\\synthetic.png",
+        "--output-dir",
+        "C:\\Users\\Dev.LI\\AppData\\Local\\Temp\\g6-preparation-j1ud3uin\\slices",
+        "--variant",
+        "high"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "G6 atlas error: Refusing to overwrite: C:\\Users\\Dev.LI\\AppData\\Local\\Temp\\g6-preparation-j1ud3uin\\slices\\cards\\K01_v1.png\n"
+    }
+  ],
+  "input_sha256": {
+    "assets/g6/catalog.json": "9b1349d7bdc558c7df792bec6cc54047da5835b4804bf26de3d4f503c45bc7cc",
+    "tools/prepare_g6_pack.py": "eb1253fd4994b4407ee4035884fb9fb76c7ef0150739e5b74bcca78627627896",
+    "tools/slice_g6_atlas.py": "9e820294000a4ad943df2d000241200263c131017053aee33b8f06e733e6a753",
+    "artifacts/g6-preparation/check_pack.py": "50e92085075a74bac4b1da182bdfc272a8873d72981b725b9d9579dfd9c64ff6",
+    "docs/baselines/g0.json": "b2af089b1adeb58e1ac383c1338d2073fcc646667040579dde7f882a3e4ecbf9"
+  },
+  "generation_calls_executed": 0,
+  "note": "Temporary colored atlas removed after checks; not G6 resource review evidence."
+}

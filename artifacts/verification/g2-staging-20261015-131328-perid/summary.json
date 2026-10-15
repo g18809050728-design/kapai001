@@ -1,0 +1,26 @@
+﻿[
+    {
+        "command":  "python -m py_compile tools/verify_g2_staging.py tools/test_verify_g2_staging.py",
+        "exit_code":  0
+    },
+    {
+        "command":  "python -m unittest tools.test_verify_g2_staging -v",
+        "exit_code":  0
+    },
+    {
+        "command":  "python tools/verify_g2_staging.py --batch cards",
+        "exit_code":  1
+    },
+    {
+        "command":  "python tools/verify_g2_staging.py --batch entities",
+        "exit_code":  1
+    },
+    {
+        "command":  "python tools/verify_g2_staging.py --batch flow",
+        "exit_code":  1
+    },
+    {
+        "command":  "python tools/verify_g2_staging.py",
+        "exit_code":  1
+    }
+]

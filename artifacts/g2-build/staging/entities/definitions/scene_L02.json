@@ -1,0 +1,51 @@
+{
+  "kind": "scene",
+  "id": "L02",
+  "source": {
+    "path": "docs/交大四年_DDL战争_统一设计文档.md",
+    "section": "scene ID L02",
+    "table_heading": "7. 场景重设计（6个）",
+    "line": 307,
+    "row": "| L02 | 宿舍 | 每次玩家准备从“恢复1精力/获得1专注/抽1/对最前任务完成3”中等概率取1；结果预先显示 | 四人桌、床帘、公共便签 |"
+  },
+  "behavior_refs": [
+    "src/content/content_db.gd::_validate_prepare_random",
+    "src/battle/battle_engine.gd::_run_scene_prepare",
+    "src/battle/battle_engine.gd::_draw_scene_prepare_result"
+  ],
+  "definition": {
+    "id": "L02",
+    "name_key": "scene.L02.name",
+    "prepare_random": {
+      "options": [
+        [
+          {
+            "op": "heal",
+            "amount": 1,
+            "target": "player"
+          }
+        ],
+        [
+          {
+            "op": "gain_focus",
+            "amount": 1
+          }
+        ],
+        [
+          {
+            "op": "draw",
+            "amount": 1
+          }
+        ],
+        [
+          {
+            "op": "complete",
+            "amount": 3
+          }
+        ]
+      ]
+    }
+  },
+  "status": "staged_schema_and_reference_verified_behavior_deferred_to_G3_G4",
+  "blockers": []
+}

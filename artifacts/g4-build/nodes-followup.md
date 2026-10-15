@@ -1,0 +1,2 @@
+# Active G5 follow-up for g4_nodes
+Your new assignment is STORE OWNER, not codec. Implement src/storage/save_store.gd, profile_merge.gd, tests/suites/test_save_store.gd per store owner section of ../g5-build/shared-api.md. The new g5_codec agent owns RunCodec/BattleCodec. Main owns SnapshotCodec and GameSession integration. Read docs database storage contract and shared API, then implement now. Write progress ../g5-build/store-status.md. Do not rerun G4 or finalize without doing G5.

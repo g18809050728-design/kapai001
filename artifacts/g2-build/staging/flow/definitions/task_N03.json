@@ -1,0 +1,48 @@
+{
+  "kind": "task",
+  "id": "N03",
+  "source": {
+    "path": "docs/交大四年_DDL战争_统一设计文档.md",
+    "section": "task ID N03",
+    "upstream_section": "§9.1 普通任务",
+    "source_lines": [
+      358
+    ],
+    "source_row": "| N03 | C语言练习 | 1～3 | 30/8 | A压力6 → B加入X01至弃牌堆并压力4 |"
+  },
+  "behavior_refs": [
+    "docs/内容层契约.md §8.1 TaskDef/TaskPhaseDef and §8.2 IntentSpec",
+    "src/battle/battle_engine.gd::_execute_intent_skill",
+    "tests/suites/test_g2_state.gd (content package behavior not exercised)"
+  ],
+  "definition": {
+    "id": "N03",
+    "name_key": "task.n03.name",
+    "kind": "normal",
+    "phases": [
+      {
+        "phase_key": "main",
+        "name_key": "task.n03.phase.main.name",
+        "work_max": 30,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "task.n03.intent.pressure6",
+            "pressure": 6
+          },
+          {
+            "index": 1,
+            "text_key": "task.n03.intent.add_x01_pressure4",
+            "pressure": 4,
+            "add_card": {
+              "card": "X01",
+              "count": 1,
+              "zone": "discard"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "status": "schema_validated_behavior_and_G2_reference_closure_pending"
+}

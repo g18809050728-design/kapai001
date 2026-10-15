@@ -1,0 +1,70 @@
+{
+  "kind": "event",
+  "id": "V03",
+  "source": {
+    "path": "docs/交大四年_DDL战争_统一设计文档.md",
+    "section": "event ID V03",
+    "upstream_section": "§10.2 随机事件",
+    "source_lines": [
+      432,
+      438,
+      449,
+      525
+    ],
+    "source_row": "| V03 | 选课咨询/1～3 | 从K14/K24/K34中选1；或删1张基础牌并支付5精力 |"
+  },
+  "behavior_refs": [
+    "docs/内容层契约.md §5, §7.9.2 事件效果的目标过滤与显式卡池 (V03 fallback_money=20), §8.1, §8.5",
+    "src/content/content_db.gd::EVENT_OP_FIELDS and _validate_event_options (schema registration only)",
+    "docs/局流程契约.md §8 choose_event transaction contract"
+  ],
+  "definition": {
+    "id": "V03",
+    "name_key": "event.v03.name",
+    "terms": [
+      1,
+      2,
+      3
+    ],
+    "once_per_run": true,
+    "options": [
+      {
+        "option_id": "consult",
+        "label_key": "event.option.consult",
+        "cost": {},
+        "effects": [
+          {
+            "op": "gain_card",
+            "card_pool": [
+              "K14",
+              "K24",
+              "K34"
+            ],
+            "selection_count": 1,
+            "fallback_money": 20
+          }
+        ]
+      },
+      {
+        "option_id": "drop",
+        "label_key": "event.option.drop",
+        "cost": {
+          "vitality": 5
+        },
+        "effects": [
+          {
+            "op": "remove_card",
+            "tag_filter": "basic"
+          }
+        ]
+      },
+      {
+        "option_id": "leave",
+        "label_key": "event.option.leave",
+        "cost": {},
+        "effects": []
+      }
+    ]
+  },
+  "status": "schema_validated_runtime_executor_missing"
+}

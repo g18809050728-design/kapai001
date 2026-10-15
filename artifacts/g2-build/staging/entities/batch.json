@@ -1,0 +1,186 @@
+{
+  "batch": "G2 entity definitions",
+  "counts": {
+    "character": 2,
+    "relic": 8,
+    "unit": 4,
+    "scene": 3
+  },
+  "ids": {
+    "character": [
+      "P01",
+      "P04"
+    ],
+    "relic": [
+      "A01",
+      "A04",
+      "A05",
+      "A07",
+      "A08",
+      "A11",
+      "A15",
+      "A18"
+    ],
+    "unit": [
+      "F01",
+      "F02",
+      "F03",
+      "F04"
+    ],
+    "scene": [
+      "L01",
+      "L02",
+      "L03"
+    ]
+  },
+  "production_manifest_mutated": false,
+  "content_deferred_mutated": false,
+  "g0_scope_mutated": false,
+  "input_sha256": {
+    "docs/baselines/g0.json": "b2af089b1adeb58e1ac383c1338d2073fcc646667040579dde7f882a3e4ecbf9",
+    "data/manifests/content_deferred.json": "61eb9e0a05d8e19413ffc07f7385f0f36752362a27a0ec88da5e10a8a17a1b07",
+    "data/definitions/cards.json": "4499ca13bb2a7d00e02374aa7f5679dc7143b85e92e53abf31178f17e4a2b009",
+    "data/definitions/statuses.json": "e55088131462b08378bbccd969cccd11d280ebf990225b451bcb11cb277ca829",
+    "data/definitions/rulesets.json": "3746cb26b9cc73ca62d3aaf40157f3bc878d2845ef709112b189247d581b67a3",
+    "artifacts/g2-build/staging/cards/batch.json": "931cee54fef0991b1906fc09904eb24586c8e6efc76c58dba7acd658313c6fd9",
+    "artifacts/g2-build/staging/cards/cards.json": "1f80023ee5157898c42bd492cee4dcfdc5869950cebe8e53f8a817580d01bb1d",
+    "docs/交大四年_DDL战争_统一设计文档.md": "733e13e1ef763c7c18c8071ce4fb9eeddd8fb2382dabd22b46e6b5ea32b84136",
+    "docs/内容层契约.md": "95b7f32bc3e15b63b36f7b9f039ddb3fa1739ea605db9de782cdb1fd2cecdc1b",
+    "src/content/content_db.gd": "3dbd9078fc9a12fd9d411cfb462afe15a6563d5ff2eb1ef5749b4996fa3b2c56",
+    "src/battle/battle_engine.gd": "e2d408defae80a8142c9625c71a3333445a3155a8f302c575ee39078b9a1ccbb",
+    "src/battle/battle_card_rules.gd": "5f2addc1631e6341fb1e558aff2d597d022ce711385d30d00cec92daee481c9f"
+  },
+  "staged_record_sha256": {
+    "artifacts/g2-build/staging/entities/definitions/character_P01.json": "3406a64fa2678f2d5763857ab8593113476931adbb7fc36188685b011d2f038b",
+    "artifacts/g2-build/staging/entities/definitions/character_P04.json": "4ebc7dc78feb9586071f991c6ce92693e429cac27f99596703c8507ea5184fda",
+    "artifacts/g2-build/staging/entities/definitions/relic_A01.json": "96d8cbc6f5d11321dcc1da849db7b8d5295a126d1f8358e35f78f5cc96cbcea5",
+    "artifacts/g2-build/staging/entities/definitions/relic_A04.json": "b7f4cd6437307a98e3bab519bbdbc6db149186091ef3872b24981a0599d7406e",
+    "artifacts/g2-build/staging/entities/definitions/relic_A05.json": "5649691fd6e92a60c3bef1da4a3f1bf580343f221726ae9bb238ac7bffe75cd2",
+    "artifacts/g2-build/staging/entities/definitions/relic_A07.json": "a7a61789d5e9aefb1b64ba6ff298070f8b3c8222e0be9a4ad22fc2328e1b2380",
+    "artifacts/g2-build/staging/entities/definitions/relic_A08.json": "6cbcc612be8cbbf4cbdd0db5d8d3eb065fab6b8922a1fe027eb4b608f73d413e",
+    "artifacts/g2-build/staging/entities/definitions/relic_A11.json": "f191113bfdf188f7afe0f14e441d83b633d58919f0348ebff7c65b3ff36bd80f",
+    "artifacts/g2-build/staging/entities/definitions/relic_A15.json": "5ad419786e187d590146f0b898e4c97efa064bc14a619a970f037aab37906f7f",
+    "artifacts/g2-build/staging/entities/definitions/relic_A18.json": "26f7da8f963e7a46ab04c35b5d5dbeccdfe4b5987d3b5ccfa15d7119ab2ec866",
+    "artifacts/g2-build/staging/entities/definitions/scene_L01.json": "9df8859570b7c989b91320ab0ded7a30cf5389be558c5132c73ffe966e112c27",
+    "artifacts/g2-build/staging/entities/definitions/scene_L02.json": "1837b5ac64edf7cdecd06d4bc1eb7b07a732f7cca5b552f4da595c09e6b94473",
+    "artifacts/g2-build/staging/entities/definitions/scene_L03.json": "39667c1554fdeaf572d0665698b753c5512d555b38292a3af1b1748e6032730b",
+    "artifacts/g2-build/staging/entities/definitions/unit_F01.json": "3da10322f2fc3dd6f84d1703d95e558acef0aa4fab94202384023bc5f9fc0270",
+    "artifacts/g2-build/staging/entities/definitions/unit_F02.json": "c2f241e2bc3efb699919e2f7c6b6e66bce0d3dc84aa49a5365175ab4d7954bc6",
+    "artifacts/g2-build/staging/entities/definitions/unit_F03.json": "2c2d040607af13ae20ba9ec0b53eae9135710589a9a2ac5e41542e7810720e20",
+    "artifacts/g2-build/staging/entities/definitions/unit_F04.json": "e77e0aa7285e4e25a30bd7beaac777be8ad7f1b9fe2cea370a1eac602223c23b"
+  },
+  "schema_probe": {
+    "status": "passed",
+    "ids": [
+      "character/P01",
+      "character/P04",
+      "relic/A01",
+      "relic/A04",
+      "relic/A05",
+      "relic/A07",
+      "relic/A08",
+      "relic/A11",
+      "relic/A15",
+      "relic/A18",
+      "unit/F01",
+      "unit/F02",
+      "unit/F03",
+      "unit/F04",
+      "scene/L01",
+      "scene/L02",
+      "scene/L03"
+    ],
+    "evidence": "artifacts/g2-build/staging/entities/runtime_probe/evidence/stdout.txt"
+  },
+  "reference_closure": {
+    "status": "passed",
+    "ids": [
+      "character/P01",
+      "character/P04",
+      "relic/A01",
+      "relic/A04",
+      "relic/A05",
+      "relic/A07",
+      "relic/A08",
+      "relic/A11",
+      "relic/A15",
+      "relic/A18",
+      "unit/F01",
+      "unit/F02",
+      "unit/F03",
+      "unit/F04",
+      "scene/L01",
+      "scene/L02",
+      "scene/L03"
+    ],
+    "evidence": "ContentDB isolated test_g2_entities load and get_definition checks"
+  },
+  "handler_verification": {
+    "status": "deferred_to_G3_G4",
+    "reason": "G2 verifies integrated schema and reference closure; handler acceptance is deferred to G3/G4.",
+    "blocked_ids": [
+      "relic/A05",
+      "relic/A07",
+      "relic/A11",
+      "relic/A15",
+      "relic/A18",
+      "unit/F03"
+    ]
+  },
+  "behavior_tests": {
+    "status": "deferred_to_G3_G4",
+    "reason": "No behavior tests ran against staged entity IDs; exact behavior acceptance is deferred to G3/G4.",
+    "blocked_ids": [
+      "relic/A05",
+      "relic/A07",
+      "relic/A11",
+      "relic/A15",
+      "relic/A18",
+      "unit/F03"
+    ]
+  },
+  "blockers": [
+    {
+      "kind": "relic",
+      "id": "A05",
+      "blockers": [
+        "The hook handler exists, but execution of A05 on exactly rounds 3 and 6 remains deferred to G3/G4 behavior acceptance."
+      ]
+    },
+    {
+      "kind": "relic",
+      "id": "A07",
+      "blockers": [
+        "The draw hook handler exists, but first-round A07 trigger timing and hand-limit behavior remain deferred to G3/G4 behavior acceptance."
+      ]
+    },
+    {
+      "kind": "relic",
+      "id": "A11",
+      "blockers": [
+        "The hook handler exists, but exact once-per-round A11 trigger behavior remains deferred to G3/G4 behavior acceptance."
+      ]
+    },
+    {
+      "kind": "relic",
+      "id": "A15",
+      "blockers": [
+        "No shop-price execution handler was found under src/; A15 remains blocked pending a G4 shop-price implementation and test."
+      ]
+    },
+    {
+      "kind": "relic",
+      "id": "A18",
+      "blockers": [
+        "The hook handler exists, but A18 round 1-3 trigger behavior remains deferred to G3/G4 behavior acceptance."
+      ]
+    },
+    {
+      "kind": "unit",
+      "id": "F03",
+      "blockers": [
+        "The support handler removes the entire matching anxiety status object and does not honor amount=1; behavior remains blocked pending a G3/G4 fix and test."
+      ]
+    }
+  ]
+}

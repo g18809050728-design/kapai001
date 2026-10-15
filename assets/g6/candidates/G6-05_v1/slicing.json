@@ -1,0 +1,136 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-10-15T10:21:30.009027+00:00",
+  "batch_id": "G6-05",
+  "variant": "high",
+  "dry_run": false,
+  "resource_status": "candidate_unreviewed",
+  "catalog_file": "E:\\desktop\\项目设计\\项目设计\\assets\\g6\\catalog.json",
+  "catalog_sha256": "9b1349d7bdc558c7df792bec6cc54047da5835b4804bf26de3d4f503c45bc7cc",
+  "source_file": "E:\\desktop\\项目设计\\项目设计\\assets\\g6\\sources\\G6-05_v1.png",
+  "source_sha256": "3cd522267243cceed9c5bd64680d60f262595c811b3685e7a0c57dabd078ed9d",
+  "source_size": [
+    3840,
+    2160
+  ],
+  "expected_size": {
+    "width": 3840,
+    "height": 2160
+  },
+  "output_dir": "E:\\desktop\\项目设计\\项目设计\\assets\\g6\\candidates\\G6-05_v1",
+  "grid": {
+    "columns": 2,
+    "rows": 2
+  },
+  "crop": {
+    "inset_ratio": 0.02,
+    "aspect_ratio": [
+      16,
+      9
+    ]
+  },
+  "rounding": {
+    "grid": "floor(index * size / count)",
+    "inset": "ceil per side",
+    "aspect": "floor; centered; odd remainder on right/bottom",
+    "boxes": "[left, top, right, bottom), input pixel coordinates"
+  },
+  "source_mode": "RGB",
+  "source_has_alpha_channel": false,
+  "source_has_transparency_metadata": false,
+  "source_contains_transparent_pixels": false,
+  "output_mode": "RGB",
+  "background_removed": false,
+  "resized": false,
+  "warnings": [],
+  "slices": [
+    {
+      "asset_id": "BG_campus",
+      "row": 0,
+      "column": 0,
+      "cell_box": [
+        0,
+        0,
+        1920,
+        1080
+      ],
+      "crop_box": [
+        39,
+        22,
+        1880,
+        1058
+      ],
+      "output_file": "backgrounds/BG_campus_v1.png",
+      "width": 1841,
+      "height": 1036,
+      "sha256": "f6080d213c63b88c0bbae5fd1b3640dc04855e8cecf99bc87fafe6c32c1b518b",
+      "contains_transparent_pixels": false
+    },
+    {
+      "asset_id": "BG_classroom",
+      "row": 0,
+      "column": 1,
+      "cell_box": [
+        1920,
+        0,
+        3840,
+        1080
+      ],
+      "crop_box": [
+        1959,
+        22,
+        3800,
+        1058
+      ],
+      "output_file": "backgrounds/BG_classroom_v1.png",
+      "width": 1841,
+      "height": 1036,
+      "sha256": "19ed9d1f1adf5dfe11caeb1843e02e32ff12bd09277456198ca5ccd95e4bd712",
+      "contains_transparent_pixels": false
+    },
+    {
+      "asset_id": "BG_home",
+      "row": 1,
+      "column": 0,
+      "cell_box": [
+        0,
+        1080,
+        1920,
+        2160
+      ],
+      "crop_box": [
+        39,
+        1102,
+        1880,
+        2138
+      ],
+      "output_file": "backgrounds/BG_home_v1.png",
+      "width": 1841,
+      "height": 1036,
+      "sha256": "605b7b177731b29dbf7093a3ab09cce9ebb8d8e68155b2f2221df5f291eb832e",
+      "contains_transparent_pixels": false
+    },
+    {
+      "asset_id": "BG_dorm",
+      "row": 1,
+      "column": 1,
+      "cell_box": [
+        1920,
+        1080,
+        3840,
+        2160
+      ],
+      "crop_box": [
+        1959,
+        1102,
+        3800,
+        2138
+      ],
+      "output_file": "backgrounds/BG_dorm_v1.png",
+      "width": 1841,
+      "height": 1036,
+      "sha256": "931a4ab340d7de062f67519e106a3abf7d69222482e4801ceb1bf43019d01e47",
+      "contains_transparent_pixels": false
+    }
+  ]
+}

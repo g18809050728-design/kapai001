@@ -1,0 +1,22 @@
+{
+    "stage":  "G3",
+    "step":  "G3-05",
+    "verification":  "passed",
+    "stage_status":  "completed",
+    "g2_stage_status":  "frozen_incomplete",
+    "g2_holdback_count":  54,
+    "prior_step_evidence":  {
+                                "G3-04":  "g3-20261015-040006-206-7af85b",
+                                "G3-03":  "g3-20261015-024019-688-f8dcc3",
+                                "G3-02":  "g3-20261015-015031-915-2b4c1d",
+                                "G3-01":  "g3-20261015-002340-219-ab0e37"
+                            },
+    "missing_prior_steps":  [
+
+                            ],
+    "missing_inputs":  [
+
+                       ],
+    "failure":  null,
+    "godot":  "4.7.2.stable.official.ed1daf0bf"
+}

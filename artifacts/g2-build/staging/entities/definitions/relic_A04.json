@@ -1,0 +1,35 @@
+{
+  "kind": "relic",
+  "id": "A04",
+  "source": {
+    "path": "docs/交大四年_DDL战争_统一设计文档.md",
+    "section": "relic ID A04",
+    "table_heading": "8. 饰品重设计（24件）",
+    "line": 324,
+    "row": "| A04 | 小组通讯录 | 初始 | 每战首张合作牌费用-1，备考面同样适用 |"
+  },
+  "behavior_refs": [
+    "src/content/content_db.gd::_validate_hook(cost_quote)",
+    "src/battle/battle_card_rules.gd::_quote_cost"
+  ],
+  "definition": {
+    "id": "A04",
+    "name_key": "relic.A04.name",
+    "availability": "starter",
+    "rarity": null,
+    "tags": [],
+    "hooks": [
+      {
+        "at": "cost_quote",
+        "card_type": "cooperation",
+        "discount": 1,
+        "limit": {
+          "per": "battle",
+          "times": 1
+        }
+      }
+    ]
+  },
+  "status": "staged_schema_and_reference_verified_behavior_deferred_to_G3_G4",
+  "blockers": []
+}

@@ -1,0 +1,6 @@
+{
+    "tools/prepare_g2_data.py":  "3c097f9a0a4cc560ed8e0537a5d78d6a7ad0a991ee3acedee607f51eaad625a5",
+    "docs/baselines/g0.json":  "b2af089b1adeb58e1ac383c1338d2073fcc646667040579dde7f882a3e4ecbf9",
+    "data/definitions/cards.json":  "4499ca13bb2a7d00e02374aa7f5679dc7143b85e92e53abf31178f17e4a2b009",
+    "data/definitions/rulesets.json":  "3746cb26b9cc73ca62d3aaf40157f3bc878d2845ef709112b189247d581b67a3"
+}

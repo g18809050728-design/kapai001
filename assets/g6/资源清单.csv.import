@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://b3ucykannoodi"
+
+[deps]
+
+files=["res://assets/g6/资源清单.label.translation", "res://assets/g6/资源清单.batch.translation", "res://assets/g6/资源清单.row.translation", "res://assets/g6/资源清单.column.translation", "res://assets/g6/资源清单.planned.translation", "res://assets/g6/资源清单.content.translation", "res://assets/g6/资源清单.requirement.translation", "res://assets/g6/资源清单.status.translation"]
+
+source_file="res://assets/g6/资源清单.csv"
+dest_files=["res://assets/g6/资源清单.label.translation", "res://assets/g6/资源清单.batch.translation", "res://assets/g6/资源清单.row.translation", "res://assets/g6/资源清单.column.translation", "res://assets/g6/资源清单.planned.translation", "res://assets/g6/资源清单.content.translation", "res://assets/g6/资源清单.requirement.translation", "res://assets/g6/资源清单.status.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

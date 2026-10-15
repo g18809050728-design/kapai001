@@ -1,0 +1,6 @@
+﻿{
+    "command":  "python -m unittest tools.test_verify_g2_staging -v",
+    "exit_code":  0,
+    "stdout":  "stdout-2.txt",
+    "stderr":  "stderr-2.txt"
+}

@@ -1,0 +1,312 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-10-15T10:21:08.547579+00:00",
+  "batch_id": "G6-03",
+  "variant": "high",
+  "dry_run": false,
+  "resource_status": "candidate_unreviewed",
+  "catalog_file": "E:\\desktop\\项目设计\\项目设计\\assets\\g6\\catalog.json",
+  "catalog_sha256": "9b1349d7bdc558c7df792bec6cc54047da5835b4804bf26de3d4f503c45bc7cc",
+  "source_file": "E:\\desktop\\项目设计\\项目设计\\assets\\g6\\sources\\G6-03_v1.png",
+  "source_sha256": "ef96ce0b29b900e568f1a1c76475c104ad73155d3374012fa2328c4efdf30201",
+  "source_size": [
+    3840,
+    2160
+  ],
+  "expected_size": {
+    "width": 3840,
+    "height": 2160
+  },
+  "output_dir": "E:\\desktop\\项目设计\\项目设计\\assets\\g6\\candidates\\G6-03_v1",
+  "grid": {
+    "columns": 4,
+    "rows": 3
+  },
+  "crop": {
+    "inset_ratio": 0.04,
+    "aspect_ratio": [
+      1,
+      1
+    ]
+  },
+  "rounding": {
+    "grid": "floor(index * size / count)",
+    "inset": "ceil per side",
+    "aspect": "floor; centered; odd remainder on right/bottom",
+    "boxes": "[left, top, right, bottom), input pixel coordinates"
+  },
+  "source_mode": "RGB",
+  "source_has_alpha_channel": false,
+  "source_has_transparency_metadata": false,
+  "source_contains_transparent_pixels": false,
+  "output_mode": "RGB",
+  "background_removed": false,
+  "resized": false,
+  "warnings": [],
+  "slices": [
+    {
+      "asset_id": "K15",
+      "row": 0,
+      "column": 0,
+      "cell_box": [
+        0,
+        0,
+        960,
+        720
+      ],
+      "crop_box": [
+        149,
+        29,
+        811,
+        691
+      ],
+      "output_file": "cards/K15_v1.png",
+      "width": 662,
+      "height": 662,
+      "sha256": "f95f95ed377046f1da80c98937a7a98d8a409099f77fedcbbad1a6a7d1724372",
+      "contains_transparent_pixels": false
+    },
+    {
+      "asset_id": "K16",
+      "row": 0,
+      "column": 1,
+      "cell_box": [
+        960,
+        0,
+        1920,
+        720
+      ],
+      "crop_box": [
+        1109,
+        29,
+        1771,
+        691
+      ],
+      "output_file": "cards/K16_v1.png",
+      "width": 662,
+      "height": 662,
+      "sha256": "d96261a2a53f2f132607ce43290659b01394116a84df8daddc30dfd59fe5cfa6",
+      "contains_transparent_pixels": false
+    },
+    {
+      "asset_id": "K19",
+      "row": 0,
+      "column": 2,
+      "cell_box": [
+        1920,
+        0,
+        2880,
+        720
+      ],
+      "crop_box": [
+        2069,
+        29,
+        2731,
+        691
+      ],
+      "output_file": "cards/K19_v1.png",
+      "width": 662,
+      "height": 662,
+      "sha256": "e2e713e2853504d349ae868ea537687d4af2e30f1fa7d7702782890a451712a6",
+      "contains_transparent_pixels": false
+    },
+    {
+      "asset_id": "K59",
+      "row": 0,
+      "column": 3,
+      "cell_box": [
+        2880,
+        0,
+        3840,
+        720
+      ],
+      "crop_box": [
+        3029,
+        29,
+        3691,
+        691
+      ],
+      "output_file": "cards/K59_v1.png",
+      "width": 662,
+      "height": 662,
+      "sha256": "384b2a86d173f96d29b102e195103a4852087e99e9cddde0c03eaaa806649ae6",
+      "contains_transparent_pixels": false
+    },
+    {
+      "asset_id": "K60",
+      "row": 1,
+      "column": 0,
+      "cell_box": [
+        0,
+        720,
+        960,
+        1440
+      ],
+      "crop_box": [
+        149,
+        749,
+        811,
+        1411
+      ],
+      "output_file": "cards/K60_v1.png",
+      "width": 662,
+      "height": 662,
+      "sha256": "5b8897f1663c82077a8e8835fc262f882915c2c1ef4023bbd3e05eeb375eb800",
+      "contains_transparent_pixels": false
+    },
+    {
+      "asset_id": "X01",
+      "row": 1,
+      "column": 1,
+      "cell_box": [
+        960,
+        720,
+        1920,
+        1440
+      ],
+      "crop_box": [
+        1109,
+        749,
+        1771,
+        1411
+      ],
+      "output_file": "cards/X01_v1.png",
+      "width": 662,
+      "height": 662,
+      "sha256": "d2b9d250ea7e6a00a5e4b7e143775adfd376885a03019757885ee86020c59309",
+      "contains_transparent_pixels": false
+    },
+    {
+      "asset_id": "N01",
+      "row": 1,
+      "column": 2,
+      "cell_box": [
+        1920,
+        720,
+        2880,
+        1440
+      ],
+      "crop_box": [
+        2069,
+        749,
+        2731,
+        1411
+      ],
+      "output_file": "tasks/N01_v1.png",
+      "width": 662,
+      "height": 662,
+      "sha256": "22145130d5c58ba49e649ad498f9ddb0d534a28acdd51cd2939bca3ebd37ed46",
+      "contains_transparent_pixels": false
+    },
+    {
+      "asset_id": "N02",
+      "row": 1,
+      "column": 3,
+      "cell_box": [
+        2880,
+        720,
+        3840,
+        1440
+      ],
+      "crop_box": [
+        3029,
+        749,
+        3691,
+        1411
+      ],
+      "output_file": "tasks/N02_v1.png",
+      "width": 662,
+      "height": 662,
+      "sha256": "0d72d180ee9defd4ef7e219299f56cae8c04530b9691e88d74bb8460aeb93ca3",
+      "contains_transparent_pixels": false
+    },
+    {
+      "asset_id": "N03",
+      "row": 2,
+      "column": 0,
+      "cell_box": [
+        0,
+        1440,
+        960,
+        2160
+      ],
+      "crop_box": [
+        149,
+        1469,
+        811,
+        2131
+      ],
+      "output_file": "tasks/N03_v1.png",
+      "width": 662,
+      "height": 662,
+      "sha256": "513feb04cddc32a0c70183f7b1dee115401b17b4cda83293fa6cb32926638fa1",
+      "contains_transparent_pixels": false
+    },
+    {
+      "asset_id": "N04",
+      "row": 2,
+      "column": 1,
+      "cell_box": [
+        960,
+        1440,
+        1920,
+        2160
+      ],
+      "crop_box": [
+        1109,
+        1469,
+        1771,
+        2131
+      ],
+      "output_file": "tasks/N04_v1.png",
+      "width": 662,
+      "height": 662,
+      "sha256": "0819c6e41446a7178d6c2eef9551bd4d80e7ecdc98d15228d605ed9304bfb5c6",
+      "contains_transparent_pixels": false
+    },
+    {
+      "asset_id": "Q01",
+      "row": 2,
+      "column": 2,
+      "cell_box": [
+        1920,
+        1440,
+        2880,
+        2160
+      ],
+      "crop_box": [
+        2069,
+        1469,
+        2731,
+        2131
+      ],
+      "output_file": "tasks/Q01_v1.png",
+      "width": 662,
+      "height": 662,
+      "sha256": "7dfcedc1612b345a6074d8bbf148f2c25ee1ac662719f330a5f7bcd9af62a567",
+      "contains_transparent_pixels": false
+    },
+    {
+      "asset_id": "B01",
+      "row": 2,
+      "column": 3,
+      "cell_box": [
+        2880,
+        1440,
+        3840,
+        2160
+      ],
+      "crop_box": [
+        3029,
+        1469,
+        3691,
+        2131
+      ],
+      "output_file": "tasks/B01_v1.png",
+      "width": 662,
+      "height": 662,
+      "sha256": "d8c2e87689dabfad8b8a9d429df750c265381ae0a57f886eeda4c2fc03f6cb25",
+      "contains_transparent_pixels": false
+    }
+  ]
+}

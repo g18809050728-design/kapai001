@@ -1,0 +1,8 @@
+Mode: g0_readiness
+Checks: 755
+Document errors: 1
+G0 blockers: 0
+ERROR MAP t1l1_normal: kind/layer/adjacent-layer edges
+Exit code: 1
+Evidence: C:\Users\Dev.LI\AppData\Local\Temp\ddl-g0-audit-eil7upjk\bad_map_edge\artifacts\verification\test-bad_map_edge
+Document assertions and registered semantic review only; no Godot, game JSON or UI tests.
