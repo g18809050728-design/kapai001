@@ -1,0 +1,6 @@
+{
+  "scope": "src/ui/**/*.gd",
+  "pattern": "\\b(?:BattleEngine|RunService|SaveStore|RandomSource|BattleState|RunState)\\b|res://src/(?:battle|run|storage)/|\\bsession\\._",
+  "files": 9,
+  "matches": []
+}

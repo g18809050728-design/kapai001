@@ -1,0 +1,26 @@
+{
+  "kind": "unit",
+  "id": "F02",
+  "source": {
+    "path": "docs/交大四年_DDL战争_统一设计文档.md",
+    "section": "unit ID F02",
+    "table_heading": "6. 单位重设计（8种）",
+    "line": 290,
+    "row": "| F02 | 忙碌学霸：厚笔记、计时表 | 4 | 6 | 无支援；高输出、短驻场，承接原稿“学霸”定位 |"
+  },
+  "behavior_refs": [
+    "src/battle/battle_engine.gd::_apply_unit_support(none)"
+  ],
+  "definition": {
+    "id": "F02",
+    "name_key": "unit.F02.name",
+    "vitality": 4,
+    "cooperation": 6,
+    "guard": false,
+    "support": {
+      "kind": "none"
+    }
+  },
+  "status": "staged_schema_and_reference_verified_behavior_deferred_to_G3_G4",
+  "blockers": []
+}

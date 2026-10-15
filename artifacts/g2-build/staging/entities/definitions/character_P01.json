@@ -1,0 +1,43 @@
+{
+  "kind": "character",
+  "id": "P01",
+  "source": {
+    "path": "docs/交大四年_DDL战争_统一设计文档.md",
+    "section": "character ID P01",
+    "table_heading": "4. 人物重设计",
+    "line": 152,
+    "row": "| P01 林序·系统拆解者 | 短外套、电脑贴纸；擅长拆问题但容易过度优化 | 每回合第3张工作牌结算后获得1编译，限1次 | K13、K14 | A01 | 从独自修bug到愿意解释与协作 |"
+  },
+  "behavior_refs": [
+    "src/content/content_db.gd::_validate_passive",
+    "src/battle/battle_engine.gd::_run_character_passive",
+    "src/battle/battle_engine.gd::_execute_effect_list(gain_status)"
+  ],
+  "definition": {
+    "id": "P01",
+    "name_key": "character.P01.name",
+    "starter_cards": [
+      "K13",
+      "K14"
+    ],
+    "starter_relic_id": "A01",
+    "passive": {
+      "id": "p01_third_work_compile",
+      "trigger": "work_card_resolved",
+      "count": 3,
+      "limit": {
+        "per": "round",
+        "times": 1
+      },
+      "effects": [
+        {
+          "op": "gain_status",
+          "status": "compile",
+          "stacks": 1
+        }
+      ]
+    }
+  },
+  "status": "staged_schema_and_reference_verified_behavior_deferred_to_G3_G4",
+  "blockers": []
+}

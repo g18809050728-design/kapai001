@@ -1,0 +1,36 @@
+{
+  "kind": "encounter",
+  "id": "N03",
+  "source": {
+    "path": "docs/交大四年_DDL战争_统一设计文档.md",
+    "section": "encounter ID N03",
+    "upstream_section": "§9.1–§9.3 encounter availability and definition",
+    "source_lines": [
+      358,
+      369
+    ],
+    "source_row": "| N03 | C语言练习 | 1～3 | 30/8 | A压力6 → B加入X01至弃牌堆并压力4 |"
+  },
+  "behavior_refs": [
+    "docs/内容层契约.md §8.1 EncounterDef and §8.7 production overrides",
+    "src/content/content_db.gd::_validate_enabled_references",
+    "src/battle/battle_engine.gd::begin (requires runtime encounter input)",
+    "tests/suites/test_battle_engine_begin.gd (not run against this staged batch)"
+  ],
+  "definition": {
+    "id": "N03",
+    "name_key": "encounter.n03.name",
+    "kind": "normal",
+    "members": [
+      "N03"
+    ],
+    "base_ddl": 8,
+    "terms": [
+      1,
+      2,
+      3
+    ],
+    "exam_flags": []
+  },
+  "status": "schema_validated_behavior_and_G2_reference_closure_pending"
+}

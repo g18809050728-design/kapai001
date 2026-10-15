@@ -1,0 +1,2321 @@
+{
+  "schema_version": 1,
+  "pack_id": "campus_mvp_g6.v1",
+  "prepared_date": "2026-10-15",
+  "status": "prepared_not_generated",
+  "generation_calls_executed": 0,
+  "platform": {
+    "provider": null,
+    "max_size_user_report": "approximately_4K",
+    "billing": "per_image_or_call",
+    "preferred_variant": "high",
+    "price_per_call": null
+  },
+  "budget": {
+    "planned_candidate_sheets": 6,
+    "planned_master_images": 46,
+    "first_round_sheets": [
+      "G6-01",
+      "G6-02"
+    ],
+    "retries_included": false,
+    "note": "每批请求一张图；尺寸、模型与平台实际计费仍须在提交前确认。6次是首次候选计划，不是总费用或成功保证。"
+  },
+  "style": {
+    "status": "candidate_not_reviewed",
+    "brief": "现代中国大学校园题材的二维手绘插画，干净深青墨线、柔和水粉铺色、轻微纸张颗粒；米白、深青、鼠尾草绿为主，少量暖黄与砖红作强调；温暖克制、有生活感。人物为成年大学生或成年助教，比例自然，服装日常；不同格保持相同画法、光照与完成度。这是首轮候选风格，尚未人工核图确认。",
+    "palette_candidates": [
+      "#F4EEDF",
+      "#243E4A",
+      "#78978E",
+      "#DDA957",
+      "#BD6B64"
+    ]
+  },
+  "sources": {
+    "docs/交大四年_DDL战争_统一设计文档.md": "733e13e1ef763c7c18c8071ce4fb9eeddd8fb2382dabd22b46e6b5ea32b84136",
+    "docs/baselines/g0.json": "b2af089b1adeb58e1ac383c1338d2073fcc646667040579dde7f882a3e4ecbf9",
+    "data/manifests/campus_mvp.json": "41d37ed7c927c981096b575602efc9562718f832f51077ae4bdc6743f5f00403"
+  },
+  "assets": [
+    {
+      "id": "P01",
+      "label": "林序·系统拆解者",
+      "category": "portraits",
+      "brief": "短外套、带无字贴纸的电脑；思考中的系统拆解者，手持电脑，专注而略显拘谨",
+      "output_name": "portraits/P01_v1.png",
+      "requirement_ids": [
+        "VIS-002",
+        "VIS-005",
+        "VIS-013"
+      ],
+      "content_refs": [
+        {
+          "kind": "character",
+          "id": "P01"
+        }
+      ],
+      "status": "planned",
+      "selected_version": null,
+      "selected_file": null,
+      "art_direction_status": "candidate_not_reviewed",
+      "source": "docs/交大四年_DDL战争_统一设计文档.md"
+    },
+    {
+      "id": "P04",
+      "label": "唐以宁·小组协调者",
+      "category": "portraits",
+      "brief": "无字社团工牌、课程便签；手持小组资料的协调者，可靠而亲和",
+      "output_name": "portraits/P04_v1.png",
+      "requirement_ids": [
+        "VIS-002",
+        "VIS-005",
+        "VIS-013"
+      ],
+      "content_refs": [
+        {
+          "kind": "character",
+          "id": "P04"
+        }
+      ],
+      "status": "planned",
+      "selected_version": null,
+      "selected_file": null,
+      "art_direction_status": "candidate_not_reviewed",
+      "source": "docs/交大四年_DDL战争_统一设计文档.md"
+    },
+    {
+      "id": "F01",
+      "label": "热心室友",
+      "category": "portraits",
+      "brief": "宽松卫衣、双肩包，热心同学护在旁边的姿态",
+      "output_name": "portraits/F01_v1.png",
+      "requirement_ids": [
+        "VIS-005",
+        "VIS-006",
+        "VIS-013"
+      ],
+      "content_refs": [
+        {
+          "kind": "unit",
+          "id": "F01"
+        },
+        {
+          "kind": "card",
+          "id": "K43"
+        }
+      ],
+      "status": "planned",
+      "selected_version": null,
+      "selected_file": null,
+      "art_direction_status": "candidate_not_reviewed",
+      "source": "docs/交大四年_DDL战争_统一设计文档.md"
+    },
+    {
+      "id": "F02",
+      "label": "忙碌学霸",
+      "category": "portraits",
+      "brief": "厚笔记、无字计时表，忙碌但专注的同学",
+      "output_name": "portraits/F02_v1.png",
+      "requirement_ids": [
+        "VIS-005",
+        "VIS-006",
+        "VIS-013"
+      ],
+      "content_refs": [
+        {
+          "kind": "unit",
+          "id": "F02"
+        },
+        {
+          "kind": "card",
+          "id": "K44"
+        }
+      ],
+      "status": "planned",
+      "selected_version": null,
+      "selected_file": null,
+      "art_direction_status": "candidate_not_reviewed",
+      "source": "docs/交大四年_DDL战争_统一设计文档.md"
+    },
+    {
+      "id": "F03",
+      "label": "耐心助教",
+      "category": "portraits",
+      "brief": "文件夹、记号笔，耐心讲解的成年助教",
+      "output_name": "portraits/F03_v1.png",
+      "requirement_ids": [
+        "VIS-005",
+        "VIS-006",
+        "VIS-013"
+      ],
+      "content_refs": [
+        {
+          "kind": "unit",
+          "id": "F03"
+        },
+        {
+          "kind": "card",
+          "id": "K45"
+        }
+      ],
+      "status": "planned",
+      "selected_version": null,
+      "selected_file": null,
+      "art_direction_status": "candidate_not_reviewed",
+      "source": "docs/交大四年_DDL战争_统一设计文档.md"
+    },
+    {
+      "id": "F04",
+      "label": "可靠组长",
+      "category": "portraits",
+      "brief": "无字分工清单，组织协作的可靠同学，手势清楚自然",
+      "output_name": "portraits/F04_v1.png",
+      "requirement_ids": [
+        "VIS-005",
+        "VIS-006",
+        "VIS-013"
+      ],
+      "content_refs": [
+        {
+          "kind": "unit",
+          "id": "F04"
+        },
+        {
+          "kind": "card",
+          "id": "K46"
+        }
+      ],
+      "status": "planned",
+      "selected_version": null,
+      "selected_file": null,
+      "art_direction_status": "candidate_not_reviewed",
+      "source": "docs/交大四年_DDL战争_统一设计文档.md"
+    },
+    {
+      "id": "K01",
+      "label": "写",
+      "category": "cards",
+      "brief": "一只手用笔在练习纸上书写，整齐的抽象笔迹，没有可读文字",
+      "output_name": "cards/K01_v1.png",
+      "requirement_ids": [
+        "VIS-002",
+        "VIS-005",
+        "VIS-006",
+        "VIS-008",
+        "VIS-013"
+      ],
+      "content_refs": [
+        {
+          "kind": "card",
+          "id": "K01"
+        }
+      ],
+      "status": "planned",
+      "selected_version": null,
+      "selected_file": null,
+      "art_direction_status": "candidate_not_reviewed",
+      "source": "docs/交大四年_DDL战争_统一设计文档.md"
+    },
+    {
+      "id": "K02",
+      "label": "暂时休息",
+      "category": "cards",
+      "brief": "书桌旁放松的肩膀、舒适靠垫和一杯温水，短暂休息",
+      "output_name": "cards/K02_v1.png",
+      "requirement_ids": [
+        "VIS-002",
+        "VIS-005",
+        "VIS-006",
+        "VIS-008",
+        "VIS-013"
+      ],
+      "content_refs": [
+        {
+          "kind": "card",
+          "id": "K02"
+        }
+      ],
+      "status": "planned",
+      "selected_version": null,
+      "selected_file": null,
+      "art_direction_status": "candidate_not_reviewed",
+      "source": "docs/交大四年_DDL战争_统一设计文档.md"
+    },
+    {
+      "id": "K03",
+      "label": "寻找思路",
+      "category": "cards",
+      "brief": "数张便签从杂乱变成有序连接，微小灯光象征找到思路，无文字",
+      "output_name": "cards/K03_v1.png",
+      "requirement_ids": [
+        "VIS-002",
+        "VIS-005",
+        "VIS-006",
+        "VIS-008",
+        "VIS-013"
+      ],
+      "content_refs": [
+        {
+          "kind": "card",
+          "id": "K03"
+        }
+      ],
+      "status": "planned",
+      "selected_version": null,
+      "selected_file": null,
+      "art_direction_status": "candidate_not_reviewed",
+      "source": "docs/交大四年_DDL战争_统一设计文档.md"
+    },
+    {
+      "id": "K04",
+      "label": "查资料",
+      "category": "cards",
+      "brief": "摊开的参考书与电脑检索界面，页面仅抽象线块，无可读文字",
+      "output_name": "cards/K04_v1.png",
+      "requirement_ids": [
+        "VIS-002",
+        "VIS-005",
+        "VIS-006",
+        "VIS-008",
+        "VIS-013"
+      ],
+      "content_refs": [
+        {
+          "kind": "card",
+          "id": "K04"
+        }
+      ],
+      "status": "planned",
+      "selected_version": null,
+      "selected_file": null,
+      "art_direction_status": "candidate_not_reviewed",
+      "source": "docs/交大四年_DDL战争_统一设计文档.md"
+    },
+    {
+      "id": "K05",
+      "label": "细心写",
+      "category": "cards",
+      "brief": "手持笔仔细核对整齐的练习纸，尺子和清晰的结构线，无文字",
+      "output_name": "cards/K05_v1.png",
+      "requirement_ids": [
+        "VIS-002",
+        "VIS-005",
+        "VIS-006",
+        "VIS-008",
+        "VIS-013"
+      ],
+      "content_refs": [
+        {
+          "kind": "card",
+          "id": "K05"
+        }
+      ],
+      "status": "planned",
+      "selected_version": null,
+      "selected_file": null,
+      "art_direction_status": "candidate_not_reviewed",
+      "source": "docs/交大四年_DDL战争_统一设计文档.md"
+    },
+    {
+      "id": "K06",
+      "label": "潦草急就",
+      "category": "cards",
+      "brief": "急促书写的手、略歪的纸张与快速笔触，表达赶工，无文字",
+      "output_name": "cards/K06_v1.png",
+      "requirement_ids": [
+        "VIS-002",
+        "VIS-005",
+        "VIS-006",
+        "VIS-008",
+        "VIS-013"
+      ],
+      "content_refs": [
+        {
+          "kind": "card",
+          "id": "K06"
+        }
+      ],
+      "status": "planned",
+      "selected_version": null,
+      "selected_file": null,
+      "art_direction_status": "candidate_not_reviewed",
+      "source": "docs/交大四年_DDL战争_统一设计文档.md"
+    },
+    {
+      "id": "K07",
+      "label": "复盘",
+      "category": "cards",
+      "brief": "摊开的旧笔记、回看用的圆形箭头与重新整理的便签，无文字",
+      "output_name": "cards/K07_v1.png",
+      "requirement_ids": [
+        "VIS-002",
+        "VIS-005",
+        "VIS-006",
+        "VIS-008",
+        "VIS-013"
+      ],
+      "content_refs": [
+        {
+          "kind": "card",
+          "id": "K07"
+        }
+      ],
+      "status": "planned",
+      "selected_version": null,
+      "selected_file": null,
+      "art_direction_status": "candidate_not_reviewed",
+      "source": "docs/交大四年_DDL战争_统一设计文档.md"
+    },
+    {
+      "id": "K08",
+      "label": "运动",
+      "category": "cards",
+      "brief": "校园步道上的跑鞋与运动水壶，轻快有活力，不突出特定人物",
+      "output_name": "cards/K08_v1.png",
+      "requirement_ids": [
+        "VIS-002",
+        "VIS-005",
+        "VIS-006",
+        "VIS-008",
+        "VIS-013"
+      ],
+      "content_refs": [
+        {
+          "kind": "card",
+          "id": "K08"
+        }
+      ],
+      "status": "planned",
+      "selected_version": null,
+      "selected_file": null,
+      "art_direction_status": "candidate_not_reviewed",
+      "source": "docs/交大四年_DDL战争_统一设计文档.md"
+    },
+    {
+      "id": "K10",
+      "label": "熬夜",
+      "category": "cards",
+      "brief": "深夜台灯照亮的电脑与咖啡杯，窗外暗蓝，屏幕无可读文字",
+      "output_name": "cards/K10_v1.png",
+      "requirement_ids": [
+        "VIS-002",
+        "VIS-005",
+        "VIS-006",
+        "VIS-008",
+        "VIS-013"
+      ],
+      "content_refs": [
+        {
+          "kind": "card",
+          "id": "K10"
+        }
+      ],
+      "status": "planned",
+      "selected_version": null,
+      "selected_file": null,
+      "art_direction_status": "candidate_not_reviewed",
+      "source": "docs/交大四年_DDL战争_统一设计文档.md"
+    },
+    {
+      "id": "K12",
+      "label": "转换思路",
+      "category": "cards",
+      "brief": "两组不同颜色的便签交换位置，分叉路径转向新的方向，无文字",
+      "output_name": "cards/K12_v1.png",
+      "requirement_ids": [
+        "VIS-002",
+        "VIS-005",
+        "VIS-006",
+        "VIS-008",
+        "VIS-013"
+      ],
+      "content_refs": [
+        {
+          "kind": "card",
+          "id": "K12"
+        }
+      ],
+      "status": "planned",
+      "selected_version": null,
+      "selected_file": null,
+      "art_direction_status": "candidate_not_reviewed",
+      "source": "docs/交大四年_DDL战争_统一设计文档.md"
+    },
+    {
+      "id": "K13",
+      "label": "编译",
+      "category": "cards",
+      "brief": "电脑中的抽象代码线经齿轮转成整齐模块，编程工具意象，无文字",
+      "output_name": "cards/K13_v1.png",
+      "requirement_ids": [
+        "VIS-002",
+        "VIS-005",
+        "VIS-006",
+        "VIS-008",
+        "VIS-013"
+      ],
+      "content_refs": [
+        {
+          "kind": "card",
+          "id": "K13"
+        }
+      ],
+      "status": "planned",
+      "selected_version": null,
+      "selected_file": null,
+      "art_direction_status": "candidate_not_reviewed",
+      "source": "docs/交大四年_DDL战争_统一设计文档.md"
+    },
+    {
+      "id": "K14",
+      "label": "打印Hello",
+      "category": "cards",
+      "brief": "电脑终端中简短输出化作明亮色块，表达程序成功输出，不画打印机，不写Hello或代码",
+      "output_name": "cards/K14_v1.png",
+      "requirement_ids": [
+        "VIS-002",
+        "VIS-005",
+        "VIS-006",
+        "VIS-008",
+        "VIS-013"
+      ],
+      "content_refs": [
+        {
+          "kind": "card",
+          "id": "K14"
+        }
+      ],
+      "status": "planned",
+      "selected_version": null,
+      "selected_file": null,
+      "art_direction_status": "candidate_not_reviewed",
+      "source": "docs/交大四年_DDL战争_统一设计文档.md"
+    },
+    {
+      "id": "K15",
+      "label": "循环练习",
+      "category": "cards",
+      "brief": "练习纸与重复的环形箭头、逐步整齐的勾形图案，无文字数字",
+      "output_name": "cards/K15_v1.png",
+      "requirement_ids": [
+        "VIS-002",
+        "VIS-005",
+        "VIS-006",
+        "VIS-008",
+        "VIS-013"
+      ],
+      "content_refs": [
+        {
+          "kind": "card",
+          "id": "K15"
+        }
+      ],
+      "status": "planned",
+      "selected_version": null,
+      "selected_file": null,
+      "art_direction_status": "candidate_not_reviewed",
+      "source": "docs/交大四年_DDL战争_统一设计文档.md"
+    },
+    {
+      "id": "K16",
+      "label": "调试",
+      "category": "cards",
+      "brief": "放大镜检查电脑屏幕中一个不协调的色块，代码仅抽象线条",
+      "output_name": "cards/K16_v1.png",
+      "requirement_ids": [
+        "VIS-002",
+        "VIS-005",
+        "VIS-006",
+        "VIS-008",
+        "VIS-013"
+      ],
+      "content_refs": [
+        {
+          "kind": "card",
+          "id": "K16"
+        }
+      ],
+      "status": "planned",
+      "selected_version": null,
+      "selected_file": null,
+      "art_direction_status": "candidate_not_reviewed",
+      "source": "docs/交大四年_DDL战争_统一设计文档.md"
+    },
+    {
+      "id": "K19",
+      "label": "版本控制",
+      "category": "cards",
+      "brief": "三个笔记版本沿分支线汇入一个整齐版本，文件与分支示意，无文字",
+      "output_name": "cards/K19_v1.png",
+      "requirement_ids": [
+        "VIS-002",
+        "VIS-005",
+        "VIS-006",
+        "VIS-008",
+        "VIS-013"
+      ],
+      "content_refs": [
+        {
+          "kind": "card",
+          "id": "K19"
+        }
+      ],
+      "status": "planned",
+      "selected_version": null,
+      "selected_file": null,
+      "art_direction_status": "candidate_not_reviewed",
+      "source": "docs/交大四年_DDL战争_统一设计文档.md"
+    },
+    {
+      "id": "K59",
+      "label": "临时抱佛脚",
+      "category": "cards",
+      "brief": "一摞重点讲义、沙漏和快速翻页的手，临近截止的紧张复习，无文字数字",
+      "output_name": "cards/K59_v1.png",
+      "requirement_ids": [
+        "VIS-002",
+        "VIS-005",
+        "VIS-006",
+        "VIS-008",
+        "VIS-013"
+      ],
+      "content_refs": [
+        {
+          "kind": "card",
+          "id": "K59"
+        }
+      ],
+      "status": "planned",
+      "selected_version": null,
+      "selected_file": null,
+      "art_direction_status": "candidate_not_reviewed",
+      "source": "docs/交大四年_DDL战争_统一设计文档.md"
+    },
+    {
+      "id": "K60",
+      "label": "检查卷面",
+      "category": "cards",
+      "brief": "笔尖逐项核对整洁答卷，放大镜和简单勾形标记，无文字数字",
+      "output_name": "cards/K60_v1.png",
+      "requirement_ids": [
+        "VIS-002",
+        "VIS-005",
+        "VIS-006",
+        "VIS-008",
+        "VIS-013"
+      ],
+      "content_refs": [
+        {
+          "kind": "card",
+          "id": "K60"
+        }
+      ],
+      "status": "planned",
+      "selected_version": null,
+      "selected_file": null,
+      "art_direction_status": "candidate_not_reviewed",
+      "source": "docs/交大四年_DDL战争_统一设计文档.md"
+    },
+    {
+      "id": "X01",
+      "label": "分心消息",
+      "category": "cards",
+      "brief": "手机弹出多个无字通知气泡，让视线离开桌面练习纸，无可读界面",
+      "output_name": "cards/X01_v1.png",
+      "requirement_ids": [
+        "VIS-002",
+        "VIS-005",
+        "VIS-006",
+        "VIS-008",
+        "VIS-013"
+      ],
+      "content_refs": [
+        {
+          "kind": "card",
+          "id": "X01"
+        }
+      ],
+      "status": "planned",
+      "selected_version": null,
+      "selected_file": null,
+      "art_direction_status": "candidate_not_reviewed",
+      "source": "docs/交大四年_DDL战争_统一设计文档.md"
+    },
+    {
+      "id": "N01",
+      "label": "课后习题",
+      "category": "tasks",
+      "brief": "一叠基础习题纸和铅笔，抽象数学图形，无可读题目",
+      "output_name": "tasks/N01_v1.png",
+      "requirement_ids": [
+        "VIS-004",
+        "VIS-009",
+        "VIS-013"
+      ],
+      "content_refs": [
+        {
+          "kind": "task",
+          "id": "N01"
+        },
+        {
+          "kind": "encounter",
+          "id": "N01"
+        }
+      ],
+      "status": "planned",
+      "selected_version": null,
+      "selected_file": null,
+      "art_direction_status": "candidate_not_reviewed",
+      "source": "docs/交大四年_DDL战争_统一设计文档.md"
+    },
+    {
+      "id": "N02",
+      "label": "英语小作文",
+      "category": "tasks",
+      "brief": "稿纸、钢笔与表达构思的对话泡泡，纸面仅抽象短线，无字母",
+      "output_name": "tasks/N02_v1.png",
+      "requirement_ids": [
+        "VIS-004",
+        "VIS-009",
+        "VIS-013"
+      ],
+      "content_refs": [
+        {
+          "kind": "task",
+          "id": "N02"
+        },
+        {
+          "kind": "encounter",
+          "id": "N02"
+        }
+      ],
+      "status": "planned",
+      "selected_version": null,
+      "selected_file": null,
+      "art_direction_status": "candidate_not_reviewed",
+      "source": "docs/交大四年_DDL战争_统一设计文档.md"
+    },
+    {
+      "id": "N03",
+      "label": "C语言练习",
+      "category": "tasks",
+      "brief": "笔记本电脑与流程图卡片，屏幕为抽象代码线，无可读程序",
+      "output_name": "tasks/N03_v1.png",
+      "requirement_ids": [
+        "VIS-004",
+        "VIS-009",
+        "VIS-013"
+      ],
+      "content_refs": [
+        {
+          "kind": "task",
+          "id": "N03"
+        },
+        {
+          "kind": "encounter",
+          "id": "N03"
+        }
+      ],
+      "status": "planned",
+      "selected_version": null,
+      "selected_file": null,
+      "art_direction_status": "candidate_not_reviewed",
+      "source": "docs/交大四年_DDL战争_统一设计文档.md"
+    },
+    {
+      "id": "N04",
+      "label": "实验预习",
+      "category": "tasks",
+      "brief": "实验讲义、简洁仪器和安全护目镜，表达实验准备，无文字",
+      "output_name": "tasks/N04_v1.png",
+      "requirement_ids": [
+        "VIS-004",
+        "VIS-009",
+        "VIS-013"
+      ],
+      "content_refs": [
+        {
+          "kind": "task",
+          "id": "N04"
+        },
+        {
+          "kind": "encounter",
+          "id": "N04"
+        }
+      ],
+      "status": "planned",
+      "selected_version": null,
+      "selected_file": null,
+      "art_direction_status": "candidate_not_reviewed",
+      "source": "docs/交大四年_DDL战争_统一设计文档.md"
+    },
+    {
+      "id": "Q01",
+      "label": "随堂小测",
+      "category": "tasks",
+      "brief": "单张测验纸、铅笔与小计时器，简洁而稍有紧迫感，无文字数字",
+      "output_name": "tasks/Q01_v1.png",
+      "requirement_ids": [
+        "VIS-004",
+        "VIS-009",
+        "VIS-013"
+      ],
+      "content_refs": [
+        {
+          "kind": "task",
+          "id": "Q01"
+        },
+        {
+          "kind": "encounter",
+          "id": "Q01"
+        }
+      ],
+      "status": "planned",
+      "selected_version": null,
+      "selected_file": null,
+      "art_direction_status": "candidate_not_reviewed",
+      "source": "docs/交大四年_DDL战争_统一设计文档.md"
+    },
+    {
+      "id": "B01",
+      "label": "大一上·高数期末",
+      "category": "tasks",
+      "brief": "厚数学试卷、几何曲线草图与沙漏，庄重的期末考试意象，无公式文字数字",
+      "output_name": "tasks/B01_v1.png",
+      "requirement_ids": [
+        "VIS-004",
+        "VIS-009",
+        "VIS-013"
+      ],
+      "content_refs": [
+        {
+          "kind": "task",
+          "id": "B01"
+        },
+        {
+          "kind": "encounter",
+          "id": "B01"
+        }
+      ],
+      "status": "planned",
+      "selected_version": null,
+      "selected_file": null,
+      "art_direction_status": "candidate_not_reviewed",
+      "source": "docs/交大四年_DDL战争_统一设计文档.md"
+    },
+    {
+      "id": "A01",
+      "label": "好用的笔",
+      "category": "relics",
+      "brief": "一支手感可靠的日常签字笔，单一清楚轮廓",
+      "output_name": "relics/A01_v1.png",
+      "requirement_ids": [
+        "VIS-002",
+        "VIS-005",
+        "VIS-006",
+        "VIS-007",
+        "VIS-013"
+      ],
+      "content_refs": [
+        {
+          "kind": "relic",
+          "id": "A01"
+        }
+      ],
+      "status": "planned",
+      "selected_version": null,
+      "selected_file": null,
+      "art_direction_status": "candidate_not_reviewed",
+      "source": "docs/交大四年_DDL战争_统一设计文档.md"
+    },
+    {
+      "id": "A04",
+      "label": "小组通讯录",
+      "category": "relics",
+      "brief": "小型通讯录与数个头像圆点，无可读姓名或号码",
+      "output_name": "relics/A04_v1.png",
+      "requirement_ids": [
+        "VIS-002",
+        "VIS-005",
+        "VIS-006",
+        "VIS-007",
+        "VIS-013"
+      ],
+      "content_refs": [
+        {
+          "kind": "relic",
+          "id": "A04"
+        }
+      ],
+      "status": "planned",
+      "selected_version": null,
+      "selected_file": null,
+      "art_direction_status": "candidate_not_reviewed",
+      "source": "docs/交大四年_DDL战争_统一设计文档.md"
+    },
+    {
+      "id": "A05",
+      "label": "老妈的饭",
+      "category": "relics",
+      "brief": "装有家常菜的便当盒，温暖朴实",
+      "output_name": "relics/A05_v1.png",
+      "requirement_ids": [
+        "VIS-002",
+        "VIS-005",
+        "VIS-006",
+        "VIS-007",
+        "VIS-013"
+      ],
+      "content_refs": [
+        {
+          "kind": "relic",
+          "id": "A05"
+        }
+      ],
+      "status": "planned",
+      "selected_version": null,
+      "selected_file": null,
+      "art_direction_status": "candidate_not_reviewed",
+      "source": "docs/交大四年_DDL战争_统一设计文档.md"
+    },
+    {
+      "id": "A07",
+      "label": "课堂笔记",
+      "category": "relics",
+      "brief": "夹有彩色标签的课堂笔记本，内页没有可读文字",
+      "output_name": "relics/A07_v1.png",
+      "requirement_ids": [
+        "VIS-002",
+        "VIS-005",
+        "VIS-006",
+        "VIS-007",
+        "VIS-013"
+      ],
+      "content_refs": [
+        {
+          "kind": "relic",
+          "id": "A07"
+        }
+      ],
+      "status": "planned",
+      "selected_version": null,
+      "selected_file": null,
+      "art_direction_status": "candidate_not_reviewed",
+      "source": "docs/交大四年_DDL战争_统一设计文档.md"
+    },
+    {
+      "id": "A08",
+      "label": "咖啡杯",
+      "category": "relics",
+      "brief": "一杯温热咖啡，杯身无标志",
+      "output_name": "relics/A08_v1.png",
+      "requirement_ids": [
+        "VIS-002",
+        "VIS-005",
+        "VIS-006",
+        "VIS-007",
+        "VIS-013"
+      ],
+      "content_refs": [
+        {
+          "kind": "relic",
+          "id": "A08"
+        }
+      ],
+      "status": "planned",
+      "selected_version": null,
+      "selected_file": null,
+      "art_direction_status": "candidate_not_reviewed",
+      "source": "docs/交大四年_DDL战争_统一设计文档.md"
+    },
+    {
+      "id": "A11",
+      "label": "计划本",
+      "category": "relics",
+      "brief": "带空白方格和小勾图形的计划本，无文字日期数字",
+      "output_name": "relics/A11_v1.png",
+      "requirement_ids": [
+        "VIS-002",
+        "VIS-005",
+        "VIS-006",
+        "VIS-007",
+        "VIS-013"
+      ],
+      "content_refs": [
+        {
+          "kind": "relic",
+          "id": "A11"
+        }
+      ],
+      "status": "planned",
+      "selected_version": null,
+      "selected_file": null,
+      "art_direction_status": "candidate_not_reviewed",
+      "source": "docs/交大四年_DDL战争_统一设计文档.md"
+    },
+    {
+      "id": "A15",
+      "label": "校园卡",
+      "category": "relics",
+      "brief": "一张通用校园卡，含抽象头像和图案，无校徽、校名、姓名和号码",
+      "output_name": "relics/A15_v1.png",
+      "requirement_ids": [
+        "VIS-002",
+        "VIS-005",
+        "VIS-006",
+        "VIS-007",
+        "VIS-013"
+      ],
+      "content_refs": [
+        {
+          "kind": "relic",
+          "id": "A15"
+        }
+      ],
+      "status": "planned",
+      "selected_version": null,
+      "selected_file": null,
+      "art_direction_status": "candidate_not_reviewed",
+      "source": "docs/交大四年_DDL战争_统一设计文档.md"
+    },
+    {
+      "id": "A18",
+      "label": "室友零食",
+      "category": "relics",
+      "brief": "一小包分享用的零食，包装无品牌和文字",
+      "output_name": "relics/A18_v1.png",
+      "requirement_ids": [
+        "VIS-002",
+        "VIS-005",
+        "VIS-006",
+        "VIS-007",
+        "VIS-013"
+      ],
+      "content_refs": [
+        {
+          "kind": "relic",
+          "id": "A18"
+        }
+      ],
+      "status": "planned",
+      "selected_version": null,
+      "selected_file": null,
+      "art_direction_status": "candidate_not_reviewed",
+      "source": "docs/交大四年_DDL战争_统一设计文档.md"
+    },
+    {
+      "id": "BG_campus",
+      "label": "校园公共背景",
+      "category": "backgrounds",
+      "brief": "大学校园步道、树荫与教学楼，清晨，整体低对比，适合主菜单与地图共用",
+      "output_name": "backgrounds/BG_campus_v1.png",
+      "requirement_ids": [
+        "VIS-001",
+        "VIS-004",
+        "VIS-007"
+      ],
+      "content_refs": [
+        {
+          "kind": "event",
+          "id": "V01"
+        },
+        {
+          "kind": "event",
+          "id": "V10"
+        }
+      ],
+      "status": "planned",
+      "selected_version": null,
+      "selected_file": null,
+      "art_direction_status": "candidate_not_reviewed",
+      "source": "docs/交大四年_DDL战争_统一设计文档.md"
+    },
+    {
+      "id": "BG_classroom",
+      "label": "教室与战斗背景",
+      "category": "backgrounds",
+      "brief": "空旷但有生活感的大学教室、桌椅与黑板，黑板无文字，适合战斗底图",
+      "output_name": "backgrounds/BG_classroom_v1.png",
+      "requirement_ids": [
+        "VIS-009",
+        "VIS-013"
+      ],
+      "content_refs": [],
+      "status": "planned",
+      "selected_version": null,
+      "selected_file": null,
+      "art_direction_status": "candidate_not_reviewed",
+      "source": "动作或者图片描述/需求台账.md"
+    },
+    {
+      "id": "BG_home",
+      "label": "自家书桌",
+      "category": "backgrounds",
+      "brief": "暖台灯、木书桌与家常饭，安稳的家中学习角落，主体不贴边",
+      "output_name": "backgrounds/BG_home_v1.png",
+      "requirement_ids": [
+        "VIS-007",
+        "VIS-008",
+        "VIS-013"
+      ],
+      "content_refs": [
+        {
+          "kind": "scene",
+          "id": "L01"
+        },
+        {
+          "kind": "card",
+          "id": "K51"
+        }
+      ],
+      "status": "planned",
+      "selected_version": null,
+      "selected_file": null,
+      "art_direction_status": "candidate_not_reviewed",
+      "source": "docs/交大四年_DDL战争_统一设计文档.md"
+    },
+    {
+      "id": "BG_dorm",
+      "label": "宿舍",
+      "category": "backgrounds",
+      "brief": "四人宿舍桌面、床帘和公共无字便签，室内略暗但物体清晰，可叠加断电状态",
+      "output_name": "backgrounds/BG_dorm_v1.png",
+      "requirement_ids": [
+        "VIS-007",
+        "VIS-008",
+        "VIS-013"
+      ],
+      "content_refs": [
+        {
+          "kind": "scene",
+          "id": "L02"
+        },
+        {
+          "kind": "card",
+          "id": "K52"
+        },
+        {
+          "kind": "event",
+          "id": "V04"
+        }
+      ],
+      "status": "planned",
+      "selected_version": null,
+      "selected_file": null,
+      "art_direction_status": "candidate_not_reviewed",
+      "source": "docs/交大四年_DDL战争_统一设计文档.md"
+    },
+    {
+      "id": "BG_study",
+      "label": "自习室",
+      "category": "backgrounds",
+      "brief": "桌椅队列、留白与安静氛围，无字标识；可共用于选课咨询的学习场所底图",
+      "output_name": "backgrounds/BG_study_v1.png",
+      "requirement_ids": [
+        "VIS-007",
+        "VIS-008",
+        "VIS-013"
+      ],
+      "content_refs": [
+        {
+          "kind": "scene",
+          "id": "L03"
+        },
+        {
+          "kind": "card",
+          "id": "K53"
+        },
+        {
+          "kind": "event",
+          "id": "V03"
+        }
+      ],
+      "status": "planned",
+      "selected_version": null,
+      "selected_file": null,
+      "art_direction_status": "candidate_not_reviewed",
+      "source": "docs/交大四年_DDL战争_统一设计文档.md"
+    },
+    {
+      "id": "BG_shop",
+      "label": "校园商店",
+      "category": "backgrounds",
+      "brief": "校园小卖部柜台、文具与便当，商品包装没有品牌与文字，陈列简洁",
+      "output_name": "backgrounds/BG_shop_v1.png",
+      "requirement_ids": [
+        "VIS-006"
+      ],
+      "content_refs": [],
+      "status": "planned",
+      "selected_version": null,
+      "selected_file": null,
+      "art_direction_status": "candidate_not_reviewed",
+      "source": "动作或者图片描述/需求台账.md"
+    },
+    {
+      "id": "BG_success",
+      "label": "学期完成摘要背景",
+      "category": "backgrounds",
+      "brief": "阳光照亮已经收好的笔记和书桌，轻松的学期完成氛围，不画成绩或奖状文字",
+      "output_name": "backgrounds/BG_success_v1.png",
+      "requirement_ids": [
+        "VIS-012"
+      ],
+      "content_refs": [],
+      "status": "planned",
+      "selected_version": null,
+      "selected_file": null,
+      "art_direction_status": "candidate_not_reviewed",
+      "source": "动作或者图片描述/需求台账.md"
+    },
+    {
+      "id": "BG_failure",
+      "label": "未完成摘要背景",
+      "category": "backgrounds",
+      "brief": "柔和阴天光线下尚未收好的练习纸与书桌，克制的暂停氛围，不加入惩罚叙事或文字",
+      "output_name": "backgrounds/BG_failure_v1.png",
+      "requirement_ids": [
+        "VIS-012"
+      ],
+      "content_refs": [],
+      "status": "planned",
+      "selected_version": null,
+      "selected_file": null,
+      "art_direction_status": "candidate_not_reviewed",
+      "source": "动作或者图片描述/需求台账.md"
+    }
+  ],
+  "batches": [
+    {
+      "id": "G6-01",
+      "title": "六位人物半身像",
+      "columns": 3,
+      "rows": 2,
+      "variants": {
+        "high": {
+          "width": 3840,
+          "height": 2160
+        },
+        "standard": {
+          "width": 1920,
+          "height": 1080
+        }
+      },
+      "crop": {
+        "inset_ratio": 0.04,
+        "aspect_ratio": [
+          4,
+          5
+        ]
+      },
+      "slots": [
+        {
+          "asset_id": "P01",
+          "row": 0,
+          "column": 0
+        },
+        {
+          "asset_id": "P04",
+          "row": 0,
+          "column": 1
+        },
+        {
+          "asset_id": "F01",
+          "row": 0,
+          "column": 2
+        },
+        {
+          "asset_id": "F02",
+          "row": 1,
+          "column": 0
+        },
+        {
+          "asset_id": "F03",
+          "row": 1,
+          "column": 1
+        },
+        {
+          "asset_id": "F04",
+          "row": 1,
+          "column": 2
+        }
+      ],
+      "kind": "portraits",
+      "status": "prompt_ready_not_generated",
+      "source_file_expected": "sources/G6-01_v1.png",
+      "reference_instruction": "G6-01 不要求另付费生成风格图；其余批次附上已选定的 G6-01，后续插画另附已选 G6-02。未经核对的图片不得称为选定参考。"
+    },
+    {
+      "id": "G6-02",
+      "title": "十二张通用与编程牌插画",
+      "columns": 4,
+      "rows": 3,
+      "variants": {
+        "high": {
+          "width": 3840,
+          "height": 2160
+        },
+        "standard": {
+          "width": 1920,
+          "height": 1080
+        }
+      },
+      "crop": {
+        "inset_ratio": 0.04,
+        "aspect_ratio": [
+          1,
+          1
+        ]
+      },
+      "slots": [
+        {
+          "asset_id": "K01",
+          "row": 0,
+          "column": 0
+        },
+        {
+          "asset_id": "K02",
+          "row": 0,
+          "column": 1
+        },
+        {
+          "asset_id": "K03",
+          "row": 0,
+          "column": 2
+        },
+        {
+          "asset_id": "K04",
+          "row": 0,
+          "column": 3
+        },
+        {
+          "asset_id": "K05",
+          "row": 1,
+          "column": 0
+        },
+        {
+          "asset_id": "K06",
+          "row": 1,
+          "column": 1
+        },
+        {
+          "asset_id": "K07",
+          "row": 1,
+          "column": 2
+        },
+        {
+          "asset_id": "K08",
+          "row": 1,
+          "column": 3
+        },
+        {
+          "asset_id": "K10",
+          "row": 2,
+          "column": 0
+        },
+        {
+          "asset_id": "K12",
+          "row": 2,
+          "column": 1
+        },
+        {
+          "asset_id": "K13",
+          "row": 2,
+          "column": 2
+        },
+        {
+          "asset_id": "K14",
+          "row": 2,
+          "column": 3
+        }
+      ],
+      "kind": "illustrations",
+      "status": "prompt_ready_not_generated",
+      "source_file_expected": "sources/G6-02_v1.png",
+      "reference_instruction": "G6-01 不要求另付费生成风格图；其余批次附上已选定的 G6-01，后续插画另附已选 G6-02。未经核对的图片不得称为选定参考。"
+    },
+    {
+      "id": "G6-03",
+      "title": "六张牌与六张任务插画",
+      "columns": 4,
+      "rows": 3,
+      "variants": {
+        "high": {
+          "width": 3840,
+          "height": 2160
+        },
+        "standard": {
+          "width": 1920,
+          "height": 1080
+        }
+      },
+      "crop": {
+        "inset_ratio": 0.04,
+        "aspect_ratio": [
+          1,
+          1
+        ]
+      },
+      "slots": [
+        {
+          "asset_id": "K15",
+          "row": 0,
+          "column": 0
+        },
+        {
+          "asset_id": "K16",
+          "row": 0,
+          "column": 1
+        },
+        {
+          "asset_id": "K19",
+          "row": 0,
+          "column": 2
+        },
+        {
+          "asset_id": "K59",
+          "row": 0,
+          "column": 3
+        },
+        {
+          "asset_id": "K60",
+          "row": 1,
+          "column": 0
+        },
+        {
+          "asset_id": "X01",
+          "row": 1,
+          "column": 1
+        },
+        {
+          "asset_id": "N01",
+          "row": 1,
+          "column": 2
+        },
+        {
+          "asset_id": "N02",
+          "row": 1,
+          "column": 3
+        },
+        {
+          "asset_id": "N03",
+          "row": 2,
+          "column": 0
+        },
+        {
+          "asset_id": "N04",
+          "row": 2,
+          "column": 1
+        },
+        {
+          "asset_id": "Q01",
+          "row": 2,
+          "column": 2
+        },
+        {
+          "asset_id": "B01",
+          "row": 2,
+          "column": 3
+        }
+      ],
+      "kind": "illustrations",
+      "status": "prompt_ready_not_generated",
+      "source_file_expected": "sources/G6-03_v1.png",
+      "reference_instruction": "G6-01 不要求另付费生成风格图；其余批次附上已选定的 G6-01，后续插画另附已选 G6-02。未经核对的图片不得称为选定参考。"
+    },
+    {
+      "id": "G6-04",
+      "title": "八件饰品",
+      "columns": 4,
+      "rows": 2,
+      "variants": {
+        "high": {
+          "width": 3840,
+          "height": 2160
+        },
+        "standard": {
+          "width": 1920,
+          "height": 1080
+        }
+      },
+      "crop": {
+        "inset_ratio": 0.06,
+        "aspect_ratio": [
+          1,
+          1
+        ]
+      },
+      "slots": [
+        {
+          "asset_id": "A01",
+          "row": 0,
+          "column": 0
+        },
+        {
+          "asset_id": "A04",
+          "row": 0,
+          "column": 1
+        },
+        {
+          "asset_id": "A05",
+          "row": 0,
+          "column": 2
+        },
+        {
+          "asset_id": "A07",
+          "row": 0,
+          "column": 3
+        },
+        {
+          "asset_id": "A08",
+          "row": 1,
+          "column": 0
+        },
+        {
+          "asset_id": "A11",
+          "row": 1,
+          "column": 1
+        },
+        {
+          "asset_id": "A15",
+          "row": 1,
+          "column": 2
+        },
+        {
+          "asset_id": "A18",
+          "row": 1,
+          "column": 3
+        }
+      ],
+      "kind": "objects",
+      "status": "prompt_ready_not_generated",
+      "source_file_expected": "sources/G6-04_v1.png",
+      "reference_instruction": "G6-01 不要求另付费生成风格图；其余批次附上已选定的 G6-01，后续插画另附已选 G6-02。未经核对的图片不得称为选定参考。"
+    },
+    {
+      "id": "G6-05",
+      "title": "校园教室自家宿舍背景",
+      "columns": 2,
+      "rows": 2,
+      "variants": {
+        "high": {
+          "width": 3840,
+          "height": 2160
+        },
+        "standard": {
+          "width": 1920,
+          "height": 1080
+        }
+      },
+      "crop": {
+        "inset_ratio": 0.02,
+        "aspect_ratio": [
+          16,
+          9
+        ]
+      },
+      "slots": [
+        {
+          "asset_id": "BG_campus",
+          "row": 0,
+          "column": 0
+        },
+        {
+          "asset_id": "BG_classroom",
+          "row": 0,
+          "column": 1
+        },
+        {
+          "asset_id": "BG_home",
+          "row": 1,
+          "column": 0
+        },
+        {
+          "asset_id": "BG_dorm",
+          "row": 1,
+          "column": 1
+        }
+      ],
+      "kind": "backgrounds",
+      "status": "prompt_ready_not_generated",
+      "source_file_expected": "sources/G6-05_v1.png",
+      "reference_instruction": "G6-01 不要求另付费生成风格图；其余批次附上已选定的 G6-01，后续插画另附已选 G6-02。未经核对的图片不得称为选定参考。"
+    },
+    {
+      "id": "G6-06",
+      "title": "自习室商店与摘要背景",
+      "columns": 2,
+      "rows": 2,
+      "variants": {
+        "high": {
+          "width": 3840,
+          "height": 2160
+        },
+        "standard": {
+          "width": 1920,
+          "height": 1080
+        }
+      },
+      "crop": {
+        "inset_ratio": 0.02,
+        "aspect_ratio": [
+          16,
+          9
+        ]
+      },
+      "slots": [
+        {
+          "asset_id": "BG_study",
+          "row": 0,
+          "column": 0
+        },
+        {
+          "asset_id": "BG_shop",
+          "row": 0,
+          "column": 1
+        },
+        {
+          "asset_id": "BG_success",
+          "row": 1,
+          "column": 0
+        },
+        {
+          "asset_id": "BG_failure",
+          "row": 1,
+          "column": 1
+        }
+      ],
+      "kind": "backgrounds",
+      "status": "prompt_ready_not_generated",
+      "source_file_expected": "sources/G6-06_v1.png",
+      "reference_instruction": "G6-01 不要求另付费生成风格图；其余批次附上已选定的 G6-01，后续插画另附已选 G6-02。未经核对的图片不得称为选定参考。"
+    }
+  ],
+  "content_coverage": [
+    {
+      "kind": "character",
+      "id": "P01",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "P01"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "character",
+      "id": "P04",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "P04"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "card",
+      "id": "K01",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "K01"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "card",
+      "id": "K02",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "K02"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "card",
+      "id": "K03",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "K03"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "card",
+      "id": "K04",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "K04"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "card",
+      "id": "K05",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "K05"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "card",
+      "id": "K06",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "K06"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "card",
+      "id": "K07",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "K07"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "card",
+      "id": "K08",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "K08"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "card",
+      "id": "K10",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "K10"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "card",
+      "id": "K12",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "K12"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "card",
+      "id": "K13",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "K13"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "card",
+      "id": "K14",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "K14"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "card",
+      "id": "K15",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "K15"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "card",
+      "id": "K16",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "K16"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "card",
+      "id": "K19",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "K19"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "card",
+      "id": "K43",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "F01"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "card",
+      "id": "K44",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "F02"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "card",
+      "id": "K45",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "F03"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "card",
+      "id": "K46",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "F04"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "card",
+      "id": "K51",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "BG_home"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "card",
+      "id": "K52",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "BG_dorm"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "card",
+      "id": "K53",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "BG_study"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "card",
+      "id": "K59",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "K59"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "card",
+      "id": "K60",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "K60"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "card",
+      "id": "X01",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "X01"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "relic",
+      "id": "A01",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "A01"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "relic",
+      "id": "A04",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "A04"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "relic",
+      "id": "A05",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "A05"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "relic",
+      "id": "A07",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "A07"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "relic",
+      "id": "A08",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "A08"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "relic",
+      "id": "A11",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "A11"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "relic",
+      "id": "A15",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "A15"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "relic",
+      "id": "A18",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "A18"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "task",
+      "id": "N01",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "N01"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "task",
+      "id": "N02",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "N02"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "task",
+      "id": "N03",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "N03"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "task",
+      "id": "N04",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "N04"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "task",
+      "id": "Q01",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "Q01"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "task",
+      "id": "B01",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "B01"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "encounter",
+      "id": "N01",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "N01"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "encounter",
+      "id": "N02",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "N02"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "encounter",
+      "id": "N03",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "N03"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "encounter",
+      "id": "N04",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "N04"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "encounter",
+      "id": "Q01",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "Q01"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "encounter",
+      "id": "B01",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "B01"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "unit",
+      "id": "F01",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "F01"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "unit",
+      "id": "F02",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "F02"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "unit",
+      "id": "F03",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "F03"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "unit",
+      "id": "F04",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "F04"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "scene",
+      "id": "L01",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "BG_home"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "scene",
+      "id": "L02",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "BG_dorm"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "scene",
+      "id": "L03",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "BG_study"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "event",
+      "id": "V01",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "BG_campus"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "event",
+      "id": "V03",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "BG_study"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "event",
+      "id": "V04",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "BG_dorm"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "event",
+      "id": "V10",
+      "method": "ai_master_or_reuse",
+      "asset_ids": [
+        "BG_campus"
+      ],
+      "status": "planned"
+    },
+    {
+      "kind": "status",
+      "id": "inspiration",
+      "method": "vector_or_godot",
+      "asset_ids": [],
+      "status": "planned_G7"
+    },
+    {
+      "kind": "status",
+      "id": "compile",
+      "method": "vector_or_godot",
+      "asset_ids": [],
+      "status": "planned_G7"
+    },
+    {
+      "kind": "status",
+      "id": "anxiety",
+      "method": "vector_or_godot",
+      "asset_ids": [],
+      "status": "planned_G7"
+    },
+    {
+      "kind": "status",
+      "id": "procrastination",
+      "method": "vector_or_godot",
+      "asset_ids": [],
+      "status": "planned_G7"
+    },
+    {
+      "kind": "status",
+      "id": "drowsiness",
+      "method": "vector_or_godot",
+      "asset_ids": [],
+      "status": "planned_G7"
+    },
+    {
+      "kind": "status",
+      "id": "extra_requirements",
+      "method": "vector_or_godot",
+      "asset_ids": [],
+      "status": "planned_G7"
+    },
+    {
+      "kind": "status",
+      "id": "guard",
+      "method": "vector_or_godot",
+      "asset_ids": [],
+      "status": "planned_G7"
+    },
+    {
+      "kind": "ruleset",
+      "id": "campus_v1",
+      "method": "no_image_needed",
+      "asset_ids": [],
+      "status": "not_applicable"
+    }
+  ],
+  "non_ai_resources": [
+    {
+      "id": "FONT_BODY",
+      "method": "open_source_font",
+      "candidate": "Source Han Sans SC / 思源黑体",
+      "source_url": "https://github.com/adobe-fonts/source-han-sans",
+      "status": "not_downloaded",
+      "license_file": null
+    },
+    {
+      "id": "ICONS_COMMON",
+      "method": "open_source_svg_or_godot",
+      "candidate": "Lucide，统一线宽",
+      "source_url": "https://lucide.dev/",
+      "status": "not_downloaded",
+      "license_file": null
+    },
+    {
+      "id": "UI_COMPONENTS",
+      "method": "godot_theme_stylebox_G7",
+      "candidate": "按钮、卡框、面板、进度条、选中/禁用/升级状态",
+      "status": "planned_G7"
+    },
+    {
+      "id": "STATUS_ICONS",
+      "method": "svg_or_godot_G7",
+      "candidate": "7种状态及资源、节点语义图标",
+      "status": "planned_G7"
+    }
+  ],
+  "ui_coverage": [
+    {
+      "requirement_id": "VIS-001",
+      "asset_ids": [
+        "BG_campus"
+      ],
+      "method": "background_plus_native_ui"
+    },
+    {
+      "requirement_id": "VIS-002",
+      "asset_ids": [
+        "P01",
+        "P04"
+      ],
+      "method": "portraits_plus_reused_cards"
+    },
+    {
+      "requirement_id": "VIS-003",
+      "asset_ids": [],
+      "method": "native_ui_no_generated_image"
+    },
+    {
+      "requirement_id": "VIS-004",
+      "asset_ids": [
+        "BG_campus"
+      ],
+      "method": "background_plus_vector_nodes"
+    },
+    {
+      "requirement_id": "VIS-005",
+      "asset_ids": [],
+      "method": "reuse_card_and_relic_images"
+    },
+    {
+      "requirement_id": "VIS-006",
+      "asset_ids": [
+        "BG_shop"
+      ],
+      "method": "background_plus_reused_inventory"
+    },
+    {
+      "requirement_id": "VIS-007",
+      "asset_ids": [
+        "BG_campus",
+        "BG_dorm",
+        "BG_study",
+        "A15"
+      ],
+      "method": "reuse_backgrounds; V10 optionally overlays A15 in G7"
+    },
+    {
+      "requirement_id": "VIS-008",
+      "asset_ids": [
+        "BG_home",
+        "BG_dorm",
+        "BG_study"
+      ],
+      "method": "reuse_backgrounds_and_card_images"
+    },
+    {
+      "requirement_id": "VIS-009",
+      "asset_ids": [
+        "BG_classroom"
+      ],
+      "method": "reuse_battle_background"
+    },
+    {
+      "requirement_id": "VIS-010",
+      "asset_ids": [],
+      "method": "not_applicable_MVP"
+    },
+    {
+      "requirement_id": "VIS-011",
+      "asset_ids": [],
+      "method": "not_applicable_MVP"
+    },
+    {
+      "requirement_id": "VIS-012",
+      "asset_ids": [
+        "BG_success",
+        "BG_failure"
+      ],
+      "method": "background_plus_native_summary"
+    },
+    {
+      "requirement_id": "VIS-013",
+      "asset_ids": [
+        "BG_classroom"
+      ],
+      "method": "reuse_all_battle_content_plus_native_ui"
+    },
+    {
+      "requirement_id": "ACT-001",
+      "asset_ids": [],
+      "method": "G7_native_interaction_or_animation_no_sprite_sequence_planned"
+    },
+    {
+      "requirement_id": "ACT-002",
+      "asset_ids": [],
+      "method": "G7_native_interaction_or_animation_no_sprite_sequence_planned"
+    },
+    {
+      "requirement_id": "ACT-003",
+      "asset_ids": [],
+      "method": "G7_native_interaction_or_animation_no_sprite_sequence_planned"
+    }
+  ],
+  "reuse_policy": [
+    "所有升级牌沿用基础原画，升级和费用由G7界面叠加",
+    "K43-K46复用F01-F04",
+    "K51-K53复用L01-L03背景",
+    "task与同ID encounter共图",
+    "B01三个阶段共用一张原画，阶段信息由UI展示",
+    "事件复用校园、宿舍、自习室背景；V10可叠校园卡",
+    "不生成整页UI、文字、按钮状态或逐帧动画"
+  ]
+}

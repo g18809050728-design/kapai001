@@ -1,0 +1,36 @@
+{
+  "kind": "relic",
+  "id": "A15",
+  "source": {
+    "path": "docs/交大四年_DDL战争_统一设计文档.md",
+    "section": "relic ID A15",
+    "table_heading": "8. 饰品重设计（24件）",
+    "line": 335,
+    "row": "| A15 | 校园卡 | 白 | 商店卡牌和饰品价格×0.8向上取整，不影响删牌与餐食 |"
+  },
+  "behavior_refs": [
+    "src/content/content_db.gd::_validate_hook(shop_price)"
+  ],
+  "definition": {
+    "id": "A15",
+    "name_key": "relic.A15.name",
+    "availability": "drop",
+    "rarity": "white",
+    "tags": [],
+    "hooks": [
+      {
+        "at": "shop_price",
+        "kinds": [
+          "card",
+          "relic"
+        ],
+        "multiplier_percent": 80,
+        "rounding": "ceil"
+      }
+    ]
+  },
+  "status": "staged_schema_and_reference_verified_behavior_deferred_to_G3_G4",
+  "blockers": [
+    "No shop-price execution handler was found under src/; A15 remains blocked pending a G4 shop-price implementation and test."
+  ]
+}

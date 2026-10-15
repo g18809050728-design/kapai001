@@ -1,0 +1,92 @@
+{
+  "kind": "task",
+  "id": "B01",
+  "source": {
+    "path": "docs/交大四年_DDL战争_统一设计文档.md",
+    "section": "task ID B01",
+    "upstream_section": "§9.3 八学期首领",
+    "source_lines": [
+      386
+    ],
+    "source_row": "| B01 | 大一上·高数期末 | 极限20/积分25/证明25 | 10 | 两项考试限制；各阶段均压力7→屏障5→压力9 |"
+  },
+  "behavior_refs": [
+    "docs/内容层契约.md §8.1 TaskDef/TaskPhaseDef and §8.2 IntentSpec",
+    "src/battle/battle_engine.gd::_execute_intent_skill",
+    "tests/suites/test_g2_state.gd (content package behavior not exercised)"
+  ],
+  "definition": {
+    "id": "B01",
+    "name_key": "task.b01.name",
+    "kind": "boss",
+    "phases": [
+      {
+        "phase_key": "limits",
+        "name_key": "task.b01.phase.limits.name",
+        "work_max": 20,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "task.b01.intent.pressure7",
+            "pressure": 7
+          },
+          {
+            "index": 1,
+            "text_key": "task.b01.intent.shield5",
+            "shield": 5
+          },
+          {
+            "index": 2,
+            "text_key": "task.b01.intent.pressure9",
+            "pressure": 9
+          }
+        ]
+      },
+      {
+        "phase_key": "integrals",
+        "name_key": "task.b01.phase.integrals.name",
+        "work_max": 25,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "task.b01.intent.pressure7",
+            "pressure": 7
+          },
+          {
+            "index": 1,
+            "text_key": "task.b01.intent.shield5",
+            "shield": 5
+          },
+          {
+            "index": 2,
+            "text_key": "task.b01.intent.pressure9",
+            "pressure": 9
+          }
+        ]
+      },
+      {
+        "phase_key": "proofs",
+        "name_key": "task.b01.phase.proofs.name",
+        "work_max": 25,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "task.b01.intent.pressure7",
+            "pressure": 7
+          },
+          {
+            "index": 1,
+            "text_key": "task.b01.intent.shield5",
+            "shield": 5
+          },
+          {
+            "index": 2,
+            "text_key": "task.b01.intent.pressure9",
+            "pressure": 9
+          }
+        ]
+      }
+    ]
+  },
+  "status": "schema_validated_behavior_and_G2_reference_closure_pending"
+}

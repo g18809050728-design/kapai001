@@ -1,0 +1,29 @@
+{
+  "kind": "scene",
+  "id": "L01",
+  "source": {
+    "path": "docs/交大四年_DDL战争_统一设计文档.md",
+    "section": "scene ID L01",
+    "table_heading": "7. 场景重设计（6个）",
+    "line": 306,
+    "row": "| L01 | 自家书桌 | 玩家准备恢复2精力，每战最多触发3次 | 暖台灯、家常饭、木桌 |"
+  },
+  "behavior_refs": [
+    "src/content/content_db.gd::_validate_definition(scene)",
+    "src/battle/battle_engine.gd::_run_scene_prepare"
+  ],
+  "definition": {
+    "id": "L01",
+    "name_key": "scene.L01.name",
+    "prepare_effects": [
+      {
+        "op": "heal",
+        "amount": 2,
+        "target": "player"
+      }
+    ],
+    "battle_limit": 3
+  },
+  "status": "staged_schema_and_reference_verified_behavior_deferred_to_G3_G4",
+  "blockers": []
+}

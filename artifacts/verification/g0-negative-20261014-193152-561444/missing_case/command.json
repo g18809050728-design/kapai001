@@ -1,0 +1,12 @@
+{
+  "argv": [
+    "F:\\minGw64\\ucrt64\\bin\\python.exe",
+    "E:\\desktop\\项目设计\\项目设计\\tools\\verify_g0.py",
+    "--root",
+    "C:\\Users\\Dev.LI\\AppData\\Local\\Temp\\ddl-g0-audit-a4uc8e45\\missing_case",
+    "--run-id",
+    "test-missing_case"
+  ],
+  "cwd": "E:\\desktop\\项目设计\\项目设计",
+  "mode": "g0_readiness"
+}

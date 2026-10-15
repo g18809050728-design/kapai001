@@ -1,0 +1,80 @@
+[
+  {
+    "id": "test_N01",
+    "name_key": "encounter.n01.name",
+    "kind": "normal",
+    "members": [
+      "test_N01"
+    ],
+    "base_ddl": 10,
+    "terms": [
+      1
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "test_N02",
+    "name_key": "encounter.n02.name",
+    "kind": "normal",
+    "members": [
+      "test_N02"
+    ],
+    "base_ddl": 10,
+    "terms": [
+      1
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "test_N03",
+    "name_key": "encounter.n03.name",
+    "kind": "normal",
+    "members": [
+      "test_N03"
+    ],
+    "base_ddl": 10,
+    "terms": [
+      1
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "test_N04",
+    "name_key": "encounter.n04.name",
+    "kind": "normal",
+    "members": [
+      "test_N04"
+    ],
+    "base_ddl": 10,
+    "terms": [
+      1
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "test_Q01",
+    "name_key": "encounter.q01.name",
+    "kind": "elite",
+    "members": [
+      "test_Q01"
+    ],
+    "base_ddl": 10,
+    "terms": [
+      1
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "test_B01",
+    "name_key": "encounter.b01.name",
+    "kind": "boss",
+    "members": [
+      "test_B01"
+    ],
+    "base_ddl": 10,
+    "terms": [
+      1
+    ],
+    "exam_flags": []
+  }
+]

@@ -1,0 +1,6 @@
+SCRIPT ERROR: Parse Error: The variable type is being inferred from a Variant value, so it will be typed as Variant. (Warning treated as error.)
+   at: GDScript::reload (res://artifacts/g2-build/staging/flow/runtime_probe/runtime_probe.gd:23)
+SCRIPT ERROR: Parse Error: The variable type is being inferred from a Variant value, so it will be typed as Variant. (Warning treated as error.)
+   at: GDScript::reload (res://artifacts/g2-build/staging/flow/runtime_probe/runtime_probe.gd:27)
+ERROR: Failed to load script "res://artifacts/g2-build/staging/flow/runtime_probe/runtime_probe.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)

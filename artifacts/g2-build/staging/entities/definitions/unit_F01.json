@@ -1,0 +1,27 @@
+{
+  "kind": "unit",
+  "id": "F01",
+  "source": {
+    "path": "docs/交大四年_DDL战争_统一设计文档.md",
+    "section": "unit ID F01",
+    "table_heading": "6. 单位重设计（8种）",
+    "line": 289,
+    "row": "| F01 | 热心室友：宽松卫衣、双肩包 | 10 | 2 | 入场获得护卫；低输出、高耐用，承接原稿“闲人”定位 |"
+  },
+  "behavior_refs": [
+    "src/content/content_db.gd::_validate_support",
+    "src/battle/battle_engine.gd::_summon_unit(guard)"
+  ],
+  "definition": {
+    "id": "F01",
+    "name_key": "unit.F01.name",
+    "vitality": 10,
+    "cooperation": 2,
+    "guard": true,
+    "support": {
+      "kind": "none"
+    }
+  },
+  "status": "staged_schema_and_reference_verified_behavior_deferred_to_G3_G4",
+  "blockers": []
+}

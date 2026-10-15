@@ -1,0 +1,254 @@
+[
+  {
+    "id": "K01",
+    "name_key": "card.K01.name",
+    "type": "work",
+    "rarity": "white",
+    "tags": [
+      "basic"
+    ],
+    "cost": 1,
+    "target": "task",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "complete",
+        "amount": 6
+      }
+    ],
+    "upgrade": {
+      "effects": [
+        {
+          "op": "complete",
+          "amount": 8
+        }
+      ]
+    }
+  },
+  {
+    "id": "K02",
+    "name_key": "card.K02.name",
+    "type": "strategy",
+    "rarity": "white",
+    "tags": [
+      "basic"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "relax",
+        "amount": 5
+      }
+    ],
+    "upgrade": {
+      "effects": [
+        {
+          "op": "relax",
+          "amount": 8
+        }
+      ]
+    }
+  },
+  {
+    "id": "K03",
+    "name_key": "card.K03.name",
+    "type": "strategy",
+    "rarity": "white",
+    "tags": [
+      "basic"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "draw",
+        "amount": 2
+      },
+      {
+        "op": "discard",
+        "amount": 1
+      }
+    ],
+    "upgrade": {
+      "effects": [
+        {
+          "op": "draw",
+          "amount": 3
+        },
+        {
+          "op": "discard",
+          "amount": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "K04",
+    "name_key": "card.K04.name",
+    "type": "strategy",
+    "rarity": "white",
+    "tags": [
+      "basic"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "gain_status",
+        "status": "inspiration",
+        "stacks": 2
+      },
+      {
+        "op": "draw",
+        "amount": 1
+      }
+    ],
+    "upgrade": {
+      "effects": [
+        {
+          "op": "gain_status",
+          "status": "inspiration",
+          "stacks": 3
+        }
+      ]
+    }
+  },
+  {
+    "id": "K10",
+    "name_key": "card.K10.name",
+    "type": "strategy",
+    "rarity": "blue",
+    "tags": [],
+    "cost": 0,
+    "vitality_cost": 4,
+    "target": "self",
+    "exhaust": true,
+    "effects": [
+      {
+        "op": "gain_focus",
+        "amount": 2
+      }
+    ],
+    "upgrade": {
+      "vitality_cost": 3
+    }
+  },
+  {
+    "id": "K13",
+    "name_key": "card.K13.name",
+    "type": "strategy",
+    "rarity": "white",
+    "tags": [],
+    "cost": 0,
+    "target": "self",
+    "exhaust": false,
+    "limit": {
+      "per": "instance_round",
+      "times": 1
+    },
+    "effects": [
+      {
+        "op": "gain_status",
+        "status": "compile",
+        "stacks": 1
+      }
+    ],
+    "upgrade": {
+      "effects": [
+        {
+          "op": "gain_status",
+          "status": "compile",
+          "stacks": 2
+        }
+      ]
+    }
+  },
+  {
+    "id": "K14",
+    "name_key": "card.K14.name",
+    "type": "work",
+    "rarity": "white",
+    "tags": [],
+    "cost": 1,
+    "target": "task",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "complete",
+        "amount": 5,
+        "bonus_if": {
+          "status": "compile",
+          "min_stacks": 1,
+          "amount": 3
+        }
+      }
+    ],
+    "upgrade": {
+      "effects": [
+        {
+          "op": "complete",
+          "amount": 7,
+          "bonus_if": {
+            "status": "compile",
+            "min_stacks": 1,
+            "amount": 3
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "K43",
+    "name_key": "card.K43.name",
+    "type": "cooperation",
+    "rarity": "white",
+    "tags": [],
+    "cost": 1,
+    "target": "unit",
+    "exhaust": true,
+    "effects": [
+      {
+        "op": "summon_unit",
+        "unit": "F01"
+      }
+    ],
+    "upgrade": {
+      "effects": [
+        {
+          "op": "summon_unit",
+          "unit": "F01",
+          "vitality_bonus": 3
+        }
+      ]
+    }
+  },
+  {
+    "id": "K44",
+    "name_key": "card.K44.name",
+    "type": "cooperation",
+    "rarity": "white",
+    "tags": [],
+    "cost": 2,
+    "target": "unit",
+    "exhaust": true,
+    "effects": [
+      {
+        "op": "summon_unit",
+        "unit": "F02"
+      }
+    ],
+    "upgrade": {
+      "effects": [
+        {
+          "op": "summon_unit",
+          "unit": "F02",
+          "cooperation_bonus": 2
+        }
+      ]
+    }
+  }
+]
