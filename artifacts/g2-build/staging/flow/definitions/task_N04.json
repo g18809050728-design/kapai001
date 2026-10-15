@@ -1,0 +1,47 @@
+{
+  "kind": "task",
+  "id": "N04",
+  "source": {
+    "path": "docs/交大四年_DDL战争_统一设计文档.md",
+    "section": "task ID N04",
+    "upstream_section": "§9.1 普通任务",
+    "source_lines": [
+      359
+    ],
+    "source_row": "| N04 | 实验预习 | 2～3 | 32/8 | A主角焦虑1 → B压力9 |"
+  },
+  "behavior_refs": [
+    "docs/内容层契约.md §8.1 TaskDef/TaskPhaseDef and §8.2 IntentSpec",
+    "src/battle/battle_engine.gd::_execute_intent_skill",
+    "tests/suites/test_g2_state.gd (content package behavior not exercised)"
+  ],
+  "definition": {
+    "id": "N04",
+    "name_key": "task.n04.name",
+    "kind": "normal",
+    "phases": [
+      {
+        "phase_key": "main",
+        "name_key": "task.n04.phase.main.name",
+        "work_max": 32,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "task.n04.intent.anxiety1",
+            "gain_status": {
+              "status": "anxiety",
+              "stacks": 1,
+              "target": "player"
+            }
+          },
+          {
+            "index": 1,
+            "text_key": "task.n04.intent.pressure9",
+            "pressure": 9
+          }
+        ]
+      }
+    ]
+  },
+  "status": "schema_validated_behavior_and_G2_reference_closure_pending"
+}

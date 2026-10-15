@@ -1,0 +1,67 @@
+[
+  {
+    "name": "engine_version",
+    "argv": [
+      "F:\\GoDot\\Godot_v4.7.2-stable_win64_console.exe",
+      "--version"
+    ]
+  },
+  {
+    "name": "editor_import",
+    "argv": [
+      "F:\\GoDot\\Godot_v4.7.2-stable_win64_console.exe",
+      "--headless",
+      "--editor",
+      "--path",
+      "E:\\desktop\\项目设计\\项目设计",
+      "--quit"
+    ]
+  },
+  {
+    "name": "ui_tests",
+    "argv": [
+      "F:\\GoDot\\Godot_v4.7.2-stable_win64_console.exe",
+      "--headless",
+      "--path",
+      "E:\\desktop\\项目设计\\项目设计",
+      "--script",
+      "res://tests/run_ui_tests.gd"
+    ]
+  },
+  {
+    "name": "session_regression",
+    "argv": [
+      "F:\\GoDot\\Godot_v4.7.2-stable_win64_console.exe",
+      "--headless",
+      "--path",
+      "E:\\desktop\\项目设计\\项目设计",
+      "--script",
+      "res://tests/run_tests.gd"
+    ]
+  },
+  {
+    "name": "main_smoke",
+    "argv": [
+      "F:\\GoDot\\Godot_v4.7.2-stable_win64_console.exe",
+      "--headless",
+      "--path",
+      "E:\\desktop\\项目设计\\项目设计",
+      "--quit-after",
+      "3"
+    ]
+  },
+  {
+    "name": "format_check",
+    "argv": [
+      "C:\\Users\\Dev.LI\\AppData\\Local\\Python\\pythoncore-3.14-64\\Scripts\\gdformat.EXE",
+      "--check",
+      "src/ui",
+      "src/app",
+      "tests/run_ui_tests.gd",
+      "tests/suites/test_ui_shell_pages.gd",
+      "tests/suites/test_ui_battle_choice.gd",
+      "tests/suites/test_ui_battle_pointer.gd",
+      "tools/capture_g7.gd"
+    ]
+  }
+]

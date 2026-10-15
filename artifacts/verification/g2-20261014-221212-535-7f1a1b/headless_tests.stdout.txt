@@ -1,0 +1,5 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+G2_TEST_MANIFEST_SHA256=3f718bd32891b7a208e39b1126b94219ef1327da00cb6ed2d0349f2c243080df
+G2_TEST_FIXTURE_SHA256=f323cbb59ef5bbbb1561fe06b98f601bbd42ae604d5dcbbb5fcf5f552bcf24c0
+G1/G2 headless tests passed

@@ -1,0 +1,827 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-10-15T10:31:50.051807+00:00",
+  "review_method": "AI view_image visual inspection",
+  "human_review_status": "not_recorded",
+  "stage": "G6",
+  "result": "usable_for_G7_prototype_with_documented_notes",
+  "counts": {
+    "source_atlases": 6,
+    "reviewed_slices": 46,
+    "selected_files": 46,
+    "byte_identical_copies": 44,
+    "derived_center_crops": 2,
+    "frozen_content_mappings": 66,
+    "ui_requirement_methods": 16
+  },
+  "source_catalog_sha256": "9b1349d7bdc558c7df792bec6cc54047da5835b4804bf26de3d4f503c45bc7cc",
+  "selection_sha256": "741157112a4072a78a25191322b4555d4705cee58c66bcadeb74a00e942054cf",
+  "contact_sheets": [
+    "artifacts/g6-review/G6-01_contact.png",
+    "artifacts/g6-review/G6-02_contact.png",
+    "artifacts/g6-review/G6-03_contact.png",
+    "artifacts/g6-review/G6-04_contact.png",
+    "artifacts/g6-review/G6-05_contact.png",
+    "artifacts/g6-review/G6-06_contact.png"
+  ],
+  "full_size_checks": [
+    "F03",
+    "F04",
+    "K05",
+    "K06",
+    "A05",
+    "selected:K05",
+    "selected:K06"
+  ],
+  "records": [
+    {
+      "asset_id": "P01",
+      "status": "ai_review_selected_with_notes",
+      "note": "Laptop and forearm touch the right edge. Usable as a framed bust portrait; avoid additional fill cropping.",
+      "evidence": "artifacts/g6-review/G6-01_contact.png"
+    },
+    {
+      "asset_id": "P04",
+      "status": "ai_review_selected",
+      "note": "Character and clothing are recognizable; coherent campus illustration style. Selected for a framed portrait with its opaque paper background.",
+      "evidence": "artifacts/g6-review/G6-01_contact.png"
+    },
+    {
+      "asset_id": "F01",
+      "status": "ai_review_selected",
+      "note": "Character and clothing are recognizable; coherent campus illustration style. Selected for a framed portrait with its opaque paper background.",
+      "evidence": "artifacts/g6-review/G6-01_contact.png"
+    },
+    {
+      "asset_id": "F02",
+      "status": "ai_review_selected",
+      "note": "Character and clothing are recognizable; coherent campus illustration style. Selected for a framed portrait with its opaque paper background.",
+      "evidence": "artifacts/g6-review/G6-01_contact.png"
+    },
+    {
+      "asset_id": "F03",
+      "status": "ai_review_selected_with_notes",
+      "note": "Right hand and marker are clipped at the right edge. Usable as a framed bust portrait; full-body display is not approved.",
+      "evidence": "artifacts/g6-review/G6-01_contact.png"
+    },
+    {
+      "asset_id": "F04",
+      "status": "ai_review_selected_with_notes",
+      "note": "Checklist and left hand are clipped at the left edge. Usable as a framed bust portrait; avoid additional fill cropping.",
+      "evidence": "artifacts/g6-review/G6-01_contact.png"
+    },
+    {
+      "asset_id": "K01",
+      "status": "ai_review_selected",
+      "note": "Card subject or action is recognizable; coherent campus illustration style. Keep gameplay labels as native UI text; any drawn notes are decorative.",
+      "evidence": "artifacts/g6-review/G6-02_contact.png"
+    },
+    {
+      "asset_id": "K02",
+      "status": "ai_review_selected",
+      "note": "Card subject or action is recognizable; coherent campus illustration style. Keep gameplay labels as native UI text; any drawn notes are decorative.",
+      "evidence": "artifacts/g6-review/G6-02_contact.png"
+    },
+    {
+      "asset_id": "K03",
+      "status": "ai_review_selected",
+      "note": "Card subject or action is recognizable; coherent campus illustration style. Keep gameplay labels as native UI text; any drawn notes are decorative.",
+      "evidence": "artifacts/g6-review/G6-02_contact.png"
+    },
+    {
+      "asset_id": "K04",
+      "status": "ai_review_selected",
+      "note": "Card subject or action is recognizable; coherent campus illustration style. Keep gameplay labels as native UI text; any drawn notes are decorative.",
+      "evidence": "artifacts/g6-review/G6-02_contact.png"
+    },
+    {
+      "asset_id": "K05",
+      "status": "ai_review_selected_with_notes",
+      "note": "Thin line from adjacent grid cell at the top of the candidate was removed with a centered crop [8,8,654,654] from 662x662 to 646x646. Selected derivative was visually checked at full size.",
+      "evidence": "artifacts/g6-review/G6-02_contact.png"
+    },
+    {
+      "asset_id": "K06",
+      "status": "ai_review_selected_with_notes",
+      "note": "Thin line from adjacent grid cell at the top of the candidate was removed with a centered crop [8,8,654,654] from 662x662 to 646x646. Selected derivative was visually checked at full size.",
+      "evidence": "artifacts/g6-review/G6-02_contact.png"
+    },
+    {
+      "asset_id": "K07",
+      "status": "ai_review_selected",
+      "note": "Card subject or action is recognizable; coherent campus illustration style. Keep gameplay labels as native UI text; any drawn notes are decorative.",
+      "evidence": "artifacts/g6-review/G6-02_contact.png"
+    },
+    {
+      "asset_id": "K08",
+      "status": "ai_review_selected",
+      "note": "Card subject or action is recognizable; coherent campus illustration style. Keep gameplay labels as native UI text; any drawn notes are decorative.",
+      "evidence": "artifacts/g6-review/G6-02_contact.png"
+    },
+    {
+      "asset_id": "K10",
+      "status": "ai_review_selected",
+      "note": "Card subject or action is recognizable; coherent campus illustration style. Keep gameplay labels as native UI text; any drawn notes are decorative.",
+      "evidence": "artifacts/g6-review/G6-02_contact.png"
+    },
+    {
+      "asset_id": "K12",
+      "status": "ai_review_selected",
+      "note": "Card subject or action is recognizable; coherent campus illustration style. Keep gameplay labels as native UI text; any drawn notes are decorative.",
+      "evidence": "artifacts/g6-review/G6-02_contact.png"
+    },
+    {
+      "asset_id": "K13",
+      "status": "ai_review_selected",
+      "note": "Card subject or action is recognizable; coherent campus illustration style. Keep gameplay labels as native UI text; any drawn notes are decorative.",
+      "evidence": "artifacts/g6-review/G6-02_contact.png"
+    },
+    {
+      "asset_id": "K14",
+      "status": "ai_review_selected",
+      "note": "Card subject or action is recognizable; coherent campus illustration style. Keep gameplay labels as native UI text; any drawn notes are decorative.",
+      "evidence": "artifacts/g6-review/G6-02_contact.png"
+    },
+    {
+      "asset_id": "K15",
+      "status": "ai_review_selected",
+      "note": "Card subject or action is recognizable; coherent campus illustration style. Keep gameplay labels as native UI text; any drawn notes are decorative.",
+      "evidence": "artifacts/g6-review/G6-03_contact.png"
+    },
+    {
+      "asset_id": "K16",
+      "status": "ai_review_selected",
+      "note": "Card subject or action is recognizable; coherent campus illustration style. Keep gameplay labels as native UI text; any drawn notes are decorative.",
+      "evidence": "artifacts/g6-review/G6-03_contact.png"
+    },
+    {
+      "asset_id": "K19",
+      "status": "ai_review_selected",
+      "note": "Card subject or action is recognizable; coherent campus illustration style. Keep gameplay labels as native UI text; any drawn notes are decorative.",
+      "evidence": "artifacts/g6-review/G6-03_contact.png"
+    },
+    {
+      "asset_id": "K59",
+      "status": "ai_review_selected",
+      "note": "Card subject or action is recognizable; coherent campus illustration style. Keep gameplay labels as native UI text; any drawn notes are decorative.",
+      "evidence": "artifacts/g6-review/G6-03_contact.png"
+    },
+    {
+      "asset_id": "K60",
+      "status": "ai_review_selected",
+      "note": "Card subject or action is recognizable; coherent campus illustration style. Keep gameplay labels as native UI text; any drawn notes are decorative.",
+      "evidence": "artifacts/g6-review/G6-03_contact.png"
+    },
+    {
+      "asset_id": "X01",
+      "status": "ai_review_selected",
+      "note": "Card subject or action is recognizable; coherent campus illustration style. Keep gameplay labels as native UI text; any drawn notes are decorative.",
+      "evidence": "artifacts/g6-review/G6-03_contact.png"
+    },
+    {
+      "asset_id": "N01",
+      "status": "ai_review_selected",
+      "note": "Task subject is recognizable; coherent campus illustration style. Keep objective and progress text in native UI.",
+      "evidence": "artifacts/g6-review/G6-03_contact.png"
+    },
+    {
+      "asset_id": "N02",
+      "status": "ai_review_selected",
+      "note": "Task subject is recognizable; coherent campus illustration style. Keep objective and progress text in native UI.",
+      "evidence": "artifacts/g6-review/G6-03_contact.png"
+    },
+    {
+      "asset_id": "N03",
+      "status": "ai_review_selected",
+      "note": "Task subject is recognizable; coherent campus illustration style. Keep objective and progress text in native UI.",
+      "evidence": "artifacts/g6-review/G6-03_contact.png"
+    },
+    {
+      "asset_id": "N04",
+      "status": "ai_review_selected",
+      "note": "Task subject is recognizable; coherent campus illustration style. Keep objective and progress text in native UI.",
+      "evidence": "artifacts/g6-review/G6-03_contact.png"
+    },
+    {
+      "asset_id": "Q01",
+      "status": "ai_review_selected",
+      "note": "Task subject is recognizable; coherent campus illustration style. Keep objective and progress text in native UI.",
+      "evidence": "artifacts/g6-review/G6-03_contact.png"
+    },
+    {
+      "asset_id": "B01",
+      "status": "ai_review_selected",
+      "note": "Task subject is recognizable; coherent campus illustration style. Keep objective and progress text in native UI.",
+      "evidence": "artifacts/g6-review/G6-03_contact.png"
+    },
+    {
+      "asset_id": "A01",
+      "status": "ai_review_selected_with_notes",
+      "note": "Pen tip is close to the image edge. Retain the complete selected image in its UI frame.",
+      "evidence": "artifacts/g6-review/G6-04_contact.png"
+    },
+    {
+      "asset_id": "A04",
+      "status": "ai_review_selected",
+      "note": "Item silhouette is recognizable; coherent campus illustration style. Selected as a framed opaque illustration, not a transparent icon.",
+      "evidence": "artifacts/g6-review/G6-04_contact.png"
+    },
+    {
+      "asset_id": "A05",
+      "status": "ai_review_selected_with_notes",
+      "note": "Lunch box left edge is slightly clipped. Object remains recognizable for a small framed relic illustration.",
+      "evidence": "artifacts/g6-review/G6-04_contact.png"
+    },
+    {
+      "asset_id": "A07",
+      "status": "ai_review_selected_with_notes",
+      "note": "Notebook corner is close to the image edge. Retain the complete selected image in its UI frame.",
+      "evidence": "artifacts/g6-review/G6-04_contact.png"
+    },
+    {
+      "asset_id": "A08",
+      "status": "ai_review_selected",
+      "note": "Item silhouette is recognizable; coherent campus illustration style. Selected as a framed opaque illustration, not a transparent icon.",
+      "evidence": "artifacts/g6-review/G6-04_contact.png"
+    },
+    {
+      "asset_id": "A11",
+      "status": "ai_review_selected_with_notes",
+      "note": "Notebook corner is close to the image edge. Retain the complete selected image in its UI frame.",
+      "evidence": "artifacts/g6-review/G6-04_contact.png"
+    },
+    {
+      "asset_id": "A15",
+      "status": "ai_review_selected",
+      "note": "Item silhouette is recognizable; coherent campus illustration style. Selected as a framed opaque illustration, not a transparent icon.",
+      "evidence": "artifacts/g6-review/G6-04_contact.png"
+    },
+    {
+      "asset_id": "A18",
+      "status": "ai_review_selected",
+      "note": "Item silhouette is recognizable; coherent campus illustration style. Selected as a framed opaque illustration, not a transparent icon.",
+      "evidence": "artifacts/g6-review/G6-04_contact.png"
+    },
+    {
+      "asset_id": "BG_campus",
+      "status": "ai_review_selected",
+      "note": "Environment or result mood is recognizable; coherent campus illustration style. Put UI text on readable panels over the detailed background.",
+      "evidence": "artifacts/g6-review/G6-05_contact.png"
+    },
+    {
+      "asset_id": "BG_classroom",
+      "status": "ai_review_selected",
+      "note": "Environment or result mood is recognizable; coherent campus illustration style. Put UI text on readable panels over the detailed background.",
+      "evidence": "artifacts/g6-review/G6-05_contact.png"
+    },
+    {
+      "asset_id": "BG_home",
+      "status": "ai_review_selected",
+      "note": "Environment or result mood is recognizable; coherent campus illustration style. Put UI text on readable panels over the detailed background.",
+      "evidence": "artifacts/g6-review/G6-05_contact.png"
+    },
+    {
+      "asset_id": "BG_dorm",
+      "status": "ai_review_selected",
+      "note": "Environment or result mood is recognizable; coherent campus illustration style. Put UI text on readable panels over the detailed background.",
+      "evidence": "artifacts/g6-review/G6-05_contact.png"
+    },
+    {
+      "asset_id": "BG_study",
+      "status": "ai_review_selected",
+      "note": "Environment or result mood is recognizable; coherent campus illustration style. Put UI text on readable panels over the detailed background.",
+      "evidence": "artifacts/g6-review/G6-06_contact.png"
+    },
+    {
+      "asset_id": "BG_shop",
+      "status": "ai_review_selected_with_notes",
+      "note": "Packaging includes abstract pseudo-writing. No readable brand was noticed at the reviewed scale; do not use image marks as UI text.",
+      "evidence": "artifacts/g6-review/G6-06_contact.png"
+    },
+    {
+      "asset_id": "BG_success",
+      "status": "ai_review_selected",
+      "note": "Environment or result mood is recognizable; coherent campus illustration style. Put UI text on readable panels over the detailed background.",
+      "evidence": "artifacts/g6-review/G6-06_contact.png"
+    },
+    {
+      "asset_id": "BG_failure",
+      "status": "ai_review_selected",
+      "note": "Environment or result mood is recognizable; coherent campus illustration style. Put UI text on readable panels over the detailed background.",
+      "evidence": "artifacts/g6-review/G6-06_contact.png"
+    }
+  ],
+  "file_checks": [
+    {
+      "asset_id": "P01",
+      "candidate_sha256_verified": true,
+      "selected_file_exists": true,
+      "selected_sha256": "61871a29312b54da3af9ea7c0282a51d3983e3d87cd366c7e00de93a07265b52",
+      "selected_size": [
+        793,
+        992
+      ],
+      "derivation": "copy_byte_identical"
+    },
+    {
+      "asset_id": "P04",
+      "candidate_sha256_verified": true,
+      "selected_file_exists": true,
+      "selected_sha256": "ccbe5113088528778da048d204843d42e592f3a2edfd71335bfe09bdb1bb6b8f",
+      "selected_size": [
+        793,
+        992
+      ],
+      "derivation": "copy_byte_identical"
+    },
+    {
+      "asset_id": "F01",
+      "candidate_sha256_verified": true,
+      "selected_file_exists": true,
+      "selected_sha256": "c8475ea24024e417a25e5818507dce8077c4b121885aecc3a197ed22f8cb67f8",
+      "selected_size": [
+        793,
+        992
+      ],
+      "derivation": "copy_byte_identical"
+    },
+    {
+      "asset_id": "F02",
+      "candidate_sha256_verified": true,
+      "selected_file_exists": true,
+      "selected_sha256": "bce0bec7fa193e01b3062d923cb3734c0cddb83e19b821f774373631bd67f527",
+      "selected_size": [
+        793,
+        992
+      ],
+      "derivation": "copy_byte_identical"
+    },
+    {
+      "asset_id": "F03",
+      "candidate_sha256_verified": true,
+      "selected_file_exists": true,
+      "selected_sha256": "c247dbedbd2f9982b89e0aeff5043a66f9317bb309998442fcd9f07f2b3ed19a",
+      "selected_size": [
+        793,
+        992
+      ],
+      "derivation": "copy_byte_identical"
+    },
+    {
+      "asset_id": "F04",
+      "candidate_sha256_verified": true,
+      "selected_file_exists": true,
+      "selected_sha256": "41942a52714ca5af0ed2e70bff60af7012a03caa9e6e3af03c0a5776dbbabf15",
+      "selected_size": [
+        793,
+        992
+      ],
+      "derivation": "copy_byte_identical"
+    },
+    {
+      "asset_id": "K01",
+      "candidate_sha256_verified": true,
+      "selected_file_exists": true,
+      "selected_sha256": "fe4e85ed3c8501e033c70b07bcc959354bd9b2da5a453bf4d96e9f940b718b47",
+      "selected_size": [
+        662,
+        662
+      ],
+      "derivation": "copy_byte_identical"
+    },
+    {
+      "asset_id": "K02",
+      "candidate_sha256_verified": true,
+      "selected_file_exists": true,
+      "selected_sha256": "e35712b75b4506e39c261b044ac9e110f6eac7d20544aad8a13dc28b9eb37804",
+      "selected_size": [
+        662,
+        662
+      ],
+      "derivation": "copy_byte_identical"
+    },
+    {
+      "asset_id": "K03",
+      "candidate_sha256_verified": true,
+      "selected_file_exists": true,
+      "selected_sha256": "1996c0662d2473d789a04805c85fd6ccd7d34660550b626cc4a3a2f6989da8ee",
+      "selected_size": [
+        662,
+        662
+      ],
+      "derivation": "copy_byte_identical"
+    },
+    {
+      "asset_id": "K04",
+      "candidate_sha256_verified": true,
+      "selected_file_exists": true,
+      "selected_sha256": "e4a1d76fc9ebd7c2856f88f2794157b4a175a6b205e42d3e58ca6cfceb8ba31c",
+      "selected_size": [
+        662,
+        662
+      ],
+      "derivation": "copy_byte_identical"
+    },
+    {
+      "asset_id": "K05",
+      "candidate_sha256_verified": true,
+      "selected_file_exists": true,
+      "selected_sha256": "aeacc7eedc46fec973d0635e2b08ec15cc538d85cf91968c87ba986dc2a6e7f4",
+      "selected_size": [
+        646,
+        646
+      ],
+      "derivation": "center_crop_to_remove_thin_top_edge_artifact"
+    },
+    {
+      "asset_id": "K06",
+      "candidate_sha256_verified": true,
+      "selected_file_exists": true,
+      "selected_sha256": "a3d54755372270df43ceed01cbb14aa7b28e1547ce675b4d80e60c2b3e8a730e",
+      "selected_size": [
+        646,
+        646
+      ],
+      "derivation": "center_crop_to_remove_thin_top_edge_artifact"
+    },
+    {
+      "asset_id": "K07",
+      "candidate_sha256_verified": true,
+      "selected_file_exists": true,
+      "selected_sha256": "2b33a6a0ff72bb5e31fec31d9acf29799c57877ad66e3ee204786f14257ee145",
+      "selected_size": [
+        662,
+        662
+      ],
+      "derivation": "copy_byte_identical"
+    },
+    {
+      "asset_id": "K08",
+      "candidate_sha256_verified": true,
+      "selected_file_exists": true,
+      "selected_sha256": "aaf31d7d85d46c5f9fcc566b5526157ce84ba946b6ff3d464f3459b7eefcb15e",
+      "selected_size": [
+        662,
+        662
+      ],
+      "derivation": "copy_byte_identical"
+    },
+    {
+      "asset_id": "K10",
+      "candidate_sha256_verified": true,
+      "selected_file_exists": true,
+      "selected_sha256": "8bc209fb341291733d27810f063a01840eb8c715fada325da1dab9c196a02945",
+      "selected_size": [
+        662,
+        662
+      ],
+      "derivation": "copy_byte_identical"
+    },
+    {
+      "asset_id": "K12",
+      "candidate_sha256_verified": true,
+      "selected_file_exists": true,
+      "selected_sha256": "49bbb00cffcfce4de77f09b365d6cd8c0272cad11ce3ce6b259772b962c66cac",
+      "selected_size": [
+        662,
+        662
+      ],
+      "derivation": "copy_byte_identical"
+    },
+    {
+      "asset_id": "K13",
+      "candidate_sha256_verified": true,
+      "selected_file_exists": true,
+      "selected_sha256": "59e91d37742a618fff6fe54283e3c1e5510b46f6ab80972f7fd0055c88f9ff9b",
+      "selected_size": [
+        662,
+        662
+      ],
+      "derivation": "copy_byte_identical"
+    },
+    {
+      "asset_id": "K14",
+      "candidate_sha256_verified": true,
+      "selected_file_exists": true,
+      "selected_sha256": "a1a541d15ac7c688812fa9e18e3376015fa77a38d66f5a2dd20570af6e2abda0",
+      "selected_size": [
+        662,
+        662
+      ],
+      "derivation": "copy_byte_identical"
+    },
+    {
+      "asset_id": "K15",
+      "candidate_sha256_verified": true,
+      "selected_file_exists": true,
+      "selected_sha256": "f95f95ed377046f1da80c98937a7a98d8a409099f77fedcbbad1a6a7d1724372",
+      "selected_size": [
+        662,
+        662
+      ],
+      "derivation": "copy_byte_identical"
+    },
+    {
+      "asset_id": "K16",
+      "candidate_sha256_verified": true,
+      "selected_file_exists": true,
+      "selected_sha256": "d96261a2a53f2f132607ce43290659b01394116a84df8daddc30dfd59fe5cfa6",
+      "selected_size": [
+        662,
+        662
+      ],
+      "derivation": "copy_byte_identical"
+    },
+    {
+      "asset_id": "K19",
+      "candidate_sha256_verified": true,
+      "selected_file_exists": true,
+      "selected_sha256": "e2e713e2853504d349ae868ea537687d4af2e30f1fa7d7702782890a451712a6",
+      "selected_size": [
+        662,
+        662
+      ],
+      "derivation": "copy_byte_identical"
+    },
+    {
+      "asset_id": "K59",
+      "candidate_sha256_verified": true,
+      "selected_file_exists": true,
+      "selected_sha256": "384b2a86d173f96d29b102e195103a4852087e99e9cddde0c03eaaa806649ae6",
+      "selected_size": [
+        662,
+        662
+      ],
+      "derivation": "copy_byte_identical"
+    },
+    {
+      "asset_id": "K60",
+      "candidate_sha256_verified": true,
+      "selected_file_exists": true,
+      "selected_sha256": "5b8897f1663c82077a8e8835fc262f882915c2c1ef4023bbd3e05eeb375eb800",
+      "selected_size": [
+        662,
+        662
+      ],
+      "derivation": "copy_byte_identical"
+    },
+    {
+      "asset_id": "X01",
+      "candidate_sha256_verified": true,
+      "selected_file_exists": true,
+      "selected_sha256": "d2b9d250ea7e6a00a5e4b7e143775adfd376885a03019757885ee86020c59309",
+      "selected_size": [
+        662,
+        662
+      ],
+      "derivation": "copy_byte_identical"
+    },
+    {
+      "asset_id": "N01",
+      "candidate_sha256_verified": true,
+      "selected_file_exists": true,
+      "selected_sha256": "22145130d5c58ba49e649ad498f9ddb0d534a28acdd51cd2939bca3ebd37ed46",
+      "selected_size": [
+        662,
+        662
+      ],
+      "derivation": "copy_byte_identical"
+    },
+    {
+      "asset_id": "N02",
+      "candidate_sha256_verified": true,
+      "selected_file_exists": true,
+      "selected_sha256": "0d72d180ee9defd4ef7e219299f56cae8c04530b9691e88d74bb8460aeb93ca3",
+      "selected_size": [
+        662,
+        662
+      ],
+      "derivation": "copy_byte_identical"
+    },
+    {
+      "asset_id": "N03",
+      "candidate_sha256_verified": true,
+      "selected_file_exists": true,
+      "selected_sha256": "513feb04cddc32a0c70183f7b1dee115401b17b4cda83293fa6cb32926638fa1",
+      "selected_size": [
+        662,
+        662
+      ],
+      "derivation": "copy_byte_identical"
+    },
+    {
+      "asset_id": "N04",
+      "candidate_sha256_verified": true,
+      "selected_file_exists": true,
+      "selected_sha256": "0819c6e41446a7178d6c2eef9551bd4d80e7ecdc98d15228d605ed9304bfb5c6",
+      "selected_size": [
+        662,
+        662
+      ],
+      "derivation": "copy_byte_identical"
+    },
+    {
+      "asset_id": "Q01",
+      "candidate_sha256_verified": true,
+      "selected_file_exists": true,
+      "selected_sha256": "7dfcedc1612b345a6074d8bbf148f2c25ee1ac662719f330a5f7bcd9af62a567",
+      "selected_size": [
+        662,
+        662
+      ],
+      "derivation": "copy_byte_identical"
+    },
+    {
+      "asset_id": "B01",
+      "candidate_sha256_verified": true,
+      "selected_file_exists": true,
+      "selected_sha256": "d8c2e87689dabfad8b8a9d429df750c265381ae0a57f886eeda4c2fc03f6cb25",
+      "selected_size": [
+        662,
+        662
+      ],
+      "derivation": "copy_byte_identical"
+    },
+    {
+      "asset_id": "A01",
+      "candidate_sha256_verified": true,
+      "selected_file_exists": true,
+      "selected_sha256": "2f6ada2f0043be0164872f1c5f39fccdda0c757145fe9a7f09d6b620e6bbcb05",
+      "selected_size": [
+        844,
+        844
+      ],
+      "derivation": "copy_byte_identical"
+    },
+    {
+      "asset_id": "A04",
+      "candidate_sha256_verified": true,
+      "selected_file_exists": true,
+      "selected_sha256": "711c782643d3cf5ba1c22a6a7be7d1ef020929beac3c75018ce7d489cca7001b",
+      "selected_size": [
+        844,
+        844
+      ],
+      "derivation": "copy_byte_identical"
+    },
+    {
+      "asset_id": "A05",
+      "candidate_sha256_verified": true,
+      "selected_file_exists": true,
+      "selected_sha256": "b20a7c5d175fb23ade27253ab397919d23d9b047191beb51c65682f4cbde3e04",
+      "selected_size": [
+        844,
+        844
+      ],
+      "derivation": "copy_byte_identical"
+    },
+    {
+      "asset_id": "A07",
+      "candidate_sha256_verified": true,
+      "selected_file_exists": true,
+      "selected_sha256": "b0421d4744902657a61ba1de4bad6313739c08f2dca15a8edd9b97670b426fea",
+      "selected_size": [
+        844,
+        844
+      ],
+      "derivation": "copy_byte_identical"
+    },
+    {
+      "asset_id": "A08",
+      "candidate_sha256_verified": true,
+      "selected_file_exists": true,
+      "selected_sha256": "789d27a70e50261cd4cf5bd3cdca0060445e6caf395737867f8fc1b724aa8085",
+      "selected_size": [
+        844,
+        844
+      ],
+      "derivation": "copy_byte_identical"
+    },
+    {
+      "asset_id": "A11",
+      "candidate_sha256_verified": true,
+      "selected_file_exists": true,
+      "selected_sha256": "b2c89036b134a453c38119b13b1682e72b1f52e7b0c59a7de18886d33f43aa77",
+      "selected_size": [
+        844,
+        844
+      ],
+      "derivation": "copy_byte_identical"
+    },
+    {
+      "asset_id": "A15",
+      "candidate_sha256_verified": true,
+      "selected_file_exists": true,
+      "selected_sha256": "181790028d5e589961cb8157807f0572f951005d34850e508c951e03595e9cb4",
+      "selected_size": [
+        844,
+        844
+      ],
+      "derivation": "copy_byte_identical"
+    },
+    {
+      "asset_id": "A18",
+      "candidate_sha256_verified": true,
+      "selected_file_exists": true,
+      "selected_sha256": "5e0ce22bc52e344ed5cb6af6c3b0c7056924855acb7a31c7535cdeef519e3899",
+      "selected_size": [
+        844,
+        844
+      ],
+      "derivation": "copy_byte_identical"
+    },
+    {
+      "asset_id": "BG_campus",
+      "candidate_sha256_verified": true,
+      "selected_file_exists": true,
+      "selected_sha256": "f6080d213c63b88c0bbae5fd1b3640dc04855e8cecf99bc87fafe6c32c1b518b",
+      "selected_size": [
+        1841,
+        1036
+      ],
+      "derivation": "copy_byte_identical"
+    },
+    {
+      "asset_id": "BG_classroom",
+      "candidate_sha256_verified": true,
+      "selected_file_exists": true,
+      "selected_sha256": "19ed9d1f1adf5dfe11caeb1843e02e32ff12bd09277456198ca5ccd95e4bd712",
+      "selected_size": [
+        1841,
+        1036
+      ],
+      "derivation": "copy_byte_identical"
+    },
+    {
+      "asset_id": "BG_home",
+      "candidate_sha256_verified": true,
+      "selected_file_exists": true,
+      "selected_sha256": "605b7b177731b29dbf7093a3ab09cce9ebb8d8e68155b2f2221df5f291eb832e",
+      "selected_size": [
+        1841,
+        1036
+      ],
+      "derivation": "copy_byte_identical"
+    },
+    {
+      "asset_id": "BG_dorm",
+      "candidate_sha256_verified": true,
+      "selected_file_exists": true,
+      "selected_sha256": "931a4ab340d7de062f67519e106a3abf7d69222482e4801ceb1bf43019d01e47",
+      "selected_size": [
+        1841,
+        1036
+      ],
+      "derivation": "copy_byte_identical"
+    },
+    {
+      "asset_id": "BG_study",
+      "candidate_sha256_verified": true,
+      "selected_file_exists": true,
+      "selected_sha256": "7bf3b6d7585598e40e440202ffbcd7d2d1c4ad64690d8116a48e32e3ea955c5e",
+      "selected_size": [
+        1841,
+        1036
+      ],
+      "derivation": "copy_byte_identical"
+    },
+    {
+      "asset_id": "BG_shop",
+      "candidate_sha256_verified": true,
+      "selected_file_exists": true,
+      "selected_sha256": "8807ff97e38a25e7bdfbdc34e12d79e3083f583e1e9a57f2436fc390b540f1fb",
+      "selected_size": [
+        1841,
+        1036
+      ],
+      "derivation": "copy_byte_identical"
+    },
+    {
+      "asset_id": "BG_success",
+      "candidate_sha256_verified": true,
+      "selected_file_exists": true,
+      "selected_sha256": "831d312a6f28b90f3563d7281c10cfc0ca76c48374c1e7467b52e7d492c8ae23",
+      "selected_size": [
+        1841,
+        1036
+      ],
+      "derivation": "copy_byte_identical"
+    },
+    {
+      "asset_id": "BG_failure",
+      "candidate_sha256_verified": true,
+      "selected_file_exists": true,
+      "selected_sha256": "056deaf86d4532f3135ecb6ee6d497de236e2f6d15ab65feda8844a6ca8b9ef3",
+      "selected_size": [
+        1841,
+        1036
+      ],
+      "derivation": "copy_byte_identical"
+    }
+  ],
+  "source_files_unchanged": true,
+  "candidate_files_unchanged": true,
+  "agent_image_generation_calls": 0,
+  "external_paid_calls": null,
+  "note": "No Godot runtime/UI or broad game regression performed. This is image selection and provenance evidence."
+}

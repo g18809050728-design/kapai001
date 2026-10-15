@@ -1,0 +1,20 @@
+{
+  "manifest_id": "campus_mvp",
+  "scope_version": "campus_mvp.v1",
+  "definitions": {},
+  "manifest_holdback": {
+    "character": [],
+    "card": [],
+    "relic": [],
+    "task": [],
+    "encounter": [],
+    "unit": [],
+    "scene": [],
+    "event": [],
+    "status": [],
+    "ruleset": []
+  },
+  "manifest_enable_after_mapping": {},
+  "package_blockers": [],
+  "pending_overrides": []
+}

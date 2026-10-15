@@ -1,0 +1,8 @@
+﻿[
+    "python -m py_compile tools/verify_g2_staging.py tools/test_verify_g2_staging.py",
+    "python -m unittest tools.test_verify_g2_staging -v",
+    "python tools/verify_g2_staging.py --batch cards",
+    "python tools/verify_g2_staging.py --batch entities",
+    "python tools/verify_g2_staging.py --batch flow",
+    "python tools/verify_g2_staging.py"
+]

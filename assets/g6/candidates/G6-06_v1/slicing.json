@@ -1,0 +1,136 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-10-15T10:21:44.466760+00:00",
+  "batch_id": "G6-06",
+  "variant": "high",
+  "dry_run": false,
+  "resource_status": "candidate_unreviewed",
+  "catalog_file": "E:\\desktop\\项目设计\\项目设计\\assets\\g6\\catalog.json",
+  "catalog_sha256": "9b1349d7bdc558c7df792bec6cc54047da5835b4804bf26de3d4f503c45bc7cc",
+  "source_file": "E:\\desktop\\项目设计\\项目设计\\assets\\g6\\sources\\G6-06_v1.png",
+  "source_sha256": "c7a52ce0f63a2d5fae6ccafbbc4b509da896bfdad9cd1b6d4cb0b526802e22f5",
+  "source_size": [
+    3840,
+    2160
+  ],
+  "expected_size": {
+    "width": 3840,
+    "height": 2160
+  },
+  "output_dir": "E:\\desktop\\项目设计\\项目设计\\assets\\g6\\candidates\\G6-06_v1",
+  "grid": {
+    "columns": 2,
+    "rows": 2
+  },
+  "crop": {
+    "inset_ratio": 0.02,
+    "aspect_ratio": [
+      16,
+      9
+    ]
+  },
+  "rounding": {
+    "grid": "floor(index * size / count)",
+    "inset": "ceil per side",
+    "aspect": "floor; centered; odd remainder on right/bottom",
+    "boxes": "[left, top, right, bottom), input pixel coordinates"
+  },
+  "source_mode": "RGB",
+  "source_has_alpha_channel": false,
+  "source_has_transparency_metadata": false,
+  "source_contains_transparent_pixels": false,
+  "output_mode": "RGB",
+  "background_removed": false,
+  "resized": false,
+  "warnings": [],
+  "slices": [
+    {
+      "asset_id": "BG_study",
+      "row": 0,
+      "column": 0,
+      "cell_box": [
+        0,
+        0,
+        1920,
+        1080
+      ],
+      "crop_box": [
+        39,
+        22,
+        1880,
+        1058
+      ],
+      "output_file": "backgrounds/BG_study_v1.png",
+      "width": 1841,
+      "height": 1036,
+      "sha256": "7bf3b6d7585598e40e440202ffbcd7d2d1c4ad64690d8116a48e32e3ea955c5e",
+      "contains_transparent_pixels": false
+    },
+    {
+      "asset_id": "BG_shop",
+      "row": 0,
+      "column": 1,
+      "cell_box": [
+        1920,
+        0,
+        3840,
+        1080
+      ],
+      "crop_box": [
+        1959,
+        22,
+        3800,
+        1058
+      ],
+      "output_file": "backgrounds/BG_shop_v1.png",
+      "width": 1841,
+      "height": 1036,
+      "sha256": "8807ff97e38a25e7bdfbdc34e12d79e3083f583e1e9a57f2436fc390b540f1fb",
+      "contains_transparent_pixels": false
+    },
+    {
+      "asset_id": "BG_success",
+      "row": 1,
+      "column": 0,
+      "cell_box": [
+        0,
+        1080,
+        1920,
+        2160
+      ],
+      "crop_box": [
+        39,
+        1102,
+        1880,
+        2138
+      ],
+      "output_file": "backgrounds/BG_success_v1.png",
+      "width": 1841,
+      "height": 1036,
+      "sha256": "831d312a6f28b90f3563d7281c10cfc0ca76c48374c1e7467b52e7d492c8ae23",
+      "contains_transparent_pixels": false
+    },
+    {
+      "asset_id": "BG_failure",
+      "row": 1,
+      "column": 1,
+      "cell_box": [
+        1920,
+        1080,
+        3840,
+        2160
+      ],
+      "crop_box": [
+        1959,
+        1102,
+        3800,
+        2138
+      ],
+      "output_file": "backgrounds/BG_failure_v1.png",
+      "width": 1841,
+      "height": 1036,
+      "sha256": "056deaf86d4532f3135ecb6ee6d497de236e2f6d15ab65feda8844a6ca8b9ef3",
+      "contains_transparent_pixels": false
+    }
+  ]
+}

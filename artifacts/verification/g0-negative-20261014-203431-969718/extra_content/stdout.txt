@@ -1,0 +1,8 @@
+Mode: g0_readiness
+Checks: 756
+Document errors: 1
+G0 blockers: 0
+ERROR SCOPE relic: exact ID set mismatch
+Exit code: 1
+Evidence: C:\Users\Dev.LI\AppData\Local\Temp\ddl-g0-audit-eil7upjk\extra_content\artifacts\verification\test-extra_content
+Document assertions and registered semantic review only; no Godot, game JSON or UI tests.

@@ -1,0 +1,10 @@
+{
+    "stage":  "G3",
+    "step":  "G3-02",
+    "verification":  "failed",
+    "stage_status":  "in_progress",
+    "g2_stage_status":  "frozen_incomplete",
+    "g2_holdback_count":  54,
+    "failure":  "Item has already been added. Key in dictionary: \u0027Path\u0027  Key being added: \u0027PATH\u0027",
+    "godot":  "unavailable"
+}

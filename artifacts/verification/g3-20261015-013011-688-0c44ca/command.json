@@ -1,0 +1,65 @@
+[
+    {
+        "name":  "engine_version",
+        "executable":  "F:\\GoDot\\Godot_v4.7.2-stable_win64_console.exe",
+        "arguments":  [
+                          "--version"
+                      ]
+    },
+    {
+        "name":  "python_version",
+        "executable":  "F:\\minGw64\\ucrt64\\bin\\python.exe",
+        "arguments":  [
+                          "--version"
+                      ]
+    },
+    {
+        "name":  "document_audit",
+        "executable":  "F:\\minGw64\\ucrt64\\bin\\python.exe",
+        "arguments":  [
+                          "tools/verify_g0.py"
+                      ]
+    },
+    {
+        "name":  "g2_static_audit",
+        "executable":  "F:\\minGw64\\ucrt64\\bin\\python.exe",
+        "arguments":  [
+                          "tools/verify_g2.py"
+                      ]
+    },
+    {
+        "name":  "editor_import",
+        "executable":  "F:\\GoDot\\Godot_v4.7.2-stable_win64_console.exe",
+        "arguments":  [
+                          "--headless",
+                          "--editor",
+                          "--path",
+                          "E:\\desktop\\项目设计\\项目设计",
+                          "--quit",
+                          "--log-file",
+                          "E:\\desktop\\项目设计\\项目设计\\artifacts\\verification\\g3-20261015-013011-688-0c44ca\\godot_editor.log"
+                      ]
+    },
+    {
+        "name":  "headless_tests",
+        "executable":  "F:\\GoDot\\Godot_v4.7.2-stable_win64_console.exe",
+        "arguments":  [
+                          "--headless",
+                          "--path",
+                          "E:\\desktop\\项目设计\\项目设计",
+                          "--script",
+                          "res://tests/run_tests.gd",
+                          "--log-file",
+                          "E:\\desktop\\项目设计\\项目设计\\artifacts\\verification\\g3-20261015-013011-688-0c44ca\\godot_tests.log"
+                      ]
+    },
+    {
+        "name":  "format_check",
+        "executable":  "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "arguments":  [
+                          "-NoProfile",
+                          "-Command",
+                          "gdformat --check src tests"
+                      ]
+    }
+]

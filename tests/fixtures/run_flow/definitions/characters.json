@@ -1,0 +1,51 @@
+[
+  {
+    "id": "test_P01",
+    "name_key": "character.P01.name",
+    "starter_cards": [
+      "test_K01",
+      "test_K02"
+    ],
+    "starter_relic_id": "test_A01",
+    "passive": {
+      "id": "p01_third_work_compile",
+      "trigger": "work_card_resolved",
+      "count": 3,
+      "limit": {
+        "per": "round",
+        "times": 1
+      },
+      "effects": [
+        {
+          "op": "gain_status",
+          "status": "compile",
+          "stacks": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "test_P04",
+    "name_key": "character.P04.name",
+    "starter_cards": [
+      "test_K01",
+      "test_K02"
+    ],
+    "starter_relic_id": "test_A04",
+    "passive": {
+      "id": "p04_first_cooperation_relax",
+      "trigger": "cooperation_card_resolved",
+      "count": 1,
+      "limit": {
+        "per": "round",
+        "times": 1
+      },
+      "effects": [
+        {
+          "op": "relax",
+          "amount": 2
+        }
+      ]
+    }
+  }
+]

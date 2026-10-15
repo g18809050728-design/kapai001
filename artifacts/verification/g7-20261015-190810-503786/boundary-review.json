@@ -1,0 +1,11 @@
+{
+  "command": [
+    "rg",
+    "-n",
+    "BattleEngine|RunService|SaveStore|FileAccess|\\.catalog|\\._state|\\._battle_engine|\\._run_service|\\._save_store",
+    "src/ui"
+  ],
+  "exit_code": 1,
+  "no_forbidden_dependency_matches": true,
+  "scope": "Text dependency scan plus UI button integration tests; not a complete static type proof"
+}

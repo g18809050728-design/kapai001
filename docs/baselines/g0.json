@@ -1,0 +1,1976 @@
+{
+  "schema_version": 2,
+  "stage": "G0",
+  "status": "frozen_document_baseline",
+  "confirmed_date": "2026-10-14",
+  "date_policy": "只记录日期，不管理每日负责人；后续目标日期未安排为null。",
+  "sources": [
+    {
+      "id": "SRC-PLAN",
+      "path": "docs/交大四年_DDL战争_项目计划书.md",
+      "version": "v1.1",
+      "adopted_sha256": "60749a05e715660ffad3b1124f5554f22b00e03dd509ea9845ef0ec3f7b5deed",
+      "approved_sha256": null,
+      "adopted_date": "2026-10-14"
+    },
+    {
+      "id": "SRC-RULES",
+      "path": "docs/交大四年_DDL战争_游戏规则书.md",
+      "version": "v0.4",
+      "adopted_sha256": "24e65db1df1b7ce1e097aed5e54dba763368f50089f92645c626b4d1a9ca2ad3",
+      "approved_sha256": null,
+      "adopted_date": "2026-10-14"
+    },
+    {
+      "id": "SRC-DESIGN",
+      "path": "docs/交大四年_DDL战争_统一设计文档.md",
+      "version": "v1.1",
+      "adopted_sha256": "733e13e1ef763c7c18c8071ce4fb9eeddd8fb2382dabd22b46e6b5ea32b84136",
+      "approved_sha256": null,
+      "adopted_date": "2026-10-14"
+    },
+    {
+      "id": "SRC-IDEA",
+      "path": "docs/交大四年_DDL战争_完整设计思路.md",
+      "version": "v0.1",
+      "adopted_sha256": "88deeebb8b3879c5029230f3cfb77943bb8af533f3b6d84be6d967e8ea1cff16",
+      "approved_sha256": null,
+      "adopted_date": "2026-10-14"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "DEC-001",
+      "document_status": "closed",
+      "confirmed_date": "2026-10-14",
+      "target_date": null,
+      "blocking_stage": null,
+      "verification_stage": "G0",
+      "implementation_status": "not_applicable",
+      "resolution": "四份当前Markdown承接基线；旧背景/Excel仅历史溯源。"
+    },
+    {
+      "id": "DEC-002",
+      "document_status": "closed",
+      "confirmed_date": "2026-10-14",
+      "target_date": null,
+      "blocking_stage": null,
+      "verification_stage": "G2/G8",
+      "implementation_status": "not_started",
+      "resolution": "生产campus_mvp与test_ fixture分离，G8 enabled精确相等且holdback为空。"
+    },
+    {
+      "id": "DEC-003",
+      "document_status": "closed",
+      "confirmed_date": "2026-10-14",
+      "target_date": null,
+      "blocking_stage": null,
+      "verification_stage": "G2/G4/G8",
+      "implementation_status": "not_started",
+      "resolution": "计划§3.1精确MVP，两项版本覆盖与B01直接终点。"
+    },
+    {
+      "id": "DEC-004",
+      "document_status": "closed",
+      "confirmed_date": "2026-10-14",
+      "target_date": null,
+      "blocking_stage": null,
+      "verification_stage": "G1",
+      "implementation_status": "not_started",
+      "resolution": "G1锁定Godot精确版本及可编译类型；当前未落实。"
+    },
+    {
+      "id": "DEC-005",
+      "document_status": "closed",
+      "confirmed_date": "2026-10-14",
+      "target_date": null,
+      "blocking_stage": null,
+      "verification_stage": "G3/G5/G7",
+      "implementation_status": "not_started",
+      "resolution": "待选仅驻内存，每条接受命令加1 revision，稳定与持久化分开。"
+    },
+    {
+      "id": "DEC-006",
+      "document_status": "closed",
+      "confirmed_date": "2026-10-14",
+      "target_date": null,
+      "blocking_stage": null,
+      "verification_stage": "G5",
+      "implementation_status": "not_started",
+      "resolution": "领域Codec独占映射，SnapshotCodec协调，SaveStore仅文件IO。"
+    },
+    {
+      "id": "DEC-007",
+      "document_status": "closed",
+      "confirmed_date": "2026-10-14",
+      "target_date": null,
+      "blocking_stage": null,
+      "verification_stage": "G7",
+      "implementation_status": "not_started",
+      "resolution": "GameSession唯一规则写入口，UI只消费只读View。"
+    },
+    {
+      "id": "DEC-008",
+      "document_status": "closed",
+      "confirmed_date": "2026-10-14",
+      "target_date": null,
+      "blocking_stage": null,
+      "verification_stage": "G2",
+      "implementation_status": "not_started",
+      "resolution": "内容§8唯一维护JSON字段、upgrade patch、逐op约束和状态映射。"
+    },
+    {
+      "id": "DEC-009",
+      "document_status": "closed",
+      "confirmed_date": "2026-10-14",
+      "target_date": null,
+      "blocking_stage": null,
+      "verification_stage": "G3",
+      "implementation_status": "not_started",
+      "resolution": "困倦player_action结束清；guard不叠加；采用用户Q-005/Q-006确认顺序。"
+    },
+    {
+      "id": "DEC-010",
+      "document_status": "closed",
+      "confirmed_date": "2026-10-14",
+      "target_date": null,
+      "blocking_stage": null,
+      "verification_stage": "G4/G5/G7",
+      "implementation_status": "not_started",
+      "resolution": "terminal_summary永久保留，profile_merge_pending仅bool；完整B08选去向后finalize。"
+    },
+    {
+      "id": "DEC-011",
+      "document_status": "closed",
+      "confirmed_date": "2026-10-14",
+      "target_date": null,
+      "blocking_stage": null,
+      "verification_stage": "G1/G3/G7",
+      "implementation_status": "not_started",
+      "resolution": "会话查询/显式恢复API与事件载荷、日志label快照统一。"
+    }
+  ],
+  "rule_decisions": [
+    {
+      "id": "Q-005",
+      "status": "closed",
+      "confirmed_date": "2026-10-14",
+      "target_date": null,
+      "blocking_scope": null,
+      "resolution": "创建顺序，再按稳定ID；具体工程注册序见RES-001。"
+    },
+    {
+      "id": "Q-006",
+      "status": "closed",
+      "confirmed_date": "2026-10-14",
+      "target_date": null,
+      "blocking_scope": null,
+      "resolution": "初始化→首次准备清旧放松/算专注→开战即时→场景与饰品准备→基础抽牌→明确抽牌后效果。"
+    },
+    {
+      "id": "Q-007",
+      "status": "open",
+      "confirmed_date": null,
+      "recorded_date": "2026-10-14",
+      "target_date": null,
+      "blocking_scope": "full",
+      "blocking_stage": "full_G0/G3",
+      "resolution": null,
+      "note": "查重护盾组合加入完整版本生产前裁决；不阻塞本期MVP。"
+    }
+  ],
+  "scope": {
+    "production_manifest_id": "campus_mvp",
+    "scope_version": "campus_mvp.v1",
+    "enabled_by_kind": {
+      "character": [
+        "P01",
+        "P04"
+      ],
+      "card": [
+        "K01",
+        "K02",
+        "K03",
+        "K04",
+        "K05",
+        "K06",
+        "K07",
+        "K08",
+        "K10",
+        "K12",
+        "K13",
+        "K14",
+        "K15",
+        "K16",
+        "K19",
+        "K43",
+        "K44",
+        "K45",
+        "K46",
+        "K51",
+        "K52",
+        "K53",
+        "K59",
+        "K60",
+        "X01"
+      ],
+      "relic": [
+        "A01",
+        "A04",
+        "A05",
+        "A07",
+        "A08",
+        "A11",
+        "A15",
+        "A18"
+      ],
+      "task": [
+        "N01",
+        "N02",
+        "N03",
+        "N04",
+        "Q01",
+        "B01"
+      ],
+      "encounter": [
+        "N01",
+        "N02",
+        "N03",
+        "N04",
+        "Q01",
+        "B01"
+      ],
+      "unit": [
+        "F01",
+        "F02",
+        "F03",
+        "F04"
+      ],
+      "scene": [
+        "L01",
+        "L02",
+        "L03"
+      ],
+      "event": [
+        "V01",
+        "V03",
+        "V04",
+        "V10"
+      ],
+      "status": [
+        "inspiration",
+        "compile",
+        "anxiety",
+        "procrastination",
+        "drowsiness",
+        "extra_requirements",
+        "guard"
+      ],
+      "ruleset": [
+        "campus_v1"
+      ]
+    },
+    "formal_card_count": 24,
+    "special_card_ids": [
+      "X01"
+    ],
+    "difficulty_ids": [
+      "normal"
+    ],
+    "term_count": 1,
+    "disabled_features": [
+      "career",
+      "legacy",
+      "graduation_choice"
+    ],
+    "holdback": [],
+    "source": {
+      "path": "docs/交大四年_DDL战争_项目计划书.md",
+      "section": "§3.1"
+    },
+    "overrides": [
+      {
+        "kind": "event",
+        "id": "V03",
+        "scope_version": "campus_mvp.v1",
+        "source": {
+          "path": "docs/交大四年_DDL战争_项目计划书.md",
+          "section": "§3.1"
+        },
+        "selector": "options[option_id=consult].effects[op=gain_card].card_pool",
+        "value": [
+          "K14",
+          "K05",
+          "K60"
+        ],
+        "full_value": [
+          "K14",
+          "K24",
+          "K34"
+        ]
+      },
+      {
+        "kind": "encounter",
+        "id": "N04",
+        "scope_version": "campus_mvp.v1",
+        "source": {
+          "path": "docs/交大四年_DDL战争_项目计划书.md",
+          "section": "§3.1"
+        },
+        "selector": "terms",
+        "value": [
+          1
+        ],
+        "full_value": [
+          2,
+          3
+        ]
+      }
+    ],
+    "map_topology": {
+      "term_count": 1,
+      "layers": 6,
+      "node_count": 8,
+      "route_length": 6,
+      "node_id_prefix_note": "模板ID，运行时加run_id|前缀。",
+      "nodes": [
+        {
+          "id": "t1l1_normal",
+          "layer": 1,
+          "kind": "normal",
+          "next_ids": [
+            "t1l2_event",
+            "t1l2_normal"
+          ]
+        },
+        {
+          "id": "t1l2_event",
+          "layer": 2,
+          "kind": "event",
+          "next_ids": [
+            "t1l3_shop"
+          ]
+        },
+        {
+          "id": "t1l2_normal",
+          "layer": 2,
+          "kind": "normal",
+          "next_ids": [
+            "t1l3_shop"
+          ]
+        },
+        {
+          "id": "t1l3_shop",
+          "layer": 3,
+          "kind": "shop",
+          "next_ids": [
+            "t1l4_normal",
+            "t1l4_elite"
+          ]
+        },
+        {
+          "id": "t1l4_normal",
+          "layer": 4,
+          "kind": "normal",
+          "next_ids": [
+            "t1l5_rest"
+          ]
+        },
+        {
+          "id": "t1l4_elite",
+          "layer": 4,
+          "kind": "elite",
+          "next_ids": [
+            "t1l5_rest"
+          ]
+        },
+        {
+          "id": "t1l5_rest",
+          "layer": 5,
+          "kind": "rest",
+          "next_ids": [
+            "t1l6_boss"
+          ]
+        },
+        {
+          "id": "t1l6_boss",
+          "layer": 6,
+          "kind": "boss",
+          "next_ids": []
+        }
+      ]
+    },
+    "representative_routes": [
+      {
+        "id": "ROUTE-01",
+        "node_ids": [
+          "t1l1_normal",
+          "t1l2_event",
+          "t1l3_shop",
+          "t1l4_normal",
+          "t1l5_rest",
+          "t1l6_boss"
+        ],
+        "characters": [
+          "P01",
+          "P04"
+        ],
+        "seeds": [
+          "42",
+          "20261014"
+        ]
+      },
+      {
+        "id": "ROUTE-02",
+        "node_ids": [
+          "t1l1_normal",
+          "t1l2_event",
+          "t1l3_shop",
+          "t1l4_elite",
+          "t1l5_rest",
+          "t1l6_boss"
+        ],
+        "characters": [
+          "P01",
+          "P04"
+        ],
+        "seeds": [
+          "42",
+          "20261014"
+        ]
+      },
+      {
+        "id": "ROUTE-03",
+        "node_ids": [
+          "t1l1_normal",
+          "t1l2_normal",
+          "t1l3_shop",
+          "t1l4_normal",
+          "t1l5_rest",
+          "t1l6_boss"
+        ],
+        "characters": [
+          "P01",
+          "P04"
+        ],
+        "seeds": [
+          "42",
+          "20261014"
+        ]
+      },
+      {
+        "id": "ROUTE-04",
+        "node_ids": [
+          "t1l1_normal",
+          "t1l2_normal",
+          "t1l3_shop",
+          "t1l4_elite",
+          "t1l5_rest",
+          "t1l6_boss"
+        ],
+        "characters": [
+          "P01",
+          "P04"
+        ],
+        "seeds": [
+          "42",
+          "20261014"
+        ]
+      }
+    ],
+    "rule_cases": [
+      {
+        "id": "T01",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§12.2"
+        },
+        "input": "新回合普通角色，无修正",
+        "expected": "专注3、抽5，首回合无第二次起手",
+        "fixture_scope": "test_mvp_",
+        "verification_stage": "G3/G4/G5",
+        "execution_status": "not_run"
+      },
+      {
+        "id": "T02",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§12.2"
+        },
+        "input": "手牌9张，抽3；随后生成临时牌",
+        "expected": "只抽1；生成牌进弃牌，不触发主动弃牌",
+        "fixture_scope": "test_mvp_",
+        "verification_stage": "G3/G4/G5",
+        "execution_status": "not_run"
+      },
+      {
+        "id": "T03",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§12.2"
+        },
+        "input": "精力4打K10，未持A08",
+        "expected": "不允许，牌与资源不变",
+        "fixture_scope": "test_mvp_",
+        "verification_stage": "G3/G4/G5",
+        "execution_status": "not_run"
+      },
+      {
+        "id": "T04",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§12.2"
+        },
+        "input": "精力4打K10，A08本战未用",
+        "expected": "可打，免支付并获得2专注，消耗饰品本战次数",
+        "fixture_scope": "test_mvp_",
+        "verification_stage": "G3/G4/G5",
+        "execution_status": "not_run"
+      },
+      {
+        "id": "T05",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§12.2"
+        },
+        "input": "场上3单位再打合作牌，取消换班",
+        "expected": "不扣费、不耗尽、不改变单位",
+        "fixture_scope": "test_mvp_",
+        "verification_stage": "G3/G4/G5",
+        "execution_status": "not_run"
+      },
+      {
+        "id": "T06",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§12.2"
+        },
+        "input": "护卫剩3精力，承受5×2压力",
+        "expected": "首段护卫暂离，无溢出；次段重新找目标",
+        "fixture_scope": "test_mvp_",
+        "verification_stage": "G3/G4/G5",
+        "execution_status": "not_run"
+      },
+      {
+        "id": "T07",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§12.2"
+        },
+        "input": "独立作答中打升级K44",
+        "expected": "同费用获得7放松，不召单位，不触发单位入场",
+        "fixture_scope": "test_mvp_",
+        "verification_stage": "G3/G4/G5",
+        "execution_status": "not_run"
+      },
+      {
+        "id": "T08",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§12.2"
+        },
+        "input": "固定考场中打K53",
+        "expected": "抽1、获得2放松、耗尽，不建立L03",
+        "fixture_scope": "test_mvp_",
+        "verification_stage": "G3/G4/G5",
+        "execution_status": "not_run"
+      },
+      {
+        "id": "T09",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§12.2"
+        },
+        "input": "建立L01、触发3次、换场再建立",
+        "expected": "不再恢复精力，本战次数不重置",
+        "fixture_scope": "test_mvp_",
+        "verification_stage": "G3/G4/G5",
+        "execution_status": "not_run"
+      },
+      {
+        "id": "T10",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§12.2"
+        },
+        "input": "DDL1时完成最后任务",
+        "expected": "立即胜利，不进行轮末超时",
+        "fixture_scope": "test_mvp_",
+        "verification_stage": "G3/G4/G5",
+        "execution_status": "not_run"
+      },
+      {
+        "id": "T11",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§12.2"
+        },
+        "input": "DDL1时轮末仍有任务",
+        "expected": "超时失败，A24不能救场",
+        "fixture_scope": "test_full_",
+        "verification_stage": "full_G3",
+        "execution_status": "not_run"
+      },
+      {
+        "id": "T12",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§12.2"
+        },
+        "input": "首领阶段归零且尚有下一阶段",
+        "expected": "先建新阶段，旧目标剩余多段跳过，不提前胜利",
+        "fixture_scope": "test_mvp_",
+        "verification_stage": "G3/G4/G5",
+        "execution_status": "not_run"
+      },
+      {
+        "id": "T13",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§12.2"
+        },
+        "input": "焦虑2，在L04第2次准备触发",
+        "expected": "原焦虑扣回能后清除；新焦虑影响下一次准备",
+        "fixture_scope": "test_full_",
+        "verification_stage": "full_G3",
+        "execution_status": "not_run"
+      },
+      {
+        "id": "T14",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§12.2"
+        },
+        "input": "L05存在，K08恢复3且A12有次数",
+        "expected": "floor((3+2)×0.5)=2，再按精力上限裁切",
+        "fixture_scope": "test_full_",
+        "verification_stage": "full_G3",
+        "execution_status": "not_run"
+      },
+      {
+        "id": "T15",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§12.2"
+        },
+        "input": "同名能力二次打出",
+        "expected": "不叠加持续能力，界面提前提示；牌正常支付并离开循环",
+        "fixture_scope": "test_full_",
+        "verification_stage": "full_G3",
+        "execution_status": "not_run"
+      },
+      {
+        "id": "T16",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§12.2"
+        },
+        "input": "钱不足/删后不足5张/满槽取消交易",
+        "expected": "余额、牌组、库存和饰品全部不变",
+        "fixture_scope": "test_mvp_",
+        "verification_stage": "G3/G4/G5",
+        "execution_status": "not_run"
+      },
+      {
+        "id": "T17",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§12.2"
+        },
+        "input": "同种子保存后继续L02随机",
+        "expected": "随机序列与不退出时一致",
+        "fixture_scope": "test_mvp_",
+        "verification_stage": "G3/G4/G5",
+        "execution_status": "not_run"
+      },
+      {
+        "id": "T18",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§12.2"
+        },
+        "input": "主角与最后任务同时归零，无A24",
+        "expected": "失败，不能发战胜奖励",
+        "fixture_scope": "test_mvp_",
+        "verification_stage": "G3/G4/G5",
+        "execution_status": "not_run"
+      },
+      {
+        "id": "T19",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§12.2"
+        },
+        "input": "单位行动后自身精力从1变0",
+        "expected": "已执行支援和协作，随后暂离，本轮不再行动",
+        "fixture_scope": "test_mvp_",
+        "verification_stage": "G3/G4/G5",
+        "execution_status": "not_run"
+      },
+      {
+        "id": "T20",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§12.2"
+        },
+        "input": "K13回收后在本回合再次打出",
+        "expected": "同实例限次仍生效；下回合才重置",
+        "fixture_scope": "test_mvp_",
+        "verification_stage": "G3/G4/G5",
+        "execution_status": "not_run"
+      },
+      {
+        "id": "RB-01",
+        "source": {
+          "path": "docs/交大四年_DDL战争_游戏规则书.md",
+          "section": "附录E"
+        },
+        "input": "无修正开始第一回合",
+        "expected": "专注3，抽5，不重复起手",
+        "fixture_scope": "test_mvp_",
+        "verification_stage": "G3/G4/G5",
+        "execution_status": "not_run"
+      },
+      {
+        "id": "RB-02",
+        "source": {
+          "path": "docs/交大四年_DDL战争_游戏规则书.md",
+          "section": "附录E"
+        },
+        "input": "尝试通用弃牌换专注",
+        "expected": "不存在该操作；普通弃牌不回专注",
+        "fixture_scope": "test_mvp_",
+        "verification_stage": "G3/G4/G5",
+        "execution_status": "not_run"
+      },
+      {
+        "id": "RB-03",
+        "source": {
+          "path": "docs/交大四年_DDL战争_游戏规则书.md",
+          "section": "附录E"
+        },
+        "input": "精力4、无A08，尝试K10",
+        "expected": "支付后不足1，不能打出",
+        "fixture_scope": "test_mvp_",
+        "verification_stage": "G3/G4/G5",
+        "execution_status": "not_run"
+      },
+      {
+        "id": "RB-04",
+        "source": {
+          "path": "docs/交大四年_DDL战争_游戏规则书.md",
+          "section": "附录E"
+        },
+        "input": "同上但A08首次免支付可用",
+        "expected": "允许出牌，获得2专注并耗尽，消费免支付次数",
+        "fixture_scope": "test_mvp_",
+        "verification_stage": "G3/G4/G5",
+        "execution_status": "not_run"
+      },
+      {
+        "id": "RB-05",
+        "source": {
+          "path": "docs/交大四年_DDL战争_游戏规则书.md",
+          "section": "附录E"
+        },
+        "input": "3单位满场打合作牌，取消换班预选",
+        "expected": "牌、专注、单位均不变",
+        "fixture_scope": "test_mvp_",
+        "verification_stage": "G3/G4/G5",
+        "execution_status": "not_run"
+      },
+      {
+        "id": "RB-06",
+        "source": {
+          "path": "docs/交大四年_DDL战争_游戏规则书.md",
+          "section": "附录E"
+        },
+        "input": "独立作答中打升级K44",
+        "expected": "同费用获得7放松，耗尽；不召入、不检查换班",
+        "fixture_scope": "test_mvp_",
+        "verification_stage": "G3/G4/G5",
+        "execution_status": "not_run"
+      },
+      {
+        "id": "RB-07",
+        "source": {
+          "path": "docs/交大四年_DDL战争_游戏规则书.md",
+          "section": "附录E"
+        },
+        "input": "固定考场打K53",
+        "expected": "抽1、2放松、耗尽，不建立自习室",
+        "fixture_scope": "test_mvp_",
+        "verification_stage": "G3/G4/G5",
+        "execution_status": "not_run"
+      },
+      {
+        "id": "RB-08",
+        "source": {
+          "path": "docs/交大四年_DDL战争_游戏规则书.md",
+          "section": "附录E"
+        },
+        "input": "L01触发3次后换走再换回",
+        "expected": "本战不再治疗，次数保留",
+        "fixture_scope": "test_mvp_",
+        "verification_stage": "G3/G4/G5",
+        "execution_status": "not_run"
+      },
+      {
+        "id": "RB-09",
+        "source": {
+          "path": "docs/交大四年_DDL战争_游戏规则书.md",
+          "section": "附录E"
+        },
+        "input": "单位1精力完成非最终任务后的协作",
+        "expected": "执行支援和协作后失去1并暂离",
+        "fixture_scope": "test_mvp_",
+        "verification_stage": "G3/G4/G5",
+        "execution_status": "not_run"
+      },
+      {
+        "id": "RB-10",
+        "source": {
+          "path": "docs/交大四年_DDL战争_游戏规则书.md",
+          "section": "附录E"
+        },
+        "input": "DDL1，在玩家行动完成最终任务",
+        "expected": "立即胜利，不再扣DDL",
+        "fixture_scope": "test_mvp_",
+        "verification_stage": "G3/G4/G5",
+        "execution_status": "not_run"
+      },
+      {
+        "id": "RB-11",
+        "source": {
+          "path": "docs/交大四年_DDL战争_游戏规则书.md",
+          "section": "附录E"
+        },
+        "input": "DDL1，到轮末仍有任务且持A24",
+        "expected": "超时失败，A24无效",
+        "fixture_scope": "test_full_",
+        "verification_stage": "full_G3",
+        "execution_status": "not_run"
+      },
+      {
+        "id": "RB-12",
+        "source": {
+          "path": "docs/交大四年_DDL战争_游戏规则书.md",
+          "section": "附录E"
+        },
+        "input": "首领旧阶段归零，旧目标仍有多段",
+        "expected": "先生成下一阶段，旧目标后续段跳过，不提前胜利",
+        "fixture_scope": "test_mvp_",
+        "verification_stage": "G3/G4/G5",
+        "execution_status": "not_run"
+      },
+      {
+        "id": "RB-13",
+        "source": {
+          "path": "docs/交大四年_DDL战争_游戏规则书.md",
+          "section": "附录E"
+        },
+        "input": "K13本回合使用后回收入手再次出牌",
+        "expected": "同实例限次仍有效",
+        "fixture_scope": "test_mvp_",
+        "verification_stage": "G3/G4/G5",
+        "execution_status": "not_run"
+      },
+      {
+        "id": "RB-14",
+        "source": {
+          "path": "docs/交大四年_DDL战争_游戏规则书.md",
+          "section": "附录E"
+        },
+        "input": "满饰品槽购买后在预选取消",
+        "expected": "不扣钱、不售出库存、不替换旧物",
+        "fixture_scope": "test_mvp_",
+        "verification_stage": "G3/G4/G5",
+        "execution_status": "not_run"
+      }
+    ],
+    "numeric_bindings": [
+      {
+        "config_key": "run.starting_vitality",
+        "expected": 72,
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§3.1–3.5、§10–10.1"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.6"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      },
+      {
+        "config_key": "run.starting_money",
+        "expected": 60,
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§3.1–3.5、§10–10.1"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.6"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      },
+      {
+        "config_key": "run.common_starter_cards",
+        "expected": [
+          "K01",
+          "K01",
+          "K01",
+          "K01",
+          "K02",
+          "K02",
+          "K02",
+          "K02",
+          "K03",
+          "K04"
+        ],
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§3.1–3.5、§10–10.1"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.6"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      },
+      {
+        "config_key": "run.starter_deck_size",
+        "expected": 12,
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§3.1–3.5、§10–10.1"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.6"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      },
+      {
+        "config_key": "run.minimum_deck_size",
+        "expected": 5,
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§3.1–3.5、§10–10.1"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.6"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      },
+      {
+        "config_key": "run.max_card_upgrades",
+        "expected": 1,
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§3.1–3.5、§10–10.1"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.6"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      },
+      {
+        "config_key": "run.relic_slots",
+        "expected": 6,
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§3.1–3.5、§10–10.1"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.6"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      },
+      {
+        "config_key": "run.term_count",
+        "expected": 1,
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§3.1–3.5、§10–10.1"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.6"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      },
+      {
+        "config_key": "run.term_heal_percent",
+        "expected": 20,
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§3.1–3.5、§10–10.1"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.6"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      },
+      {
+        "config_key": "run.rest_heal_percent",
+        "expected": 25,
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§3.1–3.5、§10–10.1"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.6"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      },
+      {
+        "config_key": "battle.starting_focus",
+        "expected": 0,
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§3.1–3.5、§10–10.1"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.6"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      },
+      {
+        "config_key": "battle.focus_per_round",
+        "expected": 3,
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§3.1–3.5、§10–10.1"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.6"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      },
+      {
+        "config_key": "battle.focus_cap",
+        "expected": 10,
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§3.1–3.5、§10–10.1"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.6"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      },
+      {
+        "config_key": "battle.draw_per_round",
+        "expected": 5,
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§3.1–3.5、§10–10.1"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.6"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      },
+      {
+        "config_key": "battle.hand_limit",
+        "expected": 10,
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§3.1–3.5、§10–10.1"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.6"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      },
+      {
+        "config_key": "battle.unit_slots",
+        "expected": 3,
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§3.1–3.5、§10–10.1"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.6"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      },
+      {
+        "config_key": "battle.scene_slots",
+        "expected": 1,
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§3.1–3.5、§10–10.1"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.6"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      },
+      {
+        "config_key": "battle.base_retention_count",
+        "expected": 0,
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§3.1–3.5、§10–10.1"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.6"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      },
+      {
+        "config_key": "battle.minimum_vitality_after_payment",
+        "expected": 1,
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§3.1–3.5、§10–10.1"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.6"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      },
+      {
+        "config_key": "battle.unit_action_vitality_cost",
+        "expected": 1,
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§3.1–3.5、§10–10.1"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.6"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      },
+      {
+        "config_key": "battle.cooperation_exam_relax",
+        "expected": [
+          5,
+          7
+        ],
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§3.1–3.5、§10–10.1"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.6"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      },
+      {
+        "config_key": "battle.scene_exam_draw",
+        "expected": 1,
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§3.1–3.5、§10–10.1"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.6"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      },
+      {
+        "config_key": "battle.scene_exam_relax",
+        "expected": [
+          2,
+          4
+        ],
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§3.1–3.5、§10–10.1"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.6"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      },
+      {
+        "config_key": "battle.minimum_ddl",
+        "expected": 1,
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§3.1–3.5、§10–10.1"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.6"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      },
+      {
+        "config_key": "rewards.normal_money_by_term",
+        "expected": [
+          15
+        ],
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§3.1–3.5、§10–10.1"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.6"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      },
+      {
+        "config_key": "rewards.elite_money_bonus",
+        "expected": 20,
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§3.1–3.5、§10–10.1"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.6"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      },
+      {
+        "config_key": "rewards.nonfinal_boss_money",
+        "expected": 50,
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§3.1–3.5、§10–10.1"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.6"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      },
+      {
+        "config_key": "rewards.candidate_count",
+        "expected": 3,
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§3.1–3.5、§10–10.1"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.6"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      },
+      {
+        "config_key": "rewards.empty_relic_pool_money",
+        "expected": 30,
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§3.1–3.5、§10–10.1"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.6"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      },
+      {
+        "config_key": "shop.card_stock",
+        "expected": {
+          "white": 2,
+          "blue": 2,
+          "purple": 1
+        },
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§3.1–3.5、§10–10.1"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.6"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      },
+      {
+        "config_key": "shop.relic_stock",
+        "expected": {
+          "white": 1,
+          "blue": 1
+        },
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§3.1–3.5、§10–10.1"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.6"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      },
+      {
+        "config_key": "shop.meal_stock",
+        "expected": 1,
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§3.1–3.5、§10–10.1"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.6"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      },
+      {
+        "config_key": "shop.card_prices",
+        "expected": {
+          "white": 35,
+          "blue": 55,
+          "purple": 85
+        },
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§3.1–3.5、§10–10.1"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.6"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      },
+      {
+        "config_key": "shop.relic_prices",
+        "expected": {
+          "white": 80,
+          "blue": 120
+        },
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§3.1–3.5、§10–10.1"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.6"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      },
+      {
+        "config_key": "shop.meal_price",
+        "expected": 25,
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§3.1–3.5、§10–10.1"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.6"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      },
+      {
+        "config_key": "shop.meal_heal",
+        "expected": 12,
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§3.1–3.5、§10–10.1"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.6"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      },
+      {
+        "config_key": "shop.removals_per_shop",
+        "expected": 1,
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§3.1–3.5、§10–10.1"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.6"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      },
+      {
+        "config_key": "shop.first_removal_price",
+        "expected": 60,
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§3.1–3.5、§10–10.1"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.6"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      },
+      {
+        "config_key": "shop.removal_price_increment",
+        "expected": 20,
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§3.1–3.5、§10–10.1"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.6"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      },
+      {
+        "config_key": "rewards.card_rarity_weights.normal",
+        "expected": {
+          "white": 60,
+          "blue": 30,
+          "purple": 9,
+          "gold": 1
+        },
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§3.1–3.5、§10–10.1"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.6"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      },
+      {
+        "config_key": "rewards.card_rarity_weights.elite",
+        "expected": {
+          "white": 20,
+          "blue": 45,
+          "purple": 30,
+          "gold": 5
+        },
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§3.1–3.5、§10–10.1"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.6"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      },
+      {
+        "config_key": "rewards.card_rarity_weights.boss",
+        "expected": {
+          "white": 0,
+          "blue": 30,
+          "purple": 50,
+          "gold": 20
+        },
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§3.1–3.5、§10–10.1"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.6"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      },
+      {
+        "config_key": "rewards.card_rarity_weights.term",
+        "expected": {
+          "white": 50,
+          "blue": 50,
+          "purple": 0,
+          "gold": 0
+        },
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§3.1–3.5、§10–10.1"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.6"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      },
+      {
+        "config_key": "rewards.relic_rarity_weights.general",
+        "expected": {
+          "white": 50,
+          "blue": 35,
+          "purple": 13,
+          "gold": 2
+        },
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§3.1–3.5、§10–10.1"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.6"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      },
+      {
+        "config_key": "rewards.relic_rarity_weights.boss",
+        "expected": {
+          "white": 20,
+          "blue": 40,
+          "purple": 35,
+          "gold": 5
+        },
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§3.1–3.5、§10–10.1"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.6"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      },
+      {
+        "config_key": "statuses.inspiration.cap",
+        "expected": 5,
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_游戏规则书.md",
+          "section": "附录A、RUN-001、BUF-005、GRW-001"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.4"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      },
+      {
+        "config_key": "statuses.inspiration.completion_per_stack",
+        "expected": 2,
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_游戏规则书.md",
+          "section": "附录A、RUN-001、BUF-005、GRW-001"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.4"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      },
+      {
+        "config_key": "statuses.compile.cap",
+        "expected": 5,
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_游戏规则书.md",
+          "section": "附录A、RUN-001、BUF-005、GRW-001"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.4"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      },
+      {
+        "config_key": "statuses.anxiety.cap",
+        "expected": 2,
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_游戏规则书.md",
+          "section": "附录A、RUN-001、BUF-005、GRW-001"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.4"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      },
+      {
+        "config_key": "statuses.anxiety.focus_penalty_per_stack",
+        "expected": 1,
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_游戏规则书.md",
+          "section": "附录A、RUN-001、BUF-005、GRW-001"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.4"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      },
+      {
+        "config_key": "statuses.procrastination.cap",
+        "expected": 3,
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_游戏规则书.md",
+          "section": "附录A、RUN-001、BUF-005、GRW-001"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.4"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      },
+      {
+        "config_key": "statuses.procrastination.draw_penalty_per_stack",
+        "expected": 1,
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_游戏规则书.md",
+          "section": "附录A、RUN-001、BUF-005、GRW-001"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.4"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      },
+      {
+        "config_key": "statuses.drowsiness.cap",
+        "expected": 2,
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_游戏规则书.md",
+          "section": "附录A、RUN-001、BUF-005、GRW-001"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.4"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      },
+      {
+        "config_key": "statuses.drowsiness.completion_penalty_per_stack",
+        "expected": 1,
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_游戏规则书.md",
+          "section": "附录A、RUN-001、BUF-005、GRW-001"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.4"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      },
+      {
+        "config_key": "statuses.extra_requirements.cap",
+        "expected": 3,
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_游戏规则书.md",
+          "section": "附录A、RUN-001、BUF-005、GRW-001"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.4"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      },
+      {
+        "config_key": "statuses.extra_requirements.pressure_per_stack",
+        "expected": 2,
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_游戏规则书.md",
+          "section": "附录A、RUN-001、BUF-005、GRW-001"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.4"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      },
+      {
+        "config_key": "difficulty_overrides.normal",
+        "expected": {
+          "starting_vitality": 72,
+          "ddl_offset": 0,
+          "pressure_percent": 100
+        },
+        "scope": "campus_mvp",
+        "upstream": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§3.1–3.5、§10–10.1"
+        },
+        "contract": {
+          "path": "docs/内容层契约.md",
+          "section": "§8.6"
+        },
+        "implementation_path": "data/definitions/rulesets.json",
+        "execution_status": "not_run"
+      }
+    ],
+    "encounter_bindings": [
+      {
+        "id": "N01",
+        "work_max_by_phase": [
+          24
+        ],
+        "base_ddl": 8,
+        "intent_cycle_each_phase": [
+          "pressure5",
+          "pressure7"
+        ],
+        "exam_flags": [],
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§9.1–9.3"
+        },
+        "execution_status": "not_run"
+      },
+      {
+        "id": "N02",
+        "work_max_by_phase": [
+          28
+        ],
+        "base_ddl": 8,
+        "intent_cycle_each_phase": [
+          "shield5",
+          "pressure8"
+        ],
+        "exam_flags": [],
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§9.1–9.3"
+        },
+        "execution_status": "not_run"
+      },
+      {
+        "id": "N03",
+        "work_max_by_phase": [
+          30
+        ],
+        "base_ddl": 8,
+        "intent_cycle_each_phase": [
+          "pressure6",
+          "X01→discard+pressure4"
+        ],
+        "exam_flags": [],
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§9.1–9.3"
+        },
+        "execution_status": "not_run"
+      },
+      {
+        "id": "N04",
+        "work_max_by_phase": [
+          32
+        ],
+        "base_ddl": 8,
+        "intent_cycle_each_phase": [
+          "anxiety1",
+          "pressure9"
+        ],
+        "exam_flags": [],
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§9.1–9.3"
+        },
+        "execution_status": "not_run"
+      },
+      {
+        "id": "Q01",
+        "work_max_by_phase": [
+          38
+        ],
+        "base_ddl": 6,
+        "intent_cycle_each_phase": [
+          "pressure7",
+          "shield6",
+          "pressure10"
+        ],
+        "exam_flags": [
+          "independent_answer"
+        ],
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§9.1–9.3"
+        },
+        "execution_status": "not_run"
+      },
+      {
+        "id": "B01",
+        "work_max_by_phase": [
+          20,
+          25,
+          25
+        ],
+        "base_ddl": 10,
+        "intent_cycle_each_phase": [
+          "pressure7",
+          "shield5",
+          "pressure9"
+        ],
+        "exam_flags": [
+          "independent_answer",
+          "fixed_exam_room"
+        ],
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "§9.1–9.3"
+        },
+        "execution_status": "not_run"
+      }
+    ],
+    "public_api_baseline": {
+      "session": "docs/接口文档.md",
+      "battle": "docs/战斗模块契约.md",
+      "run": "docs/局流程契约.md",
+      "storage": "docs/数据库与实体关系设计.md",
+      "content_and_random": "docs/初步架构设计.md",
+      "json_schema": "docs/内容层契约.md"
+    }
+  },
+  "requirement_ids": [
+    "ARCH-001",
+    "CNT-001",
+    "RNG-001",
+    "CMD-001",
+    "CMD-002",
+    "CMD-003",
+    "BAT-001",
+    "RUN-001",
+    "SAVE-001",
+    "SAVE-002",
+    "UI-001",
+    "UI-DOC-001",
+    "EXT-001",
+    "PERF-001"
+  ],
+  "traceability_document": "docs/G0需求追踪.md",
+  "ui_ledger": "动作或者图片描述/需求台账.md",
+  "semantic_review": {
+    "status": "completed",
+    "date": "2026-10-14",
+    "record": "docs/G0基线执行记录.md",
+    "open_mvp_findings": [],
+    "limits": "仅文档交叉审查；不代替未来代码/schema/游戏运行测试。"
+  },
+  "evidence": {
+    "mechanical_report": "artifacts/verification/g0-20261014-final/report.json",
+    "game_execution": "not_run",
+    "stages": {
+      "G1": "not_started",
+      "G2": "not_started",
+      "G3": "not_started",
+      "G4": "not_started",
+      "G5": "not_started",
+      "G6": "not_started",
+      "G7": "not_started",
+      "G8": "not_started"
+    }
+  }
+}

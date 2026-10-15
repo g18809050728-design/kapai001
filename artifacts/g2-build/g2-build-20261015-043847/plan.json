@@ -1,0 +1,566 @@
+{
+  "manifest_id": "campus_mvp",
+  "scope_version": "campus_mvp.v1",
+  "production_manifest_mutated": false,
+  "fixture_namespace": "test_",
+  "entries": [
+    {
+      "kind": "character",
+      "id": "P01",
+      "source_path": "docs/交大四年_DDL战争_统一设计文档.md",
+      "source_section": "character ID P01",
+      "blocking": [
+        "G2"
+      ],
+      "status": "pending"
+    },
+    {
+      "kind": "character",
+      "id": "P04",
+      "source_path": "docs/交大四年_DDL战争_统一设计文档.md",
+      "source_section": "character ID P04",
+      "blocking": [
+        "G2"
+      ],
+      "status": "pending"
+    },
+    {
+      "kind": "card",
+      "id": "K05",
+      "source_path": "docs/交大四年_DDL战争_统一设计文档.md",
+      "source_section": "card ID K05",
+      "blocking": [
+        "G2"
+      ],
+      "status": "pending"
+    },
+    {
+      "kind": "card",
+      "id": "K06",
+      "source_path": "docs/交大四年_DDL战争_统一设计文档.md",
+      "source_section": "card ID K06",
+      "blocking": [
+        "G2"
+      ],
+      "status": "pending"
+    },
+    {
+      "kind": "card",
+      "id": "K07",
+      "source_path": "docs/交大四年_DDL战争_统一设计文档.md",
+      "source_section": "card ID K07",
+      "blocking": [
+        "G2"
+      ],
+      "status": "pending"
+    },
+    {
+      "kind": "card",
+      "id": "K08",
+      "source_path": "docs/交大四年_DDL战争_统一设计文档.md",
+      "source_section": "card ID K08",
+      "blocking": [
+        "G2"
+      ],
+      "status": "pending"
+    },
+    {
+      "kind": "card",
+      "id": "K10",
+      "source_path": "docs/交大四年_DDL战争_统一设计文档.md",
+      "source_section": "card ID K10",
+      "blocking": [
+        "G2"
+      ],
+      "status": "pending"
+    },
+    {
+      "kind": "card",
+      "id": "K12",
+      "source_path": "docs/交大四年_DDL战争_统一设计文档.md",
+      "source_section": "card ID K12",
+      "blocking": [
+        "G2"
+      ],
+      "status": "pending"
+    },
+    {
+      "kind": "card",
+      "id": "K13",
+      "source_path": "docs/交大四年_DDL战争_统一设计文档.md",
+      "source_section": "card ID K13",
+      "blocking": [
+        "G2"
+      ],
+      "status": "pending"
+    },
+    {
+      "kind": "card",
+      "id": "K14",
+      "source_path": "docs/交大四年_DDL战争_统一设计文档.md",
+      "source_section": "card ID K14",
+      "blocking": [
+        "G2"
+      ],
+      "status": "pending"
+    },
+    {
+      "kind": "card",
+      "id": "K15",
+      "source_path": "docs/交大四年_DDL战争_统一设计文档.md",
+      "source_section": "card ID K15",
+      "blocking": [
+        "G2"
+      ],
+      "status": "pending"
+    },
+    {
+      "kind": "card",
+      "id": "K16",
+      "source_path": "docs/交大四年_DDL战争_统一设计文档.md",
+      "source_section": "card ID K16",
+      "blocking": [
+        "G2"
+      ],
+      "status": "pending"
+    },
+    {
+      "kind": "card",
+      "id": "K19",
+      "source_path": "docs/交大四年_DDL战争_统一设计文档.md",
+      "source_section": "card ID K19",
+      "blocking": [
+        "G2"
+      ],
+      "status": "pending"
+    },
+    {
+      "kind": "card",
+      "id": "K43",
+      "source_path": "docs/交大四年_DDL战争_统一设计文档.md",
+      "source_section": "card ID K43",
+      "blocking": [
+        "G2"
+      ],
+      "status": "pending"
+    },
+    {
+      "kind": "card",
+      "id": "K44",
+      "source_path": "docs/交大四年_DDL战争_统一设计文档.md",
+      "source_section": "card ID K44",
+      "blocking": [
+        "G2"
+      ],
+      "status": "pending"
+    },
+    {
+      "kind": "card",
+      "id": "K45",
+      "source_path": "docs/交大四年_DDL战争_统一设计文档.md",
+      "source_section": "card ID K45",
+      "blocking": [
+        "G2"
+      ],
+      "status": "pending"
+    },
+    {
+      "kind": "card",
+      "id": "K46",
+      "source_path": "docs/交大四年_DDL战争_统一设计文档.md",
+      "source_section": "card ID K46",
+      "blocking": [
+        "G2"
+      ],
+      "status": "pending"
+    },
+    {
+      "kind": "card",
+      "id": "K51",
+      "source_path": "docs/交大四年_DDL战争_统一设计文档.md",
+      "source_section": "card ID K51",
+      "blocking": [
+        "G2"
+      ],
+      "status": "pending"
+    },
+    {
+      "kind": "card",
+      "id": "K52",
+      "source_path": "docs/交大四年_DDL战争_统一设计文档.md",
+      "source_section": "card ID K52",
+      "blocking": [
+        "G2"
+      ],
+      "status": "pending"
+    },
+    {
+      "kind": "card",
+      "id": "K53",
+      "source_path": "docs/交大四年_DDL战争_统一设计文档.md",
+      "source_section": "card ID K53",
+      "blocking": [
+        "G2"
+      ],
+      "status": "pending"
+    },
+    {
+      "kind": "card",
+      "id": "K59",
+      "source_path": "docs/交大四年_DDL战争_统一设计文档.md",
+      "source_section": "card ID K59",
+      "blocking": [
+        "G2"
+      ],
+      "status": "pending"
+    },
+    {
+      "kind": "card",
+      "id": "K60",
+      "source_path": "docs/交大四年_DDL战争_统一设计文档.md",
+      "source_section": "card ID K60",
+      "blocking": [
+        "G2"
+      ],
+      "status": "pending"
+    },
+    {
+      "kind": "card",
+      "id": "X01",
+      "source_path": "docs/交大四年_DDL战争_统一设计文档.md",
+      "source_section": "card ID X01",
+      "blocking": [
+        "G2"
+      ],
+      "status": "pending"
+    },
+    {
+      "kind": "relic",
+      "id": "A01",
+      "source_path": "docs/交大四年_DDL战争_统一设计文档.md",
+      "source_section": "relic ID A01",
+      "blocking": [
+        "G2"
+      ],
+      "status": "pending"
+    },
+    {
+      "kind": "relic",
+      "id": "A04",
+      "source_path": "docs/交大四年_DDL战争_统一设计文档.md",
+      "source_section": "relic ID A04",
+      "blocking": [
+        "G2"
+      ],
+      "status": "pending"
+    },
+    {
+      "kind": "relic",
+      "id": "A05",
+      "source_path": "docs/交大四年_DDL战争_统一设计文档.md",
+      "source_section": "relic ID A05",
+      "blocking": [
+        "G2"
+      ],
+      "status": "pending"
+    },
+    {
+      "kind": "relic",
+      "id": "A07",
+      "source_path": "docs/交大四年_DDL战争_统一设计文档.md",
+      "source_section": "relic ID A07",
+      "blocking": [
+        "G2"
+      ],
+      "status": "pending"
+    },
+    {
+      "kind": "relic",
+      "id": "A08",
+      "source_path": "docs/交大四年_DDL战争_统一设计文档.md",
+      "source_section": "relic ID A08",
+      "blocking": [
+        "G2"
+      ],
+      "status": "pending"
+    },
+    {
+      "kind": "relic",
+      "id": "A11",
+      "source_path": "docs/交大四年_DDL战争_统一设计文档.md",
+      "source_section": "relic ID A11",
+      "blocking": [
+        "G2"
+      ],
+      "status": "pending"
+    },
+    {
+      "kind": "relic",
+      "id": "A15",
+      "source_path": "docs/交大四年_DDL战争_统一设计文档.md",
+      "source_section": "relic ID A15",
+      "blocking": [
+        "G2"
+      ],
+      "status": "pending"
+    },
+    {
+      "kind": "relic",
+      "id": "A18",
+      "source_path": "docs/交大四年_DDL战争_统一设计文档.md",
+      "source_section": "relic ID A18",
+      "blocking": [
+        "G2"
+      ],
+      "status": "pending"
+    },
+    {
+      "kind": "task",
+      "id": "N01",
+      "source_path": "docs/交大四年_DDL战争_统一设计文档.md",
+      "source_section": "task ID N01",
+      "blocking": [
+        "G2"
+      ],
+      "status": "pending"
+    },
+    {
+      "kind": "task",
+      "id": "N02",
+      "source_path": "docs/交大四年_DDL战争_统一设计文档.md",
+      "source_section": "task ID N02",
+      "blocking": [
+        "G2"
+      ],
+      "status": "pending"
+    },
+    {
+      "kind": "task",
+      "id": "N03",
+      "source_path": "docs/交大四年_DDL战争_统一设计文档.md",
+      "source_section": "task ID N03",
+      "blocking": [
+        "G2"
+      ],
+      "status": "pending"
+    },
+    {
+      "kind": "task",
+      "id": "N04",
+      "source_path": "docs/交大四年_DDL战争_统一设计文档.md",
+      "source_section": "task ID N04",
+      "blocking": [
+        "G2"
+      ],
+      "status": "pending"
+    },
+    {
+      "kind": "task",
+      "id": "Q01",
+      "source_path": "docs/交大四年_DDL战争_统一设计文档.md",
+      "source_section": "task ID Q01",
+      "blocking": [
+        "G2"
+      ],
+      "status": "pending"
+    },
+    {
+      "kind": "task",
+      "id": "B01",
+      "source_path": "docs/交大四年_DDL战争_统一设计文档.md",
+      "source_section": "task ID B01",
+      "blocking": [
+        "G2"
+      ],
+      "status": "pending"
+    },
+    {
+      "kind": "encounter",
+      "id": "N01",
+      "source_path": "docs/交大四年_DDL战争_统一设计文档.md",
+      "source_section": "encounter ID N01",
+      "blocking": [
+        "G2"
+      ],
+      "status": "pending"
+    },
+    {
+      "kind": "encounter",
+      "id": "N02",
+      "source_path": "docs/交大四年_DDL战争_统一设计文档.md",
+      "source_section": "encounter ID N02",
+      "blocking": [
+        "G2"
+      ],
+      "status": "pending"
+    },
+    {
+      "kind": "encounter",
+      "id": "N03",
+      "source_path": "docs/交大四年_DDL战争_统一设计文档.md",
+      "source_section": "encounter ID N03",
+      "blocking": [
+        "G2"
+      ],
+      "status": "pending"
+    },
+    {
+      "kind": "encounter",
+      "id": "N04",
+      "source_path": "docs/交大四年_DDL战争_统一设计文档.md",
+      "source_section": "encounter ID N04",
+      "blocking": [
+        "G2"
+      ],
+      "status": "pending"
+    },
+    {
+      "kind": "encounter",
+      "id": "Q01",
+      "source_path": "docs/交大四年_DDL战争_统一设计文档.md",
+      "source_section": "encounter ID Q01",
+      "blocking": [
+        "G2"
+      ],
+      "status": "pending"
+    },
+    {
+      "kind": "encounter",
+      "id": "B01",
+      "source_path": "docs/交大四年_DDL战争_统一设计文档.md",
+      "source_section": "encounter ID B01",
+      "blocking": [
+        "G2"
+      ],
+      "status": "pending"
+    },
+    {
+      "kind": "unit",
+      "id": "F01",
+      "source_path": "docs/交大四年_DDL战争_统一设计文档.md",
+      "source_section": "unit ID F01",
+      "blocking": [
+        "G2"
+      ],
+      "status": "pending"
+    },
+    {
+      "kind": "unit",
+      "id": "F02",
+      "source_path": "docs/交大四年_DDL战争_统一设计文档.md",
+      "source_section": "unit ID F02",
+      "blocking": [
+        "G2"
+      ],
+      "status": "pending"
+    },
+    {
+      "kind": "unit",
+      "id": "F03",
+      "source_path": "docs/交大四年_DDL战争_统一设计文档.md",
+      "source_section": "unit ID F03",
+      "blocking": [
+        "G2"
+      ],
+      "status": "pending"
+    },
+    {
+      "kind": "unit",
+      "id": "F04",
+      "source_path": "docs/交大四年_DDL战争_统一设计文档.md",
+      "source_section": "unit ID F04",
+      "blocking": [
+        "G2"
+      ],
+      "status": "pending"
+    },
+    {
+      "kind": "scene",
+      "id": "L01",
+      "source_path": "docs/交大四年_DDL战争_统一设计文档.md",
+      "source_section": "scene ID L01",
+      "blocking": [
+        "G2"
+      ],
+      "status": "pending"
+    },
+    {
+      "kind": "scene",
+      "id": "L02",
+      "source_path": "docs/交大四年_DDL战争_统一设计文档.md",
+      "source_section": "scene ID L02",
+      "blocking": [
+        "G2"
+      ],
+      "status": "pending"
+    },
+    {
+      "kind": "scene",
+      "id": "L03",
+      "source_path": "docs/交大四年_DDL战争_统一设计文档.md",
+      "source_section": "scene ID L03",
+      "blocking": [
+        "G2"
+      ],
+      "status": "pending"
+    },
+    {
+      "kind": "event",
+      "id": "V01",
+      "source_path": "docs/交大四年_DDL战争_统一设计文档.md",
+      "source_section": "event ID V01",
+      "blocking": [
+        "G2"
+      ],
+      "status": "pending"
+    },
+    {
+      "kind": "event",
+      "id": "V03",
+      "source_path": "docs/交大四年_DDL战争_统一设计文档.md",
+      "source_section": "event ID V03",
+      "blocking": [
+        "G2"
+      ],
+      "status": "pending"
+    },
+    {
+      "kind": "event",
+      "id": "V04",
+      "source_path": "docs/交大四年_DDL战争_统一设计文档.md",
+      "source_section": "event ID V04",
+      "blocking": [
+        "G2"
+      ],
+      "status": "pending"
+    },
+    {
+      "kind": "event",
+      "id": "V10",
+      "source_path": "docs/交大四年_DDL战争_统一设计文档.md",
+      "source_section": "event ID V10",
+      "blocking": [
+        "G2"
+      ],
+      "status": "pending"
+    }
+  ],
+  "counts": {
+    "total": 54,
+    "by_kind": {
+      "card": 21,
+      "character": 2,
+      "encounter": 6,
+      "event": 4,
+      "relic": 8,
+      "scene": 3,
+      "task": 6,
+      "unit": 4
+    }
+  },
+  "inputs": {
+    "docs/baselines/g0.json": "b2af089b1adeb58e1ac383c1338d2073fcc646667040579dde7f882a3e4ecbf9",
+    "data/manifests/content_deferred.json": "61eb9e0a05d8e19413ffc07f7385f0f36752362a27a0ec88da5e10a8a17a1b07",
+    "docs/交大四年_DDL战争_统一设计文档.md": "733e13e1ef763c7c18c8071ce4fb9eeddd8fb2382dabd22b46e6b5ea32b84136"
+  }
+}

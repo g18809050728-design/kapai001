@@ -1,0 +1,112 @@
+G2 staging batch audit: REJECTED
+Frozen definitions: 54
+G2 stage gate: not established by this audit
+[entities] REJECTED; observed=17/17
+  artifact_hashes_missing: entities batch report does not record hashes for staged definition files
+  artifact_hashes_missing: character/P01 has no staged artifact hash
+  artifact_hashes_missing: character/P04 has no staged artifact hash
+  artifact_hashes_missing: relic/A01 has no staged artifact hash
+  artifact_hashes_missing: relic/A04 has no staged artifact hash
+  artifact_hashes_missing: relic/A05 has no staged artifact hash
+  artifact_hashes_missing: relic/A07 has no staged artifact hash
+  artifact_hashes_missing: relic/A08 has no staged artifact hash
+  artifact_hashes_missing: relic/A11 has no staged artifact hash
+  artifact_hashes_missing: relic/A15 has no staged artifact hash
+  artifact_hashes_missing: relic/A18 has no staged artifact hash
+  artifact_hashes_missing: unit/F01 has no staged artifact hash
+  artifact_hashes_missing: unit/F02 has no staged artifact hash
+  artifact_hashes_missing: unit/F03 has no staged artifact hash
+  artifact_hashes_missing: unit/F04 has no staged artifact hash
+  artifact_hashes_missing: scene/L01 has no staged artifact hash
+  artifact_hashes_missing: scene/L02 has no staged artifact hash
+  artifact_hashes_missing: scene/L03 has no staged artifact hash
+  schema_probe_failed: entities schema probe exit code is 1
+  schema_probe_coverage_mismatch: schema probe coverage differs; missing=[('character', 'P01'), ('character', 'P04'), ('relic', 'A01'), ('relic', 'A04'), ('relic', 'A05'), ('relic', 'A07'), ('relic', 'A08'), ('relic', 'A11'), ('relic', 'A15'), ('relic', 'A18'), ('scene', 'L01'), ('scene', 'L02'), ('scene', 'L03'), ('unit', 'F01'), ('unit', 'F02'), ('unit', 'F03'), ('unit', 'F04')], extra=[]
+  schema_unverified: character/P01 has no successful schema probe
+  schema_unverified: character/P04 has no successful schema probe
+  schema_unverified: relic/A01 has no successful schema probe
+  schema_unverified: relic/A04 has no successful schema probe
+  schema_unverified: relic/A05 has no successful schema probe
+  schema_unverified: relic/A07 has no successful schema probe
+  schema_unverified: relic/A08 has no successful schema probe
+  schema_unverified: relic/A11 has no successful schema probe
+  schema_unverified: relic/A15 has no successful schema probe
+  schema_unverified: relic/A18 has no successful schema probe
+  schema_unverified: scene/L01 has no successful schema probe
+  schema_unverified: scene/L02 has no successful schema probe
+  schema_unverified: scene/L03 has no successful schema probe
+  schema_unverified: unit/F01 has no successful schema probe
+  schema_unverified: unit/F02 has no successful schema probe
+  schema_unverified: unit/F03 has no successful schema probe
+  schema_unverified: unit/F04 has no successful schema probe
+  reference_closure_unverified: entities reference_closure attestation is missing ['character/P01', 'character/P04', 'relic/A01', 'relic/A04', 'relic/A05', 'relic/A07', 'relic/A08', 'relic/A11', 'relic/A15', 'relic/A18', 'scene/L01', 'scene/L02', 'scene/L03', 'unit/F01', 'unit/F02', 'unit/F03', 'unit/F04']
+  reference_closure_unverified: character/P01 remains unverified for reference_closure
+  reference_closure_unverified: character/P04 remains unverified for reference_closure
+  reference_closure_unverified: relic/A01 remains unverified for reference_closure
+  reference_closure_unverified: relic/A04 remains unverified for reference_closure
+  reference_closure_unverified: relic/A05 remains unverified for reference_closure
+  reference_closure_unverified: relic/A07 remains unverified for reference_closure
+  reference_closure_unverified: relic/A08 remains unverified for reference_closure
+  reference_closure_unverified: relic/A11 remains unverified for reference_closure
+  reference_closure_unverified: relic/A15 remains unverified for reference_closure
+  reference_closure_unverified: relic/A18 remains unverified for reference_closure
+  reference_closure_unverified: scene/L01 remains unverified for reference_closure
+  reference_closure_unverified: scene/L02 remains unverified for reference_closure
+  reference_closure_unverified: scene/L03 remains unverified for reference_closure
+  reference_closure_unverified: unit/F01 remains unverified for reference_closure
+  reference_closure_unverified: unit/F02 remains unverified for reference_closure
+  reference_closure_unverified: unit/F03 remains unverified for reference_closure
+  reference_closure_unverified: unit/F04 remains unverified for reference_closure
+  handler_unverified: entities handler_verification attestation is missing ['character/P01', 'character/P04', 'relic/A01', 'relic/A04', 'relic/A05', 'relic/A07', 'relic/A08', 'relic/A11', 'relic/A15', 'relic/A18', 'scene/L01', 'scene/L02', 'scene/L03', 'unit/F01', 'unit/F02', 'unit/F03', 'unit/F04']
+  handler_unverified: character/P01 remains unverified for handler_verification
+  handler_unverified: character/P04 remains unverified for handler_verification
+  handler_unverified: relic/A01 remains unverified for handler_verification
+  handler_unverified: relic/A04 remains unverified for handler_verification
+  handler_unverified: relic/A05 remains unverified for handler_verification
+  handler_unverified: relic/A07 remains unverified for handler_verification
+  handler_unverified: relic/A08 remains unverified for handler_verification
+  handler_unverified: relic/A11 remains unverified for handler_verification
+  handler_unverified: relic/A15 remains unverified for handler_verification
+  handler_unverified: relic/A18 remains unverified for handler_verification
+  handler_unverified: scene/L01 remains unverified for handler_verification
+  handler_unverified: scene/L02 remains unverified for handler_verification
+  handler_unverified: scene/L03 remains unverified for handler_verification
+  handler_unverified: unit/F01 remains unverified for handler_verification
+  handler_unverified: unit/F02 remains unverified for handler_verification
+  handler_unverified: unit/F03 remains unverified for handler_verification
+  handler_unverified: unit/F04 remains unverified for handler_verification
+  behavior_tests_unverified: entities behavior_tests attestation is missing ['character/P01', 'character/P04', 'relic/A01', 'relic/A04', 'relic/A05', 'relic/A07', 'relic/A08', 'relic/A11', 'relic/A15', 'relic/A18', 'scene/L01', 'scene/L02', 'scene/L03', 'unit/F01', 'unit/F02', 'unit/F03', 'unit/F04']
+  behavior_tests_unverified: character/P01 remains unverified for behavior_tests
+  behavior_tests_unverified: character/P04 remains unverified for behavior_tests
+  behavior_tests_unverified: relic/A01 remains unverified for behavior_tests
+  behavior_tests_unverified: relic/A04 remains unverified for behavior_tests
+  behavior_tests_unverified: relic/A05 remains unverified for behavior_tests
+  behavior_tests_unverified: relic/A07 remains unverified for behavior_tests
+  behavior_tests_unverified: relic/A08 remains unverified for behavior_tests
+  behavior_tests_unverified: relic/A11 remains unverified for behavior_tests
+  behavior_tests_unverified: relic/A15 remains unverified for behavior_tests
+  behavior_tests_unverified: relic/A18 remains unverified for behavior_tests
+  behavior_tests_unverified: scene/L01 remains unverified for behavior_tests
+  behavior_tests_unverified: scene/L02 remains unverified for behavior_tests
+  behavior_tests_unverified: scene/L03 remains unverified for behavior_tests
+  behavior_tests_unverified: unit/F01 remains unverified for behavior_tests
+  behavior_tests_unverified: unit/F02 remains unverified for behavior_tests
+  behavior_tests_unverified: unit/F03 remains unverified for behavior_tests
+  behavior_tests_unverified: unit/F04 remains unverified for behavior_tests
+  character/P01: artifact_hashes_missing; schema_unverified; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  character/P04: artifact_hashes_missing; schema_unverified; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  relic/A01: artifact_hashes_missing; schema_unverified; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  relic/A04: artifact_hashes_missing; schema_unverified; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  relic/A05: artifact_hashes_missing; schema_unverified; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  relic/A07: artifact_hashes_missing; schema_unverified; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  relic/A08: artifact_hashes_missing; schema_unverified; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  relic/A11: artifact_hashes_missing; schema_unverified; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  relic/A15: artifact_hashes_missing; schema_unverified; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  relic/A18: artifact_hashes_missing; schema_unverified; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  scene/L01: artifact_hashes_missing; schema_unverified; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  scene/L02: artifact_hashes_missing; schema_unverified; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  scene/L03: artifact_hashes_missing; schema_unverified; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  unit/F01: artifact_hashes_missing; schema_unverified; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  unit/F02: artifact_hashes_missing; schema_unverified; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  unit/F03: artifact_hashes_missing; schema_unverified; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  unit/F04: artifact_hashes_missing; schema_unverified; reference_closure_unverified; handler_unverified; behavior_tests_unverified

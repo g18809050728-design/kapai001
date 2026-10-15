@@ -1,0 +1,8 @@
+{
+    "stage":  "G1",
+    "status":  "failed",
+    "expected_godot":  "4.7.2.stable",
+    "actual_godot":  "unavailable",
+    "failure":  "Godot 4.7.2 is required. Set GODOT_BIN or pass -GodotPath.",
+    "checks":  "incomplete"
+}
