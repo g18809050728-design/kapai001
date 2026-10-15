@@ -1,0 +1,92 @@
+SCRIPT ERROR: Parse Error: Could not parse global class "ContentDB" from "res://src/content/content_db.gd".
+   at: GDScript::reload (res://tests/suites/test_content_loader.gd:209)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:16)
+SCRIPT ERROR: Parse Error: Could not parse global class "ContentDB" from "res://src/content/content_db.gd".
+   at: GDScript::reload (res://tests/suites/test_content_loader.gd:215)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:16)
+SCRIPT ERROR: Parse Error: Could not parse global class "ContentDB" from "res://src/content/content_db.gd".
+   at: GDScript::reload (res://tests/suites/test_content_loader.gd:231)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:16)
+SCRIPT ERROR: Parse Error: Could not resolve class "ContentDB", because of a parser error.
+   at: GDScript::reload (res://tests/suites/test_content_loader.gd:7)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:16)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "isolated_db" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/suites/test_content_loader.gd:7)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:16)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "loaded" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/suites/test_content_loader.gd:8)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:16)
+SCRIPT ERROR: Parse Error: Could not resolve class "ContentDB", because of a parser error.
+   at: GDScript::reload (res://tests/suites/test_content_loader.gd:21)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:16)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "implicit_test_load" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/suites/test_content_loader.gd:21)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:16)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "card_result" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/suites/test_content_loader.gd:44)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:16)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "stable_hash" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/suites/test_content_loader.gd:53)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:16)
+SCRIPT ERROR: Parse Error: Could not resolve class "ContentDB", because of a parser error.
+   at: GDScript::reload (res://tests/suites/test_content_loader.gd:55)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:16)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "production_db" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/suites/test_content_loader.gd:55)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:16)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "test_manifest_in_production" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/suites/test_content_loader.gd:56)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:16)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "incomplete_production" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/suites/test_content_loader.gd:62)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:16)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "result" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/suites/test_content_loader.gd:210)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:16)
+SCRIPT ERROR: Parse Error: Could not resolve class "ContentDB", because of a parser error.
+   at: GDScript::reload (res://tests/suites/test_content_loader.gd:221)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:16)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "result" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/suites/test_content_loader.gd:253)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:16)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "valid" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/suites/test_content_loader.gd:254)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:16)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "restored" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/suites/test_content_loader.gd:263)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:16)
+SCRIPT ERROR: Parse Error: Could not resolve class "ContentDB", because of a parser error.
+   at: GDScript::reload (res://tests/suites/test_content_loader.gd:272)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:16)
+SCRIPT ERROR: Parse Error: Could not resolve class "ContentDB", because of a parser error.
+   at: GDScript::reload (res://tests/suites/test_content_loader.gd:318)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:16)
+ERROR: Failed to load script "res://tests/suites/test_content_loader.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:16)
+ERROR: Content loader suite failed to load
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:39)

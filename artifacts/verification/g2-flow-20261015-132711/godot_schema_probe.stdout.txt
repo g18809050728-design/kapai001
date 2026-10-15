@@ -1,0 +1,19 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+SCHEMA_OK task/N01
+SCHEMA_OK task/N02
+SCHEMA_OK task/N03
+SCHEMA_OK task/N04
+SCHEMA_OK task/Q01
+SCHEMA_OK task/B01
+SCHEMA_OK encounter/N01
+SCHEMA_OK encounter/N02
+SCHEMA_OK encounter/N03
+SCHEMA_OK encounter/N04
+SCHEMA_OK encounter/Q01
+SCHEMA_OK encounter/B01
+SCHEMA_OK event/V01
+SCHEMA_OK event/V03
+SCHEMA_OK event/V04
+SCHEMA_OK event/V10
+FLOW_SCHEMA_PROBE=passed definitions=16

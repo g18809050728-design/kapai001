@@ -1,0 +1,6 @@
+SCRIPT ERROR: Invalid access to property or key 'patch' on a base object of type 'Dictionary'.
+   at: ContentDB._apply_overrides (res://src/content/content_db.gd:1626)
+   GDScript backtrace (most recent call first):
+       [0] _apply_overrides (res://src/content/content_db.gd:1626)
+       [1] load (res://src/content/content_db.gd:318)
+       [2] _initialize (res://artifacts/g2-build/load_candidate.gd:6)

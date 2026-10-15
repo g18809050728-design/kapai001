@@ -1,0 +1,18 @@
+SCRIPT ERROR: Invalid access to property or key 'prepare_effects' on a base object of type 'Dictionary'.
+   at: ContentDB._validate_definition (res://src/content/content_db.gd:608)
+   GDScript backtrace (most recent call first):
+       [0] _validate_definition (res://src/content/content_db.gd:608)
+       [1] _validate_definition_file (res://src/content/content_db.gd:505)
+       [2] load (res://src/content/content_db.gd:298)
+       [3] _not_published_failure (res://tests/suites/test_content_loader.gd:210)
+       [4] _reject_definition (res://tests/suites/test_content_loader.gd:223)
+       [5] run (res://tests/suites/test_content_loader.gd:187)
+       [6] _initialize (res://tests/run_tests.gd:19)
+ERROR: approved MVP override applies to a deep-copied enabled definition
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:39)
+ERROR: unapproved override values reject the package atomically
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:39)

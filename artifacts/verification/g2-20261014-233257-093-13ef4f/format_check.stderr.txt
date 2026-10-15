@@ -1,0 +1,2 @@
+would reformat tests\suites\test_content_loader.gd
+1 file would be reformatted, 31 files would be left unchanged.

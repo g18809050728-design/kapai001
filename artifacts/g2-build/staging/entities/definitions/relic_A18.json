@@ -1,0 +1,44 @@
+{
+  "kind": "relic",
+  "id": "A18",
+  "source": {
+    "path": "docs/交大四年_DDL战争_统一设计文档.md",
+    "section": "relic ID A18",
+    "table_heading": "8. 饰品重设计（24件）",
+    "line": 338,
+    "row": "| A18 | 室友零食 | 白 | 每战前3回合开始恢复1精力 |"
+  },
+  "behavior_refs": [
+    "src/content/content_db.gd::_validate_hook(round_start)",
+    "src/battle/battle_engine.gd::_run_relic_hooks",
+    "src/battle/battle_engine.gd::_prepare_player_round"
+  ],
+  "definition": {
+    "id": "A18",
+    "name_key": "relic.A18.name",
+    "availability": "drop",
+    "rarity": "white",
+    "tags": [],
+    "hooks": [
+      {
+        "at": "round_start",
+        "rounds": [
+          1,
+          2,
+          3
+        ],
+        "effects": [
+          {
+            "op": "heal",
+            "amount": 1,
+            "target": "player"
+          }
+        ]
+      }
+    ]
+  },
+  "status": "staged_schema_and_reference_verified_behavior_deferred_to_G3_G4",
+  "blockers": [
+    "The hook handler exists, but A18 round 1-3 trigger behavior remains deferred to G3/G4 behavior acceptance."
+  ]
+}

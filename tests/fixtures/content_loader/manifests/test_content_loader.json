@@ -1,0 +1,30 @@
+{
+  "id": "test_content_loader",
+  "content_version": "campus_mvp.v1",
+  "ruleset_id": "campus_v1",
+  "enabled": {
+    "character": [],
+    "card": [
+      "test_card_001"
+    ],
+    "relic": [],
+    "task": [],
+    "encounter": [],
+    "unit": [],
+    "scene": [],
+    "event": [],
+    "status": [
+      "inspiration",
+      "compile",
+      "anxiety",
+      "procrastination",
+      "drowsiness",
+      "extra_requirements",
+      "guard"
+    ],
+    "ruleset": [
+      "campus_v1"
+    ]
+  },
+  "overrides": []
+}

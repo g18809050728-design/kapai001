@@ -1,0 +1,2 @@
+Document checker regression: 9/9 passed
+Evidence: E:\desktop\项目设计\项目设计\artifacts\verification\g0-negative-20261014-201745-391981

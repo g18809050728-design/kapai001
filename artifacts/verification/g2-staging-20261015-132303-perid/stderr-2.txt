@@ -1,0 +1,14 @@
+test_cards_without_per_record_source_row_cannot_pass (tools.test_verify_g2_staging.G2StagingVerifierTests.test_cards_without_per_record_source_row_cannot_pass) ... ok
+test_empty_behavior_refs_are_rejected (tools.test_verify_g2_staging.G2StagingVerifierTests.test_empty_behavior_refs_are_rejected) ... ok
+test_exact_frozen_ids_and_source_rows_are_checked (tools.test_verify_g2_staging.G2StagingVerifierTests.test_exact_frozen_ids_and_source_rows_are_checked) ... ok
+test_hash_drift_and_unregistered_definition_are_reported (tools.test_verify_g2_staging.G2StagingVerifierTests.test_hash_drift_and_unregistered_definition_are_reported) ... ok
+test_input_hash_drift_marks_item_blocker (tools.test_verify_g2_staging.G2StagingVerifierTests.test_input_hash_drift_marks_item_blocker) ... ok
+test_legacy_batch_attestation_remains_supported (tools.test_verify_g2_staging.G2StagingVerifierTests.test_legacy_batch_attestation_remains_supported) ... ok
+test_pending_closure_and_handler_prevent_batch_acceptance (tools.test_verify_g2_staging.G2StagingVerifierTests.test_pending_closure_and_handler_prevent_batch_acceptance) ... ok
+test_per_id_attestation_keeps_verified_items_independent (tools.test_verify_g2_staging.G2StagingVerifierTests.test_per_id_attestation_keeps_verified_items_independent) ... ok
+test_source_line_must_be_inside_the_expected_g0_section (tools.test_verify_g2_staging.G2StagingVerifierTests.test_source_line_must_be_inside_the_expected_g0_section) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.261s
+
+OK

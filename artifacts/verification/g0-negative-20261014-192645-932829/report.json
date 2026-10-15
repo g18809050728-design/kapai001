@@ -1,0 +1,96 @@
+{
+  "cases": [
+    {
+      "name": "control",
+      "mutation": "Current documents; full-only Q-007 and G1 implementation do not block G0",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "diagnostic": null,
+      "passed": true,
+      "baseline_sha256": "4d2567e7877922e9bf397b8b5d3261183ebc6950568f42ce6e94c2d8c68c82cc"
+    },
+    {
+      "name": "bad_link",
+      "mutation": "Append an inline missing file link to README",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "diagnostic": "LINK",
+      "passed": true,
+      "baseline_sha256": "4d2567e7877922e9bf397b8b5d3261183ebc6950568f42ce6e94c2d8c68c82cc"
+    },
+    {
+      "name": "source_drift",
+      "mutation": "Append a byte to the adopted project plan without updating its hash",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "diagnostic": "SHA-256",
+      "passed": true,
+      "baseline_sha256": "4d2567e7877922e9bf397b8b5d3261183ebc6950568f42ce6e94c2d8c68c82cc"
+    },
+    {
+      "name": "extra_content",
+      "mutation": "Add full-only A24 to the MVP enabled relic IDs",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "diagnostic": "exact ID set",
+      "passed": true,
+      "baseline_sha256": "7dcbb3b43319dd3bbcd797936838149898de3ce4af432e3fdaedb28489b49f11"
+    },
+    {
+      "name": "bad_map_edge",
+      "mutation": "Replace the layer-1 next IDs with a direct boss edge",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "diagnostic": "adjacent-layer",
+      "passed": true,
+      "baseline_sha256": "944c1b2c23640955d820a16ce07fd84315d8cda676b83821a6c86a2920f19b45"
+    },
+    {
+      "name": "missing_case",
+      "mutation": "Remove T01 from registered rule cases",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "diagnostic": "coverage",
+      "passed": true,
+      "baseline_sha256": "978911a68568b4a086b85286bbcaacaf1b7290e8696a08d800d2beb92e31036c"
+    },
+    {
+      "name": "numeric_drift",
+      "mutation": "Change the registered draw_per_round from 5 to 6",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "diagnostic": "value absent/different",
+      "passed": true,
+      "baseline_sha256": "70404eb0005d13977fe0775e44fb60ee63e0f244fce3c6e0ade53cb11de077fb"
+    },
+    {
+      "name": "open_mvp_rule",
+      "mutation": "Reopen Q-005 as an unresolved MVP rule",
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "diagnostic": "MVP rule decision open",
+      "passed": true,
+      "baseline_sha256": "13af3fd663af6c48360b96c50cdf97d448f2eb89e4a747fb1050be940450dfa6"
+    },
+    {
+      "name": "documents_only",
+      "mutation": "Same unresolved Q-005, but explicitly request only document checks",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "diagnostic": null,
+      "passed": true,
+      "baseline_sha256": "13af3fd663af6c48360b96c50cdf97d448f2eb89e4a747fb1050be940450dfa6"
+    }
+  ],
+  "passed": 9,
+  "total": 9,
+  "command": [
+    "F:\\minGw64\\ucrt64\\bin\\python.exe",
+    "E:\\desktop\\项目设计\\项目设计\\tools\\test_verify_g0.py"
+  ],
+  "harness_sha256": "fc43c69a2ebf77b2f8f5fe03b627de9b807acc4ed31a86cada314226facd886e",
+  "verifier_sha256": "4a93ab218cca9c81c2ddf8f6afe4aa648f60c6c75c78e4ad027cd8a47aebc5ec",
+  "python": "3.12.11 (main, Jun  7 2025, 12:31:34)  [GCC UCRT 15.1.0 64 bit (AMD64)]",
+  "temporary_fixture_root": "C:\\Users\\Dev.LI\\AppData\\Local\\Temp\\ddl-g0-audit-cbgz0eeh",
+  "scope": "Document checker regression only; no gameplay or Godot tests"
+}

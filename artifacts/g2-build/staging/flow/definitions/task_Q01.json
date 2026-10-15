@@ -1,0 +1,48 @@
+{
+  "kind": "task",
+  "id": "Q01",
+  "source": {
+    "path": "docs/交大四年_DDL战争_统一设计文档.md",
+    "section": "task ID Q01",
+    "upstream_section": "§9.2 精英",
+    "source_lines": [
+      375
+    ],
+    "source_row": "| Q01 | 随堂小测 | 1～2 | 38/6 | 独立作答；压力7→屏障6→压力10 |"
+  },
+  "behavior_refs": [
+    "docs/内容层契约.md §8.1 TaskDef/TaskPhaseDef and §8.2 IntentSpec",
+    "src/battle/battle_engine.gd::_execute_intent_skill",
+    "tests/suites/test_g2_state.gd (content package behavior not exercised)"
+  ],
+  "definition": {
+    "id": "Q01",
+    "name_key": "task.q01.name",
+    "kind": "elite",
+    "phases": [
+      {
+        "phase_key": "main",
+        "name_key": "task.q01.phase.main.name",
+        "work_max": 38,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "task.q01.intent.pressure7",
+            "pressure": 7
+          },
+          {
+            "index": 1,
+            "text_key": "task.q01.intent.shield6",
+            "shield": 6
+          },
+          {
+            "index": 2,
+            "text_key": "task.q01.intent.pressure10",
+            "pressure": 10
+          }
+        ]
+      }
+    ]
+  },
+  "status": "schema_validated_behavior_and_G2_reference_closure_pending"
+}

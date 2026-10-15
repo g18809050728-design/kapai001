@@ -1,0 +1,116 @@
+[
+  {
+    "id": "test_N01",
+    "name_key": "task.n01.name",
+    "kind": "normal",
+    "phases": [
+      {
+        "phase_key": "main",
+        "name_key": "test.task.main",
+        "work_max": 1,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "test.intent",
+            "pressure": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "test_N02",
+    "name_key": "task.n02.name",
+    "kind": "normal",
+    "phases": [
+      {
+        "phase_key": "main",
+        "name_key": "test.task.main",
+        "work_max": 1,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "test.intent",
+            "pressure": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "test_N03",
+    "name_key": "task.n03.name",
+    "kind": "normal",
+    "phases": [
+      {
+        "phase_key": "main",
+        "name_key": "test.task.main",
+        "work_max": 1,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "test.intent",
+            "pressure": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "test_N04",
+    "name_key": "task.n04.name",
+    "kind": "normal",
+    "phases": [
+      {
+        "phase_key": "main",
+        "name_key": "test.task.main",
+        "work_max": 1,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "test.intent",
+            "pressure": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "test_Q01",
+    "name_key": "task.q01.name",
+    "kind": "elite",
+    "phases": [
+      {
+        "phase_key": "main",
+        "name_key": "test.task.main",
+        "work_max": 1,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "test.intent",
+            "pressure": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "test_B01",
+    "name_key": "task.b01.name",
+    "kind": "boss",
+    "phases": [
+      {
+        "phase_key": "main",
+        "name_key": "test.task.main",
+        "work_max": 1,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "test.intent",
+            "pressure": 1
+          }
+        ]
+      }
+    ]
+  }
+]

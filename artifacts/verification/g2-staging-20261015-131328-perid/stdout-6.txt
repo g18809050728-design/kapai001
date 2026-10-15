@@ -1,0 +1,379 @@
+G2 staging batch audit: REJECTED
+Frozen definitions: 54
+G2 stage gate: not established by this audit
+[cards] REJECTED; observed=21/21
+  input_hash_mismatch: input hash mismatch for docs/战斗模块契约.md
+  input_hash_drift: card/K14 blocked by changed input docs/战斗模块契约.md
+  input_hash_drift: card/K12 blocked by changed input docs/战斗模块契约.md
+  input_hash_drift: card/K53 blocked by changed input docs/战斗模块契约.md
+  input_hash_drift: card/X01 blocked by changed input docs/战斗模块契约.md
+  input_hash_drift: card/K60 blocked by changed input docs/战斗模块契约.md
+  input_hash_drift: card/K46 blocked by changed input docs/战斗模块契约.md
+  input_hash_drift: card/K51 blocked by changed input docs/战斗模块契约.md
+  input_hash_drift: card/K08 blocked by changed input docs/战斗模块契约.md
+  input_hash_drift: card/K10 blocked by changed input docs/战斗模块契约.md
+  input_hash_drift: card/K19 blocked by changed input docs/战斗模块契约.md
+  input_hash_drift: card/K07 blocked by changed input docs/战斗模块契约.md
+  input_hash_drift: card/K45 blocked by changed input docs/战斗模块契约.md
+  input_hash_drift: card/K59 blocked by changed input docs/战斗模块契约.md
+  input_hash_drift: card/K15 blocked by changed input docs/战斗模块契约.md
+  input_hash_drift: card/K43 blocked by changed input docs/战斗模块契约.md
+  input_hash_drift: card/K52 blocked by changed input docs/战斗模块契约.md
+  input_hash_drift: card/K13 blocked by changed input docs/战斗模块契约.md
+  input_hash_drift: card/K16 blocked by changed input docs/战斗模块契约.md
+  input_hash_drift: card/K06 blocked by changed input docs/战斗模块契约.md
+  input_hash_drift: card/K44 blocked by changed input docs/战斗模块契约.md
+  input_hash_drift: card/K05 blocked by changed input docs/战斗模块契约.md
+  input_hash_mismatch: input hash mismatch for src/battle/battle_engine.gd
+  input_hash_drift: card/K14 blocked by changed input src/battle/battle_engine.gd
+  input_hash_drift: card/K12 blocked by changed input src/battle/battle_engine.gd
+  input_hash_drift: card/K53 blocked by changed input src/battle/battle_engine.gd
+  input_hash_drift: card/X01 blocked by changed input src/battle/battle_engine.gd
+  input_hash_drift: card/K60 blocked by changed input src/battle/battle_engine.gd
+  input_hash_drift: card/K46 blocked by changed input src/battle/battle_engine.gd
+  input_hash_drift: card/K51 blocked by changed input src/battle/battle_engine.gd
+  input_hash_drift: card/K08 blocked by changed input src/battle/battle_engine.gd
+  input_hash_drift: card/K10 blocked by changed input src/battle/battle_engine.gd
+  input_hash_drift: card/K19 blocked by changed input src/battle/battle_engine.gd
+  input_hash_drift: card/K07 blocked by changed input src/battle/battle_engine.gd
+  input_hash_drift: card/K45 blocked by changed input src/battle/battle_engine.gd
+  input_hash_drift: card/K59 blocked by changed input src/battle/battle_engine.gd
+  input_hash_drift: card/K15 blocked by changed input src/battle/battle_engine.gd
+  input_hash_drift: card/K43 blocked by changed input src/battle/battle_engine.gd
+  input_hash_drift: card/K52 blocked by changed input src/battle/battle_engine.gd
+  input_hash_drift: card/K13 blocked by changed input src/battle/battle_engine.gd
+  input_hash_drift: card/K16 blocked by changed input src/battle/battle_engine.gd
+  input_hash_drift: card/K06 blocked by changed input src/battle/battle_engine.gd
+  input_hash_drift: card/K44 blocked by changed input src/battle/battle_engine.gd
+  input_hash_drift: card/K05 blocked by changed input src/battle/battle_engine.gd
+  input_hash_mismatch: input hash mismatch for tests/suites/test_battle_engine_begin.gd
+  input_hash_drift: card/K14 blocked by changed input tests/suites/test_battle_engine_begin.gd
+  input_hash_drift: card/K12 blocked by changed input tests/suites/test_battle_engine_begin.gd
+  input_hash_drift: card/K53 blocked by changed input tests/suites/test_battle_engine_begin.gd
+  input_hash_drift: card/X01 blocked by changed input tests/suites/test_battle_engine_begin.gd
+  input_hash_drift: card/K60 blocked by changed input tests/suites/test_battle_engine_begin.gd
+  input_hash_drift: card/K46 blocked by changed input tests/suites/test_battle_engine_begin.gd
+  input_hash_drift: card/K51 blocked by changed input tests/suites/test_battle_engine_begin.gd
+  input_hash_drift: card/K08 blocked by changed input tests/suites/test_battle_engine_begin.gd
+  input_hash_drift: card/K10 blocked by changed input tests/suites/test_battle_engine_begin.gd
+  input_hash_drift: card/K19 blocked by changed input tests/suites/test_battle_engine_begin.gd
+  input_hash_drift: card/K07 blocked by changed input tests/suites/test_battle_engine_begin.gd
+  input_hash_drift: card/K45 blocked by changed input tests/suites/test_battle_engine_begin.gd
+  input_hash_drift: card/K59 blocked by changed input tests/suites/test_battle_engine_begin.gd
+  input_hash_drift: card/K15 blocked by changed input tests/suites/test_battle_engine_begin.gd
+  input_hash_drift: card/K43 blocked by changed input tests/suites/test_battle_engine_begin.gd
+  input_hash_drift: card/K52 blocked by changed input tests/suites/test_battle_engine_begin.gd
+  input_hash_drift: card/K13 blocked by changed input tests/suites/test_battle_engine_begin.gd
+  input_hash_drift: card/K16 blocked by changed input tests/suites/test_battle_engine_begin.gd
+  input_hash_drift: card/K06 blocked by changed input tests/suites/test_battle_engine_begin.gd
+  input_hash_drift: card/K44 blocked by changed input tests/suites/test_battle_engine_begin.gd
+  input_hash_drift: card/K05 blocked by changed input tests/suites/test_battle_engine_begin.gd
+  artifact_hashes_missing: cards batch does not record a hash for cards.json
+  artifact_hashes_missing: card/K05 has no staged artifact hash
+  artifact_hashes_missing: card/K06 has no staged artifact hash
+  artifact_hashes_missing: card/K07 has no staged artifact hash
+  artifact_hashes_missing: card/K08 has no staged artifact hash
+  artifact_hashes_missing: card/K10 has no staged artifact hash
+  artifact_hashes_missing: card/K12 has no staged artifact hash
+  artifact_hashes_missing: card/K13 has no staged artifact hash
+  artifact_hashes_missing: card/K14 has no staged artifact hash
+  artifact_hashes_missing: card/K15 has no staged artifact hash
+  artifact_hashes_missing: card/K16 has no staged artifact hash
+  artifact_hashes_missing: card/K19 has no staged artifact hash
+  artifact_hashes_missing: card/K43 has no staged artifact hash
+  artifact_hashes_missing: card/K44 has no staged artifact hash
+  artifact_hashes_missing: card/K45 has no staged artifact hash
+  artifact_hashes_missing: card/K46 has no staged artifact hash
+  artifact_hashes_missing: card/K51 has no staged artifact hash
+  artifact_hashes_missing: card/K52 has no staged artifact hash
+  artifact_hashes_missing: card/K53 has no staged artifact hash
+  artifact_hashes_missing: card/K59 has no staged artifact hash
+  artifact_hashes_missing: card/K60 has no staged artifact hash
+  artifact_hashes_missing: card/X01 has no staged artifact hash
+  schema_probe_missing: cards batch has static mapping only; no executable schema probe evidence
+  schema_probe_coverage_mismatch: schema probe coverage differs; missing=[('card', 'K05'), ('card', 'K06'), ('card', 'K07'), ('card', 'K08'), ('card', 'K10'), ('card', 'K12'), ('card', 'K13'), ('card', 'K14'), ('card', 'K15'), ('card', 'K16'), ('card', 'K19'), ('card', 'K43'), ('card', 'K44'), ('card', 'K45'), ('card', 'K46'), ('card', 'K51'), ('card', 'K52'), ('card', 'K53'), ('card', 'K59'), ('card', 'K60'), ('card', 'X01')], extra=[]
+  schema_unverified: card/K05 has no successful schema probe
+  schema_unverified: card/K06 has no successful schema probe
+  schema_unverified: card/K07 has no successful schema probe
+  schema_unverified: card/K08 has no successful schema probe
+  schema_unverified: card/K10 has no successful schema probe
+  schema_unverified: card/K12 has no successful schema probe
+  schema_unverified: card/K13 has no successful schema probe
+  schema_unverified: card/K14 has no successful schema probe
+  schema_unverified: card/K15 has no successful schema probe
+  schema_unverified: card/K16 has no successful schema probe
+  schema_unverified: card/K19 has no successful schema probe
+  schema_unverified: card/K43 has no successful schema probe
+  schema_unverified: card/K44 has no successful schema probe
+  schema_unverified: card/K45 has no successful schema probe
+  schema_unverified: card/K46 has no successful schema probe
+  schema_unverified: card/K51 has no successful schema probe
+  schema_unverified: card/K52 has no successful schema probe
+  schema_unverified: card/K53 has no successful schema probe
+  schema_unverified: card/K59 has no successful schema probe
+  schema_unverified: card/K60 has no successful schema probe
+  schema_unverified: card/X01 has no successful schema probe
+  reference_closure_unverified: cards reference_closure attestation is missing ['card/K05', 'card/K06', 'card/K07', 'card/K08', 'card/K10', 'card/K12', 'card/K13', 'card/K14', 'card/K15', 'card/K16', 'card/K19', 'card/K43', 'card/K44', 'card/K45', 'card/K46', 'card/K51', 'card/K52', 'card/K53', 'card/K59', 'card/K60', 'card/X01']
+  reference_closure_unverified: card/K05 remains unverified for reference_closure
+  reference_closure_unverified: card/K06 remains unverified for reference_closure
+  reference_closure_unverified: card/K07 remains unverified for reference_closure
+  reference_closure_unverified: card/K08 remains unverified for reference_closure
+  reference_closure_unverified: card/K10 remains unverified for reference_closure
+  reference_closure_unverified: card/K12 remains unverified for reference_closure
+  reference_closure_unverified: card/K13 remains unverified for reference_closure
+  reference_closure_unverified: card/K14 remains unverified for reference_closure
+  reference_closure_unverified: card/K15 remains unverified for reference_closure
+  reference_closure_unverified: card/K16 remains unverified for reference_closure
+  reference_closure_unverified: card/K19 remains unverified for reference_closure
+  reference_closure_unverified: card/K43 remains unverified for reference_closure
+  reference_closure_unverified: card/K44 remains unverified for reference_closure
+  reference_closure_unverified: card/K45 remains unverified for reference_closure
+  reference_closure_unverified: card/K46 remains unverified for reference_closure
+  reference_closure_unverified: card/K51 remains unverified for reference_closure
+  reference_closure_unverified: card/K52 remains unverified for reference_closure
+  reference_closure_unverified: card/K53 remains unverified for reference_closure
+  reference_closure_unverified: card/K59 remains unverified for reference_closure
+  reference_closure_unverified: card/K60 remains unverified for reference_closure
+  reference_closure_unverified: card/X01 remains unverified for reference_closure
+  handler_unverified: cards handler_verification attestation is missing ['card/K05', 'card/K06', 'card/K07', 'card/K08', 'card/K10', 'card/K12', 'card/K13', 'card/K14', 'card/K15', 'card/K16', 'card/K19', 'card/K43', 'card/K44', 'card/K45', 'card/K46', 'card/K51', 'card/K52', 'card/K53', 'card/K59', 'card/K60', 'card/X01']
+  handler_unverified: card/K05 remains unverified for handler_verification
+  handler_unverified: card/K06 remains unverified for handler_verification
+  handler_unverified: card/K07 remains unverified for handler_verification
+  handler_unverified: card/K08 remains unverified for handler_verification
+  handler_unverified: card/K10 remains unverified for handler_verification
+  handler_unverified: card/K12 remains unverified for handler_verification
+  handler_unverified: card/K13 remains unverified for handler_verification
+  handler_unverified: card/K14 remains unverified for handler_verification
+  handler_unverified: card/K15 remains unverified for handler_verification
+  handler_unverified: card/K16 remains unverified for handler_verification
+  handler_unverified: card/K19 remains unverified for handler_verification
+  handler_unverified: card/K43 remains unverified for handler_verification
+  handler_unverified: card/K44 remains unverified for handler_verification
+  handler_unverified: card/K45 remains unverified for handler_verification
+  handler_unverified: card/K46 remains unverified for handler_verification
+  handler_unverified: card/K51 remains unverified for handler_verification
+  handler_unverified: card/K52 remains unverified for handler_verification
+  handler_unverified: card/K53 remains unverified for handler_verification
+  handler_unverified: card/K59 remains unverified for handler_verification
+  handler_unverified: card/K60 remains unverified for handler_verification
+  handler_unverified: card/X01 remains unverified for handler_verification
+  behavior_tests_unverified: cards behavior_tests attestation is missing ['card/K05', 'card/K06', 'card/K07', 'card/K08', 'card/K10', 'card/K12', 'card/K13', 'card/K14', 'card/K15', 'card/K16', 'card/K19', 'card/K43', 'card/K44', 'card/K45', 'card/K46', 'card/K51', 'card/K52', 'card/K53', 'card/K59', 'card/K60', 'card/X01']
+  behavior_tests_unverified: card/K05 remains unverified for behavior_tests
+  behavior_tests_unverified: card/K06 remains unverified for behavior_tests
+  behavior_tests_unverified: card/K07 remains unverified for behavior_tests
+  behavior_tests_unverified: card/K08 remains unverified for behavior_tests
+  behavior_tests_unverified: card/K10 remains unverified for behavior_tests
+  behavior_tests_unverified: card/K12 remains unverified for behavior_tests
+  behavior_tests_unverified: card/K13 remains unverified for behavior_tests
+  behavior_tests_unverified: card/K14 remains unverified for behavior_tests
+  behavior_tests_unverified: card/K15 remains unverified for behavior_tests
+  behavior_tests_unverified: card/K16 remains unverified for behavior_tests
+  behavior_tests_unverified: card/K19 remains unverified for behavior_tests
+  behavior_tests_unverified: card/K43 remains unverified for behavior_tests
+  behavior_tests_unverified: card/K44 remains unverified for behavior_tests
+  behavior_tests_unverified: card/K45 remains unverified for behavior_tests
+  behavior_tests_unverified: card/K46 remains unverified for behavior_tests
+  behavior_tests_unverified: card/K51 remains unverified for behavior_tests
+  behavior_tests_unverified: card/K52 remains unverified for behavior_tests
+  behavior_tests_unverified: card/K53 remains unverified for behavior_tests
+  behavior_tests_unverified: card/K59 remains unverified for behavior_tests
+  behavior_tests_unverified: card/K60 remains unverified for behavior_tests
+  behavior_tests_unverified: card/X01 remains unverified for behavior_tests
+  card/K05: input_hash_drift; input_hash_drift; input_hash_drift; artifact_hashes_missing; schema_unverified; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  card/K06: input_hash_drift; input_hash_drift; input_hash_drift; artifact_hashes_missing; schema_unverified; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  card/K07: input_hash_drift; input_hash_drift; input_hash_drift; artifact_hashes_missing; schema_unverified; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  card/K08: input_hash_drift; input_hash_drift; input_hash_drift; artifact_hashes_missing; schema_unverified; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  card/K10: input_hash_drift; input_hash_drift; input_hash_drift; artifact_hashes_missing; schema_unverified; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  card/K12: input_hash_drift; input_hash_drift; input_hash_drift; artifact_hashes_missing; schema_unverified; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  card/K13: input_hash_drift; input_hash_drift; input_hash_drift; artifact_hashes_missing; schema_unverified; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  card/K14: input_hash_drift; input_hash_drift; input_hash_drift; artifact_hashes_missing; schema_unverified; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  card/K15: input_hash_drift; input_hash_drift; input_hash_drift; artifact_hashes_missing; schema_unverified; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  card/K16: input_hash_drift; input_hash_drift; input_hash_drift; artifact_hashes_missing; schema_unverified; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  card/K19: input_hash_drift; input_hash_drift; input_hash_drift; artifact_hashes_missing; schema_unverified; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  card/K43: input_hash_drift; input_hash_drift; input_hash_drift; artifact_hashes_missing; schema_unverified; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  card/K44: input_hash_drift; input_hash_drift; input_hash_drift; artifact_hashes_missing; schema_unverified; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  card/K45: input_hash_drift; input_hash_drift; input_hash_drift; artifact_hashes_missing; schema_unverified; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  card/K46: input_hash_drift; input_hash_drift; input_hash_drift; artifact_hashes_missing; schema_unverified; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  card/K51: input_hash_drift; input_hash_drift; input_hash_drift; artifact_hashes_missing; schema_unverified; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  card/K52: input_hash_drift; input_hash_drift; input_hash_drift; artifact_hashes_missing; schema_unverified; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  card/K53: input_hash_drift; input_hash_drift; input_hash_drift; artifact_hashes_missing; schema_unverified; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  card/K59: input_hash_drift; input_hash_drift; input_hash_drift; artifact_hashes_missing; schema_unverified; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  card/K60: input_hash_drift; input_hash_drift; input_hash_drift; artifact_hashes_missing; schema_unverified; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  card/X01: input_hash_drift; input_hash_drift; input_hash_drift; artifact_hashes_missing; schema_unverified; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+[entities] REJECTED; observed=17/17
+  artifact_hashes_missing: entities batch report does not record hashes for staged definition files
+  artifact_hashes_missing: character/P01 has no staged artifact hash
+  artifact_hashes_missing: character/P04 has no staged artifact hash
+  artifact_hashes_missing: relic/A01 has no staged artifact hash
+  artifact_hashes_missing: relic/A04 has no staged artifact hash
+  artifact_hashes_missing: relic/A05 has no staged artifact hash
+  artifact_hashes_missing: relic/A07 has no staged artifact hash
+  artifact_hashes_missing: relic/A08 has no staged artifact hash
+  artifact_hashes_missing: relic/A11 has no staged artifact hash
+  artifact_hashes_missing: relic/A15 has no staged artifact hash
+  artifact_hashes_missing: relic/A18 has no staged artifact hash
+  artifact_hashes_missing: unit/F01 has no staged artifact hash
+  artifact_hashes_missing: unit/F02 has no staged artifact hash
+  artifact_hashes_missing: unit/F03 has no staged artifact hash
+  artifact_hashes_missing: unit/F04 has no staged artifact hash
+  artifact_hashes_missing: scene/L01 has no staged artifact hash
+  artifact_hashes_missing: scene/L02 has no staged artifact hash
+  artifact_hashes_missing: scene/L03 has no staged artifact hash
+  schema_probe_failed: entities schema probe exit code is 1
+  schema_probe_coverage_mismatch: schema probe coverage differs; missing=[('character', 'P01'), ('character', 'P04'), ('relic', 'A01'), ('relic', 'A04'), ('relic', 'A05'), ('relic', 'A07'), ('relic', 'A08'), ('relic', 'A11'), ('relic', 'A15'), ('relic', 'A18'), ('scene', 'L01'), ('scene', 'L02'), ('scene', 'L03'), ('unit', 'F01'), ('unit', 'F02'), ('unit', 'F03'), ('unit', 'F04')], extra=[]
+  schema_unverified: character/P01 has no successful schema probe
+  schema_unverified: character/P04 has no successful schema probe
+  schema_unverified: relic/A01 has no successful schema probe
+  schema_unverified: relic/A04 has no successful schema probe
+  schema_unverified: relic/A05 has no successful schema probe
+  schema_unverified: relic/A07 has no successful schema probe
+  schema_unverified: relic/A08 has no successful schema probe
+  schema_unverified: relic/A11 has no successful schema probe
+  schema_unverified: relic/A15 has no successful schema probe
+  schema_unverified: relic/A18 has no successful schema probe
+  schema_unverified: scene/L01 has no successful schema probe
+  schema_unverified: scene/L02 has no successful schema probe
+  schema_unverified: scene/L03 has no successful schema probe
+  schema_unverified: unit/F01 has no successful schema probe
+  schema_unverified: unit/F02 has no successful schema probe
+  schema_unverified: unit/F03 has no successful schema probe
+  schema_unverified: unit/F04 has no successful schema probe
+  reference_closure_unverified: entities reference_closure attestation is missing ['character/P01', 'character/P04', 'relic/A01', 'relic/A04', 'relic/A05', 'relic/A07', 'relic/A08', 'relic/A11', 'relic/A15', 'relic/A18', 'scene/L01', 'scene/L02', 'scene/L03', 'unit/F01', 'unit/F02', 'unit/F03', 'unit/F04']
+  reference_closure_unverified: character/P01 remains unverified for reference_closure
+  reference_closure_unverified: character/P04 remains unverified for reference_closure
+  reference_closure_unverified: relic/A01 remains unverified for reference_closure
+  reference_closure_unverified: relic/A04 remains unverified for reference_closure
+  reference_closure_unverified: relic/A05 remains unverified for reference_closure
+  reference_closure_unverified: relic/A07 remains unverified for reference_closure
+  reference_closure_unverified: relic/A08 remains unverified for reference_closure
+  reference_closure_unverified: relic/A11 remains unverified for reference_closure
+  reference_closure_unverified: relic/A15 remains unverified for reference_closure
+  reference_closure_unverified: relic/A18 remains unverified for reference_closure
+  reference_closure_unverified: scene/L01 remains unverified for reference_closure
+  reference_closure_unverified: scene/L02 remains unverified for reference_closure
+  reference_closure_unverified: scene/L03 remains unverified for reference_closure
+  reference_closure_unverified: unit/F01 remains unverified for reference_closure
+  reference_closure_unverified: unit/F02 remains unverified for reference_closure
+  reference_closure_unverified: unit/F03 remains unverified for reference_closure
+  reference_closure_unverified: unit/F04 remains unverified for reference_closure
+  handler_unverified: entities handler_verification attestation is missing ['character/P01', 'character/P04', 'relic/A01', 'relic/A04', 'relic/A05', 'relic/A07', 'relic/A08', 'relic/A11', 'relic/A15', 'relic/A18', 'scene/L01', 'scene/L02', 'scene/L03', 'unit/F01', 'unit/F02', 'unit/F03', 'unit/F04']
+  handler_unverified: character/P01 remains unverified for handler_verification
+  handler_unverified: character/P04 remains unverified for handler_verification
+  handler_unverified: relic/A01 remains unverified for handler_verification
+  handler_unverified: relic/A04 remains unverified for handler_verification
+  handler_unverified: relic/A05 remains unverified for handler_verification
+  handler_unverified: relic/A07 remains unverified for handler_verification
+  handler_unverified: relic/A08 remains unverified for handler_verification
+  handler_unverified: relic/A11 remains unverified for handler_verification
+  handler_unverified: relic/A15 remains unverified for handler_verification
+  handler_unverified: relic/A18 remains unverified for handler_verification
+  handler_unverified: scene/L01 remains unverified for handler_verification
+  handler_unverified: scene/L02 remains unverified for handler_verification
+  handler_unverified: scene/L03 remains unverified for handler_verification
+  handler_unverified: unit/F01 remains unverified for handler_verification
+  handler_unverified: unit/F02 remains unverified for handler_verification
+  handler_unverified: unit/F03 remains unverified for handler_verification
+  handler_unverified: unit/F04 remains unverified for handler_verification
+  behavior_tests_unverified: entities behavior_tests attestation is missing ['character/P01', 'character/P04', 'relic/A01', 'relic/A04', 'relic/A05', 'relic/A07', 'relic/A08', 'relic/A11', 'relic/A15', 'relic/A18', 'scene/L01', 'scene/L02', 'scene/L03', 'unit/F01', 'unit/F02', 'unit/F03', 'unit/F04']
+  behavior_tests_unverified: character/P01 remains unverified for behavior_tests
+  behavior_tests_unverified: character/P04 remains unverified for behavior_tests
+  behavior_tests_unverified: relic/A01 remains unverified for behavior_tests
+  behavior_tests_unverified: relic/A04 remains unverified for behavior_tests
+  behavior_tests_unverified: relic/A05 remains unverified for behavior_tests
+  behavior_tests_unverified: relic/A07 remains unverified for behavior_tests
+  behavior_tests_unverified: relic/A08 remains unverified for behavior_tests
+  behavior_tests_unverified: relic/A11 remains unverified for behavior_tests
+  behavior_tests_unverified: relic/A15 remains unverified for behavior_tests
+  behavior_tests_unverified: relic/A18 remains unverified for behavior_tests
+  behavior_tests_unverified: scene/L01 remains unverified for behavior_tests
+  behavior_tests_unverified: scene/L02 remains unverified for behavior_tests
+  behavior_tests_unverified: scene/L03 remains unverified for behavior_tests
+  behavior_tests_unverified: unit/F01 remains unverified for behavior_tests
+  behavior_tests_unverified: unit/F02 remains unverified for behavior_tests
+  behavior_tests_unverified: unit/F03 remains unverified for behavior_tests
+  behavior_tests_unverified: unit/F04 remains unverified for behavior_tests
+  character/P01: artifact_hashes_missing; schema_unverified; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  character/P04: artifact_hashes_missing; schema_unverified; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  relic/A01: artifact_hashes_missing; schema_unverified; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  relic/A04: artifact_hashes_missing; schema_unverified; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  relic/A05: artifact_hashes_missing; schema_unverified; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  relic/A07: artifact_hashes_missing; schema_unverified; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  relic/A08: artifact_hashes_missing; schema_unverified; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  relic/A11: artifact_hashes_missing; schema_unverified; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  relic/A15: artifact_hashes_missing; schema_unverified; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  relic/A18: artifact_hashes_missing; schema_unverified; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  scene/L01: artifact_hashes_missing; schema_unverified; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  scene/L02: artifact_hashes_missing; schema_unverified; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  scene/L03: artifact_hashes_missing; schema_unverified; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  unit/F01: artifact_hashes_missing; schema_unverified; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  unit/F02: artifact_hashes_missing; schema_unverified; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  unit/F03: artifact_hashes_missing; schema_unverified; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  unit/F04: artifact_hashes_missing; schema_unverified; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+[flow] REJECTED; observed=16/16
+  reference_closure_unverified: flow reference_closure attestation is missing ['encounter/B01', 'encounter/N01', 'encounter/N02', 'encounter/N03', 'encounter/N04', 'encounter/Q01', 'event/V01', 'event/V03', 'event/V04', 'event/V10', 'task/B01', 'task/N01', 'task/N02', 'task/N03', 'task/N04', 'task/Q01']
+  reference_closure_unverified: encounter/B01 remains unverified for reference_closure
+  reference_closure_unverified: encounter/N01 remains unverified for reference_closure
+  reference_closure_unverified: encounter/N02 remains unverified for reference_closure
+  reference_closure_unverified: encounter/N03 remains unverified for reference_closure
+  reference_closure_unverified: encounter/N04 remains unverified for reference_closure
+  reference_closure_unverified: encounter/Q01 remains unverified for reference_closure
+  reference_closure_unverified: event/V01 remains unverified for reference_closure
+  reference_closure_unverified: event/V03 remains unverified for reference_closure
+  reference_closure_unverified: event/V04 remains unverified for reference_closure
+  reference_closure_unverified: event/V10 remains unverified for reference_closure
+  reference_closure_unverified: task/B01 remains unverified for reference_closure
+  reference_closure_unverified: task/N01 remains unverified for reference_closure
+  reference_closure_unverified: task/N02 remains unverified for reference_closure
+  reference_closure_unverified: task/N03 remains unverified for reference_closure
+  reference_closure_unverified: task/N04 remains unverified for reference_closure
+  reference_closure_unverified: task/Q01 remains unverified for reference_closure
+  handler_unverified: flow handler_verification attestation is missing ['encounter/B01', 'encounter/N01', 'encounter/N02', 'encounter/N03', 'encounter/N04', 'encounter/Q01', 'event/V01', 'event/V03', 'event/V04', 'event/V10', 'task/B01', 'task/N01', 'task/N02', 'task/N03', 'task/N04', 'task/Q01']
+  handler_unverified: encounter/B01 remains unverified for handler_verification
+  handler_unverified: encounter/N01 remains unverified for handler_verification
+  handler_unverified: encounter/N02 remains unverified for handler_verification
+  handler_unverified: encounter/N03 remains unverified for handler_verification
+  handler_unverified: encounter/N04 remains unverified for handler_verification
+  handler_unverified: encounter/Q01 remains unverified for handler_verification
+  handler_unverified: event/V01 remains unverified for handler_verification
+  handler_unverified: event/V03 remains unverified for handler_verification
+  handler_unverified: event/V04 remains unverified for handler_verification
+  handler_unverified: event/V10 remains unverified for handler_verification
+  handler_unverified: task/B01 remains unverified for handler_verification
+  handler_unverified: task/N01 remains unverified for handler_verification
+  handler_unverified: task/N02 remains unverified for handler_verification
+  handler_unverified: task/N03 remains unverified for handler_verification
+  handler_unverified: task/N04 remains unverified for handler_verification
+  handler_unverified: task/Q01 remains unverified for handler_verification
+  behavior_tests_unverified: flow behavior_tests attestation is missing ['encounter/B01', 'encounter/N01', 'encounter/N02', 'encounter/N03', 'encounter/N04', 'encounter/Q01', 'event/V01', 'event/V03', 'event/V04', 'event/V10', 'task/B01', 'task/N01', 'task/N02', 'task/N03', 'task/N04', 'task/Q01']
+  behavior_tests_unverified: encounter/B01 remains unverified for behavior_tests
+  behavior_tests_unverified: encounter/N01 remains unverified for behavior_tests
+  behavior_tests_unverified: encounter/N02 remains unverified for behavior_tests
+  behavior_tests_unverified: encounter/N03 remains unverified for behavior_tests
+  behavior_tests_unverified: encounter/N04 remains unverified for behavior_tests
+  behavior_tests_unverified: encounter/Q01 remains unverified for behavior_tests
+  behavior_tests_unverified: event/V01 remains unverified for behavior_tests
+  behavior_tests_unverified: event/V03 remains unverified for behavior_tests
+  behavior_tests_unverified: event/V04 remains unverified for behavior_tests
+  behavior_tests_unverified: event/V10 remains unverified for behavior_tests
+  behavior_tests_unverified: task/B01 remains unverified for behavior_tests
+  behavior_tests_unverified: task/N01 remains unverified for behavior_tests
+  behavior_tests_unverified: task/N02 remains unverified for behavior_tests
+  behavior_tests_unverified: task/N03 remains unverified for behavior_tests
+  behavior_tests_unverified: task/N04 remains unverified for behavior_tests
+  behavior_tests_unverified: task/Q01 remains unverified for behavior_tests
+  encounter/B01: reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  encounter/N01: reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  encounter/N02: reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  encounter/N03: reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  encounter/N04: reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  encounter/Q01: reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  event/V01: reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  event/V03: reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  event/V04: reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  event/V10: reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  task/B01: reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  task/N01: reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  task/N02: reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  task/N03: reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  task/N04: reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  task/Q01: reference_closure_unverified; handler_unverified; behavior_tests_unverified

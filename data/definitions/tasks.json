@@ -1,0 +1,209 @@
+[
+  {
+    "id": "N01",
+    "name_key": "task.n01.name",
+    "kind": "normal",
+    "phases": [
+      {
+        "phase_key": "main",
+        "name_key": "task.n01.phase.main.name",
+        "work_max": 24,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "task.n01.intent.pressure5",
+            "pressure": 5
+          },
+          {
+            "index": 1,
+            "text_key": "task.n01.intent.pressure7",
+            "pressure": 7
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "N02",
+    "name_key": "task.n02.name",
+    "kind": "normal",
+    "phases": [
+      {
+        "phase_key": "main",
+        "name_key": "task.n02.phase.main.name",
+        "work_max": 28,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "task.n02.intent.shield5",
+            "shield": 5
+          },
+          {
+            "index": 1,
+            "text_key": "task.n02.intent.pressure8",
+            "pressure": 8
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "N03",
+    "name_key": "task.n03.name",
+    "kind": "normal",
+    "phases": [
+      {
+        "phase_key": "main",
+        "name_key": "task.n03.phase.main.name",
+        "work_max": 30,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "task.n03.intent.pressure6",
+            "pressure": 6
+          },
+          {
+            "index": 1,
+            "text_key": "task.n03.intent.add_x01_pressure4",
+            "pressure": 4,
+            "add_card": {
+              "card": "X01",
+              "count": 1,
+              "zone": "discard"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "N04",
+    "name_key": "task.n04.name",
+    "kind": "normal",
+    "phases": [
+      {
+        "phase_key": "main",
+        "name_key": "task.n04.phase.main.name",
+        "work_max": 32,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "task.n04.intent.anxiety1",
+            "gain_status": {
+              "status": "anxiety",
+              "stacks": 1,
+              "target": "player"
+            }
+          },
+          {
+            "index": 1,
+            "text_key": "task.n04.intent.pressure9",
+            "pressure": 9
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "Q01",
+    "name_key": "task.q01.name",
+    "kind": "elite",
+    "phases": [
+      {
+        "phase_key": "main",
+        "name_key": "task.q01.phase.main.name",
+        "work_max": 38,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "task.q01.intent.pressure7",
+            "pressure": 7
+          },
+          {
+            "index": 1,
+            "text_key": "task.q01.intent.shield6",
+            "shield": 6
+          },
+          {
+            "index": 2,
+            "text_key": "task.q01.intent.pressure10",
+            "pressure": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "B01",
+    "name_key": "task.b01.name",
+    "kind": "boss",
+    "phases": [
+      {
+        "phase_key": "limits",
+        "name_key": "task.b01.phase.limits.name",
+        "work_max": 20,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "task.b01.intent.pressure7",
+            "pressure": 7
+          },
+          {
+            "index": 1,
+            "text_key": "task.b01.intent.shield5",
+            "shield": 5
+          },
+          {
+            "index": 2,
+            "text_key": "task.b01.intent.pressure9",
+            "pressure": 9
+          }
+        ]
+      },
+      {
+        "phase_key": "integrals",
+        "name_key": "task.b01.phase.integrals.name",
+        "work_max": 25,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "task.b01.intent.pressure7",
+            "pressure": 7
+          },
+          {
+            "index": 1,
+            "text_key": "task.b01.intent.shield5",
+            "shield": 5
+          },
+          {
+            "index": 2,
+            "text_key": "task.b01.intent.pressure9",
+            "pressure": 9
+          }
+        ]
+      },
+      {
+        "phase_key": "proofs",
+        "name_key": "task.b01.phase.proofs.name",
+        "work_max": 25,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "task.b01.intent.pressure7",
+            "pressure": 7
+          },
+          {
+            "index": 1,
+            "text_key": "task.b01.intent.shield5",
+            "shield": 5
+          },
+          {
+            "index": 2,
+            "text_key": "task.b01.intent.pressure9",
+            "pressure": 9
+          }
+        ]
+      }
+    ]
+  }
+]

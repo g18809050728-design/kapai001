@@ -1,0 +1,6 @@
+﻿{
+    "command":  "python -m unittest tools.test_verify_g2_staging -v",
+    "exit_code":  0,
+    "stdout":  "artifacts\\verification\\g2-staging-20261015-131121-perid\\stdout-2.txt",
+    "stderr":  "artifacts\\verification\\g2-staging-20261015-131121-perid\\stderr-2.txt"
+}

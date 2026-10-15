@@ -1,0 +1,12 @@
+SCRIPT ERROR: Parse Error: There is already a variable named "card_result" declared in this scope.
+   at: GDScript::reload (res://tests/suites/test_content_loader.gd:76)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:16)
+ERROR: Failed to load script "res://tests/suites/test_content_loader.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:16)
+ERROR: Content loader suite failed to load
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:39)

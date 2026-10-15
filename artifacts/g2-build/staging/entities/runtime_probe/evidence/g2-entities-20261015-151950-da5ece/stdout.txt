@@ -1,0 +1,3 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+SCHEMA_OK entity_count=17 ids=character:P01,character:P04,relic:A01,relic:A04,relic:A05,relic:A07,relic:A08,relic:A11,relic:A15,relic:A18,unit:F01,unit:F02,unit:F03,unit:F04,scene:L01,scene:L02,scene:L03

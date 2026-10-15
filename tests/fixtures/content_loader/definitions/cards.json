@@ -1,0 +1,28 @@
+[
+  {
+    "id": "test_card_001",
+    "name_key": "card.test_content_loader.name",
+    "type": "work",
+    "rarity": "white",
+    "tags": [
+      "test"
+    ],
+    "cost": 0,
+    "target": "task",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "complete",
+        "amount": 1
+      }
+    ],
+    "upgrade": {
+      "effects": [
+        {
+          "op": "complete",
+          "amount": 2
+        }
+      ]
+    }
+  }
+]

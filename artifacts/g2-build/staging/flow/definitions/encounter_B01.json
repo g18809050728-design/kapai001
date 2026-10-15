@@ -1,0 +1,37 @@
+{
+  "kind": "encounter",
+  "id": "B01",
+  "source": {
+    "path": "docs/交大四年_DDL战争_统一设计文档.md",
+    "section": "encounter ID B01",
+    "upstream_section": "§9.1–§9.3 encounter availability and definition",
+    "source_lines": [
+      382,
+      386
+    ],
+    "source_row": "| B01 | 大一上·高数期末 | 极限20/积分25/证明25 | 10 | 两项考试限制；各阶段均压力7→屏障5→压力9 |"
+  },
+  "behavior_refs": [
+    "docs/内容层契约.md §8.1 EncounterDef and §8.7 production overrides",
+    "src/content/content_db.gd::_validate_enabled_references",
+    "src/battle/battle_engine.gd::begin (requires runtime encounter input)",
+    "tests/suites/test_battle_engine_begin.gd (not run against this staged batch)"
+  ],
+  "definition": {
+    "id": "B01",
+    "name_key": "encounter.b01.name",
+    "kind": "boss",
+    "members": [
+      "B01"
+    ],
+    "base_ddl": 10,
+    "terms": [
+      1
+    ],
+    "exam_flags": [
+      "independent_answer",
+      "fixed_exam_room"
+    ]
+  },
+  "status": "schema_validated_behavior_and_G2_reference_closure_pending"
+}

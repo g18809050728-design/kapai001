@@ -1,0 +1,6 @@
+﻿{
+    "command":  "python tools/verify_g2_staging.py --batch entities",
+    "exit_code":  1,
+    "stdout":  "stdout-4.txt",
+    "stderr":  "stderr-4.txt"
+}

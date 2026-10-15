@@ -1,0 +1,733 @@
+{
+  "manifest_id": "campus_mvp",
+  "scope_version": "campus_mvp.v1",
+  "definitions": {
+    "character": [
+      {
+        "id": "P01",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "character ID P01"
+        },
+        "missing": "No verified JSON definition exists in data/definitions/characters.json; no registered behavior mapping is available for publication.",
+        "blocking": [
+          "G2"
+        ]
+      },
+      {
+        "id": "P04",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "character ID P04"
+        },
+        "missing": "No verified JSON definition exists in data/definitions/characters.json; no registered behavior mapping is available for publication.",
+        "blocking": [
+          "G2"
+        ]
+      }
+    ],
+    "card": [
+      {
+        "id": "K05",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "card ID K05"
+        },
+        "missing": "No verified JSON definition exists in data/definitions/cards.json; no registered behavior mapping is available for publication.",
+        "blocking": [
+          "G2"
+        ]
+      },
+      {
+        "id": "K06",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "card ID K06"
+        },
+        "missing": "No verified JSON definition exists in data/definitions/cards.json; no registered behavior mapping is available for publication.",
+        "blocking": [
+          "G2"
+        ]
+      },
+      {
+        "id": "K07",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "card ID K07"
+        },
+        "missing": "No verified JSON definition exists in data/definitions/cards.json; no registered behavior mapping is available for publication.",
+        "blocking": [
+          "G2"
+        ]
+      },
+      {
+        "id": "K08",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "card ID K08"
+        },
+        "missing": "No verified JSON definition exists in data/definitions/cards.json; no registered behavior mapping is available for publication.",
+        "blocking": [
+          "G2"
+        ]
+      },
+      {
+        "id": "K10",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "card ID K10"
+        },
+        "missing": "No verified JSON definition exists in data/definitions/cards.json; no registered behavior mapping is available for publication.",
+        "blocking": [
+          "G2"
+        ]
+      },
+      {
+        "id": "K12",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "card ID K12"
+        },
+        "missing": "No verified JSON definition exists in data/definitions/cards.json; no registered behavior mapping is available for publication.",
+        "blocking": [
+          "G2"
+        ]
+      },
+      {
+        "id": "K13",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "card ID K13"
+        },
+        "missing": "No verified JSON definition exists in data/definitions/cards.json; no registered behavior mapping is available for publication.",
+        "blocking": [
+          "G2"
+        ]
+      },
+      {
+        "id": "K14",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "card ID K14"
+        },
+        "missing": "No verified JSON definition exists in data/definitions/cards.json; no registered behavior mapping is available for publication.",
+        "blocking": [
+          "G2"
+        ]
+      },
+      {
+        "id": "K15",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "card ID K15"
+        },
+        "missing": "No verified JSON definition exists in data/definitions/cards.json; no registered behavior mapping is available for publication.",
+        "blocking": [
+          "G2"
+        ]
+      },
+      {
+        "id": "K16",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "card ID K16"
+        },
+        "missing": "No verified JSON definition exists in data/definitions/cards.json; no registered behavior mapping is available for publication.",
+        "blocking": [
+          "G2"
+        ]
+      },
+      {
+        "id": "K19",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "card ID K19"
+        },
+        "missing": "No verified JSON definition exists in data/definitions/cards.json; no registered behavior mapping is available for publication.",
+        "blocking": [
+          "G2"
+        ]
+      },
+      {
+        "id": "K43",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "card ID K43"
+        },
+        "missing": "No verified JSON definition exists in data/definitions/cards.json; no registered behavior mapping is available for publication.",
+        "blocking": [
+          "G2"
+        ]
+      },
+      {
+        "id": "K44",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "card ID K44"
+        },
+        "missing": "No verified JSON definition exists in data/definitions/cards.json; no registered behavior mapping is available for publication.",
+        "blocking": [
+          "G2"
+        ]
+      },
+      {
+        "id": "K45",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "card ID K45"
+        },
+        "missing": "No verified JSON definition exists in data/definitions/cards.json; no registered behavior mapping is available for publication.",
+        "blocking": [
+          "G2"
+        ]
+      },
+      {
+        "id": "K46",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "card ID K46"
+        },
+        "missing": "No verified JSON definition exists in data/definitions/cards.json; no registered behavior mapping is available for publication.",
+        "blocking": [
+          "G2"
+        ]
+      },
+      {
+        "id": "K51",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "card ID K51"
+        },
+        "missing": "No verified JSON definition exists in data/definitions/cards.json; no registered behavior mapping is available for publication.",
+        "blocking": [
+          "G2"
+        ]
+      },
+      {
+        "id": "K52",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "card ID K52"
+        },
+        "missing": "No verified JSON definition exists in data/definitions/cards.json; no registered behavior mapping is available for publication.",
+        "blocking": [
+          "G2"
+        ]
+      },
+      {
+        "id": "K53",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "card ID K53"
+        },
+        "missing": "No verified JSON definition exists in data/definitions/cards.json; no registered behavior mapping is available for publication.",
+        "blocking": [
+          "G2"
+        ]
+      },
+      {
+        "id": "K59",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "card ID K59"
+        },
+        "missing": "No verified JSON definition exists in data/definitions/cards.json; no registered behavior mapping is available for publication.",
+        "blocking": [
+          "G2"
+        ]
+      },
+      {
+        "id": "K60",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "card ID K60"
+        },
+        "missing": "No verified JSON definition exists in data/definitions/cards.json; no registered behavior mapping is available for publication.",
+        "blocking": [
+          "G2"
+        ]
+      },
+      {
+        "id": "X01",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "card ID X01"
+        },
+        "missing": "No verified JSON definition exists in data/definitions/cards.json; no registered behavior mapping is available for publication.",
+        "blocking": [
+          "G2"
+        ]
+      }
+    ],
+    "relic": [
+      {
+        "id": "A01",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "relic ID A01"
+        },
+        "missing": "No verified JSON definition exists in data/definitions/relics.json; no registered behavior mapping is available for publication.",
+        "blocking": [
+          "G2"
+        ]
+      },
+      {
+        "id": "A04",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "relic ID A04"
+        },
+        "missing": "No verified JSON definition exists in data/definitions/relics.json; no registered behavior mapping is available for publication.",
+        "blocking": [
+          "G2"
+        ]
+      },
+      {
+        "id": "A05",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "relic ID A05"
+        },
+        "missing": "No verified JSON definition exists in data/definitions/relics.json; no registered behavior mapping is available for publication.",
+        "blocking": [
+          "G2"
+        ]
+      },
+      {
+        "id": "A07",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "relic ID A07"
+        },
+        "missing": "No verified JSON definition exists in data/definitions/relics.json; no registered behavior mapping is available for publication.",
+        "blocking": [
+          "G2"
+        ]
+      },
+      {
+        "id": "A08",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "relic ID A08"
+        },
+        "missing": "No verified JSON definition exists in data/definitions/relics.json; no registered behavior mapping is available for publication.",
+        "blocking": [
+          "G2"
+        ]
+      },
+      {
+        "id": "A11",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "relic ID A11"
+        },
+        "missing": "No verified JSON definition exists in data/definitions/relics.json; no registered behavior mapping is available for publication.",
+        "blocking": [
+          "G2"
+        ]
+      },
+      {
+        "id": "A15",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "relic ID A15"
+        },
+        "missing": "No verified JSON definition exists in data/definitions/relics.json; no registered behavior mapping is available for publication.",
+        "blocking": [
+          "G2"
+        ]
+      },
+      {
+        "id": "A18",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "relic ID A18"
+        },
+        "missing": "No verified JSON definition exists in data/definitions/relics.json; no registered behavior mapping is available for publication.",
+        "blocking": [
+          "G2"
+        ]
+      }
+    ],
+    "task": [
+      {
+        "id": "N01",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "task ID N01"
+        },
+        "missing": "No verified JSON definition exists in data/definitions/tasks.json; no registered behavior mapping is available for publication.",
+        "blocking": [
+          "G2"
+        ]
+      },
+      {
+        "id": "N02",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "task ID N02"
+        },
+        "missing": "No verified JSON definition exists in data/definitions/tasks.json; no registered behavior mapping is available for publication.",
+        "blocking": [
+          "G2"
+        ]
+      },
+      {
+        "id": "N03",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "task ID N03"
+        },
+        "missing": "No verified JSON definition exists in data/definitions/tasks.json; no registered behavior mapping is available for publication.",
+        "blocking": [
+          "G2"
+        ]
+      },
+      {
+        "id": "N04",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "task ID N04"
+        },
+        "missing": "No verified JSON definition exists in data/definitions/tasks.json; no registered behavior mapping is available for publication.",
+        "blocking": [
+          "G2"
+        ]
+      },
+      {
+        "id": "Q01",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "task ID Q01"
+        },
+        "missing": "No verified JSON definition exists in data/definitions/tasks.json; no registered behavior mapping is available for publication.",
+        "blocking": [
+          "G2"
+        ]
+      },
+      {
+        "id": "B01",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "task ID B01"
+        },
+        "missing": "No verified JSON definition exists in data/definitions/tasks.json; no registered behavior mapping is available for publication.",
+        "blocking": [
+          "G2"
+        ]
+      }
+    ],
+    "encounter": [
+      {
+        "id": "N01",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "encounter ID N01"
+        },
+        "missing": "No verified JSON definition exists in data/definitions/encounters.json; no registered behavior mapping is available for publication.",
+        "blocking": [
+          "G2"
+        ]
+      },
+      {
+        "id": "N02",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "encounter ID N02"
+        },
+        "missing": "No verified JSON definition exists in data/definitions/encounters.json; no registered behavior mapping is available for publication.",
+        "blocking": [
+          "G2"
+        ]
+      },
+      {
+        "id": "N03",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "encounter ID N03"
+        },
+        "missing": "No verified JSON definition exists in data/definitions/encounters.json; no registered behavior mapping is available for publication.",
+        "blocking": [
+          "G2"
+        ]
+      },
+      {
+        "id": "N04",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "encounter ID N04"
+        },
+        "missing": "No verified JSON definition exists in data/definitions/encounters.json; no registered behavior mapping is available for publication.",
+        "blocking": [
+          "G2"
+        ]
+      },
+      {
+        "id": "Q01",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "encounter ID Q01"
+        },
+        "missing": "No verified JSON definition exists in data/definitions/encounters.json; no registered behavior mapping is available for publication.",
+        "blocking": [
+          "G2"
+        ]
+      },
+      {
+        "id": "B01",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "encounter ID B01"
+        },
+        "missing": "No verified JSON definition exists in data/definitions/encounters.json; no registered behavior mapping is available for publication.",
+        "blocking": [
+          "G2"
+        ]
+      }
+    ],
+    "unit": [
+      {
+        "id": "F01",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "unit ID F01"
+        },
+        "missing": "No verified JSON definition exists in data/definitions/units.json; no registered behavior mapping is available for publication.",
+        "blocking": [
+          "G2"
+        ]
+      },
+      {
+        "id": "F02",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "unit ID F02"
+        },
+        "missing": "No verified JSON definition exists in data/definitions/units.json; no registered behavior mapping is available for publication.",
+        "blocking": [
+          "G2"
+        ]
+      },
+      {
+        "id": "F03",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "unit ID F03"
+        },
+        "missing": "No verified JSON definition exists in data/definitions/units.json; no registered behavior mapping is available for publication.",
+        "blocking": [
+          "G2"
+        ]
+      },
+      {
+        "id": "F04",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "unit ID F04"
+        },
+        "missing": "No verified JSON definition exists in data/definitions/units.json; no registered behavior mapping is available for publication.",
+        "blocking": [
+          "G2"
+        ]
+      }
+    ],
+    "scene": [
+      {
+        "id": "L01",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "scene ID L01"
+        },
+        "missing": "No verified JSON definition exists in data/definitions/scenes.json; no registered behavior mapping is available for publication.",
+        "blocking": [
+          "G2"
+        ]
+      },
+      {
+        "id": "L02",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "scene ID L02"
+        },
+        "missing": "No verified JSON definition exists in data/definitions/scenes.json; no registered behavior mapping is available for publication.",
+        "blocking": [
+          "G2"
+        ]
+      },
+      {
+        "id": "L03",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "scene ID L03"
+        },
+        "missing": "No verified JSON definition exists in data/definitions/scenes.json; no registered behavior mapping is available for publication.",
+        "blocking": [
+          "G2"
+        ]
+      }
+    ],
+    "event": [
+      {
+        "id": "V01",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "event ID V01"
+        },
+        "missing": "No verified JSON definition exists in data/definitions/events.json; no registered behavior mapping is available for publication.",
+        "blocking": [
+          "G2"
+        ]
+      },
+      {
+        "id": "V03",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "event ID V03"
+        },
+        "missing": "No verified JSON definition exists in data/definitions/events.json; no registered behavior mapping is available for publication.",
+        "blocking": [
+          "G2"
+        ]
+      },
+      {
+        "id": "V04",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "event ID V04"
+        },
+        "missing": "No verified JSON definition exists in data/definitions/events.json; no registered behavior mapping is available for publication.",
+        "blocking": [
+          "G2"
+        ]
+      },
+      {
+        "id": "V10",
+        "source": {
+          "path": "docs/交大四年_DDL战争_统一设计文档.md",
+          "section": "event ID V10"
+        },
+        "missing": "No verified JSON definition exists in data/definitions/events.json; no registered behavior mapping is available for publication.",
+        "blocking": [
+          "G2"
+        ]
+      }
+    ]
+  },
+  "manifest_holdback": {
+    "character": [
+      "P01",
+      "P04"
+    ],
+    "card": [
+      "K05",
+      "K06",
+      "K07",
+      "K08",
+      "K10",
+      "K12",
+      "K13",
+      "K14",
+      "K15",
+      "K16",
+      "K19",
+      "K43",
+      "K44",
+      "K45",
+      "K46",
+      "K51",
+      "K52",
+      "K53",
+      "K59",
+      "K60",
+      "X01"
+    ],
+    "relic": [
+      "A01",
+      "A04",
+      "A05",
+      "A07",
+      "A08",
+      "A11",
+      "A15",
+      "A18"
+    ],
+    "task": [
+      "N01",
+      "N02",
+      "N03",
+      "N04",
+      "Q01",
+      "B01"
+    ],
+    "encounter": [
+      "N01",
+      "N02",
+      "N03",
+      "N04",
+      "Q01",
+      "B01"
+    ],
+    "unit": [
+      "F01",
+      "F02",
+      "F03",
+      "F04"
+    ],
+    "scene": [
+      "L01",
+      "L02",
+      "L03"
+    ],
+    "event": [
+      "V01",
+      "V03",
+      "V04",
+      "V10"
+    ],
+    "status": [],
+    "ruleset": []
+  },
+  "manifest_enable_after_mapping": {},
+  "package_blockers": [],
+  "pending_overrides": [
+    {
+      "kind": "event",
+      "id": "V03",
+      "scope_version": "campus_mvp.v1",
+      "source": {
+        "path": "docs/交大四年_DDL战争_项目计划书.md",
+        "section": "§3.1"
+      },
+      "selector": "options[option_id=consult].effects[op=gain_card].card_pool",
+      "value": [
+        "K14",
+        "K05",
+        "K60"
+      ],
+      "full_value": [
+        "K14",
+        "K24",
+        "K34"
+      ],
+      "blocked_by": "Override target definition is currently in manifest_holdback."
+    },
+    {
+      "kind": "encounter",
+      "id": "N04",
+      "scope_version": "campus_mvp.v1",
+      "source": {
+        "path": "docs/交大四年_DDL战争_项目计划书.md",
+        "section": "§3.1"
+      },
+      "selector": "terms",
+      "value": [
+        1
+      ],
+      "full_value": [
+        2,
+        3
+      ],
+      "blocked_by": "Override target definition is currently in manifest_holdback."
+    }
+  ]
+}
