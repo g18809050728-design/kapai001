@@ -1,0 +1,10 @@
+{
+  "argv": [
+    "F:\\minGw64\\ucrt64\\bin\\python.exe",
+    "E:\\desktop\\项目设计\\项目设计\\tools\\verify_g0.py",
+    "--run-id",
+    "g0-20261014-pass"
+  ],
+  "cwd": "E:\\desktop\\项目设计\\项目设计",
+  "mode": "g0_readiness"
+}

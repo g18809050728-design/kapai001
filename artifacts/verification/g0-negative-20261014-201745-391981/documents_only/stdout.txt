@@ -1,0 +1,9 @@
+Mode: documents_only
+Checks: 754
+Document errors: 0
+G0 blockers: 2
+BLOCKER Q-005: G0 document decision open
+BLOCKER Q-005: MVP rule decision open
+Exit code: 0
+Evidence: C:\Users\Dev.LI\AppData\Local\Temp\ddl-g0-audit-k94cowab\documents_only\artifacts\verification\test-documents_only
+Document assertions and registered semantic review only; no Godot, game JSON or UI tests.

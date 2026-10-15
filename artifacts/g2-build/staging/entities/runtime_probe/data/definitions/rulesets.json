@@ -1,0 +1,158 @@
+[
+  {
+    "id": "campus_v1",
+    "schema_version": 1,
+    "run": {
+      "starting_vitality": 72,
+      "starting_money": 60,
+      "common_starter_cards": [
+        "K01",
+        "K01",
+        "K01",
+        "K01",
+        "K02",
+        "K02",
+        "K02",
+        "K02",
+        "K03",
+        "K04"
+      ],
+      "starter_deck_size": 12,
+      "minimum_deck_size": 5,
+      "max_card_upgrades": 1,
+      "relic_slots": 6,
+      "term_count": 1,
+      "term_heal_percent": 20,
+      "rest_heal_percent": 25
+    },
+    "battle": {
+      "starting_focus": 0,
+      "focus_per_round": 3,
+      "focus_cap": 10,
+      "draw_per_round": 5,
+      "hand_limit": 10,
+      "unit_slots": 3,
+      "scene_slots": 1,
+      "base_retention_count": 0,
+      "minimum_vitality_after_payment": 1,
+      "unit_action_vitality_cost": 1,
+      "cooperation_exam_relax": [
+        5,
+        7
+      ],
+      "scene_exam_draw": 1,
+      "scene_exam_relax": [
+        2,
+        4
+      ],
+      "minimum_ddl": 1
+    },
+    "rewards": {
+      "normal_money_by_term": [
+        15
+      ],
+      "elite_money_bonus": 20,
+      "nonfinal_boss_money": 50,
+      "candidate_count": 3,
+      "empty_relic_pool_money": 30,
+      "card_rarity_weights": {
+        "normal": {
+          "white": 60,
+          "blue": 30,
+          "purple": 9,
+          "gold": 1
+        },
+        "elite": {
+          "white": 20,
+          "blue": 45,
+          "purple": 30,
+          "gold": 5
+        },
+        "boss": {
+          "white": 0,
+          "blue": 30,
+          "purple": 50,
+          "gold": 20
+        },
+        "term": {
+          "white": 50,
+          "blue": 50,
+          "purple": 0,
+          "gold": 0
+        }
+      },
+      "relic_rarity_weights": {
+        "general": {
+          "white": 50,
+          "blue": 35,
+          "purple": 13,
+          "gold": 2
+        },
+        "boss": {
+          "white": 20,
+          "blue": 40,
+          "purple": 35,
+          "gold": 5
+        }
+      }
+    },
+    "shop": {
+      "card_stock": {
+        "white": 2,
+        "blue": 2,
+        "purple": 1
+      },
+      "relic_stock": {
+        "white": 1,
+        "blue": 1
+      },
+      "meal_stock": 1,
+      "card_prices": {
+        "white": 35,
+        "blue": 55,
+        "purple": 85
+      },
+      "relic_prices": {
+        "white": 80,
+        "blue": 120
+      },
+      "meal_price": 25,
+      "meal_heal": 12,
+      "removals_per_shop": 1,
+      "first_removal_price": 60,
+      "removal_price_increment": 20
+    },
+    "statuses": {
+      "inspiration": {
+        "cap": 5,
+        "completion_per_stack": 2
+      },
+      "compile": {
+        "cap": 5
+      },
+      "anxiety": {
+        "cap": 2,
+        "focus_penalty_per_stack": 1
+      },
+      "procrastination": {
+        "cap": 3,
+        "draw_penalty_per_stack": 1
+      },
+      "drowsiness": {
+        "cap": 2,
+        "completion_penalty_per_stack": 1
+      },
+      "extra_requirements": {
+        "cap": 3,
+        "pressure_per_stack": 2
+      }
+    },
+    "difficulty_overrides": {
+      "normal": {
+        "starting_vitality": 72,
+        "ddl_offset": 0,
+        "pressure_percent": 100
+      }
+    }
+  }
+]

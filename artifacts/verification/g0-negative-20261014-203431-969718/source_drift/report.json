@@ -1,0 +1,13 @@
+{
+  "run_id": "test-source_drift",
+  "mode": "g0_readiness",
+  "checks": 755,
+  "errors": [
+    "SOURCE SRC-PLAN: adopted SHA-256 mismatch"
+  ],
+  "g0_blockers": [],
+  "exit_code": 1,
+  "documents_passed": false,
+  "g0_ready": false,
+  "limits": "Document assertions and registered semantic review only; no Godot, game JSON or UI tests."
+}

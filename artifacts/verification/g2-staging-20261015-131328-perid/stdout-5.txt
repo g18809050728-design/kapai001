@@ -1,0 +1,71 @@
+G2 staging batch audit: REJECTED
+Frozen definitions: 54
+G2 stage gate: not established by this audit
+[flow] REJECTED; observed=16/16
+  reference_closure_unverified: flow reference_closure attestation is missing ['encounter/B01', 'encounter/N01', 'encounter/N02', 'encounter/N03', 'encounter/N04', 'encounter/Q01', 'event/V01', 'event/V03', 'event/V04', 'event/V10', 'task/B01', 'task/N01', 'task/N02', 'task/N03', 'task/N04', 'task/Q01']
+  reference_closure_unverified: encounter/B01 remains unverified for reference_closure
+  reference_closure_unverified: encounter/N01 remains unverified for reference_closure
+  reference_closure_unverified: encounter/N02 remains unverified for reference_closure
+  reference_closure_unverified: encounter/N03 remains unverified for reference_closure
+  reference_closure_unverified: encounter/N04 remains unverified for reference_closure
+  reference_closure_unverified: encounter/Q01 remains unverified for reference_closure
+  reference_closure_unverified: event/V01 remains unverified for reference_closure
+  reference_closure_unverified: event/V03 remains unverified for reference_closure
+  reference_closure_unverified: event/V04 remains unverified for reference_closure
+  reference_closure_unverified: event/V10 remains unverified for reference_closure
+  reference_closure_unverified: task/B01 remains unverified for reference_closure
+  reference_closure_unverified: task/N01 remains unverified for reference_closure
+  reference_closure_unverified: task/N02 remains unverified for reference_closure
+  reference_closure_unverified: task/N03 remains unverified for reference_closure
+  reference_closure_unverified: task/N04 remains unverified for reference_closure
+  reference_closure_unverified: task/Q01 remains unverified for reference_closure
+  handler_unverified: flow handler_verification attestation is missing ['encounter/B01', 'encounter/N01', 'encounter/N02', 'encounter/N03', 'encounter/N04', 'encounter/Q01', 'event/V01', 'event/V03', 'event/V04', 'event/V10', 'task/B01', 'task/N01', 'task/N02', 'task/N03', 'task/N04', 'task/Q01']
+  handler_unverified: encounter/B01 remains unverified for handler_verification
+  handler_unverified: encounter/N01 remains unverified for handler_verification
+  handler_unverified: encounter/N02 remains unverified for handler_verification
+  handler_unverified: encounter/N03 remains unverified for handler_verification
+  handler_unverified: encounter/N04 remains unverified for handler_verification
+  handler_unverified: encounter/Q01 remains unverified for handler_verification
+  handler_unverified: event/V01 remains unverified for handler_verification
+  handler_unverified: event/V03 remains unverified for handler_verification
+  handler_unverified: event/V04 remains unverified for handler_verification
+  handler_unverified: event/V10 remains unverified for handler_verification
+  handler_unverified: task/B01 remains unverified for handler_verification
+  handler_unverified: task/N01 remains unverified for handler_verification
+  handler_unverified: task/N02 remains unverified for handler_verification
+  handler_unverified: task/N03 remains unverified for handler_verification
+  handler_unverified: task/N04 remains unverified for handler_verification
+  handler_unverified: task/Q01 remains unverified for handler_verification
+  behavior_tests_unverified: flow behavior_tests attestation is missing ['encounter/B01', 'encounter/N01', 'encounter/N02', 'encounter/N03', 'encounter/N04', 'encounter/Q01', 'event/V01', 'event/V03', 'event/V04', 'event/V10', 'task/B01', 'task/N01', 'task/N02', 'task/N03', 'task/N04', 'task/Q01']
+  behavior_tests_unverified: encounter/B01 remains unverified for behavior_tests
+  behavior_tests_unverified: encounter/N01 remains unverified for behavior_tests
+  behavior_tests_unverified: encounter/N02 remains unverified for behavior_tests
+  behavior_tests_unverified: encounter/N03 remains unverified for behavior_tests
+  behavior_tests_unverified: encounter/N04 remains unverified for behavior_tests
+  behavior_tests_unverified: encounter/Q01 remains unverified for behavior_tests
+  behavior_tests_unverified: event/V01 remains unverified for behavior_tests
+  behavior_tests_unverified: event/V03 remains unverified for behavior_tests
+  behavior_tests_unverified: event/V04 remains unverified for behavior_tests
+  behavior_tests_unverified: event/V10 remains unverified for behavior_tests
+  behavior_tests_unverified: task/B01 remains unverified for behavior_tests
+  behavior_tests_unverified: task/N01 remains unverified for behavior_tests
+  behavior_tests_unverified: task/N02 remains unverified for behavior_tests
+  behavior_tests_unverified: task/N03 remains unverified for behavior_tests
+  behavior_tests_unverified: task/N04 remains unverified for behavior_tests
+  behavior_tests_unverified: task/Q01 remains unverified for behavior_tests
+  encounter/B01: reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  encounter/N01: reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  encounter/N02: reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  encounter/N03: reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  encounter/N04: reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  encounter/Q01: reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  event/V01: reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  event/V03: reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  event/V04: reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  event/V10: reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  task/B01: reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  task/N01: reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  task/N02: reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  task/N03: reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  task/N04: reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  task/Q01: reference_closure_unverified; handler_unverified; behavior_tests_unverified

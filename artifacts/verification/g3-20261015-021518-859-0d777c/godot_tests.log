@@ -1,0 +1,9 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+G2_TEST_MANIFEST_SHA256=60e4f78e220ad78375e9d7e95dc94cdd8ad9519c8cd83ee118c2114fd4a037aa
+G2_TEST_FIXTURE_SHA256=642743e5e2e3b1941fa0effe48c37adf6034ad473210f4c8749782a6c7e6fc1e
+{"code":"CONTENT_INVALID","details":{"issues":["cards[4].effects must not be empty","cards[4] must have an effect","cards[4].upgrade.result.effects must not be empty","cards[4].upgrade.result must have an effect"]},"message_key":"content.package.invalid"}
+ERROR: isolated battle fixture loads
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:51)

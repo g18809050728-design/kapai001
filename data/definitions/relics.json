@@ -1,0 +1,162 @@
+[
+  {
+    "id": "A01",
+    "name_key": "relic.A01.name",
+    "availability": "starter",
+    "rarity": null,
+    "tags": [],
+    "modifiers": {
+      "work_flat_bonus": 1
+    },
+    "limit": {
+      "per": "round",
+      "times": 1
+    }
+  },
+  {
+    "id": "A04",
+    "name_key": "relic.A04.name",
+    "availability": "starter",
+    "rarity": null,
+    "tags": [],
+    "hooks": [
+      {
+        "at": "cost_quote",
+        "card_type": "cooperation",
+        "discount": 1,
+        "limit": {
+          "per": "battle",
+          "times": 1
+        }
+      }
+    ]
+  },
+  {
+    "id": "A05",
+    "name_key": "relic.A05.name",
+    "availability": "drop",
+    "rarity": "white",
+    "tags": [],
+    "hooks": [
+      {
+        "at": "round_start",
+        "rounds": [
+          3,
+          6
+        ],
+        "effects": [
+          {
+            "op": "heal",
+            "amount": 3,
+            "target": "player"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "A07",
+    "name_key": "relic.A07.name",
+    "availability": "drop",
+    "rarity": "blue",
+    "tags": [],
+    "hooks": [
+      {
+        "at": "draw",
+        "rounds": [
+          1
+        ],
+        "effects": [
+          {
+            "op": "draw",
+            "amount": 2
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "A08",
+    "name_key": "relic.A08.name",
+    "availability": "drop",
+    "rarity": "white",
+    "tags": [],
+    "hooks": [
+      {
+        "at": "cost_quote",
+        "definition_id": "K10",
+        "skip_vitality_cost": true,
+        "limit": {
+          "per": "battle",
+          "times": 1
+        }
+      }
+    ]
+  },
+  {
+    "id": "A11",
+    "name_key": "relic.A11.name",
+    "availability": "drop",
+    "rarity": "white",
+    "tags": [],
+    "hooks": [
+      {
+        "at": "card_resolved",
+        "card_type": "strategy",
+        "limit": {
+          "per": "round",
+          "times": 1
+        },
+        "effects": [
+          {
+            "op": "relax",
+            "amount": 2,
+            "target": "player"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "A15",
+    "name_key": "relic.A15.name",
+    "availability": "drop",
+    "rarity": "white",
+    "tags": [],
+    "hooks": [
+      {
+        "at": "shop_price",
+        "kinds": [
+          "card",
+          "relic"
+        ],
+        "multiplier_percent": 80,
+        "rounding": "ceil"
+      }
+    ]
+  },
+  {
+    "id": "A18",
+    "name_key": "relic.A18.name",
+    "availability": "drop",
+    "rarity": "white",
+    "tags": [],
+    "hooks": [
+      {
+        "at": "round_start",
+        "rounds": [
+          1,
+          2,
+          3
+        ],
+        "effects": [
+          {
+            "op": "heal",
+            "amount": 1,
+            "target": "player"
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,8 @@
+Staged 17 G2 entity definitions under E:\desktop\项目设计\项目设计\artifacts\g2-build\staging\entities
+Source rows resolved: 17/17
+Definitions with explicit blockers: 6
+Static self-audit: completed; no structural/source-scope errors
+Godot schema/reference probe exit code: 0
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+SCHEMA_OK entity_count=17 ids=character:P01,character:P04,relic:A01,relic:A04,relic:A05,relic:A07,relic:A08,relic:A11,relic:A15,relic:A18,unit:F01,unit:F02,unit:F03,unit:F04,scene:L01,scene:L02,scene:L03

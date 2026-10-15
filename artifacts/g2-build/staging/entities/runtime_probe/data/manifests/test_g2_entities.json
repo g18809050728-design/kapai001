@@ -1,0 +1,59 @@
+{
+  "id": "test_g2_entities",
+  "content_version": "campus_mvp.v1",
+  "ruleset_id": "campus_v1",
+  "enabled": {
+    "character": [
+      "P01",
+      "P04"
+    ],
+    "card": [
+      "K01",
+      "K02",
+      "K03",
+      "K04",
+      "K10",
+      "K13",
+      "K14",
+      "K43",
+      "K44"
+    ],
+    "relic": [
+      "A01",
+      "A04",
+      "A05",
+      "A07",
+      "A08",
+      "A11",
+      "A15",
+      "A18"
+    ],
+    "task": [],
+    "encounter": [],
+    "unit": [
+      "F01",
+      "F02",
+      "F03",
+      "F04"
+    ],
+    "scene": [
+      "L01",
+      "L02",
+      "L03"
+    ],
+    "event": [],
+    "status": [
+      "inspiration",
+      "compile",
+      "anxiety",
+      "procrastination",
+      "drowsiness",
+      "extra_requirements",
+      "guard"
+    ],
+    "ruleset": [
+      "campus_v1"
+    ]
+  },
+  "overrides": []
+}

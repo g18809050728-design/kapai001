@@ -1,0 +1,94 @@
+{
+  "id": "test_run_g4",
+  "content_version": "test_g4.v1",
+  "ruleset_id": "campus_v1",
+  "enabled": {
+    "character": [
+      "test_P01",
+      "test_P04"
+    ],
+    "card": [
+      "test_K01",
+      "test_K02",
+      "test_K03",
+      "test_K04",
+      "test_K05",
+      "test_K06",
+      "test_K07",
+      "test_K08",
+      "test_K10",
+      "test_K12",
+      "test_K13",
+      "test_K14",
+      "test_K15",
+      "test_K16",
+      "test_K19",
+      "test_K43",
+      "test_K44",
+      "test_K45",
+      "test_K46",
+      "test_K51",
+      "test_K52",
+      "test_K53",
+      "test_K59",
+      "test_K60",
+      "test_X01"
+    ],
+    "relic": [
+      "test_A01",
+      "test_A04",
+      "test_A05",
+      "test_A07",
+      "test_A08",
+      "test_A11",
+      "test_A15",
+      "test_A18"
+    ],
+    "task": [
+      "test_N01",
+      "test_N02",
+      "test_N03",
+      "test_N04",
+      "test_Q01",
+      "test_B01"
+    ],
+    "encounter": [
+      "test_N01",
+      "test_N02",
+      "test_N03",
+      "test_N04",
+      "test_Q01",
+      "test_B01"
+    ],
+    "unit": [
+      "test_F01",
+      "test_F02",
+      "test_F03",
+      "test_F04"
+    ],
+    "scene": [
+      "test_L01",
+      "test_L02",
+      "test_L03"
+    ],
+    "event": [
+      "test_V01",
+      "test_V03",
+      "test_V04",
+      "test_V10"
+    ],
+    "status": [
+      "inspiration",
+      "compile",
+      "anxiety",
+      "procrastination",
+      "drowsiness",
+      "extra_requirements",
+      "guard"
+    ],
+    "ruleset": [
+      "campus_v1"
+    ]
+  },
+  "overrides": []
+}

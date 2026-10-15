@@ -1,0 +1,2096 @@
+{
+  "created_at": "2026-10-15T10:40:27.035689+00:00",
+  "command": "python artifacts/g6-review/check_selection.py",
+  "scope": "G6 selected file provenance, dimensions, mappings and two documentation link sets; no Godot, UI or gameplay regression",
+  "selection_sha256": "741157112a4072a78a25191322b4555d4705cee58c66bcadeb74a00e942054cf",
+  "counts": {
+    "sources": 6,
+    "selected_assets": 46,
+    "content_mappings": 66,
+    "ui_requirements": 16,
+    "checks": 518,
+    "failures": 0
+  },
+  "categories": {
+    "portraits": 6,
+    "cards": 18,
+    "tasks": 6,
+    "relics": 8,
+    "backgrounds": 8
+  },
+  "result": "pass",
+  "checks": [
+    {
+      "check": "46 unique selected assets equal planned IDs",
+      "passed": true
+    },
+    {
+      "check": "6 supplied source atlases",
+      "passed": true
+    },
+    {
+      "check": "catalog hash matches selection",
+      "passed": true
+    },
+    {
+      "check": "selection hash matches visual report",
+      "passed": true
+    },
+    {
+      "check": "AI review is not labeled human signoff",
+      "passed": true
+    },
+    {
+      "check": "external billing is unknown",
+      "passed": true
+    },
+    {
+      "check": "agent generation calls zero",
+      "passed": true
+    },
+    {
+      "check": "G6-01 source hash",
+      "passed": true
+    },
+    {
+      "check": "G6-01 slicing manifest hash",
+      "passed": true
+    },
+    {
+      "check": "G6-01 catalog hash",
+      "passed": true
+    },
+    {
+      "check": "G6-01 source size",
+      "passed": true
+    },
+    {
+      "check": "G6-02 source hash",
+      "passed": true
+    },
+    {
+      "check": "G6-02 slicing manifest hash",
+      "passed": true
+    },
+    {
+      "check": "G6-02 catalog hash",
+      "passed": true
+    },
+    {
+      "check": "G6-02 source size",
+      "passed": true
+    },
+    {
+      "check": "G6-03 source hash",
+      "passed": true
+    },
+    {
+      "check": "G6-03 slicing manifest hash",
+      "passed": true
+    },
+    {
+      "check": "G6-03 catalog hash",
+      "passed": true
+    },
+    {
+      "check": "G6-03 source size",
+      "passed": true
+    },
+    {
+      "check": "G6-04 source hash",
+      "passed": true
+    },
+    {
+      "check": "G6-04 slicing manifest hash",
+      "passed": true
+    },
+    {
+      "check": "G6-04 catalog hash",
+      "passed": true
+    },
+    {
+      "check": "G6-04 source size",
+      "passed": true
+    },
+    {
+      "check": "G6-05 source hash",
+      "passed": true
+    },
+    {
+      "check": "G6-05 slicing manifest hash",
+      "passed": true
+    },
+    {
+      "check": "G6-05 catalog hash",
+      "passed": true
+    },
+    {
+      "check": "G6-05 source size",
+      "passed": true
+    },
+    {
+      "check": "G6-06 source hash",
+      "passed": true
+    },
+    {
+      "check": "G6-06 slicing manifest hash",
+      "passed": true
+    },
+    {
+      "check": "G6-06 catalog hash",
+      "passed": true
+    },
+    {
+      "check": "G6-06 source size",
+      "passed": true
+    },
+    {
+      "check": "P01 candidate hash",
+      "passed": true
+    },
+    {
+      "check": "P01 selected hash",
+      "passed": true
+    },
+    {
+      "check": "P01 original crop provenance",
+      "passed": true
+    },
+    {
+      "check": "P01 requirements and content refs",
+      "passed": true
+    },
+    {
+      "check": "P01 readable review note",
+      "passed": true
+    },
+    {
+      "check": "P01 visual evidence exists",
+      "passed": true
+    },
+    {
+      "check": "P01 selected size and mode",
+      "passed": true
+    },
+    {
+      "check": "P01 byte-identical copy",
+      "passed": true
+    },
+    {
+      "check": "P04 candidate hash",
+      "passed": true
+    },
+    {
+      "check": "P04 selected hash",
+      "passed": true
+    },
+    {
+      "check": "P04 original crop provenance",
+      "passed": true
+    },
+    {
+      "check": "P04 requirements and content refs",
+      "passed": true
+    },
+    {
+      "check": "P04 readable review note",
+      "passed": true
+    },
+    {
+      "check": "P04 visual evidence exists",
+      "passed": true
+    },
+    {
+      "check": "P04 selected size and mode",
+      "passed": true
+    },
+    {
+      "check": "P04 byte-identical copy",
+      "passed": true
+    },
+    {
+      "check": "F01 candidate hash",
+      "passed": true
+    },
+    {
+      "check": "F01 selected hash",
+      "passed": true
+    },
+    {
+      "check": "F01 original crop provenance",
+      "passed": true
+    },
+    {
+      "check": "F01 requirements and content refs",
+      "passed": true
+    },
+    {
+      "check": "F01 readable review note",
+      "passed": true
+    },
+    {
+      "check": "F01 visual evidence exists",
+      "passed": true
+    },
+    {
+      "check": "F01 selected size and mode",
+      "passed": true
+    },
+    {
+      "check": "F01 byte-identical copy",
+      "passed": true
+    },
+    {
+      "check": "F02 candidate hash",
+      "passed": true
+    },
+    {
+      "check": "F02 selected hash",
+      "passed": true
+    },
+    {
+      "check": "F02 original crop provenance",
+      "passed": true
+    },
+    {
+      "check": "F02 requirements and content refs",
+      "passed": true
+    },
+    {
+      "check": "F02 readable review note",
+      "passed": true
+    },
+    {
+      "check": "F02 visual evidence exists",
+      "passed": true
+    },
+    {
+      "check": "F02 selected size and mode",
+      "passed": true
+    },
+    {
+      "check": "F02 byte-identical copy",
+      "passed": true
+    },
+    {
+      "check": "F03 candidate hash",
+      "passed": true
+    },
+    {
+      "check": "F03 selected hash",
+      "passed": true
+    },
+    {
+      "check": "F03 original crop provenance",
+      "passed": true
+    },
+    {
+      "check": "F03 requirements and content refs",
+      "passed": true
+    },
+    {
+      "check": "F03 readable review note",
+      "passed": true
+    },
+    {
+      "check": "F03 visual evidence exists",
+      "passed": true
+    },
+    {
+      "check": "F03 selected size and mode",
+      "passed": true
+    },
+    {
+      "check": "F03 byte-identical copy",
+      "passed": true
+    },
+    {
+      "check": "F04 candidate hash",
+      "passed": true
+    },
+    {
+      "check": "F04 selected hash",
+      "passed": true
+    },
+    {
+      "check": "F04 original crop provenance",
+      "passed": true
+    },
+    {
+      "check": "F04 requirements and content refs",
+      "passed": true
+    },
+    {
+      "check": "F04 readable review note",
+      "passed": true
+    },
+    {
+      "check": "F04 visual evidence exists",
+      "passed": true
+    },
+    {
+      "check": "F04 selected size and mode",
+      "passed": true
+    },
+    {
+      "check": "F04 byte-identical copy",
+      "passed": true
+    },
+    {
+      "check": "K01 candidate hash",
+      "passed": true
+    },
+    {
+      "check": "K01 selected hash",
+      "passed": true
+    },
+    {
+      "check": "K01 original crop provenance",
+      "passed": true
+    },
+    {
+      "check": "K01 requirements and content refs",
+      "passed": true
+    },
+    {
+      "check": "K01 readable review note",
+      "passed": true
+    },
+    {
+      "check": "K01 visual evidence exists",
+      "passed": true
+    },
+    {
+      "check": "K01 selected size and mode",
+      "passed": true
+    },
+    {
+      "check": "K01 byte-identical copy",
+      "passed": true
+    },
+    {
+      "check": "K02 candidate hash",
+      "passed": true
+    },
+    {
+      "check": "K02 selected hash",
+      "passed": true
+    },
+    {
+      "check": "K02 original crop provenance",
+      "passed": true
+    },
+    {
+      "check": "K02 requirements and content refs",
+      "passed": true
+    },
+    {
+      "check": "K02 readable review note",
+      "passed": true
+    },
+    {
+      "check": "K02 visual evidence exists",
+      "passed": true
+    },
+    {
+      "check": "K02 selected size and mode",
+      "passed": true
+    },
+    {
+      "check": "K02 byte-identical copy",
+      "passed": true
+    },
+    {
+      "check": "K03 candidate hash",
+      "passed": true
+    },
+    {
+      "check": "K03 selected hash",
+      "passed": true
+    },
+    {
+      "check": "K03 original crop provenance",
+      "passed": true
+    },
+    {
+      "check": "K03 requirements and content refs",
+      "passed": true
+    },
+    {
+      "check": "K03 readable review note",
+      "passed": true
+    },
+    {
+      "check": "K03 visual evidence exists",
+      "passed": true
+    },
+    {
+      "check": "K03 selected size and mode",
+      "passed": true
+    },
+    {
+      "check": "K03 byte-identical copy",
+      "passed": true
+    },
+    {
+      "check": "K04 candidate hash",
+      "passed": true
+    },
+    {
+      "check": "K04 selected hash",
+      "passed": true
+    },
+    {
+      "check": "K04 original crop provenance",
+      "passed": true
+    },
+    {
+      "check": "K04 requirements and content refs",
+      "passed": true
+    },
+    {
+      "check": "K04 readable review note",
+      "passed": true
+    },
+    {
+      "check": "K04 visual evidence exists",
+      "passed": true
+    },
+    {
+      "check": "K04 selected size and mode",
+      "passed": true
+    },
+    {
+      "check": "K04 byte-identical copy",
+      "passed": true
+    },
+    {
+      "check": "K05 candidate hash",
+      "passed": true
+    },
+    {
+      "check": "K05 selected hash",
+      "passed": true
+    },
+    {
+      "check": "K05 original crop provenance",
+      "passed": true
+    },
+    {
+      "check": "K05 requirements and content refs",
+      "passed": true
+    },
+    {
+      "check": "K05 readable review note",
+      "passed": true
+    },
+    {
+      "check": "K05 visual evidence exists",
+      "passed": true
+    },
+    {
+      "check": "K05 selected size and mode",
+      "passed": true
+    },
+    {
+      "check": "K05 exact recorded center crop",
+      "passed": true
+    },
+    {
+      "check": "K06 candidate hash",
+      "passed": true
+    },
+    {
+      "check": "K06 selected hash",
+      "passed": true
+    },
+    {
+      "check": "K06 original crop provenance",
+      "passed": true
+    },
+    {
+      "check": "K06 requirements and content refs",
+      "passed": true
+    },
+    {
+      "check": "K06 readable review note",
+      "passed": true
+    },
+    {
+      "check": "K06 visual evidence exists",
+      "passed": true
+    },
+    {
+      "check": "K06 selected size and mode",
+      "passed": true
+    },
+    {
+      "check": "K06 exact recorded center crop",
+      "passed": true
+    },
+    {
+      "check": "K07 candidate hash",
+      "passed": true
+    },
+    {
+      "check": "K07 selected hash",
+      "passed": true
+    },
+    {
+      "check": "K07 original crop provenance",
+      "passed": true
+    },
+    {
+      "check": "K07 requirements and content refs",
+      "passed": true
+    },
+    {
+      "check": "K07 readable review note",
+      "passed": true
+    },
+    {
+      "check": "K07 visual evidence exists",
+      "passed": true
+    },
+    {
+      "check": "K07 selected size and mode",
+      "passed": true
+    },
+    {
+      "check": "K07 byte-identical copy",
+      "passed": true
+    },
+    {
+      "check": "K08 candidate hash",
+      "passed": true
+    },
+    {
+      "check": "K08 selected hash",
+      "passed": true
+    },
+    {
+      "check": "K08 original crop provenance",
+      "passed": true
+    },
+    {
+      "check": "K08 requirements and content refs",
+      "passed": true
+    },
+    {
+      "check": "K08 readable review note",
+      "passed": true
+    },
+    {
+      "check": "K08 visual evidence exists",
+      "passed": true
+    },
+    {
+      "check": "K08 selected size and mode",
+      "passed": true
+    },
+    {
+      "check": "K08 byte-identical copy",
+      "passed": true
+    },
+    {
+      "check": "K10 candidate hash",
+      "passed": true
+    },
+    {
+      "check": "K10 selected hash",
+      "passed": true
+    },
+    {
+      "check": "K10 original crop provenance",
+      "passed": true
+    },
+    {
+      "check": "K10 requirements and content refs",
+      "passed": true
+    },
+    {
+      "check": "K10 readable review note",
+      "passed": true
+    },
+    {
+      "check": "K10 visual evidence exists",
+      "passed": true
+    },
+    {
+      "check": "K10 selected size and mode",
+      "passed": true
+    },
+    {
+      "check": "K10 byte-identical copy",
+      "passed": true
+    },
+    {
+      "check": "K12 candidate hash",
+      "passed": true
+    },
+    {
+      "check": "K12 selected hash",
+      "passed": true
+    },
+    {
+      "check": "K12 original crop provenance",
+      "passed": true
+    },
+    {
+      "check": "K12 requirements and content refs",
+      "passed": true
+    },
+    {
+      "check": "K12 readable review note",
+      "passed": true
+    },
+    {
+      "check": "K12 visual evidence exists",
+      "passed": true
+    },
+    {
+      "check": "K12 selected size and mode",
+      "passed": true
+    },
+    {
+      "check": "K12 byte-identical copy",
+      "passed": true
+    },
+    {
+      "check": "K13 candidate hash",
+      "passed": true
+    },
+    {
+      "check": "K13 selected hash",
+      "passed": true
+    },
+    {
+      "check": "K13 original crop provenance",
+      "passed": true
+    },
+    {
+      "check": "K13 requirements and content refs",
+      "passed": true
+    },
+    {
+      "check": "K13 readable review note",
+      "passed": true
+    },
+    {
+      "check": "K13 visual evidence exists",
+      "passed": true
+    },
+    {
+      "check": "K13 selected size and mode",
+      "passed": true
+    },
+    {
+      "check": "K13 byte-identical copy",
+      "passed": true
+    },
+    {
+      "check": "K14 candidate hash",
+      "passed": true
+    },
+    {
+      "check": "K14 selected hash",
+      "passed": true
+    },
+    {
+      "check": "K14 original crop provenance",
+      "passed": true
+    },
+    {
+      "check": "K14 requirements and content refs",
+      "passed": true
+    },
+    {
+      "check": "K14 readable review note",
+      "passed": true
+    },
+    {
+      "check": "K14 visual evidence exists",
+      "passed": true
+    },
+    {
+      "check": "K14 selected size and mode",
+      "passed": true
+    },
+    {
+      "check": "K14 byte-identical copy",
+      "passed": true
+    },
+    {
+      "check": "K15 candidate hash",
+      "passed": true
+    },
+    {
+      "check": "K15 selected hash",
+      "passed": true
+    },
+    {
+      "check": "K15 original crop provenance",
+      "passed": true
+    },
+    {
+      "check": "K15 requirements and content refs",
+      "passed": true
+    },
+    {
+      "check": "K15 readable review note",
+      "passed": true
+    },
+    {
+      "check": "K15 visual evidence exists",
+      "passed": true
+    },
+    {
+      "check": "K15 selected size and mode",
+      "passed": true
+    },
+    {
+      "check": "K15 byte-identical copy",
+      "passed": true
+    },
+    {
+      "check": "K16 candidate hash",
+      "passed": true
+    },
+    {
+      "check": "K16 selected hash",
+      "passed": true
+    },
+    {
+      "check": "K16 original crop provenance",
+      "passed": true
+    },
+    {
+      "check": "K16 requirements and content refs",
+      "passed": true
+    },
+    {
+      "check": "K16 readable review note",
+      "passed": true
+    },
+    {
+      "check": "K16 visual evidence exists",
+      "passed": true
+    },
+    {
+      "check": "K16 selected size and mode",
+      "passed": true
+    },
+    {
+      "check": "K16 byte-identical copy",
+      "passed": true
+    },
+    {
+      "check": "K19 candidate hash",
+      "passed": true
+    },
+    {
+      "check": "K19 selected hash",
+      "passed": true
+    },
+    {
+      "check": "K19 original crop provenance",
+      "passed": true
+    },
+    {
+      "check": "K19 requirements and content refs",
+      "passed": true
+    },
+    {
+      "check": "K19 readable review note",
+      "passed": true
+    },
+    {
+      "check": "K19 visual evidence exists",
+      "passed": true
+    },
+    {
+      "check": "K19 selected size and mode",
+      "passed": true
+    },
+    {
+      "check": "K19 byte-identical copy",
+      "passed": true
+    },
+    {
+      "check": "K59 candidate hash",
+      "passed": true
+    },
+    {
+      "check": "K59 selected hash",
+      "passed": true
+    },
+    {
+      "check": "K59 original crop provenance",
+      "passed": true
+    },
+    {
+      "check": "K59 requirements and content refs",
+      "passed": true
+    },
+    {
+      "check": "K59 readable review note",
+      "passed": true
+    },
+    {
+      "check": "K59 visual evidence exists",
+      "passed": true
+    },
+    {
+      "check": "K59 selected size and mode",
+      "passed": true
+    },
+    {
+      "check": "K59 byte-identical copy",
+      "passed": true
+    },
+    {
+      "check": "K60 candidate hash",
+      "passed": true
+    },
+    {
+      "check": "K60 selected hash",
+      "passed": true
+    },
+    {
+      "check": "K60 original crop provenance",
+      "passed": true
+    },
+    {
+      "check": "K60 requirements and content refs",
+      "passed": true
+    },
+    {
+      "check": "K60 readable review note",
+      "passed": true
+    },
+    {
+      "check": "K60 visual evidence exists",
+      "passed": true
+    },
+    {
+      "check": "K60 selected size and mode",
+      "passed": true
+    },
+    {
+      "check": "K60 byte-identical copy",
+      "passed": true
+    },
+    {
+      "check": "X01 candidate hash",
+      "passed": true
+    },
+    {
+      "check": "X01 selected hash",
+      "passed": true
+    },
+    {
+      "check": "X01 original crop provenance",
+      "passed": true
+    },
+    {
+      "check": "X01 requirements and content refs",
+      "passed": true
+    },
+    {
+      "check": "X01 readable review note",
+      "passed": true
+    },
+    {
+      "check": "X01 visual evidence exists",
+      "passed": true
+    },
+    {
+      "check": "X01 selected size and mode",
+      "passed": true
+    },
+    {
+      "check": "X01 byte-identical copy",
+      "passed": true
+    },
+    {
+      "check": "N01 candidate hash",
+      "passed": true
+    },
+    {
+      "check": "N01 selected hash",
+      "passed": true
+    },
+    {
+      "check": "N01 original crop provenance",
+      "passed": true
+    },
+    {
+      "check": "N01 requirements and content refs",
+      "passed": true
+    },
+    {
+      "check": "N01 readable review note",
+      "passed": true
+    },
+    {
+      "check": "N01 visual evidence exists",
+      "passed": true
+    },
+    {
+      "check": "N01 selected size and mode",
+      "passed": true
+    },
+    {
+      "check": "N01 byte-identical copy",
+      "passed": true
+    },
+    {
+      "check": "N02 candidate hash",
+      "passed": true
+    },
+    {
+      "check": "N02 selected hash",
+      "passed": true
+    },
+    {
+      "check": "N02 original crop provenance",
+      "passed": true
+    },
+    {
+      "check": "N02 requirements and content refs",
+      "passed": true
+    },
+    {
+      "check": "N02 readable review note",
+      "passed": true
+    },
+    {
+      "check": "N02 visual evidence exists",
+      "passed": true
+    },
+    {
+      "check": "N02 selected size and mode",
+      "passed": true
+    },
+    {
+      "check": "N02 byte-identical copy",
+      "passed": true
+    },
+    {
+      "check": "N03 candidate hash",
+      "passed": true
+    },
+    {
+      "check": "N03 selected hash",
+      "passed": true
+    },
+    {
+      "check": "N03 original crop provenance",
+      "passed": true
+    },
+    {
+      "check": "N03 requirements and content refs",
+      "passed": true
+    },
+    {
+      "check": "N03 readable review note",
+      "passed": true
+    },
+    {
+      "check": "N03 visual evidence exists",
+      "passed": true
+    },
+    {
+      "check": "N03 selected size and mode",
+      "passed": true
+    },
+    {
+      "check": "N03 byte-identical copy",
+      "passed": true
+    },
+    {
+      "check": "N04 candidate hash",
+      "passed": true
+    },
+    {
+      "check": "N04 selected hash",
+      "passed": true
+    },
+    {
+      "check": "N04 original crop provenance",
+      "passed": true
+    },
+    {
+      "check": "N04 requirements and content refs",
+      "passed": true
+    },
+    {
+      "check": "N04 readable review note",
+      "passed": true
+    },
+    {
+      "check": "N04 visual evidence exists",
+      "passed": true
+    },
+    {
+      "check": "N04 selected size and mode",
+      "passed": true
+    },
+    {
+      "check": "N04 byte-identical copy",
+      "passed": true
+    },
+    {
+      "check": "Q01 candidate hash",
+      "passed": true
+    },
+    {
+      "check": "Q01 selected hash",
+      "passed": true
+    },
+    {
+      "check": "Q01 original crop provenance",
+      "passed": true
+    },
+    {
+      "check": "Q01 requirements and content refs",
+      "passed": true
+    },
+    {
+      "check": "Q01 readable review note",
+      "passed": true
+    },
+    {
+      "check": "Q01 visual evidence exists",
+      "passed": true
+    },
+    {
+      "check": "Q01 selected size and mode",
+      "passed": true
+    },
+    {
+      "check": "Q01 byte-identical copy",
+      "passed": true
+    },
+    {
+      "check": "B01 candidate hash",
+      "passed": true
+    },
+    {
+      "check": "B01 selected hash",
+      "passed": true
+    },
+    {
+      "check": "B01 original crop provenance",
+      "passed": true
+    },
+    {
+      "check": "B01 requirements and content refs",
+      "passed": true
+    },
+    {
+      "check": "B01 readable review note",
+      "passed": true
+    },
+    {
+      "check": "B01 visual evidence exists",
+      "passed": true
+    },
+    {
+      "check": "B01 selected size and mode",
+      "passed": true
+    },
+    {
+      "check": "B01 byte-identical copy",
+      "passed": true
+    },
+    {
+      "check": "A01 candidate hash",
+      "passed": true
+    },
+    {
+      "check": "A01 selected hash",
+      "passed": true
+    },
+    {
+      "check": "A01 original crop provenance",
+      "passed": true
+    },
+    {
+      "check": "A01 requirements and content refs",
+      "passed": true
+    },
+    {
+      "check": "A01 readable review note",
+      "passed": true
+    },
+    {
+      "check": "A01 visual evidence exists",
+      "passed": true
+    },
+    {
+      "check": "A01 selected size and mode",
+      "passed": true
+    },
+    {
+      "check": "A01 byte-identical copy",
+      "passed": true
+    },
+    {
+      "check": "A04 candidate hash",
+      "passed": true
+    },
+    {
+      "check": "A04 selected hash",
+      "passed": true
+    },
+    {
+      "check": "A04 original crop provenance",
+      "passed": true
+    },
+    {
+      "check": "A04 requirements and content refs",
+      "passed": true
+    },
+    {
+      "check": "A04 readable review note",
+      "passed": true
+    },
+    {
+      "check": "A04 visual evidence exists",
+      "passed": true
+    },
+    {
+      "check": "A04 selected size and mode",
+      "passed": true
+    },
+    {
+      "check": "A04 byte-identical copy",
+      "passed": true
+    },
+    {
+      "check": "A05 candidate hash",
+      "passed": true
+    },
+    {
+      "check": "A05 selected hash",
+      "passed": true
+    },
+    {
+      "check": "A05 original crop provenance",
+      "passed": true
+    },
+    {
+      "check": "A05 requirements and content refs",
+      "passed": true
+    },
+    {
+      "check": "A05 readable review note",
+      "passed": true
+    },
+    {
+      "check": "A05 visual evidence exists",
+      "passed": true
+    },
+    {
+      "check": "A05 selected size and mode",
+      "passed": true
+    },
+    {
+      "check": "A05 byte-identical copy",
+      "passed": true
+    },
+    {
+      "check": "A07 candidate hash",
+      "passed": true
+    },
+    {
+      "check": "A07 selected hash",
+      "passed": true
+    },
+    {
+      "check": "A07 original crop provenance",
+      "passed": true
+    },
+    {
+      "check": "A07 requirements and content refs",
+      "passed": true
+    },
+    {
+      "check": "A07 readable review note",
+      "passed": true
+    },
+    {
+      "check": "A07 visual evidence exists",
+      "passed": true
+    },
+    {
+      "check": "A07 selected size and mode",
+      "passed": true
+    },
+    {
+      "check": "A07 byte-identical copy",
+      "passed": true
+    },
+    {
+      "check": "A08 candidate hash",
+      "passed": true
+    },
+    {
+      "check": "A08 selected hash",
+      "passed": true
+    },
+    {
+      "check": "A08 original crop provenance",
+      "passed": true
+    },
+    {
+      "check": "A08 requirements and content refs",
+      "passed": true
+    },
+    {
+      "check": "A08 readable review note",
+      "passed": true
+    },
+    {
+      "check": "A08 visual evidence exists",
+      "passed": true
+    },
+    {
+      "check": "A08 selected size and mode",
+      "passed": true
+    },
+    {
+      "check": "A08 byte-identical copy",
+      "passed": true
+    },
+    {
+      "check": "A11 candidate hash",
+      "passed": true
+    },
+    {
+      "check": "A11 selected hash",
+      "passed": true
+    },
+    {
+      "check": "A11 original crop provenance",
+      "passed": true
+    },
+    {
+      "check": "A11 requirements and content refs",
+      "passed": true
+    },
+    {
+      "check": "A11 readable review note",
+      "passed": true
+    },
+    {
+      "check": "A11 visual evidence exists",
+      "passed": true
+    },
+    {
+      "check": "A11 selected size and mode",
+      "passed": true
+    },
+    {
+      "check": "A11 byte-identical copy",
+      "passed": true
+    },
+    {
+      "check": "A15 candidate hash",
+      "passed": true
+    },
+    {
+      "check": "A15 selected hash",
+      "passed": true
+    },
+    {
+      "check": "A15 original crop provenance",
+      "passed": true
+    },
+    {
+      "check": "A15 requirements and content refs",
+      "passed": true
+    },
+    {
+      "check": "A15 readable review note",
+      "passed": true
+    },
+    {
+      "check": "A15 visual evidence exists",
+      "passed": true
+    },
+    {
+      "check": "A15 selected size and mode",
+      "passed": true
+    },
+    {
+      "check": "A15 byte-identical copy",
+      "passed": true
+    },
+    {
+      "check": "A18 candidate hash",
+      "passed": true
+    },
+    {
+      "check": "A18 selected hash",
+      "passed": true
+    },
+    {
+      "check": "A18 original crop provenance",
+      "passed": true
+    },
+    {
+      "check": "A18 requirements and content refs",
+      "passed": true
+    },
+    {
+      "check": "A18 readable review note",
+      "passed": true
+    },
+    {
+      "check": "A18 visual evidence exists",
+      "passed": true
+    },
+    {
+      "check": "A18 selected size and mode",
+      "passed": true
+    },
+    {
+      "check": "A18 byte-identical copy",
+      "passed": true
+    },
+    {
+      "check": "BG_campus candidate hash",
+      "passed": true
+    },
+    {
+      "check": "BG_campus selected hash",
+      "passed": true
+    },
+    {
+      "check": "BG_campus original crop provenance",
+      "passed": true
+    },
+    {
+      "check": "BG_campus requirements and content refs",
+      "passed": true
+    },
+    {
+      "check": "BG_campus readable review note",
+      "passed": true
+    },
+    {
+      "check": "BG_campus visual evidence exists",
+      "passed": true
+    },
+    {
+      "check": "BG_campus selected size and mode",
+      "passed": true
+    },
+    {
+      "check": "BG_campus byte-identical copy",
+      "passed": true
+    },
+    {
+      "check": "BG_classroom candidate hash",
+      "passed": true
+    },
+    {
+      "check": "BG_classroom selected hash",
+      "passed": true
+    },
+    {
+      "check": "BG_classroom original crop provenance",
+      "passed": true
+    },
+    {
+      "check": "BG_classroom requirements and content refs",
+      "passed": true
+    },
+    {
+      "check": "BG_classroom readable review note",
+      "passed": true
+    },
+    {
+      "check": "BG_classroom visual evidence exists",
+      "passed": true
+    },
+    {
+      "check": "BG_classroom selected size and mode",
+      "passed": true
+    },
+    {
+      "check": "BG_classroom byte-identical copy",
+      "passed": true
+    },
+    {
+      "check": "BG_home candidate hash",
+      "passed": true
+    },
+    {
+      "check": "BG_home selected hash",
+      "passed": true
+    },
+    {
+      "check": "BG_home original crop provenance",
+      "passed": true
+    },
+    {
+      "check": "BG_home requirements and content refs",
+      "passed": true
+    },
+    {
+      "check": "BG_home readable review note",
+      "passed": true
+    },
+    {
+      "check": "BG_home visual evidence exists",
+      "passed": true
+    },
+    {
+      "check": "BG_home selected size and mode",
+      "passed": true
+    },
+    {
+      "check": "BG_home byte-identical copy",
+      "passed": true
+    },
+    {
+      "check": "BG_dorm candidate hash",
+      "passed": true
+    },
+    {
+      "check": "BG_dorm selected hash",
+      "passed": true
+    },
+    {
+      "check": "BG_dorm original crop provenance",
+      "passed": true
+    },
+    {
+      "check": "BG_dorm requirements and content refs",
+      "passed": true
+    },
+    {
+      "check": "BG_dorm readable review note",
+      "passed": true
+    },
+    {
+      "check": "BG_dorm visual evidence exists",
+      "passed": true
+    },
+    {
+      "check": "BG_dorm selected size and mode",
+      "passed": true
+    },
+    {
+      "check": "BG_dorm byte-identical copy",
+      "passed": true
+    },
+    {
+      "check": "BG_study candidate hash",
+      "passed": true
+    },
+    {
+      "check": "BG_study selected hash",
+      "passed": true
+    },
+    {
+      "check": "BG_study original crop provenance",
+      "passed": true
+    },
+    {
+      "check": "BG_study requirements and content refs",
+      "passed": true
+    },
+    {
+      "check": "BG_study readable review note",
+      "passed": true
+    },
+    {
+      "check": "BG_study visual evidence exists",
+      "passed": true
+    },
+    {
+      "check": "BG_study selected size and mode",
+      "passed": true
+    },
+    {
+      "check": "BG_study byte-identical copy",
+      "passed": true
+    },
+    {
+      "check": "BG_shop candidate hash",
+      "passed": true
+    },
+    {
+      "check": "BG_shop selected hash",
+      "passed": true
+    },
+    {
+      "check": "BG_shop original crop provenance",
+      "passed": true
+    },
+    {
+      "check": "BG_shop requirements and content refs",
+      "passed": true
+    },
+    {
+      "check": "BG_shop readable review note",
+      "passed": true
+    },
+    {
+      "check": "BG_shop visual evidence exists",
+      "passed": true
+    },
+    {
+      "check": "BG_shop selected size and mode",
+      "passed": true
+    },
+    {
+      "check": "BG_shop byte-identical copy",
+      "passed": true
+    },
+    {
+      "check": "BG_success candidate hash",
+      "passed": true
+    },
+    {
+      "check": "BG_success selected hash",
+      "passed": true
+    },
+    {
+      "check": "BG_success original crop provenance",
+      "passed": true
+    },
+    {
+      "check": "BG_success requirements and content refs",
+      "passed": true
+    },
+    {
+      "check": "BG_success readable review note",
+      "passed": true
+    },
+    {
+      "check": "BG_success visual evidence exists",
+      "passed": true
+    },
+    {
+      "check": "BG_success selected size and mode",
+      "passed": true
+    },
+    {
+      "check": "BG_success byte-identical copy",
+      "passed": true
+    },
+    {
+      "check": "BG_failure candidate hash",
+      "passed": true
+    },
+    {
+      "check": "BG_failure selected hash",
+      "passed": true
+    },
+    {
+      "check": "BG_failure original crop provenance",
+      "passed": true
+    },
+    {
+      "check": "BG_failure requirements and content refs",
+      "passed": true
+    },
+    {
+      "check": "BG_failure readable review note",
+      "passed": true
+    },
+    {
+      "check": "BG_failure visual evidence exists",
+      "passed": true
+    },
+    {
+      "check": "BG_failure selected size and mode",
+      "passed": true
+    },
+    {
+      "check": "BG_failure byte-identical copy",
+      "passed": true
+    },
+    {
+      "check": "66 unique frozen content mappings",
+      "passed": true
+    },
+    {
+      "check": "content character/P01",
+      "passed": true
+    },
+    {
+      "check": "content character/P04",
+      "passed": true
+    },
+    {
+      "check": "content card/K01",
+      "passed": true
+    },
+    {
+      "check": "content card/K02",
+      "passed": true
+    },
+    {
+      "check": "content card/K03",
+      "passed": true
+    },
+    {
+      "check": "content card/K04",
+      "passed": true
+    },
+    {
+      "check": "content card/K05",
+      "passed": true
+    },
+    {
+      "check": "content card/K06",
+      "passed": true
+    },
+    {
+      "check": "content card/K07",
+      "passed": true
+    },
+    {
+      "check": "content card/K08",
+      "passed": true
+    },
+    {
+      "check": "content card/K10",
+      "passed": true
+    },
+    {
+      "check": "content card/K12",
+      "passed": true
+    },
+    {
+      "check": "content card/K13",
+      "passed": true
+    },
+    {
+      "check": "content card/K14",
+      "passed": true
+    },
+    {
+      "check": "content card/K15",
+      "passed": true
+    },
+    {
+      "check": "content card/K16",
+      "passed": true
+    },
+    {
+      "check": "content card/K19",
+      "passed": true
+    },
+    {
+      "check": "content card/K43",
+      "passed": true
+    },
+    {
+      "check": "content card/K44",
+      "passed": true
+    },
+    {
+      "check": "content card/K45",
+      "passed": true
+    },
+    {
+      "check": "content card/K46",
+      "passed": true
+    },
+    {
+      "check": "content card/K51",
+      "passed": true
+    },
+    {
+      "check": "content card/K52",
+      "passed": true
+    },
+    {
+      "check": "content card/K53",
+      "passed": true
+    },
+    {
+      "check": "content card/K59",
+      "passed": true
+    },
+    {
+      "check": "content card/K60",
+      "passed": true
+    },
+    {
+      "check": "content card/X01",
+      "passed": true
+    },
+    {
+      "check": "content relic/A01",
+      "passed": true
+    },
+    {
+      "check": "content relic/A04",
+      "passed": true
+    },
+    {
+      "check": "content relic/A05",
+      "passed": true
+    },
+    {
+      "check": "content relic/A07",
+      "passed": true
+    },
+    {
+      "check": "content relic/A08",
+      "passed": true
+    },
+    {
+      "check": "content relic/A11",
+      "passed": true
+    },
+    {
+      "check": "content relic/A15",
+      "passed": true
+    },
+    {
+      "check": "content relic/A18",
+      "passed": true
+    },
+    {
+      "check": "content task/N01",
+      "passed": true
+    },
+    {
+      "check": "content task/N02",
+      "passed": true
+    },
+    {
+      "check": "content task/N03",
+      "passed": true
+    },
+    {
+      "check": "content task/N04",
+      "passed": true
+    },
+    {
+      "check": "content task/Q01",
+      "passed": true
+    },
+    {
+      "check": "content task/B01",
+      "passed": true
+    },
+    {
+      "check": "content encounter/N01",
+      "passed": true
+    },
+    {
+      "check": "content encounter/N02",
+      "passed": true
+    },
+    {
+      "check": "content encounter/N03",
+      "passed": true
+    },
+    {
+      "check": "content encounter/N04",
+      "passed": true
+    },
+    {
+      "check": "content encounter/Q01",
+      "passed": true
+    },
+    {
+      "check": "content encounter/B01",
+      "passed": true
+    },
+    {
+      "check": "content unit/F01",
+      "passed": true
+    },
+    {
+      "check": "content unit/F02",
+      "passed": true
+    },
+    {
+      "check": "content unit/F03",
+      "passed": true
+    },
+    {
+      "check": "content unit/F04",
+      "passed": true
+    },
+    {
+      "check": "content scene/L01",
+      "passed": true
+    },
+    {
+      "check": "content scene/L02",
+      "passed": true
+    },
+    {
+      "check": "content scene/L03",
+      "passed": true
+    },
+    {
+      "check": "content event/V01",
+      "passed": true
+    },
+    {
+      "check": "content event/V03",
+      "passed": true
+    },
+    {
+      "check": "content event/V04",
+      "passed": true
+    },
+    {
+      "check": "content event/V10",
+      "passed": true
+    },
+    {
+      "check": "content status/inspiration",
+      "passed": true
+    },
+    {
+      "check": "content status/compile",
+      "passed": true
+    },
+    {
+      "check": "content status/anxiety",
+      "passed": true
+    },
+    {
+      "check": "content status/procrastination",
+      "passed": true
+    },
+    {
+      "check": "content status/drowsiness",
+      "passed": true
+    },
+    {
+      "check": "content status/extra_requirements",
+      "passed": true
+    },
+    {
+      "check": "content status/guard",
+      "passed": true
+    },
+    {
+      "check": "content ruleset/campus_v1",
+      "passed": true
+    },
+    {
+      "check": "16 unique UI requirement methods",
+      "passed": true
+    },
+    {
+      "check": "VIS-001 planned method preserved",
+      "passed": true
+    },
+    {
+      "check": "VIS-002 planned method preserved",
+      "passed": true
+    },
+    {
+      "check": "VIS-003 planned method preserved",
+      "passed": true
+    },
+    {
+      "check": "VIS-004 planned method preserved",
+      "passed": true
+    },
+    {
+      "check": "VIS-005 planned method preserved",
+      "passed": true
+    },
+    {
+      "check": "VIS-006 planned method preserved",
+      "passed": true
+    },
+    {
+      "check": "VIS-007 planned method preserved",
+      "passed": true
+    },
+    {
+      "check": "VIS-008 planned method preserved",
+      "passed": true
+    },
+    {
+      "check": "VIS-009 planned method preserved",
+      "passed": true
+    },
+    {
+      "check": "VIS-010 planned method preserved",
+      "passed": true
+    },
+    {
+      "check": "VIS-011 planned method preserved",
+      "passed": true
+    },
+    {
+      "check": "VIS-012 planned method preserved",
+      "passed": true
+    },
+    {
+      "check": "VIS-013 planned method preserved",
+      "passed": true
+    },
+    {
+      "check": "ACT-001 planned method preserved",
+      "passed": true
+    },
+    {
+      "check": "ACT-002 planned method preserved",
+      "passed": true
+    },
+    {
+      "check": "ACT-003 planned method preserved",
+      "passed": true
+    },
+    {
+      "check": "README.md link selection.json",
+      "passed": true
+    },
+    {
+      "check": "README.md link ../art/g6-v1/",
+      "passed": true
+    },
+    {
+      "check": "README.md link ../../artifacts/g6-review/review.json",
+      "passed": true
+    },
+    {
+      "check": "README.md link ../../artifacts/g6-review/g6_contact_sheet.png",
+      "passed": true
+    },
+    {
+      "check": "README.md link selection.json",
+      "passed": true
+    },
+    {
+      "check": "README.md link catalog.json",
+      "passed": true
+    },
+    {
+      "check": "README.md link 资源清单.csv",
+      "passed": true
+    },
+    {
+      "check": "README.md link ../../动作或者图片描述/G6批量生图任务单.md",
+      "passed": true
+    },
+    {
+      "check": "README.md link ../../docs/G6资源制作规范.md",
+      "passed": true
+    },
+    {
+      "check": "README.md link ../../tools/slice_g6_atlas.py",
+      "passed": true
+    },
+    {
+      "check": "README.md link ../../artifacts/g6-review/review.json",
+      "passed": true
+    },
+    {
+      "check": "README.md link ../../artifacts/g6-review/selection-check.json",
+      "passed": true
+    },
+    {
+      "check": "README.md link ../../docs/G6资源准备执行记录.md",
+      "passed": true
+    },
+    {
+      "check": "G6资源准备执行记录.md link ../assets/g6/selection.json",
+      "passed": true
+    },
+    {
+      "check": "G6资源准备执行记录.md link ../assets/g6/README.md",
+      "passed": true
+    },
+    {
+      "check": "G6资源准备执行记录.md link ../assets/g6/selection.json",
+      "passed": true
+    },
+    {
+      "check": "G6资源准备执行记录.md link ../assets/art/g6-v1/",
+      "passed": true
+    },
+    {
+      "check": "G6资源准备执行记录.md link ../artifacts/g6-review/review.json",
+      "passed": true
+    },
+    {
+      "check": "G6资源准备执行记录.md link ../artifacts/g6-review/g6_contact_sheet.png",
+      "passed": true
+    },
+    {
+      "check": "G6资源准备执行记录.md link ../artifacts/g6-review/G6-01_contact.png",
+      "passed": true
+    },
+    {
+      "check": "G6资源准备执行记录.md link ../artifacts/g6-review/G6-02_contact.png",
+      "passed": true
+    },
+    {
+      "check": "G6资源准备执行记录.md link ../artifacts/g6-review/G6-03_contact.png",
+      "passed": true
+    },
+    {
+      "check": "G6资源准备执行记录.md link ../artifacts/g6-review/G6-04_contact.png",
+      "passed": true
+    },
+    {
+      "check": "G6资源准备执行记录.md link ../artifacts/g6-review/G6-05_contact.png",
+      "passed": true
+    },
+    {
+      "check": "G6资源准备执行记录.md link ../artifacts/g6-review/G6-06_contact.png",
+      "passed": true
+    },
+    {
+      "check": "G6资源准备执行记录.md link ../artifacts/g6-review/selection-check.json",
+      "passed": true
+    },
+    {
+      "check": "G6资源准备执行记录.md link ../assets/g6/catalog.json",
+      "passed": true
+    },
+    {
+      "check": "G6资源准备执行记录.md link ../assets/g6/资源清单.csv",
+      "passed": true
+    },
+    {
+      "check": "G6资源准备执行记录.md link ../动作或者图片描述/G6批量生图任务单.md",
+      "passed": true
+    },
+    {
+      "check": "G6资源准备执行记录.md link G6资源制作规范.md",
+      "passed": true
+    },
+    {
+      "check": "G6资源准备执行记录.md link ../tools/prepare_g6_pack.py",
+      "passed": true
+    },
+    {
+      "check": "G6资源准备执行记录.md link ../tools/slice_g6_atlas.py",
+      "passed": true
+    },
+    {
+      "check": "G6资源准备执行记录.md link ../requirements-g6.txt",
+      "passed": true
+    },
+    {
+      "check": "G6资源准备执行记录.md link ../artifacts/g6-preparation/pack-check.json",
+      "passed": true
+    },
+    {
+      "check": "G6资源准备执行记录.md link ../artifacts/verification/g0-20261015-174043-695380/report.md",
+      "passed": true
+    }
+  ]
+}

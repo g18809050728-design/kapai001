@@ -1,0 +1,8 @@
+{
+    "stage":  "G2",
+    "verification":  "failed",
+    "stage_status":  "in_progress",
+    "holdback_count":  54,
+    "failure":  "headless_tests returned exit code 1; expected 0. See E:\\desktop\\项目设计\\项目设计\\artifacts\\verification\\g2-20261014-233151-578-1001a5",
+    "godot":  "4.7.2.stable.official.ed1daf0bf"
+}

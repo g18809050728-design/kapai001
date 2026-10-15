@@ -1,0 +1,54 @@
+[
+  {
+    "id": "L01",
+    "name_key": "scene.L01.name",
+    "prepare_effects": [
+      {
+        "op": "heal",
+        "amount": 2,
+        "target": "player"
+      }
+    ],
+    "battle_limit": 3
+  },
+  {
+    "id": "L02",
+    "name_key": "scene.L02.name",
+    "prepare_random": {
+      "options": [
+        [
+          {
+            "op": "heal",
+            "amount": 1,
+            "target": "player"
+          }
+        ],
+        [
+          {
+            "op": "gain_focus",
+            "amount": 1
+          }
+        ],
+        [
+          {
+            "op": "draw",
+            "amount": 1
+          }
+        ],
+        [
+          {
+            "op": "complete",
+            "amount": 3
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "id": "L03",
+    "name_key": "scene.L03.name",
+    "modifiers": {
+      "first_work_cost_discount": 1
+    }
+  }
+]

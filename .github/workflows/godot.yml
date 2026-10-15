@@ -1,0 +1,33 @@
+name: Godot verification
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install GDScript formatter
+        run: python -m pip install -r requirements-dev.txt
+      - name: Download pinned Godot
+        shell: pwsh
+        run: |
+          $archive = Join-Path $env:RUNNER_TEMP "Godot_v4.7.2-stable_win64.exe.zip"
+          $install = Join-Path $env:RUNNER_TEMP "godot"
+          curl.exe --fail --location --retry 3 --retry-delay 2 "https://downloads.godotengine.org/?version=4.7.2&flavor=stable&slug=win64.exe.zip" --output $archive
+          if ($LASTEXITCODE -ne 0) { throw "Godot download failed." }
+          $actualHash = (Get-FileHash -LiteralPath $archive -Algorithm SHA256).Hash.ToLowerInvariant()
+          $expectedHash = "731980f9608d61333e5baf54a2ef17210acc7a538446c0cb9969f002aca1e953"
+          if ($actualHash -ne $expectedHash) { throw "Godot archive SHA-256 mismatch." }
+          Expand-Archive -LiteralPath $archive -DestinationPath $install
+          $env:GODOT_BIN = (Get-ChildItem -LiteralPath $install -Filter "Godot_v4.7.2-stable_win64.exe" -File -Recurse | Select-Object -First 1).FullName
+          "GODOT_BIN=$env:GODOT_BIN" | Out-File -FilePath $env:GITHUB_ENV -Append
+      - name: Verify G1
+        shell: pwsh
+        run: .\tools\verify_g1.ps1

@@ -1,0 +1,14 @@
+{
+  "created_by": "Pillow visual review aid",
+  "source": "assets/g6/candidates/*/slicing.json",
+  "sheets": [
+    "artifacts/g6-review/G6-01_contact.png",
+    "artifacts/g6-review/G6-02_contact.png",
+    "artifacts/g6-review/G6-03_contact.png",
+    "artifacts/g6-review/G6-04_contact.png",
+    "artifacts/g6-review/G6-05_contact.png",
+    "artifacts/g6-review/G6-06_contact.png"
+  ],
+  "slice_count": 46,
+  "note": "Contact sheets are review aids derived from candidate slices; not selected game resources."
+}

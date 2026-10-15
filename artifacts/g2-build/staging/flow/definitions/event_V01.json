@@ -1,0 +1,80 @@
+{
+  "kind": "event",
+  "id": "V01",
+  "source": {
+    "path": "docs/交大四年_DDL战争_统一设计文档.md",
+    "section": "event ID V01",
+    "upstream_section": "§10.2 随机事件",
+    "source_lines": [
+      432,
+      436,
+      449
+    ],
+    "source_row": "| V01 | 节日放假/1～8 | 回老家：白饰品1件；出去玩：蓝卡三选一；在家打游戏：恢复24精力 |"
+  },
+  "behavior_refs": [
+    "docs/内容层契约.md §5, §8.1, §8.5",
+    "src/content/content_db.gd::EVENT_OP_FIELDS and _validate_event_options (schema registration only)",
+    "docs/局流程契约.md §8 choose_event transaction contract"
+  ],
+  "definition": {
+    "id": "V01",
+    "name_key": "event.v01.name",
+    "terms": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "once_per_run": true,
+    "options": [
+      {
+        "option_id": "return_home",
+        "label_key": "event.option.return_home",
+        "cost": {},
+        "effects": [
+          {
+            "op": "gain_relic",
+            "rarity": "white",
+            "count": 1,
+            "fallback_money": 20
+          }
+        ]
+      },
+      {
+        "option_id": "travel",
+        "label_key": "event.option.travel",
+        "cost": {},
+        "effects": [
+          {
+            "op": "gain_card",
+            "rarity": "blue",
+            "candidate_count": 3
+          }
+        ]
+      },
+      {
+        "option_id": "play_games",
+        "label_key": "event.option.play_games",
+        "cost": {},
+        "effects": [
+          {
+            "op": "heal",
+            "amount": 24
+          }
+        ]
+      },
+      {
+        "option_id": "leave",
+        "label_key": "event.option.leave",
+        "cost": {},
+        "effects": []
+      }
+    ]
+  },
+  "status": "schema_validated_runtime_executor_missing"
+}

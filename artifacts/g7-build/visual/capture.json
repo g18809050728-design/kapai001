@@ -1,0 +1,89 @@
+{
+	"isolated_storage": true,
+	"screens": [
+		{
+			"label": "01-menu",
+			"path": "res://artifacts/g7-build/visual/01-menu.png",
+			"revision": 0,
+			"run_id": null,
+			"save_error": 0,
+			"screen": "menu",
+			"window_size": [
+				1280,
+				800
+			]
+		},
+		{
+			"label": "02-settings",
+			"path": "res://artifacts/g7-build/visual/02-settings.png",
+			"revision": 0,
+			"run_id": null,
+			"save_error": 0,
+			"screen": "menu",
+			"window_size": [
+				1280,
+				800
+			]
+		},
+		{
+			"label": "03-setup",
+			"path": "res://artifacts/g7-build/visual/03-setup.png",
+			"revision": 0,
+			"run_id": null,
+			"save_error": 0,
+			"screen": "menu",
+			"window_size": [
+				1280,
+				800
+			]
+		},
+		{
+			"label": "04-map",
+			"path": "res://artifacts/g7-build/visual/04-map.png",
+			"revision": 0,
+			"run_id": "run_dd6ed058be70f4fbfb1f161a",
+			"save_error": 0,
+			"screen": "map",
+			"window_size": [
+				1280,
+				800
+			]
+		},
+		{
+			"label": "05-battle",
+			"path": "res://artifacts/g7-build/visual/05-battle.png",
+			"revision": 1,
+			"run_id": "run_dd6ed058be70f4fbfb1f161a",
+			"save_error": 0,
+			"screen": "battle",
+			"window_size": [
+				1280,
+				800
+			]
+		},
+		{
+			"label": "06-choice",
+			"path": "res://artifacts/g7-build/visual/06-choice.png",
+			"revision": 2,
+			"run_id": "run_dd6ed058be70f4fbfb1f161a",
+			"save_error": 0,
+			"screen": "battle",
+			"window_size": [
+				1280,
+				800
+			]
+		},
+		{
+			"label": "07-battle-960",
+			"path": "res://artifacts/g7-build/visual/07-battle-960.png",
+			"revision": 2,
+			"run_id": "run_dd6ed058be70f4fbfb1f161a",
+			"save_error": 0,
+			"screen": "battle",
+			"window_size": [
+				960,
+				640
+			]
+		}
+	]
+}

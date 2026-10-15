@@ -1,0 +1,2 @@
+# Offline G6 atlas slicing only; no image generation service is invoked.
+Pillow>=12.1.0,<13

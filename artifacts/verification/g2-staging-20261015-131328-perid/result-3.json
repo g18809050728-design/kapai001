@@ -1,0 +1,6 @@
+﻿{
+    "command":  "python tools/verify_g2_staging.py --batch cards",
+    "exit_code":  1,
+    "stdout":  "stdout-3.txt",
+    "stderr":  "stderr-3.txt"
+}

@@ -1,0 +1,7 @@
+﻿{
+    "tools/verify_g2_staging.py":  "4abe83cc18aaeb15e54ad0b987d7e4704e5f7b167ed46052de9cbc854ff2a0f9",
+    "data/manifests/content_deferred.json":  "61eb9e0a05d8e19413ffc07f7385f0f36752362a27a0ec88da5e10a8a17a1b07",
+    "data/manifests/campus_mvp.json":  "67d5178485b519ad9cee0fb3ff5f3ada873a0ed58f84d6d592433a1e7a7a7ae7",
+    "docs/baselines/g0.json":  "b2af089b1adeb58e1ac383c1338d2073fcc646667040579dde7f882a3e4ecbf9",
+    "tools/test_verify_g2_staging.py":  "0751dc2788b108c54955c62a9cce869cb85aefa4f9e2c4ccd8be99a8f05dc1f8"
+}

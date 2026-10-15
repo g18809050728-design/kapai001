@@ -1,0 +1,19 @@
+{
+  "docs/baselines/g0.json": "b2af089b1adeb58e1ac383c1338d2073fcc646667040579dde7f882a3e4ecbf9",
+  "artifacts/g2-build/integrate_content.py": "48183f7a38b9f56c4e878f92fa8d38613ddae783853d1b0cf8143a054587ddfa",
+  "artifacts/g2-build/load_candidate.gd": "99abce24ecd50173e0f0914d625fba91b2a26c400ad02c29c7aab5387213c17c",
+  "tools/prepare_g2_data.py": "6b16f3fd384e186857fcdd47e57bd1b742f85b34874b1f5c1c94e4731f137907",
+  "src/content/content_db.gd": "3dbd9078fc9a12fd9d411cfb462afe15a6563d5ff2eb1ef5749b4996fa3b2c56",
+  ".godot/g2_full_candidate/definitions/cards.json": "756cf15552820915a08b54f8154afd511d06eb48272942bd867446c9ef54ffed",
+  ".godot/g2_full_candidate/definitions/characters.json": "9ec1607ac2017952c426a3d546f75cfd4c6c5323b6e5b8b8606ac4bbb880a585",
+  ".godot/g2_full_candidate/definitions/encounters.json": "c6bf29c1171f70994546cf4165cc73bb7a322352b38eee7cd11bc7f74c08c248",
+  ".godot/g2_full_candidate/definitions/events.json": "b6a85c83ba3bdf5e999ce3af2222fa18abebd4ed209107ff08a11305f37eff75",
+  ".godot/g2_full_candidate/definitions/relics.json": "49063b8b7694823958d565a6c5aa595936d4af1edb7c87dbb54b44a83fd60efb",
+  ".godot/g2_full_candidate/definitions/rulesets.json": "3746cb26b9cc73ca62d3aaf40157f3bc878d2845ef709112b189247d581b67a3",
+  ".godot/g2_full_candidate/definitions/scenes.json": "39995ca90a2766b60c55d6e41a96c4c68c7d6a332dd1e5c419de2827e1a67b8d",
+  ".godot/g2_full_candidate/definitions/statuses.json": "e55088131462b08378bbccd969cccd11d280ebf990225b451bcb11cb277ca829",
+  ".godot/g2_full_candidate/definitions/tasks.json": "a7b5a171c80ed12088e89ac9293236eabad998d51119df426b39b1ea4553c5ec",
+  ".godot/g2_full_candidate/definitions/units.json": "b762827412108941ca7105c509eb1ce008ea7781ad876e4ef20bd308ecbf2f7f",
+  ".godot/g2_full_candidate/manifests/campus_mvp.json": "11e1c50d1e41f8438a479629104a8cb340c5b60d990b6c15f7de17bf9c6c2646",
+  ".godot/g2_full_candidate/manifests/content_deferred.json": "a9a820f844fc2261fed2741d83c26c44d8f7e8d0d011228a006bd6529267d3b9"
+}

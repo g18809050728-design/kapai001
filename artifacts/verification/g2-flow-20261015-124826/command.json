@@ -1,0 +1,43 @@
+[
+  {
+    "name": "staging",
+    "command": [
+      "C:\\Users\\Dev.LI\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+      "artifacts/g2-build/staging/flow/build_flow.py"
+    ],
+    "cwd": "E:\\desktop\\项目设计\\项目设计"
+  },
+  {
+    "name": "python_compile",
+    "command": [
+      "C:\\Users\\Dev.LI\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+      "-m",
+      "compileall",
+      "-q",
+      "artifacts/g2-build/staging/flow/build_flow.py",
+      "artifacts/g2-build/staging/flow/verify_flow.py"
+    ],
+    "cwd": "E:\\desktop\\项目设计\\项目设计"
+  },
+  {
+    "name": "gdformat_check",
+    "command": [
+      "gdformat",
+      "--check",
+      "artifacts/g2-build/staging/flow/schema_probe.gd"
+    ],
+    "cwd": "E:\\desktop\\项目设计\\项目设计"
+  },
+  {
+    "name": "godot_schema_probe",
+    "command": [
+      "F:\\GoDot\\Godot_v4.7.2-stable_win64_console.exe",
+      "--headless",
+      "--path",
+      ".",
+      "--script",
+      "res://artifacts/g2-build/staging/flow/schema_probe.gd"
+    ],
+    "cwd": "E:\\desktop\\项目设计\\项目设计"
+  }
+]

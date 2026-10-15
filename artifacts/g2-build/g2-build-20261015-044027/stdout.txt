@@ -1,0 +1,4 @@
+G2 production build plan: E:\desktop\项目设计\项目设计\artifacts\g2-build\g2-build-20261015-044027
+Frozen definitions staged for construction: 54
+Production manifest mutated: False
+Fixture namespace: test_

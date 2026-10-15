@@ -1,0 +1,41 @@
+{
+  "kind": "character",
+  "id": "P04",
+  "source": {
+    "path": "docs/交大四年_DDL战争_统一设计文档.md",
+    "section": "character ID P04",
+    "table_heading": "4. 人物重设计",
+    "line": 155,
+    "row": "| P04 唐以宁·小组协调者 | 社团工牌、课程便签；可靠但不会拒绝 | 每回合首张合作牌结算后获得2放松，考试备考面也触发 | K43、K44 | A04 | 从包办全部到合理分工 |"
+  },
+  "behavior_refs": [
+    "src/content/content_db.gd::_validate_passive",
+    "src/battle/battle_engine.gd::_run_character_passive"
+  ],
+  "definition": {
+    "id": "P04",
+    "name_key": "character.P04.name",
+    "starter_cards": [
+      "K43",
+      "K44"
+    ],
+    "starter_relic_id": "A04",
+    "passive": {
+      "id": "p04_first_cooperation_relax",
+      "trigger": "cooperation_card_resolved",
+      "count": 1,
+      "limit": {
+        "per": "round",
+        "times": 1
+      },
+      "effects": [
+        {
+          "op": "relax",
+          "amount": 2
+        }
+      ]
+    }
+  },
+  "status": "staged_schema_and_reference_verified_behavior_deferred_to_G3_G4",
+  "blockers": []
+}

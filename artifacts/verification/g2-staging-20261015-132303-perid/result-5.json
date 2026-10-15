@@ -1,0 +1,6 @@
+﻿{
+    "command":  "python tools/verify_g2_staging.py --batch flow",
+    "exit_code":  1,
+    "stdout":  "stdout-5.txt",
+    "stderr":  "stderr-5.txt"
+}

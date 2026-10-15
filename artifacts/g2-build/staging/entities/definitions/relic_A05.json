@@ -1,0 +1,43 @@
+{
+  "kind": "relic",
+  "id": "A05",
+  "source": {
+    "path": "docs/交大四年_DDL战争_统一设计文档.md",
+    "section": "relic ID A05",
+    "table_heading": "8. 饰品重设计（24件）",
+    "line": 325,
+    "row": "| A05 | 老妈的饭 | 白 | 每场战斗第3、6回合开始恢复3精力 |"
+  },
+  "behavior_refs": [
+    "src/content/content_db.gd::_validate_hook(round_start)",
+    "src/battle/battle_engine.gd::_run_relic_hooks",
+    "src/battle/battle_engine.gd::_prepare_player_round"
+  ],
+  "definition": {
+    "id": "A05",
+    "name_key": "relic.A05.name",
+    "availability": "drop",
+    "rarity": "white",
+    "tags": [],
+    "hooks": [
+      {
+        "at": "round_start",
+        "rounds": [
+          3,
+          6
+        ],
+        "effects": [
+          {
+            "op": "heal",
+            "amount": 3,
+            "target": "player"
+          }
+        ]
+      }
+    ]
+  },
+  "status": "staged_schema_and_reference_verified_behavior_deferred_to_G3_G4",
+  "blockers": [
+    "The hook handler exists, but execution of A05 on exactly rounds 3 and 6 remains deferred to G3/G4 behavior acceptance."
+  ]
+}

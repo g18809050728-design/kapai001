@@ -1,0 +1,20 @@
+SCRIPT ERROR: Parse Error: Cannot infer the type of "view" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/suites/test_ui_battle_choice.gd:46)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/run_ui_tests.gd:11)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "seen" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/suites/test_ui_battle_choice.gd:47)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/run_ui_tests.gd:11)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "after_first" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/suites/test_ui_battle_choice.gd:49)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/run_ui_tests.gd:11)
+ERROR: Failed to load script "res://tests/suites/test_ui_battle_choice.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/run_ui_tests.gd:11)
+ERROR: G7 UI suite failed to load: test_ui_battle_choice
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/run_ui_tests.gd:22)

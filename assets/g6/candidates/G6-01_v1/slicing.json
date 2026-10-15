@@ -1,0 +1,180 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-10-15T09:56:41.934283+00:00",
+  "batch_id": "G6-01",
+  "variant": "high",
+  "dry_run": false,
+  "resource_status": "candidate_unreviewed",
+  "catalog_file": "E:\\desktop\\项目设计\\项目设计\\assets\\g6\\catalog.json",
+  "catalog_sha256": "9b1349d7bdc558c7df792bec6cc54047da5835b4804bf26de3d4f503c45bc7cc",
+  "source_file": "E:\\desktop\\项目设计\\项目设计\\assets\\g6\\sources\\G6-01_v1.png",
+  "source_sha256": "ffd1178ae9ed715dde968efe7f4591fc1c0559cfc8f2c793e68d04e5753a5fc1",
+  "source_size": [
+    3840,
+    2160
+  ],
+  "expected_size": {
+    "width": 3840,
+    "height": 2160
+  },
+  "output_dir": "E:\\desktop\\项目设计\\项目设计\\assets\\g6\\candidates\\G6-01_v1",
+  "grid": {
+    "columns": 3,
+    "rows": 2
+  },
+  "crop": {
+    "inset_ratio": 0.04,
+    "aspect_ratio": [
+      4,
+      5
+    ]
+  },
+  "rounding": {
+    "grid": "floor(index * size / count)",
+    "inset": "ceil per side",
+    "aspect": "floor; centered; odd remainder on right/bottom",
+    "boxes": "[left, top, right, bottom), input pixel coordinates"
+  },
+  "source_mode": "RGB",
+  "source_has_alpha_channel": false,
+  "source_has_transparency_metadata": false,
+  "source_contains_transparent_pixels": false,
+  "output_mode": "RGB",
+  "background_removed": false,
+  "resized": false,
+  "warnings": [],
+  "slices": [
+    {
+      "asset_id": "P01",
+      "row": 0,
+      "column": 0,
+      "cell_box": [
+        0,
+        0,
+        1280,
+        1080
+      ],
+      "crop_box": [
+        243,
+        44,
+        1036,
+        1036
+      ],
+      "output_file": "portraits/P01_v1.png",
+      "width": 793,
+      "height": 992,
+      "sha256": "61871a29312b54da3af9ea7c0282a51d3983e3d87cd366c7e00de93a07265b52",
+      "contains_transparent_pixels": false
+    },
+    {
+      "asset_id": "P04",
+      "row": 0,
+      "column": 1,
+      "cell_box": [
+        1280,
+        0,
+        2560,
+        1080
+      ],
+      "crop_box": [
+        1523,
+        44,
+        2316,
+        1036
+      ],
+      "output_file": "portraits/P04_v1.png",
+      "width": 793,
+      "height": 992,
+      "sha256": "ccbe5113088528778da048d204843d42e592f3a2edfd71335bfe09bdb1bb6b8f",
+      "contains_transparent_pixels": false
+    },
+    {
+      "asset_id": "F01",
+      "row": 0,
+      "column": 2,
+      "cell_box": [
+        2560,
+        0,
+        3840,
+        1080
+      ],
+      "crop_box": [
+        2803,
+        44,
+        3596,
+        1036
+      ],
+      "output_file": "portraits/F01_v1.png",
+      "width": 793,
+      "height": 992,
+      "sha256": "c8475ea24024e417a25e5818507dce8077c4b121885aecc3a197ed22f8cb67f8",
+      "contains_transparent_pixels": false
+    },
+    {
+      "asset_id": "F02",
+      "row": 1,
+      "column": 0,
+      "cell_box": [
+        0,
+        1080,
+        1280,
+        2160
+      ],
+      "crop_box": [
+        243,
+        1124,
+        1036,
+        2116
+      ],
+      "output_file": "portraits/F02_v1.png",
+      "width": 793,
+      "height": 992,
+      "sha256": "bce0bec7fa193e01b3062d923cb3734c0cddb83e19b821f774373631bd67f527",
+      "contains_transparent_pixels": false
+    },
+    {
+      "asset_id": "F03",
+      "row": 1,
+      "column": 1,
+      "cell_box": [
+        1280,
+        1080,
+        2560,
+        2160
+      ],
+      "crop_box": [
+        1523,
+        1124,
+        2316,
+        2116
+      ],
+      "output_file": "portraits/F03_v1.png",
+      "width": 793,
+      "height": 992,
+      "sha256": "c247dbedbd2f9982b89e0aeff5043a66f9317bb309998442fcd9f07f2b3ed19a",
+      "contains_transparent_pixels": false
+    },
+    {
+      "asset_id": "F04",
+      "row": 1,
+      "column": 2,
+      "cell_box": [
+        2560,
+        1080,
+        3840,
+        2160
+      ],
+      "crop_box": [
+        2803,
+        1124,
+        3596,
+        2116
+      ],
+      "output_file": "portraits/F04_v1.png",
+      "width": 793,
+      "height": 992,
+      "sha256": "41942a52714ca5af0ed2e70bff60af7012a03caa9e6e3af03c0a5776dbbabf15",
+      "contains_transparent_pixels": false
+    }
+  ]
+}

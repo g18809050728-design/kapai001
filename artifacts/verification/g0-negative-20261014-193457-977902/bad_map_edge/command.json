@@ -1,0 +1,12 @@
+{
+  "argv": [
+    "F:\\minGw64\\ucrt64\\bin\\python.exe",
+    "E:\\desktop\\项目设计\\项目设计\\tools\\verify_g0.py",
+    "--root",
+    "C:\\Users\\Dev.LI\\AppData\\Local\\Temp\\ddl-g0-audit-155_tl6b\\bad_map_edge",
+    "--run-id",
+    "test-bad_map_edge"
+  ],
+  "cwd": "E:\\desktop\\项目设计\\项目设计",
+  "mode": "g0_readiness"
+}

@@ -1,0 +1,13 @@
+{
+  "argv": [
+    "F:\\minGw64\\ucrt64\\bin\\python.exe",
+    "E:\\desktop\\项目设计\\项目设计\\tools\\verify_g0.py",
+    "--root",
+    "C:\\Users\\Dev.LI\\AppData\\Local\\Temp\\ddl-g0-audit-cbgz0eeh\\documents_only",
+    "--run-id",
+    "test-documents_only",
+    "--documents-only"
+  ],
+  "cwd": "E:\\desktop\\项目设计\\项目设计",
+  "mode": "documents_only"
+}

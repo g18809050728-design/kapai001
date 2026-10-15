@@ -1,0 +1,291 @@
+{
+  "batch_id": "g2-cards-20261015",
+  "stage": "G2 staging; not production-enabled",
+  "source_section": "统一设计文档 §5.1–§5.7，卡牌 ID 表行；卡牌专属原文以 source_line 记录",
+  "definition_file": "cards.json",
+  "production_manifest_mutated": false,
+  "g0_scope_mutated": false,
+  "holdback_mutated": false,
+  "fixture_content": false,
+  "input_sha256": {
+    "docs/baselines/g0.json": "b2af089b1adeb58e1ac383c1338d2073fcc646667040579dde7f882a3e4ecbf9",
+    "docs/G2冻结未完成项.md": "7d930047fe8d523ce289f2d728a7a583bcb6abe89221a298459322a712353bbb",
+    "data/manifests/content_deferred.json": "61eb9e0a05d8e19413ffc07f7385f0f36752362a27a0ec88da5e10a8a17a1b07",
+    "docs/交大四年_DDL战争_统一设计文档.md": "733e13e1ef763c7c18c8071ce4fb9eeddd8fb2382dabd22b46e6b5ea32b84136",
+    "docs/内容层契约.md": "95b7f32bc3e15b63b36f7b9f039ddb3fa1739ea605db9de782cdb1fd2cecdc1b",
+    "docs/战斗模块契约.md": "14fc3d67095ccc0af9400008f043a5a5c8814adf73ac17c71005ad40d217de10",
+    "src/content/content_db.gd": "3dbd9078fc9a12fd9d411cfb462afe15a6563d5ff2eb1ef5749b4996fa3b2c56",
+    "src/battle/battle_card_rules.gd": "5f2addc1631e6341fb1e558aff2d597d022ce711385d30d00cec92daee481c9f",
+    "src/battle/battle_engine.gd": "e2d408defae80a8142c9625c71a3333445a3155a8f302c575ee39078b9a1ccbb",
+    "tests/suites/test_content_loader.gd": "0c2507b153e5da138e83b844a8833df5fba325c8d7697ff0150fe75e5baa743b",
+    "tests/suites/test_battle_engine_begin.gd": "e1e7e631df0e9ed6a84c8813812aecedd3da4407116bb1cda3a327e31c72f3cd",
+    "tests/suites/test_battle_phase_flow.gd": "1b32c1ae7c4bd46833dfe44aea03acbb82b0afb79d61af551241ac20668eb52c",
+    "tools/verify_g2_staging.py": "b3eca3d3a899f7548c6a56774b882e38b448e35785112c84fccf397e977cdba0",
+    "artifacts/g2-build/staging/cards/cards.json": "1f80023ee5157898c42bd492cee4dcfdc5869950cebe8e53f8a817580d01bb1d",
+    "artifacts/g2-build/staging/cards/schema_probe.gd": "0820dd9b7fe261c631278662c88869d067913eb39f6b28016547ae6f13c4f356",
+    "artifacts/g2-build/staging/cards/schema_probe.exit_code.txt": "9585fbece5c402088f2d6a2def7e60d1c7ffecc24b16d32d5823a064b008935b",
+    "artifacts/g2-build/staging/cards/schema_probe.stdout.txt": "0114dd67e5d10bae1dc187f34d0288cf0342c7aea175b650bb177e362a89a226",
+    "artifacts/g2-build/staging/cards/schema_probe.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "artifacts/g2-build/staging/cards/schema_probe.command.json": "59519a846cccba24ac373600dfc501aec655102b4aabf7e50c8f35b2ebe3f6bd",
+    "artifacts/g2-build/staging/cards/schema_probe.environment.json": "ea6fa70ed18951a5fd0d184690d93ad4012d409952f21fbbd8be3517002e8d1d",
+    "artifacts/g2-build/staging/cards/build_cards.py": "adb0584cf3d2f28e8cec56e31d17d489485b25470c7bcb265852ce7594f709fb",
+    "artifacts/g2-build/staging/entities/definitions/unit_F01.json": "b9a02bb78c45fbc5182cfdeccd7533f4b4a68273c97b6a5a99bac9631454dcf2",
+    "artifacts/g2-build/staging/entities/definitions/unit_F02.json": "a96de39d9b4fce56c61071bee99b4e994f9819124fb0b730761d513647492e67",
+    "artifacts/g2-build/staging/entities/definitions/unit_F03.json": "c64e65dab6635767bc6a4c776b6261b277422c49e32262672f9a324fcfad046e",
+    "artifacts/g2-build/staging/entities/definitions/unit_F04.json": "4126aaa9bfeff4fb25cd2a18eb1c0334355f54962a77751a994c1617a9b0b6ed",
+    "artifacts/g2-build/staging/entities/definitions/scene_L01.json": "b1b11f550749442b54350a228c1d5ebe9d84377a42e92d8a2cc0696f885e98ea",
+    "artifacts/g2-build/staging/entities/definitions/scene_L02.json": "52887141b136db02b92a7deb4671febd6f299e893e4741f32487754efb62ef1c",
+    "artifacts/g2-build/staging/entities/definitions/scene_L03.json": "c5e193c163ac31fa945d51154399382be569f6fbc73da9624c992b8823ec19b0"
+  },
+  "cards": [
+    {
+      "id": "K05",
+      "source_line": 184,
+      "behavior": "complete 14; same-segment +4 if K04 was played this round; upgrade base 18; references card K04",
+      "source_row": "| K05 | 细心写 | 2·工作·白 | 完成14；本回合打过K04则额外完成4，合并为同一段 | 基础18 |"
+    },
+    {
+      "id": "K06",
+      "source_line": 185,
+      "behavior": "complete 3 and gain_focus 1; exhaust; upgrade completion 5",
+      "source_row": "| K06 | 潦草急就 | 0·工作·蓝 | 完成3，获得1专注；耗尽 | 完成5 |"
+    },
+    {
+      "id": "K07",
+      "source_line": 186,
+      "behavior": "recall one discard card to hand; exhaust; unavailable without a legal discard target; upgrade cost 0",
+      "source_row": "| K07 | 复盘 | 1·策略·蓝 | 选弃牌堆1张加入手牌；耗尽；无目标不可用 | 费用0 |"
+    },
+    {
+      "id": "K08",
+      "source_line": 187,
+      "behavior": "heal 3, relax 3, remove one anxiety; exhaust; upgrade heal 5",
+      "source_row": "| K08 | 运动 | 1·策略·蓝 | 恢复3精力，获得3放松，移除1焦虑；耗尽 | 恢复5 |"
+    },
+    {
+      "id": "K10",
+      "source_line": 189,
+      "behavior": "pay vitality_cost 4, gain_focus 2; exhaust; upgrade vitality_cost 3",
+      "source_row": "| K10 | 熬夜 | 0·策略·蓝 | 支付4精力，获得2专注；耗尽 | 支付3 |"
+    },
+    {
+      "id": "K12",
+      "source_line": 191,
+      "behavior": "discard up to 2 then draw 1 plus actual discarded count; upgrade pre_effects relax 2",
+      "source_row": "| K12 | 转换思路 | 1·策略·白 | 弃至多2张，抽实际弃牌数+1 | 获得2放松后再执行 |"
+    },
+    {
+      "id": "K13",
+      "source_line": 197,
+      "behavior": "gain one compile; once per card instance per round; upgrade compile 2",
+      "source_row": "| K13 | 编译 | 0·策略·白 | 获得1编译；每实例每回合限打1次 | 编译2 |"
+    },
+    {
+      "id": "K14",
+      "source_line": 198,
+      "behavior": "complete 5 plus 3 in the same segment when compile is present; upgrade base 7",
+      "source_row": "| K14 | 打印Hello | 1·工作·白 | 完成5；编译≥1时同段+3 | 基础7 |"
+    },
+    {
+      "id": "K15",
+      "source_line": 199,
+      "behavior": "complete 4 and draw 1; upgrade completion 6",
+      "source_row": "| K15 | 循环练习 | 1·工作·白 | 完成4，抽1 | 完成6 |"
+    },
+    {
+      "id": "K16",
+      "source_line": 200,
+      "behavior": "choose one negative status and remove up to 2 stacks; gain compile 1; upgrade compile 2",
+      "source_row": "| K16 | 调试 | 1·策略·蓝 | 净化2层负面，获得1编译 | 编译2 |"
+    },
+    {
+      "id": "K19",
+      "source_line": 203,
+      "behavior": "relax 5 and choose another hand card to retain through discard; upgrade relax 8",
+      "source_row": "| K19 | 版本控制 | 1·策略·白 | 获得5放松，保留另一张手牌 | 放松8 |"
+    },
+    {
+      "id": "K43",
+      "source_line": 242,
+      "behavior": "summon F01; exhaust; upgrade new unit vitality +3; reference unit F01",
+      "source_row": "| K43 | 室友搭把手 | 1·合作·白 | 召入F01；耗尽 | 单位上限精力+3 |"
+    },
+    {
+      "id": "K44",
+      "source_line": 243,
+      "behavior": "summon F02; exhaust; upgrade new unit cooperation +2; reference unit F02",
+      "source_row": "| K44 | 请教学霸 | 2·合作·白 | 召入F02；耗尽 | 单位协作+2 |"
+    },
+    {
+      "id": "K45",
+      "source_line": 244,
+      "behavior": "summon F03; exhaust; upgrade new unit vitality +3; reference unit F03",
+      "source_row": "| K45 | 请教助教 | 1·合作·蓝 | 召入F03；耗尽 | 单位上限精力+3 |"
+    },
+    {
+      "id": "K46",
+      "source_line": 245,
+      "behavior": "summon F04; exhaust; upgrade new unit vitality +4; reference unit F04",
+      "source_row": "| K46 | 组队分工 | 2·合作·蓝 | 召入F04；耗尽 | 单位上限精力+4 |"
+    },
+    {
+      "id": "K51",
+      "source_line": 257,
+      "behavior": "establish L01; exhaust; upgrade cost 0; reference scene L01",
+      "source_row": "| K51 | 回到自家 | 1·场景·蓝 | 建立L01；耗尽 | 费用0 |"
+    },
+    {
+      "id": "K52",
+      "source_line": 258,
+      "behavior": "establish L02; exhaust; upgrade pre_effects relax 3 before scene establishment; reference scene L02",
+      "source_row": "| K52 | 宿舍自习 | 1·场景·白 | 建立L02；耗尽 | 建立前获得3放松 |"
+    },
+    {
+      "id": "K53",
+      "source_line": 259,
+      "behavior": "establish L03; exhaust; upgrade pre_effects relax 4 before scene establishment; reference scene L03",
+      "source_row": "| K53 | 找到自习室 | 2·场景·紫 | 建立L03；耗尽 | 建立前获得4放松 |"
+    },
+    {
+      "id": "K59",
+      "source_line": 270,
+      "behavior": "complete 12 plus 10 in the same segment when DDL <= 3; upgrade base 16",
+      "source_row": "| K59 | 临时抱佛脚 | 2·工作·紫 | 完成12；当前DDL≤3时同段+10 | 基础16 |"
+    },
+    {
+      "id": "K60",
+      "source_line": 271,
+      "behavior": "relax 4, draw 1, remove one extra_requirements stack from selected task; upgrade relax 7",
+      "source_row": "| K60 | 检查卷面 | 1·策略·白 | 获得4放松，抽1，移除目标任务1层额外要求 | 放松7 |"
+    },
+    {
+      "id": "X01",
+      "source_line": 277,
+      "behavior": "temporary, rarity null, unplayable, no effects; remains eligible for normal end-of-round discard",
+      "source_row": "| X01 | 分心消息 | 临时，不可打出；回合末正常弃置，无被动扣费 |"
+    }
+  ],
+  "reference_closure": {
+    "status": "passed",
+    "ids": [
+      "card/K05",
+      "card/K06",
+      "card/K07",
+      "card/K08",
+      "card/K10",
+      "card/K12",
+      "card/K13",
+      "card/K14",
+      "card/K15",
+      "card/K16",
+      "card/K19",
+      "card/K43",
+      "card/K44",
+      "card/K45",
+      "card/K46",
+      "card/K51",
+      "card/K52",
+      "card/K53",
+      "card/K59",
+      "card/K60",
+      "card/X01"
+    ],
+    "evidence": "artifacts/g2-build/staging/cards/schema_probe.stdout.txt",
+    "scope": "isolated package with staged unit F01-F04 and scene L01-L03; production manifest unchanged"
+  },
+  "schema_and_behavior_mapping": {
+    "schema": "docs/内容层契约.md §7.5–§7.6, §8.1–§8.3; exact CardDef keys and explicit upgrade patches",
+    "registered_ops": [
+      "complete",
+      "gain_focus",
+      "recall_from_discard",
+      "heal",
+      "relax",
+      "remove_status",
+      "discard",
+      "draw",
+      "gain_status",
+      "retain_hand_card",
+      "summon_unit",
+      "establish_scene"
+    ],
+    "registered_card_fields": [
+      "vitality_cost",
+      "limit",
+      "unplayable"
+    ],
+    "runtime_mapping": "docs/战斗模块契约.md §19–§20; src/battle/battle_engine.gd and BattleCardRules; ContentDB validates op fields and upgrade merged faces",
+    "relevant_existing_tests": [
+      "tests/suites/test_content_loader.gd",
+      "tests/suites/test_battle_engine_begin.gd",
+      "tests/suites/test_battle_ops.gd"
+    ],
+    "test_status": "Godot 4.7.2 isolated test_cards_staging package load passed and schema/reference closure passed for all 21 cards; per-card runtime behavior tests remain pending."
+  },
+  "blockers": [
+    {
+      "kind": "production_reference_integration",
+      "ids": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "L01",
+        "L02",
+        "L03"
+      ],
+      "reason": "These references resolve in the isolated staging package using entity staging definitions; production manifest integration remains pending.",
+      "blocks": "production enablement only; isolated staging reference closure passed"
+    }
+  ],
+  "validation_notes": [
+    "All 21 staged cards passed the live ContentDB per-definition schema probe.",
+    "All 21 staged cards passed reference closure in an isolated package containing staged F01-F04 and L01-L03; production manifest was not modified.",
+    "The isolated test_cards_staging package loaded successfully under Godot 4.7.2.",
+    "Per-card handler verification and runtime behavior tests remain pending; no shared G3 test is attributed to these card definitions.",
+    "No numeric values were introduced beyond the cited design rows and contract semantics."
+  ],
+  "artifact_sha256": {
+    "artifacts/g2-build/staging/cards/cards.json": "1f80023ee5157898c42bd492cee4dcfdc5869950cebe8e53f8a817580d01bb1d"
+  },
+  "handler_verification": {
+    "status": "pending_behavior_audit",
+    "ids": []
+  },
+  "behavior_tests": {
+    "status": "pending_card_batch_tests",
+    "ids": []
+  },
+  "schema_probe": {
+    "status": "passed",
+    "ids": [
+      "card/K05",
+      "card/K06",
+      "card/K07",
+      "card/K08",
+      "card/K10",
+      "card/K12",
+      "card/K13",
+      "card/K14",
+      "card/K15",
+      "card/K16",
+      "card/K19",
+      "card/K43",
+      "card/K44",
+      "card/K45",
+      "card/K46",
+      "card/K51",
+      "card/K52",
+      "card/K53",
+      "card/K59",
+      "card/K60",
+      "card/X01"
+    ],
+    "command": "F:/GoDot/Godot_v4.7.2-stable_win64_console.exe --headless --path . --script res://artifacts/g2-build/staging/cards/schema_probe.gd",
+    "exit_code": 0,
+    "evidence": "artifacts/g2-build/staging/cards/schema_probe.stdout.txt",
+    "command_record": "artifacts/g2-build/staging/cards/schema_probe.command.json",
+    "environment_record": "artifacts/g2-build/staging/cards/schema_probe.environment.json",
+    "package_load": "passed"
+  }
+}

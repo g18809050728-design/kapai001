@@ -1,0 +1,9 @@
+{
+  "stage": "G2 candidate integration",
+  "status": "passed",
+  "added_ids": 54,
+  "enabled_ids": 66,
+  "holdback_ids": 0,
+  "production_published": true,
+  "behavior_acceptance": "G3/G4"
+}

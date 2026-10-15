@@ -1,0 +1,66 @@
+[
+    {
+        "name":  "engine_version",
+        "executable":  "",
+        "arguments":  [
+                          "--version"
+                      ]
+    },
+    {
+        "name":  "editor_import",
+        "executable":  "",
+        "arguments":  [
+                          "--headless",
+                          "--editor",
+                          "--path",
+                          "E:\\desktop\\项目设计\\项目设计",
+                          "--quit"
+                      ]
+    },
+    {
+        "name":  "headless_tests",
+        "executable":  "",
+        "arguments":  [
+                          "--headless",
+                          "--path",
+                          "E:\\desktop\\项目设计\\项目设计",
+                          "--script",
+                          "res://tests/run_tests.gd"
+                      ]
+    },
+    {
+        "name":  "test_failure_probe",
+        "executable":  "",
+        "arguments":  [
+                          "--headless",
+                          "--path",
+                          "E:\\desktop\\项目设计\\项目设计",
+                          "--script",
+                          "res://tests/run_tests.gd",
+                          "--",
+                          "--force-failure"
+                      ],
+        "expected_exit":  1
+    },
+    {
+        "name":  "headless_startup",
+        "executable":  "",
+        "arguments":  [
+                          "--headless",
+                          "--path",
+                          "E:\\desktop\\项目设计\\项目设计",
+                          "--quit-after",
+                          "2"
+                      ]
+    },
+    {
+        "name":  "format_check",
+        "executable":  "gdformat",
+        "arguments":  [
+                          "--check",
+                          "src",
+                          "tests"
+                      ],
+        "expected_exit":  0
+    }
+]

@@ -1,0 +1,35 @@
+{
+  "kind": "relic",
+  "id": "A08",
+  "source": {
+    "path": "docs/交大四年_DDL战争_统一设计文档.md",
+    "section": "relic ID A08",
+    "table_heading": "8. 饰品重设计（24件）",
+    "line": 328,
+    "row": "| A08 | 咖啡杯 | 白 | 每战首张K10免除精力支付，其他效果正常 |"
+  },
+  "behavior_refs": [
+    "src/content/content_db.gd::_validate_hook(cost_quote)",
+    "src/battle/battle_card_rules.gd::_quote_cost"
+  ],
+  "definition": {
+    "id": "A08",
+    "name_key": "relic.A08.name",
+    "availability": "drop",
+    "rarity": "white",
+    "tags": [],
+    "hooks": [
+      {
+        "at": "cost_quote",
+        "definition_id": "K10",
+        "skip_vitality_cost": true,
+        "limit": {
+          "per": "battle",
+          "times": 1
+        }
+      }
+    ]
+  },
+  "status": "staged_schema_and_reference_verified_behavior_deferred_to_G3_G4",
+  "blockers": []
+}

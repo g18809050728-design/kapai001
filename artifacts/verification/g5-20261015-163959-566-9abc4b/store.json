@@ -1,0 +1,1 @@
+{"filesystem":"real","hooks":["fail_write","truncate_temp","fail_after_backup","fail_rename"],"passed":true,"profile":"idempotent and conflicting summaries"}

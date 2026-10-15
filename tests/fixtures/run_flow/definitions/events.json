@@ -1,0 +1,198 @@
+[
+  {
+    "id": "test_V01",
+    "name_key": "event.v01.name",
+    "terms": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "once_per_run": true,
+    "options": [
+      {
+        "option_id": "return_home",
+        "label_key": "event.option.return_home",
+        "cost": {},
+        "effects": [
+          {
+            "op": "gain_relic",
+            "rarity": "white",
+            "count": 1,
+            "fallback_money": 20
+          }
+        ]
+      },
+      {
+        "option_id": "travel",
+        "label_key": "event.option.travel",
+        "cost": {},
+        "effects": [
+          {
+            "op": "gain_card",
+            "rarity": "blue",
+            "candidate_count": 3
+          }
+        ]
+      },
+      {
+        "option_id": "play_games",
+        "label_key": "event.option.play_games",
+        "cost": {},
+        "effects": [
+          {
+            "op": "heal",
+            "amount": 24
+          }
+        ]
+      },
+      {
+        "option_id": "leave",
+        "label_key": "event.option.leave",
+        "cost": {},
+        "effects": []
+      }
+    ]
+  },
+  {
+    "id": "test_V03",
+    "name_key": "event.v03.name",
+    "terms": [
+      1,
+      2,
+      3
+    ],
+    "once_per_run": true,
+    "options": [
+      {
+        "option_id": "consult",
+        "label_key": "event.option.consult",
+        "cost": {},
+        "effects": [
+          {
+            "op": "gain_card",
+            "card_pool": [
+              "test_K14",
+              "test_K05",
+              "test_K60"
+            ],
+            "selection_count": 1,
+            "fallback_money": 20
+          }
+        ]
+      },
+      {
+        "option_id": "drop",
+        "label_key": "event.option.drop",
+        "cost": {
+          "vitality": 5
+        },
+        "effects": [
+          {
+            "op": "remove_card",
+            "tag_filter": "basic"
+          }
+        ]
+      },
+      {
+        "option_id": "leave",
+        "label_key": "event.option.leave",
+        "cost": {},
+        "effects": []
+      }
+    ]
+  },
+  {
+    "id": "test_V04",
+    "name_key": "event.v04.name",
+    "terms": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "once_per_run": true,
+    "options": [
+      {
+        "option_id": "rest",
+        "label_key": "event.option.rest",
+        "cost": {},
+        "effects": [
+          {
+            "op": "heal",
+            "amount": 10
+          }
+        ]
+      },
+      {
+        "option_id": "upgrade_work",
+        "label_key": "event.option.upgrade_work",
+        "cost": {
+          "vitality": 6
+        },
+        "effects": [
+          {
+            "op": "upgrade_card",
+            "type_filter": "work"
+          }
+        ]
+      },
+      {
+        "option_id": "leave",
+        "label_key": "event.option.leave",
+        "cost": {},
+        "effects": []
+      }
+    ]
+  },
+  {
+    "id": "test_V10",
+    "name_key": "event.v10.name",
+    "terms": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "once_per_run": true,
+    "options": [
+      {
+        "option_id": "return_card",
+        "label_key": "event.option.return_card",
+        "cost": {},
+        "effects": [
+          {
+            "op": "gain_relic",
+            "relic_id": "test_A15",
+            "fallback_money": 20
+          }
+        ]
+      },
+      {
+        "option_id": "service_desk",
+        "label_key": "event.option.service_desk",
+        "cost": {},
+        "effects": [
+          {
+            "op": "heal",
+            "amount": 6
+          }
+        ]
+      },
+      {
+        "option_id": "leave",
+        "label_key": "event.option.leave",
+        "cost": {},
+        "effects": []
+      }
+    ]
+  }
+]

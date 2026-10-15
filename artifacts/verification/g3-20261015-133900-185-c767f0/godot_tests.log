@@ -1,0 +1,8 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+G2_TEST_MANIFEST_SHA256=60e4f78e220ad78375e9d7e95dc94cdd8ad9519c8cd83ee118c2114fd4a037aa
+G2_TEST_FIXTURE_SHA256=642743e5e2e3b1941fa0effe48c37adf6034ad473210f4c8749782a6c7e6fc1e
+G3-02_TEST_FIXTURE_SHA256=4a8e9a8fdc4c7f21d7268d2b78940e6989d52548ad28b8d0f39b96b1514b5146
+G3-03_PREVIEW_FIXTURE_SHA256=4a8e9a8fdc4c7f21d7268d2b78940e6989d52548ad28b8d0f39b96b1514b5146
+G3-02_MISSING_CARD_ERROR={"code":"CONTENT_INVALID","details":{"id":"test_missing_card","kind":"card","path":"input.cards[0].definition_id"},"message_key":"battle.content.reference_invalid"}
+G1/G2/G3 headless tests passed

@@ -1,0 +1,91 @@
+[
+  {
+    "id": "B01",
+    "name_key": "encounter.b01.name",
+    "kind": "boss",
+    "members": [
+      "B01"
+    ],
+    "base_ddl": 10,
+    "terms": [
+      1
+    ],
+    "exam_flags": [
+      "independent_answer",
+      "fixed_exam_room"
+    ]
+  },
+  {
+    "id": "N01",
+    "name_key": "encounter.n01.name",
+    "kind": "normal",
+    "members": [
+      "N01"
+    ],
+    "base_ddl": 8,
+    "terms": [
+      1,
+      2
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "N02",
+    "name_key": "encounter.n02.name",
+    "kind": "normal",
+    "members": [
+      "N02"
+    ],
+    "base_ddl": 8,
+    "terms": [
+      1,
+      2
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "N03",
+    "name_key": "encounter.n03.name",
+    "kind": "normal",
+    "members": [
+      "N03"
+    ],
+    "base_ddl": 8,
+    "terms": [
+      1,
+      2,
+      3
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "N04",
+    "name_key": "encounter.n04.name",
+    "kind": "normal",
+    "members": [
+      "N04"
+    ],
+    "base_ddl": 8,
+    "terms": [
+      2,
+      3
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "Q01",
+    "name_key": "encounter.q01.name",
+    "kind": "elite",
+    "members": [
+      "Q01"
+    ],
+    "base_ddl": 6,
+    "terms": [
+      1,
+      2
+    ],
+    "exam_flags": [
+      "independent_answer"
+    ]
+  }
+]

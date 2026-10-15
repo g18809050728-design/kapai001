@@ -1,0 +1,11 @@
+{
+  "run_id": "g0-20261015-135252-236189",
+  "mode": "g0_readiness",
+  "checks": 771,
+  "errors": [],
+  "g0_blockers": [],
+  "exit_code": 0,
+  "documents_passed": true,
+  "g0_ready": true,
+  "limits": "Document assertions and registered semantic review only; no Godot, game JSON or UI tests."
+}

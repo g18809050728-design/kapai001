@@ -1,0 +1,13 @@
+{
+    "stage":  "G3",
+    "step":  "G3-02",
+    "verification":  "passed",
+    "stage_status":  "in_progress",
+    "g2_stage_status":  "frozen_incomplete",
+    "g2_holdback_count":  54,
+    "missing_inputs":  [
+
+                       ],
+    "failure":  null,
+    "godot":  "4.7.2.stable.official.ed1daf0bf"
+}

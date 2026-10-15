@@ -1,0 +1,8 @@
+ERROR: approved MVP override applies to a deep-copied enabled definition
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:39)
+ERROR: unapproved override values reject the package atomically
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:39)

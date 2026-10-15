@@ -1,0 +1,88 @@
+G2 staging batch audit: REJECTED
+Frozen definitions: 54
+G2 stage gate: not established by this audit
+[flow] REJECTED; observed=16/16
+  input_hash_mismatch: input hash mismatch for artifacts/g2-build/staging/flow/build_flow.py
+  input_hash_drift: encounter/N03 blocked by changed input artifacts/g2-build/staging/flow/build_flow.py
+  input_hash_drift: task/Q01 blocked by changed input artifacts/g2-build/staging/flow/build_flow.py
+  input_hash_drift: encounter/N02 blocked by changed input artifacts/g2-build/staging/flow/build_flow.py
+  input_hash_drift: task/N03 blocked by changed input artifacts/g2-build/staging/flow/build_flow.py
+  input_hash_drift: task/B01 blocked by changed input artifacts/g2-build/staging/flow/build_flow.py
+  input_hash_drift: event/V01 blocked by changed input artifacts/g2-build/staging/flow/build_flow.py
+  input_hash_drift: encounter/N04 blocked by changed input artifacts/g2-build/staging/flow/build_flow.py
+  input_hash_drift: encounter/N01 blocked by changed input artifacts/g2-build/staging/flow/build_flow.py
+  input_hash_drift: event/V03 blocked by changed input artifacts/g2-build/staging/flow/build_flow.py
+  input_hash_drift: event/V04 blocked by changed input artifacts/g2-build/staging/flow/build_flow.py
+  input_hash_drift: task/N02 blocked by changed input artifacts/g2-build/staging/flow/build_flow.py
+  input_hash_drift: task/N04 blocked by changed input artifacts/g2-build/staging/flow/build_flow.py
+  input_hash_drift: event/V10 blocked by changed input artifacts/g2-build/staging/flow/build_flow.py
+  input_hash_drift: encounter/Q01 blocked by changed input artifacts/g2-build/staging/flow/build_flow.py
+  input_hash_drift: encounter/B01 blocked by changed input artifacts/g2-build/staging/flow/build_flow.py
+  input_hash_drift: task/N01 blocked by changed input artifacts/g2-build/staging/flow/build_flow.py
+  reference_closure_unverified: flow reference_closure attestation is missing ['encounter/B01', 'encounter/N01', 'encounter/N02', 'encounter/N03', 'encounter/N04', 'encounter/Q01', 'event/V01', 'event/V03', 'event/V04', 'event/V10', 'task/B01', 'task/N01', 'task/N02', 'task/N03', 'task/N04', 'task/Q01']
+  reference_closure_unverified: encounter/B01 remains unverified for reference_closure
+  reference_closure_unverified: encounter/N01 remains unverified for reference_closure
+  reference_closure_unverified: encounter/N02 remains unverified for reference_closure
+  reference_closure_unverified: encounter/N03 remains unverified for reference_closure
+  reference_closure_unverified: encounter/N04 remains unverified for reference_closure
+  reference_closure_unverified: encounter/Q01 remains unverified for reference_closure
+  reference_closure_unverified: event/V01 remains unverified for reference_closure
+  reference_closure_unverified: event/V03 remains unverified for reference_closure
+  reference_closure_unverified: event/V04 remains unverified for reference_closure
+  reference_closure_unverified: event/V10 remains unverified for reference_closure
+  reference_closure_unverified: task/B01 remains unverified for reference_closure
+  reference_closure_unverified: task/N01 remains unverified for reference_closure
+  reference_closure_unverified: task/N02 remains unverified for reference_closure
+  reference_closure_unverified: task/N03 remains unverified for reference_closure
+  reference_closure_unverified: task/N04 remains unverified for reference_closure
+  reference_closure_unverified: task/Q01 remains unverified for reference_closure
+  handler_unverified: flow handler_verification attestation is missing ['encounter/B01', 'encounter/N01', 'encounter/N02', 'encounter/N03', 'encounter/N04', 'encounter/Q01', 'event/V01', 'event/V03', 'event/V04', 'event/V10', 'task/B01', 'task/N01', 'task/N02', 'task/N03', 'task/N04', 'task/Q01']
+  handler_unverified: encounter/B01 remains unverified for handler_verification
+  handler_unverified: encounter/N01 remains unverified for handler_verification
+  handler_unverified: encounter/N02 remains unverified for handler_verification
+  handler_unverified: encounter/N03 remains unverified for handler_verification
+  handler_unverified: encounter/N04 remains unverified for handler_verification
+  handler_unverified: encounter/Q01 remains unverified for handler_verification
+  handler_unverified: event/V01 remains unverified for handler_verification
+  handler_unverified: event/V03 remains unverified for handler_verification
+  handler_unverified: event/V04 remains unverified for handler_verification
+  handler_unverified: event/V10 remains unverified for handler_verification
+  handler_unverified: task/B01 remains unverified for handler_verification
+  handler_unverified: task/N01 remains unverified for handler_verification
+  handler_unverified: task/N02 remains unverified for handler_verification
+  handler_unverified: task/N03 remains unverified for handler_verification
+  handler_unverified: task/N04 remains unverified for handler_verification
+  handler_unverified: task/Q01 remains unverified for handler_verification
+  behavior_tests_unverified: flow behavior_tests attestation is missing ['encounter/B01', 'encounter/N01', 'encounter/N02', 'encounter/N03', 'encounter/N04', 'encounter/Q01', 'event/V01', 'event/V03', 'event/V04', 'event/V10', 'task/B01', 'task/N01', 'task/N02', 'task/N03', 'task/N04', 'task/Q01']
+  behavior_tests_unverified: encounter/B01 remains unverified for behavior_tests
+  behavior_tests_unverified: encounter/N01 remains unverified for behavior_tests
+  behavior_tests_unverified: encounter/N02 remains unverified for behavior_tests
+  behavior_tests_unverified: encounter/N03 remains unverified for behavior_tests
+  behavior_tests_unverified: encounter/N04 remains unverified for behavior_tests
+  behavior_tests_unverified: encounter/Q01 remains unverified for behavior_tests
+  behavior_tests_unverified: event/V01 remains unverified for behavior_tests
+  behavior_tests_unverified: event/V03 remains unverified for behavior_tests
+  behavior_tests_unverified: event/V04 remains unverified for behavior_tests
+  behavior_tests_unverified: event/V10 remains unverified for behavior_tests
+  behavior_tests_unverified: task/B01 remains unverified for behavior_tests
+  behavior_tests_unverified: task/N01 remains unverified for behavior_tests
+  behavior_tests_unverified: task/N02 remains unverified for behavior_tests
+  behavior_tests_unverified: task/N03 remains unverified for behavior_tests
+  behavior_tests_unverified: task/N04 remains unverified for behavior_tests
+  behavior_tests_unverified: task/Q01 remains unverified for behavior_tests
+  encounter/B01: input_hash_drift; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  encounter/N01: input_hash_drift; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  encounter/N02: input_hash_drift; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  encounter/N03: input_hash_drift; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  encounter/N04: input_hash_drift; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  encounter/Q01: input_hash_drift; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  event/V01: input_hash_drift; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  event/V03: input_hash_drift; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  event/V04: input_hash_drift; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  event/V10: input_hash_drift; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  task/B01: input_hash_drift; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  task/N01: input_hash_drift; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  task/N02: input_hash_drift; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  task/N03: input_hash_drift; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  task/N04: input_hash_drift; reference_closure_unverified; handler_unverified; behavior_tests_unverified
+  task/Q01: input_hash_drift; reference_closure_unverified; handler_unverified; behavior_tests_unverified

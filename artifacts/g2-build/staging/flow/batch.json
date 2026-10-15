@@ -1,0 +1,224 @@
+{
+  "batch": "G2 flow definitions",
+  "counts": {
+    "task": 6,
+    "encounter": 6,
+    "event": 4
+  },
+  "ids": {
+    "task": [
+      "B01",
+      "N01",
+      "N02",
+      "N03",
+      "N04",
+      "Q01"
+    ],
+    "encounter": [
+      "B01",
+      "N01",
+      "N02",
+      "N03",
+      "N04",
+      "Q01"
+    ],
+    "event": [
+      "V01",
+      "V03",
+      "V04",
+      "V10"
+    ]
+  },
+  "production_manifest_mutated": false,
+  "content_deferred_mutated": false,
+  "g0_scope_mutated": false,
+  "verification": {
+    "python_staging": "passed",
+    "python_compileall": "passed",
+    "godot_schema_probe": {
+      "status": "passed_per_definition_schema_only",
+      "command": [
+        "F:\\GoDot\\Godot_v4.7.2-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        ".",
+        "--script",
+        "res://artifacts/g2-build/staging/flow/schema_probe.gd"
+      ],
+      "godot_version": "4.7.2.stable.official.ed1daf0bf",
+      "exit_code": 0,
+      "raw_output": "artifacts/g2-build/staging/flow/final_probe/schema.stdout.txt",
+      "raw_stderr": "artifacts/g2-build/staging/flow/final_probe/schema.stderr.txt",
+      "evidence": "artifacts/g2-build/staging/flow/final_probe"
+    },
+    "godot_reference_probe": {
+      "status": "passed_reference_closure_and_event_schema_only",
+      "command": [
+        "F:\\GoDot\\Godot_v4.7.2-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        ".",
+        "--script",
+        "res://artifacts/g2-build/staging/flow/runtime_probe/runtime_probe.gd"
+      ],
+      "godot_version": "4.7.2.stable.official.ed1daf0bf",
+      "exit_code": 0,
+      "raw_output": "artifacts/g2-build/staging/flow/final_probe/reference.stdout.txt",
+      "raw_stderr": "artifacts/g2-build/staging/flow/final_probe/reference.stderr.txt",
+      "evidence": "artifacts/g2-build/staging/flow/final_probe"
+    },
+    "reference_closure": {
+      "status": "partial",
+      "scope": "test_g2_flow ContentDB enabled tasks and encounters only; events are intentionally disabled",
+      "items": {
+        "task/N01": {
+          "status": "passed",
+          "evidence": "artifacts/g2-build/staging/flow/final_probe"
+        },
+        "task/N02": {
+          "status": "passed",
+          "evidence": "artifacts/g2-build/staging/flow/final_probe"
+        },
+        "task/N03": {
+          "status": "passed",
+          "evidence": "artifacts/g2-build/staging/flow/final_probe"
+        },
+        "task/N04": {
+          "status": "passed",
+          "evidence": "artifacts/g2-build/staging/flow/final_probe"
+        },
+        "task/Q01": {
+          "status": "passed",
+          "evidence": "artifacts/g2-build/staging/flow/final_probe"
+        },
+        "task/B01": {
+          "status": "passed",
+          "evidence": "artifacts/g2-build/staging/flow/final_probe"
+        },
+        "encounter/N01": {
+          "status": "passed",
+          "evidence": "artifacts/g2-build/staging/flow/final_probe"
+        },
+        "encounter/N02": {
+          "status": "passed",
+          "evidence": "artifacts/g2-build/staging/flow/final_probe"
+        },
+        "encounter/N03": {
+          "status": "passed",
+          "evidence": "artifacts/g2-build/staging/flow/final_probe"
+        },
+        "encounter/N04": {
+          "status": "passed",
+          "evidence": "artifacts/g2-build/staging/flow/final_probe"
+        },
+        "encounter/Q01": {
+          "status": "passed",
+          "evidence": "artifacts/g2-build/staging/flow/final_probe"
+        },
+        "encounter/B01": {
+          "status": "passed",
+          "evidence": "artifacts/g2-build/staging/flow/final_probe"
+        }
+      }
+    },
+    "handler_verification": {
+      "status": "not_run",
+      "reason": "No event executor or production flow handler behavior was exercised by this schema/closure probe."
+    },
+    "behavior_tests": {
+      "status": "not_run",
+      "reason": "Battle and event behavior tests remain outside this isolated content package probe."
+    },
+    "evidence_bundle": "artifacts/g2-build/staging/flow/final_probe"
+  },
+  "input_sha256": {
+    "docs/baselines/g0.json": "b2af089b1adeb58e1ac383c1338d2073fcc646667040579dde7f882a3e4ecbf9",
+    "data/manifests/content_deferred.json": "a9a820f844fc2261fed2741d83c26c44d8f7e8d0d011228a006bd6529267d3b9",
+    "docs/交大四年_DDL战争_统一设计文档.md": "733e13e1ef763c7c18c8071ce4fb9eeddd8fb2382dabd22b46e6b5ea32b84136",
+    "docs/内容层契约.md": "95b7f32bc3e15b63b36f7b9f039ddb3fa1739ea605db9de782cdb1fd2cecdc1b",
+    "docs/交大四年_DDL战争_项目计划书.md": "60749a05e715660ffad3b1124f5554f22b00e03dd509ea9845ef0ec3f7b5deed",
+    "docs/局流程契约.md": "fe9a6cb63091f56da64611d89b2577896572017d32718d3c953ae4eba2d0aad4",
+    "src/content/content_db.gd": "3dbd9078fc9a12fd9d411cfb462afe15a6563d5ff2eb1ef5749b4996fa3b2c56",
+    "src/battle/battle_engine.gd": "e2d408defae80a8142c9625c71a3333445a3155a8f302c575ee39078b9a1ccbb",
+    "src/battle/battle_card_rules.gd": "5f2addc1631e6341fb1e558aff2d597d022ce711385d30d00cec92daee481c9f",
+    "src/app/game_session.gd": "d981f7af0e8be2c342f76bcebfc474893cf5a7c1e0033fe967bb2c1c6f09bf5b",
+    "src/run/run_state.gd": "d28376727c3744f2be60b424adac161b627e7548a35c9c83fcaf373b8be69857",
+    "tests/suites/test_battle_engine_begin.gd": "e1e7e631df0e9ed6a84c8813812aecedd3da4407116bb1cda3a327e31c72f3cd",
+    "tests/suites/test_g2_state.gd": "9ce8c160dd7ef4070d953a7d5133c170dc89d61a310c1e251abdf559472dbf9b",
+    "tools/g2_content_builder.py": "a00c2fa2f8f455802c9963bea2a19b76b66f9f914b5f52b3da83c8f4c9ba0d99",
+    "artifacts/g2-build/staging/flow/build_flow.py": "9c2cd1d84ab6c284c7678628c1713dd77ccc4d8884535cad4b732cd46dcb56fe",
+    "artifacts/g2-build/staging/flow/schema_probe.gd": "ac661c670a1fc57e011a1e28a751e3bec4ffd3a00ac2c253319f222e84f189bb"
+  },
+  "staged_record_sha256": {
+    "artifacts/g2-build/staging/flow/definitions/task_N01.json": "316665f5bc77d647dd440b027ae35c80edda0e3215b0add3be174f809a92ad70",
+    "artifacts/g2-build/staging/flow/definitions/task_N02.json": "df628663256f98160bd9f3ba594db799ac48a36c61ec31d5448ab26af07dc091",
+    "artifacts/g2-build/staging/flow/definitions/task_N03.json": "f6b5d6568b4ca0b1396ba8d374d3391697ae3adc25e17b65129e7f02247fbecb",
+    "artifacts/g2-build/staging/flow/definitions/task_N04.json": "47616fc10afc45eba47e6375183ff5c2e850e1ebf50cc3acee83b0a01a5e8b54",
+    "artifacts/g2-build/staging/flow/definitions/task_Q01.json": "0b470c0cdfc2df10c632a27684fb6ed6c09655cedb9d510db67a3f6a5941fe1f",
+    "artifacts/g2-build/staging/flow/definitions/task_B01.json": "de6eebea936ec7f02e021dee6479874eb522ea7ce6739b0be5f2293506dcce14",
+    "artifacts/g2-build/staging/flow/definitions/encounter_N01.json": "f20d959837af767925b090cecfea04dfc754eec558ac05ef439342fae4d0ea3a",
+    "artifacts/g2-build/staging/flow/definitions/encounter_N02.json": "67d5a0f34b920ab357f81dc4d60b07ccb2e8f1366f8af7c05be0704aaf398c9b",
+    "artifacts/g2-build/staging/flow/definitions/encounter_N03.json": "626deeee2de3d47dae25ceed0e2a205854fd2038f3ab403e8f40d120dd189aec",
+    "artifacts/g2-build/staging/flow/definitions/encounter_N04.json": "16af2d69703712ca3fd61789346d20596c8596c9984df12985988d039f228918",
+    "artifacts/g2-build/staging/flow/definitions/encounter_Q01.json": "139a563bf0900b5da9b07c309d1cc20c7d59e14314697d9784eaf72df9d93d27",
+    "artifacts/g2-build/staging/flow/definitions/encounter_B01.json": "5ee19a2f6b18fa6ac78a3a98e270647e3c0fc32256756c7d5a0d599d81918c65",
+    "artifacts/g2-build/staging/flow/definitions/event_V01.json": "483594f01ed847d0e5ce84a43a00389f5d3c22a2472e2950d230a11485c89015",
+    "artifacts/g2-build/staging/flow/definitions/event_V03.json": "56c94f6830d5838cebe9d1c1a204164248155ee20b79b4afb9713f7f64b6b579",
+    "artifacts/g2-build/staging/flow/definitions/event_V04.json": "bc9cd680089f5c13fafa0ce2494bc968feba7f308929f6eb3ac026a47e331610",
+    "artifacts/g2-build/staging/flow/definitions/event_V10.json": "a67454c7974ab0b19f60665adc923cfb9aa4b6db940941bfdc4ca968a1b7b830"
+  },
+  "reference_closure": {
+    "status": "partial",
+    "scope": "test_g2_flow ContentDB enabled tasks and encounters only; events are intentionally disabled",
+    "items": {
+      "task/N01": {
+        "status": "passed",
+        "evidence": "artifacts/g2-build/staging/flow/final_probe"
+      },
+      "task/N02": {
+        "status": "passed",
+        "evidence": "artifacts/g2-build/staging/flow/final_probe"
+      },
+      "task/N03": {
+        "status": "passed",
+        "evidence": "artifacts/g2-build/staging/flow/final_probe"
+      },
+      "task/N04": {
+        "status": "passed",
+        "evidence": "artifacts/g2-build/staging/flow/final_probe"
+      },
+      "task/Q01": {
+        "status": "passed",
+        "evidence": "artifacts/g2-build/staging/flow/final_probe"
+      },
+      "task/B01": {
+        "status": "passed",
+        "evidence": "artifacts/g2-build/staging/flow/final_probe"
+      },
+      "encounter/N01": {
+        "status": "passed",
+        "evidence": "artifacts/g2-build/staging/flow/final_probe"
+      },
+      "encounter/N02": {
+        "status": "passed",
+        "evidence": "artifacts/g2-build/staging/flow/final_probe"
+      },
+      "encounter/N03": {
+        "status": "passed",
+        "evidence": "artifacts/g2-build/staging/flow/final_probe"
+      },
+      "encounter/N04": {
+        "status": "passed",
+        "evidence": "artifacts/g2-build/staging/flow/final_probe"
+      },
+      "encounter/Q01": {
+        "status": "passed",
+        "evidence": "artifacts/g2-build/staging/flow/final_probe"
+      },
+      "encounter/B01": {
+        "status": "passed",
+        "evidence": "artifacts/g2-build/staging/flow/final_probe"
+      }
+    }
+  }
+}

@@ -1,0 +1,6 @@
+﻿{
+    "command":  "python -m py_compile tools/verify_g2_staging.py tools/test_verify_g2_staging.py",
+    "exit_code":  0,
+    "stdout":  "stdout-1.txt",
+    "stderr":  "stderr-1.txt"
+}

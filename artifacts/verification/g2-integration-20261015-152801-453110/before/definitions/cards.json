@@ -1,0 +1,67 @@
+[
+  {
+    "id": "K01",
+    "name_key": "card.K01.name",
+    "type": "work",
+    "rarity": "white",
+    "tags": ["basic"],
+    "cost": 1,
+    "target": "task",
+    "exhaust": false,
+    "effects": [{ "op": "complete", "amount": 6 }],
+    "upgrade": {
+      "effects": [{ "op": "complete", "amount": 8 }]
+    }
+  },
+  {
+    "id": "K02",
+    "name_key": "card.K02.name",
+    "type": "strategy",
+    "rarity": "white",
+    "tags": ["basic"],
+    "cost": 1,
+    "target": "self",
+    "exhaust": false,
+    "effects": [{ "op": "relax", "amount": 5 }],
+    "upgrade": {
+      "effects": [{ "op": "relax", "amount": 8 }]
+    }
+  },
+  {
+    "id": "K03",
+    "name_key": "card.K03.name",
+    "type": "strategy",
+    "rarity": "white",
+    "tags": ["basic"],
+    "cost": 1,
+    "target": "self",
+    "exhaust": false,
+    "effects": [
+      { "op": "draw", "amount": 2 },
+      { "op": "discard", "amount": 1 }
+    ],
+    "upgrade": {
+      "effects": [
+        { "op": "draw", "amount": 3 },
+        { "op": "discard", "amount": 1 }
+      ]
+    }
+  },
+  {
+    "id": "K04",
+    "name_key": "card.K04.name",
+    "type": "strategy",
+    "rarity": "white",
+    "tags": ["basic"],
+    "cost": 1,
+    "target": "self",
+    "exhaust": false,
+    "effects": [
+      { "op": "gain_status", "status": "inspiration", "stacks": 2 },
+      { "op": "draw", "amount": 1 }
+    ],
+    "upgrade": {
+      "effects": [{ "op": "gain_status", "status": "inspiration", "stacks": 3 }]
+    }
+  }
+]

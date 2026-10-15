@@ -1,0 +1,36 @@
+{
+  "kind": "encounter",
+  "id": "N01",
+  "source": {
+    "path": "docs/交大四年_DDL战争_统一设计文档.md",
+    "section": "encounter ID N01",
+    "upstream_section": "§9.1–§9.3 encounter availability and definition",
+    "source_lines": [
+      352,
+      356,
+      369
+    ],
+    "source_row": "| N01 | 课后习题 | 1～2 | 24/8 | A压力5 → B压力7 |"
+  },
+  "behavior_refs": [
+    "docs/内容层契约.md §8.1 EncounterDef and §8.7 production overrides",
+    "src/content/content_db.gd::_validate_enabled_references",
+    "src/battle/battle_engine.gd::begin (requires runtime encounter input)",
+    "tests/suites/test_battle_engine_begin.gd (not run against this staged batch)"
+  ],
+  "definition": {
+    "id": "N01",
+    "name_key": "encounter.n01.name",
+    "kind": "normal",
+    "members": [
+      "N01"
+    ],
+    "base_ddl": 8,
+    "terms": [
+      1,
+      2
+    ],
+    "exam_flags": []
+  },
+  "status": "schema_validated_behavior_and_G2_reference_closure_pending"
+}

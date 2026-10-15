@@ -1,0 +1,12 @@
+﻿{
+    "run_id":  "g2-flow-probe-20261015-131159",
+    "command":  [
+                    "F:\\GoDot\\Godot_v4.7.2-stable_win64_console.exe",
+                    "--headless",
+                    "--path",
+                    ".",
+                    "--script",
+                    "res://artifacts/g2-build/staging/flow/runtime_probe/runtime_probe.gd"
+                ],
+    "cwd":  "E:\\desktop\\项目设计\\项目设计"
+}

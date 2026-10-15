@@ -1,0 +1,24 @@
+{
+  "kind": "scene",
+  "id": "L03",
+  "source": {
+    "path": "docs/交大四年_DDL战争_统一设计文档.md",
+    "section": "scene ID L03",
+    "table_heading": "7. 场景重设计（6个）",
+    "line": 308,
+    "row": "| L03 | 自习室 | 每回合第一张工作牌费用-1，最低0 | 桌椅队列、留白、安静标识 |"
+  },
+  "behavior_refs": [
+    "src/content/content_db.gd::_validate_scene_modifiers",
+    "src/battle/battle_card_rules.gd::_quote_cost(first_work_cost_discount)"
+  ],
+  "definition": {
+    "id": "L03",
+    "name_key": "scene.L03.name",
+    "modifiers": {
+      "first_work_cost_discount": 1
+    }
+  },
+  "status": "staged_schema_and_reference_verified_behavior_deferred_to_G3_G4",
+  "blockers": []
+}

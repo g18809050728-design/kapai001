@@ -1,0 +1,10 @@
+{
+    "stage":  "G3",
+    "step":  "G3-02",
+    "verification":  "failed",
+    "stage_status":  "in_progress",
+    "g2_stage_status":  "frozen_incomplete",
+    "g2_holdback_count":  54,
+    "failure":  "You cannot call a method on a null-valued expression.",
+    "godot":  "unavailable"
+}

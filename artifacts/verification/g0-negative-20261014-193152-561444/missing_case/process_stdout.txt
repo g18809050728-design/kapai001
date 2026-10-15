@@ -1,0 +1,8 @@
+Mode: g0_readiness
+Checks: 718
+Document errors: 1
+G0 blockers: 0
+ERROR TRACE T01-T20/RB-01-RB-14 coverage
+Exit code: 1
+Evidence: C:\Users\Dev.LI\AppData\Local\Temp\ddl-g0-audit-a4uc8e45\missing_case\artifacts\verification\test-missing_case
+Document assertions and registered semantic review only; no Godot, game JSON or UI tests.

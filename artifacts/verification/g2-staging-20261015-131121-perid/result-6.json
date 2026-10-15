@@ -1,0 +1,6 @@
+﻿{
+    "command":  "python tools/verify_g2_staging.py",
+    "exit_code":  1,
+    "stdout":  "artifacts\\verification\\g2-staging-20261015-131121-perid\\stdout-6.txt",
+    "stderr":  "artifacts\\verification\\g2-staging-20261015-131121-perid\\stderr-6.txt"
+}

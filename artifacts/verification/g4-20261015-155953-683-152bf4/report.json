@@ -1,0 +1,8 @@
+{
+    "stage":  "G4",
+    "verification":  "passed",
+    "stage_status":  "passed",
+    "holdback_count":  0,
+    "failure":  null,
+    "godot":  "4.7.2.stable.official.ed1daf0bf"
+}

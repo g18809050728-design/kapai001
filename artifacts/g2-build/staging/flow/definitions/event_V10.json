@@ -1,0 +1,67 @@
+{
+  "kind": "event",
+  "id": "V10",
+  "source": {
+    "path": "docs/交大四年_DDL战争_统一设计文档.md",
+    "section": "event ID V10",
+    "upstream_section": "§10.2 随机事件",
+    "source_lines": [
+      432,
+      445,
+      449
+    ],
+    "source_row": "| V10 | 捡到校园卡/1～8 | 归还：获得A15，已持有则20生活费；或交服务台：恢复6精力 |"
+  },
+  "behavior_refs": [
+    "docs/内容层契约.md §5, §8.1, §8.5",
+    "src/content/content_db.gd::EVENT_OP_FIELDS and _validate_event_options (schema registration only)",
+    "docs/局流程契约.md §8 choose_event transaction contract"
+  ],
+  "definition": {
+    "id": "V10",
+    "name_key": "event.v10.name",
+    "terms": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "once_per_run": true,
+    "options": [
+      {
+        "option_id": "return_card",
+        "label_key": "event.option.return_card",
+        "cost": {},
+        "effects": [
+          {
+            "op": "gain_relic",
+            "relic_id": "A15",
+            "fallback_money": 20
+          }
+        ]
+      },
+      {
+        "option_id": "service_desk",
+        "label_key": "event.option.service_desk",
+        "cost": {},
+        "effects": [
+          {
+            "op": "heal",
+            "amount": 6
+          }
+        ]
+      },
+      {
+        "option_id": "leave",
+        "label_key": "event.option.leave",
+        "cost": {},
+        "effects": []
+      }
+    ]
+  },
+  "status": "schema_validated_runtime_executor_missing"
+}

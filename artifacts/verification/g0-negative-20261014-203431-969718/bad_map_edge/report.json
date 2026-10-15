@@ -1,0 +1,13 @@
+{
+  "run_id": "test-bad_map_edge",
+  "mode": "g0_readiness",
+  "checks": 755,
+  "errors": [
+    "MAP t1l1_normal: kind/layer/adjacent-layer edges"
+  ],
+  "g0_blockers": [],
+  "exit_code": 1,
+  "documents_passed": false,
+  "g0_ready": false,
+  "limits": "Document assertions and registered semantic review only; no Godot, game JSON or UI tests."
+}

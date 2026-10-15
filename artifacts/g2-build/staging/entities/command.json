@@ -1,0 +1,6 @@
+{
+  "executable": "C:\\Users\\Dev.LI\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+  "arguments": [
+    "artifacts/g2-build/staging/entities/build_entities.py"
+  ]
+}

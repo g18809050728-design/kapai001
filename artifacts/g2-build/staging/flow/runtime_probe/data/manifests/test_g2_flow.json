@@ -1,0 +1,63 @@
+{
+  "id": "test_g2_flow",
+  "content_version": "campus_mvp.v1",
+  "ruleset_id": "campus_v1",
+  "enabled": {
+    "character": [],
+    "card": [
+      "K01",
+      "K02",
+      "K03",
+      "K04",
+      "X01"
+    ],
+    "relic": [],
+    "task": [
+      "N01",
+      "N02",
+      "N03",
+      "N04",
+      "Q01",
+      "B01"
+    ],
+    "encounter": [
+      "N01",
+      "N02",
+      "N03",
+      "N04",
+      "Q01",
+      "B01"
+    ],
+    "event": [],
+    "unit": [],
+    "scene": [],
+    "status": [
+      "inspiration",
+      "compile",
+      "anxiety",
+      "procrastination",
+      "drowsiness",
+      "extra_requirements",
+      "guard"
+    ],
+    "ruleset": [
+      "campus_v1"
+    ]
+  },
+  "overrides": [
+    {
+      "kind": "encounter",
+      "id": "N04",
+      "scope_version": "campus_mvp.v1",
+      "source": {
+        "path": "docs/交大四年_DDL战争_项目计划书.md",
+        "section": "§3.1"
+      },
+      "patch": {
+        "terms": [
+          1
+        ]
+      }
+    }
+  ]
+}

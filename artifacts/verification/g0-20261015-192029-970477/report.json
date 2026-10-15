@@ -1,0 +1,13 @@
+{
+  "run_id": "g0-20261015-192029-970477",
+  "mode": "g0_readiness",
+  "checks": 961,
+  "errors": [
+    "LINK docs/G6资源准备执行记录.md:30: ../assets/art/g6-v1/"
+  ],
+  "g0_blockers": [],
+  "exit_code": 1,
+  "documents_passed": false,
+  "g0_ready": false,
+  "limits": "Document assertions and registered semantic review only; no Godot, game JSON or UI tests."
+}

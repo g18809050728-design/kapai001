@@ -1,0 +1,32 @@
+{
+  "kind": "unit",
+  "id": "F03",
+  "source": {
+    "path": "docs/交大四年_DDL战争_统一设计文档.md",
+    "section": "unit ID F03",
+    "table_heading": "6. 单位重设计（8种）",
+    "line": 291,
+    "row": "| F03 | 耐心助教：文件夹、记号笔 | 6 | 1 | 每次行动移除主角1焦虑；无焦虑改给2放松 |"
+  },
+  "behavior_refs": [
+    "src/content/content_db.gd::_validate_support(cleanse_or_relax)",
+    "src/battle/battle_engine.gd::_apply_unit_support(cleanse_or_relax)"
+  ],
+  "definition": {
+    "id": "F03",
+    "name_key": "unit.F03.name",
+    "vitality": 6,
+    "cooperation": 1,
+    "guard": false,
+    "support": {
+      "kind": "cleanse_or_relax",
+      "status": "anxiety",
+      "amount": 1,
+      "fallback_relax": 2
+    }
+  },
+  "status": "staged_schema_and_reference_verified_behavior_deferred_to_G3_G4",
+  "blockers": [
+    "The support handler removes the entire matching anxiety status object and does not honor amount=1; behavior remains blocked pending a G3/G4 fix and test."
+  ]
+}

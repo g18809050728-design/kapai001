@@ -1,0 +1,13 @@
+{
+    "stage":  "G3",
+    "step":  "G3-02",
+    "verification":  "failed",
+    "stage_status":  "in_progress",
+    "g2_stage_status":  "frozen_incomplete",
+    "g2_holdback_count":  54,
+    "missing_inputs":  [
+
+                       ],
+    "failure":  "format_check returned exit code 1. See E:\\desktop\\项目设计\\项目设计\\artifacts\\verification\\g3-20261015-012747-536-de35e6",
+    "godot":  "4.7.2.stable.official.ed1daf0bf"
+}

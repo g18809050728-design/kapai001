@@ -1,0 +1,10 @@
+ERROR: Condition "res != ((HRESULT)0x00000000)" is true. Returning: String()
+   at: get_system_dir (platform/windows/os_windows.cpp:2502)
+ERROR: Condition "res != ((HRESULT)0x00000000)" is true. Returning: String()
+   at: get_system_dir (platform/windows/os_windows.cpp:2502)
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+ERROR: Cannot save file 'C:/Users/Dev.LI/AppData/Roaming/Godot/editor_settings-4.7.tres'.
+   at: save (scene/resources/resource_format_text.cpp:1768)
+ERROR: Error saving editor settings to C:/Users/Dev.LI/AppData/Roaming/Godot/editor_settings-4.7.tres
+   at: save (editor/settings/editor_settings.cpp:1525)

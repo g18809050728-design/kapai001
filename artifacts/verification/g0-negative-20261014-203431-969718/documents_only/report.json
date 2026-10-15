@@ -1,0 +1,14 @@
+{
+  "run_id": "test-documents_only",
+  "mode": "documents_only",
+  "checks": 754,
+  "errors": [],
+  "g0_blockers": [
+    "Q-005: G0 document decision open",
+    "Q-005: MVP rule decision open"
+  ],
+  "exit_code": 0,
+  "documents_passed": true,
+  "g0_ready": null,
+  "limits": "Document assertions and registered semantic review only; no Godot, game JSON or UI tests."
+}

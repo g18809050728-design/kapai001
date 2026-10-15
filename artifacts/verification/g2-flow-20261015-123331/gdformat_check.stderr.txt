@@ -1,0 +1,2 @@
+would reformat artifacts/g2-build/staging/flow/schema_probe.gd
+1 file would be reformatted, 0 files would be left unchanged.

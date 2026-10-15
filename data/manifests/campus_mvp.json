@@ -1,0 +1,158 @@
+{
+  "id": "campus_mvp",
+  "content_version": "campus_mvp.v1",
+  "ruleset_id": "campus_v1",
+  "enabled": {
+    "character": [
+      "P01",
+      "P04"
+    ],
+    "card": [
+      "K01",
+      "K02",
+      "K03",
+      "K04",
+      "K05",
+      "K06",
+      "K07",
+      "K08",
+      "K10",
+      "K12",
+      "K13",
+      "K14",
+      "K15",
+      "K16",
+      "K19",
+      "K43",
+      "K44",
+      "K45",
+      "K46",
+      "K51",
+      "K52",
+      "K53",
+      "K59",
+      "K60",
+      "X01"
+    ],
+    "relic": [
+      "A01",
+      "A04",
+      "A05",
+      "A07",
+      "A08",
+      "A11",
+      "A15",
+      "A18"
+    ],
+    "task": [
+      "N01",
+      "N02",
+      "N03",
+      "N04",
+      "Q01",
+      "B01"
+    ],
+    "encounter": [
+      "N01",
+      "N02",
+      "N03",
+      "N04",
+      "Q01",
+      "B01"
+    ],
+    "unit": [
+      "F01",
+      "F02",
+      "F03",
+      "F04"
+    ],
+    "scene": [
+      "L01",
+      "L02",
+      "L03"
+    ],
+    "event": [
+      "V01",
+      "V03",
+      "V04",
+      "V10"
+    ],
+    "status": [
+      "inspiration",
+      "compile",
+      "anxiety",
+      "procrastination",
+      "drowsiness",
+      "extra_requirements",
+      "guard"
+    ],
+    "ruleset": [
+      "campus_v1"
+    ]
+  },
+  "overrides": [
+    {
+      "kind": "event",
+      "id": "V03",
+      "scope_version": "campus_mvp.v1",
+      "source": {
+        "path": "docs/交大四年_DDL战争_项目计划书.md",
+        "section": "§3.1"
+      },
+      "patch": {
+        "options": [
+          {
+            "option_id": "consult",
+            "label_key": "event.option.consult",
+            "cost": {},
+            "effects": [
+              {
+                "op": "gain_card",
+                "card_pool": [
+                  "K14",
+                  "K05",
+                  "K60"
+                ],
+                "selection_count": 1,
+                "fallback_money": 20
+              }
+            ]
+          },
+          {
+            "option_id": "drop",
+            "label_key": "event.option.drop",
+            "cost": {
+              "vitality": 5
+            },
+            "effects": [
+              {
+                "op": "remove_card",
+                "tag_filter": "basic"
+              }
+            ]
+          },
+          {
+            "option_id": "leave",
+            "label_key": "event.option.leave",
+            "cost": {},
+            "effects": []
+          }
+        ]
+      }
+    },
+    {
+      "kind": "encounter",
+      "id": "N04",
+      "scope_version": "campus_mvp.v1",
+      "source": {
+        "path": "docs/交大四年_DDL战争_项目计划书.md",
+        "section": "§3.1"
+      },
+      "patch": {
+        "terms": [
+          1
+        ]
+      }
+    }
+  ]
+}

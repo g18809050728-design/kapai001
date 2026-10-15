@@ -1,0 +1,31 @@
+{
+  "kind": "relic",
+  "id": "A01",
+  "source": {
+    "path": "docs/交大四年_DDL战争_统一设计文档.md",
+    "section": "relic ID A01",
+    "table_heading": "8. 饰品重设计（24件）",
+    "line": 321,
+    "row": "| A01 | 好用的笔 | 初始 | 每回合首张工作牌第一段完成量+1 |"
+  },
+  "behavior_refs": [
+    "src/content/content_db.gd::_validate_relic_modifiers",
+    "src/battle/battle_engine.gd::_resolve_completion(work_flat_bonus)"
+  ],
+  "definition": {
+    "id": "A01",
+    "name_key": "relic.A01.name",
+    "availability": "starter",
+    "rarity": null,
+    "tags": [],
+    "modifiers": {
+      "work_flat_bonus": 1
+    },
+    "limit": {
+      "per": "round",
+      "times": 1
+    }
+  },
+  "status": "staged_schema_and_reference_verified_behavior_deferred_to_G3_G4",
+  "blockers": []
+}

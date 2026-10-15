@@ -1,0 +1,4 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+FLOW_REFERENCE_CLOSURE_OK tasks=6 encounters=6 events=4 cards=5 override=N04:[1]
+FLOW_EVENT_SCHEMA_ONLY_OK events=4 enabled=4 executor=G4

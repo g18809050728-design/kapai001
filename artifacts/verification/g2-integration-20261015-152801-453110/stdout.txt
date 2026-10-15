@@ -1,0 +1,13 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+G2_ENABLED character=2
+G2_ENABLED card=25
+G2_ENABLED relic=8
+G2_ENABLED task=6
+G2_ENABLED encounter=6
+G2_ENABLED unit=4
+G2_ENABLED scene=3
+G2_ENABLED event=4
+G2_ENABLED status=7
+G2_ENABLED ruleset=1
+G2_FULL_PACKAGE_LOAD_OK total=66 hash=3b413a8065ab053917ee9cfababa9eab1b5c4d7b1e06cb795caf5ad02cad831b
