@@ -47,10 +47,7 @@ func _render_menu() -> void:
 	add_text(body, "第一学期 · 校园卡牌冒险", 24)
 	add_text(body, "选择角色，规划路线，在作业与休息之间迎接期末挑战。")
 	var row: HBoxContainer = add_row(body)
-	var start: Button = add_button(row, "menu:new", "开始新学期", _ui("new_run"))
-	start.disabled = not bool(view.get("can_start_new", true))
-	if start.disabled:
-		start.tooltip_text = "当前学期或长期进度仍需保存，请先继续并完成保存。"
+	add_button(row, "menu:new", "开始新学期", _ui("new_run"))
 	var resume: Button = add_button(row, "menu:continue", "继续学期", _ui("continue"))
 	resume.disabled = (
 		not bool(view.get("has_active_session", false)) and not bool(view.get("has_save", false))
@@ -166,11 +163,16 @@ func _render_setup() -> void:
 			refresh_local()
 	)
 	add_text(body, "相同种子可重现同一学期；种子和难度将在开局后锁定。", 15)
+	var confirming := bool(view.get("confirm_restart", false))
+	if bool(view.get("replaces_run", false)):
+		add_text(body, "开始新学期会结束原来的学期并替换当前存档；返回可继续原来的学期。", 18)
+	if confirming:
+		add_text(body, "确定结束原来的学期，并按以上配置开始新学期吗？", 21)
 	var footer: HBoxContainer = add_row(body)
 	add_button(
 		footer,
-		"setup:start",
-		"进入校园",
+		"setup:restart_confirm" if confirming else "setup:start",
+		"结束旧局并开始" if confirming else "进入校园",
 		func() -> Dictionary:
 			return _ui(
 				"start_run",
@@ -178,10 +180,13 @@ func _render_setup() -> void:
 					"character_id": _character,
 					"difficulty": _difficulty,
 					"manifest_id": _manifest,
-					"seed": _seed
+					"seed": _seed,
+					"confirmed": confirming
 				}
 			)
 	)
+	if confirming:
+		add_button(footer, "setup:restart_cancel", "取消重开", _ui("cancel_restart"))
 	add_button(footer, "setup:back", "返回", _ui("menu"))
 
 
@@ -233,9 +238,6 @@ func _render_map() -> void:
 						)
 			if not next_names.is_empty():
 				add_text(panel, "→ " + " / ".join(next_names), 14)
-	var current: Dictionary = _dict(view.get("node"))
-	if str(current.get("status", "")) == "active":
-		add_button(body, "map:leave", "本站处理完毕，继续前进", _leave())
 	var footer: HBoxContainer = add_row(body)
 	add_button(footer, "map:save", "保存进度", _ui("save"))
 	add_button(footer, "map:menu", "主菜单", _ui("menu"))
@@ -311,7 +313,8 @@ func _render_reward() -> void:
 					"skip_reward", {"offer_id": str(offer.get("offer_id", "")), "item_id": item_id}
 				)
 			)
-	add_button(body, "reward:leave", "处理完毕，继续", _leave())
+	add_text(body, "处理完全部奖励后，将自动前往下一站。", 16)
+	_flow_navigation("reward")
 
 
 func _render_shop() -> void:
@@ -381,6 +384,7 @@ func _render_shop() -> void:
 			)
 		)
 	add_button(body, "shop:leave", "离开商店", _leave())
+	_flow_navigation("shop")
 
 
 func _render_event() -> void:
@@ -446,7 +450,8 @@ func _render_event() -> void:
 		)
 	if not str(event.get("resolved_option_id", "")).is_empty():
 		add_text(body, "本次事件已处理。", 18)
-	add_button(body, "event:leave", "继续前进", _leave())
+	add_text(body, "完成事件选择后，将自动前往下一站。", 16)
+	_flow_navigation("event")
 
 
 func _render_rest() -> void:
@@ -487,7 +492,14 @@ func _render_rest() -> void:
 			)
 	if bool(rest.get("used", false)):
 		add_text(body, "休整完成，可以继续前进。", 18)
-	add_button(body, "rest:leave", "继续前进", _leave())
+	add_text(body, "完成休整后，将自动前往下一站。", 16)
+	_flow_navigation("rest")
+
+
+func _flow_navigation(prefix: String) -> void:
+	var row := add_row(body)
+	add_button(row, prefix + ":save", "保存进度", _ui("save"))
+	add_button(row, prefix + ":menu", "主菜单", _ui("menu"))
 
 
 func _render_battle_entry() -> void:

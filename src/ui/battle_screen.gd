@@ -20,6 +20,18 @@ var _preview_draft: Dictionary = {}
 var _revision_seen: int = -1
 var _choice_id_seen: String = ""
 var _submitted_revision: int = -2
+var _stage: Control
+var _hand_cards: Array[BattleCard] = []
+var _target_frames: Dictionary = {}
+var _aim: BattleAim
+var _tip_label: Label
+var _hint_label: Label
+var _hovered_card: BattleCard
+var _pointer_card: BattleCard
+var _pointer_start := Vector2.ZERO
+var _dragging: bool = false
+var _drag_ghost: BattleCard
+var _pointer_position := Vector2.ZERO
 
 
 func _init() -> void:
@@ -29,6 +41,7 @@ func _init() -> void:
 
 func _process(delta: float) -> void:
 	_animator.advance(delta)
+	_update_pointer(delta)
 
 
 func render(data: Dictionary) -> void:
@@ -49,7 +62,6 @@ func render(data: Dictionary) -> void:
 	_revision_seen = next_revision
 	_submitted_revision = -2
 	view = next_view
-	reset_page("", "", true)
 	_render_battle()
 
 
@@ -122,362 +134,221 @@ func display_snapshot() -> Dictionary:
 func apply_gating(results: Dictionary) -> void:
 	super.apply_gating(results)
 	_apply_lock_state()
+	_sync_card_visuals()
 
 
 func action_draft(uid: String) -> Dictionary:
 	var draft := super.action_draft(uid)
-	if is_locked() and str(draft.get("type", "")) != "confirm_choice":
+	if is_locked() and str(draft.get("type", "")) not in ["confirm_choice", "ui.new_run"]:
 		return {}
 	return draft
 
 
 func _render_battle() -> void:
-	_render_status_bar()
-	_render_notice()
-	_render_controls(body)
-	var main_row := add_row(body)
-	var left := _scroll_column(main_row, 1.1)
-	_render_tasks(left)
-	_render_units(left)
-	var right := _scroll_column(main_row, 1.0)
-	_render_choice(right)
-	_render_selection(right)
-	_render_retention(right)
-	_render_player(right)
-	_render_scene(right)
-	_render_hand(body)
-	_render_zones_and_log(body)
-	_apply_preview_gating()
-	_apply_lock_state()
+	BattleLayout.new().build(self)
 
 
-func _render_status_bar() -> void:
-	var player := _dict(view.get("player"))
-	add_text(
-		body,
-		(
-			"%s · 第 %s 回合 · %s　｜　专注 %s　精力 %s　DDL %s"
-			% [
-				_battle_subtitle(),
-				view.get("round_index", 0),
-				UiStyle.label(str(view.get("phase", ""))),
-				player.get("focus", 0),
-				player.get("vitality", 0),
-				view.get("ddl", 0)
-			]
-		),
-		20,
-		UiStyle.INK
-	)
+func _reset_stage() -> void:
+	_pointer_card = null
+	_hovered_card = null
+	_drag_ghost = null
+	_dragging = false
+	_hand_cards.clear()
+	_target_frames.clear()
+	_buttons.clear()
+	_drafts.clear()
+	_last_action.clear()
+	for child in get_children():
+		remove_child(child)
+		child.queue_free()
+	_stage = Control.new()
+	_stage.size = Vector2(1280, 800)
+	_stage.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_stage)
+	if not resized.is_connected(_fit_stage):
+		resized.connect(_fit_stage)
 
 
-func _scroll_column(parent: Node, stretch: float) -> VBoxContainer:
-	var scroll := ScrollContainer.new()
-	scroll.custom_minimum_size = Vector2(0, 190)
-	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	scroll.size_flags_stretch_ratio = stretch
-	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	parent.add_child(scroll)
-	var column := VBoxContainer.new()
-	column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	column.add_theme_constant_override("separation", 6)
-	scroll.add_child(column)
-	return column
-
-
-func _compact_panel(parent: Node) -> VBoxContainer:
-	var column := add_panel(parent)
-	column.add_theme_constant_override("separation", 4)
-	var style := UiStyle.box(Color("f3f2e7"))
-	style.content_margin_top = 8
-	style.content_margin_bottom = 8
-	style.content_margin_left = 10
-	style.content_margin_right = 10
-	column.get_parent().add_theme_stylebox_override("panel", style)
-	return column
-
-
-func _render_notice() -> void:
-	_feedback_label = add_text(
-		body, _feedback_text, 18, UiStyle.RED if not _feedback_text.is_empty() else UiStyle.MUTED
-	)
-	_feedback_label.visible = not _feedback_text.is_empty()
-
-
-func _render_tasks(parent: Node) -> void:
-	add_text(parent, "当前任务", 20)
-	var tasks := _array(view.get("tasks"))
-	if tasks.is_empty():
-		add_text(parent, "暂无公开任务。", 17, UiStyle.MUTED)
-	for task_value in tasks:
-		var task: Dictionary = _dict(task_value)
-		var task_id := str(task.get("task_id", task.get("definition_id", "")))
-		var panel := _compact_panel(parent)
-		var row := add_row(panel)
-		var art := add_art(row, str(task.get("definition_id", "")), Vector2(72, 68))
-		art.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
-		var details := VBoxContainer.new()
-		details.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		row.add_child(details)
-		add_text(details, UiStyle.label(str(task.get("definition_id", task_id))), 18)
-		add_text(
-			details,
-			(
-				"阶段 %s · 剩余 %s/%s · 屏障 %s"
-				% [
-					UiStyle.label(str(task.get("phase_key", ""))),
-					task.get("work_remaining", 0),
-					task.get("work_max", 0),
-					task.get("shield", 0)
-				]
-			),
-			16,
-			UiStyle.MUTED
-		)
-		var intent := _dict(task.get("intent_snapshot"))
-		if not intent.is_empty():
-			add_text(details, "公开意图：" + _intent_text(intent), 16, UiStyle.GOLD)
-		var button := add_button(panel, "task:" + task_id, "选择任务", {}, _bind_task(task_id))
-		button.tooltip_text = "点击后补足当前卡牌目标" if not _selected_card_id.is_empty() else "选择合作目标"
-
-
-func _render_units(parent: Node) -> void:
-	var units := _array(view.get("units"))
-	if units.is_empty():
-		add_text(parent, "协作单位：暂无", 16, UiStyle.MUTED)
+func _fit_stage() -> void:
+	if not is_instance_valid(_stage):
 		return
-	add_text(parent, "协作单位", 20)
-	for unit_value in units:
-		var unit: Dictionary = _dict(unit_value)
-		var unit_id := str(unit.get("unit_id", unit.get("definition_id", "")))
-		var panel := _compact_panel(parent)
-		add_art(panel, str(unit.get("definition_id", "")), Vector2(64, 48))
-		add_text(panel, UiStyle.label(str(unit.get("definition_id", unit_id))), 19)
-		add_text(
-			panel,
-			(
-				"精力 %s · 协作 %s · 放松 %s · 护卫 %s"
-				% [
-					unit.get("vitality", 0),
-					unit.get("cooperation", 0),
-					unit.get("relax", 0),
-					unit.get("guard", 0)
-				]
-			),
-			16,
-			UiStyle.MUTED
-		)
-		add_button(panel, "unit:" + unit_id, "选择单位", {}, _bind_unit(unit_id))
+	var factor := minf(size.x / 1280.0, size.y / 800.0)
+	_stage.scale = Vector2.ONE * factor
+	_stage.position = (size - Vector2(1280, 800) * factor) * 0.5
 
 
-func _render_player(parent: Node) -> void:
-	add_text(parent, "我的状态", 22)
-	var player := _dict(view.get("player"))
-	add_text(
-		parent,
-		(
-			"专注 %s · 精力 %s · 放松 %s"
-			% [player.get("focus", 0), player.get("vitality", 0), player.get("relax", 0)]
-		),
-		17
-	)
-	var statuses := _array(view.get("statuses"))
-	if not statuses.is_empty():
-		add_text(parent, "状态：" + _status_text(statuses), 16, UiStyle.MUTED)
-
-
-func _render_scene(parent: Node) -> void:
-	var scene := _dict(view.get("scene"))
-	if scene.is_empty():
+func _input(event: InputEvent) -> void:
+	if not is_visible_in_tree() or not is_instance_valid(_stage):
 		return
-	add_text(parent, "当前场景", 21)
-	add_art(parent, str(scene.get("definition_id", "")), Vector2(160, 90))
-	add_text(parent, UiStyle.label(str(scene.get("definition_id", ""))), 18)
-
-
-func _render_choice(parent: Node) -> void:
-	var choice := _choice_dict(view.get("pending_choice"))
-	if choice.is_empty():
+	if event is InputEventMouse:
+		_pointer_position = event.position
+	if event is InputEventKey and event.pressed and event.keycode == KEY_ESCAPE:
+		if is_locked():
+			return
+		if not _panel_text.is_empty():
+			_close_panel()
+		else:
+			_cancel_selection()
+		get_viewport().set_input_as_handled()
 		return
-	add_text(parent, "效果内选择", 22, UiStyle.GOLD)
-	var choice_names := {
-		"discard": "请选择要弃置的卡牌", "recall": "请选择要回忆的卡牌", "retain": "请选择要保留的卡牌", "purify": "请选择要净化的状态"
-	}
-	add_text(parent, str(choice_names.get(str(choice.get("kind", "")), "请选择候选")), 17)
-	var candidates := _array(choice.get("candidates"))
-	for option_value in candidates:
-		var option := _dict(option_value)
-		var id := str(option.get("id", option.get("candidate_id", "")))
-		var selected := _choice_selected_ids.has(id)
-		var option_preview := _dict(option.get("preview"))
-		var definition_id := str(option_preview.get("definition_id", ""))
-		var option_label := UiStyle.label(
-			definition_id if not definition_id.is_empty() else str(option.get("label_key", id))
-		)
-		var button := add_button(
-			parent,
-			"choice:" + id,
-			("● " if selected else "○ ") + option_label,
-			{},
-			_bind_choice(id)
-		)
-		button.tooltip_text = _choice_preview_text(_dict(option.get("preview")))
-	var confirm := add_button(parent, "choice:confirm", "确认选择", _choice_draft())
-	confirm.disabled = (
-		_choice_selected_ids.size() < int(choice.get("min_count", 0))
-		or _choice_selected_ids.size() > int(choice.get("max_count", 0))
-	)
-	if confirm.disabled:
-		confirm.tooltip_text = (
-			"请选择 %s-%s 项" % [choice.get("min_count", 0), choice.get("max_count", 0)]
-		)
-
-
-func _render_selection(parent: Node) -> void:
-	if _selected_card_id.is_empty() and _selected_unit_id.is_empty():
+	if (
+		event is InputEventMouseButton
+		and event.pressed
+		and event.button_index == MOUSE_BUTTON_RIGHT
+	):
+		if not is_locked() and _panel_text.is_empty():
+			_cancel_selection()
+			get_viewport().set_input_as_handled()
 		return
-	add_text(parent, "当前预选", 21, UiStyle.GOLD)
-	if not _selected_card_id.is_empty():
-		add_text(parent, UiStyle.label(_card_definition(_selected_card_id)) + " · 等待目标", 17)
-	if not _selected_unit_id.is_empty():
-		add_text(parent, "单位：" + UiStyle.label(_unit_definition(_selected_unit_id)), 17)
-	for selection_value in _required(_active_preview):
-		var selection := _dict(selection_value)
-		if str(selection.get("field", "")) == "replace_unit_id":
-			add_text(parent, "单位槽已满，请选择换班对象：", 17)
-			for candidate_value in _array(selection.get("candidates")):
-				var candidate := _dict(candidate_value)
-				var id := str(candidate.get("id", ""))
-				add_button(
-					parent,
-					"replace:" + id,
-					UiStyle.label(str(candidate.get("label_key", id))),
-					{},
-					_bind_unit(id)
-				)
-
-
-func _render_retention(parent: Node) -> void:
-	if is_locked():
+	if is_locked() or not _panel_text.is_empty():
 		return
-	var quote: Variant = _preview({"type": "end_turn", "payload": {"retained_card_ids": []}})
-	for selection_value in _required(quote):
-		var selection := _dict(selection_value)
-		if str(selection.get("field", "")) != "retained_card_ids":
-			continue
-		add_text(parent, "本回合普通保留（最多 %s 张）" % selection.get("max_count", 0), 18)
-		for candidate_value in _array(selection.get("candidates")):
-			var candidate := _dict(candidate_value)
-			var id := str(candidate.get("id", ""))
-			add_button(
-				parent,
-				"retain:" + id,
-				(
-					("● " if _retained_card_ids.has(id) else "○ ")
-					+ UiStyle.label(str(candidate.get("label_key", id)))
-				),
-				{},
-				_bind_retention(id, int(selection.get("max_count", 0)))
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		if event.pressed:
+			var card := _card_at(event.position)
+			if card != null:
+				if card.disabled:
+					_tip_label.text = card.tooltip_text
+				else:
+					_pointer_card = card
+					_pointer_start = event.position
+				get_viewport().set_input_as_handled()
+		elif is_instance_valid(_pointer_card):
+			get_viewport().set_input_as_handled()
+			var card_id := str(_pointer_card.card_data.get("card_id", ""))
+			if _dragging:
+				_finish_drag(event.position)
+			else:
+				_pointer_card = null
+				_on_card_pressed(card_id)
+	elif event is InputEventMouseMotion and is_instance_valid(_pointer_card):
+		if not _dragging and event.position.distance_to(_pointer_start) > 10:
+			_begin_drag()
+		if _dragging:
+			_move_drag(event.position)
+		get_viewport().set_input_as_handled()
+
+
+func _card_at(point: Vector2) -> BattleCard:
+	if is_instance_valid(_hovered_card) and _hovered_card.contains_global(point):
+		return _hovered_card
+	for index in range(_hand_cards.size() - 1, -1, -1):
+		if _hand_cards[index].contains_home(point):
+			return _hand_cards[index]
+	return null
+
+
+func _update_pointer(delta: float) -> void:
+	if not is_instance_valid(_stage):
+		return
+	if not _dragging and not is_locked() and _panel_text.is_empty():
+		_hovered_card = _card_at(_pointer_position)
+	else:
+		_hovered_card = null
+	if is_instance_valid(_tip_label) and not is_instance_valid(_pointer_card):
+		_tip_label.text = _hovered_card.tooltip_text if is_instance_valid(_hovered_card) else ""
+	for card in _hand_cards:
+		var raised := card == _hovered_card or card.selected
+		var destination := card.home_position + (Vector2(0, -60) if raised else Vector2.ZERO)
+		card.position = card.position.lerp(destination, minf(1, delta * 18))
+		card.rotation = lerp_angle(
+			card.rotation, 0.0 if raised else card.home_rotation, minf(1, delta * 18)
+		)
+		card.scale = card.scale.lerp(Vector2.ONE * (1.16 if raised else 1.0), minf(1, delta * 18))
+		card.z_index = 60 if raised else card.home_order
+		card.highlighted = raised
+		card.queue_redraw()
+	if is_instance_valid(_aim):
+		_aim.visible = (
+			not _selected_card_id.is_empty() and not is_locked() and _panel_text.is_empty()
+		)
+		if _aim.visible:
+			_aim.origin = Vector2(640, 573)
+			_aim.destination = (
+				_stage.get_global_transform_with_canvas().affine_inverse() * _pointer_position
 			)
+			_aim.valid_target = not _target_at(_pointer_position).is_empty()
+			_aim.queue_redraw()
 
 
-func _render_controls(parent: Node) -> void:
-	var row := add_row(parent)
-	var end_button := add_button(row, "battle:end_turn", "结束回合", _end_turn_draft())
-	end_button.tooltip_text = "结束本回合"
-	add_button(row, "battle:draw", "抽牌堆", {}, Callable(self, "_show_draw"))
-	add_button(row, "battle:discard", "弃牌堆", {}, Callable(self, "_show_discard"))
-	add_button(row, "battle:exhaust", "消耗堆", {}, Callable(self, "_show_exhaust"))
-	var row2 := add_row(parent)
-	add_button(row2, "battle:rules", "规则说明", {}, Callable(self, "_show_rules"))
-	var animation := add_button(
-		row2,
-		"battle:animation",
-		"动画：" + ("开" if animation_enabled else "关"),
-		{},
-		Callable(self, "_toggle_animation")
-	)
-	animation.tooltip_text = "切换事件提示动画"
-	add_button(row2, "battle:speed", "速度 ×%s" % speed_scale, {}, Callable(self, "_cycle_speed"))
-	add_button(row2, "battle:save", "保存", {"type": "ui.save", "payload": {}})
-	add_button(row2, "battle:menu", "主菜单", {"type": "ui.menu", "payload": {}})
-	if not _buttons.has("battle:cancel"):
-		var cancel := add_button(
-			row, "battle:cancel", "取消预选", {}, Callable(self, "_cancel_selection")
-		)
-		cancel.disabled = _selected_card_id.is_empty() and _selected_unit_id.is_empty()
-		cancel.tooltip_text = "尚未选择卡牌或单位" if cancel.disabled else "只取消本地预选"
-	if not _panel_text.is_empty():
-		add_text(parent, _panel_text, 16, UiStyle.MUTED)
-		add_button(parent, "battle:close_panel", "收起说明", {}, Callable(self, "_close_panel"))
+func _begin_drag() -> void:
+	_dragging = true
+	_selected_card_id = str(_pointer_card.card_data.get("card_id", ""))
+	_selected_unit_id = ""
+	_target_ids.clear()
+	_replace_unit_id = ""
+	_preview_draft = {
+		"type": "play_card",
+		"payload":
+		{"card_instance_id": _selected_card_id, "target_ids": [], "replace_unit_id": null}
+	}
+	_active_preview = _preview(_preview_draft)
+	_drag_ghost = BattleCard.new()
+	_drag_ghost.configure(_pointer_card.card_data, true)
+	_drag_ghost.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_drag_ghost.z_index = 90
+	_drag_ghost.scale = Vector2.ONE * 0.85
+	_stage.add_child(_drag_ghost)
+	_pointer_card.modulate.a = 0.3
+	_apply_preview_gating()
+	_sync_card_visuals()
+	_hint_label.text = "松手出牌 · 拖回手牌区域或右键取消"
+	_move_drag(_pointer_position)
 
 
-func _render_hand(parent: Node) -> void:
-	add_text(parent, "手牌 · 点击卡牌，再选择高亮目标", 18)
-	var cards := _array(view.get("hand"))
-	if cards.is_empty():
-		add_text(parent, "手牌为空。", 17, UiStyle.MUTED)
+func _move_drag(point: Vector2) -> void:
+	if is_instance_valid(_drag_ghost):
+		var local := _stage.get_global_transform_with_canvas().affine_inverse() * point
+		_drag_ghost.position = local - Vector2(84, 170)
+		_drag_ghost.modulate.a = 0.9
+
+
+func _target_at(point: Vector2) -> String:
+	for uid in _target_frames:
+		var button: Button = _buttons[uid]
+		if not button.disabled and button.get_global_rect().has_point(point):
+			return str(uid)
+	return ""
+
+
+func _finish_drag(point: Vector2) -> void:
+	var local := _stage.get_global_transform_with_canvas().affine_inverse() * point
+	var target := _target_at(point)
+	_pointer_card = null
+	_dragging = false
+	if is_instance_valid(_drag_ghost):
+		_stage.remove_child(_drag_ghost)
+		_drag_ghost.queue_free()
+	_drag_ghost = null
+	if local.y >= 540 or not Rect2(0, 66, 1280, 474).has_point(local):
+		_cancel_selection()
 		return
-	var scroll := ScrollContainer.new()
-	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	scroll.custom_minimum_size = Vector2(0, 220)
-	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	parent.add_child(scroll)
-	var row := add_row(scroll)
-	for card_value in cards:
-		var card := _dict(card_value)
-		var card_id := str(card.get("card_id", ""))
-		var panel := _compact_panel(row)
-		panel.custom_minimum_size = Vector2(174, 0)
-		add_art(panel, str(card.get("definition_id", "")), Vector2(132, 58))
-		add_text(panel, UiStyle.label(str(card.get("definition_id", card_id))), 17)
-		add_text(
-			panel,
-			(
-				"专注 %s · 精力 %s"
-				% [card.get("effective_cost", 0), card.get("effective_vitality_cost", 0)]
-			),
-			15,
-			UiStyle.MUTED
+	if target.begins_with("task:"):
+		_on_task_pressed(target.trim_prefix("task:"))
+	elif target.begins_with("unit:"):
+		_on_unit_pressed(target.trim_prefix("unit:"))
+	elif _preview_can_submit(_active_preview) and _required(_active_preview).is_empty():
+		_emit_draft(_preview_draft)
+	else:
+		_cancel_selection()
+
+
+func _sync_card_visuals() -> void:
+	for card in _hand_cards:
+		card.selected = str(card.card_data.get("card_id", "")) == _selected_card_id
+		card.queue_redraw()
+	for uid in _target_frames:
+		var frame: Panel = _target_frames[uid]
+		var active: bool = (
+			not _buttons[uid].disabled
+			and (not _selected_card_id.is_empty() or not _selected_unit_id.is_empty())
 		)
-		var face := _dict(card.get("face", card.get("effective_card", {})))
-		var effect_text := UiStyle.describe_effects(_array(face.get("effects", [])))
-		if not effect_text.is_empty():
-			var effect := add_text(panel, effect_text, 14, UiStyle.MUTED)
-			effect.max_lines_visible = 2
-			effect.tooltip_text = effect_text
-		var play := add_button(panel, "card:" + card_id, "打出", {}, _bind_card(card_id))
-		play.custom_minimum_size.y = 36
-		if card.has("playable"):
-			play.disabled = not bool(card.get("playable", false))
-			if play.disabled:
-				play.tooltip_text = "此牌当前不可出"
-
-
-func _render_zones_and_log(parent: Node) -> void:
-	var zones := _dict(view.get("zones_public"))
-	var counts := _dict(view.get("zone_counts"))
-	var panel := add_panel(parent)
-	add_text(panel, "牌堆公开信息", 21)
-	add_text(
-		panel,
-		(
-			"抽牌堆 %s 张 · 弃牌堆 %s 张 · 消耗堆 %s 张"
-			% [
-				counts.get("draw", 0),
-				_array(zones.get("discard")).size(),
-				_array(zones.get("exhaust")).size()
-			]
-		),
-		16,
-		UiStyle.MUTED
-	)
-	var log := _array(view.get("event_log"))
-	if not log.is_empty():
-		add_text(panel, "最近记录", 20)
-		for entry_value in log.slice(maxi(0, log.size() - 8), log.size()):
-			var entry := _dict(entry_value)
-			add_text(panel, _event_text(entry), 15, UiStyle.MUTED)
+		var style := UiStyle.box(Color("eee7d7"))
+		style.border_color = Color("f3d38a") if active else Color("b5ab8b")
+		style.set_border_width_all(4 if active else 2)
+		if active:
+			style.shadow_color = Color(0.95, 0.81, 0.42, 0.4)
+			style.shadow_size = 12
+		frame.add_theme_stylebox_override("panel", style)
 
 
 func _on_card_pressed(card_id: String) -> void:
@@ -558,6 +429,8 @@ func _emit_draft(draft: Dictionary) -> void:
 
 
 func _cancel_selection() -> void:
+	if is_locked():
+		return
 	_selected_card_id = ""
 	_selected_unit_id = ""
 	_target_ids.clear()
@@ -758,6 +631,20 @@ func _set_enabled(uid: String, enabled: bool, reason: String) -> void:
 	if _buttons.has(uid):
 		_buttons[uid].disabled = not enabled
 		_buttons[uid].tooltip_text = "" if enabled else reason
+		if _buttons[uid] is BattleCard:
+			var card: BattleCard = _buttons[uid]
+			var face := _dict(card.card_data.get("face", card.card_data.get("effective_card", {})))
+			card.tooltip_text = (
+				("" if enabled else reason + "  ·  ")
+				+ UiStyle.describe_effects(_array(face.get("effects")))
+				+ (
+					"  ·  专注 %s / 精力 %s（主动支付，绕过放松）"
+					% [
+						card.card_data.get("effective_cost", 0),
+						card.card_data.get("effective_vitality_cost", 0)
+					]
+				)
+			)
 
 
 func _render_from_local() -> void:
@@ -804,7 +691,15 @@ func _show_exhaust() -> void:
 
 
 func _show_rules() -> void:
-	_panel_text = "玩家行动阶段：选择卡牌、目标或协作目标；结束回合后由规则层推进敌方意图。"
+	_panel_text = "点击或拖拽整张卡牌出牌。需要目标的牌，可点击后选择高亮任务/伙伴，或直接拖到目标后松手。\n\n不需要目标的牌，可点击使用，或拖出底部手牌区域后松手使用。拖回底部、右键或 Esc 可取消。\n\n点击伙伴，再点击任务可指定协作目标。需要换班时，选择高亮伙伴。结束回合前可选择本回合保留牌。\n\n结束回合由规则层推进公开意图。抽牌堆仅公开数量。卡牌效果产生待选时，须先在中央选牌面板完成选择。"
+	_render_from_local()
+
+
+func _show_log() -> void:
+	var lines: Array[String] = []
+	for value in _array(view.get("event_log")):
+		lines.append(_event_text(_dict(value)))
+	_panel_text = "战斗记录\n\n" + ("\n".join(lines) if not lines.is_empty() else "暂无记录")
 	_render_from_local()
 
 

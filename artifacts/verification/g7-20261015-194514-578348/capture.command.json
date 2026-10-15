@@ -1,0 +1,9 @@
+[
+  "F:\\GoDot\\Godot_v4.7.2-stable_win64_console.exe",
+  "--path",
+  "E:\\desktop\\项目设计\\项目设计",
+  "--script",
+  "tools/capture_g7.gd",
+  "--",
+  "--output=res://artifacts/verification/g7-20261015-194514-578348/visual"
+]

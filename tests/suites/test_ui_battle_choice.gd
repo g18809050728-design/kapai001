@@ -72,7 +72,55 @@ func run() -> Array[String]:
 	)
 	animated.free()
 	instant.free()
+	_check_restart_pending()
 	return _failures
+
+
+func _check_restart_pending() -> void:
+	var path := _root + "/restart"
+	var shell := _helpers.attach_shell(GameSession.new(SaveStore.new(path))) as GameShell
+	_check(shell.session.update_settings({"autosave": false}).ok, "isolate pending restart save")
+	shell.press("menu:new")
+	var input := _find_input(shell.page)
+	input.text = "0"
+	input.text_changed.emit("0")
+	_check(shell.press("setup:start"), "start independent production run for pending restart")
+	var initial := shell.session.get_view()
+	if initial.run_id == null:
+		_check(false, "pending restart production session exists")
+		shell.free()
+		return
+	_check(
+		shell.press("node:" + str(initial.run.reachable_node_ids[0])),
+		"enter independent battle for pending restart"
+	)
+	var card_id := _card_id(shell, "K03")
+	_check(
+		not card_id.is_empty() and shell.press("card:" + card_id),
+		"open genuine choice before restart"
+	)
+	if shell.session.get_view().pending_choice == null:
+		_check(false, "pending restart begins with genuine choice")
+		shell.free()
+		return
+	var old_id: String = shell.session.get_view().run_id
+	var pending := _fingerprint(shell)
+	_check(shell.press("choice:new_run"), "pending modal can open new-run setup")
+	_check(shell.press("setup:start"), "pending restart requires confirmation")
+	_check(_fingerprint(shell) == pending, "confirmation preserves pending workspace")
+	_check(
+		shell.press("setup:restart_cancel") and shell.press("setup:back"), "cancel pending restart"
+	)
+	_check(shell.press("menu:continue"), "return to original pending choice")
+	_check(_fingerprint(shell) == pending, "return preserves complete pending state and RNG")
+	_check(shell.press("choice:new_run") and shell.press("setup:start"), "reopen pending restart")
+	_check(shell.press("setup:restart_confirm"), "confirm restart while choice is pending")
+	var current := shell.session.get_view()
+	_check(current.run_id != old_id and current.revision == 0, "pending restart creates fresh run")
+	_check(current.pending_choice == null and current.battle == null, "old workspace is discarded")
+	var saved := SaveStore.new(path).load("current_run")
+	_check(saved.ok and str(saved.data.run_id) == str(current.run_id), "replacement is saved")
+	shell.free()
 
 
 func _check_local_actions(shell: GameShell) -> void:

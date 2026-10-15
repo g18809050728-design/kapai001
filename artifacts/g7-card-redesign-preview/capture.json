@@ -1,0 +1,89 @@
+{
+	"isolated_storage": true,
+	"screens": [
+		{
+			"label": "01-menu",
+			"path": "res://artifacts/g7-card-redesign-preview/01-menu.png",
+			"revision": 0,
+			"run_id": null,
+			"save_error": 0,
+			"screen": "menu",
+			"window_size": [
+				1280,
+				800
+			]
+		},
+		{
+			"label": "02-settings",
+			"path": "res://artifacts/g7-card-redesign-preview/02-settings.png",
+			"revision": 0,
+			"run_id": null,
+			"save_error": 0,
+			"screen": "menu",
+			"window_size": [
+				1280,
+				800
+			]
+		},
+		{
+			"label": "03-setup",
+			"path": "res://artifacts/g7-card-redesign-preview/03-setup.png",
+			"revision": 0,
+			"run_id": null,
+			"save_error": 0,
+			"screen": "menu",
+			"window_size": [
+				1280,
+				800
+			]
+		},
+		{
+			"label": "04-map",
+			"path": "res://artifacts/g7-card-redesign-preview/04-map.png",
+			"revision": 0,
+			"run_id": "run_9dd5402a9163367f7d68c2f7",
+			"save_error": 0,
+			"screen": "map",
+			"window_size": [
+				1280,
+				800
+			]
+		},
+		{
+			"label": "05-battle",
+			"path": "res://artifacts/g7-card-redesign-preview/05-battle.png",
+			"revision": 1,
+			"run_id": "run_9dd5402a9163367f7d68c2f7",
+			"save_error": 0,
+			"screen": "battle",
+			"window_size": [
+				1280,
+				800
+			]
+		},
+		{
+			"label": "06-choice",
+			"path": "res://artifacts/g7-card-redesign-preview/06-choice.png",
+			"revision": 2,
+			"run_id": "run_9dd5402a9163367f7d68c2f7",
+			"save_error": 0,
+			"screen": "battle",
+			"window_size": [
+				1280,
+				800
+			]
+		},
+		{
+			"label": "07-battle-960",
+			"path": "res://artifacts/g7-card-redesign-preview/07-battle-960.png",
+			"revision": 2,
+			"run_id": "run_9dd5402a9163367f7d68c2f7",
+			"save_error": 0,
+			"screen": "battle",
+			"window_size": [
+				960,
+				640
+			]
+		}
+	]
+}

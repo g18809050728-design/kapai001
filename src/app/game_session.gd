@@ -87,9 +87,46 @@ func start_run(request: StartRunRequest) -> ActionResult:
 			return _reject(GameConstants.ERROR_RUN_ACTIVE, "error.run.backup_requires_choice")
 		if backup.error.code != GameConstants.ERROR_SAVE_NOT_FOUND:
 			return ActionResult.rejected(backup.error, get_view())
+	var prepared := _prepare_run(request)
+	if not prepared.ok:
+		return ActionResult.rejected(prepared.error, get_view())
+	_activate_run(prepared.data)
+	return _accepted(prepared.data.events)
+
+
+func restart_run(request: StartRunRequest, confirmed: bool = false) -> ActionResult:
+	if not confirmed:
+		return _reject(GameConstants.ERROR_INVALID_ARGUMENT, "error.run.restart_confirmation")
+	var prepared := _prepare_run(request)
+	if not prepared.ok:
+		return ActionResult.rejected(prepared.error, get_view())
+	var merged := _merge_previous_summary()
+	if not merged.ok:
+		return ActionResult.rejected(merged.error, get_view())
+	# Persist the replacement before publishing it, even when autosave is off.
+	# A pending old battle is discarded, never serialized as a stable snapshot.
+	var saved := _save_state(prepared.data.state, prepared.data.catalog)
+	if not saved.ok:
+		return ActionResult.rejected(saved.error, get_view())
+	_activate_run(prepared.data)
+	_last_receipt = saved.data
+	var result := ActionResult.new(get_view())
+	result.accepted = true
+	result.events.assign(prepared.data.events)
+	result.persistence = GameConstants.PERSISTENCE_SAVED
+	return result
+
+
+func _prepare_run(request: StartRunRequest) -> GameResult:
+	if (
+		request == null
+		or not _is_manifest_allowed(request.manifest_id)
+		or request.difficulty != &"normal"
+	):
+		return _failure(GameConstants.ERROR_INVALID_ARGUMENT, "error.run.manifest")
 	var loaded := _load_catalog(request.manifest_id)
 	if not loaded.ok:
-		return ActionResult.rejected(loaded.error, get_view())
+		return loaded
 	var candidate: ContentDB = loaded.data
 	var service := RunService.new(candidate)
 	var created := (
@@ -105,14 +142,52 @@ func start_run(request: StartRunRequest) -> ActionResult:
 		)
 	)
 	if not created.ok:
-		return ActionResult.rejected(created.error, get_view())
+		return created
 	var working := SessionState.new()
 	_publish_run_step(working, created.data)
-	_catalog = candidate
-	_run_service = service
-	_battle_engine = BattleEngine.new(candidate)
-	_state = working
-	return _accepted(created.data.events)
+	return GameResult.success(
+		{"catalog": candidate, "service": service, "state": working, "events": created.data.events}
+	)
+
+
+func _activate_run(prepared: Dictionary) -> void:
+	_catalog = prepared.catalog
+	_run_service = prepared.service
+	_battle_engine = BattleEngine.new(_catalog)
+	_state = prepared.state
+	_last_receipt = null
+	_profile_status = {}
+
+
+func _merge_previous_summary() -> GameResult:
+	var previous := _state
+	if previous == null:
+		var loaded := _store.load("current_run")
+		if not loaded.ok and loaded.error.code == GameConstants.ERROR_SAVE_NOT_FOUND:
+			loaded = _store.load_backup("current_run")
+		if not loaded.ok:
+			return (
+				GameResult.success(true)
+				if loaded.error.code == GameConstants.ERROR_SAVE_NOT_FOUND
+				else loaded
+			)
+		var catalog := _load_catalog(loaded.data.manifest_id)
+		if not catalog.ok:
+			return catalog
+		var decoded := SnapshotCodec.decode_session(loaded.data, catalog.data)
+		if not decoded.ok:
+			return decoded
+		previous = decoded.data
+	if not previous.profile_merge_pending:
+		return GameResult.success(true)
+	var profile := _read_profile()
+	if not profile.ok:
+		return profile
+	var merged := ProfileMerge.merge(profile.data, previous.terminal_summary)
+	if not merged.ok:
+		return merged
+	var encoded := SnapshotCodec.encode_document("profile", merged.data)
+	return _store.save("profile", encoded.data) if encoded.ok else encoded
 
 
 func continue_run() -> GameResult:
@@ -389,11 +464,13 @@ func _restore(backup: bool) -> GameResult:
 	return GameResult.success(get_view())
 
 
-func _save_state(state: SessionState) -> GameResult:
-	var encoded := SnapshotCodec.encode_session(state, _catalog.get_info())
+func _save_state(state: SessionState, catalog: ContentDB = null) -> GameResult:
+	if catalog == null:
+		catalog = _catalog
+	var encoded := SnapshotCodec.encode_session(state, catalog.get_info())
 	if not encoded.ok:
 		return encoded
-	var checked := SnapshotCodec.decode_session(encoded.data, _catalog)
+	var checked := SnapshotCodec.decode_session(encoded.data, catalog)
 	if not checked.ok:
 		return checked
 	return _store.save("current_run", encoded.data)

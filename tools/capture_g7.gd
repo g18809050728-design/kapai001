@@ -38,6 +38,27 @@ func _capture() -> void:
 		_fail("node:" + node_id)
 		return
 	await _save("05-battle")
+	var battle := _shell.page as BattleScreen
+	for card in battle._hand_cards:
+		if str(card.card_data.get("definition_id", "")) == "K14":
+			_mouse_move(card.get_global_transform_with_canvas() * Vector2(85, 80))
+			await create_timer(0.2).timeout
+			await _save("08-card-hover")
+			_mouse_button(card.get_global_transform_with_canvas() * Vector2(85, 80), true)
+			var task_id := str(_session.get_view().battle.tasks[0].task_id)
+			var target: Button = battle._buttons["task:" + task_id]
+			var destination := target.get_global_rect().get_center()
+			_mouse_move(destination, true)
+			await _save("09-card-drag-target")
+			_mouse_button(destination, true, MOUSE_BUTTON_RIGHT)
+			_mouse_button(destination, false)
+			break
+	_mouse_move(Vector2(600, 120))
+	root.size = Vector2i(960, 640)
+	await _save("10-battle-960")
+	root.size = Vector2i(1280, 800)
+	await process_frame
+	await process_frame
 	for card in _session.get_view().battle.hand:
 		if card.definition_id == "K03" and not _shell.page.button_disabled("card:" + card.card_id):
 			_shell.press("card:" + card.card_id)
@@ -52,6 +73,23 @@ func _capture() -> void:
 	_shell.free()
 	print("G7 visual capture passed: " + _output)
 	quit(0)
+
+
+func _mouse_move(point: Vector2, held: bool = false) -> void:
+	var event := InputEventMouseMotion.new()
+	event.position = point
+	event.global_position = point
+	event.button_mask = MOUSE_BUTTON_MASK_LEFT if held else 0
+	root.push_input(event, true)
+
+
+func _mouse_button(point: Vector2, pressed: bool, button: MouseButton = MOUSE_BUTTON_LEFT) -> void:
+	var event := InputEventMouseButton.new()
+	event.position = point
+	event.global_position = point
+	event.button_index = button
+	event.pressed = pressed
+	root.push_input(event, true)
 
 
 func _save(label: String) -> void:

@@ -1,0 +1,131 @@
+{
+  "reviewer": "AI visual inspection",
+  "human_acceptance": false,
+  "capture_exit_code": 0,
+  "result": "passed for implemented G7 scope",
+  "screens": [
+    {
+      "label": "01-menu",
+      "window_setting": [
+        1280,
+        800
+      ],
+      "png_size": [
+        1280,
+        800
+      ]
+    },
+    {
+      "label": "02-settings",
+      "window_setting": [
+        1280,
+        800
+      ],
+      "png_size": [
+        1280,
+        800
+      ]
+    },
+    {
+      "label": "03-setup",
+      "window_setting": [
+        1280,
+        800
+      ],
+      "png_size": [
+        1280,
+        800
+      ]
+    },
+    {
+      "label": "04-map",
+      "window_setting": [
+        1280,
+        800
+      ],
+      "png_size": [
+        1280,
+        800
+      ]
+    },
+    {
+      "label": "05-battle",
+      "window_setting": [
+        1280,
+        800
+      ],
+      "png_size": [
+        1280,
+        800
+      ]
+    },
+    {
+      "label": "08-card-hover",
+      "window_setting": [
+        1280,
+        800
+      ],
+      "png_size": [
+        1280,
+        800
+      ]
+    },
+    {
+      "label": "09-card-drag-target",
+      "window_setting": [
+        1280,
+        800
+      ],
+      "png_size": [
+        1280,
+        800
+      ]
+    },
+    {
+      "label": "10-battle-960",
+      "window_setting": [
+        960,
+        640
+      ],
+      "png_size": [
+        960,
+        600
+      ]
+    },
+    {
+      "label": "06-choice",
+      "window_setting": [
+        1280,
+        800
+      ],
+      "png_size": [
+        1280,
+        800
+      ]
+    },
+    {
+      "label": "07-battle-960",
+      "window_setting": [
+        960,
+        640
+      ],
+      "png_size": [
+        960,
+        600
+      ]
+    }
+  ],
+  "observations": [
+    "Full-screen battlefield with player on left, tasks and intentions on right, fan of cards at bottom.",
+    "Hover raises and enlarges a card; drag shows a card copy, aiming curve and highlighted target.",
+    "Choice modal displays cards, internal scrolling and fixed confirmation; background is dimmed.",
+    "Deck buttons are fully visible after applying compact button style before sizing.",
+    "Window setting 960x640 yields 960x600 rendered PNG with the canvas_items stretch mode.",
+    "Menu/settings/setup/map reviewed together in review-pages.png; battle variants viewed individually."
+  ],
+  "limits": [
+    "No exhaustive production hand/unit/status combinations.",
+    "Human art acceptance and source licensing remain before G8 release."
+  ],
+  "document_check": "artifacts/verification/g0-20261015-195629-672502/report.json"
+}

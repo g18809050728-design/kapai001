@@ -1,0 +1,54 @@
+ERROR: open genuine choice before restart
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/run_ui_tests.gd:22)
+       [1] run (res://tests/suites/test_ui_battle_pointer.gd:147)
+       [2] _frames (res://tests/suites/test_ui_battle_pointer.gd:202)
+ERROR: pending modal can open new-run setup
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/run_ui_tests.gd:22)
+       [1] run (res://tests/suites/test_ui_battle_pointer.gd:147)
+       [2] _frames (res://tests/suites/test_ui_battle_pointer.gd:202)
+ERROR: pending restart requires confirmation
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/run_ui_tests.gd:22)
+       [1] run (res://tests/suites/test_ui_battle_pointer.gd:147)
+       [2] _frames (res://tests/suites/test_ui_battle_pointer.gd:202)
+ERROR: cancel pending restart
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/run_ui_tests.gd:22)
+       [1] run (res://tests/suites/test_ui_battle_pointer.gd:147)
+       [2] _frames (res://tests/suites/test_ui_battle_pointer.gd:202)
+ERROR: return to original pending choice
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/run_ui_tests.gd:22)
+       [1] run (res://tests/suites/test_ui_battle_pointer.gd:147)
+       [2] _frames (res://tests/suites/test_ui_battle_pointer.gd:202)
+ERROR: reopen pending restart
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/run_ui_tests.gd:22)
+       [1] run (res://tests/suites/test_ui_battle_pointer.gd:147)
+       [2] _frames (res://tests/suites/test_ui_battle_pointer.gd:202)
+ERROR: confirm restart while choice is pending
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/run_ui_tests.gd:22)
+       [1] run (res://tests/suites/test_ui_battle_pointer.gd:147)
+       [2] _frames (res://tests/suites/test_ui_battle_pointer.gd:202)
+ERROR: pending restart creates fresh run
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/run_ui_tests.gd:22)
+       [1] run (res://tests/suites/test_ui_battle_pointer.gd:147)
+       [2] _frames (res://tests/suites/test_ui_battle_pointer.gd:202)
+ERROR: old workspace is discarded
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/run_ui_tests.gd:22)
+       [1] run (res://tests/suites/test_ui_battle_pointer.gd:147)
+       [2] _frames (res://tests/suites/test_ui_battle_pointer.gd:202)

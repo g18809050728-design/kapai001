@@ -13,6 +13,11 @@ var _background: TextureRect
 var _notice_label: Label
 var _status_label: Label
 var _setup_defaults: Dictionary = {}
+var _frame_margin: MarginContainer
+var _frame_column: VBoxContainer
+var _frame_panel: PanelContainer
+var _restart_confirmation := false
+var _advance_paused := false
 
 
 func _ready() -> void:
@@ -40,11 +45,13 @@ func _build_frame() -> void:
 	_background.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_background)
 	var margin := MarginContainer.new()
+	_frame_margin = margin
 	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	for side in ["left", "right", "top", "bottom"]:
 		margin.add_theme_constant_override("margin_" + side, 20)
 	add_child(margin)
 	var column := VBoxContainer.new()
+	_frame_column = column
 	column.add_theme_constant_override("separation", 10)
 	margin.add_child(column)
 	_status_label = Label.new()
@@ -52,6 +59,7 @@ func _build_frame() -> void:
 	_status_label.add_theme_font_size_override("font_size", 16)
 	column.add_child(_status_label)
 	var panel := PanelContainer.new()
+	_frame_panel = panel
 	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	column.add_child(panel)
 	_host = Control.new()
@@ -73,6 +81,8 @@ func show_screen(screen: String) -> void:
 func refresh() -> void:
 	if not is_instance_valid(_host):
 		return
+	if _ui_screen.is_empty() and not _advance_paused and last_error == null:
+		_advance_completed_nodes()
 	var current := session.get_view()
 	var screen := _ui_screen if not _ui_screen.is_empty() else String(current.screen)
 	var data: Dictionary = {}
@@ -80,7 +90,6 @@ func refresh() -> void:
 		"menu":
 			data = _storage_view()
 			data.profile = _profile_view()
-			data.can_start_new = current.run_id == null or current.terminal_summary != null
 		"setup":
 			var options := session.get_setup_options()
 			if not options.ok:
@@ -95,6 +104,8 @@ func refresh() -> void:
 				"default_seed": options.data.default_seed
 			}
 			data.merge(_setup_defaults, true)
+			data.replaces_run = _has_previous_run()
+			data.confirm_restart = _restart_confirmation
 		"settings":
 			data = _storage_view()
 			data.settings = {"autosave": session.get_profile().autosave}
@@ -115,6 +126,11 @@ func refresh() -> void:
 				data.run_id = current.run_id
 				data.revision = current.revision
 				data.can_save = current.can_save
+				data.notice = notice
+				if current.run is Dictionary:
+					data.character_id = current.run.get("character_id", "P01")
+					data.max_vitality = current.run.get("max_vitality", 1)
+					data.money = current.run.get("money", 0)
 			else:
 				screen = "battle_entry"
 				data = current.run.duplicate(true) if current.run is Dictionary else {}
@@ -138,6 +154,7 @@ func refresh() -> void:
 		page.action_requested.connect(submit_action)
 		page.local_selection_changed.connect(func(_selection: Dictionary): _regate())
 		_page_key = screen
+	_set_battle_frame(screen == "battle")
 	page.render(data)
 	_regate()
 	var background_id: String = (
@@ -162,6 +179,22 @@ func refresh() -> void:
 	_notice_label.add_theme_color_override(
 		"font_color", UiStyle.RED if last_error != null else UiStyle.INK
 	)
+	if screen == "battle" and last_error != null:
+		_notice_label.visible = true
+		_notice_label.custom_minimum_size.y = 28
+
+
+func _set_battle_frame(battle: bool) -> void:
+	for side in ["left", "right", "top", "bottom"]:
+		_frame_margin.add_theme_constant_override("margin_" + side, 0 if battle else 20)
+	_frame_column.add_theme_constant_override("separation", 0 if battle else 10)
+	_status_label.visible = not battle
+	_notice_label.visible = not battle
+	_notice_label.custom_minimum_size.y = 28 if battle else 48
+	if battle:
+		_frame_panel.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
+	else:
+		_frame_panel.remove_theme_stylebox_override("panel")
 
 
 func _storage_view() -> Dictionary:
@@ -229,7 +262,21 @@ func _regate() -> void:
 				"ok": current.can_save,
 				"reason": "请先完成当前选择" if current.pending_choice != null else "尚未开始学期"
 			}
-		elif current.pending_choice != null and type.begins_with("ui."):
+		elif (
+			current.pending_choice != null
+			and type.begins_with("ui.")
+			and (
+				type
+				not in [
+					"ui.menu",
+					"ui.new_run",
+					"ui.start_run",
+					"ui.cancel_restart",
+					"ui.continue",
+					"ui.back"
+				]
+			)
+		):
 			gates[uid] = {"ok": false, "reason": "请先完成当前选择"}
 	page.apply_gating(gates)
 
@@ -257,43 +304,106 @@ func submit_action(draft: Dictionary) -> void:
 		refresh()
 		return
 	_ui_screen = ""
+	_action_notice(result)
+	refresh()
+	var final_view := session.get_view()
+	if (
+		page is BattleScreen
+		and result.view.battle is Dictionary
+		and final_view.battle is Dictionary
+		and result.view.run_id == final_view.run_id
+		and result.view.battle.battle_id == final_view.battle.battle_id
+	):
+		page.consume_events(result.events, str(result.view.run_id), result.revision)
+
+
+func _has_previous_run() -> bool:
+	var storage := _storage_view()
+	return storage.has_active_session or storage.has_save or storage.backup_meta != null
+
+
+func _advance_completed_nodes() -> void:
+	# At most leave the completed node, enter its sole successor, and inspect it.
+	for step in range(3):
+		var current := session.get_view()
+		if (
+			current.pending_choice != null
+			or current.terminal_summary != null
+			or current.battle != null
+			or not current.node is Dictionary
+		):
+			return
+		var draft: Dictionary = {}
+		if str(current.node.get("status", "")) == "active":
+			if str(current.node.get("kind", "")) == "shop":
+				return
+			draft = {"type": "leave_node", "payload": {"node_id": current.node.node_id}}
+		elif current.screen == &"map" and current.run.reachable_node_ids.size() == 1:
+			draft = {
+				"type": "enter_node", "payload": {"node_id": current.run.reachable_node_ids[0]}
+			}
+		else:
+			return
+		var preview := _preview(draft)
+		if preview == null or not preview.can_submit:
+			return
+		var result := session.submit(
+			CommandContext.new(str(current.run_id), current.revision),
+			GameAction.new(StringName(draft.type), draft.payload)
+		)
+		if not result.accepted:
+			_report_error(result.error)
+			return
+		_action_notice(result)
+		if _advance_paused:
+			return
+
+
+func _action_notice(result: ActionResult) -> void:
 	notice = _persistence_notice(result.persistence, result.profile_merge, result.profile_cleanup)
+	_advance_paused = (
+		result.persistence == &"failed"
+		or result.profile_merge in [&"failed", &"pending"]
+		or result.profile_cleanup in [&"failed", &"pending"]
+	)
 	if result.save_error != null:
 		notice += " · " + UiStyle.error_text(result.save_error)
-	refresh()
-	if page is BattleScreen:
-		page.consume_events(result.events, str(result.view.run_id), result.revision)
 
 
 func _navigate(type: String, payload: Dictionary) -> void:
 	match type:
 		"ui.menu":
 			_ui_screen = "menu"
+			_restart_confirmation = false
 		"ui.new_run", "ui.retry":
 			var current := session.get_view()
 			if current.run_id != null:
-				if current.terminal_summary == null:
-					notice = "已有进行中的学期，请继续或在地图中放弃后重开。"
-					refresh()
-					return
 				_setup_defaults.default_character_id = str(current.run.character_id)
-				var saved := session.save_and_exit()
-				if not _handle_save(saved) or session.get_view().run_id != null:
-					refresh()
-					return
+			_restart_confirmation = false
 			_ui_screen = "setup"
+			notice = "配置好新学期后开始；返回菜单可继续原来的学期。"
+		"ui.cancel_restart":
+			_restart_confirmation = false
 		"ui.start_run":
+			var replacing := _has_previous_run()
+			if replacing and not bool(payload.get("confirmed", false)):
+				_restart_confirmation = true
+				refresh()
+				return
 			_setup_defaults.default_seed = str(payload.get("seed", "0"))
-			var started := session.start_run(
-				StartRunRequest.new(
-					str(payload.get("character_id", "")),
-					StringName(str(payload.get("difficulty", "normal"))),
-					str(payload.get("manifest_id", "")),
-					str(payload.get("seed", "0"))
-				)
+			var request := StartRunRequest.new(
+				str(payload.get("character_id", "")),
+				StringName(str(payload.get("difficulty", "normal"))),
+				str(payload.get("manifest_id", "")),
+				str(payload.get("seed", "0"))
+			)
+			var started := (
+				session.restart_run(request, true) if replacing else session.start_run(request)
 			)
 			if started.accepted:
 				_ui_screen = ""
+				_restart_confirmation = false
+				_advance_paused = started.persistence == &"failed"
 				notice = (
 					"学期开始。选择地图上的第一个节点。 "
 					+ _persistence_notice(
@@ -319,7 +429,8 @@ func _navigate(type: String, payload: Dictionary) -> void:
 		"ui.back":
 			_ui_screen = _back_screen
 		"ui.save":
-			_handle_save(session.save_current())
+			if _handle_save(session.save_current()):
+				_advance_paused = false
 		"ui.save_settings":
 			var changed := session.update_settings(payload)
 			if changed.ok:

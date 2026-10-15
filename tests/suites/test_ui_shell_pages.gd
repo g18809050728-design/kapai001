@@ -28,6 +28,7 @@ func run() -> Array[String]:
 	_root = "user://g7-ui-shell-%s-%s" % [Time.get_ticks_usec(), OS.get_process_id()]
 	_check_production_start()
 	_check_save_continue()
+	_check_restart()
 	var shell := start_fixture_shell(_root + "/semester")
 	if shell.session.get_view().run_id != null:
 		drive_semester(shell, true)
@@ -35,6 +36,7 @@ func run() -> Array[String]:
 		_check(view.screen == &"summary", "six-node route reaches summary through buttons")
 		_check(view.run.outcome == "won", "real BattleEngine boss win finishes semester")
 		_check(view.run.node_path.size() == 6, "six route nodes finish exactly once")
+		_check_terminal_restart(shell.session)
 		_check(shell.press("summary:menu"), "summary returns to menu")
 		_check(shell.press("menu:settings"), "terminal settings are reachable")
 		_check(shell.press("settings:save"), "terminal save is a button operation")
@@ -47,12 +49,19 @@ func run() -> Array[String]:
 		)
 		_check(shell.press("settings:back"), "settings returns to menu")
 		_check(shell.press("menu:continue"), "terminal session remains resumable")
-		_check(shell.press("summary:retry"), "retry saves old session and opens setup")
+		_check(shell.press("summary:retry"), "retry opens setup without releasing old session")
 		_check(
-			shell.session.get_view().run_id == null,
-			"retry releases completed session only after save"
+			shell.session.get_view().run_id == view.run_id,
+			"retry configuration retains completed session until confirmation"
 		)
 		_check(shell.page.button_uids().has("setup:start"), "retry opens real setup page")
+		_check(shell.press("setup:start"), "retry asks for replacement confirmation")
+		_check(shell.press("setup:restart_confirm"), "retry replaces completed session")
+		_check(shell.session.get_view().run_id != view.run_id, "confirmed retry creates new run")
+		_check(
+			shell.session.get_profile().completed_run_ids == profile.completed_run_ids,
+			"restart preserves permanent progress"
+		)
 	shell.free()
 	print(
 		"G7_UI_ROUTE_EVIDENCE=",
@@ -111,14 +120,23 @@ func drive_semester(shell: GameShell, claim_first: bool = false) -> void:
 			for node in shell.session.get_view().run.nodes:
 				if int(node.layer) == 6:
 					assert_disabled_unchanged(shell, "node:" + str(node.node_id))
-		if not press_rule(shell, "node:" + node_id):
-			return
+		if shell.session.get_view().screen == &"map":
+			if layer > 1:
+				_check(
+					shell.session.get_view().run.reachable_node_ids.size() == 2,
+					"route pauses only at a real branch"
+				)
+			if not press_rule(shell, "node:" + node_id):
+				return
+		_check(shell.session.get_view().run.current_node_id == node_id, "enters expected layer")
 		if kind in ["normal", "elite", "boss"]:
 			if not finish_battle(shell):
 				return
 			if kind == "boss":
 				return
-			assert_disabled_unchanged(shell, "reward:leave")
+			_check(
+				not shell.page.button_uids().has("reward:leave"), "reward has no continue button"
+			)
 			for index in range(8):
 				if shell.session.get_view().screen != &"reward":
 					break
@@ -132,6 +150,11 @@ func drive_semester(shell: GameShell, claim_first: bool = false) -> void:
 					_check(false, "reward screen contains a pending item")
 					return
 				var uid := "reward:" + str(item.item_id)
+				var pending_count := 0
+				for reward_item in offer.items:
+					if str(reward_item.status) == "pending":
+						pending_count += 1
+				var automatic := (2 if layer == 4 else 1) if pending_count == 1 else 0
 				if claim_first and layer == 1 and index == 0:
 					assert_disabled_unchanged(shell, uid + ":claim")
 					var candidate: Variant = item.candidates[0]
@@ -145,20 +168,33 @@ func drive_semester(shell: GameShell, claim_first: bool = false) -> void:
 						shell.press(uid + ":pick:" + id), "reward candidate button is selectable"
 					)
 					_check(fingerprint(shell.session) == before, "reward selection is local only")
-					if not press_rule(shell, uid + ":claim"):
+					if not press_rule(shell, uid + ":claim", automatic):
 						return
 				else:
-					if not press_rule(shell, uid + ":skip"):
+					if not press_rule(shell, uid + ":skip", automatic):
 						return
-			if not press_rule(shell, "map:leave"):
-				return
+			_check(
+				(
+					str(
+						(
+							shell
+							. session
+							. get_view()
+							. run
+							. nodes
+							. filter(func(node): return str(node.node_id) == node_id)[0]
+							. status
+						)
+					)
+					== "completed"
+				),
+				"rewards automatically complete the battle node"
+			)
 		elif kind == "event":
-			assert_disabled_unchanged(shell, "event:leave")
-			if not press_rule(shell, "event:option:leave"):
+			_check(not shell.page.button_uids().has("event:leave"), "event has no continue button")
+			if not press_rule(shell, "event:option:leave", 2):
 				return
-			assert_disabled_unchanged(shell, "event:option:leave")
-			if not press_rule(shell, "event:leave"):
-				return
+			_check(shell.session.get_view().screen == &"shop", "event proceeds directly to shop")
 		elif kind == "shop":
 			var stocks: Array = shell.session.get_view().run.shop.stocks
 			_check(not stocks.is_empty(), "shop exposes real stock")
@@ -167,18 +203,17 @@ func drive_semester(shell: GameShell, claim_first: bool = false) -> void:
 			var uid := "shop:buy:" + str(stocks[0].stock_id)
 			if not press_rule(shell, uid):
 				return
+			_check(shell.session.get_view().screen == &"shop", "purchase keeps shop open")
 			assert_disabled_unchanged(shell, uid)
 			if not press_rule(shell, "shop:leave"):
 				return
 		elif kind == "rest":
-			assert_disabled_unchanged(shell, "rest:leave")
+			_check(not shell.page.button_uids().has("rest:leave"), "rest has no continue button")
 			var card_id: String = shell.session.get_view().run.cards[0].card_id
 			var uid := "rest:take:upgrade:" + card_id
-			if not press_rule(shell, uid):
+			if not press_rule(shell, uid, 2):
 				return
-			assert_disabled_unchanged(shell, uid)
-			if not press_rule(shell, "rest:leave"):
-				return
+			_check(shell.session.get_view().screen == &"battle", "rest proceeds directly to boss")
 	_check(false, "route must terminate at boss summary")
 
 
@@ -208,12 +243,14 @@ func finish_battle(shell: GameShell) -> bool:
 	return false
 
 
-func press_rule(shell: GameShell, uid: String) -> bool:
+func press_rule(shell: GameShell, uid: String, automatic_commands: int = 0) -> bool:
 	var revision := shell.session.get_view().revision
 	var draft := shell.page.action_draft(uid)
 	var pressed := shell.press(uid)
-	var accepted := pressed and shell.session.get_view().revision == revision + 1
-	_check(accepted, "accepted button command increments revision once: " + uid)
+	var accepted := (
+		pressed and shell.session.get_view().revision == revision + 1 + automatic_commands
+	)
+	_check(accepted, "button and automatic commands each increment revision once: " + uid)
 	if not accepted:
 		print(
 			"G7_UI_COMMAND_ERROR=",
@@ -225,7 +262,14 @@ func press_rule(shell: GameShell, uid: String) -> bool:
 				else shell.page.button_reason(uid)
 			)
 		)
-	_commands.append({"uid": uid, "draft": draft, "revision": shell.session.get_view().revision})
+	_commands.append(
+		{
+			"uid": uid,
+			"draft": draft,
+			"automatic_commands": automatic_commands,
+			"revision": shell.session.get_view().revision
+		}
+	)
 	return accepted
 
 
@@ -337,7 +381,9 @@ func _check_save_continue() -> void:
 	press_rule(shell, "node:" + id)
 	var live := fingerprint(shell.session)
 	_check(shell.press("battle:menu"), "battle menu keeps in-memory session")
-	_check(not shell.press("menu:new"), "active-session menu disables destructive new run")
+	_check(shell.press("menu:new"), "active session can configure a new run")
+	_check(fingerprint(shell.session) == live, "opening setup preserves old battle")
+	_check(shell.press("setup:back"), "setup can return without starting a run")
 	_check(shell.press("menu:continue"), "continue prefers active in-memory session")
 	_check(fingerprint(shell.session) == live, "menu continue preserves unsaved current battle")
 	shell.free()
@@ -352,6 +398,94 @@ func _check_save_continue() -> void:
 		"autosave-off continue restores last explicit boundary"
 	)
 	restored.free()
+
+
+func _check_restart() -> void:
+	var path := _root + "/restart"
+	var shell := start_fixture_shell(path)
+	var session := shell.session
+	var request := StartRunRequest.new("test_P01", &"normal", "test_run_g4", "43")
+	_check(shell.press("map:save"), "save old run before replacement failure tests")
+	var saved := SaveStore.new(path).load("current_run")
+	var old_id: String = session.get_view().run_id
+	var node_id: String = session.get_view().run.reachable_node_ids[0]
+	press_rule(shell, "node:" + node_id)
+	var before := fingerprint(session)
+	_check(not session.restart_run(request).accepted, "restart requires explicit confirmation")
+	_check(
+		not (
+			session
+			. restart_run(
+				StartRunRequest.new("test_P01", &"normal", "test_run_g4", "invalid"), true
+			)
+			. accepted
+		),
+		"invalid replacement seed is rejected"
+	)
+	session._store.debug_hooks = {"current_run": {"fail_write": true}}
+	_check(not session.restart_run(request, true).accepted, "replacement write failure is rejected")
+	_check(fingerprint(session) == before, "failed replacements preserve old battle and RNG")
+	_check(
+		SaveStore.new(path).load("current_run").data == saved.data,
+		"failed replacements preserve old disk snapshot"
+	)
+	session._store.debug_hooks = {}
+	_check(shell.press("battle:menu") and shell.press("menu:new"), "battle can open new setup")
+	_check(shell.press("setup:start"), "active run asks for confirmation")
+	_check(fingerprint(session) == before, "requesting confirmation preserves old run")
+	_check(shell.press("setup:restart_cancel"), "replacement can be cancelled")
+	_check(fingerprint(session) == before, "cancel preserves old battle and RNG")
+	_check(shell.press("setup:start") and shell.press("setup:restart_confirm"), "restart midbattle")
+	_check(session.get_view().run_id != old_id, "restart creates a distinct run id")
+	_check(
+		session.get_view().revision == 0 and session.get_view().screen == &"map", "restart is fresh"
+	)
+	var replacement := fingerprint(session)
+	shell.free()
+	var fresh := attach_shell(fixture_session(path))
+	_check(fresh.press("menu:continue"), "restart is durable even with autosave disabled")
+	_check(
+		fingerprint(fresh.session) == replacement, "relaunch restores replacement, not old battle"
+	)
+	fresh.free()
+	var disk := attach_shell(fixture_session(path))
+	_check(
+		disk.press("menu:new") and disk.press("setup:start"), "disk run permits new configuration"
+	)
+	_check(
+		disk.press("setup:restart_confirm"), "disk active save can be replaced without restoring"
+	)
+	_check(disk.session.get_view().run_id != old_id, "disk replacement starts a new run")
+	disk.free()
+
+
+func _check_terminal_restart(source: GameSession) -> void:
+	var path := _root + "/terminal_restart"
+	var snapshot := SnapshotCodec.encode_session(source._state, source._catalog.get_info())
+	_check(
+		snapshot.ok and SaveStore.new(path).save("current_run", snapshot.data).ok,
+		"persist terminal marker before a simulated relaunch"
+	)
+	var session := fixture_session(path)
+	var request := StartRunRequest.new("test_P01", &"normal", "test_run_g4", "44")
+	session._store.debug_hooks = {"profile": {"fail_write": true}}
+	_check(
+		not session.restart_run(request, true).accepted,
+		"profile merge failure prevents losing terminal summary on restart"
+	)
+	_check(
+		SaveStore.new(path).load("current_run").data == snapshot.data,
+		"failed terminal restart retains pending summary on disk"
+	)
+	session._store.debug_hooks = {}
+	_check(
+		session.restart_run(request, true).accepted, "restart retries pending disk summary merge"
+	)
+	_check(
+		session.get_profile().completed_run_ids == [str(source.get_view().run_id)],
+		"replacement merges exactly one old terminal summary"
+	)
+	session.free()
 
 
 func _line_edit(node: Node) -> LineEdit:
