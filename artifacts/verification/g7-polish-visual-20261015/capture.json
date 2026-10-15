@@ -1,0 +1,50 @@
+{
+	"isolated_storage": true,
+	"screens": [
+		{
+			"label": "map",
+			"save_error": 0,
+			"size": [
+				1280,
+				800
+			],
+			"source": "real production start"
+		},
+		{
+			"label": "deck",
+			"save_error": 0,
+			"size": [
+				1280,
+				800
+			],
+			"source": "real production deck, local overlay"
+		},
+		{
+			"label": "battle-deck",
+			"save_error": 0,
+			"size": [
+				1280,
+				800
+			],
+			"source": "real production battle, local full-deck panel"
+		},
+		{
+			"label": "shop",
+			"save_error": 0,
+			"size": [
+				1280,
+				800
+			],
+			"source": "controlled display context; production definitions and public RunView"
+		},
+		{
+			"label": "rest",
+			"save_error": 0,
+			"size": [
+				1280,
+				800
+			],
+			"source": "controlled display context; production definitions and public RunView"
+		}
+	]
+}

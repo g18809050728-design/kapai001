@@ -69,7 +69,7 @@ func _header() -> void:
 	_text(stage, Rect2(26, 34, 400, 25), page._battle_subtitle(), 18, LIGHT)
 	_text(
 		stage,
-		Rect2(420, 14, 380, 38),
+		Rect2(414, 14, 320, 38),
 		(
 			"第 %s 回合   ·   %s   |   DDL %s"
 			% [
@@ -82,6 +82,7 @@ func _header() -> void:
 		LIGHT,
 		HORIZONTAL_ALIGNMENT_CENTER
 	)
+	_button(Rect2(752, 14, 72, 36), "battle:deck", "牌组", {}, Callable(page, "_show_deck"))
 	_button(Rect2(830, 14, 72, 36), "battle:rules", "规则", {}, Callable(page, "_show_rules"))
 	_button(Rect2(908, 14, 72, 36), "battle:log", "记录", {}, Callable(page, "_show_log"))
 	_button(
@@ -162,15 +163,34 @@ func _tasks() -> void:
 			HORIZONTAL_ALIGNMENT_CENTER
 		)
 		var frame := _panel(stage, Rect2(x, 207, width, 236), Color("eee7d7"), Color("d0b785"))
-		_art(frame, str(task.get("definition_id", "")), Rect2(7, 7, width - 14, 162))
+		var phase_count := int(task.get("phase_count", 1))
+		var has_phases := phase_count > 1
+		_art(
+			frame,
+			str(task.get("definition_id", "")),
+			Rect2(7, 7, width - 14, 142 if has_phases else 162)
+		)
 		_text(
 			frame,
-			Rect2(8, 177, width - 16, 48),
+			Rect2(8, 155 if has_phases else 177, width - 16, 30 if has_phases else 48),
 			UiStyle.label(str(task.get("definition_id", ""))),
 			20,
 			UiStyle.INK,
 			HORIZONTAL_ALIGNMENT_CENTER
 		)
+		var phase_text := UiStyle.label(str(task.get("phase_key", "")))
+		if has_phases:
+			var phase_index := int(task.get("phase_index", 1))
+			phase_text = "第 %s / %s 阶段 · %s" % [phase_index, phase_count, phase_text]
+			phase_text += "\n最终阶段，完成即可获胜" if phase_index == phase_count else "\n完成后进入下一阶段"
+			_text(
+				frame,
+				Rect2(8, 187, width - 16, 42),
+				phase_text,
+				13,
+				UiStyle.INK,
+				HORIZONTAL_ALIGNMENT_CENTER
+			)
 		var remaining := int(task.get("work_remaining", 0))
 		var maximum := maxi(1, int(task.get("work_max", 1)))
 		_bar(stage, Rect2(x, 454, width, 12), float(remaining) / maximum, Color("b77566"))
@@ -185,7 +205,7 @@ func _tasks() -> void:
 		var target := _button(Rect2(x, 207, width, 236), "task:" + id, "", {}, page._bind_task(id))
 		_transparent_target(target)
 		page._target_frames["task:" + id] = frame
-		target.tooltip_text = "任务阶段：" + UiStyle.label(str(task.get("phase_key", "")))
+		target.tooltip_text = "任务阶段：" + phase_text
 
 
 func _units() -> void:
@@ -242,6 +262,7 @@ func _hand() -> void:
 		var id := str(data.get("card_id", ""))
 		var card := BattleCard.new()
 		card.configure(data, page._selected_card_id == id)
+		card.shortcut_index = index + 1 if index < 9 else 0
 		card.set_meta("uid", "card:" + id)
 		card.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		var offset := float(index) - (cards.size() - 1) * 0.5
@@ -267,7 +288,7 @@ func _hand() -> void:
 	_text(
 		stage,
 		Rect2(390, 775, 500, 22),
-		"拖拽卡牌出牌  /  点击卡牌选择目标  /  右键或 Esc 取消",
+		"1—9 选牌 / 点击或拖拽出牌 / 右键或 Esc 取消",
 		13,
 		SOFT,
 		HORIZONTAL_ALIGNMENT_CENTER
@@ -361,19 +382,24 @@ func _retention() -> void:
 
 
 func _selection_hint() -> String:
+	var focus := int(page._dict(page.view.get("player")).get("focus", 0))
 	if page.is_locked():
 		return "完成卡牌效果后继续行动"
 	if not page._selected_card_id.is_empty():
 		return (
-			"【%s】%s"
+			"剩余专注 %s · 已选【%s】· %s"
 			% [
+				focus,
 				UiStyle.label(page._card_definition(page._selected_card_id)),
 				"选择要换班的伙伴" if page._selection_kind() == "replace_unit_id" else "选择高亮目标"
 			]
 		)
 	if not page._selected_unit_id.is_empty():
-		return "选择该伙伴的协作任务"
-	return "选择一张手牌，开始你的行动"
+		return (
+			"剩余专注 %s · 已选【%s】· 选择高亮任务进行协作"
+			% [focus, UiStyle.label(page._unit_definition(page._selected_unit_id))]
+		)
+	return "剩余专注 %s · 选择手牌，或结束回合恢复专注" % focus
 
 
 func _choice_panel() -> void:
@@ -431,7 +457,7 @@ func _choice_panel() -> void:
 	confirm.size = Vector2(260, 52)
 	_style_button(confirm)
 	var restart := page.add_button(
-		overlay, "choice:new_run", "开始新学期", {"type": "ui.new_run", "payload": {}}
+		overlay, "choice:new_run", "新一局", {"type": "ui.new_run", "payload": {}}
 	)
 	_style_button(restart)
 	restart.position = Vector2(820, 444)

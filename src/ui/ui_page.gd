@@ -9,6 +9,11 @@ var body: VBoxContainer
 var _buttons: Dictionary = {}
 var _drafts: Dictionary = {}
 var _last_action: Dictionary = {}
+var _scroll: ScrollContainer
+var _scroll_scope := ""
+var _scroll_position := Vector2i.ZERO
+var _scroll_restore_pending := false
+var _render_generation := 0
 
 
 func render(data: Dictionary) -> void:
@@ -17,6 +22,14 @@ func render(data: Dictionary) -> void:
 
 
 func reset_page(title: String, subtitle: String = "", compact: bool = false) -> VBoxContainer:
+	var scope := "%s|%s|%s" % [title, view.get("run_id", ""), view.get("current_node_id", "")]
+	if scope != _scroll_scope:
+		_scroll_position = Vector2i.ZERO
+	elif is_instance_valid(_scroll) and not _scroll_restore_pending:
+		_scroll_position = Vector2i(_scroll.scroll_horizontal, _scroll.scroll_vertical)
+	_scroll_scope = scope
+	_scroll_restore_pending = true
+	_render_generation += 1
 	for child in get_children():
 		remove_child(child)
 		child.queue_free()
@@ -24,6 +37,7 @@ func reset_page(title: String, subtitle: String = "", compact: bool = false) -> 
 	_drafts.clear()
 	_last_action.clear()
 	var scroll := ScrollContainer.new()
+	_scroll = scroll
 	scroll.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	add_child(scroll)
@@ -40,7 +54,21 @@ func reset_page(title: String, subtitle: String = "", compact: bool = false) -> 
 		add_text(body, title, 30)
 	if not subtitle.is_empty():
 		add_text(body, subtitle, 17, UiStyle.MUTED)
+	_restore_scroll.call_deferred(_render_generation)
 	return body
+
+
+func _restore_scroll(generation: int) -> void:
+	# Container sizing spans frames; restoring earlier clamps the offset to zero.
+	if not is_inside_tree():
+		return
+	await get_tree().process_frame
+	await get_tree().process_frame
+	if generation != _render_generation or not is_instance_valid(_scroll):
+		return
+	_scroll.scroll_horizontal = _scroll_position.x
+	_scroll.scroll_vertical = _scroll_position.y
+	_scroll_restore_pending = false
 
 
 func add_button(

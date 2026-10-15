@@ -5,6 +5,7 @@ var _catalog: ContentDB
 var _reward_generator: RewardGenerator
 var _transaction_resolver: TransactionResolver
 var _node_service: RunNodeService
+var _card_rules: BattleCardRules
 
 const ACTION_KEYS := {
 	"enter_node": ["node_id"],
@@ -30,6 +31,7 @@ func set_catalog(catalog: ContentDB) -> void:
 	_reward_generator = RewardGenerator.new(catalog)
 	_transaction_resolver = TransactionResolver.new(catalog)
 	_node_service = RunNodeService.new(catalog)
+	_card_rules = BattleCardRules.new(catalog)
 
 
 func rewards() -> RewardGenerator:
@@ -611,6 +613,30 @@ func make_view(state: RunState) -> Dictionary:
 	view.relic_slots = int(rules.run.relic_slots)
 	view.deck_size = state.cards.size()
 	view.reachable_node_ids = state.reachable_node_ids()
+	for card in view.cards:
+		var level := int(card.get("upgrade_level", 0))
+		card.detail = _reward_candidate_view(
+			"card", str(card.definition_id), rules, level, str(card.card_id)
+		)
+		card.upgrade_detail = null
+		var definition := _catalog.get_definition("card", str(card.definition_id))
+		if (
+			level < int(rules.run.max_card_upgrades)
+			and definition.ok
+			and not definition.data.get("upgrade", {}).is_empty()
+		):
+			card.upgrade_detail = _reward_candidate_view(
+				"card", str(card.definition_id), rules, level + 1, str(card.card_id)
+			)
+	for relic in view.relics:
+		relic.detail = _reward_candidate_view("relic", str(relic.definition_id), rules)
+	if view.pending_reward is Dictionary:
+		for item in view.pending_reward.items:
+			item.candidate_details = {}
+			for id in item.candidates:
+				item.candidate_details[str(id)] = _reward_candidate_view(
+					str(item.kind), str(id), rules
+				)
 	view.eligible_endings = eligible_endings(state)
 	view.nodes = []
 	for node in state.nodes:
@@ -638,6 +664,19 @@ func make_view(state: RunState) -> Dictionary:
 				stock.price = _reward_generator.price_for(
 					state, str(stock.kind), int(stock.get("base_price", stock.price))
 				)
+				if stock.kind in ["card", "relic"]:
+					stock.detail = _reward_candidate_view(
+						str(stock.kind), str(stock.definition_id), rules
+					)
+				elif stock.kind == "meal":
+					var base_heal := int(rules.shop.meal_heal)
+					var heal := mini(base_heal, maxi(0, state.max_vitality - state.vitality))
+					stock.detail = {
+						"kind": "meal",
+						"base_heal_amount": base_heal,
+						"heal_amount": heal,
+						"effects": [{"op": "heal", "amount": heal, "target": "player"}]
+					}
 			view.shop.removal = {
 				"available":
 				(
@@ -661,6 +700,9 @@ func make_view(state: RunState) -> Dictionary:
 			view.screen = "event"
 		elif node.kind == "rest":
 			view.rest = _node_service.rest_view(state, node)
+			view.rest.effective_heal_amount = mini(
+				int(view.rest.heal_amount), maxi(0, state.max_vitality - state.vitality)
+			)
 			view.screen = "rest"
 	if state.pending_reward != null and not state.pending_reward.is_complete():
 		view.screen = "reward"
@@ -671,6 +713,60 @@ func make_view(state: RunState) -> Dictionary:
 	if state.awaiting_ending:
 		view.screen = "ending"
 	return view
+
+
+func _reward_candidate_view(
+	kind: String,
+	id: String,
+	rules: Dictionary,
+	upgrade_level: int = 0,
+	card_instance_id: String = ""
+) -> Dictionary:
+	var result := _catalog.get_definition(kind, id)
+	if not result.ok:
+		return {}
+	var detail: Dictionary = result.data.duplicate(true)
+	if kind == "card":
+		var instance_id := card_instance_id if not card_instance_id.is_empty() else id
+		var face_state := BattleState.new(
+			{
+				"card_by_id":
+				{
+					instance_id:
+					{
+						"definition_id": id,
+						"upgrade_level": upgrade_level,
+						"origin_card_id": card_instance_id
+					}
+				}
+			}
+		)
+		var resolved := _card_rules.resolve_face(face_state, instance_id)
+		if not resolved.ok:
+			return {}
+		detail = resolved.data.duplicate(true)
+	detail.related_units = {}
+	detail.related_scenes = {}
+	for effect in detail.get("pre_effects", []) + detail.get("effects", []):
+		for pair in [["unit", "related_units"], ["scene", "related_scenes"]]:
+			var related_id := str(effect.get(pair[0], ""))
+			if related_id.is_empty():
+				continue
+			var related := _catalog.get_definition(pair[0], related_id)
+			if related.ok:
+				detail[pair[1]][related_id] = related.data.duplicate(true)
+	if kind == "card" and detail.get("type") in ["cooperation", "scene"]:
+		var battle_rules: Dictionary = rules.get("battle", {})
+		var values: Array = battle_rules.get(
+			"cooperation_exam_relax" if detail.type == "cooperation" else "scene_exam_relax", []
+		)
+		if values.size() > upgrade_level:
+			detail.exam_effects = [{"op": "relax", "amount": values[upgrade_level]}]
+			if detail.type == "scene":
+				detail.exam_effects.push_front(
+					{"op": "draw", "amount": int(battle_rules.get("scene_exam_draw", 0))}
+				)
+	return detail
 
 
 func _node_view(node: RunNodeState) -> Dictionary:

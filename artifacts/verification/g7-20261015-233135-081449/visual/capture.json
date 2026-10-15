@@ -1,0 +1,24 @@
+{
+  "candidates": [
+    "K05",
+    "K43",
+    "K51"
+  ],
+  "controlled_reward_display": true,
+  "player_save_accessed": false,
+  "production_manifest": "campus_mvp",
+  "save_error": 0,
+  "size": [
+    1280,
+    800
+  ],
+  "command": [
+    "F:/GoDot/Godot_v4.7.2-stable_win64_console.exe",
+    "--path",
+    ".",
+    "--script",
+    "res://artifacts/verification/g7-20261015-233135-081449/visual/capture_reward.gd"
+  ],
+  "exit_code": 0,
+  "visual_review": "AI reviewed actual PNG: costs, targets, effects and selection/claim controls readable without overlap; lower navigation requires vertical scrolling. Controlled candidates, not a natural route; not human approval."
+}

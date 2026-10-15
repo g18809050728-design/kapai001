@@ -120,14 +120,9 @@ func drive_semester(shell: GameShell, claim_first: bool = false) -> void:
 			for node in shell.session.get_view().run.nodes:
 				if int(node.layer) == 6:
 					assert_disabled_unchanged(shell, "node:" + str(node.node_id))
-		if shell.session.get_view().screen == &"map":
-			if layer > 1:
-				_check(
-					shell.session.get_view().run.reachable_node_ids.size() == 2,
-					"route pauses only at a real branch"
-				)
-			if not press_rule(shell, "node:" + node_id):
-				return
+		_check(shell.session.get_view().screen == &"map", "every next layer waits for a map click")
+		if not press_rule(shell, "node:" + node_id):
+			return
 		_check(shell.session.get_view().run.current_node_id == node_id, "enters expected layer")
 		if kind in ["normal", "elite", "boss"]:
 			if not finish_battle(shell):
@@ -154,7 +149,7 @@ func drive_semester(shell: GameShell, claim_first: bool = false) -> void:
 				for reward_item in offer.items:
 					if str(reward_item.status) == "pending":
 						pending_count += 1
-				var automatic := (2 if layer == 4 else 1) if pending_count == 1 else 0
+				var automatic := 1 if pending_count == 1 else 0
 				if claim_first and layer == 1 and index == 0:
 					assert_disabled_unchanged(shell, uid + ":claim")
 					var candidate: Variant = item.candidates[0]
@@ -192,9 +187,12 @@ func drive_semester(shell: GameShell, claim_first: bool = false) -> void:
 			)
 		elif kind == "event":
 			_check(not shell.page.button_uids().has("event:leave"), "event has no continue button")
-			if not press_rule(shell, "event:option:leave", 2):
+			if not press_rule(shell, "event:option:leave", 1):
 				return
-			_check(shell.session.get_view().screen == &"shop", "event proceeds directly to shop")
+			_check(
+				shell.session.get_view().screen == &"map",
+				"event returns to map before the sole shop"
+			)
 		elif kind == "shop":
 			var stocks: Array = shell.session.get_view().run.shop.stocks
 			_check(not stocks.is_empty(), "shop exposes real stock")
@@ -209,11 +207,15 @@ func drive_semester(shell: GameShell, claim_first: bool = false) -> void:
 				return
 		elif kind == "rest":
 			_check(not shell.page.button_uids().has("rest:leave"), "rest has no continue button")
+			_check(shell.press("rest:option:upgrade"), "rest opens upgrade comparison")
 			var card_id: String = shell.session.get_view().run.cards[0].card_id
 			var uid := "rest:take:upgrade:" + card_id
-			if not press_rule(shell, uid, 2):
+			if not press_rule(shell, uid, 1):
 				return
-			_check(shell.session.get_view().screen == &"battle", "rest proceeds directly to boss")
+			_check(
+				shell.session.get_view().screen == &"map",
+				"rest returns to map before the sole boss"
+			)
 	_check(false, "route must terminate at boss summary")
 
 

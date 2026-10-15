@@ -1,0 +1,14 @@
+SCRIPT ERROR: Parse Error: Cannot infer the type of "value" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/suites/test_ui_flow_feedback.gd:157)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/run_ui_tests.gd:16)
+ERROR: Failed to load script "res://tests/suites/test_ui_flow_feedback.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/run_ui_tests.gd:16)
+ERROR: G7 UI suite failed to load: test_ui_flow_feedback
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/run_ui_tests.gd:27)
+       [1] run (res://tests/suites/test_ui_battle_pointer.gd:147)
+       [2] _frames (res://tests/suites/test_ui_battle_pointer.gd:202)

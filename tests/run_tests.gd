@@ -50,7 +50,8 @@ func _initialize() -> void:
 		"test_save_codec",
 		"test_save_store",
 		"test_snapshot_codec",
-		"test_session_storage"
+		"test_session_storage",
+		"test_production_boss"
 	]:
 		var run_script: Script = load("res://tests/suites/%s.gd" % path)
 		if run_script != null and run_script.can_instantiate():

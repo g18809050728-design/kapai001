@@ -667,12 +667,26 @@ func _battle_view(battle: BattleState) -> Dictionary:
 		"player": battle.player.duplicate(true),
 		"hand": hand,
 		"units": battle.units.duplicate(true),
-		"tasks": battle.tasks.duplicate(true),
+		"tasks": battle.tasks.map(_task_view),
 		"statuses": battle.statuses.duplicate(true),
 		"scene": battle.scene.duplicate(true) if battle.scene is Dictionary else null,
 		"zone_counts": counts,
 		"zones_public": zones_public,
 	}
+
+
+func _task_view(task: Dictionary) -> Dictionary:
+	var view := task.duplicate(true)
+	var definition := _catalog.get_definition("task", str(task.get("definition_id", "")))
+	if not definition.ok:
+		return view
+	var phases: Array = definition.data.get("phases", [])
+	view["phase_count"] = phases.size()
+	for index in phases.size():
+		if str(phases[index].get("phase_key", "")) == str(task.get("phase_key", "")):
+			view["phase_index"] = index + 1
+			break
+	return view
 
 
 func _card_view(battle: BattleState, card_id: String) -> Dictionary:

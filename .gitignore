@@ -1,3 +1,45 @@
+# Godot generated cache and translations.
+# Keep *.import settings and *.gd.uid files under version control.
 .godot/
 .import/
 *.translation
+
+# Local builds and export credentials.
+/build/
+/builds/
+/dist/
+/export/
+/exports/
+/export_credentials.cfg
+
+# Python bytecode, tool caches and virtual environments.
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+env/
+
+# Local code index and editor settings.
+.codegraph/
+.idea/
+.vscode/
+
+# Local environment values; allow shareable templates.
+.env
+.env.*
+!.env.example
+!.env.sample
+
+# OS and editor temporary files.
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.swp
+*.swo
+*~
+
+# assets/ and artifacts/verification/ are intentional project deliverables.

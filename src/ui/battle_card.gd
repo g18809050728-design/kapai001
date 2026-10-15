@@ -8,6 +8,7 @@ var highlighted: bool = false
 var home_position := Vector2.ZERO
 var home_rotation: float = 0.0
 var home_order: int = 0
+var shortcut_index: int = 0
 var accent := Color("739d95")
 
 
@@ -60,6 +61,17 @@ func _draw() -> void:
 		draw_texture_rect_region(art, Rect2(10, 39, 148, 96), source)
 	draw_rect(Rect2(10, 132, 148, 3), accent)
 	var font := get_theme_font("font")
+	if shortcut_index > 0:
+		draw_style_box(UiStyle.box(Color(0.08, 0.16, 0.19, 0.85)), Rect2(134, 43, 22, 23))
+		draw_string(
+			font,
+			Vector2(134, 60),
+			str(shortcut_index),
+			HORIZONTAL_ALIGNMENT_CENTER,
+			22,
+			15,
+			Color("fff2d5")
+		)
 	var name_text := UiStyle.label(str(card_data.get("definition_id", "")))
 	name_text = name_text.split("：")[0]
 	draw_string(font, Vector2(39, 28), name_text, HORIZONTAL_ALIGNMENT_CENTER, 116, 16, UiStyle.INK)

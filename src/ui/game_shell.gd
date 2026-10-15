@@ -131,6 +131,8 @@ func refresh() -> void:
 					data.character_id = current.run.get("character_id", "P01")
 					data.max_vitality = current.run.get("max_vitality", 1)
 					data.money = current.run.get("money", 0)
+					data.cards = current.run.get("cards", []).duplicate(true)
+					data.relics = current.run.get("relics", []).duplicate(true)
 			else:
 				screen = "battle_entry"
 				data = current.run.duplicate(true) if current.run is Dictionary else {}
@@ -323,40 +325,32 @@ func _has_previous_run() -> bool:
 
 
 func _advance_completed_nodes() -> void:
-	# At most leave the completed node, enter its sole successor, and inspect it.
-	for step in range(3):
-		var current := session.get_view()
-		if (
-			current.pending_choice != null
-			or current.terminal_summary != null
-			or current.battle != null
-			or not current.node is Dictionary
-		):
-			return
-		var draft: Dictionary = {}
-		if str(current.node.get("status", "")) == "active":
-			if str(current.node.get("kind", "")) == "shop":
-				return
-			draft = {"type": "leave_node", "payload": {"node_id": current.node.node_id}}
-		elif current.screen == &"map" and current.run.reachable_node_ids.size() == 1:
-			draft = {
-				"type": "enter_node", "payload": {"node_id": current.run.reachable_node_ids[0]}
-			}
-		else:
-			return
-		var preview := _preview(draft)
-		if preview == null or not preview.can_submit:
-			return
-		var result := session.submit(
-			CommandContext.new(str(current.run_id), current.revision),
-			GameAction.new(StringName(draft.type), draft.payload)
-		)
-		if not result.accepted:
-			_report_error(result.error)
-			return
-		_action_notice(result)
-		if _advance_paused:
-			return
+	# Finish the resolved node; entering the next node is always a map click.
+	var current := session.get_view()
+	if (
+		current.pending_choice != null
+		or current.terminal_summary != null
+		or current.battle != null
+		or not current.node is Dictionary
+	):
+		return
+	if (
+		str(current.node.get("status", "")) != "active"
+		or str(current.node.get("kind", "")) == "shop"
+	):
+		return
+	var draft := {"type": "leave_node", "payload": {"node_id": current.node.node_id}}
+	var preview := _preview(draft)
+	if preview == null or not preview.can_submit:
+		return
+	var result := session.submit(
+		CommandContext.new(str(current.run_id), current.revision),
+		GameAction.new(StringName(draft.type), draft.payload)
+	)
+	if not result.accepted:
+		_report_error(result.error)
+		return
+	_action_notice(result)
 
 
 func _action_notice(result: ActionResult) -> void:

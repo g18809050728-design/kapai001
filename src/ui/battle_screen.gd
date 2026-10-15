@@ -93,7 +93,8 @@ func lock_snapshot() -> Dictionary:
 		"end_turn": button_disabled("battle:end_turn"),
 		"decks":
 		(
-			button_disabled("battle:draw")
+			button_disabled("battle:deck")
+			or button_disabled("battle:draw")
 			or button_disabled("battle:discard")
 			or button_disabled("battle:exhaust")
 		),
@@ -201,6 +202,27 @@ func _input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 		return
 	if is_locked() or not _panel_text.is_empty():
+		return
+	if (
+		event is InputEventKey
+		and event.pressed
+		and not event.echo
+		and not event.ctrl_pressed
+		and not event.alt_pressed
+		and not event.meta_pressed
+		and event.keycode >= KEY_1
+		and event.keycode <= KEY_9
+	):
+		var index := int(event.keycode) - int(KEY_1)
+		if index < _hand_cards.size():
+			var card := _hand_cards[index]
+			if card.disabled:
+				_feedback_text = card.tooltip_text
+				_feedback_label.text = _feedback_text
+				_feedback_label.visible = true
+			else:
+				_on_card_pressed(str(card.card_data.get("card_id", "")))
+			get_viewport().set_input_as_handled()
 		return
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed:
@@ -680,18 +702,58 @@ func _show_draw() -> void:
 	_render_from_local()
 
 
+func _show_deck() -> void:
+	if is_locked():
+		return
+	var cards := _array(view.get("cards")).duplicate(true)
+	cards.sort_custom(
+		func(a, b):
+			return (
+				"%s|%s" % [a.get("definition_id", ""), a.get("card_id", "")]
+				< "%s|%s" % [b.get("definition_id", ""), b.get("card_id", "")]
+			)
+	)
+	var lines: Array[String] = ["本局牌组 · %s 张" % cards.size(), "按卡牌整理；费用与效果为牌组基础值。"]
+	for value in cards:
+		var card := _dict(value)
+		lines.append(
+			(
+				"%s%s\n%s"
+				% [
+					UiStyle.label(str(card.get("definition_id", ""))),
+					" +%s" % card.upgrade_level if int(card.get("upgrade_level", 0)) > 0 else "",
+					UiContentText.describe_card(_dict(card.get("detail")))
+				]
+			)
+		)
+	lines.append("携带饰品 · %s 件" % _array(view.get("relics")).size())
+	for value in _array(view.get("relics")):
+		var relic := _dict(value)
+		lines.append(
+			(
+				"%s\n%s"
+				% [
+					UiStyle.label(str(relic.get("definition_id", ""))),
+					UiContentText.describe_relic(_dict(relic.get("detail")))
+				]
+			)
+		)
+	_panel_text = "\n\n".join(lines)
+	_render_from_local()
+
+
 func _show_discard() -> void:
-	_panel_text = "弃牌堆：" + _zone_names("discard")
+	_panel_text = _zone_details("discard", "弃牌堆")
 	_render_from_local()
 
 
 func _show_exhaust() -> void:
-	_panel_text = "消耗堆：" + _zone_names("exhaust")
+	_panel_text = _zone_details("exhaust", "消耗堆")
 	_render_from_local()
 
 
 func _show_rules() -> void:
-	_panel_text = "点击或拖拽整张卡牌出牌。需要目标的牌，可点击后选择高亮任务/伙伴，或直接拖到目标后松手。\n\n不需要目标的牌，可点击使用，或拖出底部手牌区域后松手使用。拖回底部、右键或 Esc 可取消。\n\n点击伙伴，再点击任务可指定协作目标。需要换班时，选择高亮伙伴。结束回合前可选择本回合保留牌。\n\n结束回合由规则层推进公开意图。抽牌堆仅公开数量。卡牌效果产生待选时，须先在中央选牌面板完成选择。"
+	_panel_text = "点击或拖拽整张卡牌出牌。数字 1—9 对应从左到右的手牌，与点击相同。需要目标的牌，选牌后点击高亮任务/伙伴，或直接拖到目标后松手。\n\n不需要目标的牌，可点击或按对应数字使用，也可拖出底部手牌区域后松手使用。拖回底部、右键或 Esc 可取消。\n\n点击伙伴，再点击任务可指定协作目标。需要换班时，选择高亮伙伴。结束回合前可选择本回合保留牌。\n\n牌组可查看本局全部卡牌与饰品。弃牌和消耗堆可查看公开牌效果，抽牌堆仅公开数量。卡牌效果产生待选时，须先在中央选牌面板完成选择。"
 	_render_from_local()
 
 
@@ -821,12 +883,26 @@ func _status_text(statuses: Array) -> String:
 	return "、".join(parts)
 
 
-func _zone_names(zone: String) -> String:
-	var names: Array[String] = []
-	for value in _array(_dict(view.get("zones_public")).get(zone)):
+func _zone_details(zone: String, title: String) -> String:
+	var cards := _array(_dict(view.get("zones_public")).get(zone))
+	var lines: Array[String] = ["%s · %s 张" % [title, cards.size()]]
+	for value in cards:
 		var card := _dict(value)
-		names.append(UiStyle.label(str(card.get("definition_id", ""))))
-	return "、".join(names) if not names.is_empty() else "暂无公开卡牌"
+		var detail := _dict(card.get("face", card.get("effective_card", {}))).duplicate(true)
+		detail.cost = card.get("effective_cost", detail.get("cost", 0))
+		detail.vitality_cost = card.get("effective_vitality_cost", detail.get("vitality_cost", 0))
+		lines.append(
+			(
+				"%s\n%s"
+				% [
+					UiStyle.label(str(card.get("definition_id", ""))),
+					UiContentText.describe_card(detail)
+				]
+			)
+		)
+	if cards.is_empty():
+		lines.append("暂无公开卡牌")
+	return "\n\n".join(lines)
 
 
 func _choice_preview_text(preview: Dictionary) -> String:
@@ -840,6 +916,12 @@ func _choice_preview_text(preview: Dictionary) -> String:
 func _event_text(event: Dictionary) -> String:
 	var type := str(event.get("type", "事件"))
 	var data := _dict(event.get("data"))
+	if type == "task_advanced":
+		return "本阶段已完成，进入下一阶段 · " + UiStyle.label(str(data.get("phase_key", "")))
+	if type == "task_completed":
+		return "任务全部阶段已完成"
+	if type == "battle_finished":
+		return "战斗胜利" if str(data.get("result", "")) == "won" else "战斗结束"
 	var source := str(event.get("source_label", event.get("source_id", "")))
 	var suffix := ""
 	if data.has("amount"):

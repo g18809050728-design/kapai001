@@ -1,0 +1,13 @@
+﻿{
+    "date":  "2026-10-16T00:04:40.4573075+08:00",
+    "engine":  "F:\\GoDot\\Godot_v4.7.2-stable_win64_console.exe",
+    "arguments":  [
+                      "--path",
+                      ".",
+                      "--script",
+                      "res://tools/capture_g7_polish.gd",
+                      "--",
+                      "--output=res://artifacts/verification/g7-polish-visual-20261016-000440-352657"
+                  ],
+    "cwd":  "E:\\desktop\\项目设计\\项目设计"
+}

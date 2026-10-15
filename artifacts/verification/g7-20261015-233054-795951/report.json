@@ -1,0 +1,23 @@
+{
+  "stage": "G7",
+  "functional_checks": "failed",
+  "visual_review": "separate capture required",
+  "checks": [
+    {
+      "name": "engine_version",
+      "exit_code": 0,
+      "passed": true
+    },
+    {
+      "name": "editor_import",
+      "exit_code": 0,
+      "passed": true
+    },
+    {
+      "name": "ui_tests",
+      "exit_code": 1,
+      "passed": false
+    }
+  ],
+  "evidence": "artifacts/verification/g7-20261015-233054-795951"
+}

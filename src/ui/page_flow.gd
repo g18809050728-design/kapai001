@@ -11,9 +11,13 @@ var _seed: String = ""
 var _autosave: bool = true
 var _settings_loaded: bool = false
 var _confirm_abandon: bool = false
+var _inspector: Control
+var _inspect_return_focus: Control
+var _inspector_focus_modes: Dictionary = {}
 
 
 func render(data: Dictionary) -> void:
+	_close_inspector()
 	view = data.duplicate(true)
 	match screen:
 		"menu":
@@ -47,7 +51,7 @@ func _render_menu() -> void:
 	add_text(body, "第一学期 · 校园卡牌冒险", 24)
 	add_text(body, "选择角色，规划路线，在作业与休息之间迎接期末挑战。")
 	var row: HBoxContainer = add_row(body)
-	add_button(row, "menu:new", "开始新学期", _ui("new_run"))
+	add_button(row, "menu:new", "开始新一局", _ui("new_run"))
 	var resume: Button = add_button(row, "menu:continue", "继续学期", _ui("continue"))
 	resume.disabled = (
 		not bool(view.get("has_active_session", false)) and not bool(view.get("has_save", false))
@@ -165,9 +169,9 @@ func _render_setup() -> void:
 	add_text(body, "相同种子可重现同一学期；种子和难度将在开局后锁定。", 15)
 	var confirming := bool(view.get("confirm_restart", false))
 	if bool(view.get("replaces_run", false)):
-		add_text(body, "开始新学期会结束原来的学期并替换当前存档；返回可继续原来的学期。", 18)
+		add_text(body, "开始新一局会结束原来的局并替换当前存档；返回可继续原来的局。", 18)
 	if confirming:
-		add_text(body, "确定结束原来的学期，并按以上配置开始新学期吗？", 21)
+		add_text(body, "确定结束原来的局，并按以上配置重新开始第一学期吗？", 21)
 	var footer: HBoxContainer = add_row(body)
 	add_button(
 		footer,
@@ -192,10 +196,33 @@ func _render_setup() -> void:
 
 func _render_map() -> void:
 	reset_page("校园路线", "沿着箭头选择下一站，准备迎接期末。")
-	add_art(body, "BG_campus", Vector2(760, 220))
 	_run_bar(body)
 	var reachable: Array = _array(view.get("reachable_node_ids"))
 	var nodes: Array = _array(view.get("nodes"))
+	var completed := 0
+	for node in nodes:
+		if str(node.get("status", "")) == "completed":
+			completed += 1
+	add_text(body, "已完成 %s 站 · 下一站由你选择" % completed, 21)
+	var next_row := add_row(body)
+	for node in nodes:
+		var id := str(node.get("node_id", ""))
+		if not reachable.has(id):
+			continue
+		var panel := add_panel(next_row)
+		add_text(
+			panel, "第 %s 层 · %s" % [node.get("layer", 0), _node_name(str(node.get("kind", "")))], 22
+		)
+		add_text(panel, _node_hint(str(node.get("kind", ""))), 17)
+		add_button(
+			panel,
+			"node:" + id,
+			"进入 · " + _node_name(str(node.get("kind", ""))),
+			_action("enter_node", {"node_id": id})
+		)
+	if reachable.is_empty():
+		add_text(body, "当前站尚未完成，请继续处理当前任务。", 17)
+	add_text(body, "完整路线", 22)
 	var layers: Dictionary = {}
 	for node in nodes:
 		var layer: int = int(node.get("layer", 0))
@@ -205,8 +232,10 @@ func _render_map() -> void:
 	var ordered: Array = layers.keys()
 	ordered.sort()
 	for layer in ordered:
-		add_text(body, "第 %s 层" % layer, 21)
 		var row: HBoxContainer = add_row(body)
+		var layer_label := add_text(row, "第 %s 层" % layer, 18)
+		layer_label.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+		layer_label.custom_minimum_size.x = 68
 		for node in layers[layer]:
 			var id: String = str(node.get("node_id", ""))
 			var panel: VBoxContainer = add_panel(row)
@@ -217,12 +246,15 @@ func _render_map() -> void:
 				status = "当前"
 			elif reachable.has(id):
 				status = "可进入"
-			add_button(
-				panel,
-				"node:" + id,
-				_node_name(str(node.get("kind", ""))) + " · " + status,
-				_action("enter_node", {"node_id": id})
-			)
+			if reachable.has(id):
+				add_text(panel, _node_name(str(node.get("kind", ""))) + " · " + status, 18)
+			else:
+				add_button(
+					panel,
+					"node:" + id,
+					_node_name(str(node.get("kind", ""))) + " · " + status,
+					_action("enter_node", {"node_id": id})
+				)
 			var next_names: Array[String] = []
 			for next_id in _array(node.get("next_ids")):
 				for destination in nodes:
@@ -274,10 +306,19 @@ func _render_reward() -> void:
 			continue
 		var row: HBoxContainer = add_row(panel)
 		var candidates: Array = _array(item.get("candidates"))
+		var details: Dictionary = _dict(item.get("candidate_details"))
 		for candidate in candidates:
 			var id: String = _candidate_id(candidate)
 			var choice: VBoxContainer = add_panel(row)
 			add_art(choice, id, Vector2(120, 155) if kind == "card" else Vector2(120, 110))
+			add_text(choice, UiStyle.label(id), 20)
+			var detail: Dictionary = _dict(details.get(id))
+			var description := (
+				UiContentText.describe_card(detail)
+				if kind == "card"
+				else UiContentText.describe_relic(detail)
+			)
+			add_text(choice, description, 17)
 			add_button(
 				choice,
 				"reward:%s:pick:%s" % [item_id, id],
@@ -313,7 +354,7 @@ func _render_reward() -> void:
 					"skip_reward", {"offer_id": str(offer.get("offer_id", "")), "item_id": item_id}
 				)
 			)
-	add_text(body, "处理完全部奖励后，将自动前往下一站。", 16)
+	add_text(body, "处理完全部奖励后返回地图，点击下一站进入。", 16)
 	_flow_navigation("reward")
 
 
@@ -321,8 +362,8 @@ func _render_shop() -> void:
 	var shop: Dictionary = _dict(view.get("shop"))
 	_scope(str(shop.get("shop_id", "")))
 	reset_page("校园商店", "买点补给，让下一段路走得更从容。")
-	add_art(body, "BG_shop", Vector2(760, 200))
 	_run_bar(body)
+	add_button(body, "shop:leave", "离开商店，返回地图", _leave())
 	var grid := GridContainer.new()
 	grid.columns = 3
 	grid.add_theme_constant_override("h_separation", 14)
@@ -336,6 +377,26 @@ func _render_shop() -> void:
 		if kind != "meal":
 			add_art(panel, definition_id, Vector2(110, 135))
 		add_text(panel, "校园餐食" if kind == "meal" else UiStyle.label(definition_id), 20)
+		var detail := _dict(stock.get("detail"))
+		if kind == "meal":
+			add_text(
+				panel,
+				(
+					"恢复 %s 精力（最多 %s）"
+					% [detail.get("heal_amount", "—"), detail.get("base_heal_amount", "—")]
+				),
+				17
+			)
+		else:
+			add_text(
+				panel,
+				(
+					UiContentText.describe_card(detail)
+					if kind == "card"
+					else UiContentText.describe_relic(detail)
+				),
+				17
+			)
 		add_text(
 			panel,
 			"金钱 %s%s" % [stock.get("price", 0), " · 已售出" if stock.get("sold", false) else ""],
@@ -374,8 +435,11 @@ func _render_shop() -> void:
 	)
 	for card in _array(view.get("cards")):
 		var card_id: String = str(card.get("card_id", ""))
+		var card_panel := add_panel(removal_panel)
+		add_text(card_panel, _card_name(card), 20)
+		add_text(card_panel, UiContentText.describe_card(_dict(card.get("detail"))), 16)
 		add_button(
-			removal_panel,
+			card_panel,
 			"shop:remove:" + card_id,
 			"移除 " + _card_name(card),
 			_action(
@@ -383,7 +447,6 @@ func _render_shop() -> void:
 				{"shop_id": str(shop.get("shop_id", "")), "card_instance_id": card_id}
 			)
 		)
-	add_button(body, "shop:leave", "离开商店", _leave())
 	_flow_navigation("shop")
 
 
@@ -410,8 +473,10 @@ func _render_event() -> void:
 				add_text(panel, "选择一张牌：", 16)
 				for card in _array(view.get("cards")):
 					var card_id: String = str(card.get("card_id", ""))
+					var card_panel := add_panel(panel)
+					_card_comparison(card_panel, card, op == "upgrade_card")
 					add_button(
-						panel,
+						card_panel,
 						"event:%s:card:%s" % [option_id, card_id],
 						(
 							("● " if str(_choices.get(key, "")) == card_id else "○ ")
@@ -450,24 +515,45 @@ func _render_event() -> void:
 		)
 	if not str(event.get("resolved_option_id", "")).is_empty():
 		add_text(body, "本次事件已处理。", 18)
-	add_text(body, "完成事件选择后，将自动前往下一站。", 16)
+	add_text(body, "完成事件选择后返回地图，点击下一站进入。", 16)
 	_flow_navigation("event")
 
 
 func _render_rest() -> void:
 	var rest: Dictionary = _dict(view.get("rest"))
+	_scope(str(view.get("current_node_id", "")))
 	reset_page("休整时光", "停一停，选一种方式为接下来的挑战做准备。")
-	add_art(body, "BG_dorm", Vector2(760, 200))
 	_run_bar(body)
+	var options := _array(rest.get("options"))
+	var selected := str(_choices.get("rest:option", "heal"))
+	var option_row := add_row(body)
+	for option in options:
+		var id := str(option.get("option_id", ""))
+		add_button(
+			option_row,
+			"rest:option:" + id,
+			("● " if selected == id else "○ ") + _rest_name(id),
+			{},
+			func() -> void: _choose("rest:option", id)
+		)
 	for option in _array(rest.get("options")):
 		var option_id: String = str(option.get("option_id", ""))
 		var panel: VBoxContainer = add_panel(body)
+		(panel.get_parent() as Control).visible = option_id == selected
 		add_text(panel, _rest_name(option_id), 22)
 		if bool(option.get("needs_card", false)):
+			var grid := GridContainer.new()
+			grid.columns = 2 if size.x >= 700 else 1
+			grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			grid.add_theme_constant_override("h_separation", 14)
+			grid.add_theme_constant_override("v_separation", 14)
+			panel.add_child(grid)
 			for card in _array(view.get("cards")):
 				var card_id: String = str(card.get("card_id", ""))
+				var card_panel := add_panel(grid)
+				_card_comparison(card_panel, card, option_id in ["upgrade", "train"])
 				add_button(
-					panel,
+					card_panel,
 					"rest:take:%s:%s" % [option_id, card_id],
 					_card_name(card),
 					_action(
@@ -480,7 +566,17 @@ func _render_rest() -> void:
 					)
 				)
 		else:
-			add_text(panel, "恢复 %s 精力" % rest.get("heal_amount", 0), 18)
+			add_text(
+				panel,
+				(
+					"恢复 %s 精力（最多 %s）"
+					% [
+						rest.get("effective_heal_amount", rest.get("heal_amount", 0)),
+						rest.get("heal_amount", 0)
+					]
+				),
+				18
+			)
 			add_button(
 				panel,
 				"rest:take:" + option_id,
@@ -492,7 +588,7 @@ func _render_rest() -> void:
 			)
 	if bool(rest.get("used", false)):
 		add_text(body, "休整完成，可以继续前进。", 18)
-	add_text(body, "完成休整后，将自动前往下一站。", 16)
+	add_text(body, "完成休整后返回地图，点击下一站进入。", 16)
 	_flow_navigation("rest")
 
 
@@ -531,6 +627,8 @@ func _render_summary() -> void:
 		"校园里的每一次选择，都成为了这学期的回忆。" if won else "稍作休息，再尝试一条新的校园路线。"
 	)
 	add_art(body, "BG_success" if won else "BG_failure", Vector2(760, 280))
+	if won:
+		add_text(body, "你已完成当前版本的全部学期内容。第二学期尚未开放；再开一局会重新开始第一学期。", 20)
 	add_text(
 		body,
 		(
@@ -650,7 +748,7 @@ func _replacement_picker(parent: Node, uid_prefix: String, choice_key: String) -
 	add_text(parent, "饰品槽已满，请选择要替换的饰品：", 16)
 	for relic in _array(view.get("relics")):
 		var id: String = str(relic.get("relic_id", ""))
-		add_button(
+		var button := add_button(
 			parent,
 			uid_prefix + ":replace:" + id,
 			(
@@ -660,6 +758,7 @@ func _replacement_picker(parent: Node, uid_prefix: String, choice_key: String) -
 			{},
 			func() -> void: _choose(choice_key, id)
 		)
+		button.tooltip_text = UiContentText.describe_relic(_dict(relic.get("detail")))
 
 
 func _run_bar(parent: Node) -> void:
@@ -682,6 +781,119 @@ func _run_bar(parent: Node) -> void:
 		relics.append(UiStyle.label(str(relic.get("definition_id", ""))))
 	if not relics.is_empty():
 		add_text(parent, "携带饰品：" + "、".join(relics), 16)
+	var row := add_row(parent)
+	add_button(
+		row,
+		"inspect:deck",
+		"查看牌组 · %s 张" % _array(view.get("cards")).size(),
+		{},
+		func() -> void: _open_inspector("deck")
+	)
+	add_button(
+		row,
+		"inspect:relics",
+		"查看饰品 · %s 件" % relics.size(),
+		{},
+		func() -> void: _open_inspector("relics")
+	)
+
+
+func _card_comparison(parent: Node, card: Dictionary, upgrading: bool) -> void:
+	add_text(parent, _card_name(card), 20)
+	add_text(parent, "当前：" + UiContentText.describe_card(_dict(card.get("detail"))), 16)
+	if upgrading:
+		var next_detail := _dict(card.get("upgrade_detail"))
+		add_text(
+			parent,
+			(
+				"升级后：" + UiContentText.describe_card(next_detail)
+				if not next_detail.is_empty()
+				else "这张牌没有可用的下一等级。"
+			),
+			16
+		)
+
+
+func _open_inspector(kind: String) -> void:
+	_close_inspector()
+	_inspect_return_focus = get_viewport().gui_get_focus_owner()
+	for control in find_children("*", "Control", true, false):
+		if control.focus_mode != Control.FOCUS_NONE:
+			_inspector_focus_modes[control] = control.focus_mode
+			control.focus_mode = Control.FOCUS_NONE
+	_inspector = Control.new()
+	_inspector.name = "CollectionInspector"
+	_inspector.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_inspector.mouse_filter = Control.MOUSE_FILTER_STOP
+	add_child(_inspector)
+	var shade := ColorRect.new()
+	shade.color = Color(0.03, 0.08, 0.09, 0.86)
+	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_inspector.add_child(shade)
+	var margin := MarginContainer.new()
+	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	for side in ["left", "right", "top", "bottom"]:
+		margin.add_theme_constant_override("margin_" + side, 24)
+	_inspector.add_child(margin)
+	var panel := add_panel(margin)
+	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	var header := add_row(panel)
+	var entries := _array(view.get("cards" if kind == "deck" else "relics"))
+	add_text(header, ("我的牌组 · %s 张" if kind == "deck" else "携带饰品 · %s 件") % entries.size(), 26)
+	var close := add_button(header, "inspect:close", "关闭 · Esc", {}, _close_inspector)
+	close.size_flags_horizontal = Control.SIZE_SHRINK_END
+	close.grab_focus()
+	add_text(panel, "显示整副牌组的当前等级效果；不代表抽牌顺序。" if kind == "deck" else "饰品的触发条件与效果如下。", 16)
+	var scroll := ScrollContainer.new()
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	panel.add_child(scroll)
+	var grid := GridContainer.new()
+	grid.columns = 2 if size.x >= 700 else 1
+	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	grid.add_theme_constant_override("h_separation", 14)
+	grid.add_theme_constant_override("v_separation", 14)
+	scroll.add_child(grid)
+	if entries.is_empty():
+		add_text(grid, "暂未携带饰品。" if kind == "relics" else "牌组为空。", 18)
+	for entry in entries:
+		var item := add_panel(grid)
+		var id := str(entry.get("definition_id", ""))
+		var row := add_row(item)
+		var art := add_art(row, id, Vector2(70, 92) if kind == "deck" else Vector2(70, 70))
+		art.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+		add_text(row, _card_name(entry) if kind == "deck" else UiStyle.label(id), 21)
+		var detail := _dict(entry.get("detail"))
+		add_text(
+			item,
+			(
+				UiContentText.describe_card(detail)
+				if kind == "deck"
+				else UiContentText.describe_relic(detail)
+			),
+			17
+		)
+
+
+func _close_inspector() -> void:
+	if is_instance_valid(_inspector):
+		remove_child(_inspector)
+		_inspector.queue_free()
+	_inspector = null
+	_buttons.erase("inspect:close")
+	for control in _inspector_focus_modes:
+		if is_instance_valid(control):
+			control.focus_mode = _inspector_focus_modes[control]
+	_inspector_focus_modes.clear()
+	if is_instance_valid(_inspect_return_focus) and _inspect_return_focus.is_inside_tree():
+		_inspect_return_focus.grab_focus()
+	_inspect_return_focus = null
+
+
+func _input(event: InputEvent) -> void:
+	if is_instance_valid(_inspector) and event.is_action_pressed("ui_cancel"):
+		_close_inspector()
+		get_viewport().set_input_as_handled()
 
 
 func _deck_summary(parent: Node) -> void:
@@ -782,6 +994,22 @@ func _node_name(kind: String) -> String:
 				"rest": "休息"
 			}
 			. get(kind, kind)
+		)
+	)
+
+
+func _node_hint(kind: String) -> String:
+	return str(
+		(
+			{
+				"normal": "完成作业，获得卡牌奖励。",
+				"elite": "更难的作业挑战，进入前留意精力与牌组。",
+				"boss": "第一学期的最后挑战，共有三个阶段。",
+				"shop": "购买卡牌、饰品或餐食，也可以精简牌组。",
+				"event": "遇见校园事件，选择适合当前状态的行动。",
+				"rest": "恢复精力、升级卡牌，或整理负担。"
+			}
+			. get(kind, "选择后进入这一站。")
 		)
 	)
 

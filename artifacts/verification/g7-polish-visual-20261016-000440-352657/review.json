@@ -1,0 +1,17 @@
+{
+  "reviewer": "Codex AI visual inspection",
+  "functional_evidence": "artifacts/verification/g7-20261016-000430-142919",
+  "documentation_evidence": "artifacts/verification/g0-20261016-000709-316026",
+  "current_capture": "artifacts/verification/g7-polish-visual-20261016-000440-352657",
+  "inspected": [
+    {
+      "file": "artifacts/verification/g7-polish-visual-20261016-000440-352657/rest.png",
+      "result": "Selected upgrade panel is visible with two columns and current/upgrade effects; unselected panel backgrounds leave no blank rows."
+    },
+    {
+      "file": "artifacts/verification/g7-polish-visual-20261016-000350-415331/deck.png",
+      "result": "Focused close button text is readable; deck effects and two-column scroll content are visible. The final capture uses the same deck code."
+    }
+  ],
+  "limits": "AI inspection only. Shop/rest captures use controlled contexts with production definitions. Second semester is not implemented; G8 is not complete."
+}
