@@ -13,6 +13,8 @@ var _background: TextureRect
 var _notice_label: Label
 var _status_label: Label
 var _setup_defaults: Dictionary = {}
+var _setup_seed_revision := 0
+var _active_seed := ""
 var _frame_margin: MarginContainer
 var _frame_column: VBoxContainer
 var _frame_panel: PanelContainer
@@ -104,8 +106,11 @@ func refresh() -> void:
 				"default_seed": options.data.default_seed
 			}
 			data.merge(_setup_defaults, true)
+			data.seed_revision = _setup_seed_revision
 			data.replaces_run = _has_previous_run()
 			data.confirm_restart = _restart_confirmation
+			var storage := _storage_view()
+			data.unreadable_save = storage.has_save and not storage.can_continue
 		"settings":
 			data = _storage_view()
 			data.settings = {"autosave": session.get_profile().autosave}
@@ -117,7 +122,7 @@ func refresh() -> void:
 			data.can_save = current.can_save
 			data.difficulty = current.run.get("difficulty", "") if current.run is Dictionary else ""
 			if current.run is Dictionary:
-				data.seed = _setup_defaults.get("default_seed", "旧存档未记录初始种子")
+				data.seed = _active_seed if not _active_seed.is_empty() else "旧存档未记录初始种子"
 		"battle":
 			if current.battle is Dictionary:
 				data = current.battle.duplicate(true)
@@ -205,6 +210,7 @@ func _storage_view() -> Dictionary:
 		return {
 			"has_active_session": session.get_view().run_id != null,
 			"has_save": false,
+			"can_continue": false,
 			"save_meta": null,
 			"backup_meta": null,
 			"save_error": UiStyle.error_text(inspected.error)
@@ -213,6 +219,7 @@ func _storage_view() -> Dictionary:
 	return {
 		"has_active_session": storage.has_active_session,
 		"has_save": storage.has_save,
+		"can_continue": storage.can_continue,
 		"save_meta": storage.save_meta,
 		"backup_meta": storage.backup_meta,
 		"save_error": UiStyle.error_text(storage.save_error) if storage.has_save else ""
@@ -273,6 +280,7 @@ func _regate() -> void:
 					"ui.menu",
 					"ui.new_run",
 					"ui.start_run",
+					"ui.random_seed",
 					"ui.cancel_restart",
 					"ui.continue",
 					"ui.back"
@@ -370,12 +378,35 @@ func _navigate(type: String, payload: Dictionary) -> void:
 			_ui_screen = "menu"
 			_restart_confirmation = false
 		"ui.new_run", "ui.retry":
+			var options := session.get_setup_options()
+			if not options.ok:
+				_report_error(options.error)
+				refresh()
+				return
+			var generated := (
+				session.generate_run_seed()
+				if options.data.default_seed.is_empty()
+				else GameResult.success(options.data.default_seed)
+			)
+			if not generated.ok:
+				_report_error(generated.error)
+				refresh()
+				return
+			_setup_defaults.default_seed = generated.data
+			_setup_seed_revision += 1
 			var current := session.get_view()
 			if current.run_id != null:
 				_setup_defaults.default_character_id = str(current.run.character_id)
 			_restart_confirmation = false
 			_ui_screen = "setup"
 			notice = "配置好新学期后开始；返回菜单可继续原来的学期。"
+		"ui.random_seed":
+			var generated := session.generate_run_seed()
+			if generated.ok:
+				_setup_defaults.default_seed = generated.data
+				_setup_seed_revision += 1
+			else:
+				_report_error(generated.error)
 		"ui.cancel_restart":
 			_restart_confirmation = false
 		"ui.start_run":
@@ -395,6 +426,7 @@ func _navigate(type: String, payload: Dictionary) -> void:
 				session.restart_run(request, true) if replacing else session.start_run(request)
 			)
 			if started.accepted:
+				_active_seed = request.seed
 				_ui_screen = ""
 				_restart_confirmation = false
 				_advance_paused = started.persistence == &"failed"
@@ -406,6 +438,8 @@ func _navigate(type: String, payload: Dictionary) -> void:
 				)
 				if started.save_error != null:
 					notice += " · " + UiStyle.error_text(started.save_error)
+				if not started.archived_save_path.is_empty():
+					notice += " 旧存档原件已保留：" + started.archived_save_path
 			else:
 				_report_error(started.error)
 		"ui.continue", "ui.start_battle", "ui.resume_battle":

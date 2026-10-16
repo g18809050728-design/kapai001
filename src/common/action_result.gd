@@ -14,6 +14,7 @@ var profile_merge: StringName = &"not_pending"
 var profile_error: ApiError
 var profile_cleanup: StringName = &"not_needed"
 var cleanup_error: ApiError
+var archived_save_path: String = ""
 
 
 func _init(p_view: SessionView = null) -> void:

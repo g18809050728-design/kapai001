@@ -10,6 +10,7 @@ func _run() -> void:
 	for path in [
 		"test_run_content_views",
 		"test_ui_shell_pages",
+		"test_ui_save_seed",
 		"test_ui_flow_feedback",
 		"test_ui_battle_choice",
 		"test_ui_battle_pointer",

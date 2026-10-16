@@ -1,0 +1,26 @@
+{
+  "command": [
+    "F:\\GoDot\\Godot_v4.7.2-stable_win64_console.exe",
+    "--headless",
+    "--path",
+    "E:\\desktop\\项目设计\\项目设计",
+    "--script",
+    "res://artifacts/verification/g7-20261016-121334-201790/inspect_player_save.gd"
+  ],
+  "exit_code": 0,
+  "player_save_directory": "C:\\Users\\Dev.LI\\AppData\\Roaming\\Godot\\app_userdata\\交大四年：DDL战争\\saves",
+  "hashes_before": {
+    "current_run.json": "7aa24fa88235fb1721036f9984a6de651d5bed9d63ad21c28d9eb66489af70d7",
+    "current_run.json.bak": "7aa24fa88235fb1721036f9984a6de651d5bed9d63ad21c28d9eb66489af70d7",
+    "profile.json": "fc0821890138825297257412befe0505809d108d2ff699feceb1ebfa1110ea7f",
+    "profile.json.bak": "4231d54e7f2c3e416231715cb283d3f2aac31b6fdeb460bdde8aacab6b809022"
+  },
+  "hashes_after": {
+    "current_run.json": "7aa24fa88235fb1721036f9984a6de651d5bed9d63ad21c28d9eb66489af70d7",
+    "current_run.json.bak": "7aa24fa88235fb1721036f9984a6de651d5bed9d63ad21c28d9eb66489af70d7",
+    "profile.json": "fc0821890138825297257412befe0505809d108d2ff699feceb1ebfa1110ea7f",
+    "profile.json.bak": "4231d54e7f2c3e416231715cb283d3f2aac31b6fdeb460bdde8aacab6b809022"
+  },
+  "player_saves_unchanged": true,
+  "tracked_player_saves": []
+}

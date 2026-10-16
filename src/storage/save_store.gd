@@ -31,6 +31,35 @@ func load_backup(slot: String) -> GameResult:
 	return _read_snapshot(_path(slot) + ".bak")
 
 
+func archive_current_run() -> GameResult:
+	# Preserve bytes, including corrupt/unsupported documents, before replacement.
+	var nonce := Crypto.new().generate_random_bytes(16)
+	if nonce.size() != 16:
+		return _io_error("save.archive.random_failed", _base_path)
+	var destination := _base_path.path_join("recovery").path_join(nonce.hex_encode())
+	if DirAccess.dir_exists_absolute(destination):
+		return _io_error("save.archive.exists", destination)
+	var made := DirAccess.make_dir_recursive_absolute(destination)
+	if made != OK:
+		return _io_error("save.archive.directory_failed", destination, made)
+	for suffix in ["", ".bak"]:
+		var source: String = _path("current_run") + suffix
+		if not FileAccess.file_exists(source):
+			continue
+		var target := destination.path_join(source.get_file())
+		var copied := (
+			FAILED
+			if _hook("current_run", "fail_archive")
+			else DirAccess.copy_absolute(source, target)
+		)
+		if copied != OK:
+			return _io_error("save.archive.copy_failed", target, copied)
+		var digest := FileAccess.get_sha256(source)
+		if digest.is_empty() or FileAccess.get_sha256(target) != digest:
+			return _io_error("save.archive.verify_failed", target)
+	return GameResult.success(destination)
+
+
 func save(slot: String, snapshot: Dictionary) -> GameResult:
 	if not SLOTS.has(slot):
 		return _invalid_slot(slot)

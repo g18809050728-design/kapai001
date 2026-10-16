@@ -31,7 +31,7 @@ def main():
         ("ui_tests", [args.godot, "--headless", "--path", str(root), "--script", "res://tests/run_ui_tests.gd"], "G7 UI tests passed"),
         ("session_regression", [args.godot, "--headless", "--path", str(root), "--script", "res://tests/run_tests.gd"], "G5 headless tests passed"),
         ("main_smoke", [args.godot, "--headless", "--path", str(root), "--quit-after", "3"], "Project bootstrap ready"),
-        ("format_check", [shutil.which("gdformat") or "gdformat", "--check", "src/ui", "src/app", "src/run/run_service.gd", "tests/run_ui_tests.gd", "tests/suites/test_ui_shell_pages.gd", "tests/suites/test_ui_flow_feedback.gd", "tests/suites/test_run_content_views.gd", "tests/suites/test_ui_battle_polish.gd", "tests/suites/test_ui_battle_choice.gd", "tests/suites/test_ui_battle_pointer.gd", "tools/capture_g7.gd", "tools/capture_g7_polish.gd"], None),
+        ("format_check", [shutil.which("gdformat") or "gdformat", "--check", "src/ui", "src/app", "src/storage/save_store.gd", "src/common/action_result.gd", "src/common/setup_options.gd", "src/common/session_storage_view.gd", "src/run/run_service.gd", "tests/run_ui_tests.gd", "tests/suites/test_ui_shell_pages.gd", "tests/suites/test_ui_save_seed.gd", "tests/suites/test_ui_flow_feedback.gd", "tests/suites/test_run_content_views.gd", "tests/suites/test_ui_battle_polish.gd", "tests/suites/test_ui_battle_choice.gd", "tests/suites/test_ui_battle_pointer.gd", "tools/capture_g7.gd", "tools/capture_g7_polish.gd"], None),
     ]
     write("command.json", [{"name": name, "argv": argv} for name, argv, _ in commands])
     write("environment.json", {"os": platform.platform(), "python": sys.version,

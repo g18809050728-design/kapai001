@@ -129,6 +129,7 @@ static func error_text(error: ApiError) -> String:
 		"RUN_NOT_FOUND": "尚未开始学期",
 		"SAVE_NOT_FOUND": "暂无存档",
 		"SAVE_CORRUPT": "存档损坏，可检查备份",
+		"VERSION_MISMATCH": "存档与当前游戏版本不兼容",
 		"SAVE_IO_ERROR": "保存失败，请重试",
 		"STALE_STATE": "界面已过期，请重新选择",
 		"UNPLAYABLE": "此牌不可主动打出"

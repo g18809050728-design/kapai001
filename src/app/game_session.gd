@@ -114,6 +114,7 @@ func restart_run(request: StartRunRequest, confirmed: bool = false) -> ActionRes
 	result.accepted = true
 	result.events.assign(prepared.data.events)
 	result.persistence = GameConstants.PERSISTENCE_SAVED
+	result.archived_save_path = merged.data if merged.data is String else ""
 	return result
 
 
@@ -169,14 +170,14 @@ func _merge_previous_summary() -> GameResult:
 			return (
 				GameResult.success(true)
 				if loaded.error.code == GameConstants.ERROR_SAVE_NOT_FOUND
-				else loaded
+				else _archive_unreadable_run(loaded)
 			)
 		var catalog := _load_catalog(loaded.data.manifest_id)
 		if not catalog.ok:
-			return catalog
+			return _archive_unreadable_run(catalog)
 		var decoded := SnapshotCodec.decode_session(loaded.data, catalog.data)
 		if not decoded.ok:
-			return decoded
+			return _archive_unreadable_run(decoded)
 		previous = decoded.data
 	if not previous.profile_merge_pending:
 		return GameResult.success(true)
@@ -188,6 +189,15 @@ func _merge_previous_summary() -> GameResult:
 		return merged
 	var encoded := SnapshotCodec.encode_document("profile", merged.data)
 	return _store.save("profile", encoded.data) if encoded.ok else encoded
+
+
+func _archive_unreadable_run(result: GameResult) -> GameResult:
+	if (
+		result.error.code
+		not in [GameConstants.ERROR_SAVE_CORRUPT, GameConstants.ERROR_VERSION_MISMATCH]
+	):
+		return result
+	return _store.archive_current_run()
 
 
 func continue_run() -> GameResult:
@@ -383,7 +393,20 @@ func inspect_saves() -> GameResult:
 	if formal.ok:
 		view.has_save = true
 		view.save_meta = formal.data.duplicate(true)
-		if not formal.data.valid:
+		if formal.data.valid:
+			var loaded := _store.load("current_run")
+			var decoded := loaded
+			if loaded.ok:
+				var catalog := _load_catalog(loaded.data.manifest_id)
+				decoded = (
+					SnapshotCodec.decode_session(loaded.data, catalog.data)
+					if catalog.ok
+					else catalog
+				)
+			view.can_continue = decoded.ok
+			if not decoded.ok:
+				view.save_error = decoded.error
+		else:
 			view.save_error = ApiError.new(
 				GameConstants.ERROR_SAVE_CORRUPT,
 				"error.save.corrupt",
@@ -404,6 +427,14 @@ func inspect_saves() -> GameResult:
 	else:
 		view.backup_error = backup.error
 	return GameResult.success(view)
+
+
+func generate_run_seed() -> GameResult:
+	# Entropy for a new run only; never draw from any gameplay stream.
+	var bytes := Crypto.new().generate_random_bytes(8)
+	if bytes.size() != 8:
+		return _failure(GameConstants.ERROR_INVALID_ARGUMENT, "error.seed.entropy_unavailable")
+	return GameResult.success(str(bytes.decode_u64(0) & 0x7fffffffffffffff))
 
 
 func get_setup_options() -> GameResult:

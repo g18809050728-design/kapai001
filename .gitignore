@@ -12,6 +12,13 @@
 /exports/
 /export_credentials.cfg
 
+# Player data must never travel with source downloads or exports.
+/saves/
+/user_data/
+**/current_run.json
+**/current_run.json.bak*
+**/current_run.json.tmp
+
 # Python bytecode, tool caches and virtual environments.
 __pycache__/
 *.py[cod]

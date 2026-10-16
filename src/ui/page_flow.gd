@@ -8,6 +8,7 @@ var _character: String = ""
 var _difficulty: String = ""
 var _manifest: String = ""
 var _seed: String = ""
+var _seed_revision := -1
 var _autosave: bool = true
 var _settings_loaded: bool = false
 var _confirm_abandon: bool = false
@@ -54,15 +55,19 @@ func _render_menu() -> void:
 	add_button(row, "menu:new", "开始新一局", _ui("new_run"))
 	var resume: Button = add_button(row, "menu:continue", "继续学期", _ui("continue"))
 	resume.disabled = (
-		not bool(view.get("has_active_session", false)) and not bool(view.get("has_save", false))
+		not bool(view.get("has_active_session", false))
+		and not bool(view.get("can_continue", false))
 	)
 	if resume.disabled:
-		resume.tooltip_text = "还没有可以继续的学期。"
+		resume.tooltip_text = str(view.get("save_error", ""))
+		if resume.tooltip_text.is_empty():
+			resume.tooltip_text = "还没有可以继续的学期。"
 	add_button(row, "menu:settings", "设置与存档", _ui("settings"))
 	if bool(view.get("has_active_session", false)):
 		add_text(body, "当前学期已保留，可以随时继续。", 16)
 	if view.get("save_error") != null and not str(view.get("save_error", "")).is_empty():
-		add_text(body, "存档暂时不可用；当前内存中的学期仍可继续。请在设置中查看或恢复备份。", 16)
+		add_text(body, "存档暂时不可用：" + str(view.save_error), 16)
+		add_text(body, "可在设置中检查备份，或开始新一局；重开会先保留旧存档原件。", 16)
 	var profile: Dictionary = _dict(view.get("profile"))
 	if not profile.is_empty():
 		add_text(
@@ -147,8 +152,9 @@ func _render_setup() -> void:
 				{},
 				func() -> void: _select_setup("manifest", id)
 			)
-	if _seed.is_empty():
-		_seed = str(view.get("default_seed", "42"))
+	if _seed_revision != int(view.get("seed_revision", 0)):
+		_seed = str(view.get("default_seed", ""))
+		_seed_revision = int(view.get("seed_revision", 0))
 	add_text(body, "学期种子", 22)
 	var seed_row: HBoxContainer = add_row(body)
 	var seed_input := LineEdit.new()
@@ -157,19 +163,13 @@ func _render_setup() -> void:
 	seed_input.custom_minimum_size = Vector2(280, 44)
 	seed_input.text_changed.connect(func(value: String) -> void: _seed = value)
 	seed_row.add_child(seed_input)
-	add_button(
-		seed_row,
-		"setup:seed_random",
-		"随机种子",
-		{},
-		func() -> void:
-			_seed = str(int(Time.get_unix_time_from_system()))
-			refresh_local()
-	)
+	add_button(seed_row, "setup:seed_random", "随机种子", _ui("random_seed"))
 	add_text(body, "相同种子可重现同一学期；种子和难度将在开局后锁定。", 15)
 	var confirming := bool(view.get("confirm_restart", false))
 	if bool(view.get("replaces_run", false)):
 		add_text(body, "开始新一局会结束原来的局并替换当前存档；返回可继续原来的局。", 18)
+	if bool(view.get("unreadable_save", false)):
+		add_text(body, "旧存档无法继续。确认后会先保留旧文件及备份原件，再开始新一局。", 18)
 	if confirming:
 		add_text(body, "确定结束原来的局，并按以上配置重新开始第一学期吗？", 21)
 	var footer: HBoxContainer = add_row(body)
