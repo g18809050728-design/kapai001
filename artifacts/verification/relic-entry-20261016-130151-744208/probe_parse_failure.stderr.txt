@@ -1,0 +1,4 @@
+SCRIPT ERROR: Parse Error: Cannot infer the type of "valid" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://artifacts/verification/relic-entry-20261016-130151-744208/replay.gd:25)
+ERROR: Failed to load script "res://artifacts/verification/relic-entry-20261016-130151-744208/replay.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)

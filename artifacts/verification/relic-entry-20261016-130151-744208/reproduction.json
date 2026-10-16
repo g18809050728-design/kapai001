@@ -1,0 +1,17 @@
+{
+  "command": [
+    "F:\\GoDot\\Godot_v4.7.2-stable_win64_console.exe",
+    "--headless",
+    "--path",
+    "E:\\desktop\\项目设计\\项目设计",
+    "--script",
+    "res://artifacts/verification/relic-entry-20261016-130151-744208/replay.gd"
+  ],
+  "source_path": "C:\\Users\\Dev.LI\\AppData\\Roaming\\Godot\\app_userdata\\交大四年：DDL战争\\saves\\current_run.json",
+  "source_sha256": "f5af7e2be7df1cb36a2593c010b6d4b11911885f9fc22261ac2f4a7a69856014",
+  "original_file_unchanged": true,
+  "before_exit_code": 1,
+  "before_engine_sha256": "1d9dfd66b7b664c80dc106676dc17689f27a243a8cbd311f81ab86a70fe1f3d3",
+  "after_exit_code": 0,
+  "after_engine_sha256": "dd7e35e35fbde937c8c7467b76c86352ca690d78c97a02a6220e8950542a5508"
+}

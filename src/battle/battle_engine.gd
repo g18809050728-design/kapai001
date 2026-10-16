@@ -2651,6 +2651,9 @@ func _validate_input(input: Dictionary) -> GameResult:
 		if not relic_result.ok:
 			return relic_result
 		for hook: Dictionary in relic_result.data.get("hooks", []):
+			# Shop hooks are handled by the run layer, not executed in combat.
+			if str(hook.get("at", "")) == "shop_price":
+				continue
 			if (
 				str(hook.get("at", ""))
 				not in ["round_start", "draw", "card_resolved", "cost_quote"]

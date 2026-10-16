@@ -1,0 +1,220 @@
+ERROR: relic battle entry: N01 control battle starts
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:69)
+ERROR: relic battle entry: N01 with A01 enters combat
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:69)
+ERROR: relic battle entry: N01 with A04 enters combat
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:69)
+ERROR: relic battle entry: N01 with A05 enters combat
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:69)
+ERROR: relic battle entry: N01 with A07 enters combat
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:69)
+ERROR: relic battle entry: N01 with A08 enters combat
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:69)
+ERROR: relic battle entry: N01 with A11 enters combat
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:69)
+ERROR: relic battle entry: N01 with A15 enters combat
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:69)
+ERROR: relic battle entry: N01 with A18 enters combat
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:69)
+ERROR: relic battle entry: N02 control battle starts
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:69)
+ERROR: relic battle entry: N02 with A01 enters combat
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:69)
+ERROR: relic battle entry: N02 with A04 enters combat
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:69)
+ERROR: relic battle entry: N02 with A05 enters combat
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:69)
+ERROR: relic battle entry: N02 with A07 enters combat
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:69)
+ERROR: relic battle entry: N02 with A08 enters combat
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:69)
+ERROR: relic battle entry: N02 with A11 enters combat
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:69)
+ERROR: relic battle entry: N02 with A15 enters combat
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:69)
+ERROR: relic battle entry: N02 with A18 enters combat
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:69)
+ERROR: relic battle entry: N03 control battle starts
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:69)
+ERROR: relic battle entry: N03 with A01 enters combat
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:69)
+ERROR: relic battle entry: N03 with A04 enters combat
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:69)
+ERROR: relic battle entry: N03 with A05 enters combat
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:69)
+ERROR: relic battle entry: N03 with A07 enters combat
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:69)
+ERROR: relic battle entry: N03 with A08 enters combat
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:69)
+ERROR: relic battle entry: N03 with A11 enters combat
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:69)
+ERROR: relic battle entry: N03 with A15 enters combat
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:69)
+ERROR: relic battle entry: N03 with A18 enters combat
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:69)
+ERROR: relic battle entry: N04 control battle starts
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:69)
+ERROR: relic battle entry: N04 with A01 enters combat
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:69)
+ERROR: relic battle entry: N04 with A04 enters combat
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:69)
+ERROR: relic battle entry: N04 with A05 enters combat
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:69)
+ERROR: relic battle entry: N04 with A07 enters combat
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:69)
+ERROR: relic battle entry: N04 with A08 enters combat
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:69)
+ERROR: relic battle entry: N04 with A11 enters combat
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:69)
+ERROR: relic battle entry: N04 with A15 enters combat
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:69)
+ERROR: relic battle entry: N04 with A18 enters combat
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:69)
+ERROR: relic battle entry: Q01 control battle starts
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:69)
+ERROR: relic battle entry: Q01 with A01 enters combat
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:69)
+ERROR: relic battle entry: Q01 with A04 enters combat
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:69)
+ERROR: relic battle entry: Q01 with A05 enters combat
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:69)
+ERROR: relic battle entry: Q01 with A07 enters combat
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:69)
+ERROR: relic battle entry: Q01 with A08 enters combat
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:69)
+ERROR: relic battle entry: Q01 with A11 enters combat
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:69)
+ERROR: relic battle entry: Q01 with A15 enters combat
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:69)
+ERROR: relic battle entry: Q01 with A18 enters combat
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:69)
+ERROR: relic battle entry: B01 control battle starts
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:69)
+ERROR: relic battle entry: B01 with A01 enters combat
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:69)
+ERROR: relic battle entry: B01 with A04 enters combat
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:69)
+ERROR: relic battle entry: B01 with A05 enters combat
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:69)
+ERROR: relic battle entry: B01 with A07 enters combat
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:69)
+ERROR: relic battle entry: B01 with A08 enters combat
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:69)
+ERROR: relic battle entry: B01 with A11 enters combat
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:69)
+ERROR: relic battle entry: B01 with A15 enters combat
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:69)
+ERROR: relic battle entry: B01 with A18 enters combat
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:69)
+ERROR: relic battle entry: unknown hooks remain rejected
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tests/run_tests.gd:69)

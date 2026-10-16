@@ -1,0 +1,3 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+PLAYER_BOSS_ENTRY_REPLAY={"accepted":false,"boss_node":"run_c55fc31ceffc18c35cf29a59|t1l6_boss","error":{"code":"ENGINE_NOT_READY","details":{"at":"shop_price","relic_id":"A15"},"message_key":"battle.relic.hook_not_supported"},"input_revision":59,"isolated_store":"user://relic-entry-replay-39884-613637","rejection_preserves_state_rng":true}

@@ -18,6 +18,7 @@ func run() -> Array[String]:
 	# A valid controlled pre-boss fixture isolates phase progression from route balance.
 	# All content, costs, intents, transitions and subsequent commands remain production code.
 	var run := session._state.run
+	TransactionResolver.new(session._catalog).add_relic(run, "A15", "", 1)
 	for card in run.cards:
 		card.definition_id = "K01"
 	for layer in range(1, 6):
@@ -124,7 +125,7 @@ func run() -> Array[String]:
 			{
 				"seed": "42",
 				"manifest": "campus_mvp",
-				"fixture": "valid pre-boss run; twelve production K01 cards",
+				"fixture": "valid pre-boss run; twelve production K01 cards; A01 and A15 relics",
 				"phases": _phases,
 				"restored_phases": _restores,
 				"commands": commands,
