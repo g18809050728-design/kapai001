@@ -92,3 +92,5 @@ artifacts/**/working/
 # Project assets and existing historical verification evidence are deliverables.
 agent.md
 AGENTS.md
+/.vs/kapai001/FileContentIndex
+/.vs
