@@ -26,6 +26,8 @@ __pycache__/
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
+.tox/
+.nox/
 .venv/
 venv/
 env/
@@ -34,6 +36,8 @@ env/
 .codegraph/
 .idea/
 .vscode/
+.codex/
+.claude/
 
 # Local environment values; allow shareable templates.
 .env
@@ -49,4 +53,42 @@ Desktop.ini
 *.swo
 *~
 
-# assets/ and artifacts/verification/ are intentional project deliverables.
+# Re-creatable test reports and local coverage output.
+.coverage
+.coverage.*
+coverage/
+htmlcov/
+test-results/
+test-output/
+junit.xml
+junit-*.xml
+
+# Ad hoc project archive created for local transfer.
+/docs.zip
+
+# AI assistant scratch space and temporary artifacts.
+.ai-work/
+.ai-scratch/
+.agent-work/
+/artifacts/ai-work/
+/artifacts/ai-intermediate/
+artifacts/**/scratch/
+artifacts/**/tmp/
+artifacts/**/temp/
+artifacts/**/working/
+
+# Local verification runs and downloaded research-page snapshots.
+/artifacts/verification/*/
+
+# AI authoring workspaces stay local; retain only final design deliverables.
+/artifacts/cardpool40-20261029/
+/artifacts/doc-sync-20261029/
+/artifacts/redesign-20261029/*
+!/artifacts/redesign-20261029/README.md
+!/artifacts/redesign-20261029/source-manifest.json
+!/artifacts/redesign-20261029/校园角色与专属卡池_v2.xlsx
+!/artifacts/redesign-20261029/杀戮尖塔2_卡牌参考与流派分析.xlsx
+
+# Project assets and existing historical verification evidence are deliverables.
+agent.md
+AGENTS.md
