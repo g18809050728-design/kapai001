@@ -1,0 +1,45 @@
+{
+  "date": "2026-10-30",
+  "local_design_commit": "9b0db3793b71b6abac2f009f074118d3fa0a6312",
+  "upstream_commit": "e9dc58e74d67f0b3785a72fad520d63591a80345",
+  "strategy": "normal merge; overlapping current-design rules prefer local v3.1; preserve upstream candidates",
+  "historical_marker": "历史候选归档：不作为当前 v3.1 规则。",
+  "candidate_documents": [
+    {
+      "source_path": "docs/小怪设计草稿.md",
+      "current_path": "docs/小怪设计草稿_历史候选_20261030.md",
+      "source_git_blob": "3dc97f02670c085673d6fef6ef2e5b2745b3d966",
+      "source_sha256": "5a3cb5f95dda291558717c7e8ef78452c955b6ebdf2392f35a508c8ce13a14f5",
+      "notice": "> 历史候选归档：不作为当前 v3.1 规则。\n> 2026-10-30 协作合并；来源提交：e9dc58e74d67f0b3785a72fad520d63591a80345。\n> 保留远程新增的第三组、候选表及 D1 强制目标裁决；现行遭遇维护源仍为统一设计第9节。\n> 以下为来源原文；其中“当前”“现行”指来源版本，不覆盖现行维护源。两个候选文档的临时编号各自独立，不是运行 ID，不据同号合并。\n\n",
+      "text_replacements": [
+        {
+          "kind": "trailing_space",
+          "before": "导师约谈      攻击 受到致命伤害时为我方回复5能量 但之降低我方2能量上限，持续两 \n",
+          "after": "导师约谈      攻击 受到致命伤害时为我方回复5能量 但之降低我方2能量上限，持续两\n",
+          "occurrences": 1
+        },
+        {
+          "kind": "trailing_space",
+          "before": "讲座考勤      不攻击 每回合往我方手牌塞一张签到表（不可打出） 存在时我方每回合 \n",
+          "after": "讲座考勤      不攻击 每回合往我方手牌塞一张签到表（不可打出） 存在时我方每回合\n",
+          "occurrences": 1
+        }
+      ]
+    },
+    {
+      "source_path": "docs/饰品与怪物.md",
+      "current_path": "docs/饰品与怪物.md",
+      "source_git_blob": "f61c42af6a4e5970cda27f751da277ae9e3dce19",
+      "source_sha256": "11f243f1bd96108909d66c95508b59de01a34cafadfe604ef72c521c6709edf6",
+      "notice": "> 历史候选归档：不作为当前 v3.1 规则。\n> 2026-10-30 协作合并；来源提交：e9dc58e74d67f0b3785a72fad520d63591a80345。\n> 原文按旧 v2 编写。A49–A51 依赖的旧角色资源已停用，不适用于 v3.1；其余条目也仅保留为候选，不进入当前卡池、饰品或遭遇范围。\n> 以下为来源原文；其中“当前”“现行”指来源版本，不覆盖现行维护源。两个候选文档的临时编号各自独立，不是运行 ID，不据同号合并。\n\n",
+      "text_replacements": [
+        {
+          "before": "(小怪设计草稿.md)",
+          "after": "(小怪设计草稿_历史候选_20261030.md)",
+          "occurrences": 2,
+          "kind": "relative_link"
+        }
+      ]
+    }
+  ]
+}

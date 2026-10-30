@@ -370,7 +370,50 @@ def main():
     documents = ([ROOT / 'README.md', ROOT / 'agent.md', ROOT / '实施计划与验收基线.md']
                  + sorted((ROOT / 'docs').rglob('*.md'))
                  + sorted((ROOT / '动作或者图片描述').rglob('*.md'))
-                 + [HERE / 'README.md'])
+                 + [HERE / 'README.md', HERE / 'git-integration.md'])
+
+    historical_candidates = set()
+
+    def upstream_archives():
+        manifest = json.loads((HERE / 'git-integration.json').read_text(encoding='utf-8'))
+        expected = {
+            'docs/小怪设计草稿.md': 'docs/小怪设计草稿_历史候选_20261030.md',
+            'docs/饰品与怪物.md': 'docs/饰品与怪物.md',
+        }
+        entries = manifest['candidate_documents']
+        require(len(entries) == 2 and
+                {e['source_path']: e['current_path'] for e in entries} == expected,
+                'Only the two explicitly archived upstream candidate documents may be excluded')
+        for entry in entries:
+            path = ROOT / entry['current_path']
+            notice = entry['notice'].encode('utf-8')
+            require(manifest['historical_marker'] == '历史候选归档：不作为当前 v3.1 规则。'
+                    and manifest['historical_marker'] in entry['notice']
+                    and manifest['upstream_commit'] in entry['notice'],
+                    (entry['current_path'], 'missing historical version/source boundary'))
+            # Git text checkout may use CRLF; source Git blobs use LF.
+            content = path.read_bytes().replace(b'\r\n', b'\n')
+            require(content.startswith(notice), (entry['current_path'], 'archive notice changed'))
+            original = content[len(notice):]
+            for replacement in reversed(entry['text_replacements']):
+                before = replacement['before'].encode('utf-8')
+                after = replacement['after'].encode('utf-8')
+                require(original.count(after) == replacement['occurrences'],
+                        (entry['current_path'], 'recorded text replacement count changed'))
+                original = original.replace(after, before)
+            require(hashlib.sha256(original).hexdigest() == entry['source_sha256'],
+                    (entry['current_path'], 'upstream original bytes changed'))
+            blob = b'blob ' + str(len(original)).encode('ascii') + b'\0' + original
+            require(hashlib.sha1(blob).hexdigest() == entry['source_git_blob'],
+                    (entry['current_path'], 'upstream Git blob mismatch'))
+        require('A49–A51' in entries[1]['notice'] and '已停用' in entries[1]['notice'],
+                'Retired character-resource candidates must remain explicitly historical')
+        historical_candidates.update(ROOT / e['current_path'] for e in entries)
+        return {'source_commit': manifest['upstream_commit'], 'preserved_candidate_documents': 2,
+                'source_sha256_and_git_blob_match': True,
+                'excluded_from_current_rule_audit': sorted(expected.values()),
+                'local_link_checks_still_apply': True}
+    check('upstream_candidate_originals_and_historical_boundaries', upstream_archives)
 
     def links():
         broken, total = [], 0
@@ -399,7 +442,8 @@ def main():
     check('markdown_utf8_and_local_link_paths', links)
 
     def legacy():
-        active = [p for p in documents if not p.name.startswith(('G0', 'G1', 'G2', 'G3', 'G4', 'G5', 'G6', 'G7'))]
+        active = [p for p in documents if p not in historical_candidates
+                  and not p.name.startswith(('G0', 'G1', 'G2', 'G3', 'G4', 'G5', 'G6', 'G7'))]
         findings = []
         patterns = [r'当前设计以已改写的v2', r'新R2卡', r'R2-[CP]\d?\d?-\d+',
                     r'获得\d+(?:点)?(?:编译|数据|稿件)', r'(?:编译|稿件)(?:上限|初始)',
@@ -421,7 +465,8 @@ def main():
 
     def retired_p03_rules():
         historical_names = ('G0', 'G1', 'G2', 'G3', 'G4', 'G5', 'G6', 'G7', '文档修改总结报告_')
-        active = [p for p in documents if not p.name.startswith(historical_names)]
+        active = [p for p in documents if p not in historical_candidates
+                  and not p.name.startswith(historical_names)]
         patterns = [r'破绽|动摇|暴露|催化|引爆|毒爆', r'公共(?:8种|8张)',
                     r'168\s*(?:种)?永久', r'170个卡定义', r'40\+6', r'46种(?:奖励|资格)',
                     r'13张工作表', r'自然与额外(?:合计|触发)']

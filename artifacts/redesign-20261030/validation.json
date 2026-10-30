@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-30T17:19:56.722018+08:00",
+  "timestamp": "2026-10-30T17:27:28.345069+08:00",
   "command": "python artifacts/redesign-20261030/verify_delivery.py",
   "environment": {
     "python": "3.14.2 (tags/v3.14.2:df79316, Dec  5 2025, 17:18:21) [MSC v.1944 64 bit (AMD64)]",
@@ -148,11 +148,25 @@
       }
     },
     {
+      "check": "upstream_candidate_originals_and_historical_boundaries",
+      "passed": true,
+      "detail": {
+        "source_commit": "e9dc58e74d67f0b3785a72fad520d63591a80345",
+        "preserved_candidate_documents": 2,
+        "source_sha256_and_git_blob_match": true,
+        "excluded_from_current_rule_audit": [
+          "docs/小怪设计草稿_历史候选_20261030.md",
+          "docs/饰品与怪物.md"
+        ],
+        "local_link_checks_still_apply": true
+      }
+    },
+    {
       "check": "markdown_utf8_and_local_link_paths",
       "passed": true,
       "detail": {
-        "markdown_files": 44,
-        "local_link_paths": 520,
+        "markdown_files": 47,
+        "local_link_paths": 534,
         "broken": [],
         "scope": "existing local paths; anchors and remote sites not fetched"
       }
@@ -169,7 +183,7 @@
           "(?:编译|稿件)(?:上限|初始)",
           "每人(?:均有)?(?:三|3)条(?:主)?流派"
         ],
-        "active_documents": 34,
+        "active_documents": 35,
         "findings": [],
         "boundary": "Targeted text audit; not a semantic proof of all card rules"
       }
@@ -178,7 +192,7 @@
       "check": "retired_p03_mechanics_and_outdated_delivery_counts_removed",
       "passed": true,
       "detail": {
-        "current_documents_scanned": 33,
+        "current_documents_scanned": 34,
         "patterns_checked": [
           "破绽|动摇|暴露|催化|引爆|毒爆",
           "公共(?:8种|8张)",
@@ -466,9 +480,9 @@
     }
   ],
   "reviewed_file_sha256": {
-    "README.md": "761e267b8394e72a0feedd9b3ee90db5fbcedc3de3295397c9cb333db30400ad",
+    "README.md": "8365dc635a57d54aa493f086b3125391fa059a06488071798e6c675005019215",
     "agent.md": "db9314c10461253ac5dd7da0751a9361e2904f798736a2004d60e98a6d19456a",
-    "实施计划与验收基线.md": "a63f6eb7acd0d7195fa143ceadba6b860db0b87fbddbbf1d33dea7e2b67ea0b9",
+    "实施计划与验收基线.md": "76f3a073851f33c57c9438fe447986b32e9bb28a2e4f72ffac11a23903ace07e",
     "docs/baselines/README.md": "29d10f6118e6d6c7340f79cd24b5d2f1fb0ce6f7657df5af13492d841966cb3b",
     "docs/G0基线执行记录.md": "0273b2145beba8ea7ca8d837f4c278d9f63c4ce84bc0ec1d29621b56bfd49c56",
     "docs/G0需求追踪.md": "66a8f5c5ffd0a4be554bef48e7039f078e9c28dbf503755564b1cb0b3f78039f",
@@ -487,6 +501,7 @@
     "docs/初步架构设计.md": "7d3036391eca0ae0586e55ca11bf75233cf0f1bd3989b8956bbe2ece29f73bfa",
     "docs/卡牌名词与Buff效果说明.md": "5c71ca5744d64eb5b83086a33a17f61cd51d7e25f190ee1cc4bfd646085bd882",
     "docs/四角色与卡池重设计汇总_20261030.md": "800beb85db0665dbcb8b2499257944b8ca051f520c6d996781af7a3924288429",
+    "docs/小怪设计草稿_历史候选_20261030.md": "dc1e4509c7001cb8fcc4a1dd9328e6bf79f0c0a26ad927fc17163f513f983cc3",
     "docs/局流程契约.md": "0c6ac764c322594daad6566a83d16922568c5cb78558abd75bed0154bd098d36",
     "docs/战斗模块契约.md": "038dd7ecaae251c7f8446d1fe3588df9e9949258dfded3436b0b448a23d8dadd",
     "docs/接口文档.md": "1766dcc15d2019d8a2eec04d2df6fdbc01611397e66a3551b7890201fffe0ecd",
@@ -500,6 +515,7 @@
     "docs/角色与专属卡池重设计_v2.md": "0f5829e530d8b3c1b5dc04a6a81352084bb3d07b22afda8c0360bb205fef327d",
     "docs/角色与专属卡池重设计_v3.md": "bbc78dc418a7607fdf34fbad08db062f55b0b887d804cf26522e6cde87a57c0f",
     "docs/论文路线卡牌修订与实现草案.md": "04d223dc27bff325234915189f9e06bd0017fb6d68d6eca6538e63386d45a075",
+    "docs/饰品与怪物.md": "3c026af25b53b386ad55ce9b4d116e1d191012b29b8f1c002652f516923d1327",
     "动作或者图片描述/ACT-002-战斗交互动作.md": "16dfe869f97bfa4d48ee34f287e2a62839689d5bdd30f429a2d2e927952b700c",
     "动作或者图片描述/ACT-003-战斗事件演出.md": "4827297c678a39eccfcf4e50a8593e3c558c454f49dc2b38091adaff4b05812d",
     "动作或者图片描述/G7界面与交互设计.md": "91d4a7a21ac981a388741e23a1c8e3cc73b65b67157fca58561a7c9e96ed77f3",
@@ -509,17 +525,19 @@
     "动作或者图片描述/角色卡池重设计需求_v2.md": "55014aff39f21e3efd38fc21ae26958610da583f82f8e15d6ce49dbd214e26b3",
     "动作或者图片描述/角色卡池重设计需求_v3.md": "db0afaa8539cb706dbf072145160bf574c090bb48301a072b78f158d9fd26108",
     "动作或者图片描述/需求台账.md": "3bb5df9cb2397dcb9693c3ae13558065a3906a0e656f8bd7ff463a657f67a64e",
-    "artifacts/redesign-20261030/README.md": "9c8dccb69e8d6963cc3fd83af9439e300f76ace0e7ec9dafff8e4c38c7dfad19",
+    "artifacts/redesign-20261030/README.md": "d6039743fd17b17d734c39cb31068ff50b1e488cbf415f4392c116bd9f2498d0",
+    "artifacts/redesign-20261030/git-integration.md": "f53709873fff7e48def6db40b0dd2a8618ccbf33f5181b1a6204e2e4b698079a",
     "artifacts/redesign-20261030/baseline.json": "652689b8b414cdd7c5afc4315b36eb743bc0998b3516e36fcdb65185521f2c30",
     "artifacts/redesign-20261030/before-v3.zip": "07250c4b952b3484b91d4117ee9fefa718b6776ccea5e8b459ab7ebb3aad06a5",
     "artifacts/redesign-20261030/build_delivery.py": "4d92b493fa528f8ef12d09c13d222a98180b8646967ec9a816a9e12f834fa2e4",
     "artifacts/redesign-20261030/campus-cards-v3.json": "9dab7377074420583da835ced4c9072f210d20684fc1b3919897288289b8c3d5",
     "artifacts/redesign-20261030/catalog_v3.py": "955a0330100e8d131266956e7487fd35ff2ede70d401b375d5bdb92c326805a2",
     "artifacts/redesign-20261030/finalize_docs.py": "f17dc06f285395046a6e2e82b7204b8327712cf973617367d41ca5a4e3a251f7",
+    "artifacts/redesign-20261030/git-integration.json": "8705e39c313acbc3385476132c101b89fe896d5257cd37108b9194f2ed5c50c5",
     "artifacts/redesign-20261030/protected-before.json": "ac3f608f3249c10de0507643ff5dc7a6af8b11626b1cff8b286328e31b1efd3e",
     "artifacts/redesign-20261030/sync_contracts.py": "96eb3af39eeb641286fdd724928a91a80d5ccaa1e7ab113788a594afe142590f",
     "artifacts/redesign-20261030/sync_docs.py": "129114e2e3e93d88bd029c37eebc35ae3a7f115a31e9309a1c575515b950b765",
-    "artifacts/redesign-20261030/verify_delivery.py": "c714bc4a7384a80b4a6f8b5167749c17354dbb6235ab97662a0e2b505ea0091f",
+    "artifacts/redesign-20261030/verify_delivery.py": "af58f3a7d727d18743a5a469713e049988df1224dc2ce8ca8ae1c21608faf1bf",
     "artifacts/redesign-20261030/校园角色与专属卡池_v3.xlsx": "21b59c11ffae4d41d8abfea871108d53678f718af72f93c962f12f3508fbf319",
     "artifacts/redesign-20261030/debuff-revision/before-v3.1.json": "924d2292acf1257d99f90ccd1f99621a77c61e874696f5aa89a9a9a22bc9a297",
     "artifacts/redesign-20261030/debuff-revision/before-v3.1.zip": "d714b04fe95232820ffb6e6da294fe714bea81f9b3bbe0632f01e24c5ebdcab4",

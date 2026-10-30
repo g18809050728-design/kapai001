@@ -11,6 +11,7 @@
 | [build_delivery.py](build_delivery.py) | 同一JSON生成卡表和Excel；分组导读/角色概要在本文件维护 |
 | [verify_delivery.py](verify_delivery.py) | 数量、ID、完整字段、Excel逐字段回读、导读、相对链接及文件保护核查 |
 | [validation.json](validation.json)、[validation.md](validation.md) | 实际核查的机器记录/可读报告；含命令、时间、环境、退出码及边界 |
+| [协作合并说明](git-integration.md)、[来源与归档记录](git-integration.json) | 远程候选保留方式、冲突取舍、来源提交/原文hash与可逆链接调整 |
 | [before-v3.zip](before-v3.zip)、[baseline.json](baseline.json) | 修改前文档/旧校园Excel字节及SHA256；baseline用于识别本次改删 |
 | [本轮改前ZIP](debuff-revision/before-v3.1.zip)、[本轮SHA256](debuff-revision/before-v3.1.json) | v3到v3.1改前56文件备份，不覆盖更早before-v3 |
 | [逐牌差异](debuff-revision/card-changes.json)、[参考摘录](debuff-revision/reference-cards.json) | 对照本轮备份的45张修改、4张新增，以及9张参考卡的中英文原记录与来源hash |

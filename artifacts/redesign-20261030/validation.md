@@ -1,6 +1,6 @@
 # v3.1设计交付静态核查记录
 
-时间：2026-10-30T17:19:56.722018+08:00
+时间：2026-10-30T17:27:28.345069+08:00
 
 命令：`python artifacts/redesign-20261030/verify_delivery.py`
 
@@ -21,6 +21,7 @@
 | all_character_common_functions_have_valid_card_sources | 通过 |
 | revision_card_delta_matches_authorized_scope | 通过 |
 | nine_reference_cards_match_archived_bilingual_snapshots | 通过 |
+| upstream_candidate_originals_and_historical_boundaries | 通过 |
 | markdown_utf8_and_local_link_paths | 通过 |
 | targeted_legacy_rule_audit_and_consolidation | 通过 |
 | retired_p03_mechanics_and_outdated_delivery_counts_removed | 通过 |
@@ -43,6 +44,7 @@ PASS six_debuff_definitions_passive_and_p03_route_contract
 PASS all_character_common_functions_have_valid_card_sources
 PASS revision_card_delta_matches_authorized_scope
 PASS nine_reference_cards_match_archived_bilingual_snapshots
+PASS upstream_candidate_originals_and_historical_boundaries
 PASS markdown_utf8_and_local_link_paths
 PASS targeted_legacy_rule_audit_and_consolidation
 PASS retired_p03_mechanics_and_outdated_delivery_counts_removed
