@@ -1,0 +1,58 @@
+[
+  {
+    "url": "https://spire-codex.com/api/cards?lang=zhs",
+    "status": 200,
+    "retrieved_utc": "2026-10-29T07:42:06.165870+00:00",
+    "bytes": 655253,
+    "sha256": "68710d545e5744d986cdd0139ec2b2b0f21a21af2985a852d3f1c4cee8aada96",
+    "file": "cards-zhs.json"
+  },
+  {
+    "url": "https://spire-codex.com/api/cards?lang=eng",
+    "status": 200,
+    "retrieved_utc": "2026-10-29T07:42:05.846147+00:00",
+    "bytes": 643327,
+    "sha256": "fa908e4c6f77026a93fe5b8fff25f307fade8b6feb698cd5835e3f40107a39b8",
+    "file": "cards-eng.json"
+  },
+  {
+    "url": "https://spire-codex.com/api/characters?lang=zhs",
+    "status": 200,
+    "retrieved_utc": "2026-10-29T07:42:06.006918+00:00",
+    "bytes": 39852,
+    "sha256": "64e744ba0983c95e634d26d8b9f2a12aa55d67f9b051aed03a856b18b887f525",
+    "file": "characters-zhs.json"
+  },
+  {
+    "url": "https://spire-codex.com/api/versions",
+    "status": 200,
+    "retrieved_utc": "2026-10-29T07:44:41.752145+00:00",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "file": "versions.json"
+  },
+  {
+    "url": "https://spire-codex.com/api/changelogs",
+    "status": 200,
+    "retrieved_utc": "2026-10-29T07:44:41.991884+00:00",
+    "bytes": 6802,
+    "sha256": "3b376892559ffb0cb4200586b0e1162f3b80fe2c04116d10885308b2ca8f0852",
+    "file": "changelogs.json"
+  },
+  {
+    "url": "https://sts2.untapped.gg/en/cards",
+    "status": 200,
+    "retrieved_utc": "2026-10-29T07:36:23.988415+00:00",
+    "bytes": 2383607,
+    "sha256": "fe0854d5b4e3978d056d8dc3cb939e27d853b9a39fa2ff84ac2cabbc396b91f1",
+    "file": "untapped-cards.html"
+  },
+  {
+    "url": "https://api.github.com/repos/ptrlrd/spire-codex/git/trees/main?recursive=1",
+    "status": 200,
+    "retrieved_utc": "2026-10-29T07:36:44.456679+00:00",
+    "bytes": 7190452,
+    "sha256": "b852b0165fb0a1c573526726e1fc31123cfa6a610a28916299707aa96a8dba94",
+    "file": "github-tree.json"
+  }
+]
