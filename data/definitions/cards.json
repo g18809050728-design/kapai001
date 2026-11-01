@@ -717,5 +717,20 @@
     "exhaust": false,
     "unplayable": true,
     "effects": []
+  },
+  {
+    "id": "X02",
+    "name_key": "card.X02.name",
+    "type": "strategy",
+    "rarity": null,
+    "tags": [
+      "special",
+      "temporary"
+    ],
+    "cost": 0,
+    "target": "self",
+    "exhaust": false,
+    "unplayable": true,
+    "effects": []
   }
 ]

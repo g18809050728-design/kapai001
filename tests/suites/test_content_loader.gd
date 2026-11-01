@@ -211,6 +211,65 @@ func run() -> Array[String]:
 		"task intents require their text key and registered fields",
 		failures
 	)
+	var elite_task := {
+		"id": "test_task_001",
+		"name_key": "task.test.name",
+		"kind": "elite",
+		"phases":
+		[
+			{
+				"phase_key": "main",
+				"work_max": 10,
+				"intents": [{"index": 0, "text_key": "intent.test", "pressure": 3}],
+				"intent_loop": "clamp",
+			}
+		],
+	}
+	var accepted_elite := _reject_definition(
+		isolated_db, isolated_root, "task", elite_task, stable_hash
+	)
+	_check(
+		not accepted_elite,
+		"elite task with clamp intent loop is accepted by the schema",
+		failures
+	)
+	# The accepted load republishes content, so later rejections compare against its hash.
+	stable_hash = isolated_db.get_info().content_hash
+	var bad_loop := elite_task.duplicate(true)
+	bad_loop.phases[0].intent_loop = "loop"
+	_check(
+		_reject_definition(isolated_db, isolated_root, "task", bad_loop, stable_hash),
+		"intent_loop rejects unregistered modes",
+		failures
+	)
+	var bad_victory := elite_task.duplicate(true)
+	bad_victory.victory_required = "yes"
+	_check(
+		_reject_definition(isolated_db, isolated_root, "task", bad_victory, stable_hash),
+		"victory_required must be boolean",
+		failures
+	)
+	var bad_unit_scaling := elite_task.duplicate(true)
+	bad_unit_scaling.phases[0].intents[0].pressure_per_unit_cap = 3
+	_check(
+		_reject_definition(isolated_db, isolated_root, "task", bad_unit_scaling, stable_hash),
+		"pressure_per_unit_cap requires pressure_per_unit",
+		failures
+	)
+	var bad_summon := elite_task.duplicate(true)
+	bad_summon.phases[0].intents[0].summon_tasks = [{"task": "test_task_001"}]
+	_check(
+		_reject_definition(isolated_db, isolated_root, "task", bad_summon, stable_hash),
+		"summon_tasks entries require a count",
+		failures
+	)
+	var bad_destruct := elite_task.duplicate(true)
+	bad_destruct.phases[0].intents[0].self_destruct = "yes"
+	_check(
+		_reject_definition(isolated_db, isolated_root, "task", bad_destruct, stable_hash),
+		"self_destruct must be boolean",
+		failures
+	)
 	var bad_unit := {
 		"id": "test_unit_001",
 		"name_key": "unit.test.name",

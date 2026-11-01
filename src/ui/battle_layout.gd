@@ -127,8 +127,19 @@ func _player() -> void:
 	)
 	_text(stage, Rect2(48, 117, 330, 28), "我的行动", 23, LIGHT)
 	var statuses := page._array(page.view.get("statuses"))
-	if not statuses.is_empty():
-		_text(stage, Rect2(35, 484, 220, 68), page._status_text(statuses), 14, Color("e5c894"))
+	var player_id := str(player.get("entity_id", ""))
+	var player_statuses: Array = []
+	for value in statuses:
+		if str(page._dict(value).get("target_id", "")) == player_id:
+			player_statuses.append(value)
+	if not player_statuses.is_empty():
+		_text(
+			stage,
+			Rect2(35, 484, 220, 68),
+			page._status_text(player_statuses),
+			14,
+			Color("e5c894")
+		)
 	var scene := page._dict(page.view.get("scene"))
 	if not scene.is_empty():
 		_text(
@@ -206,6 +217,24 @@ func _tasks() -> void:
 		_transparent_target(target)
 		page._target_frames["task:" + id] = frame
 		target.tooltip_text = "任务阶段：" + phase_text
+		var task_status := _task_status_text(id)
+		if not task_status.is_empty():
+			target.tooltip_text += " · 增益：" + task_status
+
+
+func _task_status_text(task_id: String) -> String:
+	var parts: PackedStringArray = []
+	for value in page._array(page.view.get("statuses")):
+		var status := page._dict(value)
+		if str(status.get("target_id", "")) != task_id:
+			continue
+		parts.append(
+			(
+				"%s×%s"
+				% [UiStyle.label(str(status.get("status_id", ""))), status.get("stacks", 0)]
+			)
+		)
+	return "、".join(parts)
 
 
 func _units() -> void:

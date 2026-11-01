@@ -782,12 +782,16 @@ func _end_turn(
 	phase_result = _set_phase(state, events, "enemy_skill")
 	if not phase_result.ok:
 		return phase_result
+	var pending_summons: Array[Dictionary] = []
+	var pending_transforms: Array[Dictionary] = []
 	for task_index in state.tasks.size():
 		var task: Dictionary = state.tasks[task_index]
 		if int(task.get("eligible_round", 1)) > state.round_index:
 			continue
 		var intent: Dictionary = task.get("intent_snapshot", {})
-		var skill_result := _execute_intent_skill(state, task_index, intent, rng, events)
+		var skill_result := _execute_intent_skill(
+			state, task_index, intent, rng, events, pending_summons, pending_transforms
+		)
 		if not skill_result.ok:
 			return skill_result
 		if state.phase == "finished":
@@ -795,22 +799,50 @@ func _end_turn(
 	phase_result = _set_phase(state, events, "enemy_pressure")
 	if not phase_result.ok:
 		return phase_result
-	for task: Dictionary in state.tasks:
-		if int(task.get("eligible_round", 1)) > state.round_index:
-			continue
-		var intent: Dictionary = task.get("intent_snapshot", {})
-		var pressure := int(intent.get("pressure", 0))
-		var extra := _status_stacks(state, "extra_requirements", str(task.get("task_id", "")))
-		var pressure_rules: Dictionary = ruleset_result.data.statuses.get("extra_requirements", {})
-		pressure += extra * int(pressure_rules.get("pressure_per_stack", 0))
-		var times := maxi(1, int(intent.get("pressure_times", 1)))
-		for segment_index in times:
-			if pressure > 0:
-				_apply_pressure(
-					state, pressure, bool(intent.get("pressure_all", false)), events, segment_index
-				)
+	var pressure_rules: Dictionary = ruleset_result.data.statuses.get("extra_requirements", {})
+	var brainstorm_rules: Dictionary = ruleset_result.data.statuses.get("brainstorm", {})
+	var pressure_index := 0
+	while pressure_index < state.tasks.size():
+		var task: Dictionary = state.tasks[pressure_index]
+		if int(task.get("eligible_round", 1)) <= state.round_index:
+			var task_id := str(task.get("task_id", ""))
+			var intent: Dictionary = task.get("intent_snapshot", {})
+			var pressure := int(intent.get("pressure", 0))
+			var extra := _status_stacks(state, "extra_requirements", task_id)
+			pressure += extra * int(pressure_rules.get("pressure_per_stack", 0))
+			var brainstorm := _status_stacks(state, "brainstorm", task_id)
+			pressure += brainstorm * int(brainstorm_rules.get("pressure_per_stack", 0))
+			var per_unit := int(intent.get("pressure_per_unit", 0))
+			if per_unit > 0:
+				var scaled := per_unit * state.units.size()
+				var scaled_cap := int(intent.get("pressure_per_unit_cap", scaled))
+				pressure += mini(scaled, maxi(0, scaled_cap))
+			var times := maxi(1, int(intent.get("pressure_times", 1)))
+			for segment_index in times:
+				if pressure > 0:
+					_apply_pressure(
+						state, pressure, bool(intent.get("pressure_all", false)), events, segment_index
+					)
+					if state.phase == "finished":
+						return GameResult.success(null)
+			if bool(intent.get("self_destruct", false)):
+				_self_destruct_task(state, pressure_index, events)
 				if state.phase == "finished":
 					return GameResult.success(null)
+				continue
+		pressure_index += 1
+	for pending: Dictionary in pending_transforms:
+		var transform_result := _transform_task(
+			state, str(pending.get("task_id", "")), pending.get("spec", {}), events
+		)
+		if not transform_result.ok:
+			return transform_result
+	for pending: Dictionary in pending_summons:
+		var summon_result := _summon_tasks(
+			state, str(pending.get("source_id", "")), pending.get("spec", {}), events
+		)
+		if not summon_result.ok:
+			return summon_result
 	phase_result = _set_phase(state, events, "round_end")
 	if not phase_result.ok:
 		return phase_result
@@ -845,10 +877,21 @@ func _end_turn(
 			var phase := _phase_definition(definition.data, str(task.get("phase_key", "")))
 			var intents: Array = phase.get("intents", [])
 			if not intents.is_empty():
-				var cursor := (int(task.get("intent_cursor", 0)) + 1) % intents.size()
+				var cursor := int(task.get("intent_cursor", 0)) + 1
+				if str(phase.get("intent_loop", "cycle")) == "clamp":
+					cursor = mini(cursor, intents.size() - 1)
+				else:
+					cursor = cursor % intents.size()
 				task.intent_cursor = cursor
 				task.intent_snapshot = intents[cursor].duplicate(true)
-				task.shield = int(task.intent_snapshot.get("shield", 0))
+				task.shield = (
+					_scaled_shield(
+						state,
+						ruleset_result.data,
+						str(task.get("task_id", "")),
+						int(task.intent_snapshot.get("shield", 0))
+					)
+				)
 	_add_event(events, "round_started", "", [], {"round_index": state.round_index})
 	return _run_player_prepare(state, ruleset_result.data, previous_round, rng, events)
 
@@ -901,11 +944,19 @@ func _execute_intent_skill(
 	intent: Dictionary,
 	rng: RandomSource,
 	events: Array[RuleEvent],
+	pending_summons: Array[Dictionary],
+	pending_transforms: Array[Dictionary],
 ) -> GameResult:
 	var task_id := str(state.tasks[task_index].get("task_id", ""))
 	var task := state.tasks[task_index]
+	var ruleset := _loaded_ruleset()
+	if not ruleset.ok:
+		return ruleset
 	if intent.has("shield"):
-		task.shield = int(task.get("shield", 0)) + int(intent.shield)
+		task.shield = (
+			int(task.get("shield", 0))
+			+ _scaled_shield(state, ruleset.data, task_id, int(intent.shield))
+		)
 	if intent.has("extra_requirements"):
 		var extra := _gain_status_on_target(
 			state,
@@ -959,6 +1010,28 @@ func _execute_intent_skill(
 		var add_result := _add_intent_cards(state, task_id, intent.add_card, events)
 		if not add_result.ok:
 			return add_result
+	if intent.has("summon_tasks"):
+		var summon_key := BattleState.counter_key(
+			GameConstants.COUNTER_SCOPE_BATTLE, task_id, &"summon"
+		)
+		if int(state.counters.get(summon_key, 0)) == 0:
+			state.counters[summon_key] = 1
+			for spec: Variant in intent.summon_tasks:
+				if typeof(spec) != TYPE_DICTIONARY:
+					continue
+				pending_summons.append({"source_id": task_id, "spec": spec})
+	if intent.has("ddl_bonus"):
+		var ddl_before := state.ddl
+		state.ddl += int(intent.ddl_bonus)
+		_add_event(
+			events,
+			"ddl_adjusted",
+			task_id,
+			[task_id],
+			{"before": ddl_before, "after": state.ddl, "reason": "intent"},
+		)
+	if intent.has("transform_task"):
+		pending_transforms.append({"task_id": task_id, "spec": intent.transform_task})
 	_add_event(
 		events,
 		"enemy_skill",
@@ -967,6 +1040,149 @@ func _execute_intent_skill(
 		{"intent_index": int(intent.get("index", 0)), "text_key": str(intent.get("text_key", ""))},
 	)
 	return GameResult.success(null)
+
+
+func _scaled_shield(
+	state: BattleState, ruleset: Dictionary, task_id: String, amount: int
+) -> int:
+	var per_stack := int(
+		ruleset.get("statuses", {}).get("confusion", {}).get("shield_per_stack", 0)
+	)
+	if per_stack <= 0:
+		return amount
+	return amount + _status_stacks(state, "confusion", task_id) * per_stack
+
+
+func _summon_tasks(
+	state: BattleState, source_id: String, spec: Dictionary, events: Array[RuleEvent]
+) -> GameResult:
+	var definition_id := str(spec.get("task", ""))
+	var definition_result := _catalog.get_definition("task", definition_id)
+	if not definition_result.ok:
+		return _content_reference_error("task", definition_id, "intent.summon_tasks[].task")
+	var phases: Array = definition_result.data.get("phases", [])
+	if phases.is_empty():
+		return _failure(
+			GameConstants.ERROR_CONTENT_INVALID,
+			"battle.task.phase_missing",
+			{"definition_id": definition_id}
+		)
+	var phase: Dictionary = phases[0]
+	var intents: Array = phase.get("intents", [])
+	if intents.is_empty():
+		return _failure(
+			GameConstants.ERROR_CONTENT_INVALID,
+			"battle.task.intent_missing",
+			{"definition_id": definition_id}
+		)
+	var clamped := str(phase.get("intent_loop", "cycle")) == "clamp"
+	for _index in maxi(1, int(spec.get("count", 1))):
+		var cursor := 0 if clamped else intents.size() - 1
+		var intent: Dictionary = intents[cursor].duplicate(true)
+		var task_id := _new_instance_id(state, "t")
+		var summoned := {
+			"task_id": task_id,
+			"definition_id": definition_id,
+			"phase_key": str(phase.get("phase_key", "")),
+			"work_remaining": int(phase.get("work_max", 1)),
+			"work_max": int(phase.get("work_max", 1)),
+			"shield": int(intent.get("shield", 0)),
+			"intent_cursor": cursor,
+			"intent_snapshot": intent,
+			"entered_order": state.next_creation_order,
+			"eligible_round": state.round_index,
+		}
+		_register_source(state, task_id, "task", definition_id)
+		state.tasks.append(summoned)
+		_add_event(
+			events,
+			"task_summoned",
+			source_id,
+			[task_id],
+			{
+				"definition_id": definition_id,
+				"phase_key": str(phase.get("phase_key", "")),
+				"work_remaining": int(summoned.work_remaining),
+			},
+		)
+	return GameResult.success(null)
+
+
+func _transform_task(
+	state: BattleState, task_id: String, spec: Dictionary, events: Array[RuleEvent]
+) -> GameResult:
+	var task_index := _task_index(state, task_id)
+	if task_index < 0:
+		return GameResult.success(null)
+	var definition_id := str(spec.get("task", ""))
+	var definition_result := _catalog.get_definition("task", definition_id)
+	if not definition_result.ok:
+		return _content_reference_error("task", definition_id, "intent.transform_task.task")
+	var phases: Array = definition_result.data.get("phases", [])
+	if phases.is_empty():
+		return _failure(
+			GameConstants.ERROR_CONTENT_INVALID,
+			"battle.task.phase_missing",
+			{"definition_id": definition_id}
+		)
+	var phase: Dictionary = phases[0]
+	var intents: Array = phase.get("intents", [])
+	if intents.is_empty():
+		return _failure(
+			GameConstants.ERROR_CONTENT_INVALID,
+			"battle.task.intent_missing",
+			{"definition_id": definition_id}
+		)
+	var task: Dictionary = state.tasks[task_index]
+	var previous_definition := str(task.get("definition_id", ""))
+	var previous_phase := str(task.get("phase_key", ""))
+	var work_max := int(phase.get("work_max", 1))
+	var work_remaining := clampi(int(task.get("work_remaining", work_max)), 1, work_max)
+	var cursor := 0 if str(phase.get("intent_loop", "cycle")) == "clamp" else intents.size() - 1
+	var intent: Dictionary = intents[cursor].duplicate(true)
+	_remove_holder_statuses(state, task_id)
+	task.definition_id = definition_id
+	task.phase_key = str(phase.get("phase_key", ""))
+	task.work_max = work_max
+	task.work_remaining = work_remaining
+	task.intent_cursor = cursor
+	task.intent_snapshot = intent
+	task.shield = int(intent.get("shield", 0))
+	if state.source_registry.has(task_id):
+		state.source_registry[task_id]["definition_id"] = definition_id
+	_add_event(
+		events,
+		"task_transformed",
+		task_id,
+		[task_id],
+		{
+			"from_definition_id": previous_definition,
+			"to_definition_id": definition_id,
+			"from_phase_key": previous_phase,
+			"to_phase_key": str(phase.get("phase_key", "")),
+			"work_remaining": work_remaining,
+		},
+	)
+	return GameResult.success(null)
+
+
+func _self_destruct_task(
+	state: BattleState, task_index: int, events: Array[RuleEvent]
+) -> void:
+	if task_index < 0 or task_index >= state.tasks.size():
+		return
+	var task: Dictionary = state.tasks[task_index]
+	var task_id := str(task.get("task_id", ""))
+	_remove_holder_statuses(state, task_id)
+	state.tasks.remove_at(task_index)
+	_add_event(
+		events,
+		"task_self_destructed",
+		task_id,
+		[task_id],
+		{"definition_id": str(task.get("definition_id", ""))},
+	)
+	_check_battle_outcome(state, events)
 
 
 func _add_intent_cards(
@@ -1118,6 +1334,61 @@ func _draw_scene_prepare_result(definition: Dictionary, rng: RandomSource) -> Ga
 	if not result.ok:
 		return result
 	return GameResult.success(options[int(result.data)].duplicate(true))
+
+
+func _absorb_cooperation(
+	state: BattleState,
+	encounter: Dictionary,
+	ruleset: Dictionary,
+	rng: RandomSource,
+	events: Array[RuleEvent],
+) -> GameResult:
+	if not encounter.has("absorb_cooperation"):
+		return GameResult.success(null)
+	var spec: Dictionary = encounter.absorb_cooperation
+	var absorbed: Array[String] = []
+	for zone in ["draw", "hand", "discard"]:
+		for card_id in state.zones.get(zone, []).duplicate():
+			var card: Dictionary = state.card_by_id.get(card_id, {})
+			var definition := _catalog.get_definition("card", str(card.get("definition_id", "")))
+			if not definition.ok or str(definition.data.get("type", "")) != "cooperation":
+				continue
+			state.zones[zone].erase(card_id)
+			state.zones.exhaust.append(card_id)
+			absorbed.append(str(card_id))
+			_add_event(
+				events,
+				"card_absorbed",
+				"",
+				[card_id],
+				{
+					"definition_id": str(definition.data.get("id", "")),
+					"from_zone": zone,
+					"to_zone": "exhaust",
+				},
+			)
+	if absorbed.is_empty():
+		return GameResult.success(null)
+	var focus_per_card := int(spec.get("focus_per_card", 0))
+	var draw_per_card := int(spec.get("draw_per_card", 0))
+	var focus_before := int(state.player.get("focus", 0))
+	var focus_cap := int(ruleset.battle.get("focus_cap", focus_before))
+	state.player.focus = mini(focus_cap, focus_before + absorbed.size() * focus_per_card)
+	if state.player.focus != focus_before:
+		_add_event(
+			events,
+			"focus_changed",
+			str(state.player.get("entity_id", "")),
+			[str(state.player.get("entity_id", ""))],
+			{
+				"before": focus_before,
+				"after": state.player.focus,
+				"delta": state.player.focus - focus_before,
+				"reason": "absorbed_cooperation",
+			},
+		)
+	_draw_cards(state, absorbed.size() * draw_per_card, rng, events)
+	return GameResult.success(null)
 
 
 func _ordered_unit_ids(state: BattleState) -> Array[String]:
@@ -1695,8 +1966,18 @@ func _check_battle_outcome(state: BattleState, events: Array[RuleEvent]) -> void
 		return
 	if int(state.player.get("vitality", 0)) <= 0:
 		_finish_battle(state, "lost", "vitality_depleted", events)
-	elif state.tasks.is_empty():
+	elif not _has_required_task(state):
 		_finish_battle(state, "won", "tasks_completed", events)
+
+
+func _has_required_task(state: BattleState) -> bool:
+	for task: Dictionary in state.tasks:
+		var definition := _catalog.get_definition("task", str(task.get("definition_id", "")))
+		if not definition.ok:
+			return true
+		if bool(definition.data.get("victory_required", true)):
+			return true
+	return false
 
 
 func _summon_unit(
@@ -2455,7 +2736,7 @@ func begin(input: Dictionary) -> GameResult:
 		state.card_by_id[card_id] = card
 		card_ids.append(card_id)
 
-	for member_id in encounter.members:
+	for member_id in encounter.get("initial_members", encounter.members):
 		var task_definition: Dictionary = context.tasks[member_id]
 		var initial_phase: Dictionary = task_definition.phases[0]
 		var intent: Dictionary = initial_phase.intents[0].duplicate(true)
@@ -2483,6 +2764,9 @@ func begin(input: Dictionary) -> GameResult:
 	var prepare_result := _run_player_prepare(state, ruleset, 0, rng, events)
 	if not prepare_result.ok:
 		return prepare_result
+	var absorb_result := _absorb_cooperation(state, encounter, ruleset, rng, events)
+	if not absorb_result.ok:
+		return absorb_result
 	var result_snapshot: RandomSnapshot = rng.export_state()
 	return GameResult.success(
 		BattleStep.new(state, events, null, null, true, result_snapshot.to_dictionary())

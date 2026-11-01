@@ -145,6 +145,14 @@
       "extra_requirements": {
         "cap": 3,
         "pressure_per_stack": 2
+      },
+      "brainstorm": {
+        "cap": 3,
+        "pressure_per_stack": 1
+      },
+      "confusion": {
+        "cap": 3,
+        "shield_per_stack": 1
       }
     },
     "difficulty_overrides": {

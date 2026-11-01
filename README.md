@@ -2,6 +2,10 @@
 
 2026-10-29：原四份上游与技术文档已同步改写为v2；旧正文可从 Git 历史查阅。本轮保留林序、许知微、沈见章、唐以宁，完成角色专属卡池与流派的 v2 文档提案。**当前可运行程序仍是 v1，未接入新版卡牌。** v1 仅含第一学期，G0–G5 已通过、G6 已交接、G7 已完成必要验证，G8 未开始；完整用户路径、平衡、性能及发布验收仍待完成。
 
+2026-11-01：按用户要求把两份精英设计草稿（[草稿一](docs/精英敌人设计草稿.md)、[草稿二](docs/精英敌人设计草稿2.md)）的 12 个精英遭遇（E01–E07、Q0A–Q0E）落进 v1 数据与战斗引擎，新增每单位压力缩放、任务召唤/转换/自爆、意图停留、可选任务与绞尽脑汁/迷惑敌方增益；[小怪设计草稿](docs/小怪设计草稿.md)的新增普通敌人未实现。范围、语义解读、偏差与未完成项见[精英敌人实现记录](docs/精英敌人实现记录_20261101.md)。Godot `4.7.2.stable` 无头套件、UI 套件与启动冒烟均已在本机实跑通过（证据 `artifacts/verification/elite-godot-20261101-162637-290819/`）；平衡与人工视觉仍未验证。
+
+2026-11-02：第一学期精英池定为 `Q01`、`E01`、`E02`、`E03`、`Q0B`、`Q0C`（`Q0B`/`Q0C` 提前到第 1 学期）。用机器人对起始牌组做了难度下限试玩：`Q0B`/`Q0C` 两人物 100% 胜偏易，`E02`/`E03` 为 50–100%，`E01` 对 P04 仅 4%；`Q0A`/`Q0D` 近似必败，已明确排除出第一学期。数据与复现见实现记录 §7。
+
 ## 本轮设计交付
 
 | 阅读顺序 | 内容 |
@@ -23,6 +27,7 @@
 | [实施计划与验收基线](实施计划与验收基线.md)、[工作约定](agent.md) | 阶段、范围调整、退出条件和证据要求 |
 | [项目计划](docs/交大四年_DDL战争_项目计划书.md)、[规则书](docs/交大四年_DDL战争_游戏规则书.md)、[统一设计](docs/交大四年_DDL战争_统一设计文档.md)、[设计思路](docs/交大四年_DDL战争_完整设计思路.md) | 当前v2上游，已直接重写；旧来源原文/hash可从 Git 历史查阅 |
 | [G0登记](docs/baselines/g0.json)、[需求追踪](docs/G0需求追踪.md)、[G0记录](docs/G0基线执行记录.md) | v1 精确生产范围、裁决和历史核验 |
+| [精英敌人实现记录](docs/精英敌人实现记录_20261101.md) | 2026-11-01 精英遭遇的内容/引擎扩充、语义解读、未完成项与验证状态 |
 | [架构](docs/初步架构设计.md)、[接口](docs/接口文档.md)、[存储设计](docs/数据库与实体关系设计.md) | 模块边界、公共 API、稳定存档与恢复 |
 | [内容契约](docs/内容层契约.md)、[战斗契约](docs/战斗模块契约.md)、[局流程契约](docs/局流程契约.md)、[界面契约](docs/界面层契约.md) | v2目标行为；现有代码/schema/API仍v1，新版待冻结 |
 | [玩家术语说明](docs/卡牌名词与Buff效果说明.md) | v2名词、人物资源、合作、场景与考试说明 |
@@ -34,10 +39,15 @@ v1 生产清单为 P01/P04 等全部 66 个冻结 ID，holdback=0；精确集合
 
 ## 启动与核验
 
-使用 Godot `4.7.2.stable`，在项目根目录启动：
+使用 Godot `4.7.2.stable`（本机版本串 `4.7.2.stable.official.ed1daf0bf`）。2026-11-01 实测安装位置为 `D:\Godot\Godot_v4.7.2-stable_win64_console.exe`；旧记录的 `F:\GoDot` 在本机不存在。`tools/verify_*.ps1` 现依次尝试 `F:\GoDot`、`D:\Godot`、`C:\Godot` 与 `godot` 命令，也可用 `GODOT_BIN` 或 `-GodotPath` 显式指定。
+
+**首次运行或删除 `.godot/` 后必须先做一次编辑器导入**，否则 `class_name` 全局类没有注册，所有测试会以 `Could not find type …` 整体失败：
 
 ```powershell
-$env:GODOT_BIN = 'F:\GoDot\Godot_v4.7.2-stable_win64_console.exe'
+$env:GODOT_BIN = 'D:\Godot\Godot_v4.7.2-stable_win64_console.exe'
+& $env:GODOT_BIN --headless --editor --path . --quit
+& $env:GODOT_BIN --headless --path . --script res://tests/run_tests.gd
+& $env:GODOT_BIN --headless --path . --script res://tests/run_ui_tests.gd
 & $env:GODOT_BIN --path .
 ```
 
@@ -52,4 +62,4 @@ $env:GODOT_BIN = 'F:\GoDot\Godot_v4.7.2-stable_win64_console.exe'
 python tools/verify_g7.py --godot $env:GODOT_BIN
 ```
 
-本轮文档和 Excel 一致性核查已在本地完成，过程脚本与运行报告不纳入 Git。旧 `verify_g0.py` 固定检查 v1 来源；旧文档可从 Git 历史查阅，须在隔离历史目录运行，不得以当前根目录运行结果代表新版 G0。上述 Godot 工具仍针对 v1 程序。工程环境依赖见 `requirements-dev.txt`；各阶段命令和证据解释见相应执行记录。本轮未重跑 Godot。
+本轮文档和 Excel 一致性核查已在本地完成，过程脚本与运行报告不纳入 Git。旧 `verify_g0.py` 固定检查 v1 来源；旧文档可从 Git 历史查阅，须在隔离历史目录运行，不得以当前根目录运行结果代表新版 G0。上述 Godot 工具仍针对 v1 程序。工程环境依赖见 `requirements-dev.txt`；各阶段命令和证据解释见相应执行记录。2026-11-01 已在本机重跑无头与 UI 测试（见[精英敌人实现记录](docs/精英敌人实现记录_20261101.md)§6）。

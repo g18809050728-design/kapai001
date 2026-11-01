@@ -12,9 +12,19 @@ $started = (Get-Date).ToString("o")
 $env:PYTHONUTF8 = "1"
 $godotProblem = $null
 if ([string]::IsNullOrWhiteSpace($GodotPath)) {
-	$installedConsole = 'F:\GoDot\Godot_v4.7.2-stable_win64_console.exe'
+	$installedConsole = $null
+	foreach ($candidate in @(
+		'D:\Godot\Godot_v4.7.2-stable_win64_console.exe',
+		'F:\GoDot\Godot_v4.7.2-stable_win64_console.exe',
+		'C:\Godot\Godot_v4.7.2-stable_win64_console.exe'
+	)) {
+		if (Test-Path -LiteralPath $candidate -PathType Leaf) {
+			$installedConsole = $candidate
+			break
+		}
+	}
 	$godotCommand = Get-Command godot -ErrorAction SilentlyContinue
-	if (Test-Path -LiteralPath $installedConsole -PathType Leaf) {
+	if (-not [string]::IsNullOrEmpty($installedConsole)) {
 		$GodotPath = $installedConsole
 	} elseif ($null -ne $godotCommand) {
 		$GodotPath = $godotCommand.Source

@@ -12,10 +12,22 @@ import sys
 from datetime import datetime
 
 
+def _default_godot():
+    candidates = [
+        os.environ.get("GODOT_BIN"),
+        r"F:\GoDot\Godot_v4.7.2-stable_win64_console.exe",
+        r"D:\Godot\Godot_v4.7.2-stable_win64_console.exe",
+        r"C:\Godot\Godot_v4.7.2-stable_win64_console.exe",
+    ]
+    for candidate in candidates:
+        if candidate and Path(candidate).is_file():
+            return candidate
+    return candidates[1]
+
+
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--godot", default=os.environ.get(
-        "GODOT_BIN", r"F:\GoDot\Godot_v4.7.2-stable_win64_console.exe"))
+    parser.add_argument("--godot", default=_default_godot())
     args = parser.parse_args()
     root = Path(__file__).resolve().parent.parent
     run_id = "g7-" + datetime.now().strftime("%Y%m%d-%H%M%S-%f")

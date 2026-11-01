@@ -49,9 +49,21 @@ const DEFINITION_FIELDS := {
 		"limit",
 		"art_key"
 	],
-	"task": ["id", "name_key", "kind", "phases", "art_key"],
+	"task": ["id", "name_key", "kind", "phases", "victory_required", "art_key"],
 	"encounter":
-	["id", "name_key", "kind", "members", "base_ddl", "terms", "exam_flags", "scaling", "art_key"],
+	[
+		"id",
+		"name_key",
+		"kind",
+		"members",
+		"base_ddl",
+		"terms",
+		"exam_flags",
+		"initial_members",
+		"absorb_cooperation",
+		"scaling",
+		"art_key"
+	],
 	"unit":
 	["id", "name_key", "vitality", "cooperation", "guard", "support", "entry_effects", "art_key"],
 	"scene":
@@ -218,6 +230,7 @@ const REFERENCE_KEYS := {
 	"starter_relic_id": "relic",
 	"relic_id": "relic",
 	"members": "task",
+	"initial_members": "task",
 	"unit": "unit",
 	"scene": "scene",
 	"status": "status",
@@ -234,6 +247,8 @@ const STATUS_POLICY := {
 	"procrastination": ["player", "capped", "next_draw", "negative"],
 	"drowsiness": ["player", "capped", "next_player_action_end", "negative"],
 	"extra_requirements": ["task", "capped", "battle", "explicit"],
+	"brainstorm": ["task", "capped", "battle", "explicit"],
+	"confusion": ["task", "capped", "battle", "explicit"],
 	"guard": ["unit", "presence", "unit_departure", "none"],
 }
 const STATUS_RULE_FIELDS := {
@@ -247,6 +262,8 @@ const STATUS_RULE_FIELDS := {
 	"procrastination": ["cap", "draw_penalty_per_stack"],
 	"drowsiness": ["cap", "completion_penalty_per_stack"],
 	"extra_requirements": ["cap", "pressure_per_stack"],
+	"brainstorm": ["cap", "pressure_per_stack"],
+	"confusion": ["cap", "shield_per_stack"],
 }
 
 var _data_root: String
@@ -699,6 +716,38 @@ func _validate_definition(
 				)
 			):
 				issues.append("%s.exam_flags contains an unknown flag" % location)
+			if definition.has("initial_members"):
+				_validate_string_array(
+					definition.initial_members, "%s.initial_members" % location, issues
+				)
+				if _is_array(definition.get("initial_members")):
+					if definition.initial_members.is_empty():
+						issues.append("%s.initial_members must not be empty" % location)
+					elif (
+						_is_array(definition.get("members"))
+						and definition.initial_members.any(
+							func(member): return not definition.members.has(member)
+						)
+					):
+						issues.append(
+							"%s.initial_members must be encounter members" % location
+						)
+			if definition.has("absorb_cooperation"):
+				_validate_fields(
+					definition.absorb_cooperation,
+					["draw_per_card", "focus_per_card"],
+					["draw_per_card", "focus_per_card"],
+					"%s.absorb_cooperation" % location,
+					issues
+				)
+				if _is_dictionary(definition.absorb_cooperation):
+					for field in ["draw_per_card", "focus_per_card"]:
+						_validate_int(
+							definition.absorb_cooperation.get(field),
+							"%s.absorb_cooperation.%s" % [location, field],
+							0,
+							issues
+						)
 			if definition.has("scaling"):
 				_validate_fields(
 					definition.scaling,
@@ -1192,6 +1241,8 @@ func _validate_passive(value: Variant, location: String, issues: Array[String]) 
 func _validate_task(value: Dictionary, location: String, issues: Array[String]) -> void:
 	if not ["normal", "elite", "boss"].has(value.get("kind")):
 		issues.append("%s.kind is invalid" % location)
+	if value.has("victory_required"):
+		_validate_bool(value.victory_required, "%s.victory_required" % location, issues)
 	var phases: Variant = value.get("phases")
 	if not _is_array(phases) or phases.is_empty():
 		issues.append("%s kind/phases are invalid" % location)
@@ -1202,7 +1253,7 @@ func _validate_task(value: Dictionary, location: String, issues: Array[String]) 
 		var phase_location := "%s.phases[%d]" % [location, index]
 		_validate_fields(
 			phase,
-			["phase_key", "work_max", "intents", "name_key"],
+			["phase_key", "work_max", "intents", "name_key", "intent_loop"],
 			["phase_key", "work_max", "intents"],
 			phase_location,
 			issues
@@ -1216,6 +1267,8 @@ func _validate_task(value: Dictionary, location: String, issues: Array[String]) 
 			and (typeof(phase.name_key) != TYPE_STRING or str(phase.name_key).is_empty())
 		):
 			issues.append("%s.name_key must be non-empty" % phase_location)
+		if phase.has("intent_loop") and not ["cycle", "clamp"].has(phase.intent_loop):
+			issues.append("%s.intent_loop is invalid" % phase_location)
 		if seen.has(phase.get("phase_key")):
 			issues.append("%s.phase_key is duplicated" % phase_location)
 		seen[phase.get("phase_key")] = true
@@ -1238,11 +1291,17 @@ func _validate_intent(value: Variant, location: String, issues: Array[String]) -
 		"pressure",
 		"pressure_times",
 		"pressure_all",
+		"pressure_per_unit",
+		"pressure_per_unit_cap",
 		"shield",
 		"work_restore",
 		"extra_requirements",
 		"gain_status",
-		"add_card"
+		"add_card",
+		"summon_tasks",
+		"transform_task",
+		"ddl_bonus",
+		"self_destruct"
 	]
 	_validate_fields(value, fields, ["index", "text_key"], location, issues)
 	if not _is_dictionary(value):
@@ -1257,6 +1316,50 @@ func _validate_intent(value: Variant, location: String, issues: Array[String]) -
 		issues.append("%s.pressure_times requires pressure" % location)
 	if value.has("pressure_all"):
 		_validate_bool(value.pressure_all, "%s.pressure_all" % location, issues)
+	if value.has("pressure_per_unit"):
+		_validate_int(value.pressure_per_unit, "%s.pressure_per_unit" % location, 1, issues)
+		if not value.has("pressure"):
+			issues.append("%s.pressure_per_unit requires pressure" % location)
+		if value.has("pressure_per_unit_cap"):
+			_validate_int(
+				value.pressure_per_unit_cap, "%s.pressure_per_unit_cap" % location, 1, issues
+			)
+	elif value.has("pressure_per_unit_cap"):
+		issues.append("%s.pressure_per_unit_cap requires pressure_per_unit" % location)
+	if value.has("ddl_bonus"):
+		_validate_int(value.ddl_bonus, "%s.ddl_bonus" % location, 1, issues)
+	if value.has("self_destruct"):
+		_validate_bool(value.self_destruct, "%s.self_destruct" % location, issues)
+	if value.has("summon_tasks"):
+		if not _is_array(value.summon_tasks) or value.summon_tasks.is_empty():
+			issues.append("%s.summon_tasks must be a non-empty array" % location)
+		else:
+			for spec in value.summon_tasks:
+				_validate_fields(
+					spec,
+					["task", "count"],
+					["task", "count"],
+					"%s.summon_tasks[]" % location,
+					issues
+				)
+				if _is_dictionary(spec):
+					var summoned_task: Variant = spec.get("task")
+					if (
+						typeof(summoned_task) != TYPE_STRING
+						or str(summoned_task).is_empty()
+					):
+						issues.append("%s.summon_tasks[].task must be an id" % location)
+					_validate_int(
+						spec.get("count"), "%s.summon_tasks[].count" % location, 1, issues
+					)
+	if value.has("transform_task"):
+		_validate_fields(
+			value.transform_task, ["task"], ["task"], "%s.transform_task" % location, issues
+		)
+		if _is_dictionary(value.transform_task):
+			var transform_target: Variant = value.transform_task.get("task")
+			if typeof(transform_target) != TYPE_STRING or str(transform_target).is_empty():
+				issues.append("%s.transform_task.task must be an id" % location)
 	if value.has("gain_status"):
 		_validate_fields(
 			value.gain_status,

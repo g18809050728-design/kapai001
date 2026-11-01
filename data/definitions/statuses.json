@@ -60,5 +60,23 @@
     "stack_policy": "presence",
     "duration_policy": "unit_departure",
     "dispel_policy": "none"
+  },
+  {
+    "id": "brainstorm",
+    "name_key": "status.brainstorm.name",
+    "target": "task",
+    "stack_policy": "capped",
+    "duration_policy": "battle",
+    "dispel_policy": "explicit",
+    "numeric_rule_key": "brainstorm"
+  },
+  {
+    "id": "confusion",
+    "name_key": "status.confusion.name",
+    "target": "task",
+    "stack_policy": "capped",
+    "duration_policy": "battle",
+    "dispel_policy": "explicit",
+    "numeric_rule_key": "confusion"
   }
 ]
