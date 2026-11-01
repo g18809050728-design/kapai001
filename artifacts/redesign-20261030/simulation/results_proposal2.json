@@ -1,0 +1,1487 @@
+{
+ "mode": "proposal2",
+ "proposal": 2,
+ "trials": 1500,
+ "encounters": {
+  "N01": {
+   "hp": [
+    72
+   ],
+   "ddl": 7
+  },
+  "N02": {
+   "hp": [
+    74
+   ],
+   "ddl": 7
+  },
+  "N03": {
+   "hp": [
+    80
+   ],
+   "ddl": 7
+  },
+  "N04": {
+   "hp": [
+    78
+   ],
+   "ddl": 7
+  },
+  "Q01": {
+   "hp": [
+    68
+   ],
+   "ddl": 7
+  },
+  "B01": {
+   "hp": [
+    30,
+    38,
+    38
+   ],
+   "ddl": 10
+  }
+ },
+ "rows": [
+  {
+   "char": "P01",
+   "build": "连携速攻",
+   "encounter": "N01",
+   "developed": false,
+   "n": 1500,
+   "win": 0.9946666666666667,
+   "avg_turn": 6.052278820375335,
+   "avg_hp": 41.820375335120644
+  },
+  {
+   "char": "P01",
+   "build": "连携速攻",
+   "encounter": "N01",
+   "developed": true,
+   "n": 1500,
+   "win": 0.9966666666666667,
+   "avg_turn": 5.699665551839465,
+   "avg_hp": 46.01939799331104
+  },
+  {
+   "char": "P01",
+   "build": "连携速攻",
+   "encounter": "N02",
+   "developed": false,
+   "n": 1500,
+   "win": 0.14666666666666667,
+   "avg_turn": 7,
+   "avg_hp": 46.28181818181818
+  },
+  {
+   "char": "P01",
+   "build": "连携速攻",
+   "encounter": "N02",
+   "developed": true,
+   "n": 1500,
+   "win": 0.8373333333333334,
+   "avg_turn": 6.5756369426751595,
+   "avg_hp": 53.4156050955414
+  },
+  {
+   "char": "P01",
+   "build": "连携速攻",
+   "encounter": "N03",
+   "developed": false,
+   "n": 1500,
+   "win": 0.376,
+   "avg_turn": 6.943262411347518,
+   "avg_hp": 40.12943262411348
+  },
+  {
+   "char": "P01",
+   "build": "连携速攻",
+   "encounter": "N03",
+   "developed": true,
+   "n": 1500,
+   "win": 0.9346666666666666,
+   "avg_turn": 6.268901569186876,
+   "avg_hp": 47.3416547788873
+  },
+  {
+   "char": "P01",
+   "build": "连携速攻",
+   "encounter": "N04",
+   "developed": false,
+   "n": 1500,
+   "win": 0.7766666666666666,
+   "avg_turn": 6.857510729613734,
+   "avg_hp": 39.97768240343348
+  },
+  {
+   "char": "P01",
+   "build": "连携速攻",
+   "encounter": "N04",
+   "developed": true,
+   "n": 1500,
+   "win": 0.894,
+   "avg_turn": 6.567486950037286,
+   "avg_hp": 46.47054436987323
+  },
+  {
+   "char": "P01",
+   "build": "连携速攻",
+   "encounter": "Q01",
+   "developed": false,
+   "n": 1500,
+   "win": 0.7766666666666666,
+   "avg_turn": 6.84206008583691,
+   "avg_hp": 40.65150214592275
+  },
+  {
+   "char": "P01",
+   "build": "连携速攻",
+   "encounter": "Q01",
+   "developed": true,
+   "n": 1500,
+   "win": 0.9493333333333334,
+   "avg_turn": 6.054073033707865,
+   "avg_hp": 48.690308988764045
+  },
+  {
+   "char": "P01",
+   "build": "连携速攻",
+   "encounter": "B01",
+   "developed": false,
+   "n": 1500,
+   "win": 0.19333333333333333,
+   "avg_turn": 9.955172413793104,
+   "avg_hp": 23.589655172413792
+  },
+  {
+   "char": "P01",
+   "build": "连携速攻",
+   "encounter": "B01",
+   "developed": true,
+   "n": 1500,
+   "win": 0.7806666666666666,
+   "avg_turn": 9.433817250213492,
+   "avg_hp": 33.81298035866781
+  },
+  {
+   "char": "P01",
+   "build": "复用引擎",
+   "encounter": "N01",
+   "developed": false,
+   "n": 1500,
+   "win": 0.9946666666666667,
+   "avg_turn": 6.052278820375335,
+   "avg_hp": 41.820375335120644
+  },
+  {
+   "char": "P01",
+   "build": "复用引擎",
+   "encounter": "N01",
+   "developed": true,
+   "n": 1500,
+   "win": 0.25666666666666665,
+   "avg_turn": 6.802597402597403,
+   "avg_hp": 39.92467532467533
+  },
+  {
+   "char": "P01",
+   "build": "复用引擎",
+   "encounter": "N02",
+   "developed": false,
+   "n": 1500,
+   "win": 0.14666666666666667,
+   "avg_turn": 7,
+   "avg_hp": 46.28181818181818
+  },
+  {
+   "char": "P01",
+   "build": "复用引擎",
+   "encounter": "N02",
+   "developed": true,
+   "n": 1500,
+   "win": 0.0033333333333333335,
+   "avg_turn": 7,
+   "avg_hp": 51.4
+  },
+  {
+   "char": "P01",
+   "build": "复用引擎",
+   "encounter": "N03",
+   "developed": false,
+   "n": 1500,
+   "win": 0.376,
+   "avg_turn": 6.943262411347518,
+   "avg_hp": 40.12943262411348
+  },
+  {
+   "char": "P01",
+   "build": "复用引擎",
+   "encounter": "N03",
+   "developed": true,
+   "n": 1500,
+   "win": 0.06733333333333333,
+   "avg_turn": 6.930693069306931,
+   "avg_hp": 45.24752475247525
+  },
+  {
+   "char": "P01",
+   "build": "复用引擎",
+   "encounter": "N04",
+   "developed": false,
+   "n": 1500,
+   "win": 0.7766666666666666,
+   "avg_turn": 6.857510729613734,
+   "avg_hp": 39.97768240343348
+  },
+  {
+   "char": "P01",
+   "build": "复用引擎",
+   "encounter": "N04",
+   "developed": true,
+   "n": 1500,
+   "win": 0.009333333333333334,
+   "avg_turn": 7,
+   "avg_hp": 42.42857142857143
+  },
+  {
+   "char": "P01",
+   "build": "复用引擎",
+   "encounter": "Q01",
+   "developed": false,
+   "n": 1500,
+   "win": 0.7766666666666666,
+   "avg_turn": 6.84206008583691,
+   "avg_hp": 40.65150214592275
+  },
+  {
+   "char": "P01",
+   "build": "复用引擎",
+   "encounter": "Q01",
+   "developed": true,
+   "n": 1500,
+   "win": 0.044,
+   "avg_turn": 6.9393939393939394,
+   "avg_hp": 44.333333333333336
+  },
+  {
+   "char": "P01",
+   "build": "复用引擎",
+   "encounter": "B01",
+   "developed": false,
+   "n": 1500,
+   "win": 0.19333333333333333,
+   "avg_turn": 9.955172413793104,
+   "avg_hp": 23.589655172413792
+  },
+  {
+   "char": "P01",
+   "build": "复用引擎",
+   "encounter": "B01",
+   "developed": true,
+   "n": 1500,
+   "win": 0.0026666666666666666,
+   "avg_turn": 10,
+   "avg_hp": 34.25
+  },
+  {
+   "char": "P01",
+   "build": "集中爆发",
+   "encounter": "N01",
+   "developed": false,
+   "n": 1500,
+   "win": 0.9946666666666667,
+   "avg_turn": 6.052278820375335,
+   "avg_hp": 41.820375335120644
+  },
+  {
+   "char": "P01",
+   "build": "集中爆发",
+   "encounter": "N01",
+   "developed": true,
+   "n": 1500,
+   "win": 0.896,
+   "avg_turn": 6.386904761904762,
+   "avg_hp": 46.529761904761905
+  },
+  {
+   "char": "P01",
+   "build": "集中爆发",
+   "encounter": "N02",
+   "developed": false,
+   "n": 1500,
+   "win": 0.14666666666666667,
+   "avg_turn": 7,
+   "avg_hp": 46.28181818181818
+  },
+  {
+   "char": "P01",
+   "build": "集中爆发",
+   "encounter": "N02",
+   "developed": true,
+   "n": 1500,
+   "win": 0.346,
+   "avg_turn": 6.840077071290944,
+   "avg_hp": 55.408477842003855
+  },
+  {
+   "char": "P01",
+   "build": "集中爆发",
+   "encounter": "N03",
+   "developed": false,
+   "n": 1500,
+   "win": 0.376,
+   "avg_turn": 6.943262411347518,
+   "avg_hp": 40.12943262411348
+  },
+  {
+   "char": "P01",
+   "build": "集中爆发",
+   "encounter": "N03",
+   "developed": true,
+   "n": 1500,
+   "win": 0.6446666666666667,
+   "avg_turn": 6.765253360910031,
+   "avg_hp": 49.74250258531541
+  },
+  {
+   "char": "P01",
+   "build": "集中爆发",
+   "encounter": "N04",
+   "developed": false,
+   "n": 1500,
+   "win": 0.7766666666666666,
+   "avg_turn": 6.857510729613734,
+   "avg_hp": 39.97768240343348
+  },
+  {
+   "char": "P01",
+   "build": "集中爆发",
+   "encounter": "N04",
+   "developed": true,
+   "n": 1500,
+   "win": 0.21533333333333332,
+   "avg_turn": 6.987616099071207,
+   "avg_hp": 45.526315789473685
+  },
+  {
+   "char": "P01",
+   "build": "集中爆发",
+   "encounter": "Q01",
+   "developed": false,
+   "n": 1500,
+   "win": 0.7766666666666666,
+   "avg_turn": 6.84206008583691,
+   "avg_hp": 40.65150214592275
+  },
+  {
+   "char": "P01",
+   "build": "集中爆发",
+   "encounter": "Q01",
+   "developed": true,
+   "n": 1500,
+   "win": 0.616,
+   "avg_turn": 6.670995670995671,
+   "avg_hp": 48.98701298701299
+  },
+  {
+   "char": "P01",
+   "build": "集中爆发",
+   "encounter": "B01",
+   "developed": false,
+   "n": 1500,
+   "win": 0.19333333333333333,
+   "avg_turn": 9.955172413793104,
+   "avg_hp": 23.589655172413792
+  },
+  {
+   "char": "P01",
+   "build": "集中爆发",
+   "encounter": "B01",
+   "developed": true,
+   "n": 1500,
+   "win": 0.21,
+   "avg_turn": 9.844444444444445,
+   "avg_hp": 40.13333333333333
+  },
+  {
+   "char": "P02",
+   "build": "发表一波",
+   "encounter": "N01",
+   "developed": false,
+   "n": 1500,
+   "win": 0.976,
+   "avg_turn": 6.103825136612022,
+   "avg_hp": 40.35245901639344
+  },
+  {
+   "char": "P02",
+   "build": "发表一波",
+   "encounter": "N01",
+   "developed": true,
+   "n": 1500,
+   "win": 0.8593333333333333,
+   "avg_turn": 4.948021722265322,
+   "avg_hp": 55.81846392552366
+  },
+  {
+   "char": "P02",
+   "build": "发表一波",
+   "encounter": "N02",
+   "developed": false,
+   "n": 1500,
+   "win": 0.32866666666666666,
+   "avg_turn": 6.896551724137931,
+   "avg_hp": 46.75659229208925
+  },
+  {
+   "char": "P02",
+   "build": "发表一波",
+   "encounter": "N02",
+   "developed": true,
+   "n": 1500,
+   "win": 0.712,
+   "avg_turn": 5.273408239700374,
+   "avg_hp": 63.28464419475655
+  },
+  {
+   "char": "P02",
+   "build": "发表一波",
+   "encounter": "N03",
+   "developed": false,
+   "n": 1500,
+   "win": 0.642,
+   "avg_turn": 6.686396677050882,
+   "avg_hp": 41.22326064382139
+  },
+  {
+   "char": "P02",
+   "build": "发表一波",
+   "encounter": "N03",
+   "developed": true,
+   "n": 1500,
+   "win": 0.778,
+   "avg_turn": 5.0754070265638385,
+   "avg_hp": 58.39845758354756
+  },
+  {
+   "char": "P02",
+   "build": "发表一波",
+   "encounter": "N04",
+   "developed": false,
+   "n": 1500,
+   "win": 0.748,
+   "avg_turn": 6.4420677361853835,
+   "avg_hp": 44.45008912655972
+  },
+  {
+   "char": "P02",
+   "build": "发表一波",
+   "encounter": "N04",
+   "developed": true,
+   "n": 1500,
+   "win": 0.8033333333333333,
+   "avg_turn": 5.291286307053942,
+   "avg_hp": 58.40580912863071
+  },
+  {
+   "char": "P02",
+   "build": "发表一波",
+   "encounter": "Q01",
+   "developed": false,
+   "n": 1500,
+   "win": 0.7346666666666667,
+   "avg_turn": 6.6678765880217785,
+   "avg_hp": 41.86206896551724
+  },
+  {
+   "char": "P02",
+   "build": "发表一波",
+   "encounter": "Q01",
+   "developed": true,
+   "n": 1500,
+   "win": 0.786,
+   "avg_turn": 5.0144189991518235,
+   "avg_hp": 58.40203562340967
+  },
+  {
+   "char": "P02",
+   "build": "发表一波",
+   "encounter": "B01",
+   "developed": false,
+   "n": 1500,
+   "win": 0.30266666666666664,
+   "avg_turn": 9.863436123348018,
+   "avg_hp": 24.154185022026432
+  },
+  {
+   "char": "P02",
+   "build": "发表一波",
+   "encounter": "B01",
+   "developed": true,
+   "n": 1500,
+   "win": 0.4613333333333333,
+   "avg_turn": 9.080924855491329,
+   "avg_hp": 39.153179190751445
+  },
+  {
+   "char": "P02",
+   "build": "章节持续",
+   "encounter": "N01",
+   "developed": false,
+   "n": 1500,
+   "win": 0.976,
+   "avg_turn": 6.103825136612022,
+   "avg_hp": 40.35245901639344
+  },
+  {
+   "char": "P02",
+   "build": "章节持续",
+   "encounter": "N01",
+   "developed": true,
+   "n": 1500,
+   "win": 0.618,
+   "avg_turn": 5.500539374325782,
+   "avg_hp": 52.50809061488673
+  },
+  {
+   "char": "P02",
+   "build": "章节持续",
+   "encounter": "N02",
+   "developed": false,
+   "n": 1500,
+   "win": 0.32866666666666666,
+   "avg_turn": 6.896551724137931,
+   "avg_hp": 46.75659229208925
+  },
+  {
+   "char": "P02",
+   "build": "章节持续",
+   "encounter": "N02",
+   "developed": true,
+   "n": 1500,
+   "win": 0.466,
+   "avg_turn": 5.658082975679542,
+   "avg_hp": 62.42918454935622
+  },
+  {
+   "char": "P02",
+   "build": "章节持续",
+   "encounter": "N03",
+   "developed": false,
+   "n": 1500,
+   "win": 0.642,
+   "avg_turn": 6.686396677050882,
+   "avg_hp": 41.22326064382139
+  },
+  {
+   "char": "P02",
+   "build": "章节持续",
+   "encounter": "N03",
+   "developed": true,
+   "n": 1500,
+   "win": 0.534,
+   "avg_turn": 5.543071161048689,
+   "avg_hp": 55.42821473158552
+  },
+  {
+   "char": "P02",
+   "build": "章节持续",
+   "encounter": "N04",
+   "developed": false,
+   "n": 1500,
+   "win": 0.748,
+   "avg_turn": 6.4420677361853835,
+   "avg_hp": 44.45008912655972
+  },
+  {
+   "char": "P02",
+   "build": "章节持续",
+   "encounter": "N04",
+   "developed": true,
+   "n": 1500,
+   "win": 0.6193333333333333,
+   "avg_turn": 5.731969860064585,
+   "avg_hp": 57.29924650161464
+  },
+  {
+   "char": "P02",
+   "build": "章节持续",
+   "encounter": "Q01",
+   "developed": false,
+   "n": 1500,
+   "win": 0.7346666666666667,
+   "avg_turn": 6.6678765880217785,
+   "avg_hp": 41.86206896551724
+  },
+  {
+   "char": "P02",
+   "build": "章节持续",
+   "encounter": "Q01",
+   "developed": true,
+   "n": 1500,
+   "win": 0.5273333333333333,
+   "avg_turn": 5.467762326169406,
+   "avg_hp": 56.05689001264223
+  },
+  {
+   "char": "P02",
+   "build": "章节持续",
+   "encounter": "B01",
+   "developed": false,
+   "n": 1500,
+   "win": 0.30266666666666664,
+   "avg_turn": 9.863436123348018,
+   "avg_hp": 24.154185022026432
+  },
+  {
+   "char": "P02",
+   "build": "章节持续",
+   "encounter": "B01",
+   "developed": true,
+   "n": 1500,
+   "win": 0.09333333333333334,
+   "avg_turn": 8.878571428571428,
+   "avg_hp": 45.25714285714286
+  },
+  {
+   "char": "P02",
+   "build": "混合路线",
+   "encounter": "N01",
+   "developed": false,
+   "n": 1500,
+   "win": 0.976,
+   "avg_turn": 6.103825136612022,
+   "avg_hp": 40.35245901639344
+  },
+  {
+   "char": "P02",
+   "build": "混合路线",
+   "encounter": "N01",
+   "developed": true,
+   "n": 1500,
+   "win": 0.808,
+   "avg_turn": 4.974422442244224,
+   "avg_hp": 48.95627062706271
+  },
+  {
+   "char": "P02",
+   "build": "混合路线",
+   "encounter": "N02",
+   "developed": false,
+   "n": 1500,
+   "win": 0.32866666666666666,
+   "avg_turn": 6.896551724137931,
+   "avg_hp": 46.75659229208925
+  },
+  {
+   "char": "P02",
+   "build": "混合路线",
+   "encounter": "N02",
+   "developed": true,
+   "n": 1500,
+   "win": 0.6653333333333333,
+   "avg_turn": 5.221442885771543,
+   "avg_hp": 59.307615230460925
+  },
+  {
+   "char": "P02",
+   "build": "混合路线",
+   "encounter": "N03",
+   "developed": false,
+   "n": 1500,
+   "win": 0.642,
+   "avg_turn": 6.686396677050882,
+   "avg_hp": 41.22326064382139
+  },
+  {
+   "char": "P02",
+   "build": "混合路线",
+   "encounter": "N03",
+   "developed": true,
+   "n": 1500,
+   "win": 0.7133333333333334,
+   "avg_turn": 5.113084112149533,
+   "avg_hp": 51.92336448598131
+  },
+  {
+   "char": "P02",
+   "build": "混合路线",
+   "encounter": "N04",
+   "developed": false,
+   "n": 1500,
+   "win": 0.748,
+   "avg_turn": 6.4420677361853835,
+   "avg_hp": 44.45008912655972
+  },
+  {
+   "char": "P02",
+   "build": "混合路线",
+   "encounter": "N04",
+   "developed": true,
+   "n": 1500,
+   "win": 0.8046666666666666,
+   "avg_turn": 5.24026512013256,
+   "avg_hp": 55.05219552609776
+  },
+  {
+   "char": "P02",
+   "build": "混合路线",
+   "encounter": "Q01",
+   "developed": false,
+   "n": 1500,
+   "win": 0.7346666666666667,
+   "avg_turn": 6.6678765880217785,
+   "avg_hp": 41.86206896551724
+  },
+  {
+   "char": "P02",
+   "build": "混合路线",
+   "encounter": "Q01",
+   "developed": true,
+   "n": 1500,
+   "win": 0.722,
+   "avg_turn": 4.963065558633426,
+   "avg_hp": 53.040627885503234
+  },
+  {
+   "char": "P02",
+   "build": "混合路线",
+   "encounter": "B01",
+   "developed": false,
+   "n": 1500,
+   "win": 0.30266666666666664,
+   "avg_turn": 9.863436123348018,
+   "avg_hp": 24.154185022026432
+  },
+  {
+   "char": "P02",
+   "build": "混合路线",
+   "encounter": "B01",
+   "developed": true,
+   "n": 1500,
+   "win": 0.36533333333333334,
+   "avg_turn": 9.142335766423358,
+   "avg_hp": 31.333941605839417
+  },
+  {
+   "char": "P03",
+   "build": "侵蚀增殖",
+   "encounter": "N01",
+   "developed": false,
+   "n": 1500,
+   "win": 0.9886666666666667,
+   "avg_turn": 6.122724207687121,
+   "avg_hp": 47.69049224544842
+  },
+  {
+   "char": "P03",
+   "build": "侵蚀增殖",
+   "encounter": "N01",
+   "developed": true,
+   "n": 1500,
+   "win": 0.9233333333333333,
+   "avg_turn": 5.535740072202166,
+   "avg_hp": 43.0028880866426
+  },
+  {
+   "char": "P03",
+   "build": "侵蚀增殖",
+   "encounter": "N02",
+   "developed": false,
+   "n": 1500,
+   "win": 0.368,
+   "avg_turn": 6.967391304347826,
+   "avg_hp": 52.68840579710145
+  },
+  {
+   "char": "P03",
+   "build": "侵蚀增殖",
+   "encounter": "N02",
+   "developed": true,
+   "n": 1500,
+   "win": 0.7793333333333333,
+   "avg_turn": 6.036783575705732,
+   "avg_hp": 54.224123182207016
+  },
+  {
+   "char": "P03",
+   "build": "侵蚀增殖",
+   "encounter": "N03",
+   "developed": false,
+   "n": 1500,
+   "win": 0.698,
+   "avg_turn": 6.7535816618911175,
+   "avg_hp": 49.57593123209169
+  },
+  {
+   "char": "P03",
+   "build": "侵蚀增殖",
+   "encounter": "N03",
+   "developed": true,
+   "n": 1500,
+   "win": 0.856,
+   "avg_turn": 5.7725856697819315,
+   "avg_hp": 46.545171339563865
+  },
+  {
+   "char": "P03",
+   "build": "侵蚀增殖",
+   "encounter": "N04",
+   "developed": false,
+   "n": 1500,
+   "win": 0.6526666666666666,
+   "avg_turn": 6.844739530132789,
+   "avg_hp": 48.978549540347295
+  },
+  {
+   "char": "P03",
+   "build": "侵蚀增殖",
+   "encounter": "N04",
+   "developed": true,
+   "n": 1500,
+   "win": 0.7093333333333334,
+   "avg_turn": 6.103383458646617,
+   "avg_hp": 47.58646616541353
+  },
+  {
+   "char": "P03",
+   "build": "侵蚀增殖",
+   "encounter": "Q01",
+   "developed": false,
+   "n": 1500,
+   "win": 0.7953333333333333,
+   "avg_turn": 6.7376362112321875,
+   "avg_hp": 47.31852472757753
+  },
+  {
+   "char": "P03",
+   "build": "侵蚀增殖",
+   "encounter": "Q01",
+   "developed": true,
+   "n": 1500,
+   "win": 0.8413333333333334,
+   "avg_turn": 5.702060221870047,
+   "avg_hp": 46.776545166402535
+  },
+  {
+   "char": "P03",
+   "build": "侵蚀增殖",
+   "encounter": "B01",
+   "developed": false,
+   "n": 1500,
+   "win": 0.32866666666666666,
+   "avg_turn": 9.724137931034482,
+   "avg_hp": 31.93103448275862
+  },
+  {
+   "char": "P03",
+   "build": "侵蚀增殖",
+   "encounter": "B01",
+   "developed": true,
+   "n": 1500,
+   "win": 0.24333333333333335,
+   "avg_turn": 9.717808219178082,
+   "avg_hp": 28.64109589041096
+  },
+  {
+   "char": "P03",
+   "build": "诱发连打",
+   "encounter": "N01",
+   "developed": false,
+   "n": 1500,
+   "win": 0.9886666666666667,
+   "avg_turn": 6.122724207687121,
+   "avg_hp": 47.69049224544842
+  },
+  {
+   "char": "P03",
+   "build": "诱发连打",
+   "encounter": "N01",
+   "developed": true,
+   "n": 1500,
+   "win": 0.8706666666666667,
+   "avg_turn": 6.447166921898928,
+   "avg_hp": 40.33843797856049
+  },
+  {
+   "char": "P03",
+   "build": "诱发连打",
+   "encounter": "N02",
+   "developed": false,
+   "n": 1500,
+   "win": 0.368,
+   "avg_turn": 6.967391304347826,
+   "avg_hp": 52.68840579710145
+  },
+  {
+   "char": "P03",
+   "build": "诱发连打",
+   "encounter": "N02",
+   "developed": true,
+   "n": 1500,
+   "win": 0.18666666666666668,
+   "avg_turn": 6.964285714285714,
+   "avg_hp": 50.589285714285715
+  },
+  {
+   "char": "P03",
+   "build": "诱发连打",
+   "encounter": "N03",
+   "developed": false,
+   "n": 1500,
+   "win": 0.698,
+   "avg_turn": 6.7535816618911175,
+   "avg_hp": 49.57593123209169
+  },
+  {
+   "char": "P03",
+   "build": "诱发连打",
+   "encounter": "N03",
+   "developed": true,
+   "n": 1500,
+   "win": 0.574,
+   "avg_turn": 6.765389082462253,
+   "avg_hp": 44.23112659698025
+  },
+  {
+   "char": "P03",
+   "build": "诱发连打",
+   "encounter": "N04",
+   "developed": false,
+   "n": 1500,
+   "win": 0.6526666666666666,
+   "avg_turn": 6.844739530132789,
+   "avg_hp": 48.978549540347295
+  },
+  {
+   "char": "P03",
+   "build": "诱发连打",
+   "encounter": "N04",
+   "developed": true,
+   "n": 1500,
+   "win": 0.12933333333333333,
+   "avg_turn": 6.974226804123711,
+   "avg_hp": 43.18556701030928
+  },
+  {
+   "char": "P03",
+   "build": "诱发连打",
+   "encounter": "Q01",
+   "developed": false,
+   "n": 1500,
+   "win": 0.7953333333333333,
+   "avg_turn": 6.7376362112321875,
+   "avg_hp": 47.31852472757753
+  },
+  {
+   "char": "P03",
+   "build": "诱发连打",
+   "encounter": "Q01",
+   "developed": true,
+   "n": 1500,
+   "win": 0.5166666666666667,
+   "avg_turn": 6.816774193548387,
+   "avg_hp": 42.84516129032258
+  },
+  {
+   "char": "P03",
+   "build": "诱发连打",
+   "encounter": "B01",
+   "developed": false,
+   "n": 1500,
+   "win": 0.32866666666666666,
+   "avg_turn": 9.724137931034482,
+   "avg_hp": 31.93103448275862
+  },
+  {
+   "char": "P03",
+   "build": "诱发连打",
+   "encounter": "B01",
+   "developed": true,
+   "n": 1500,
+   "win": 0.13066666666666665,
+   "avg_turn": 9.943877551020408,
+   "avg_hp": 28.331632653061224
+  },
+  {
+   "char": "P03",
+   "build": "混合抑制",
+   "encounter": "N01",
+   "developed": false,
+   "n": 1500,
+   "win": 0.9886666666666667,
+   "avg_turn": 6.122724207687121,
+   "avg_hp": 47.69049224544842
+  },
+  {
+   "char": "P03",
+   "build": "混合抑制",
+   "encounter": "N01",
+   "developed": true,
+   "n": 1500,
+   "win": 0.8873333333333333,
+   "avg_turn": 6.418482344102179,
+   "avg_hp": 56.48835462058602
+  },
+  {
+   "char": "P03",
+   "build": "混合抑制",
+   "encounter": "N02",
+   "developed": false,
+   "n": 1500,
+   "win": 0.368,
+   "avg_turn": 6.967391304347826,
+   "avg_hp": 52.68840579710145
+  },
+  {
+   "char": "P03",
+   "build": "混合抑制",
+   "encounter": "N02",
+   "developed": true,
+   "n": 1500,
+   "win": 0.4593333333333333,
+   "avg_turn": 6.83744557329463,
+   "avg_hp": 62.77503628447025
+  },
+  {
+   "char": "P03",
+   "build": "混合抑制",
+   "encounter": "N03",
+   "developed": false,
+   "n": 1500,
+   "win": 0.698,
+   "avg_turn": 6.7535816618911175,
+   "avg_hp": 49.57593123209169
+  },
+  {
+   "char": "P03",
+   "build": "混合抑制",
+   "encounter": "N03",
+   "developed": true,
+   "n": 1500,
+   "win": 0.6093333333333333,
+   "avg_turn": 6.691466083150985,
+   "avg_hp": 59.15426695842451
+  },
+  {
+   "char": "P03",
+   "build": "混合抑制",
+   "encounter": "N04",
+   "developed": false,
+   "n": 1500,
+   "win": 0.6526666666666666,
+   "avg_turn": 6.844739530132789,
+   "avg_hp": 48.978549540347295
+  },
+  {
+   "char": "P03",
+   "build": "混合抑制",
+   "encounter": "N04",
+   "developed": true,
+   "n": 1500,
+   "win": 0.324,
+   "avg_turn": 6.917695473251029,
+   "avg_hp": 55.76543209876543
+  },
+  {
+   "char": "P03",
+   "build": "混合抑制",
+   "encounter": "Q01",
+   "developed": false,
+   "n": 1500,
+   "win": 0.7953333333333333,
+   "avg_turn": 6.7376362112321875,
+   "avg_hp": 47.31852472757753
+  },
+  {
+   "char": "P03",
+   "build": "混合抑制",
+   "encounter": "Q01",
+   "developed": true,
+   "n": 1500,
+   "win": 0.7186666666666667,
+   "avg_turn": 6.619666048237477,
+   "avg_hp": 57.90723562152134
+  },
+  {
+   "char": "P03",
+   "build": "混合抑制",
+   "encounter": "B01",
+   "developed": false,
+   "n": 1500,
+   "win": 0.32866666666666666,
+   "avg_turn": 9.724137931034482,
+   "avg_hp": 31.93103448275862
+  },
+  {
+   "char": "P03",
+   "build": "混合抑制",
+   "encounter": "B01",
+   "developed": true,
+   "n": 1500,
+   "win": 0.13133333333333333,
+   "avg_turn": 9.893401015228426,
+   "avg_hp": 45.90862944162436
+  },
+  {
+   "char": "P04",
+   "build": "分工推进",
+   "encounter": "N01",
+   "developed": false,
+   "n": 1500,
+   "win": 0.9513333333333334,
+   "avg_turn": 6.444288717589348,
+   "avg_hp": 40.38822704975473
+  },
+  {
+   "char": "P04",
+   "build": "分工推进",
+   "encounter": "N01",
+   "developed": true,
+   "n": 1500,
+   "win": 0.9866666666666667,
+   "avg_turn": 5.812162162162162,
+   "avg_hp": 52.306756756756755
+  },
+  {
+   "char": "P04",
+   "build": "分工推进",
+   "encounter": "N02",
+   "developed": false,
+   "n": 1500,
+   "win": 0.12066666666666667,
+   "avg_turn": 7,
+   "avg_hp": 48.70165745856354
+  },
+  {
+   "char": "P04",
+   "build": "分工推进",
+   "encounter": "N02",
+   "developed": true,
+   "n": 1500,
+   "win": 0.7506666666666667,
+   "avg_turn": 6.482238010657194,
+   "avg_hp": 60.226465364120784
+  },
+  {
+   "char": "P04",
+   "build": "分工推进",
+   "encounter": "N03",
+   "developed": false,
+   "n": 1500,
+   "win": 0.342,
+   "avg_turn": 6.9376218323586745,
+   "avg_hp": 44.26120857699805
+  },
+  {
+   "char": "P04",
+   "build": "分工推进",
+   "encounter": "N03",
+   "developed": true,
+   "n": 1500,
+   "win": 0.8966666666666666,
+   "avg_turn": 6.194052044609665,
+   "avg_hp": 54.66542750929368
+  },
+  {
+   "char": "P04",
+   "build": "分工推进",
+   "encounter": "N04",
+   "developed": false,
+   "n": 1500,
+   "win": 0.5273333333333333,
+   "avg_turn": 6.969658659924146,
+   "avg_hp": 40.45891276864728
+  },
+  {
+   "char": "P04",
+   "build": "分工推进",
+   "encounter": "N04",
+   "developed": true,
+   "n": 1500,
+   "win": 0.7506666666666667,
+   "avg_turn": 6.506216696269982,
+   "avg_hp": 54.92451154529307
+  },
+  {
+   "char": "P04",
+   "build": "分工推进",
+   "encounter": "Q01",
+   "developed": false,
+   "n": 1500,
+   "win": 0.41,
+   "avg_turn": 7,
+   "avg_hp": 40.8390243902439
+  },
+  {
+   "char": "P04",
+   "build": "分工推进",
+   "encounter": "Q01",
+   "developed": true,
+   "n": 1500,
+   "win": 0.9,
+   "avg_turn": 6.322962962962963,
+   "avg_hp": 54.04888888888889
+  },
+  {
+   "char": "P04",
+   "build": "分工推进",
+   "encounter": "B01",
+   "developed": false,
+   "n": 1500,
+   "win": 0.0,
+   "avg_turn": null,
+   "avg_hp": null
+  },
+  {
+   "char": "P04",
+   "build": "分工推进",
+   "encounter": "B01",
+   "developed": true,
+   "n": 1500,
+   "win": 0.6773333333333333,
+   "avg_turn": 9.541338582677165,
+   "avg_hp": 41.482283464566926
+  },
+  {
+   "char": "P04",
+   "build": "接力轮换",
+   "encounter": "N01",
+   "developed": false,
+   "n": 1500,
+   "win": 0.9513333333333334,
+   "avg_turn": 6.444288717589348,
+   "avg_hp": 40.38822704975473
+  },
+  {
+   "char": "P04",
+   "build": "接力轮换",
+   "encounter": "N01",
+   "developed": true,
+   "n": 1500,
+   "win": 0.41733333333333333,
+   "avg_turn": 6.659744408945687,
+   "avg_hp": 50.587859424920126
+  },
+  {
+   "char": "P04",
+   "build": "接力轮换",
+   "encounter": "N02",
+   "developed": false,
+   "n": 1500,
+   "win": 0.12066666666666667,
+   "avg_turn": 7,
+   "avg_hp": 48.70165745856354
+  },
+  {
+   "char": "P04",
+   "build": "接力轮换",
+   "encounter": "N02",
+   "developed": true,
+   "n": 1500,
+   "win": 0.056,
+   "avg_turn": 6.916666666666667,
+   "avg_hp": 60.95238095238095
+  },
+  {
+   "char": "P04",
+   "build": "接力轮换",
+   "encounter": "N03",
+   "developed": false,
+   "n": 1500,
+   "win": 0.342,
+   "avg_turn": 6.9376218323586745,
+   "avg_hp": 44.26120857699805
+  },
+  {
+   "char": "P04",
+   "build": "接力轮换",
+   "encounter": "N03",
+   "developed": true,
+   "n": 1500,
+   "win": 0.17666666666666667,
+   "avg_turn": 6.7924528301886795,
+   "avg_hp": 55.40754716981132
+  },
+  {
+   "char": "P04",
+   "build": "接力轮换",
+   "encounter": "N04",
+   "developed": false,
+   "n": 1500,
+   "win": 0.5273333333333333,
+   "avg_turn": 6.969658659924146,
+   "avg_hp": 40.45891276864728
+  },
+  {
+   "char": "P04",
+   "build": "接力轮换",
+   "encounter": "N04",
+   "developed": true,
+   "n": 1500,
+   "win": 0.06533333333333333,
+   "avg_turn": 6.887755102040816,
+   "avg_hp": 50.54081632653061
+  },
+  {
+   "char": "P04",
+   "build": "接力轮换",
+   "encounter": "Q01",
+   "developed": false,
+   "n": 1500,
+   "win": 0.41,
+   "avg_turn": 7,
+   "avg_hp": 40.8390243902439
+  },
+  {
+   "char": "P04",
+   "build": "接力轮换",
+   "encounter": "Q01",
+   "developed": true,
+   "n": 1500,
+   "win": 0.25333333333333335,
+   "avg_turn": 6.844736842105263,
+   "avg_hp": 49.99473684210526
+  },
+  {
+   "char": "P04",
+   "build": "接力轮换",
+   "encounter": "B01",
+   "developed": false,
+   "n": 1500,
+   "win": 0.0,
+   "avg_turn": null,
+   "avg_hp": null
+  },
+  {
+   "char": "P04",
+   "build": "接力轮换",
+   "encounter": "B01",
+   "developed": true,
+   "n": 1500,
+   "win": 0.0033333333333333335,
+   "avg_turn": 10,
+   "avg_hp": 42.8
+  },
+  {
+   "char": "P04",
+   "build": "备考内化",
+   "encounter": "N01",
+   "developed": false,
+   "n": 1500,
+   "win": 0.9513333333333334,
+   "avg_turn": 6.444288717589348,
+   "avg_hp": 40.38822704975473
+  },
+  {
+   "char": "P04",
+   "build": "备考内化",
+   "encounter": "N01",
+   "developed": true,
+   "n": 1500,
+   "win": 0.998,
+   "avg_turn": 5.44622578490314,
+   "avg_hp": 51.60855043420174
+  },
+  {
+   "char": "P04",
+   "build": "备考内化",
+   "encounter": "N02",
+   "developed": false,
+   "n": 1500,
+   "win": 0.12066666666666667,
+   "avg_turn": 7,
+   "avg_hp": 48.70165745856354
+  },
+  {
+   "char": "P04",
+   "build": "备考内化",
+   "encounter": "N02",
+   "developed": true,
+   "n": 1500,
+   "win": 0.83,
+   "avg_turn": 6.447389558232932,
+   "avg_hp": 57.36224899598393
+  },
+  {
+   "char": "P04",
+   "build": "备考内化",
+   "encounter": "N03",
+   "developed": false,
+   "n": 1500,
+   "win": 0.342,
+   "avg_turn": 6.9376218323586745,
+   "avg_hp": 44.26120857699805
+  },
+  {
+   "char": "P04",
+   "build": "备考内化",
+   "encounter": "N03",
+   "developed": true,
+   "n": 1500,
+   "win": 0.974,
+   "avg_turn": 6.006160164271047,
+   "avg_hp": 53.14031485284052
+  },
+  {
+   "char": "P04",
+   "build": "备考内化",
+   "encounter": "N04",
+   "developed": false,
+   "n": 1500,
+   "win": 0.5273333333333333,
+   "avg_turn": 6.969658659924146,
+   "avg_hp": 40.45891276864728
+  },
+  {
+   "char": "P04",
+   "build": "备考内化",
+   "encounter": "N04",
+   "developed": true,
+   "n": 1500,
+   "win": 0.83,
+   "avg_turn": 6.501204819277109,
+   "avg_hp": 51.620883534136546
+  },
+  {
+   "char": "P04",
+   "build": "备考内化",
+   "encounter": "Q01",
+   "developed": false,
+   "n": 1500,
+   "win": 0.41,
+   "avg_turn": 7,
+   "avg_hp": 40.8390243902439
+  },
+  {
+   "char": "P04",
+   "build": "备考内化",
+   "encounter": "Q01",
+   "developed": true,
+   "n": 1500,
+   "win": 0.9273333333333333,
+   "avg_turn": 5.798705966930266,
+   "avg_hp": 55.770668583752695
+  },
+  {
+   "char": "P04",
+   "build": "备考内化",
+   "encounter": "B01",
+   "developed": false,
+   "n": 1500,
+   "win": 0.0,
+   "avg_turn": null,
+   "avg_hp": null
+  },
+  {
+   "char": "P04",
+   "build": "备考内化",
+   "encounter": "B01",
+   "developed": true,
+   "n": 1500,
+   "win": 0.6386666666666667,
+   "avg_turn": 9.312108559498956,
+   "avg_hp": 44.464509394572026
+  }
+ ]
+}
