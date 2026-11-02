@@ -31,6 +31,7 @@ const PLAYER_FIELDS := {
 	"entity_id": TYPE_STRING,
 	"vitality": TYPE_INT,
 	"max_vitality": TYPE_INT,
+	"max_vitality_base": TYPE_INT,
 	"relax": TYPE_INT,
 	"focus": TYPE_INT,
 }
@@ -196,7 +197,7 @@ static func _validate_structure(data: Dictionary) -> Array[String]:
 	RunCodec.shape(data, FIELDS, "battle", issues)
 	if not issues.is_empty():
 		return issues
-	RunCodec.shape(data.player, PLAYER_FIELDS, "battle.player", issues)
+	RunCodec.shape(data.player, PLAYER_FIELDS, "battle.player", issues, ["max_vitality_base"])
 	RunCodec.shape(
 		data.zones,
 		{

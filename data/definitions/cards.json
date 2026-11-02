@@ -732,5 +732,20 @@
     "exhaust": false,
     "unplayable": true,
     "effects": []
+  },
+  {
+    "id": "X03",
+    "name_key": "card.X03.name",
+    "type": "strategy",
+    "rarity": null,
+    "tags": [
+      "special",
+      "temporary"
+    ],
+    "cost": 0,
+    "target": "self",
+    "exhaust": false,
+    "unplayable": true,
+    "effects": []
   }
 ]

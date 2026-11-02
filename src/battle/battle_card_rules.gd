@@ -94,6 +94,14 @@ func calculate_cost(state: BattleState, card_id: String) -> GameResult:
 		focus_discount += int(
 			scene_result.data.get("modifiers", {}).get("first_work_cost_discount", 0)
 		)
+	var any_played_key := BattleState.counter_key(
+		GameConstants.COUNTER_SCOPE_ROUND, "played:any", &"played"
+	)
+	if int(state.counters.get(any_played_key, 0)) == 0:
+		for task: Dictionary in state.tasks:
+			var task_def := _catalog.get_definition("task", str(task.get("definition_id", "")))
+			if task_def.ok:
+				focus_added += int(task_def.data.get("first_card_cost_bonus", 0))
 	for relic_id in state.relics:
 		var relic_result := _catalog.get_definition("relic", relic_id)
 		if not relic_result.ok:

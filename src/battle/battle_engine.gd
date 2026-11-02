@@ -365,10 +365,13 @@ func _has_effect(face: Dictionary, op: String) -> bool:
 func _target_candidates(state: BattleState, target: String) -> Array[Dictionary]:
 	var candidates: Array[Dictionary] = []
 	if target == "task":
+		var has_taunt := _has_taunting_task(state)
 		for task: Dictionary in state.tasks:
 			if int(task.get("work_remaining", 0)) <= 0:
 				continue
 			if int(task.get("eligible_round", 1)) > state.round_index:
+				continue
+			if has_taunt and not _task_has_taunt(state, str(task.get("task_id", ""))):
 				continue
 			var definition_result := _catalog.get_definition(
 				"task", str(task.get("definition_id", ""))
@@ -474,7 +477,7 @@ func apply(state: BattleState, action: ActionDraft, rng_state: Dictionary) -> Ga
 	var events: Array[RuleEvent] = []
 	var pending_choice: Variant = null
 	if action.type == GameConstants.ACTION_PLAY_CARD:
-		var started := _start_card_resolution(working, action.payload, events)
+		var started := _start_card_resolution(working, action.payload, rng, events)
 		if not started.ok:
 			return started
 	elif action.type == GameConstants.ACTION_CONFIRM_CHOICE:
@@ -505,7 +508,7 @@ func apply(state: BattleState, action: ActionDraft, rng_state: Dictionary) -> Ga
 
 
 func _start_card_resolution(
-	state: BattleState, payload: Dictionary, events: Array[RuleEvent]
+	state: BattleState, payload: Dictionary, rng: RandomSource, events: Array[RuleEvent]
 ) -> GameResult:
 	var card_id: String = payload.card_instance_id
 	var preview_result := preview(state, ActionDraft.new(GameConstants.ACTION_PLAY_CARD, payload))
@@ -565,6 +568,22 @@ func _start_card_resolution(
 		GameConstants.COUNTER_SCOPE_ROUND, "played:" + str(face.get("id", "")), &"played"
 	)
 	state.counters[played_key] = int(state.counters.get(played_key, 0)) + 1
+	var any_played_key := BattleState.counter_key(
+		GameConstants.COUNTER_SCOPE_ROUND, "played:any", &"played"
+	)
+	state.counters[any_played_key] = int(state.counters.get(any_played_key, 0)) + 1
+	if int(state.counters[any_played_key]) == 1:
+		var discard_result := _random_discard(
+			state, _task_first_card_discard(state), rng, events
+		)
+		if not discard_result.ok:
+			return discard_result
+	var played_type := str(face.get("type", ""))
+	if not played_type.is_empty():
+		var type_key := BattleState.counter_key(
+			GameConstants.COUNTER_SCOPE_BATTLE, "card_type:" + played_type, &"played"
+		)
+		state.counters[type_key] = int(state.counters.get(type_key, 0)) + 1
 	if str(face.get("type", "")) == "work":
 		var work_played_key := BattleState.counter_key(
 			GameConstants.COUNTER_SCOPE_ROUND, "played:work", &"played"
@@ -727,7 +746,7 @@ func _end_turn(
 					}
 				)
 				if int(task.work_remaining) == 0:
-					_advance_or_remove_task(state, task_index, events)
+					_advance_or_remove_task(state, task_index, events, rng)
 				_check_battle_outcome(state, events)
 				if state.phase == "finished":
 					return GameResult.success(null)
@@ -778,6 +797,9 @@ func _end_turn(
 	if not phase_result.ok:
 		return phase_result
 	for task: Dictionary in state.tasks:
+		var shield_def := _catalog.get_definition("task", str(task.get("definition_id", "")))
+		if shield_def.ok and bool(shield_def.data.get("shield_persistent", false)):
+			continue
 		task.shield = 0
 	phase_result = _set_phase(state, events, "enemy_skill")
 	if not phase_result.ok:
@@ -817,6 +839,27 @@ func _end_turn(
 				var scaled := per_unit * state.units.size()
 				var scaled_cap := int(intent.get("pressure_per_unit_cap", scaled))
 				pressure += mini(scaled, maxi(0, scaled_cap))
+			var per_vitality := int(intent.get("pressure_per_vitality", 0))
+			if per_vitality > 0:
+				var step := int(intent.get("pressure_vitality_step", 10))
+				pressure += per_vitality * int(int(state.player.get("vitality", 0)) / maxi(1, step))
+			if int(task.get("shield", 0)) > 0:
+				pressure += int(intent.get("pressure_when_shield", 0))
+			var per_card_type: Variant = intent.get("pressure_per_card_type", {})
+			if per_card_type is Dictionary:
+				for card_type in per_card_type:
+					var played_key := BattleState.counter_key(
+						GameConstants.COUNTER_SCOPE_BATTLE, "card_type:" + str(card_type), &"played"
+					)
+					pressure += int(per_card_type[card_type]) * int(state.counters.get(played_key, 0))
+			if state.units.is_empty():
+				var no_unit_mult := int(intent.get("pressure_no_unit_mult", 100))
+				if no_unit_mult != 100:
+					pressure = int(ceil(pressure * no_unit_mult / 100.0))
+			else:
+				var has_unit_mult := int(intent.get("pressure_has_unit_mult", 100))
+				if has_unit_mult != 100:
+					pressure = int(ceil(pressure * has_unit_mult / 100.0))
 			var times := maxi(1, int(intent.get("pressure_times", 1)))
 			for segment_index in times:
 				if pressure > 0:
@@ -892,6 +935,20 @@ func _end_turn(
 						int(task.intent_snapshot.get("shield", 0))
 					)
 				)
+	var self_copy_pending: Array[Dictionary] = []
+	for task: Dictionary in state.tasks.duplicate(true):
+		var self_copy_def := _catalog.get_definition("task", str(task.get("definition_id", "")))
+		if self_copy_def.ok and bool(self_copy_def.data.get("self_copy_every_round", false)):
+			self_copy_pending.append(
+				{
+					"source_id": str(task.get("task_id", "")),
+					"spec": {"task": str(task.get("definition_id", "")), "count": 1}
+				}
+			)
+	for pending: Dictionary in self_copy_pending:
+		var copy_result := _summon_tasks(state, pending.source_id, pending.spec, events)
+		if not copy_result.ok:
+			return copy_result
 	_add_event(events, "round_started", "", [], {"round_index": state.round_index})
 	return _run_player_prepare(state, ruleset_result.data, previous_round, rng, events)
 
@@ -957,6 +1014,39 @@ func _execute_intent_skill(
 			int(task.get("shield", 0))
 			+ _scaled_shield(state, ruleset.data, task_id, int(intent.shield))
 		)
+	if intent.has("player_gain_focus"):
+		var cap := int(ruleset.data.battle.focus_cap)
+		var focus_before := int(state.player.get("focus", 0))
+		state.player.focus = mini(cap, focus_before + int(intent.player_gain_focus))
+		if state.player.focus != focus_before:
+			_add_event(
+				events,
+				"focus_changed",
+				task_id,
+				[str(state.player.get("entity_id", ""))],
+				{
+					"before": focus_before,
+					"after": state.player.focus,
+					"delta": state.player.focus - focus_before,
+					"reason": "intent",
+				}
+			)
+	if intent.has("player_reduce_focus"):
+		var reduce_before := int(state.player.get("focus", 0))
+		state.player.focus = maxi(0, reduce_before - int(intent.player_reduce_focus))
+		if state.player.focus != reduce_before:
+			_add_event(
+				events,
+				"focus_changed",
+				task_id,
+				[str(state.player.get("entity_id", ""))],
+				{
+					"before": reduce_before,
+					"after": state.player.focus,
+					"delta": state.player.focus - reduce_before,
+					"reason": "intent",
+				}
+			)
 	if intent.has("extra_requirements"):
 		var extra := _gain_status_on_target(
 			state,
@@ -1233,6 +1323,11 @@ func _run_player_prepare(
 	if state.round_index != previous_round:
 		_reset_round_counters(state)
 	state.player.relax = 0
+	var max_reduction := _task_max_vitality_reduction(state)
+	if max_reduction > 0:
+		var max_before := int(state.player.get("max_vitality", 0))
+		state.player.max_vitality = maxi(1, max_before - max_reduction)
+		state.player.vitality = mini(int(state.player.get("vitality", 0)), state.player.max_vitality)
 	var anxiety := _status_stacks(state, "anxiety", "player")
 	var focus_before := int(state.player.get("focus", 0))
 	var focus_amount := maxi(0, int(ruleset.battle.focus_per_round) - anxiety)
@@ -1266,7 +1361,10 @@ func _run_player_prepare(
 	if not phase_to_draw.ok:
 		return phase_to_draw
 	var draw_amount := maxi(
-		0, int(ruleset.battle.draw_per_round) - _status_stacks(state, "procrastination", "player")
+		0,
+		int(ruleset.battle.draw_per_round)
+		- _status_stacks(state, "procrastination", "player")
+		- _task_draw_reduction(state)
 	)
 	_clear_expiring_statuses(state, "draw", events)
 	_draw_cards(state, draw_amount, rng, events)
@@ -1753,10 +1851,143 @@ func _execute_card_effect(
 			return _establish_scene(state, effect, rng, events)
 		"gain_status":
 			return _gain_status(state, effect, events)
+		"pressure":
+			_apply_pressure(state, amount, str(effect.get("target", "player")) == "all", events, 0)
+			return GameResult.success(null)
+		"reduce_relax":
+			var relax_before: int = int(state.player.get("relax", 0))
+			state.player.relax = maxi(0, relax_before - maxi(0, amount))
+			_add_event(
+				events,
+				"relax_changed",
+				str(state.resolution.get("card_instance_id", "")),
+				[str(state.player.get("entity_id", ""))],
+				{
+					"before": relax_before,
+					"after": state.player.relax,
+					"delta": state.player.relax - relax_before,
+					"reason": "effect",
+				}
+			)
+			return GameResult.success(null)
+		"reduce_max_vitality":
+			var max_before: int = int(state.player.get("max_vitality", 0))
+			state.player.max_vitality = maxi(1, max_before - maxi(0, amount))
+			state.player.vitality = mini(int(state.player.get("vitality", 0)), state.player.max_vitality)
+			return GameResult.success(null)
+		"restore_max_vitality":
+			var max_base: int = int(state.player.get("max_vitality_base", state.player.get("max_vitality", 0)))
+			state.player.max_vitality = mini(max_base, int(state.player.get("max_vitality", 0)) + maxi(0, amount))
+			return GameResult.success(null)
+		"reduce_focus":
+			var focus_before: int = int(state.player.get("focus", 0))
+			state.player.focus = maxi(0, focus_before - maxi(0, amount))
+			_add_event(
+				events,
+				"focus_changed",
+				str(state.resolution.get("card_instance_id", "")),
+				[str(state.player.get("entity_id", ""))],
+				{
+					"before": focus_before,
+					"after": state.player.focus,
+					"delta": state.player.focus - focus_before,
+					"reason": "effect",
+				}
+			)
+			return GameResult.success(null)
+		"random_discard":
+			return _random_discard(state, maxi(0, amount), rng, events)
+		"summon_task":
+			return _summon_tasks(
+				state,
+				str(state.resolution.get("card_instance_id", "")),
+				{"task": str(effect.get("task", "")), "count": maxi(1, int(effect.get("count", 1)))},
+				events
+			)
 		_:
 			return _failure(
 				GameConstants.ERROR_ENGINE_NOT_READY, "battle.effect.not_ready", {"op": op}
 			)
+
+
+func _random_discard(
+	state: BattleState, amount: int, rng: RandomSource, events: Array[RuleEvent]
+) -> GameResult:
+	var hand: Array[String] = []
+	for card_id in state.zones.get("hand", []):
+		hand.append(str(card_id))
+	var resolving := ""
+	if typeof(state.resolution) == TYPE_DICTIONARY:
+		resolving = str(state.resolution.get("card_instance_id", ""))
+	hand.erase(resolving)
+	if amount <= 0 or hand.is_empty():
+		return GameResult.success(null)
+	var shuffled := rng.shuffle(GameConstants.RNG_STREAM_BATTLE, hand)
+	if not shuffled.ok:
+		return shuffled
+	var discarded_count := mini(amount, shuffled.data.size())
+	for index in discarded_count:
+		var card_id: String = str(shuffled.data[index])
+		state.zones.hand.erase(card_id)
+		state.zones.discard.append(card_id)
+		_add_event(
+			events,
+			"card_discarded",
+			resolving,
+			[card_id],
+			{
+				"definition_id": str(state.card_by_id[card_id].definition_id),
+				"from_zone": "hand",
+				"to_zone": "discard",
+			}
+		)
+	return GameResult.success(null)
+
+
+func _task_draw_reduction(state: BattleState) -> int:
+	var total := 0
+	for task: Dictionary in state.tasks:
+		var definition := _catalog.get_definition("task", str(task.get("definition_id", "")))
+		if definition.ok:
+			total += int(definition.data.get("draw_reduction", 0))
+	return total
+
+
+func _task_first_card_discard(state: BattleState) -> int:
+	var total := 0
+	for task: Dictionary in state.tasks:
+		var definition := _catalog.get_definition("task", str(task.get("definition_id", "")))
+		if definition.ok:
+			total += int(definition.data.get("discard_on_first_card", 0))
+	return total
+
+
+func _task_max_vitality_reduction(state: BattleState) -> int:
+	var total := 0
+	for task: Dictionary in state.tasks:
+		var definition := _catalog.get_definition("task", str(task.get("definition_id", "")))
+		if definition.ok:
+			total += int(definition.data.get("max_vitality_reduction", 0))
+	return total
+
+
+func _has_taunting_task(state: BattleState) -> bool:
+	for task: Dictionary in state.tasks:
+		if int(task.get("work_remaining", 0)) <= 0:
+			continue
+		if int(task.get("eligible_round", 1)) > state.round_index:
+			continue
+		if _task_has_taunt(state, str(task.get("task_id", ""))):
+			return true
+	return false
+
+
+func _task_has_taunt(state: BattleState, task_id: String) -> bool:
+	var task_index := _task_index(state, task_id)
+	if task_index < 0:
+		return false
+	var definition := _catalog.get_definition("task", str(state.tasks[task_index].get("definition_id", "")))
+	return definition.ok and bool(definition.data.get("taunt", false))
 
 
 func _apply_completion(
@@ -1787,6 +2018,10 @@ func _apply_completion(
 			* int(
 				ruleset.data.statuses.get("drowsiness", {}).get("completion_penalty_per_stack", 0)
 			)
+		)
+		requested += (
+			_status_stacks(state, "work_boost", "player")
+			* int(ruleset.data.statuses.get("work_boost", {}).get("completion_per_stack", 0))
 		)
 		if bool(resolution.get("first_work_card", false)):
 			for relic_id in state.relics:
@@ -1870,7 +2105,7 @@ func _apply_completion(
 			}
 		)
 		if int(task.work_remaining) == 0:
-			_advance_or_remove_task(state, task_index, events)
+			_advance_or_remove_task(state, task_index, events, rng)
 			_check_battle_outcome(state, events)
 			if state.phase == "finished":
 				return
@@ -1905,7 +2140,38 @@ func _completion_bonus_matches(state: BattleState, condition: Dictionary) -> boo
 	return true
 
 
-func _advance_or_remove_task(state: BattleState, task_index: int, events: Array[RuleEvent]) -> void:
+func _run_on_complete_effects(
+	state: BattleState, task_id: String, effects: Array, rng: RandomSource, events: Array[RuleEvent]
+) -> GameResult:
+	if effects.is_empty():
+		return GameResult.success(null)
+	var previous: Variant = state.resolution
+	state.resolution = {
+		"card_instance_id": task_id,
+		"definition_id": "",
+		"effects": [],
+		"cursor": 0,
+		"target_ids": [],
+		"choice": null,
+		"choice_counts": {},
+		"discarded_in_resolution": [],
+		"all_tasks": false,
+		"context_target_id": "",
+	}
+	for effect: Dictionary in effects:
+		var result := _execute_card_effect(state, effect, rng, events)
+		if not result.ok:
+			state.resolution = previous
+			return result
+		if state.phase == "finished":
+			break
+	state.resolution = previous
+	return GameResult.success(null)
+
+
+func _advance_or_remove_task(
+	state: BattleState, task_index: int, events: Array[RuleEvent], rng: RandomSource = null
+) -> void:
 	var previous: Dictionary = state.tasks[task_index]
 	var definition_result := _catalog.get_definition("task", str(previous.get("definition_id", "")))
 	if not definition_result.ok:
@@ -1951,6 +2217,9 @@ func _advance_or_remove_task(state: BattleState, task_index: int, events: Array[
 			}
 		)
 		return
+	var on_complete: Array = definition_result.data.get("on_complete_effects", [])
+	if not on_complete.is_empty() and rng != null:
+		_run_on_complete_effects(state, str(previous.task_id), on_complete, rng, events)
 	state.tasks.remove_at(task_index)
 	_add_event(
 		events,
@@ -2698,6 +2967,7 @@ func begin(input: Dictionary) -> GameResult:
 					"vitality":
 					input.get("vitality", input.get("max_vitality", ruleset.run.starting_vitality)),
 					"max_vitality": input.get("max_vitality", ruleset.run.starting_vitality),
+					"max_vitality_base": input.get("max_vitality", ruleset.run.starting_vitality),
 					"relax": 0,
 					"focus": 0,
 				},

@@ -153,6 +153,10 @@
       "confusion": {
         "cap": 3,
         "shield_per_stack": 1
+      },
+      "work_boost": {
+        "cap": 10,
+        "completion_per_stack": 1
       }
     },
     "difficulty_overrides": {

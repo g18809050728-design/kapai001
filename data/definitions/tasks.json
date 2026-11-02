@@ -938,5 +938,741 @@
       }
     ],
     "victory_required": false
+  },
+  {
+    "id": "N13",
+    "name_key": "task.n13.name",
+    "kind": "normal",
+    "phases": [
+      {
+        "phase_key": "main",
+        "work_max": 18,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "task.n13.intent.a",
+            "pressure": 3
+          },
+          {
+            "index": 1,
+            "text_key": "task.n13.intent.b",
+            "pressure": 5
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "N14",
+    "name_key": "task.n14.name",
+    "kind": "normal",
+    "on_complete_effects": [
+      {
+        "op": "pressure",
+        "amount": 4,
+        "target": "player"
+      },
+      {
+        "op": "reduce_relax",
+        "amount": 4
+      }
+    ],
+    "phases": [
+      {
+        "phase_key": "main",
+        "work_max": 26,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "task.n14.intent.a",
+            "pressure": 5,
+            "gain_status": {
+              "status": "drowsiness",
+              "stacks": 1,
+              "target": "player"
+            }
+          },
+          {
+            "index": 1,
+            "text_key": "task.n14.intent.b",
+            "pressure": 8
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "N15",
+    "name_key": "task.n15.name",
+    "kind": "normal",
+    "phases": [
+      {
+        "phase_key": "code",
+        "work_max": 30,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "task.n15.intent.a",
+            "pressure": 6
+          },
+          {
+            "index": 1,
+            "text_key": "task.n15.intent.b",
+            "pressure": 9
+          }
+        ]
+      },
+      {
+        "phase_key": "retake",
+        "work_max": 8,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "task.n15.intent.a",
+            "pressure": 6
+          },
+          {
+            "index": 1,
+            "text_key": "task.n15.intent.b",
+            "pressure": 9
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "N16",
+    "name_key": "task.n16.name",
+    "kind": "normal",
+    "phases": [
+      {
+        "phase_key": "main",
+        "work_max": 22,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "task.n16.intent.a",
+            "player_gain_focus": 2
+          },
+          {
+            "index": 1,
+            "text_key": "task.n16.intent.b",
+            "pressure": 6,
+            "player_reduce_focus": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "N17",
+    "name_key": "task.n17.name",
+    "kind": "normal",
+    "on_complete_effects": [
+      {
+        "op": "gain_focus",
+        "amount": 2
+      }
+    ],
+    "phases": [
+      {
+        "phase_key": "main",
+        "work_max": 24,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "task.n17.intent.a",
+            "pressure": 5
+          },
+          {
+            "index": 1,
+            "text_key": "task.n17.intent.b",
+            "pressure": 7
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "N18",
+    "name_key": "task.n18.name",
+    "kind": "normal",
+    "shield_persistent": true,
+    "phases": [
+      {
+        "phase_key": "main",
+        "work_max": 28,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "task.n18.intent.a",
+            "pressure": 6
+          },
+          {
+            "index": 1,
+            "text_key": "task.n18.intent.b",
+            "shield": 5
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "N19",
+    "name_key": "task.n19.name",
+    "kind": "normal",
+    "phases": [
+      {
+        "phase_key": "main",
+        "work_max": 36,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "task.n19.intent.a",
+            "shield": 8
+          },
+          {
+            "index": 1,
+            "text_key": "task.n19.intent.b",
+            "pressure": 10,
+            "pressure_all": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "N20",
+    "name_key": "task.n20.name",
+    "kind": "normal",
+    "self_copy_every_round": true,
+    "on_complete_effects": [
+      {
+        "op": "pressure",
+        "amount": 4,
+        "target": "player"
+      }
+    ],
+    "phases": [
+      {
+        "phase_key": "main",
+        "work_max": 24,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "task.n20.intent.a",
+            "pressure": 5
+          },
+          {
+            "index": 1,
+            "text_key": "task.n20.intent.b",
+            "pressure": 5
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "N21",
+    "name_key": "task.n21.name",
+    "kind": "normal",
+    "max_vitality_reduction": 1,
+    "phases": [
+      {
+        "phase_key": "main",
+        "work_max": 30,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "task.n21.intent.a",
+            "pressure": 5
+          },
+          {
+            "index": 1,
+            "text_key": "task.n21.intent.b",
+            "pressure": 6
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "N22",
+    "name_key": "task.n22.name",
+    "kind": "normal",
+    "taunt": true,
+    "phases": [
+      {
+        "phase_key": "main",
+        "work_max": 20,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "task.n22.intent.a",
+            "pressure": 4
+          },
+          {
+            "index": 1,
+            "text_key": "task.n22.intent.b",
+            "pressure": 6
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "N23",
+    "name_key": "task.n23.name",
+    "kind": "normal",
+    "on_complete_effects": [
+      {
+        "op": "summon_task",
+        "task": "N22",
+        "count": 2
+      }
+    ],
+    "phases": [
+      {
+        "phase_key": "main",
+        "work_max": 24,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "task.n23.intent.a",
+            "pressure": 5
+          },
+          {
+            "index": 1,
+            "text_key": "task.n23.intent.b",
+            "pressure": 7
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "N24",
+    "name_key": "task.n24.name",
+    "kind": "normal",
+    "phases": [
+      {
+        "phase_key": "main",
+        "work_max": 40,
+        "intent_loop": "clamp",
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "task.n24.intent.a",
+            "pressure": 4
+          },
+          {
+            "index": 1,
+            "text_key": "task.n24.intent.b",
+            "pressure": 8
+          },
+          {
+            "index": 2,
+            "text_key": "task.n24.intent.c",
+            "pressure": 16
+          },
+          {
+            "index": 3,
+            "text_key": "task.n24.intent.d",
+            "pressure": 32
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "N25",
+    "name_key": "task.n25.name",
+    "kind": "normal",
+    "on_complete_effects": [
+      {
+        "op": "gain_focus",
+        "amount": 5
+      }
+    ],
+    "phases": [
+      {
+        "phase_key": "main",
+        "work_max": 28,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "task.n25.intent.a",
+            "pressure": 6
+          },
+          {
+            "index": 1,
+            "text_key": "task.n25.intent.b",
+            "pressure": 9
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "N26",
+    "name_key": "task.n26.name",
+    "kind": "normal",
+    "draw_reduction": 1,
+    "phases": [
+      {
+        "phase_key": "main",
+        "work_max": 20,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "task.n26.intent.a",
+            "add_card": {
+              "card": "X03",
+              "count": 1,
+              "zone": "hand"
+            }
+          },
+          {
+            "index": 1,
+            "text_key": "task.n26.intent.b",
+            "pressure": 3
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "N27",
+    "name_key": "task.n27.name",
+    "kind": "normal",
+    "phases": [
+      {
+        "phase_key": "main",
+        "work_max": 36,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "task.n27.intent.a",
+            "pressure": 7,
+            "pressure_has_unit_mult": 50,
+            "pressure_no_unit_mult": 200
+          },
+          {
+            "index": 1,
+            "text_key": "task.n27.intent.b",
+            "pressure": 9,
+            "pressure_has_unit_mult": 50,
+            "pressure_no_unit_mult": 200
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "N28",
+    "name_key": "task.n28.name",
+    "kind": "normal",
+    "first_card_cost_bonus": 1,
+    "phases": [
+      {
+        "phase_key": "main",
+        "work_max": 20,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "task.n28.intent.a",
+            "pressure": 5
+          },
+          {
+            "index": 1,
+            "text_key": "task.n28.intent.b",
+            "pressure": 7
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "N29",
+    "name_key": "task.n29.name",
+    "kind": "normal",
+    "draw_reduction": 1,
+    "on_complete_effects": [
+      {
+        "op": "gain_focus",
+        "amount": 3
+      }
+    ],
+    "phases": [
+      {
+        "phase_key": "main",
+        "work_max": 22,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "task.n29.intent.a",
+            "pressure": 4
+          },
+          {
+            "index": 1,
+            "text_key": "task.n29.intent.b",
+            "pressure": 5
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "N30",
+    "name_key": "task.n30.name",
+    "kind": "normal",
+    "phases": [
+      {
+        "phase_key": "main",
+        "work_max": 34,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "task.n30.intent.a",
+            "pressure": 7,
+            "pressure_when_shield": 2
+          },
+          {
+            "index": 1,
+            "text_key": "task.n30.intent.b",
+            "pressure": 9,
+            "pressure_when_shield": 2
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "N31",
+    "name_key": "task.n31.name",
+    "kind": "normal",
+    "max_vitality_reduction": 1,
+    "on_complete_effects": [
+      {
+        "op": "restore_max_vitality",
+        "amount": 99
+      }
+    ],
+    "phases": [
+      {
+        "phase_key": "main",
+        "work_max": 38,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "task.n31.intent.a",
+            "pressure": 7,
+            "gain_status": {
+              "status": "work_boost",
+              "stacks": 1,
+              "target": "player"
+            }
+          },
+          {
+            "index": 1,
+            "text_key": "task.n31.intent.b",
+            "pressure": 8,
+            "gain_status": {
+              "status": "work_boost",
+              "stacks": 1,
+              "target": "player"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "N32",
+    "name_key": "task.n32.name",
+    "kind": "normal",
+    "phases": [
+      {
+        "phase_key": "main",
+        "work_max": 42,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "task.n32.intent.a",
+            "pressure": 7,
+            "pressure_per_vitality": 1,
+            "pressure_vitality_step": 10
+          },
+          {
+            "index": 1,
+            "text_key": "task.n32.intent.b",
+            "pressure": 9,
+            "pressure_per_vitality": 1,
+            "pressure_vitality_step": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "N33",
+    "name_key": "task.n33.name",
+    "kind": "normal",
+    "shield_persistent": true,
+    "phases": [
+      {
+        "phase_key": "main",
+        "work_max": 44,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "task.n33.intent.a",
+            "shield": 10
+          },
+          {
+            "index": 1,
+            "text_key": "task.n33.intent.b",
+            "shield": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "N34",
+    "name_key": "task.n34.name",
+    "kind": "normal",
+    "discard_on_first_card": 1,
+    "phases": [
+      {
+        "phase_key": "main",
+        "work_max": 22,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "task.n34.intent.a",
+            "pressure": 5
+          },
+          {
+            "index": 1,
+            "text_key": "task.n34.intent.b",
+            "pressure": 7
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "N35",
+    "name_key": "task.n35.name",
+    "kind": "normal",
+    "on_complete_effects": [
+      {
+        "op": "pressure",
+        "amount": 6,
+        "target": "all"
+      }
+    ],
+    "phases": [
+      {
+        "phase_key": "main",
+        "work_max": 34,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "task.n35.intent.a",
+            "pressure": 7
+          },
+          {
+            "index": 1,
+            "text_key": "task.n35.intent.b",
+            "pressure": 9
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "N36",
+    "name_key": "task.n36.name",
+    "kind": "normal",
+    "phases": [
+      {
+        "phase_key": "main",
+        "work_max": 20,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "task.n36.intent.a",
+            "gain_status": {
+              "status": "procrastination",
+              "stacks": 1,
+              "target": "player"
+            }
+          },
+          {
+            "index": 1,
+            "text_key": "task.n36.intent.b",
+            "pressure": 4
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "N37",
+    "name_key": "task.n37.name",
+    "kind": "normal",
+    "phases": [
+      {
+        "phase_key": "main",
+        "work_max": 34,
+        "intent_loop": "clamp",
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "task.n37.intent.a",
+            "pressure": 5
+          },
+          {
+            "index": 1,
+            "text_key": "task.n37.intent.b",
+            "pressure": 10,
+            "pressure_all": true,
+            "player_reduce_focus": 2,
+            "self_destruct": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "N38",
+    "name_key": "task.n38.name",
+    "kind": "normal",
+    "phases": [
+      {
+        "phase_key": "main",
+        "work_max": 36,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "task.n38.intent.a",
+            "pressure": 7,
+            "pressure_per_card_type": {
+              "cooperation": 1
+            }
+          },
+          {
+            "index": 1,
+            "text_key": "task.n38.intent.b",
+            "pressure": 9,
+            "pressure_per_card_type": {
+              "cooperation": 1
+            }
+          }
+        ]
+      }
+    ]
   }
 ]

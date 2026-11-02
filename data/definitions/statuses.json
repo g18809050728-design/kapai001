@@ -78,5 +78,14 @@
     "duration_policy": "battle",
     "dispel_policy": "explicit",
     "numeric_rule_key": "confusion"
+  },
+  {
+    "id": "work_boost",
+    "name_key": "status.work_boost.name",
+    "target": "player",
+    "stack_policy": "capped",
+    "duration_policy": "battle",
+    "dispel_policy": "explicit",
+    "numeric_rule_key": "work_boost"
   }
 ]

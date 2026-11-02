@@ -316,5 +316,386 @@
     "initial_members": [
       "Q0E_1"
     ]
+  },
+  {
+    "id": "N13",
+    "name_key": "encounter.n13.name",
+    "kind": "normal",
+    "members": [
+      "N13"
+    ],
+    "base_ddl": 8,
+    "terms": [
+      1
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "N14",
+    "name_key": "encounter.n14.name",
+    "kind": "normal",
+    "members": [
+      "N14"
+    ],
+    "base_ddl": 8,
+    "terms": [
+      1,
+      2,
+      3
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "N15",
+    "name_key": "encounter.n15.name",
+    "kind": "normal",
+    "members": [
+      "N15"
+    ],
+    "base_ddl": 8,
+    "terms": [
+      1,
+      2,
+      3
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "N16",
+    "name_key": "encounter.n16.name",
+    "kind": "normal",
+    "members": [
+      "N16"
+    ],
+    "base_ddl": 8,
+    "terms": [
+      1,
+      2
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "N17",
+    "name_key": "encounter.n17.name",
+    "kind": "normal",
+    "members": [
+      "N17"
+    ],
+    "base_ddl": 8,
+    "terms": [
+      2,
+      3
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "N18",
+    "name_key": "encounter.n18.name",
+    "kind": "normal",
+    "members": [
+      "N18"
+    ],
+    "base_ddl": 8,
+    "terms": [
+      1,
+      2
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "N19",
+    "name_key": "encounter.n19.name",
+    "kind": "normal",
+    "members": [
+      "N19"
+    ],
+    "base_ddl": 9,
+    "terms": [
+      3,
+      4
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "N20",
+    "name_key": "encounter.n20.name",
+    "kind": "normal",
+    "members": [
+      "N20"
+    ],
+    "base_ddl": 8,
+    "terms": [
+      4,
+      5,
+      6
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "N21",
+    "name_key": "encounter.n21.name",
+    "kind": "normal",
+    "members": [
+      "N21"
+    ],
+    "base_ddl": 8,
+    "terms": [
+      6,
+      7,
+      8
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "N22",
+    "name_key": "encounter.n22.name",
+    "kind": "normal",
+    "members": [
+      "N22"
+    ],
+    "base_ddl": 8,
+    "terms": [
+      2,
+      3,
+      4
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "N23",
+    "name_key": "encounter.n23.name",
+    "kind": "normal",
+    "members": [
+      "N23"
+    ],
+    "base_ddl": 8,
+    "terms": [
+      1,
+      2,
+      3
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "N24",
+    "name_key": "encounter.n24.name",
+    "kind": "normal",
+    "members": [
+      "N24"
+    ],
+    "base_ddl": 7,
+    "terms": [
+      3,
+      4,
+      5
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "N25",
+    "name_key": "encounter.n25.name",
+    "kind": "normal",
+    "members": [
+      "N25"
+    ],
+    "base_ddl": 8,
+    "terms": [
+      2,
+      3,
+      4
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "N26",
+    "name_key": "encounter.n26.name",
+    "kind": "normal",
+    "members": [
+      "N26"
+    ],
+    "base_ddl": 8,
+    "terms": [
+      1,
+      2
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "N27",
+    "name_key": "encounter.n27.name",
+    "kind": "normal",
+    "members": [
+      "N27"
+    ],
+    "base_ddl": 9,
+    "terms": [
+      3,
+      4
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "N28",
+    "name_key": "encounter.n28.name",
+    "kind": "normal",
+    "members": [
+      "N28"
+    ],
+    "base_ddl": 8,
+    "terms": [
+      1,
+      2
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "N29",
+    "name_key": "encounter.n29.name",
+    "kind": "normal",
+    "members": [
+      "N29"
+    ],
+    "base_ddl": 8,
+    "terms": [
+      2,
+      3,
+      4
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "N30",
+    "name_key": "encounter.n30.name",
+    "kind": "normal",
+    "members": [
+      "N30"
+    ],
+    "base_ddl": 9,
+    "terms": [
+      3,
+      4,
+      5
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "N31",
+    "name_key": "encounter.n31.name",
+    "kind": "normal",
+    "members": [
+      "N31"
+    ],
+    "base_ddl": 9,
+    "terms": [
+      4,
+      5,
+      6
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "N32",
+    "name_key": "encounter.n32.name",
+    "kind": "normal",
+    "members": [
+      "N32"
+    ],
+    "base_ddl": 9,
+    "terms": [
+      5,
+      6,
+      7
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "N33",
+    "name_key": "encounter.n33.name",
+    "kind": "normal",
+    "members": [
+      "N33"
+    ],
+    "base_ddl": 10,
+    "terms": [
+      6,
+      7,
+      8
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "N34",
+    "name_key": "encounter.n34.name",
+    "kind": "normal",
+    "members": [
+      "N34"
+    ],
+    "base_ddl": 8,
+    "terms": [
+      1,
+      2,
+      3
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "N35",
+    "name_key": "encounter.n35.name",
+    "kind": "normal",
+    "members": [
+      "N35"
+    ],
+    "base_ddl": 9,
+    "terms": [
+      3,
+      4,
+      5
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "N36",
+    "name_key": "encounter.n36.name",
+    "kind": "normal",
+    "members": [
+      "N36"
+    ],
+    "base_ddl": 8,
+    "terms": [
+      2,
+      3,
+      4
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "N37",
+    "name_key": "encounter.n37.name",
+    "kind": "normal",
+    "members": [
+      "N37"
+    ],
+    "base_ddl": 9,
+    "terms": [
+      4,
+      5,
+      6
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "N38",
+    "name_key": "encounter.n38.name",
+    "kind": "normal",
+    "members": [
+      "N38"
+    ],
+    "base_ddl": 9,
+    "terms": [
+      4,
+      5,
+      6
+    ],
+    "exam_flags": []
   }
 ]

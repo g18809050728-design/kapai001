@@ -49,7 +49,23 @@ const DEFINITION_FIELDS := {
 		"limit",
 		"art_key"
 	],
-	"task": ["id", "name_key", "kind", "phases", "victory_required", "art_key"],
+	"task":
+	[
+		"id",
+		"name_key",
+		"kind",
+		"phases",
+		"victory_required",
+		"on_complete_effects",
+		"shield_persistent",
+		"taunt",
+		"draw_reduction",
+		"first_card_cost_bonus",
+		"discard_on_first_card",
+		"max_vitality_reduction",
+		"self_copy_every_round",
+		"art_key"
+	],
 	"encounter":
 	[
 		"id",
@@ -142,6 +158,15 @@ const OP_FIELDS := {
 	"establish_scene": ["scene"],
 	"restore_work": ["amount", "target"],
 	"pressure": ["amount", "target", "times"],
+	"reduce_shield": ["amount", "target"],
+	"reduce_relax": ["amount", "target"],
+	"reduce_max_vitality": ["amount"],
+	"restore_max_vitality": ["amount"],
+	"reduce_focus_cap": ["amount"],
+	"restore_focus_cap": ["amount"],
+	"reduce_focus": ["amount"],
+	"random_discard": ["amount", "up_to"],
+	"summon_task": ["task", "count"],
 }
 const EVENT_OP_FIELDS := {
 	"gain_money": ["amount"],
@@ -249,6 +274,7 @@ const STATUS_POLICY := {
 	"extra_requirements": ["task", "capped", "battle", "explicit"],
 	"brainstorm": ["task", "capped", "battle", "explicit"],
 	"confusion": ["task", "capped", "battle", "explicit"],
+	"work_boost": ["player", "capped", "battle", "explicit"],
 	"guard": ["unit", "presence", "unit_departure", "none"],
 }
 const STATUS_RULE_FIELDS := {
@@ -264,6 +290,7 @@ const STATUS_RULE_FIELDS := {
 	"extra_requirements": ["cap", "pressure_per_stack"],
 	"brainstorm": ["cap", "pressure_per_stack"],
 	"confusion": ["cap", "shield_per_stack"],
+	"work_boost": ["cap", "completion_per_stack"],
 }
 
 var _data_root: String
@@ -958,6 +985,15 @@ func _validate_effects(
 			"establish_scene": ["scene"],
 			"restore_work": ["amount"],
 			"pressure": ["amount"],
+			"reduce_shield": ["amount"],
+			"reduce_relax": ["amount"],
+			"reduce_max_vitality": ["amount"],
+			"restore_max_vitality": ["amount"],
+			"reduce_focus_cap": ["amount"],
+			"restore_focus_cap": ["amount"],
+			"reduce_focus": ["amount"],
+			"random_discard": ["amount"],
+			"summon_task": ["task"],
 			"gain_money": ["amount"]
 		}
 		var required: Array = ["op"] + required_by_op.get(op, [])
@@ -1243,6 +1279,23 @@ func _validate_task(value: Dictionary, location: String, issues: Array[String]) 
 		issues.append("%s.kind is invalid" % location)
 	if value.has("victory_required"):
 		_validate_bool(value.victory_required, "%s.victory_required" % location, issues)
+	if value.has("shield_persistent"):
+		_validate_bool(value.shield_persistent, "%s.shield_persistent" % location, issues)
+	if value.has("taunt"):
+		_validate_bool(value.taunt, "%s.taunt" % location, issues)
+	if value.has("self_copy_every_round"):
+		_validate_bool(value.self_copy_every_round, "%s.self_copy_every_round" % location, issues)
+	for field in ["draw_reduction", "first_card_cost_bonus", "discard_on_first_card", "max_vitality_reduction"]:
+		if value.has(field):
+			_validate_int(value[field], "%s.%s" % [location, field], 1, issues)
+	if value.has("on_complete_effects"):
+		_validate_effects(
+			value.on_complete_effects,
+			"battle",
+			"%s.on_complete_effects" % location,
+			issues,
+			false
+		)
 	var phases: Variant = value.get("phases")
 	if not _is_array(phases) or phases.is_empty():
 		issues.append("%s kind/phases are invalid" % location)
@@ -1293,6 +1346,14 @@ func _validate_intent(value: Variant, location: String, issues: Array[String]) -
 		"pressure_all",
 		"pressure_per_unit",
 		"pressure_per_unit_cap",
+		"pressure_per_vitality",
+		"pressure_vitality_step",
+		"pressure_has_unit_mult",
+		"pressure_no_unit_mult",
+		"pressure_when_shield",
+		"pressure_per_card_type",
+		"player_gain_focus",
+		"player_reduce_focus",
 		"shield",
 		"work_restore",
 		"extra_requirements",
@@ -1330,6 +1391,37 @@ func _validate_intent(value: Variant, location: String, issues: Array[String]) -
 		_validate_int(value.ddl_bonus, "%s.ddl_bonus" % location, 1, issues)
 	if value.has("self_destruct"):
 		_validate_bool(value.self_destruct, "%s.self_destruct" % location, issues)
+	if value.has("pressure_per_vitality"):
+		_validate_int(
+			value.pressure_per_vitality, "%s.pressure_per_vitality" % location, 1, issues
+		)
+		_validate_int(
+			value.get("pressure_vitality_step", 10),
+			"%s.pressure_vitality_step" % location,
+			1,
+			issues
+		)
+	elif value.has("pressure_vitality_step"):
+		issues.append("%s.pressure_vitality_step requires pressure_per_vitality" % location)
+	for field in ["pressure_has_unit_mult", "pressure_no_unit_mult", "pressure_when_shield"]:
+		if value.has(field):
+			_validate_int(value[field], "%s.%s" % [location, field], 1, issues)
+	for field in ["player_gain_focus", "player_reduce_focus"]:
+		if value.has(field):
+			_validate_int(value[field], "%s.%s" % [location, field], 1, issues)
+	if value.has("pressure_per_card_type"):
+		if not _is_dictionary(value.pressure_per_card_type) or value.pressure_per_card_type.is_empty():
+			issues.append("%s.pressure_per_card_type must be a non-empty object" % location)
+		else:
+			for card_type in value.pressure_per_card_type:
+				if not ["work", "strategy", "ability", "cooperation", "scene"].has(card_type):
+					issues.append("%s.pressure_per_card_type key is invalid" % location)
+				_validate_int(
+					value.pressure_per_card_type[card_type],
+					"%s.pressure_per_card_type.%s" % [location, card_type],
+					1,
+					issues
+				)
 	if value.has("summon_tasks"):
 		if not _is_array(value.summon_tasks) or value.summon_tasks.is_empty():
 			issues.append("%s.summon_tasks must be a non-empty array" % location)

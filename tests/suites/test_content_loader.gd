@@ -270,6 +270,83 @@ func run() -> Array[String]:
 		"self_destruct must be boolean",
 		failures
 	)
+	var bad_on_complete := elite_task.duplicate(true)
+	bad_on_complete.on_complete_effects = [{"op": "unregistered_op"}]
+	_check(
+		_reject_definition(isolated_db, isolated_root, "task", bad_on_complete, stable_hash),
+		"on_complete_effects reject unregistered ops",
+		failures
+	)
+	var bad_shield_persistent := elite_task.duplicate(true)
+	bad_shield_persistent.shield_persistent = "yes"
+	_check(
+		_reject_definition(isolated_db, isolated_root, "task", bad_shield_persistent, stable_hash),
+		"shield_persistent must be boolean",
+		failures
+	)
+	var bad_taunt := elite_task.duplicate(true)
+	bad_taunt.taunt = 1
+	_check(
+		_reject_definition(isolated_db, isolated_root, "task", bad_taunt, stable_hash),
+		"taunt must be boolean",
+		failures
+	)
+	var bad_self_copy := elite_task.duplicate(true)
+	bad_self_copy.self_copy_every_round = "yes"
+	_check(
+		_reject_definition(isolated_db, isolated_root, "task", bad_self_copy, stable_hash),
+		"self_copy_every_round must be boolean",
+		failures
+	)
+	var bad_draw_reduction := elite_task.duplicate(true)
+	bad_draw_reduction.draw_reduction = 0
+	_check(
+		_reject_definition(isolated_db, isolated_root, "task", bad_draw_reduction, stable_hash),
+		"draw_reduction requires a positive integer",
+		failures
+	)
+	var bad_first_discard := elite_task.duplicate(true)
+	bad_first_discard.discard_on_first_card = 0
+	_check(
+		_reject_definition(isolated_db, isolated_root, "task", bad_first_discard, stable_hash),
+		"discard_on_first_card requires a positive integer",
+		failures
+	)
+	var bad_cost_bonus := elite_task.duplicate(true)
+	bad_cost_bonus.first_card_cost_bonus = 0
+	_check(
+		_reject_definition(isolated_db, isolated_root, "task", bad_cost_bonus, stable_hash),
+		"first_card_cost_bonus requires a positive integer",
+		failures
+	)
+	var bad_max_vitality := elite_task.duplicate(true)
+	bad_max_vitality.max_vitality_reduction = 0
+	_check(
+		_reject_definition(isolated_db, isolated_root, "task", bad_max_vitality, stable_hash),
+		"max_vitality_reduction requires a positive integer",
+		failures
+	)
+	var bad_vitality_step := elite_task.duplicate(true)
+	bad_vitality_step.phases[0].intents[0].pressure_vitality_step = 10
+	_check(
+		_reject_definition(isolated_db, isolated_root, "task", bad_vitality_step, stable_hash),
+		"pressure_vitality_step requires pressure_per_vitality",
+		failures
+	)
+	var bad_card_type := elite_task.duplicate(true)
+	bad_card_type.phases[0].intents[0].pressure_per_card_type = {"unknown": 1}
+	_check(
+		_reject_definition(isolated_db, isolated_root, "task", bad_card_type, stable_hash),
+		"pressure_per_card_type rejects unregistered card types",
+		failures
+	)
+	var bad_player_focus := elite_task.duplicate(true)
+	bad_player_focus.phases[0].intents[0].player_gain_focus = 0
+	_check(
+		_reject_definition(isolated_db, isolated_root, "task", bad_player_focus, stable_hash),
+		"player_gain_focus requires a positive integer",
+		failures
+	)
 	var bad_unit := {
 		"id": "test_unit_001",
 		"name_key": "unit.test.name",

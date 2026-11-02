@@ -53,7 +53,8 @@ func _initialize() -> void:
 		"test_session_storage",
 		"test_relic_battle_entry",
 		"test_production_boss",
-		"test_elite_encounters"
+		"test_elite_encounters",
+		"test_minion_encounters"
 	]:
 		var run_script: Script = load("res://tests/suites/%s.gd" % path)
 		if run_script != null and run_script.can_instantiate():
