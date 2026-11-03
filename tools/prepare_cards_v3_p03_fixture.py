@@ -1,0 +1,326 @@
+#!/usr/bin/env python3
+"""Prepare the v3.1 P03 (Shen Jianzhang) battle fixture.
+
+Includes the common 12 plus all 40 P03 cards, the six task debuffs, anxiety,
+and two tasks.  Test-only; never enabled by a production manifest.
+"""
+
+from __future__ import annotations
+
+import json
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+CATALOG = ROOT / "data/catalog/cards_v3.json"
+OUT = ROOT / "tests/fixtures/cards_v3_p03"
+
+CARDS = [f"R3-C-{index:02d}" for index in range(1, 13)] + [
+    f"R3-P03-{index:02d}" for index in range(1, 41)
+]
+
+
+def write(name: str, data) -> None:
+    path = OUT / name
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+
+def ruleset() -> dict:
+    return {
+        "id": "campus_v1",
+        "schema_version": 1,
+        "run": {
+            "starting_vitality": 72,
+            "starting_money": 60,
+            "common_starter_cards": [
+                "R3-C-01", "R3-C-01", "R3-C-01", "R3-C-01",
+                "R3-C-02", "R3-C-02", "R3-C-02", "R3-C-02",
+                "R3-C-03", "R3-C-04",
+            ],
+            "starter_deck_size": 12,
+            "minimum_deck_size": 5,
+            "max_card_upgrades": 1,
+            "relic_slots": 6,
+            "term_count": 1,
+            "term_heal_percent": 20,
+            "rest_heal_percent": 25,
+            "career_cap": 100,
+        },
+        "battle": {
+            "starting_focus": 0,
+            "focus_per_round": 3,
+            "focus_cap": 10,
+            "draw_per_round": 5,
+            "hand_limit": 10,
+            "unit_slots": 3,
+            "scene_slots": 1,
+            "base_retention_count": 0,
+            "minimum_vitality_after_payment": 1,
+            "unit_action_vitality_cost": 1,
+            "cooperation_exam_relax": [5, 7],
+            "scene_exam_draw": 1,
+            "scene_exam_relax": [2, 4],
+            "minimum_ddl": 1,
+        },
+        "rewards": {
+            "normal_money_by_term": [15],
+            "elite_money_bonus": 20,
+            "nonfinal_boss_money": 50,
+            "candidate_count": 3,
+            "empty_relic_pool_money": 30,
+            "card_rarity_weights": {
+                "normal": {"white": 60, "blue": 30, "purple": 9, "gold": 1},
+                "elite": {"white": 20, "blue": 45, "purple": 30, "gold": 5},
+                "boss": {"white": 0, "blue": 30, "purple": 50, "gold": 20},
+                "term": {"white": 50, "blue": 50, "purple": 0, "gold": 0},
+            },
+            "relic_rarity_weights": {
+                "general": {"white": 50, "blue": 35, "purple": 13, "gold": 2},
+                "boss": {"white": 20, "blue": 40, "purple": 35, "gold": 5},
+            },
+        },
+        "shop": {
+            "card_stock": {"white": 2, "blue": 2, "purple": 1},
+            "relic_stock": {"white": 1, "blue": 1},
+            "meal_stock": 1,
+            "card_prices": {"white": 35, "blue": 55, "purple": 85},
+            "relic_prices": {"white": 80, "blue": 120},
+            "meal_price": 25,
+            "meal_heal": 12,
+            "removals_per_shop": 1,
+            "first_removal_price": 60,
+            "removal_price_increment": 20,
+        },
+        "statuses": {
+            "vulnerability": {"cap": 3, "completion_percent": 125},
+            "weakness": {"cap": 3, "pressure_percent": 75},
+            "brittle": {"cap": 3, "shield_percent": 50},
+            "feebleness": {"cap": 4, "pressure_flat": 1},
+            "erosion": {"cap": 20, "completion_per_stack": 1},
+            "induced": {"cap": 3, "max_triggers_per_turn": 4},
+            "anxiety": {"cap": 2, "focus_penalty_per_stack": 1},
+        },
+        "difficulty_overrides": {
+            "normal": {"starting_vitality": 72, "ddl_offset": 0, "pressure_percent": 100}
+        },
+    }
+
+
+def main() -> None:
+    catalog = json.loads(CATALOG.read_text(encoding="utf-8"))
+    by_id = {card["id"]: card for card in catalog["cards"]}
+    cards = []
+    for card_id in CARDS:
+        raw = by_id[card_id]
+        entry = {
+            "id": raw["id"],
+            "name_key": raw["id"],
+            "type": raw["type"],
+            "rarity": raw["rarity"],
+            "tags": raw["tags"],
+            "cost": raw["cost"],
+            "target": raw["target"],
+            "exhaust": bool(raw["flags"]["exhaust"]) or raw["type"] == "ability",
+            "effects": raw["effects"],
+            "upgrade": {"cost": raw["upgraded_cost"], "effects": raw["upgrade_effects"]},
+            "v3": True,
+            "owner": raw["owner"],
+            "permanent": True,
+            "limits": raw.get("limits", {}),
+        }
+        if raw.get("ability"):
+            entry["ability"] = raw["ability"]
+        cards.append(entry)
+
+    write("definitions/cards.json", cards)
+    write("definitions/characters.json", [
+        {
+            "id": "P03",
+            "name_key": "character.P03.name",
+            "starter_cards": ["R3-P03-01", "R3-P03-21"],
+            "starter_relic_id": "R3_TEST_RELIC",
+            "passive": {
+                "id": "r3_p03_test_passive",
+                "trigger": "cooperation_card_resolved",
+                "count": 1,
+                "limit": {"per": "battle", "times": 1},
+                "effects": [{"op": "heal", "amount": 1}],
+            },
+        }
+    ])
+    write("definitions/relics.json", [
+        {
+            "id": "R3_TEST_RELIC",
+            "name_key": "relic.R3_TEST_RELIC.name",
+            "availability": "starter",
+            "rarity": None,
+            "tags": [],
+            "hooks": [
+                {
+                    "at": "round_start",
+                    "effects": [{"op": "draw", "amount": 0, "per_discarded": 1}],
+                }
+            ],
+        }
+    ])
+    write("definitions/tasks.json", [
+        {
+            "id": "R3_TEST_TASK_A",
+            "name_key": "task.R3_TEST_TASK_A.name",
+            "kind": "normal",
+            "phases": [
+                {
+                    "phase_key": "main",
+                    "work_max": 50,
+                    "intents": [{"index": 0, "text_key": "task.R3_TEST_TASK_A.intent.a"}],
+                }
+            ],
+        },
+        {
+            "id": "R3_TEST_TASK_B",
+            "name_key": "task.R3_TEST_TASK_B.name",
+            "kind": "normal",
+            "phases": [
+                {
+                    "phase_key": "main",
+                    "work_max": 50,
+                    "intents": [{"index": 0, "text_key": "task.R3_TEST_TASK_B.intent.a"}],
+                }
+            ],
+        },
+        {
+            "id": "R3_TEST_SHIELD",
+            "name_key": "task.R3_TEST_SHIELD.name",
+            "kind": "normal",
+            "phases": [
+                {
+                    "phase_key": "main",
+                    "work_max": 50,
+                    "intents": [
+                        {"index": 0, "text_key": "task.R3_TEST_SHIELD.intent.a", "shield": 8},
+                        {"index": 1, "text_key": "task.R3_TEST_SHIELD.intent.b", "shield": 8},
+                    ],
+                }
+            ],
+        },
+    ])
+    write("definitions/encounters.json", [
+        {
+            "id": "R3_TEST",
+            "name_key": "encounter.R3_TEST.name",
+            "kind": "normal",
+            "members": ["R3_TEST_TASK_A", "R3_TEST_TASK_B", "R3_TEST_SHIELD"],
+            "base_ddl": 20,
+            "terms": [1],
+            "exam_flags": [],
+        }
+    ])
+    write("definitions/scenes.json", [
+        {
+            "id": "R3-S01",
+            "name_key": "scene.R3-S01.name",
+            "prepare_effects": [{"op": "relax", "amount": 3}],
+            "battle_limit": 2,
+        },
+        {
+            "id": "R3-S01+",
+            "name_key": "scene.R3-S01+.name",
+            "prepare_effects": [{"op": "relax", "amount": 5}],
+            "battle_limit": 2,
+        },
+    ])
+    write("definitions/statuses.json", [
+        {
+            "id": "vulnerability",
+            "name_key": "status.vulnerability.name",
+            "target": "task",
+            "stack_policy": "capped",
+            "duration_policy": "pressure_window",
+            "dispel_policy": "explicit",
+            "numeric_rule_key": "vulnerability",
+        },
+        {
+            "id": "weakness",
+            "name_key": "status.weakness.name",
+            "target": "task",
+            "stack_policy": "capped",
+            "duration_policy": "pressure_window",
+            "dispel_policy": "explicit",
+            "numeric_rule_key": "weakness",
+        },
+        {
+            "id": "brittle",
+            "name_key": "status.brittle.name",
+            "target": "task",
+            "stack_policy": "capped",
+            "duration_policy": "pressure_window",
+            "dispel_policy": "explicit",
+            "numeric_rule_key": "brittle",
+        },
+        {
+            "id": "feebleness",
+            "name_key": "status.feebleness.name",
+            "target": "task",
+            "stack_policy": "capped",
+            "duration_policy": "battle",
+            "dispel_policy": "explicit",
+            "numeric_rule_key": "feebleness",
+        },
+        {
+            "id": "erosion",
+            "name_key": "status.erosion.name",
+            "target": "task",
+            "stack_policy": "capped",
+            "duration_policy": "battle",
+            "dispel_policy": "explicit",
+            "numeric_rule_key": "erosion",
+        },
+        {
+            "id": "induced",
+            "name_key": "status.induced.name",
+            "target": "task",
+            "stack_policy": "capped",
+            "duration_policy": "next_player_action_end",
+            "dispel_policy": "explicit",
+            "numeric_rule_key": "induced",
+        },
+        {
+            "id": "anxiety",
+            "name_key": "status.anxiety.name",
+            "target": "player",
+            "stack_policy": "capped",
+            "duration_policy": "next_prepare",
+            "dispel_policy": "negative",
+            "numeric_rule_key": "anxiety",
+        },
+    ])
+    write("definitions/events.json", [])
+    write("definitions/units.json", [])
+    write("definitions/rulesets.json", [ruleset()])
+    write("manifests/test_cards_v3_p03.json", {
+        "id": "test_cards_v3_p03",
+        "content_version": "test_cards_v3_p03.v1",
+        "ruleset_id": "campus_v1",
+        "enabled": {
+            "card": CARDS,
+            "character": ["P03"],
+            "relic": ["R3_TEST_RELIC"],
+            "task": ["R3_TEST_TASK_A", "R3_TEST_TASK_B", "R3_TEST_SHIELD"],
+            "encounter": ["R3_TEST"],
+            "unit": [],
+            "scene": ["R3-S01", "R3-S01+"],
+            "event": [],
+            "status": [
+                "vulnerability", "weakness", "brittle", "feebleness",
+                "erosion", "induced", "anxiety",
+            ],
+            "ruleset": ["campus_v1"],
+        },
+        "overrides": [],
+    })
+    print(f"wrote {OUT}")
+    print(f"cards={len(cards)}")
+
+
+if __name__ == "__main__":
+    main()

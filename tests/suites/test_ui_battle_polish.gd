@@ -11,6 +11,7 @@ func run() -> Array[String]:
 	)
 	_shell.session.update_settings({"autosave": false})
 	_shell.press("menu:new")
+	_shell.press("setup:manifest:campus_mvp")
 	var seed := _find_input(_shell.page)
 	seed.text = "0"
 	seed.text_changed.emit("0")
@@ -20,6 +21,15 @@ func run() -> Array[String]:
 	var original_size := viewport.size
 	viewport.size = Vector2i(1280, 800)
 	await _frames()
+	_check(_shell.audio != null, "audio manager is attached")
+	_check(AudioServer.get_bus_index("SFX") >= 0, "SFX bus exists")
+	var audio_before := _fingerprint()
+	_check(_shell.audio.play_ui("ui_hover"), "placeholder UI sound loads")
+	_check(_shell.audio.play_event("card_played"), "battle event maps to a sound")
+	_shell.audio.set_muted(true)
+	_check(not _shell.audio.play_ui("ui_click"), "muted audio does not play")
+	_shell.audio.set_muted(false)
+	_check(_fingerprint() == audio_before, "audio playback preserves state and RNG")
 	var before := _fingerprint()
 	_check(_shell.press("battle:deck"), "full deck is reachable during battle")
 	var panel: String = _battle().display_snapshot().panel
@@ -58,6 +68,18 @@ func run() -> Array[String]:
 		),
 		"selected card hint includes remaining focus and next target action"
 	)
+	var inspect_before := _fingerprint()
+	_key(KEY_I)
+	await _frames()
+	var inspect_panel: String = _battle().display_snapshot().panel
+	_check(
+		inspect_panel.contains("专注") and not _battle()._detail_terms.is_empty(),
+		"keyboard I opens the selected card detail and glossary terms"
+	)
+	_check(_fingerprint() == inspect_before, "keyboard detail preserves state and RNG")
+	_key(KEY_ESCAPE)
+	await _frames()
+	_check(_battle().display_snapshot().panel == "", "Esc closes keyboard-opened detail")
 	_key(KEY_ESCAPE)
 	await _frames()
 	_check(

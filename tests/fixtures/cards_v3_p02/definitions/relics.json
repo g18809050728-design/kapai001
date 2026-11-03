@@ -1,0 +1,21 @@
+[
+  {
+    "id": "R3_TEST_RELIC",
+    "name_key": "relic.R3_TEST_RELIC.name",
+    "availability": "starter",
+    "rarity": null,
+    "tags": [],
+    "hooks": [
+      {
+        "at": "round_start",
+        "effects": [
+          {
+            "op": "draw",
+            "amount": 0,
+            "per_discarded": 1
+          }
+        ]
+      }
+    ]
+  }
+]

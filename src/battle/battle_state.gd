@@ -25,6 +25,7 @@ var outcome: Variant
 var next_creation_order: int
 var next_instance_seq: int
 var source_registry: Dictionary
+var v3: Dictionary
 
 
 func _init(values: Dictionary = {}) -> void:
@@ -58,6 +59,7 @@ func _init(values: Dictionary = {}) -> void:
 	next_creation_order = values.get("next_creation_order", 1)
 	next_instance_seq = values.get("next_instance_seq", 1)
 	source_registry = values.get("source_registry", {}).duplicate(true)
+	v3 = values.get("v3", {}).duplicate(true) if typeof(values.get("v3", {})) == TYPE_DICTIONARY else {}
 
 
 func copy() -> BattleState:
@@ -106,6 +108,15 @@ func validate(unit_slots: int = 2147483647) -> Array[String]:
 			RunCodec.unique(str(id), zoned, "battle zone card", issues)
 			if not card_by_id.has(id):
 				issues.append("battle zone references a missing card")
+	if v3.has("paper") and typeof(v3.paper) == TYPE_DICTIONARY:
+		for entry: Variant in v3.paper.get("chapters", []):
+			if typeof(entry) != TYPE_DICTIONARY:
+				continue
+			var chapter_id := str(entry.get("card_id", ""))
+			if not card_by_id.has(chapter_id):
+				issues.append("battle chapter references a missing card")
+			else:
+				zoned[chapter_id] = true
 	if zoned.size() != card_by_id.size():
 		issues.append("battle card is omitted from zones")
 	if not zones.get("resolving", []).is_empty():
@@ -185,6 +196,16 @@ func validate(unit_slots: int = 2147483647) -> Array[String]:
 			or int(outcome.get("remaining_vitality", -1)) != int(player.get("vitality", 0))
 		):
 			issues.append("battle outcome disagrees with state")
+	if not v3.is_empty():
+		if typeof(v3.get("abilities", [])) != TYPE_ARRAY:
+			issues.append("battle v3 abilities must be an array")
+		for ability: Variant in v3.get("abilities", []):
+			if (
+				typeof(ability) != TYPE_DICTIONARY
+				or str(ability.get("definition_id", "")).is_empty()
+				or typeof(ability.get("effects", [])) != TYPE_ARRAY
+			):
+				issues.append("battle v3 ability is invalid")
 	return issues
 
 
@@ -222,7 +243,7 @@ static func counter_key(scope: StringName, owner_key: String, trigger_key: Strin
 
 
 func to_dictionary() -> Dictionary:
-	return {
+	var result := {
 		"battle_id": battle_id,
 		"node_id": node_id,
 		"encounter_id": encounter_id,
@@ -249,6 +270,9 @@ func to_dictionary() -> Dictionary:
 		"next_instance_seq": next_instance_seq,
 		"source_registry": source_registry.duplicate(true),
 	}
+	if not v3.is_empty():
+		result["v3"] = v3.duplicate(true)
+	return result
 
 
 func _dictionary_array(value: Variant) -> Array[Dictionary]:

@@ -1,0 +1,2278 @@
+[
+  {
+    "id": "R3-C-01",
+    "name_key": "R3-C-01",
+    "type": "work",
+    "rarity": "basic",
+    "tags": [
+      "基础输出"
+    ],
+    "cost": 1,
+    "target": "task",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "complete",
+        "amount": 6
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "complete",
+          "amount": 9
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "C",
+    "permanent": true,
+    "limits": {}
+  },
+  {
+    "id": "R3-C-02",
+    "name_key": "R3-C-02",
+    "type": "strategy",
+    "rarity": "basic",
+    "tags": [
+      "基础防护"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "relax",
+        "amount": 5
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "relax",
+          "amount": 8
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "C",
+    "permanent": true,
+    "limits": {}
+  },
+  {
+    "id": "R3-C-03",
+    "name_key": "R3-C-03",
+    "type": "strategy",
+    "rarity": "common",
+    "tags": [
+      "筛选"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "draw",
+        "amount": 2
+      },
+      {
+        "op": "discard",
+        "amount": 1,
+        "up_to": false,
+        "mode": "choose"
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "draw",
+          "amount": 3
+        },
+        {
+          "op": "discard",
+          "amount": 1,
+          "up_to": false,
+          "mode": "choose"
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "C",
+    "permanent": true,
+    "limits": {}
+  },
+  {
+    "id": "R3-C-04",
+    "name_key": "R3-C-04",
+    "type": "strategy",
+    "rarity": "common",
+    "tags": [
+      "低费防护"
+    ],
+    "cost": 0,
+    "target": "self",
+    "exhaust": true,
+    "effects": [
+      {
+        "op": "relax",
+        "amount": 3
+      }
+    ],
+    "upgrade": {
+      "cost": 0,
+      "effects": [
+        {
+          "op": "relax",
+          "amount": 5
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "C",
+    "permanent": true,
+    "limits": {}
+  },
+  {
+    "id": "R3-C-05",
+    "name_key": "R3-C-05",
+    "type": "strategy",
+    "rarity": "common",
+    "tags": [
+      "续航"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": true,
+    "effects": [
+      {
+        "op": "heal",
+        "amount": 3
+      },
+      {
+        "op": "relax",
+        "amount": 3
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "heal",
+          "amount": 4
+        },
+        {
+          "op": "relax",
+          "amount": 5
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "C",
+    "permanent": true,
+    "limits": {}
+  },
+  {
+    "id": "R3-C-06",
+    "name_key": "R3-C-06",
+    "type": "ability",
+    "rarity": "advanced",
+    "tags": [
+      "工作加成"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": true,
+    "effects": [],
+    "upgrade": {
+      "cost": 1,
+      "effects": []
+    },
+    "v3": true,
+    "owner": "C",
+    "permanent": true,
+    "limits": {},
+    "ability": {
+      "activate": "next_round",
+      "stack": "unique_name",
+      "condition": {},
+      "triggers": [
+        {
+          "on": "first_work_card_resolving",
+          "effects": [
+            {
+              "op": "add_work_bonus",
+              "amount": 2,
+              "first_segment": true,
+              "limit": "once_per_turn"
+            }
+          ],
+          "upgrade_effects": [
+            {
+              "op": "add_work_bonus",
+              "amount": 3,
+              "first_segment": true,
+              "limit": "once_per_turn"
+            }
+          ],
+          "limit": "",
+          "no_compound_reaction": false
+        }
+      ]
+    }
+  },
+  {
+    "id": "R3-C-07",
+    "name_key": "R3-C-07",
+    "type": "work",
+    "rarity": "common",
+    "tags": [
+      "临期交付"
+    ],
+    "cost": 1,
+    "target": "task",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "complete",
+        "amount": 8,
+        "bonus": {
+          "condition": {
+            "kind": "ddl_lte",
+            "value": 3
+          },
+          "amount": 4,
+          "same_segment": true
+        }
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "complete",
+          "amount": 11,
+          "bonus": {
+            "condition": {
+              "kind": "ddl_lte",
+              "value": 3
+            },
+            "amount": 6,
+            "same_segment": true
+          }
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "C",
+    "permanent": true,
+    "limits": {}
+  },
+  {
+    "id": "R3-C-08",
+    "name_key": "R3-C-08",
+    "type": "scene",
+    "rarity": "advanced",
+    "tags": [
+      "场景防护"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": true,
+    "effects": [
+      {
+        "op": "establish_scene",
+        "scene": "R3-S01"
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "establish_scene",
+          "scene": "R3-S01+"
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "C",
+    "permanent": true,
+    "limits": {}
+  },
+  {
+    "id": "R3-C-09",
+    "name_key": "R3-C-09",
+    "type": "work",
+    "rarity": "common",
+    "tags": [
+      "通用易伤"
+    ],
+    "cost": 1,
+    "target": "task",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "apply_status",
+        "status": "vulnerability",
+        "stacks": 1,
+        "target": "task"
+      },
+      {
+        "op": "complete",
+        "amount": 4
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "apply_status",
+          "status": "vulnerability",
+          "stacks": 2,
+          "target": "task"
+        },
+        {
+          "op": "complete",
+          "amount": 6
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "C",
+    "permanent": true,
+    "limits": {}
+  },
+  {
+    "id": "R3-C-10",
+    "name_key": "R3-C-10",
+    "type": "strategy",
+    "rarity": "common",
+    "tags": [
+      "通用虚弱"
+    ],
+    "cost": 1,
+    "target": "task",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "apply_status",
+        "status": "weakness",
+        "stacks": 1,
+        "target": "task"
+      },
+      {
+        "op": "relax",
+        "amount": 4
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "apply_status",
+          "status": "weakness",
+          "stacks": 2,
+          "target": "task"
+        },
+        {
+          "op": "relax",
+          "amount": 6
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "C",
+    "permanent": true,
+    "limits": {}
+  },
+  {
+    "id": "R3-C-11",
+    "name_key": "R3-C-11",
+    "type": "work",
+    "rarity": "common",
+    "tags": [
+      "通用破盾"
+    ],
+    "cost": 1,
+    "target": "task",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "remove_shield",
+        "amount": 6,
+        "target": "task",
+        "up_to": true
+      },
+      {
+        "op": "complete",
+        "amount": 5
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "remove_shield",
+          "amount": 9,
+          "target": "task",
+          "up_to": true
+        },
+        {
+          "op": "complete",
+          "amount": 7
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "C",
+    "permanent": true,
+    "limits": {}
+  },
+  {
+    "id": "R3-C-12",
+    "name_key": "R3-C-12",
+    "type": "work",
+    "rarity": "common",
+    "tags": [
+      "通用群攻"
+    ],
+    "cost": 1,
+    "target": "all_tasks",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "complete",
+        "amount": 4
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "complete",
+          "amount": 6
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "C",
+    "permanent": true,
+    "limits": {}
+  },
+  {
+    "id": "R3-P03-01",
+    "name_key": "R3-P03-01",
+    "type": "work",
+    "rarity": "common",
+    "tags": [
+      "持续毒启动"
+    ],
+    "cost": 1,
+    "target": "task",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "complete",
+        "amount": 4
+      },
+      {
+        "op": "apply_status",
+        "status": "erosion",
+        "stacks": 3,
+        "target": "task",
+        "condition": {
+          "kind": "target_still_alive"
+        }
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "complete",
+          "amount": 6
+        },
+        {
+          "op": "apply_status",
+          "status": "erosion",
+          "stacks": 4,
+          "target": "task",
+          "condition": {
+            "kind": "target_still_alive"
+          }
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P03",
+    "permanent": true,
+    "limits": {}
+  },
+  {
+    "id": "R3-P03-02",
+    "name_key": "R3-P03-02",
+    "type": "strategy",
+    "rarity": "common",
+    "tags": [
+      "施毒防护"
+    ],
+    "cost": 1,
+    "target": "task",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "apply_status",
+        "status": "erosion",
+        "stacks": 3,
+        "target": "task"
+      },
+      {
+        "op": "relax",
+        "amount": 4
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "apply_status",
+          "status": "erosion",
+          "stacks": 4,
+          "target": "task"
+        },
+        {
+          "op": "relax",
+          "amount": 6
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P03",
+    "permanent": true,
+    "limits": {}
+  },
+  {
+    "id": "R3-P03-03",
+    "name_key": "R3-P03-03",
+    "type": "strategy",
+    "rarity": "common",
+    "tags": [
+      "施毒过牌"
+    ],
+    "cost": 1,
+    "target": "task",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "apply_status",
+        "status": "erosion",
+        "stacks": 2,
+        "target": "task"
+      },
+      {
+        "op": "draw",
+        "amount": 1
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "apply_status",
+          "status": "erosion",
+          "stacks": 3,
+          "target": "task"
+        },
+        {
+          "op": "draw",
+          "amount": 1
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P03",
+    "permanent": true,
+    "limits": {}
+  },
+  {
+    "id": "R3-P03-04",
+    "name_key": "R3-P03-04",
+    "type": "ability",
+    "rarity": "common",
+    "tags": [
+      "自动施毒"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": true,
+    "effects": [],
+    "upgrade": {
+      "cost": 1,
+      "effects": []
+    },
+    "v3": true,
+    "owner": "P03",
+    "permanent": true,
+    "limits": {},
+    "ability": {
+      "activate": "next_round",
+      "stack": "unique_name",
+      "condition": {},
+      "triggers": [
+        {
+          "on": "prepare",
+          "effects": [
+            {
+              "op": "apply_status",
+              "status": "erosion",
+              "stacks": 1,
+              "target": "all_tasks",
+              "condition": {
+                "kind": "prepare_window"
+              }
+            }
+          ],
+          "upgrade_effects": [
+            {
+              "op": "apply_status",
+              "status": "erosion",
+              "stacks": 2,
+              "target": "all_tasks",
+              "condition": {
+                "kind": "prepare_window"
+              }
+            }
+          ],
+          "limit": "",
+          "no_compound_reaction": true
+        }
+      ]
+    }
+  },
+  {
+    "id": "R3-P03-05",
+    "name_key": "R3-P03-05",
+    "type": "strategy",
+    "rarity": "common",
+    "tags": [
+      "有限毒扩散"
+    ],
+    "cost": 1,
+    "target": "task",
+    "exhaust": true,
+    "effects": [
+      {
+        "op": "apply_status",
+        "status": "erosion",
+        "stacks": {
+          "op": "source_stacks",
+          "status": "erosion",
+          "cap": 3
+        },
+        "target": "other_task"
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "apply_status",
+          "status": "erosion",
+          "stacks": {
+            "op": "source_stacks",
+            "status": "erosion",
+            "cap": 5
+          },
+          "target": "other_task"
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P03",
+    "permanent": true,
+    "limits": {}
+  },
+  {
+    "id": "R3-P03-06",
+    "name_key": "R3-P03-06",
+    "type": "strategy",
+    "rarity": "advanced",
+    "tags": [
+      "条件施毒"
+    ],
+    "cost": 1,
+    "target": "task",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "apply_status",
+        "status": "erosion",
+        "stacks": 6,
+        "target": "task"
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "apply_status",
+          "status": "erosion",
+          "stacks": 8,
+          "target": "task"
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P03",
+    "permanent": true,
+    "limits": {}
+  },
+  {
+    "id": "R3-P03-07",
+    "name_key": "R3-P03-07",
+    "type": "strategy",
+    "rarity": "advanced",
+    "tags": [
+      "提前结算"
+    ],
+    "cost": 1,
+    "target": "task",
+    "exhaust": true,
+    "effects": [
+      {
+        "op": "trigger_erosion",
+        "amount": 1,
+        "extra": true,
+        "decay": false
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "trigger_erosion",
+          "amount": 1,
+          "extra": true,
+          "decay": false
+        },
+        {
+          "op": "relax",
+          "amount": 3
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P03",
+    "permanent": true,
+    "limits": {}
+  },
+  {
+    "id": "R3-P03-08",
+    "name_key": "R3-P03-08",
+    "type": "strategy",
+    "rarity": "advanced",
+    "tags": [
+      "施毒减压"
+    ],
+    "cost": 1,
+    "target": "task",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "apply_status",
+        "status": "erosion",
+        "stacks": 2,
+        "target": "task"
+      },
+      {
+        "op": "apply_status",
+        "status": "weakness",
+        "stacks": 1,
+        "target": "task"
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "apply_status",
+          "status": "erosion",
+          "stacks": 3,
+          "target": "task"
+        },
+        {
+          "op": "apply_status",
+          "status": "weakness",
+          "stacks": 2,
+          "target": "task"
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P03",
+    "permanent": true,
+    "limits": {}
+  },
+  {
+    "id": "R3-P03-09",
+    "name_key": "R3-P03-09",
+    "type": "strategy",
+    "rarity": "rare",
+    "tags": [
+      "有限毒增殖"
+    ],
+    "cost": 2,
+    "target": "task",
+    "exhaust": true,
+    "effects": [
+      {
+        "op": "apply_status",
+        "status": "erosion",
+        "stacks": {
+          "op": "source_stacks",
+          "status": "erosion",
+          "cap": 20
+        },
+        "target": "task"
+      }
+    ],
+    "upgrade": {
+      "cost": 2,
+      "effects": [
+        {
+          "op": "apply_status",
+          "status": "erosion",
+          "stacks": {
+            "op": "source_stacks",
+            "status": "erosion",
+            "cap": 20,
+            "bonus": 3
+          },
+          "target": "task"
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P03",
+    "permanent": true,
+    "limits": {}
+  },
+  {
+    "id": "R3-P03-10",
+    "name_key": "R3-P03-10",
+    "type": "ability",
+    "rarity": "rare",
+    "tags": [
+      "毒结算频率"
+    ],
+    "cost": 2,
+    "target": "self",
+    "exhaust": true,
+    "effects": [],
+    "upgrade": {
+      "cost": 2,
+      "effects": []
+    },
+    "v3": true,
+    "owner": "P03",
+    "permanent": true,
+    "limits": {},
+    "ability": {
+      "activate": "next_round",
+      "stack": "unique_name",
+      "condition": {},
+      "triggers": [
+        {
+          "on": "passive_rule",
+          "effects": [
+            {
+              "op": "modify_erosion_window",
+              "times": 2
+            }
+          ],
+          "upgrade_effects": [
+            {
+              "op": "modify_erosion_window",
+              "times": 3
+            }
+          ],
+          "limit": "",
+          "no_compound_reaction": false
+        }
+      ]
+    }
+  },
+  {
+    "id": "R3-P03-11",
+    "name_key": "R3-P03-11",
+    "type": "strategy",
+    "rarity": "common",
+    "tags": [
+      "反应毒启动"
+    ],
+    "cost": 1,
+    "target": "task",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "apply_status",
+        "status": "induced",
+        "stacks": 1,
+        "target": "task"
+      },
+      {
+        "op": "draw",
+        "amount": 1
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "apply_status",
+          "status": "induced",
+          "stacks": 2,
+          "target": "task"
+        },
+        {
+          "op": "draw",
+          "amount": 1
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P03",
+    "permanent": true,
+    "limits": {}
+  },
+  {
+    "id": "R3-P03-12",
+    "name_key": "R3-P03-12",
+    "type": "work",
+    "rarity": "common",
+    "tags": [
+      "低费触发"
+    ],
+    "cost": 0,
+    "target": "task",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "complete",
+        "amount": 3
+      }
+    ],
+    "upgrade": {
+      "cost": 0,
+      "effects": [
+        {
+          "op": "complete",
+          "amount": 5
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P03",
+    "permanent": true,
+    "limits": {
+      "per_instance_per_turn": 1
+    }
+  },
+  {
+    "id": "R3-P03-13",
+    "name_key": "R3-P03-13",
+    "type": "strategy",
+    "rarity": "common",
+    "tags": [
+      "低费过牌"
+    ],
+    "cost": 0,
+    "target": "self",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "draw",
+        "amount": 1
+      },
+      {
+        "op": "discard",
+        "amount": 1,
+        "up_to": false,
+        "mode": "choose"
+      }
+    ],
+    "upgrade": {
+      "cost": 0,
+      "effects": [
+        {
+          "op": "draw",
+          "amount": 1
+        },
+        {
+          "op": "discard",
+          "amount": 1,
+          "up_to": false,
+          "mode": "choose"
+        },
+        {
+          "op": "relax",
+          "amount": 2
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P03",
+    "permanent": true,
+    "limits": {
+      "per_instance_per_turn": 1
+    }
+  },
+  {
+    "id": "R3-P03-14",
+    "name_key": "R3-P03-14",
+    "type": "work",
+    "rarity": "common",
+    "tags": [
+      "连打过牌"
+    ],
+    "cost": 1,
+    "target": "task",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "complete",
+        "amount": 5
+      },
+      {
+        "op": "draw",
+        "amount": 1,
+        "condition": {
+          "kind": "target_had_induced_at_play_start"
+        }
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "complete",
+          "amount": 8
+        },
+        {
+          "op": "draw",
+          "amount": 1,
+          "condition": {
+            "kind": "target_had_induced_at_play_start"
+          }
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P03",
+    "permanent": true,
+    "limits": {}
+  },
+  {
+    "id": "R3-P03-15",
+    "name_key": "R3-P03-15",
+    "type": "strategy",
+    "rarity": "common",
+    "tags": [
+      "反应毒续层"
+    ],
+    "cost": 1,
+    "target": "task",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "apply_status",
+        "status": "induced",
+        "stacks": 1,
+        "target": "task"
+      },
+      {
+        "op": "relax",
+        "amount": 5
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "apply_status",
+          "status": "induced",
+          "stacks": 2,
+          "target": "task"
+        },
+        {
+          "op": "relax",
+          "amount": 7
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P03",
+    "permanent": true,
+    "limits": {}
+  },
+  {
+    "id": "R3-P03-16",
+    "name_key": "R3-P03-16",
+    "type": "strategy",
+    "rarity": "advanced",
+    "tags": [
+      "抽牌施毒"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": true,
+    "effects": [
+      {
+        "op": "arm_erosion_on_next_draws",
+        "amount": 3,
+        "status": "erosion",
+        "stacks": 1,
+        "target": "all_tasks"
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "arm_erosion_on_next_draws",
+          "amount": 4,
+          "status": "erosion",
+          "stacks": 1,
+          "target": "all_tasks"
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P03",
+    "permanent": true,
+    "limits": {}
+  },
+  {
+    "id": "R3-P03-17",
+    "name_key": "R3-P03-17",
+    "type": "strategy",
+    "rarity": "advanced",
+    "tags": [
+      "反应与增伤"
+    ],
+    "cost": 1,
+    "target": "task",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "apply_status",
+        "status": "induced",
+        "stacks": 1,
+        "target": "task"
+      },
+      {
+        "op": "apply_status",
+        "status": "vulnerability",
+        "stacks": 1,
+        "target": "task"
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "apply_status",
+          "status": "induced",
+          "stacks": 2,
+          "target": "task"
+        },
+        {
+          "op": "apply_status",
+          "status": "vulnerability",
+          "stacks": 2,
+          "target": "task"
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P03",
+    "permanent": true,
+    "limits": {}
+  },
+  {
+    "id": "R3-P03-18",
+    "name_key": "R3-P03-18",
+    "type": "work",
+    "rarity": "advanced",
+    "tags": [
+      "有限额外触发"
+    ],
+    "cost": 1,
+    "target": "task",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "complete",
+        "amount": 6
+      },
+      {
+        "op": "trigger_induced",
+        "amount": 1,
+        "extra": true,
+        "condition": {
+          "kind": "target_has_induced"
+        }
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "complete",
+          "amount": 9
+        },
+        {
+          "op": "trigger_induced",
+          "amount": 1,
+          "extra": true,
+          "condition": {
+            "kind": "target_has_induced"
+          }
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P03",
+    "permanent": true,
+    "limits": {}
+  },
+  {
+    "id": "R3-P03-19",
+    "name_key": "R3-P03-19",
+    "type": "ability",
+    "rarity": "advanced",
+    "tags": [
+      "施毒次数收益"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": true,
+    "effects": [],
+    "upgrade": {
+      "cost": 1,
+      "effects": []
+    },
+    "v3": true,
+    "owner": "P03",
+    "permanent": true,
+    "limits": {},
+    "ability": {
+      "activate": "next_round",
+      "stack": "unique_name",
+      "condition": {},
+      "triggers": [
+        {
+          "on": "erosion_applied_event",
+          "effects": [
+            {
+              "op": "status_complete",
+              "amount": 4,
+              "target": "all_tasks",
+              "condition": {
+                "kind": "erosion_applied_events_min",
+                "value": 3
+              },
+              "limit": "once_per_turn"
+            }
+          ],
+          "upgrade_effects": [
+            {
+              "op": "status_complete",
+              "amount": 6,
+              "target": "all_tasks",
+              "condition": {
+                "kind": "erosion_applied_events_min",
+                "value": 3
+              },
+              "limit": "once_per_turn"
+            }
+          ],
+          "limit": "",
+          "no_compound_reaction": false
+        }
+      ]
+    }
+  },
+  {
+    "id": "R3-P03-20",
+    "name_key": "R3-P03-20",
+    "type": "ability",
+    "rarity": "rare",
+    "tags": [
+      "反应毒强化"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": true,
+    "effects": [],
+    "upgrade": {
+      "cost": 1,
+      "effects": []
+    },
+    "v3": true,
+    "owner": "P03",
+    "permanent": true,
+    "limits": {},
+    "ability": {
+      "activate": "next_round",
+      "stack": "unique_name",
+      "condition": {},
+      "triggers": [
+        {
+          "on": "induced_trigger",
+          "effects": [
+            {
+              "op": "status_complete",
+              "amount": 3,
+              "target": "task",
+              "condition": {
+                "kind": "first_induced_trigger"
+              },
+              "limit": "once_per_turn"
+            }
+          ],
+          "upgrade_effects": [
+            {
+              "op": "status_complete",
+              "amount": 5,
+              "target": "task",
+              "condition": {
+                "kind": "first_induced_trigger"
+              },
+              "limit": "once_per_turn"
+            }
+          ],
+          "limit": "",
+          "no_compound_reaction": false
+        }
+      ]
+    }
+  },
+  {
+    "id": "R3-P03-21",
+    "name_key": "R3-P03-21",
+    "type": "strategy",
+    "rarity": "common",
+    "tags": [
+      "双重减压"
+    ],
+    "cost": 1,
+    "target": "task",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "apply_status",
+        "status": "weakness",
+        "stacks": 1,
+        "target": "task"
+      },
+      {
+        "op": "apply_status",
+        "status": "feebleness",
+        "stacks": 1,
+        "target": "task"
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "apply_status",
+          "status": "weakness",
+          "stacks": 2,
+          "target": "task"
+        },
+        {
+          "op": "apply_status",
+          "status": "feebleness",
+          "stacks": 1,
+          "target": "task"
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P03",
+    "permanent": true,
+    "limits": {}
+  },
+  {
+    "id": "R3-P03-22",
+    "name_key": "R3-P03-22",
+    "type": "work",
+    "rarity": "common",
+    "tags": [
+      "防御腐蚀"
+    ],
+    "cost": 1,
+    "target": "task",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "apply_status",
+        "status": "brittle",
+        "stacks": 1,
+        "target": "task"
+      },
+      {
+        "op": "remove_shield",
+        "amount": 4,
+        "target": "task",
+        "up_to": true
+      },
+      {
+        "op": "complete",
+        "amount": 4
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "apply_status",
+          "status": "brittle",
+          "stacks": 2,
+          "target": "task"
+        },
+        {
+          "op": "remove_shield",
+          "amount": 6,
+          "target": "task",
+          "up_to": true
+        },
+        {
+          "op": "complete",
+          "amount": 6
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P03",
+    "permanent": true,
+    "limits": {}
+  },
+  {
+    "id": "R3-P03-23",
+    "name_key": "R3-P03-23",
+    "type": "strategy",
+    "rarity": "common",
+    "tags": [
+      "通用增伤"
+    ],
+    "cost": 1,
+    "target": "task",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "apply_status",
+        "status": "vulnerability",
+        "stacks": 1,
+        "target": "task"
+      },
+      {
+        "op": "draw",
+        "amount": 1
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "apply_status",
+          "status": "vulnerability",
+          "stacks": 2,
+          "target": "task"
+        },
+        {
+          "op": "draw",
+          "amount": 1
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P03",
+    "permanent": true,
+    "limits": {}
+  },
+  {
+    "id": "R3-P03-24",
+    "name_key": "R3-P03-24",
+    "type": "strategy",
+    "rarity": "common",
+    "tags": [
+      "持久减压"
+    ],
+    "cost": 1,
+    "target": "task",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "apply_status",
+        "status": "feebleness",
+        "stacks": 1,
+        "target": "task"
+      },
+      {
+        "op": "relax",
+        "amount": 5
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "apply_status",
+          "status": "feebleness",
+          "stacks": 2,
+          "target": "task"
+        },
+        {
+          "op": "relax",
+          "amount": 7
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P03",
+    "permanent": true,
+    "limits": {}
+  },
+  {
+    "id": "R3-P03-25",
+    "name_key": "R3-P03-25",
+    "type": "work",
+    "rarity": "common",
+    "tags": [
+      "负面种类输出"
+    ],
+    "cost": 1,
+    "target": "task",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "complete",
+        "amount": 5,
+        "per_debuff_kind": 2,
+        "cap": 4
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "complete",
+          "amount": 7,
+          "per_debuff_kind": 3,
+          "cap": 4
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P03",
+    "permanent": true,
+    "limits": {}
+  },
+  {
+    "id": "R3-P03-26",
+    "name_key": "R3-P03-26",
+    "type": "strategy",
+    "rarity": "advanced",
+    "tags": [
+      "混合施加"
+    ],
+    "cost": 1,
+    "target": "task",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "apply_status",
+        "status": "erosion",
+        "stacks": 1,
+        "target": "task"
+      },
+      {
+        "op": "apply_status",
+        "status": "brittle",
+        "stacks": 1,
+        "target": "task"
+      },
+      {
+        "op": "apply_status",
+        "status": "weakness",
+        "stacks": 1,
+        "target": "task"
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "apply_status",
+          "status": "erosion",
+          "stacks": 2,
+          "target": "task"
+        },
+        {
+          "op": "apply_status",
+          "status": "brittle",
+          "stacks": 2,
+          "target": "task"
+        },
+        {
+          "op": "apply_status",
+          "status": "weakness",
+          "stacks": 1,
+          "target": "task"
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P03",
+    "permanent": true,
+    "limits": {}
+  },
+  {
+    "id": "R3-P03-27",
+    "name_key": "R3-P03-27",
+    "type": "strategy",
+    "rarity": "advanced",
+    "tags": [
+      "群体减压"
+    ],
+    "cost": 1,
+    "target": "all_tasks",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "apply_status",
+        "status": "weakness",
+        "stacks": 1,
+        "target": "all_tasks"
+      },
+      {
+        "op": "relax",
+        "amount": 2
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "apply_status",
+          "status": "weakness",
+          "stacks": 2,
+          "target": "all_tasks"
+        },
+        {
+          "op": "relax",
+          "amount": 4
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P03",
+    "permanent": true,
+    "limits": {}
+  },
+  {
+    "id": "R3-P03-28",
+    "name_key": "R3-P03-28",
+    "type": "strategy",
+    "rarity": "advanced",
+    "tags": [
+      "维持混合"
+    ],
+    "cost": 1,
+    "target": "task",
+    "exhaust": true,
+    "effects": [
+      {
+        "op": "extend_timed_debuffs",
+        "amount": 1,
+        "cap": 3
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "extend_timed_debuffs",
+          "amount": 1,
+          "cap": 3
+        },
+        {
+          "op": "relax",
+          "amount": 5
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P03",
+    "permanent": true,
+    "limits": {}
+  },
+  {
+    "id": "R3-P03-29",
+    "name_key": "R3-P03-29",
+    "type": "work",
+    "rarity": "advanced",
+    "tags": [
+      "多负面群攻"
+    ],
+    "cost": 2,
+    "target": "all_tasks",
+    "exhaust": true,
+    "effects": [
+      {
+        "op": "complete",
+        "amount": 4,
+        "per_debuff_kind": 2,
+        "cap": 4,
+        "per_target": true
+      }
+    ],
+    "upgrade": {
+      "cost": 2,
+      "effects": [
+        {
+          "op": "complete",
+          "amount": 6,
+          "per_debuff_kind": 3,
+          "cap": 4,
+          "per_target": true
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P03",
+    "permanent": true,
+    "limits": {}
+  },
+  {
+    "id": "R3-P03-30",
+    "name_key": "R3-P03-30",
+    "type": "ability",
+    "rarity": "rare",
+    "tags": [
+      "混合维持续航"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": true,
+    "effects": [],
+    "upgrade": {
+      "cost": 1,
+      "effects": []
+    },
+    "v3": true,
+    "owner": "P03",
+    "permanent": true,
+    "limits": {},
+    "ability": {
+      "activate": "next_round",
+      "stack": "unique_name",
+      "condition": {},
+      "triggers": [
+        {
+          "on": "prepare",
+          "effects": [
+            {
+              "op": "relax",
+              "amount": 5,
+              "condition": {
+                "kind": "any_task_debuff_kinds_min",
+                "value": 3
+              },
+              "limit": "once_per_turn"
+            }
+          ],
+          "upgrade_effects": [
+            {
+              "op": "relax",
+              "amount": 7,
+              "condition": {
+                "kind": "any_task_debuff_kinds_min",
+                "value": 3
+              },
+              "limit": "once_per_turn"
+            }
+          ],
+          "limit": "",
+          "no_compound_reaction": false
+        }
+      ],
+      "extra_effects": [
+        {
+          "op": "status_complete",
+          "amount": 5,
+          "target": "earliest_task",
+          "condition": {
+            "kind": "any_task_debuff_kinds_min",
+            "value": 3
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "R3-P03-31",
+    "name_key": "R3-P03-31",
+    "type": "strategy",
+    "rarity": "common",
+    "tags": [
+      "稳定过牌"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "draw",
+        "amount": 2
+      },
+      {
+        "op": "relax",
+        "amount": 3
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "draw",
+          "amount": 2
+        },
+        {
+          "op": "relax",
+          "amount": 6
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P03",
+    "permanent": true,
+    "limits": {}
+  },
+  {
+    "id": "R3-P03-32",
+    "name_key": "R3-P03-32",
+    "type": "strategy",
+    "rarity": "common",
+    "tags": [
+      "稳定防护"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "relax",
+        "amount": 8
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "relax",
+          "amount": 11
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P03",
+    "permanent": true,
+    "limits": {}
+  },
+  {
+    "id": "R3-P03-33",
+    "name_key": "R3-P03-33",
+    "type": "strategy",
+    "rarity": "common",
+    "tags": [
+      "纠错减压"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "remove_status",
+        "status": "anxiety",
+        "amount": 1,
+        "target": "self",
+        "up_to": true
+      },
+      {
+        "op": "apply_status",
+        "status": "weakness",
+        "stacks": 1,
+        "target": "task"
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "remove_status",
+          "status": "anxiety",
+          "amount": 2,
+          "target": "self",
+          "up_to": true
+        },
+        {
+          "op": "apply_status",
+          "status": "weakness",
+          "stacks": 2,
+          "target": "task"
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P03",
+    "permanent": true,
+    "limits": {}
+  },
+  {
+    "id": "R3-P03-34",
+    "name_key": "R3-P03-34",
+    "type": "strategy",
+    "rarity": "common",
+    "tags": [
+      "有限回收"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": true,
+    "effects": [
+      {
+        "op": "retrieve",
+        "card_kind": "strategy",
+        "base_cost_min": 1,
+        "amount": 1,
+        "zone": "discard",
+        "permanent_only": true
+      }
+    ],
+    "upgrade": {
+      "cost": 0,
+      "effects": [
+        {
+          "op": "retrieve",
+          "card_kind": "strategy",
+          "base_cost_min": 1,
+          "amount": 1,
+          "zone": "discard",
+          "permanent_only": true
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P03",
+    "permanent": true,
+    "limits": {}
+  },
+  {
+    "id": "R3-P03-35",
+    "name_key": "R3-P03-35",
+    "type": "work",
+    "rarity": "common",
+    "tags": [
+      "新目标补位"
+    ],
+    "cost": 1,
+    "target": "task",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "complete",
+        "amount": 8,
+        "bonus": {
+          "condition": {
+            "kind": "target_status_kinds",
+            "max": 0
+          },
+          "amount": 3,
+          "same_segment": true
+        }
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "complete",
+          "amount": 11,
+          "bonus": {
+            "condition": {
+              "kind": "target_status_kinds",
+              "max": 0
+            },
+            "amount": 4,
+            "same_segment": true
+          }
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P03",
+    "permanent": true,
+    "limits": {}
+  },
+  {
+    "id": "R3-P03-36",
+    "name_key": "R3-P03-36",
+    "type": "work",
+    "rarity": "advanced",
+    "tags": [
+      "混合过牌"
+    ],
+    "cost": 1,
+    "target": "task",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "complete",
+        "amount": 6
+      },
+      {
+        "op": "draw",
+        "amount": 1,
+        "condition": {
+          "kind": "target_status_kinds",
+          "min": 2
+        }
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "complete",
+          "amount": 9
+        },
+        {
+          "op": "draw",
+          "amount": 1,
+          "condition": {
+            "kind": "target_status_kinds",
+            "min": 2
+          }
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P03",
+    "permanent": true,
+    "limits": {}
+  },
+  {
+    "id": "R3-P03-37",
+    "name_key": "R3-P03-37",
+    "type": "strategy",
+    "rarity": "advanced",
+    "tags": [
+      "关键配方保留"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "relax",
+        "amount": 6
+      },
+      {
+        "op": "retain",
+        "amount": 1,
+        "choose": "other_hand"
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "relax",
+          "amount": 9
+        },
+        {
+          "op": "retain",
+          "amount": 1,
+          "choose": "other_hand"
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P03",
+    "permanent": true,
+    "limits": {}
+  },
+  {
+    "id": "R3-P03-38",
+    "name_key": "R3-P03-38",
+    "type": "strategy",
+    "rarity": "advanced",
+    "tags": [
+      "本战精简"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "exhaust_other",
+        "amount": 1
+      },
+      {
+        "op": "draw",
+        "amount": 2
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "exhaust_other",
+          "amount": 1
+        },
+        {
+          "op": "draw",
+          "amount": 3
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P03",
+    "permanent": true,
+    "limits": {}
+  },
+  {
+    "id": "R3-P03-39",
+    "name_key": "R3-P03-39",
+    "type": "strategy",
+    "rarity": "advanced",
+    "tags": [
+      "连打筛选"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "draw",
+        "amount": 2
+      },
+      {
+        "op": "discard",
+        "amount": 1,
+        "up_to": false,
+        "mode": "choose"
+      },
+      {
+        "op": "relax",
+        "amount": 3,
+        "condition": {
+          "kind": "any_task_has_induced"
+        }
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "draw",
+          "amount": 3
+        },
+        {
+          "op": "discard",
+          "amount": 1,
+          "up_to": false,
+          "mode": "choose"
+        },
+        {
+          "op": "relax",
+          "amount": 5,
+          "condition": {
+            "kind": "any_task_has_induced"
+          }
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P03",
+    "permanent": true,
+    "limits": {}
+  },
+  {
+    "id": "R3-P03-40",
+    "name_key": "R3-P03-40",
+    "type": "ability",
+    "rarity": "rare",
+    "tags": [
+      "混合被动支持"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": true,
+    "effects": [],
+    "upgrade": {
+      "cost": 1,
+      "effects": []
+    },
+    "v3": true,
+    "owner": "P03",
+    "permanent": true,
+    "limits": {},
+    "ability": {
+      "activate": "next_round",
+      "stack": "unique_name",
+      "condition": {},
+      "triggers": [
+        {
+          "on": "compound_reaction_success",
+          "effects": [
+            {
+              "op": "draw",
+              "amount": 1,
+              "condition": {
+                "kind": "compound_reaction_success"
+              },
+              "limit": "once_per_turn"
+            },
+            {
+              "op": "relax",
+              "amount": 3
+            }
+          ],
+          "upgrade_effects": [
+            {
+              "op": "draw",
+              "amount": 1,
+              "condition": {
+                "kind": "compound_reaction_success"
+              },
+              "limit": "once_per_turn"
+            },
+            {
+              "op": "relax",
+              "amount": 5
+            }
+          ],
+          "limit": "",
+          "no_compound_reaction": false
+        }
+      ]
+    }
+  }
+]

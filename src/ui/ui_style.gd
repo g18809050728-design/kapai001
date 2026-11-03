@@ -75,7 +75,41 @@ static func describe_effects(effects: Array) -> String:
 			"remove_status": "移除状态",
 			"lose_vitality": "失去精力",
 			"restore_work": "恢复任务量",
-			"pressure": "施加压力"
+			"pressure": "施加压力",
+			"paper_open": "开题",
+			"paper_progress": "论文进度",
+			"paper_citation": "引用",
+			"paper_modifier": "论文修正",
+			"paper_amplify": "增幅",
+			"paper_publish": "发表",
+			"chapter_deploy": "部署章节",
+			"chapter_run": "运行章节",
+			"chapter_return": "收回章节",
+			"swap_chapter_slots": "交换章节",
+			"copy_chapter_to_hand": "复印章节",
+			"change_topic": "换题",
+			"spend_citation": "消耗引用",
+			"generate_card": "生成卡牌",
+			"publication_cost_discount": "发表减费",
+			"gain_synergy": "获得协同",
+			"spend_synergy": "消耗协同",
+			"spend_synergy_up_to": "消耗协同",
+			"spend_all_synergy": "消耗全部协同",
+			"summon_partner": "召入伙伴",
+			"partner_heal": "伙伴治疗",
+			"partner_retreat": "伙伴撤回",
+			"partner_extra_action": "伙伴额外行动",
+			"cost_discount_next": "下张减费",
+			"work_bonus_next": "下张加值",
+			"retrieve": "取回卡牌",
+			"exhaust_other": "消耗其他卡牌",
+			"remove_shield": "移除护盾",
+			"arm_erosion_on_next_draws": "下次抽取施加剧侵蚀",
+			"extend_timed_debuffs": "延长限时负面",
+			"trigger_erosion": "触发侵蚀",
+			"trigger_induced": "触发诱发",
+			"shuffle_draw": "洗牌",
+			"search_draw_for_type": "检索卡牌"
 		}
 		var phrase := str(names.get(op, op))
 		if bool(effect.get("up_to", false)):
@@ -84,7 +118,7 @@ static func describe_effects(effects: Array) -> String:
 			phrase += "·" + label(str(effect.status))
 		elif effect.get("category") == "negative":
 			phrase += "·负面状态"
-		for key in ["unit", "unit_id", "scene", "scene_id", "card_id", "relic_id"]:
+		for key in ["unit", "unit_id", "scene", "scene_id", "card", "card_id", "relic_id"]:
 			if effect.has(key):
 				phrase += "·" + label(str(effect[key]))
 		if not amount.is_empty():
@@ -111,8 +145,58 @@ static func describe_effects(effects: Array) -> String:
 			elif bonus.has("ddl_lte"):
 				condition = "DDL 不超过 %s" % bonus.ddl_lte
 			phrase += "（%s时额外 +%s）" % [condition, bonus.get("amount", 0)]
+		if effect.has("condition"):
+			var condition_text := describe_condition(effect.condition)
+			if not condition_text.is_empty():
+				phrase += "（需：%s）" % condition_text
+		if str(effect.get("limit", "")) == "once_per_turn":
+			phrase += "（每回合一次）"
 		phrases.append(phrase)
 	return " / ".join(phrases)
+
+
+static func describe_conditions(conditions: Array) -> String:
+	var parts: PackedStringArray = []
+	for condition in conditions:
+		var text := describe_condition(condition)
+		if not text.is_empty():
+			parts.append(text)
+	return "、".join(parts)
+
+
+static func describe_condition(condition: Variant) -> String:
+	if not condition is Dictionary:
+		return ""
+	if condition.has("all"):
+		return describe_conditions(condition.all)
+	if condition.has("any"):
+		return describe_conditions(condition.any)
+	var kind := str(condition.get("kind", ""))
+	var value: Variant = condition.get("value", "")
+	var names := {
+		"paper_open": "已开题",
+		"paper_closed": "未开题",
+		"paper_name_unused": "本篇未用牌名",
+		"paper_name_used": "本篇已用牌名",
+		"paper_progress_min": "论文进度≥%s" % value,
+		"chapter_count_min": "章节≥%s" % value,
+		"other_chapter_ran_window": "本轮有其他章节运行",
+		"citation_min": "引用≥%s" % value,
+		"synergy_min": "协同≥%s" % value,
+		"synergy_is_zero": "协同为 0",
+		"partner_count_min": "伙伴≥%s" % value,
+		"no_partner": "无伙伴",
+		"ddl_lte": "DDL≤%s" % value,
+		"independent_exam": "独立作答",
+		"fixed_exam_room": "固定考场",
+		"first_cooperation_resolved": "本回合首张合作牌",
+		"played_type_count_turn": "本回合已打出类型牌",
+		"target_has_status": "目标有状态",
+		"target_still_alive": "目标仍存活",
+		"healed_partner_turn": "本回合治疗过伙伴",
+		"summoned_partner_turn": "本回合召入过伙伴"
+	}
+	return str(names.get(kind, ""))
 
 
 static func error_text(error: ApiError) -> String:
@@ -135,7 +219,20 @@ static func error_text(error: ApiError) -> String:
 		"UNPLAYABLE": "此牌不可主动打出"
 	}
 	var reason := str(names.get(String(error.code), "当前操作不可用"))
-	return "%s · %s\n%s" % [reason, error.code, error.message_key]
+	var details := {
+		"error.play.paper_name_used_turn": "本回合此牌名已使用",
+		"error.play.requirement_invalid": "未满足使用条件",
+		"error.play.citation_insufficient": "引用不足",
+		"error.play.no_chapter_replace": "无法选择撤下的章节",
+		"error.play.no_recall_target": "弃牌堆没有可取回的卡牌",
+		"error.play.no_exhaust_target": "没有可消耗的卡牌",
+		"error.battle.v3_card_limit": "本回合使用次数已达上限",
+		"error.battle.choice_pending": "请先完成当前选择",
+		"error.battle.no_pending_choice": "当前没有待选效果",
+		"error.battle.choice_id_invalid": "选择已失效，请重新操作"
+	}
+	var detail := str(details.get(str(error.message_key), ""))
+	return detail if not detail.is_empty() else reason
 
 
 static func make_theme() -> Theme:

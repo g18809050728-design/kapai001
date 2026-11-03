@@ -49,10 +49,7 @@ func build(screen: BattleScreen) -> void:
 	page._hint_label = _text(
 		stage, Rect2(280, 505, 720, 35), _selection_hint(), 16, LIGHT, HORIZONTAL_ALIGNMENT_CENTER
 	)
-	page._tip_label = _text(
-		stage, Rect2(285, 471, 710, 34), "", 14, Color("f1c989"), HORIZONTAL_ALIGNMENT_CENTER
-	)
-	page._tip_label.z_index = 110
+	_hover_window()
 	if not page._panel_text.is_empty():
 		_info_panel()
 	if page.is_locked():
@@ -61,6 +58,28 @@ func build(screen: BattleScreen) -> void:
 	page._apply_lock_state()
 	page._sync_card_visuals()
 	page._fit_stage()
+
+
+func _hover_window() -> void:
+	var panel := Panel.new()
+	panel.size = Vector2(360, 168)
+	panel.visible = false
+	panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	panel.z_index = 120
+	var style := UiStyle.box(Color("192f35"))
+	style.border_color = Color("d8ba7c")
+	style.set_border_width_all(2)
+	style.shadow_color = Color(0, 0, 0, 0.38)
+	style.shadow_size = 12
+	style.shadow_offset = Vector2(0, 5)
+	panel.add_theme_stylebox_override("panel", style)
+	stage.add_child(panel)
+	page._hover_panel = panel
+	page._hover_title = _text(panel, Rect2(16, 10, 328, 28), "", 19, LIGHT)
+	page._hover_meta = _text(panel, Rect2(16, 38, 328, 22), "", 13, Color("e5c894"))
+	page._hover_body = _text(panel, Rect2(16, 62, 328, 82), "", 14, LIGHT)
+	page._hover_body.max_lines_visible = 4
+	_text(panel, Rect2(16, 146, 328, 16), "I 查看详情", 12, Color("f1c989"), HORIZONTAL_ALIGNMENT_RIGHT)
 
 
 func _header() -> void:
@@ -134,12 +153,16 @@ func _player() -> void:
 			player_statuses.append(value)
 	if not player_statuses.is_empty():
 		_text(
-			stage,
-			Rect2(35, 484, 220, 68),
-			page._status_text(player_statuses),
-			14,
-			Color("e5c894")
+			stage, Rect2(35, 484, 220, 68), page._status_text(player_statuses), 14, Color("e5c894")
 		)
+		var status_hit := _button(
+			Rect2(35, 484, 220, 68),
+			"statuses:player",
+			"",
+			{},
+			Callable(page, "_open_detail_for_uid").bind("statuses:player")
+		)
+		_transparent_target(status_hit)
 	var scene := page._dict(page.view.get("scene"))
 	if not scene.is_empty():
 		_text(
@@ -216,10 +239,6 @@ func _tasks() -> void:
 		var target := _button(Rect2(x, 207, width, 236), "task:" + id, "", {}, page._bind_task(id))
 		_transparent_target(target)
 		page._target_frames["task:" + id] = frame
-		target.tooltip_text = "任务阶段：" + phase_text
-		var task_status := _task_status_text(id)
-		if not task_status.is_empty():
-			target.tooltip_text += " · 增益：" + task_status
 
 
 func _task_status_text(task_id: String) -> String:
@@ -229,10 +248,7 @@ func _task_status_text(task_id: String) -> String:
 		if str(status.get("target_id", "")) != task_id:
 			continue
 		parts.append(
-			(
-				"%s×%s"
-				% [UiStyle.label(str(status.get("status_id", ""))), status.get("stacks", 0)]
-			)
+			"%s×%s" % [UiStyle.label(str(status.get("status_id", ""))), status.get("stacks", 0)]
 		)
 	return "、".join(parts)
 
@@ -317,7 +333,7 @@ func _hand() -> void:
 	_text(
 		stage,
 		Rect2(390, 775, 500, 22),
-		"1—9 选牌 / 点击或拖拽出牌 / 右键或 Esc 取消",
+		"1—9 选牌 / 点击或拖拽出牌 / I 详情 / 右键或 Esc 取消",
 		13,
 		SOFT,
 		HORIZONTAL_ALIGNMENT_CENTER
@@ -435,7 +451,13 @@ func _choice_panel() -> void:
 	var overlay := _modal()
 	var choice := page._choice_dict(page.view.get("pending_choice"))
 	var title: String = (
-		{"discard": "选择要弃置的卡牌", "recall": "选择要回忆的卡牌", "retain": "选择要保留的卡牌", "purify": "选择要净化的状态"}
+		{
+			"discard": "选择要弃置的卡牌",
+			"recall": "选择要回忆的卡牌",
+			"retain": "选择要保留的卡牌",
+			"purify": "选择要净化的状态",
+			"chapter_replace": "选择要撤下的章节"
+		}
 		. get(str(choice.get("kind", "")), "完成卡牌效果")
 	)
 	_text(overlay, Rect2(30, 24, 1020, 48), title, 28, LIGHT, HORIZONTAL_ALIGNMENT_CENTER)
@@ -498,11 +520,27 @@ func _info_panel() -> void:
 	_text(overlay, Rect2(35, 22, 1010, 46), "战斗信息", 26, LIGHT)
 	var scroll := ScrollContainer.new()
 	scroll.position = Vector2(35, 85)
-	scroll.size = Vector2(1010, 325)
+	scroll.size = Vector2(1010, 310)
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	overlay.add_child(scroll)
 	var label := page.add_text(scroll, page._panel_text, 19, LIGHT)
 	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	if not page._detail_terms.is_empty():
+		var terms_row := HBoxContainer.new()
+		terms_row.position = Vector2(40, 400)
+		terms_row.size = Vector2(1000, 32)
+		terms_row.add_theme_constant_override("separation", 8)
+		overlay.add_child(terms_row)
+		var terms_label := page.add_text(terms_row, "词条：", 14, LIGHT)
+		terms_label.custom_minimum_size = Vector2(48, 0)
+		terms_label.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+		for term in page._detail_terms:
+			var chip := page.add_button(
+				terms_row, "term:" + term, UiGlossary.label(term), {}, page._bind_term(term)
+			)
+			chip.custom_minimum_size = Vector2(76, 30)
+			chip.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+			chip.add_theme_font_size_override("font_size", 13)
 	var close := page.add_button(
 		overlay, "battle:close_panel", "返回战斗  Esc", {}, Callable(page, "_close_panel")
 	)

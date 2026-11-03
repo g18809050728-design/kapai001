@@ -13,6 +13,7 @@ func run() -> Array[String]:
 		"disable autosave for isolated A/B"
 	)
 	animated.press("menu:new")
+	_check(animated.press("setup:manifest:campus_mvp"), "choose v1 manifest for K-card choice test")
 	var input := _find_input(animated.page)
 	if input != null:
 		input.text = "0"
@@ -81,6 +82,7 @@ func _check_restart_pending() -> void:
 	var shell := _helpers.attach_shell(GameSession.new(SaveStore.new(path))) as GameShell
 	_check(shell.session.update_settings({"autosave": false}).ok, "isolate pending restart save")
 	shell.press("menu:new")
+	_check(shell.press("setup:manifest:campus_mvp"), "choose v1 manifest for pending restart")
 	var input := _find_input(shell.page)
 	input.text = "0"
 	input.text_changed.emit("0")

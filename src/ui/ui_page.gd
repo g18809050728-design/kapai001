@@ -5,6 +5,7 @@ signal action_requested(draft: Dictionary)
 signal local_selection_changed(selection: Dictionary)
 
 var view: Dictionary = {}
+var audio: AudioManager
 var body: VBoxContainer
 var _buttons: Dictionary = {}
 var _drafts: Dictionary = {}
@@ -92,6 +93,8 @@ func add_button(
 		func():
 			if button.disabled:
 				return
+			if audio != null:
+				audio.play_ui("ui_click")
 			if local_callback.is_valid():
 				local_callback.call()
 			if _drafts.has(uid):

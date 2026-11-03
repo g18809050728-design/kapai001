@@ -1,0 +1,98 @@
+[
+  {
+    "id": "P01",
+    "name_key": "character.P01.name",
+    "starter_cards": [
+      "R3-P01-01",
+      "R3-P01-02"
+    ],
+    "starter_relic_id": "A01",
+    "passive": {
+      "id": "r3_p01_link_replay",
+      "trigger": "work_card_resolved",
+      "count": 1,
+      "limit": {
+        "per": "round",
+        "times": 1
+      },
+      "effects": [
+        {
+          "op": "relax",
+          "amount": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "P02",
+    "name_key": "character.P02.name",
+    "starter_cards": [
+      "R3-P02-01",
+      "R3-P02-11"
+    ],
+    "starter_relic_id": "A01",
+    "passive": {
+      "id": "r3_p02_paper_record",
+      "trigger": "work_card_resolved",
+      "count": 1,
+      "limit": {
+        "per": "round",
+        "times": 1
+      },
+      "effects": [
+        {
+          "op": "relax",
+          "amount": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "P03",
+    "name_key": "character.P03.name",
+    "starter_cards": [
+      "R3-P03-01",
+      "R3-P03-21"
+    ],
+    "starter_relic_id": "A01",
+    "passive": {
+      "id": "r3_p03_compound_reaction",
+      "trigger": "work_card_resolved",
+      "count": 1,
+      "limit": {
+        "per": "round",
+        "times": 1
+      },
+      "effects": [
+        {
+          "op": "relax",
+          "amount": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "P04",
+    "name_key": "character.P04.name",
+    "starter_cards": [
+      "R3-P04-01",
+      "R3-P04-02"
+    ],
+    "starter_relic_id": "A04",
+    "passive": {
+      "id": "r3_p04_teamwork",
+      "trigger": "cooperation_card_resolved",
+      "count": 1,
+      "limit": {
+        "per": "round",
+        "times": 1
+      },
+      "effects": [
+        {
+          "op": "relax",
+          "amount": 2
+        }
+      ]
+    }
+  }
+]

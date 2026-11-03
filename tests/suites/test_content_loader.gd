@@ -263,6 +263,46 @@ func run() -> Array[String]:
 		"summon_tasks entries require a count",
 		failures
 	)
+	var bad_summon_reference := elite_task.duplicate(true)
+	bad_summon_reference.phases[0].intents[0].summon_tasks = [
+		{"task": "missing_task", "count": 1}
+	]
+	_check(
+		_reject_definition(
+			isolated_db, isolated_root, "task", bad_summon_reference, stable_hash
+		),
+		"summon_tasks reject disabled or missing task references",
+		failures
+	)
+	var bad_transform_reference := elite_task.duplicate(true)
+	bad_transform_reference.phases[0].intents[0].transform_task = {"task": "missing_task"}
+	_check(
+		_reject_definition(
+			isolated_db, isolated_root, "task", bad_transform_reference, stable_hash
+		),
+		"transform_task rejects disabled or missing task references",
+		failures
+	)
+	var bad_on_complete_reference := elite_task.duplicate(true)
+	bad_on_complete_reference.on_complete_effects = [
+		{"op": "summon_task", "task": "missing_task", "count": 1}
+	]
+	_check(
+		_reject_definition(
+			isolated_db, isolated_root, "task", bad_on_complete_reference, stable_hash
+		),
+		"on_complete summon_task rejects missing task references",
+		failures
+	)
+	var bad_on_complete_choice := elite_task.duplicate(true)
+	bad_on_complete_choice.on_complete_effects = [{"op": "discard", "amount": 1}]
+	_check(
+		_reject_definition(
+			isolated_db, isolated_root, "task", bad_on_complete_choice, stable_hash
+		),
+		"on_complete_effects reject effects that require a player choice",
+		failures
+	)
 	var bad_destruct := elite_task.duplicate(true)
 	bad_destruct.phases[0].intents[0].self_destruct = "yes"
 	_check(

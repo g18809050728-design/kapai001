@@ -98,6 +98,11 @@ func start_fixture_shell(path: String) -> GameShell:
 	_check(shell.press("settings:apply"), "settings save uses public session operation")
 	_check(not shell.session.get_profile().autosave, "autosave false persists")
 	_check(shell.session.get_view().revision == 0, "settings do not change domain revision")
+	_check(shell.audio != null, "audio manager is attached")
+	_check(shell.press("settings:audio:true"), "audio mute control is reachable")
+	_check(shell.audio.is_muted(), "audio mute control mutes")
+	_check(shell.press("settings:audio:false"), "audio unmute control is reachable")
+	_check(not shell.audio.is_muted(), "audio unmute control restores")
 	_check(shell.press("settings:back"), "settings returns to menu")
 	_check(shell.press("menu:new"), "new-run button opens setup")
 	_check(shell.press("setup:character:test_P01"), "setup character uses stable uid")
@@ -357,7 +362,7 @@ func _check_production_start() -> void:
 	_check(view.screen == &"map", "production start reaches map")
 	if view.run is Dictionary:
 		_check(
-			view.run.manifest_id == "campus_mvp" and view.run.character_id == "P01",
+			view.run.manifest_id == "campus_v3" and view.run.character_id == "P01",
 			"production start uses approved manifest and character"
 		)
 		for card in view.run.cards:

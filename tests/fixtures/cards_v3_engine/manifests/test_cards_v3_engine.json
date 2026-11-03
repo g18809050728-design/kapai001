@@ -1,0 +1,48 @@
+{
+  "id": "test_cards_v3_engine",
+  "content_version": "test_cards_v3_engine.v1",
+  "ruleset_id": "campus_v1",
+  "enabled": {
+    "card": [
+      "R3-C-01",
+      "R3-C-02",
+      "R3-C-03",
+      "R3-C-04",
+      "R3-C-05",
+      "R3-C-06",
+      "R3-C-07",
+      "R3-C-08",
+      "R3-C-09",
+      "R3-C-10",
+      "R3-C-11",
+      "R3-C-12"
+    ],
+    "character": [
+      "R3_TEST_CHAR"
+    ],
+    "relic": [
+      "R3_TEST_RELIC"
+    ],
+    "task": [
+      "R3_TEST_TASK_A",
+      "R3_TEST_TASK_B"
+    ],
+    "encounter": [
+      "R3_TEST"
+    ],
+    "unit": [],
+    "scene": [
+      "R3-S01",
+      "R3-S01+"
+    ],
+    "event": [],
+    "status": [
+      "vulnerability",
+      "weakness"
+    ],
+    "ruleset": [
+      "campus_v1"
+    ]
+  },
+  "overrides": []
+}

@@ -1,0 +1,16 @@
+[
+  {
+    "id": "R3_TEST",
+    "name_key": "encounter.R3_TEST.name",
+    "kind": "normal",
+    "members": [
+      "R3_TEST_TASK_A",
+      "R3_TEST_TASK_B"
+    ],
+    "base_ddl": 20,
+    "terms": [
+      1
+    ],
+    "exam_flags": []
+  }
+]

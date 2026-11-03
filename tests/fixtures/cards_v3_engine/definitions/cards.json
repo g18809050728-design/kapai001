@@ -1,0 +1,452 @@
+[
+  {
+    "id": "R3-C-01",
+    "name_key": "R3-C-01",
+    "type": "work",
+    "rarity": "basic",
+    "tags": [
+      "基础输出"
+    ],
+    "cost": 1,
+    "target": "task",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "complete",
+        "amount": 6
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "complete",
+          "amount": 9
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "C",
+    "permanent": true
+  },
+  {
+    "id": "R3-C-02",
+    "name_key": "R3-C-02",
+    "type": "strategy",
+    "rarity": "basic",
+    "tags": [
+      "基础防护"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "relax",
+        "amount": 5
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "relax",
+          "amount": 8
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "C",
+    "permanent": true
+  },
+  {
+    "id": "R3-C-03",
+    "name_key": "R3-C-03",
+    "type": "strategy",
+    "rarity": "common",
+    "tags": [
+      "筛选"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "draw",
+        "amount": 2
+      },
+      {
+        "op": "discard",
+        "amount": 1,
+        "up_to": false,
+        "mode": "choose"
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "draw",
+          "amount": 3
+        },
+        {
+          "op": "discard",
+          "amount": 1,
+          "up_to": false,
+          "mode": "choose"
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "C",
+    "permanent": true
+  },
+  {
+    "id": "R3-C-04",
+    "name_key": "R3-C-04",
+    "type": "strategy",
+    "rarity": "common",
+    "tags": [
+      "低费防护"
+    ],
+    "cost": 0,
+    "target": "self",
+    "exhaust": true,
+    "effects": [
+      {
+        "op": "relax",
+        "amount": 3
+      }
+    ],
+    "upgrade": {
+      "cost": 0,
+      "effects": [
+        {
+          "op": "relax",
+          "amount": 5
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "C",
+    "permanent": true
+  },
+  {
+    "id": "R3-C-05",
+    "name_key": "R3-C-05",
+    "type": "strategy",
+    "rarity": "common",
+    "tags": [
+      "续航"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": true,
+    "effects": [
+      {
+        "op": "heal",
+        "amount": 3
+      },
+      {
+        "op": "relax",
+        "amount": 3
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "heal",
+          "amount": 4
+        },
+        {
+          "op": "relax",
+          "amount": 5
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "C",
+    "permanent": true
+  },
+  {
+    "id": "R3-C-06",
+    "name_key": "R3-C-06",
+    "type": "ability",
+    "rarity": "advanced",
+    "tags": [
+      "工作加成"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": true,
+    "effects": [],
+    "upgrade": {
+      "cost": 1,
+      "effects": []
+    },
+    "v3": true,
+    "owner": "C",
+    "permanent": true,
+    "ability": {
+      "activate": "next_round",
+      "stack": "unique_name",
+      "condition": {},
+      "triggers": [
+        {
+          "on": "first_work_card_resolving",
+          "effects": [
+            {
+              "op": "add_work_bonus",
+              "amount": 2,
+              "first_segment": true,
+              "limit": "once_per_turn"
+            }
+          ],
+          "upgrade_effects": [
+            {
+              "op": "add_work_bonus",
+              "amount": 3,
+              "first_segment": true,
+              "limit": "once_per_turn"
+            }
+          ],
+          "limit": "",
+          "no_compound_reaction": false
+        }
+      ]
+    }
+  },
+  {
+    "id": "R3-C-07",
+    "name_key": "R3-C-07",
+    "type": "work",
+    "rarity": "common",
+    "tags": [
+      "临期交付"
+    ],
+    "cost": 1,
+    "target": "task",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "complete",
+        "amount": 8,
+        "bonus": {
+          "condition": {
+            "kind": "ddl_lte",
+            "value": 3
+          },
+          "amount": 4,
+          "same_segment": true
+        }
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "complete",
+          "amount": 11,
+          "bonus": {
+            "condition": {
+              "kind": "ddl_lte",
+              "value": 3
+            },
+            "amount": 6,
+            "same_segment": true
+          }
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "C",
+    "permanent": true
+  },
+  {
+    "id": "R3-C-08",
+    "name_key": "R3-C-08",
+    "type": "scene",
+    "rarity": "advanced",
+    "tags": [
+      "场景防护"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": true,
+    "effects": [
+      {
+        "op": "establish_scene",
+        "scene": "R3-S01"
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "establish_scene",
+          "scene": "R3-S01+"
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "C",
+    "permanent": true
+  },
+  {
+    "id": "R3-C-09",
+    "name_key": "R3-C-09",
+    "type": "work",
+    "rarity": "common",
+    "tags": [
+      "通用易伤"
+    ],
+    "cost": 1,
+    "target": "task",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "apply_status",
+        "status": "vulnerability",
+        "stacks": 1,
+        "target": "task"
+      },
+      {
+        "op": "complete",
+        "amount": 4
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "apply_status",
+          "status": "vulnerability",
+          "stacks": 2,
+          "target": "task"
+        },
+        {
+          "op": "complete",
+          "amount": 6
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "C",
+    "permanent": true
+  },
+  {
+    "id": "R3-C-10",
+    "name_key": "R3-C-10",
+    "type": "strategy",
+    "rarity": "common",
+    "tags": [
+      "通用虚弱"
+    ],
+    "cost": 1,
+    "target": "task",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "apply_status",
+        "status": "weakness",
+        "stacks": 1,
+        "target": "task"
+      },
+      {
+        "op": "relax",
+        "amount": 4
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "apply_status",
+          "status": "weakness",
+          "stacks": 2,
+          "target": "task"
+        },
+        {
+          "op": "relax",
+          "amount": 6
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "C",
+    "permanent": true
+  },
+  {
+    "id": "R3-C-11",
+    "name_key": "R3-C-11",
+    "type": "work",
+    "rarity": "common",
+    "tags": [
+      "通用破盾"
+    ],
+    "cost": 1,
+    "target": "task",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "remove_shield",
+        "amount": 6,
+        "target": "task",
+        "up_to": true
+      },
+      {
+        "op": "complete",
+        "amount": 5
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "remove_shield",
+          "amount": 9,
+          "target": "task",
+          "up_to": true
+        },
+        {
+          "op": "complete",
+          "amount": 7
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "C",
+    "permanent": true
+  },
+  {
+    "id": "R3-C-12",
+    "name_key": "R3-C-12",
+    "type": "work",
+    "rarity": "common",
+    "tags": [
+      "通用群攻"
+    ],
+    "cost": 1,
+    "target": "all_tasks",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "complete",
+        "amount": 4
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "complete",
+          "amount": 6
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "C",
+    "permanent": true
+  }
+]

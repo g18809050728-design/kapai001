@@ -76,7 +76,7 @@ func generate_shop(node: Variant, run: RunState, rng: RandomSource) -> GameResul
 	var node_id := str(_read(node, "node_id", run.current_node_id))
 	var stocks: Array[Dictionary] = []
 	for rarity in ["white", "blue", "purple"]:
-		var pool := _catalog.get_candidates({"kind": "card", "rarity": rarity})
+		var pool := _eligible_card_pool(run, rarity)
 		var chosen := _sample(pool, int(shop_rules.card_stock.get(rarity, 0)), rng)
 		if not chosen.ok:
 			return chosen
@@ -136,13 +136,28 @@ func card_candidates(
 		if not rarity.is_empty() and quality != rarity:
 			continue
 		var pool: Array[String] = []
-		for id in _catalog.get_candidates({"kind": "card", "rarity": quality}):
-			var definition: Dictionary = _catalog.get_definition("card", id).data
-			var tags: Array = definition.get("tags", [])
-			if not tags.has("basic") and not tags.has("special"):
-				pool.append(id)
+		for id in _eligible_card_pool(run, quality):
+			pool.append(id)
 		pools[quality] = pool
 	return _weighted_sample(pools, count, rng, weights)
+
+
+func _eligible_card_pool(run: RunState, quality: String) -> Array[String]:
+	var pool: Array[String] = []
+	for id in _catalog.get_candidates({"kind": "card", "rarity": quality}):
+		var definition: Dictionary = _catalog.get_definition("card", id).data
+		var owner := str(definition.get("owner", ""))
+		if not owner.is_empty() and owner != "C" and owner != run.character_id:
+			continue
+		if not bool(definition.get("permanent", true)):
+			continue
+		if str(definition.get("rarity", "")) in ["token", "basic"]:
+			continue
+		var tags: Array = definition.get("tags", [])
+		if tags.has("basic") or tags.has("special"):
+			continue
+		pool.append(id)
+	return pool
 
 
 func relic_candidates(

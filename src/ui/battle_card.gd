@@ -90,6 +90,11 @@ func _draw() -> void:
 	var effect := UiStyle.describe_effects(face.get("effects", []))
 	if effect.is_empty():
 		effect = str(card_data.get("description", ""))
+	var requirements := UiStyle.describe_conditions(face.get("requirements", []))
+	if not requirements.is_empty():
+		effect = "需：" + requirements + "\n" + effect
+	if int(face.get("limits", {}).get("per_instance_per_turn", 0)) > 0:
+		effect += "\n每回合一次"
 	var lines := TextParagraph.new()
 	lines.add_string(effect, font, 14)
 	lines.width = 136

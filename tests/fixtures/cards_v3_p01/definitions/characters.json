@@ -1,0 +1,26 @@
+[
+  {
+    "id": "P01",
+    "name_key": "character.P01.name",
+    "starter_cards": [
+      "R3-P01-01",
+      "R3-P01-02"
+    ],
+    "starter_relic_id": "R3_TEST_RELIC",
+    "passive": {
+      "id": "r3_p01_test_passive",
+      "trigger": "cooperation_card_resolved",
+      "count": 1,
+      "limit": {
+        "per": "battle",
+        "times": 1
+      },
+      "effects": [
+        {
+          "op": "heal",
+          "amount": 1
+        }
+      ]
+    }
+  }
+]

@@ -24,9 +24,16 @@ var _stage: Control
 var _hand_cards: Array[BattleCard] = []
 var _target_frames: Dictionary = {}
 var _aim: BattleAim
-var _tip_label: Label
+var _hover_panel: Control
+var _hover_title: Label
+var _hover_meta: Label
+var _hover_body: Label
 var _hint_label: Label
 var _hovered_card: BattleCard
+var _hover_target: Dictionary = {}
+var _last_hover_uid: String = ""
+var _detail_terms: Array[String] = []
+var _inspect_open: bool = false
 var _pointer_card: BattleCard
 var _pointer_start := Vector2.ZERO
 var _dragging: bool = false
@@ -59,6 +66,10 @@ func render(data: Dictionary) -> void:
 		_replace_unit_id = ""
 		_active_preview = null
 		_preview_draft = {}
+		if _inspect_open:
+			_panel_text = ""
+			_detail_terms.clear()
+			_inspect_open = false
 	_revision_seen = next_revision
 	_submitted_revision = -2
 	view = next_view
@@ -152,6 +163,7 @@ func _render_battle() -> void:
 func _reset_stage() -> void:
 	_pointer_card = null
 	_hovered_card = null
+	_hover_target = {}
 	_drag_ghost = null
 	_dragging = false
 	_hand_cards.clear()
@@ -183,6 +195,19 @@ func _input(event: InputEvent) -> void:
 		return
 	if event is InputEventMouse:
 		_pointer_position = event.position
+	if (
+		event is InputEventKey
+		and event.pressed
+		and not event.echo
+		and event.keycode == KEY_I
+		and not event.ctrl_pressed
+		and not event.alt_pressed
+		and not event.meta_pressed
+	):
+		if not is_locked():
+			_toggle_detail()
+		get_viewport().set_input_as_handled()
+		return
 	if event is InputEventKey and event.pressed and event.keycode == KEY_ESCAPE:
 		if is_locked():
 			return
@@ -217,7 +242,7 @@ func _input(event: InputEvent) -> void:
 		if index < _hand_cards.size():
 			var card := _hand_cards[index]
 			if card.disabled:
-				_feedback_text = card.tooltip_text
+				_feedback_text = str(card.get_meta("disabled_reason", "无法打出"))
 				_feedback_label.text = _feedback_text
 				_feedback_label.visible = true
 			else:
@@ -229,7 +254,7 @@ func _input(event: InputEvent) -> void:
 			var card := _card_at(event.position)
 			if card != null:
 				if card.disabled:
-					_tip_label.text = card.tooltip_text
+					_open_detail_for_uid("card:" + str(card.card_data.get("card_id", "")))
 				else:
 					_pointer_card = card
 					_pointer_start = event.position
@@ -262,12 +287,18 @@ func _card_at(point: Vector2) -> BattleCard:
 func _update_pointer(delta: float) -> void:
 	if not is_instance_valid(_stage):
 		return
-	if not _dragging and not is_locked() and _panel_text.is_empty():
-		_hovered_card = _card_at(_pointer_position)
+	if not is_locked() and _panel_text.is_empty():
+		_hovered_card = null if _dragging else _card_at(_pointer_position)
+		_hover_target = _hover_target_at(_pointer_position)
 	else:
 		_hovered_card = null
-	if is_instance_valid(_tip_label) and not is_instance_valid(_pointer_card):
-		_tip_label.text = _hovered_card.tooltip_text if is_instance_valid(_hovered_card) else ""
+		_hover_target = {}
+	var hover_uid := str(_hover_target.get("uid", ""))
+	if hover_uid != _last_hover_uid:
+		_last_hover_uid = hover_uid
+		if not hover_uid.is_empty() and audio != null:
+			audio.play_ui("ui_hover")
+	_update_hover_window()
 	for card in _hand_cards:
 		var raised := card == _hovered_card or card.selected
 		var destination := card.home_position + (Vector2(0, -60) if raised else Vector2.ZERO)
@@ -290,6 +321,371 @@ func _update_pointer(delta: float) -> void:
 			)
 			_aim.valid_target = not _target_at(_pointer_position).is_empty()
 			_aim.queue_redraw()
+
+
+func _update_hover_window() -> void:
+	if not is_instance_valid(_hover_panel):
+		return
+	var show := not _hover_target.is_empty() and not is_locked() and _panel_text.is_empty()
+	_hover_panel.visible = show
+	if not show:
+		return
+	_hover_title.text = str(_hover_target.get("title", ""))
+	_hover_meta.text = str(_hover_target.get("meta", ""))
+	_hover_body.text = str(_hover_target.get("body", ""))
+	_place_hover_panel()
+
+
+func _place_hover_panel() -> void:
+	var inverse := _stage.get_global_transform_with_canvas().affine_inverse()
+	var local := inverse * _pointer_position
+	var size := _hover_panel.size
+	var raw_rect: Variant = _hover_target.get("rect", Rect2())
+	var target_rect: Rect2 = raw_rect if raw_rect is Rect2 else Rect2()
+	var candidates: Array[Vector2] = []
+	if target_rect.size != Vector2.ZERO:
+		var target_local := Rect2(inverse * target_rect.position, target_rect.size / _stage.scale)
+		var target_end := target_local.position + target_local.size
+		candidates.append(Vector2(target_local.position.x, target_local.position.y - size.y - 12))
+		candidates.append(Vector2(target_local.position.x, target_end.y + 12))
+		candidates.append(Vector2(target_local.position.x - size.x - 12, target_local.position.y))
+		candidates.append(Vector2(target_end.x + 12, target_local.position.y))
+	candidates.append(local + Vector2(20, 20))
+	candidates.append(local + Vector2(20, -size.y - 20))
+	candidates.append(local + Vector2(-size.x - 20, 20))
+	candidates.append(local + Vector2(-size.x - 20, -size.y - 20))
+	for candidate in candidates:
+		var pos: Vector2 = candidate
+		pos.x = clampf(pos.x, 12, 1280 - size.x - 12)
+		pos.y = clampf(pos.y, 76, 800 - size.y - 12)
+		_hover_panel.position = pos
+		if (
+			target_rect.size == Vector2.ZERO
+			or not _hover_panel.get_global_rect().intersects(target_rect)
+		):
+			return
+	_hover_panel.position = Vector2(
+		clampf(local.x + 20, 12, 1280 - size.x - 12), clampf(local.y + 20, 76, 800 - size.y - 12)
+	)
+
+
+func _hover_target_at(point: Vector2) -> Dictionary:
+	if is_instance_valid(_hovered_card):
+		return _card_hover_target(_hovered_card)
+	for uid in _buttons:
+		var key := str(uid)
+		if key.begins_with("task:") and _button_hit(key, point):
+			return _task_hover_target(key.trim_prefix("task:"))
+		if key.begins_with("unit:") and _button_hit(key, point):
+			return _unit_hover_target(key.trim_prefix("unit:"))
+	if _buttons.has("statuses:player") and _button_hit("statuses:player", point):
+		return _status_hover_target()
+	return {}
+
+
+func _button_hit(uid: String, point: Vector2) -> bool:
+	if not _buttons.has(uid):
+		return false
+	var button: Button = _buttons[uid]
+	return (
+		is_instance_valid(button) and button.visible and button.get_global_rect().has_point(point)
+	)
+
+
+func _button_rect(uid: String) -> Rect2:
+	if not _buttons.has(uid):
+		return Rect2()
+	var button: Button = _buttons[uid]
+	return button.get_global_rect() if is_instance_valid(button) else Rect2()
+
+
+func _card_hover_target(card: BattleCard) -> Dictionary:
+	var data: Dictionary = card.card_data
+	var definition_id := str(data.get("definition_id", ""))
+	var face := _dict(data.get("face", data.get("effective_card", {})))
+	var card_type := str(face.get("type", face.get("card_type", "work")))
+	var reason := str(card.get_meta("disabled_reason", ""))
+	var summary := (
+		"%s · %s · 专注 %s"
+		% [UiStyle.label(definition_id), UiStyle.label(card_type), data.get("effective_cost", "—")]
+	)
+	var effect_text := UiStyle.describe_effects(_array(face.get("effects")))
+	if effect_text.is_empty():
+		effect_text = str(data.get("description", ""))
+	if not effect_text.is_empty():
+		summary += "\n" + _short_text(effect_text, 52)
+	if not reason.is_empty():
+		summary = "无法打出：" + reason
+	var entry := _run_card_entry(str(data.get("card_id", "")), definition_id)
+	var detail_data := _dict(entry.get("detail"))
+	var body := (
+		UiContentText.describe_card(detail_data)
+		if not detail_data.is_empty()
+		else UiContentText.describe_card(face)
+	)
+	var upgraded := _dict(entry.get("upgrade_detail"))
+	if not upgraded.is_empty():
+		body += "\n\n升级后：\n" + UiContentText.describe_card(upgraded)
+	var terms := _card_terms(face, card_type)
+	var meta := "%s · 专注 %s" % [UiStyle.label(card_type), data.get("effective_cost", "—")]
+	if int(data.get("effective_vitality_cost", 0)) > 0:
+		meta += " · 精力 %s" % data.get("effective_vitality_cost", 0)
+	return {
+		"uid": "card:" + str(data.get("card_id", "")),
+		"title": UiStyle.label(definition_id),
+		"meta": meta,
+		"body": effect_text if reason.is_empty() else "无法打出：" + reason,
+		"summary": summary,
+		"detail": UiStyle.label(definition_id) + "\n" + body,
+		"terms": terms,
+		"rect": card.get_global_rect(),
+	}
+
+
+func _task_hover_target(task_id: String) -> Dictionary:
+	var task := {}
+	for value in _array(view.get("tasks")):
+		if str(_dict(value).get("task_id", "")) == task_id:
+			task = _dict(value)
+			break
+	if task.is_empty():
+		return {}
+	var phase_count := maxi(1, int(task.get("phase_count", 1)))
+	var phase_index := maxi(1, int(task.get("phase_index", 1)))
+	var intent := _intent_text(_dict(task.get("intent_snapshot")))
+	var statuses := _statuses_for(task_id)
+	var summary := (
+		"%s · 第 %s/%s 阶段 · 剩余 %s/%s · 屏障 %s"
+		% [
+			UiStyle.label(str(task.get("definition_id", ""))),
+			phase_index,
+			phase_count,
+			task.get("work_remaining", 0),
+			task.get("work_max", 0),
+			task.get("shield", 0)
+		]
+	)
+	summary += "\n下回合：" + _short_text(intent, 46)
+	var lines: Array[String] = [
+		"任务：" + UiStyle.label(str(task.get("definition_id", ""))),
+		(
+			"阶段：第 %s/%s 阶段 · %s"
+			% [phase_index, phase_count, UiStyle.label(str(task.get("phase_key", "")))]
+		),
+		"未完成量：%s/%s" % [task.get("work_remaining", 0), task.get("work_max", 0)],
+		"屏障：%s" % task.get("shield", 0),
+		"下回合意图：" + intent,
+	]
+	if not statuses.is_empty():
+		lines.append("状态：" + _status_text(statuses))
+	if not bool(task.get("victory_required", true)):
+		lines.append("非胜利必需：该任务存活不阻止胜利。")
+	var terms: Array[String] = ["pressure", "shield", "ddl"]
+	for value in statuses:
+		var key := str(_dict(value).get("status_id", ""))
+		if not key.is_empty() and not terms.has(key):
+			terms.append(key)
+	return {
+		"uid": "task:" + task_id,
+		"title": UiStyle.label(str(task.get("definition_id", ""))),
+		"meta":
+		(
+			"第 %s/%s 阶段 · 剩余 %s/%s"
+			% [phase_index, phase_count, task.get("work_remaining", 0), task.get("work_max", 0)]
+		),
+		"body": "屏障 %s\n下回合：%s" % [task.get("shield", 0), _short_text(intent, 42)],
+		"summary": summary,
+		"detail": "\n".join(lines),
+		"terms": terms,
+		"rect": _button_rect("task:" + task_id),
+	}
+
+
+func _unit_hover_target(unit_id: String) -> Dictionary:
+	var unit := {}
+	for value in _array(view.get("units")):
+		if str(_dict(value).get("unit_id", "")) == unit_id:
+			unit = _dict(value)
+			break
+	if unit.is_empty():
+		return {}
+	var summary := (
+		"%s · 精力 %s/%s · 协作 %s · 护卫 %s"
+		% [
+			UiStyle.label(str(unit.get("definition_id", ""))),
+			unit.get("vitality", 0),
+			unit.get("max_vitality", 0),
+			unit.get("cooperation", 0),
+			unit.get("guard", 0)
+		]
+	)
+	var lines: Array[String] = [
+		"单位：" + UiStyle.label(str(unit.get("definition_id", ""))),
+		"精力：%s/%s" % [unit.get("vitality", 0), unit.get("max_vitality", 0)],
+		"协作：%s" % unit.get("cooperation", 0),
+		"放松：%s" % unit.get("relax", 0),
+		"护卫：%s" % unit.get("guard", 0),
+		"本轮已行动：%s" % unit.get("actions_taken", 0),
+	]
+	var terms: Array[String] = ["vitality", "guard"]
+	return {
+		"uid": "unit:" + unit_id,
+		"title": UiStyle.label(str(unit.get("definition_id", ""))),
+		"meta":
+		(
+			"精力 %s/%s · 协作 %s"
+			% [unit.get("vitality", 0), unit.get("max_vitality", 0), unit.get("cooperation", 0)]
+		),
+		"body":
+		(
+			"放松 %s · 护卫 %s\n本轮已行动 %s"
+			% [unit.get("relax", 0), unit.get("guard", 0), unit.get("actions_taken", 0)]
+		),
+		"summary": summary,
+		"detail": "\n".join(lines),
+		"terms": terms,
+		"rect": _button_rect("unit:" + unit_id),
+	}
+
+
+func _status_hover_target() -> Dictionary:
+	var player := _dict(view.get("player"))
+	var statuses := _statuses_for(str(player.get("entity_id", "")))
+	if statuses.is_empty():
+		return {}
+	var names: PackedStringArray = []
+	var lines: Array[String] = ["我的状态"]
+	var terms: Array[String] = []
+	for value in statuses:
+		var status := _dict(value)
+		var key := str(status.get("status_id", ""))
+		var stacks := int(status.get("stacks", 0))
+		names.append("%s×%s" % [UiStyle.label(key), stacks])
+		lines.append("\n%s\n当前层数：%s" % [UiGlossary.describe(key), stacks])
+		if not key.is_empty() and not terms.has(key):
+			terms.append(key)
+	return {
+		"uid": "statuses:player",
+		"title": "我的状态",
+		"meta": "、".join(names),
+		"body": "共 %s 项状态；点击状态区或按 I 查看详情" % statuses.size(),
+		"summary": "我的状态：" + "、".join(names),
+		"detail": "\n".join(lines),
+		"terms": terms,
+		"rect": _button_rect("statuses:player"),
+	}
+
+
+func _statuses_for(target_id: String) -> Array:
+	var result: Array = []
+	for value in _array(view.get("statuses")):
+		if str(_dict(value).get("target_id", "")) == target_id:
+			result.append(value)
+	return result
+
+
+func _card_terms(face: Dictionary, card_type: String) -> Array[String]:
+	var terms: Array[String] = []
+	for key in UiGlossary.keys_for_effects(
+		_array(face.get("effects")) + _array(face.get("pre_effects"))
+	):
+		terms.append(key)
+	for key in UiGlossary.keys_for_types([card_type]):
+		if not terms.has(key):
+			terms.append(key)
+	if bool(face.get("exhaust", false)) and not terms.has("exhaust"):
+		terms.append("exhaust")
+	if bool(face.get("retain", false)) and not terms.has("retain"):
+		terms.append("retain")
+	return terms
+
+
+func _short_text(value: String, limit: int) -> String:
+	var text := value.replace("\n", "；")
+	if text.length() <= limit:
+		return text
+	return text.substr(0, limit) + "…"
+
+
+func _run_card_entry(card_id: String, definition_id: String) -> Dictionary:
+	for value in _array(view.get("cards")):
+		var card := _dict(value)
+		if str(card.get("card_id", "")) == card_id:
+			return card
+	for value in _array(view.get("cards")):
+		var card := _dict(value)
+		if str(card.get("definition_id", "")) == definition_id:
+			return card
+	return {}
+
+
+func _target_for_uid(uid: String) -> Dictionary:
+	if uid.begins_with("card:"):
+		var card_id := uid.trim_prefix("card:")
+		for card in _hand_cards:
+			if str(card.card_data.get("card_id", "")) == card_id:
+				return _card_hover_target(card)
+		if _buttons.has(uid):
+			var focused_card := _buttons[uid] as BattleCard
+			if focused_card != null:
+				return _card_hover_target(focused_card)
+	if uid.begins_with("task:"):
+		return _task_hover_target(uid.trim_prefix("task:"))
+	if uid.begins_with("unit:"):
+		return _unit_hover_target(uid.trim_prefix("unit:"))
+	if uid == "statuses:player":
+		return _status_hover_target()
+	return {}
+
+
+func _current_inspect_target() -> Dictionary:
+	if not _hover_target.is_empty():
+		return _hover_target
+	var focus := get_viewport().gui_get_focus_owner()
+	if focus is BattleCard:
+		return _card_hover_target(focus)
+	if focus is Button and focus.has_meta("uid"):
+		return _target_for_uid(str(focus.get_meta("uid")))
+	if not _selected_card_id.is_empty():
+		return _target_for_uid("card:" + _selected_card_id)
+	return {}
+
+
+func _toggle_detail() -> void:
+	if _inspect_open:
+		_close_panel()
+		return
+	if not _panel_text.is_empty():
+		return
+	_open_detail(_current_inspect_target())
+
+
+func _open_detail_for_uid(uid: String) -> void:
+	_open_detail(_target_for_uid(uid))
+
+
+func _open_detail(target: Dictionary) -> void:
+	if target.is_empty():
+		return
+	if audio != null:
+		audio.play_ui("detail_open")
+	_panel_text = str(target.get("detail", "信息不可用"))
+	_detail_terms.clear()
+	_inspect_open = true
+	for value in _array(target.get("terms")):
+		_detail_terms.append(str(value))
+	_render_from_local()
+
+
+func _bind_term(term: String) -> Callable:
+	return func(): _show_term(term)
+
+
+func _show_term(term: String) -> void:
+	if _panel_text.is_empty():
+		return
+	_panel_text += "\n\n" + UiGlossary.describe(term)
+	_render_from_local()
 
 
 func _begin_drag() -> void:
@@ -376,6 +772,8 @@ func _sync_card_visuals() -> void:
 func _on_card_pressed(card_id: String) -> void:
 	if is_locked():
 		return
+	if audio != null:
+		audio.play_ui("ui_click")
 	_selected_card_id = card_id
 	_selected_unit_id = ""
 	_target_ids.clear()
@@ -535,7 +933,11 @@ func _error_text(value: Variant) -> String:
 	if value is ApiError:
 		return UiStyle.error_text(value)
 	if value is Dictionary:
-		return "%s · %s" % [value.get("code", "ERROR"), value.get("message_key", "操作不可用")]
+		return UiStyle.error_text(
+			ApiError.new(
+				StringName(str(value.get("code", "ERROR"))), str(value.get("message_key", ""))
+			)
+		)
 	return str(value)
 
 
@@ -546,7 +948,11 @@ func _apply_lock_state() -> void:
 		if str(uid).begins_with("choice:"):
 			continue
 		_buttons[uid].disabled = true
-		_buttons[uid].tooltip_text = "请先完成当前选择"
+		if _buttons[uid] is BattleCard:
+			_buttons[uid].set_meta("disabled_reason", "请先完成当前选择")
+			_buttons[uid].tooltip_text = ""
+		else:
+			_buttons[uid].tooltip_text = "请先完成当前选择"
 	# Candidate buttons remain enabled; only the quantity gate disables confirm.
 	var choice := _choice_dict(view.get("pending_choice"))
 	if _buttons.has("choice:confirm"):
@@ -650,23 +1056,15 @@ func _may_select(quote: Variant) -> bool:
 
 
 func _set_enabled(uid: String, enabled: bool, reason: String) -> void:
-	if _buttons.has(uid):
-		_buttons[uid].disabled = not enabled
+	if not _buttons.has(uid):
+		return
+	_buttons[uid].disabled = not enabled
+	if _buttons[uid] is BattleCard:
+		var card: BattleCard = _buttons[uid]
+		card.set_meta("disabled_reason", "" if enabled else reason)
+		card.tooltip_text = ""
+	else:
 		_buttons[uid].tooltip_text = "" if enabled else reason
-		if _buttons[uid] is BattleCard:
-			var card: BattleCard = _buttons[uid]
-			var face := _dict(card.card_data.get("face", card.card_data.get("effective_card", {})))
-			card.tooltip_text = (
-				("" if enabled else reason + "  ·  ")
-				+ UiStyle.describe_effects(_array(face.get("effects")))
-				+ (
-					"  ·  专注 %s / 精力 %s（主动支付，绕过放松）"
-					% [
-						card.card_data.get("effective_cost", 0),
-						card.card_data.get("effective_vitality_cost", 0)
-					]
-				)
-			)
 
 
 func _render_from_local() -> void:
@@ -674,7 +1072,9 @@ func _render_from_local() -> void:
 	render(current)
 
 
-func _on_event_presented(_event: Dictionary, text: String) -> void:
+func _on_event_presented(event: Dictionary, text: String) -> void:
+	if audio != null:
+		audio.play_event(str(event.get("type", "")))
 	_feedback_text = text
 	if is_instance_valid(_feedback_label):
 		_feedback_label.text = text
@@ -698,6 +1098,8 @@ func _cycle_speed() -> void:
 
 
 func _show_draw() -> void:
+	_detail_terms.clear()
+	_inspect_open = false
 	_panel_text = "抽牌堆只公开数量：%s 张。" % _dict(view.get("zone_counts")).get("draw", 0)
 	_render_from_local()
 
@@ -705,6 +1107,8 @@ func _show_draw() -> void:
 func _show_deck() -> void:
 	if is_locked():
 		return
+	_detail_terms.clear()
+	_inspect_open = false
 	var cards := _array(view.get("cards")).duplicate(true)
 	cards.sort_custom(
 		func(a, b):
@@ -743,21 +1147,29 @@ func _show_deck() -> void:
 
 
 func _show_discard() -> void:
+	_detail_terms.clear()
+	_inspect_open = false
 	_panel_text = _zone_details("discard", "弃牌堆")
 	_render_from_local()
 
 
 func _show_exhaust() -> void:
+	_detail_terms.clear()
+	_inspect_open = false
 	_panel_text = _zone_details("exhaust", "消耗堆")
 	_render_from_local()
 
 
 func _show_rules() -> void:
-	_panel_text = "点击或拖拽整张卡牌出牌。数字 1—9 对应从左到右的手牌，与点击相同。需要目标的牌，选牌后点击高亮任务/伙伴，或直接拖到目标后松手。\n\n不需要目标的牌，可点击或按对应数字使用，也可拖出底部手牌区域后松手使用。拖回底部、右键或 Esc 可取消。\n\n点击伙伴，再点击任务可指定协作目标。需要换班时，选择高亮伙伴。结束回合前可选择本回合保留牌。\n\n牌组可查看本局全部卡牌与饰品。弃牌和消耗堆可查看公开牌效果，抽牌堆仅公开数量。卡牌效果产生待选时，须先在中央选牌面板完成选择。"
+	_detail_terms.clear()
+	_inspect_open = false
+	_panel_text = "把鼠标移到卡牌、任务、单位或状态上可看摘要；按 I 打开详情与词条，Esc 关闭。\n\n点击或拖拽整张卡牌出牌。数字 1—9 对应从左到右的手牌，与点击相同。需要目标的牌，选牌后点击高亮任务/伙伴，或直接拖到目标后松手。\n\n不需要目标的牌，可点击或按对应数字使用，也可拖出底部手牌区域后松手使用。拖回底部、右键或 Esc 可取消。\n\n点击伙伴，再点击任务可指定协作目标。需要换班时，选择高亮伙伴。结束回合前可选择本回合保留牌。\n\n牌组可查看本局全部卡牌与饰品。弃牌和消耗堆可查看公开牌效果，抽牌堆仅公开数量。卡牌效果产生待选时，须先在中央选牌面板完成选择。"
 	_render_from_local()
 
 
 func _show_log() -> void:
+	_detail_terms.clear()
+	_inspect_open = false
 	var lines: Array[String] = []
 	for value in _array(view.get("event_log")):
 		lines.append(_event_text(_dict(value)))
@@ -767,6 +1179,8 @@ func _show_log() -> void:
 
 func _close_panel() -> void:
 	_panel_text = ""
+	_detail_terms.clear()
+	_inspect_open = false
 	_render_from_local()
 
 
@@ -908,9 +1322,11 @@ func _zone_details(zone: String, title: String) -> String:
 func _choice_preview_text(preview: Dictionary) -> String:
 	if preview.is_empty():
 		return ""
-	return "、".join(
-		PackedStringArray(preview.keys().map(func(key): return "%s:%s" % [key, preview[key]]))
-	)
+	var face := _dict(preview.get("face", preview.get("effective_card", {})))
+	if not face.is_empty():
+		return UiStyle.describe_effects(_array(face.get("effects")))
+	var definition_id := str(preview.get("definition_id", ""))
+	return UiStyle.label(definition_id) if not definition_id.is_empty() else ""
 
 
 func _event_text(event: Dictionary) -> String:

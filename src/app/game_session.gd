@@ -2,7 +2,11 @@ class_name GameSession
 extends Node
 
 const BATTLE_ACTIONS := [&"play_card", &"end_turn", &"confirm_choice", &"set_ally_target"]
-const PRODUCTION_MANIFESTS := ["campus_mvp"]
+const PRODUCTION_MANIFESTS := ["campus_mvp", "campus_v3"]
+const MANIFEST_ROOTS := {
+	"campus_mvp": "res://data",
+	"campus_v3": "res://data/v3",
+}
 const EVENT_LOG_LIMIT := 1000
 
 var _catalog: ContentDB
@@ -51,7 +55,9 @@ func _load_catalog(manifest_id: String) -> GameResult:
 	if not _is_manifest_allowed(manifest_id):
 		return _failure(GameConstants.ERROR_VERSION_MISMATCH, "error.run.manifest")
 	var candidate: ContentDB = (
-		_catalog_factory.call() if _catalog_factory.is_valid() else ContentDB.new()
+		_catalog_factory.call() if _catalog_factory.is_valid() else ContentDB.new(
+			str(MANIFEST_ROOTS.get(manifest_id, "res://data"))
+		)
 	)
 	var loaded := candidate.load(manifest_id)
 	return GameResult.success(candidate) if loaded.ok else loaded
@@ -438,32 +444,45 @@ func generate_run_seed() -> GameResult:
 
 
 func get_setup_options() -> GameResult:
-	var catalog := ContentDB.new()
-	var loaded := catalog.load("campus_mvp")
-	if not loaded.ok:
-		return loaded
-	var info := catalog.get_info()
 	var options := SetupOptions.new()
-	for id in info.enabled.character:
-		var definition: Dictionary = catalog.get_definition("character", id).data
+	var seen_characters := {}
+	for manifest_id in ["campus_v3", "campus_mvp"]:
+		var catalog := ContentDB.new(str(MANIFEST_ROOTS[manifest_id]))
+		var loaded := catalog.load(manifest_id)
+		if not loaded.ok:
+			return loaded
+		var info := catalog.get_info()
 		(
 			options
-			. characters
+			. manifests
 			. append(
 				{
-					"id": id,
-					"name_key": definition.name_key,
-					"starter_cards": definition.starter_cards,
-					"starter_relic_id": definition.starter_relic_id,
-					"locked": false,
-					"reason": null,
+					"id": info.id,
+					"content_version": info.content_version,
+					"content_hash": info.content_hash,
 				}
 			)
 		)
+		for id in info.enabled.character:
+			if seen_characters.has(id):
+				continue
+			seen_characters[id] = true
+			var definition: Dictionary = catalog.get_definition("character", id).data
+			(
+				options
+				. characters
+				. append(
+					{
+						"id": id,
+						"name_key": definition.name_key,
+						"starter_cards": definition.starter_cards,
+						"starter_relic_id": definition.starter_relic_id,
+						"locked": false,
+						"reason": null,
+					}
+				)
+			)
 	options.difficulties = [&"normal"]
-	options.manifests = [
-		{"id": info.id, "content_version": info.content_version, "content_hash": info.content_hash}
-	]
 	return GameResult.success(options)
 
 

@@ -1,0 +1,24 @@
+[
+  {
+    "id": "R3-S01",
+    "name_key": "scene.R3-S01.name",
+    "prepare_effects": [
+      {
+        "op": "relax",
+        "amount": 3
+      }
+    ],
+    "battle_limit": 2
+  },
+  {
+    "id": "R3-S01+",
+    "name_key": "scene.R3-S01+.name",
+    "prepare_effects": [
+      {
+        "op": "relax",
+        "amount": 5
+      }
+    ],
+    "battle_limit": 2
+  }
+]

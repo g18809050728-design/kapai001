@@ -68,6 +68,35 @@ func resolve_face(state: BattleState, card_id: String) -> GameResult:
 	return GameResult.success(face)
 
 
+func _apply_exam_substitution(state: BattleState, face: Dictionary) -> GameResult:
+	if bool(face.get("v3", false)):
+		var exam: Variant = face.get("exam")
+		if typeof(exam) == TYPE_DICTIONARY:
+			var condition := str(exam.get("condition", ""))
+			var matches := (
+				(condition == "independent_answer" and state.exam_flags.has("independent_answer"))
+				or (condition == "fixed_exam_room" and state.exam_flags.has("fixed_exam_room"))
+			)
+			if matches:
+				face["target"] = str(exam.get("target", face.get("target", "self")))
+				face["effects"] = (
+					exam.get("upgrade_effects", [])
+					if int(face.get("upgrade_level", 0)) > 0
+					else exam.get("effects", [])
+				).duplicate(true)
+				face["pre_effects"] = []
+				var exam_requirements: Array = []
+				for requirement: Variant in face.get("requirements", []):
+					if (
+						typeof(requirement) == TYPE_DICTIONARY
+						and str(requirement.get("kind", "")) in ["synergy_min", "synergy_is_zero"]
+					):
+						exam_requirements.append(requirement)
+				face["requirements"] = exam_requirements
+		return GameResult.success(null)
+	return _apply_legacy_exam_substitution(state, face)
+
+
 func calculate_cost(state: BattleState, card_id: String) -> GameResult:
 	var face_result := resolve_face(state, card_id)
 	if not face_result.ok:
@@ -133,6 +162,20 @@ func calculate_cost(state: BattleState, card_id: String) -> GameResult:
 			focus_discount += int(source.discount)
 			if bool(source.skip_vitality_cost):
 				vitality_discount = vitality_base
+	var v3_discount: Variant = state.v3.get("pending_cost_discount", {})
+	if typeof(v3_discount) == TYPE_DICTIONARY:
+		var discount_amount := int(v3_discount.get("amount", 0))
+		var discount_min := int(v3_discount.get("min_base_cost", 0))
+		if (
+			discount_amount > 0
+			and str(face.get("type", "")) == "work"
+			and int(face.get("cost", 0)) >= discount_min
+		):
+			focus_discount += discount_amount
+	if str(face.get("id", "")) == "R3-T201":
+		var publication_discount := int(state.v3.get("publication_discount", 0))
+		if publication_discount > 0:
+			focus_discount += publication_discount
 	return (
 		GameResult
 		. success(
@@ -150,7 +193,7 @@ func calculate_cost(state: BattleState, card_id: String) -> GameResult:
 	)
 
 
-func _apply_exam_substitution(state: BattleState, face: Dictionary) -> GameResult:
+func _apply_legacy_exam_substitution(state: BattleState, face: Dictionary) -> GameResult:
 	var flags: Array[String] = state.exam_flags
 	var exam_key := ""
 	if "independent_answer" in flags and face.get("type") == "cooperation":

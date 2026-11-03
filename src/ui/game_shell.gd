@@ -3,6 +3,7 @@ extends Control
 
 var session: GameSession
 var page: UiPage
+var audio: AudioManager
 var last_error: ApiError
 var notice: String = "准备好开始你的第一学期了吗？"
 var _ui_screen := "menu"
@@ -29,6 +30,9 @@ func _ready() -> void:
 		session = GameSession.new()
 	if session.get_parent() == null:
 		add_child(session)
+	if audio == null:
+		audio = AudioManager.new()
+		add_child(audio)
 	_build_frame()
 	refresh()
 
@@ -156,6 +160,7 @@ func refresh() -> void:
 		else:
 			page = UiFlowPage.new()
 			page.screen = screen
+		page.audio = audio
 		_host.add_child(page)
 		page.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		page.action_requested.connect(submit_action)
@@ -507,3 +512,5 @@ func _persistence_notice(saved: StringName, merged: StringName, cleanup: StringN
 func _report_error(error: ApiError) -> void:
 	last_error = error
 	notice = UiStyle.error_text(error)
+	if audio != null:
+		audio.play_ui("error")

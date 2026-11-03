@@ -696,9 +696,24 @@ func _render_settings() -> void:
 	add_button(
 		panel,
 		"settings:apply",
-		"保存设置",
+		"应用设置",
 		func() -> Dictionary: return _ui("save_settings", {"autosave": _autosave})
 	)
+	var audio_panel: VBoxContainer = add_panel(body)
+	add_text(audio_panel, "音效", 23)
+	add_text(audio_panel, "占位音效开关；正式音量与音乐设置后续接入。", 17)
+	var audio_row: HBoxContainer = add_row(audio_panel)
+	if audio != null:
+		for muted in [false, true]:
+			add_button(
+				audio_row,
+				"settings:audio:" + str(muted),
+				("● " if audio.is_muted() == muted else "○ ") + ("静音" if muted else "开启"),
+				{},
+				func() -> void:
+					audio.set_muted(muted)
+					refresh_local()
+			)
 	var saves: VBoxContainer = add_panel(body)
 	add_text(saves, "学期进度", 23)
 	add_text(saves, "正式存档：" + _save_description(view.get("save_meta")), 17)
@@ -919,6 +934,11 @@ func _select_setup(kind: String, value: String) -> void:
 	match kind:
 		"character":
 			_character = value
+			if value in ["P02", "P03"]:
+				for manifest in _array(view.get("manifests")):
+					if str(manifest.get("id", "")) == "campus_v3":
+						_manifest = "campus_v3"
+						break
 		"difficulty":
 			_difficulty = value
 		"manifest":

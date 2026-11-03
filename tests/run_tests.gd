@@ -54,7 +54,15 @@ func _initialize() -> void:
 		"test_relic_battle_entry",
 		"test_production_boss",
 		"test_elite_encounters",
-		"test_minion_encounters"
+		"test_minion_encounters",
+		"test_cards_v3_catalog",
+		"test_cards_v3_engine",
+		"test_cards_v3_p01",
+		"test_cards_v3_p03",
+		"test_cards_v3_p04",
+		"test_cards_v3_p02",
+		"test_cards_v3_r3",
+		"test_cards_v3_production"
 	]:
 		var run_script: Script = load("res://tests/suites/%s.gd" % path)
 		if run_script != null and run_script.can_instantiate():

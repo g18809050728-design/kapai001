@@ -158,6 +158,19 @@ func _check_content_contract(catalog: ContentDB, failures: Array[String]) -> voi
 	)
 	var x03 := catalog.get_definition("card", "X03")
 	_check(x03.ok and bool(x03.data.get("unplayable", false)), "X03 is an unplayable card", failures)
+	for encounter_id in MINION_EXPECTATIONS:
+		_check(
+			UiStyle.label(encounter_id) != encounter_id,
+			"%s has a display label" % encounter_id,
+			failures
+		)
+	_check(UiStyle.label("X03") != "X03", "X03 has a display label", failures)
+	_check(UiStyle.label("work_boost") != "work_boost", "work_boost has a display label", failures)
+	_check(
+		UiStyle.label("task.n20.intent.b") == "复制自身",
+		"N20 intent labels describe the copy action",
+		failures
+	)
 
 
 func _check_on_complete(

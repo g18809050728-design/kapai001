@@ -1,0 +1,26 @@
+[
+  {
+    "id": "R3_TEST_CHAR",
+    "name_key": "character.R3_TEST_CHAR.name",
+    "starter_cards": [
+      "R3-C-01",
+      "R3-C-02"
+    ],
+    "starter_relic_id": "R3_TEST_RELIC",
+    "passive": {
+      "id": "r3_test_passive",
+      "trigger": "cooperation_card_resolved",
+      "count": 1,
+      "limit": {
+        "per": "battle",
+        "times": 1
+      },
+      "effects": [
+        {
+          "op": "heal",
+          "amount": 1
+        }
+      ]
+    }
+  }
+]

@@ -26,6 +26,7 @@ const FIELDS := {
 	"next_creation_order": TYPE_INT,
 	"next_instance_seq": TYPE_INT,
 	"source_registry": TYPE_DICTIONARY,
+	"v3": -1,
 }
 const PLAYER_FIELDS := {
 	"entity_id": TYPE_STRING,
@@ -194,7 +195,7 @@ static func decode(data: Dictionary, catalog: ContentDB) -> GameResult:
 
 static func _validate_structure(data: Dictionary) -> Array[String]:
 	var issues: Array[String] = []
-	RunCodec.shape(data, FIELDS, "battle", issues)
+	RunCodec.shape(data, FIELDS, "battle", issues, ["v3"])
 	if not issues.is_empty():
 		return issues
 	RunCodec.shape(data.player, PLAYER_FIELDS, "battle.player", issues, ["max_vitality_base"])
