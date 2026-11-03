@@ -5,14 +5,46 @@ const MANIFEST := "test_cards_v3_p02"
 const TASK_A := "R3_TEST_TASK_A"
 const TASK_B := "R3_TEST_TASK_B"
 const P02_IDS := [
-	"R3-P02-01", "R3-P02-02", "R3-P02-03", "R3-P02-04", "R3-P02-05",
-	"R3-P02-06", "R3-P02-07", "R3-P02-08", "R3-P02-09", "R3-P02-10",
-	"R3-P02-11", "R3-P02-12", "R3-P02-13", "R3-P02-14", "R3-P02-15",
-	"R3-P02-16", "R3-P02-17", "R3-P02-18", "R3-P02-19", "R3-P02-20",
-	"R3-P02-21", "R3-P02-22", "R3-P02-23", "R3-P02-24", "R3-P02-25",
-	"R3-P02-26", "R3-P02-27", "R3-P02-28", "R3-P02-29", "R3-P02-30",
-	"R3-P02-31", "R3-P02-32", "R3-P02-33", "R3-P02-34", "R3-P02-35",
-	"R3-P02-36", "R3-P02-37", "R3-P02-38", "R3-P02-39", "R3-P02-40",
+	"R3-P02-01",
+	"R3-P02-02",
+	"R3-P02-03",
+	"R3-P02-04",
+	"R3-P02-05",
+	"R3-P02-06",
+	"R3-P02-07",
+	"R3-P02-08",
+	"R3-P02-09",
+	"R3-P02-10",
+	"R3-P02-11",
+	"R3-P02-12",
+	"R3-P02-13",
+	"R3-P02-14",
+	"R3-P02-15",
+	"R3-P02-16",
+	"R3-P02-17",
+	"R3-P02-18",
+	"R3-P02-19",
+	"R3-P02-20",
+	"R3-P02-21",
+	"R3-P02-22",
+	"R3-P02-23",
+	"R3-P02-24",
+	"R3-P02-25",
+	"R3-P02-26",
+	"R3-P02-27",
+	"R3-P02-28",
+	"R3-P02-29",
+	"R3-P02-30",
+	"R3-P02-31",
+	"R3-P02-32",
+	"R3-P02-33",
+	"R3-P02-34",
+	"R3-P02-35",
+	"R3-P02-36",
+	"R3-P02-37",
+	"R3-P02-38",
+	"R3-P02-39",
+	"R3-P02-40",
 ]
 
 var _fixture_root := ""
@@ -64,18 +96,14 @@ func _check_paper_record(engine: BattleEngine, failures: Array[String]) -> void:
 		failures
 	)
 	var ended_first := engine.apply(
-		first.data.state,
-		ActionDraft.new(GameConstants.ACTION_END_TURN, {}),
-		first.data.rng_state
+		first.data.state, ActionDraft.new(GameConstants.ACTION_END_TURN, {}), first.data.rng_state
 	)
 	if ended_first.ok:
 		ended_first.data.state.player.focus = 10
 		_move_to_hand(ended_first.data.state, "R3-P02-03", 1)
 	var second := _play(engine, ended_first, "R3-P02-03", [])
 	_check(
-		second.ok
-		and int(_paper(second).progress) == 1
-		and int(_paper(second).citations) == 1,
+		second.ok and int(_paper(second).progress) == 1 and int(_paper(second).citations) == 1,
 		"P02 records a repeated name as citation",
 		failures
 	)
@@ -93,9 +121,11 @@ func _check_citation(engine: BattleEngine, failures: Array[String]) -> void:
 	opened.data.state.player.focus = 4
 	var citation := _play(engine, opened, "R3-P02-06", [])
 	_check(
-		citation.ok
-		and int(_paper(citation).citations) == 3
-		and citation.data.state.player.focus == 2,
+		(
+			citation.ok
+			and int(_paper(citation).citations) == 3
+			and citation.data.state.player.focus == 2
+		),
 		"P02 pays one focus for the third citation layer",
 		failures
 	)
@@ -137,9 +167,7 @@ func _check_publish(engine: BattleEngine, failures: Array[String]) -> void:
 
 func _check_unique_publication(engine: BattleEngine, failures: Array[String]) -> void:
 	var rng := _rng()
-	var begun := _begin(engine, _deck([
-		["R3-P02-01", 2], ["R3-T201", 1], ["R3-P02-23", 8]
-	]), rng)
+	var begun := _begin(engine, _deck([["R3-P02-01", 2], ["R3-T201", 1], ["R3-P02-23", 8]]), rng)
 	var state: BattleState = begun.data.state
 	state.player.focus = 10
 	_move_to_hand(state, "R3-P02-01", 2)
@@ -158,10 +186,12 @@ func _check_unique_publication(engine: BattleEngine, failures: Array[String]) ->
 		_move_to_hand(ended_publish.data.state, "R3-P02-01", 1)
 	var reopened := _play(engine, ended_publish, "R3-P02-01", [])
 	_check(
-		reopened.ok
-		and _paper(reopened).open
-		and _count_definition(reopened.data.state, "R3-T201") == 1
-		and _has_card(reopened.data.state, "R3-T201"),
+		(
+			reopened.ok
+			and _paper(reopened).open
+			and _count_definition(reopened.data.state, "R3-T201") == 1
+			and _has_card(reopened.data.state, "R3-T201")
+		),
 		"P02 reuses the same unique publication instance",
 		failures
 	)
@@ -169,9 +199,9 @@ func _check_unique_publication(engine: BattleEngine, failures: Array[String]) ->
 
 func _check_publication_discount(engine: BattleEngine, failures: Array[String]) -> void:
 	var rng := _rng()
-	var begun := _begin(engine, _deck([
-		["R3-P02-01", 1], ["R3-P02-28", 1], ["R3-T201", 1], ["R3-P02-23", 8]
-	]), rng)
+	var begun := _begin(
+		engine, _deck([["R3-P02-01", 1], ["R3-P02-28", 1], ["R3-T201", 1], ["R3-P02-23", 8]]), rng
+	)
 	var state: BattleState = begun.data.state
 	state.player.focus = 10
 	_move_to_hand(state, "R3-P02-01", 1)
@@ -196,9 +226,9 @@ func _count_definition(state: BattleState, definition_id: String) -> int:
 
 func _check_chapters(engine: BattleEngine, failures: Array[String]) -> void:
 	var rng := _rng()
-	var begun := _begin(engine, _deck([
-		["R3-P02-01", 1], ["R3-P02-11", 1], ["R3-P02-13", 1], ["R3-P02-23", 8]
-	]), rng)
+	var begun := _begin(
+		engine, _deck([["R3-P02-01", 1], ["R3-P02-11", 1], ["R3-P02-13", 1], ["R3-P02-23", 8]]), rng
+	)
 	var state: BattleState = begun.data.state
 	state.player.focus = 10
 	_move_to_hand(state, "R3-P02-01", 1)
@@ -207,8 +237,14 @@ func _check_chapters(engine: BattleEngine, failures: Array[String]) -> void:
 	var opened := _play(engine, begun, "R3-P02-01", [])
 	var intro := _play(engine, opened, "R3-P02-11", [])
 	var results := _play(engine, intro, "R3-P02-13", [])
-	_check(results.ok and _paper(results).chapters.size() == 2, "P02 deploys two chapters", failures)
-	var ended := engine.apply(results.data.state, ActionDraft.new(GameConstants.ACTION_END_TURN, {}), results.data.rng_state)
+	_check(
+		results.ok and _paper(results).chapters.size() == 2, "P02 deploys two chapters", failures
+	)
+	var ended := engine.apply(
+		results.data.state,
+		ActionDraft.new(GameConstants.ACTION_END_TURN, {}),
+		results.data.rng_state
+	)
 	_check(
 		ended.ok and _task(ended, TASK_A).work_remaining == 46,
 		"P02 chapter residents run at prepare",
@@ -218,10 +254,20 @@ func _check_chapters(engine: BattleEngine, failures: Array[String]) -> void:
 
 func _check_chapter_replace(engine: BattleEngine, failures: Array[String]) -> void:
 	var rng := _rng()
-	var begun := _begin(engine, _deck([
-		["R3-P02-01", 1], ["R3-P02-11", 1], ["R3-P02-12", 1], ["R3-P02-13", 1],
-		["R3-P02-14", 1], ["R3-P02-23", 8],
-	]), rng)
+	var begun := _begin(
+		engine,
+		_deck(
+			[
+				["R3-P02-01", 1],
+				["R3-P02-11", 1],
+				["R3-P02-12", 1],
+				["R3-P02-13", 1],
+				["R3-P02-14", 1],
+				["R3-P02-23", 8],
+			]
+		),
+		rng
+	)
 	var state: BattleState = begun.data.state
 	state.player.focus = 10
 	for id in ["R3-P02-01", "R3-P02-11", "R3-P02-12", "R3-P02-13", "R3-P02-14"]:
@@ -232,10 +278,12 @@ func _check_chapter_replace(engine: BattleEngine, failures: Array[String]) -> vo
 	step = _play(engine, step, "R3-P02-13", [])
 	var pending := _play_pending(engine, step, "R3-P02-14", [])
 	_check(
-		pending.ok
-		and pending.data.pending_choice != null
-		and str(pending.data.pending_choice.kind) == "chapter_replace"
-		and pending.data.pending_choice.candidates.size() == 3,
+		(
+			pending.ok
+			and pending.data.pending_choice != null
+			and str(pending.data.pending_choice.kind) == "chapter_replace"
+			and pending.data.pending_choice.candidates.size() == 3
+		),
 		"P02 full chapter slots request a replacement choice",
 		failures
 	)
@@ -251,9 +299,11 @@ func _check_chapter_replace(engine: BattleEngine, failures: Array[String]) -> vo
 			pending.data.rng_state
 		)
 		_check(
-			confirmed.ok
-			and _paper(confirmed).chapters.size() == 3
-			and confirmed.data.state.zones.discard.has(replaced),
+			(
+				confirmed.ok
+				and _paper(confirmed).chapters.size() == 3
+				and confirmed.data.state.zones.discard.has(replaced)
+			),
 			"P02 replacement discards the preselected chapter",
 			failures
 		)
@@ -261,9 +311,9 @@ func _check_chapter_replace(engine: BattleEngine, failures: Array[String]) -> vo
 
 func _check_chapter_reuse(engine: BattleEngine, failures: Array[String]) -> void:
 	var rng := _rng()
-	var begun := _begin(engine, _deck([
-		["R3-P02-01", 1], ["R3-P02-11", 1], ["R3-P02-27", 1], ["R3-P02-23", 8]
-	]), rng)
+	var begun := _begin(
+		engine, _deck([["R3-P02-01", 1], ["R3-P02-11", 1], ["R3-P02-27", 1], ["R3-P02-23", 8]]), rng
+	)
 	var state: BattleState = begun.data.state
 	state.player.focus = 10
 	_move_to_hand(state, "R3-P02-01", 1)
@@ -274,8 +324,7 @@ func _check_chapter_reuse(engine: BattleEngine, failures: Array[String]) -> void
 	var copied := _play(engine, deployed, "R3-P02-27", [])
 	var reused := _play(engine, copied, "R3-P02-11", [])
 	_check(
-		reused.ok
-		and _paper(reused).chapters.size() == 1,
+		reused.ok and _paper(reused).chapters.size() == 1,
 		"P02 chapter copy performs manual reuse without redeploying",
 		failures
 	)
@@ -292,7 +341,11 @@ func _check_amplify_and_topic(engine: BattleEngine, failures: Array[String]) -> 
 	_paper(opened).amplify = 2
 	var amplified := _play(engine, opened, "R3-P02-03", [])
 	_check(
-		amplified.ok and amplified.data.state.player.relax == 7 and int(_paper(amplified).amplify) == 0,
+		(
+			amplified.ok
+			and amplified.data.state.player.relax == 7
+			and int(_paper(amplified).amplify) == 0
+		),
 		"P02 amplification boosts the first white-list effect",
 		failures
 	)
@@ -306,9 +359,11 @@ func _check_amplify_and_topic(engine: BattleEngine, failures: Array[String]) -> 
 	_paper(opened).used_names = ["R3-P02-03"]
 	var topic := _play(engine, opened, "R3-P02-21", [])
 	_check(
-		topic.ok
-		and not _paper(topic).used_names.has("R3-P02-03")
-		and int(_paper(topic).modifier) == -1,
+		(
+			topic.ok
+			and not _paper(topic).used_names.has("R3-P02-03")
+			and int(_paper(topic).modifier) == -1
+		),
 		"P02 change-topic resets a name and lowers the modifier",
 		failures
 	)
@@ -321,7 +376,11 @@ func _check_abilities(engine: BattleEngine, failures: Array[String]) -> void:
 	state.player.focus = 10
 	_move_to_hand(state, "R3-P02-10", 1)
 	var ability := _play(engine, begun, "R3-P02-10", [])
-	var ended := engine.apply(ability.data.state, ActionDraft.new(GameConstants.ACTION_END_TURN, {}), ability.data.rng_state)
+	var ended := engine.apply(
+		ability.data.state,
+		ActionDraft.new(GameConstants.ACTION_END_TURN, {}),
+		ability.data.rng_state
+	)
 	if ended.ok:
 		ended.data.state.player.focus = 10
 		_move_to_hand(ended.data.state, "R3-P02-01", 1)
@@ -334,7 +393,19 @@ func _check_abilities(engine: BattleEngine, failures: Array[String]) -> void:
 		failures
 	)
 
-	begun = _begin(engine, _deck([["R3-P02-19", 1], ["R3-P02-01", 1], ["R3-P02-11", 2], ["R3-P02-13", 1], ["R3-P02-23", 6]]), rng)
+	begun = _begin(
+		engine,
+		_deck(
+			[
+				["R3-P02-19", 1],
+				["R3-P02-01", 1],
+				["R3-P02-11", 2],
+				["R3-P02-13", 1],
+				["R3-P02-23", 6]
+			]
+		),
+		rng
+	)
 	state = begun.data.state
 	state.player.focus = 10
 	_move_to_hand(state, "R3-P02-19", 1)
@@ -342,7 +413,9 @@ func _check_abilities(engine: BattleEngine, failures: Array[String]) -> void:
 	_move_to_hand(state, "R3-P02-11", 2)
 	_move_to_hand(state, "R3-P02-13", 1)
 	var p19 := _play(engine, begun, "R3-P02-19", [])
-	var p19_end := engine.apply(p19.data.state, ActionDraft.new(GameConstants.ACTION_END_TURN, {}), p19.data.rng_state)
+	var p19_end := engine.apply(
+		p19.data.state, ActionDraft.new(GameConstants.ACTION_END_TURN, {}), p19.data.rng_state
+	)
 	if p19_end.ok:
 		p19_end.data.state.player.focus = 10
 		_move_to_hand(p19_end.data.state, "R3-P02-01", 1)
@@ -351,7 +424,9 @@ func _check_abilities(engine: BattleEngine, failures: Array[String]) -> void:
 	var p19_open := _play(engine, p19_end, "R3-P02-01", [])
 	var p19_a := _play(engine, p19_open, "R3-P02-11", [])
 	var p19_b := _play(engine, p19_a, "R3-P02-13", [])
-	var p19_ready := engine.apply(p19_b.data.state, ActionDraft.new(GameConstants.ACTION_END_TURN, {}), p19_b.data.rng_state)
+	var p19_ready := engine.apply(
+		p19_b.data.state, ActionDraft.new(GameConstants.ACTION_END_TURN, {}), p19_b.data.rng_state
+	)
 	_check(
 		p19_ready.ok and p19_ready.data.state.player.relax == 4,
 		"P02-19 triggers after a two-chapter window",
@@ -364,10 +439,15 @@ func _check_all_cards_resolve(
 ) -> void:
 	for card_id in P02_IDS:
 		var rng := _rng()
-		var deck := _deck([
-			[card_id, 5], ["R3-P02-01", 2], ["R3-P02-11", 2],
-			["R3-P02-13", 1], ["R3-P02-23", 6],
-		])
+		var deck := _deck(
+			[
+				[card_id, 5],
+				["R3-P02-01", 2],
+				["R3-P02-11", 2],
+				["R3-P02-13", 1],
+				["R3-P02-23", 6],
+			]
+		)
 		var begun := _begin(engine, deck, rng)
 		_check(begun.ok, card_id + " smoke battle starts", failures)
 		if not begun.ok:
@@ -458,29 +538,35 @@ func _deck(entries: Array) -> Array[Dictionary]:
 		var definition_id := str(entry[0])
 		for index in int(entry[1]):
 			serial += 1
-			result.append(
-				{
-					"card_id": "card_%03d" % serial,
-					"definition_id": definition_id,
-					"upgrade_level": 0,
-				}
+			(
+				result
+				. append(
+					{
+						"card_id": "card_%03d" % serial,
+						"definition_id": definition_id,
+						"upgrade_level": 0,
+					}
+				)
 			)
 	return result
 
 
 func _begin(engine: BattleEngine, deck: Array[Dictionary], rng: Dictionary) -> GameResult:
-	return engine.begin(
-		{
-			"battle_id": "r3_p02_%d" % Time.get_ticks_usec(),
-			"encounter_id": "R3_TEST",
-			"character_id": "P02",
-			"difficulty": "normal",
-			"vitality": 72,
-			"max_vitality": 72,
-			"cards": deck,
-			"relics": [],
-			"rng_state": rng.duplicate(true),
-		}
+	return (
+		engine
+		. begin(
+			{
+				"battle_id": "r3_p02_%d" % Time.get_ticks_usec(),
+				"encounter_id": "R3_TEST",
+				"character_id": "P02",
+				"difficulty": "normal",
+				"vitality": 72,
+				"max_vitality": 72,
+				"cards": deck,
+				"relics": [],
+				"rng_state": rng.duplicate(true),
+			}
+		)
 	)
 
 
@@ -493,13 +579,14 @@ func _play_pending(
 	var card_id := _hand_card(state, definition_id)
 	if card_id.is_empty():
 		return GameResult.failure(
-			ApiError.new(GameConstants.ERROR_INVALID_TARGET, "test.card_not_in_hand", {"id": definition_id})
+			ApiError.new(
+				GameConstants.ERROR_INVALID_TARGET, "test.card_not_in_hand", {"id": definition_id}
+			)
 		)
 	return engine.apply(
 		state,
 		ActionDraft.new(
-			GameConstants.ACTION_PLAY_CARD,
-			{"card_instance_id": card_id, "target_ids": target_ids}
+			GameConstants.ACTION_PLAY_CARD, {"card_instance_id": card_id, "target_ids": target_ids}
 		),
 		step.data.rng_state
 	)
@@ -514,13 +601,14 @@ func _play(
 	var card_id := _hand_card(state, definition_id)
 	if card_id.is_empty():
 		return GameResult.failure(
-			ApiError.new(GameConstants.ERROR_INVALID_TARGET, "test.card_not_in_hand", {"id": definition_id})
+			ApiError.new(
+				GameConstants.ERROR_INVALID_TARGET, "test.card_not_in_hand", {"id": definition_id}
+			)
 		)
 	var result := engine.apply(
 		state,
 		ActionDraft.new(
-			GameConstants.ACTION_PLAY_CARD,
-			{"card_instance_id": card_id, "target_ids": target_ids}
+			GameConstants.ACTION_PLAY_CARD, {"card_instance_id": card_id, "target_ids": target_ids}
 		),
 		step.data.rng_state
 	)
@@ -605,15 +693,19 @@ func _paper(step: GameResult) -> Dictionary:
 
 
 func _add_anxiety(state: BattleState) -> void:
-	state.statuses.append(
-		{
-			"status_id": "anxiety",
-			"instance_id": "anxiety_test_1",
-			"source_id": "",
-			"target_id": str(state.player.get("entity_id", "")),
-			"stacks": 1,
-			"expiry": "next_prepare",
-		}
+	(
+		state
+		. statuses
+		. append(
+			{
+				"status_id": "anxiety",
+				"instance_id": "anxiety_test_1",
+				"source_id": "",
+				"target_id": str(state.player.get("entity_id", "")),
+				"stacks": 1,
+				"expiry": "next_prepare",
+			}
+		)
 	)
 
 

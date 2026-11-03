@@ -41,7 +41,9 @@ func load_catalog(path: String = DEFAULT_PATH) -> GameResult:
 		return _invalid("cards_v3.catalog.cards_missing", {"path": path})
 	var values: Array = cards
 	if values.size() != EXPECTED_TOTAL:
-		return _invalid("cards_v3.catalog.total", {"expected": EXPECTED_TOTAL, "actual": values.size()})
+		return _invalid(
+			"cards_v3.catalog.total", {"expected": EXPECTED_TOTAL, "actual": values.size()}
+		)
 	var owners := {}
 	for value: Variant in values:
 		if typeof(value) != TYPE_DICTIONARY:
@@ -59,7 +61,10 @@ func load_catalog(path: String = DEFAULT_PATH) -> GameResult:
 		_cards[card_id] = card.duplicate(true)
 		_order.append(card_id)
 	if owners != EXPECTED_PERMANENT_OWNERS:
-		return _invalid("cards_v3.catalog.owner_counts", {"expected": EXPECTED_PERMANENT_OWNERS, "actual": owners})
+		return _invalid(
+			"cards_v3.catalog.owner_counts",
+			{"expected": EXPECTED_PERMANENT_OWNERS, "actual": owners}
+		)
 	var starters: Variant = catalog.get("starters")
 	if typeof(starters) != TYPE_DICTIONARY:
 		return _invalid("cards_v3.catalog.starters", {})
@@ -86,7 +91,9 @@ func load_catalog(path: String = DEFAULT_PATH) -> GameResult:
 				or str(_cards[str(card_id)].get("owner", "")) != owner
 				or not bool(_cards[str(card_id)].get("permanent", false))
 			):
-				return _invalid("cards_v3.catalog.starter_exclusive", {"owner": owner, "id": str(card_id)})
+				return _invalid(
+					"cards_v3.catalog.starter_exclusive", {"owner": owner, "id": str(card_id)}
+				)
 	_starters = starters.duplicate(true)
 	_meta = {
 		"schema_version": SCHEMA_VERSION,

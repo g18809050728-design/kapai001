@@ -920,9 +920,7 @@ func _validate_definition(
 							func(member): return not definition.members.has(member)
 						)
 					):
-						issues.append(
-							"%s.initial_members must be encounter members" % location
-						)
+						issues.append("%s.initial_members must be encounter members" % location)
 			if definition.has("absorb_cooperation"):
 				_validate_fields(
 					definition.absorb_cooperation,
@@ -1035,9 +1033,7 @@ func _validate_v3_card(value: Dictionary, location: String, issues: Array[String
 			if value.upgrade.has("cost"):
 				_validate_int(value.upgrade.cost, "%s.upgrade.cost" % location, 0, issues)
 			if value.upgrade.has("effects"):
-				_validate_v3_effects(
-					value.upgrade.effects, "%s.upgrade.effects" % location, issues
-				)
+				_validate_v3_effects(value.upgrade.effects, "%s.upgrade.effects" % location, issues)
 
 
 func _validate_v3_effects(value: Variant, location: String, issues: Array[String]) -> void:
@@ -1085,7 +1081,11 @@ func _validate_v3_ability(value: Variant, location: String, issues: Array[String
 	if not _is_array(value.get("triggers")):
 		issues.append("%s.triggers must be an array" % location)
 		return
-	if value.has("condition") and _is_dictionary(value.condition) and not value.condition.is_empty():
+	if (
+		value.has("condition")
+		and _is_dictionary(value.condition)
+		and not value.condition.is_empty()
+	):
 		_validate_v3_condition(value.condition, "%s.condition" % location, issues)
 	for index in value.triggers.size():
 		var trigger: Variant = value.triggers[index]
@@ -1549,16 +1549,14 @@ func _validate_task(value: Dictionary, location: String, issues: Array[String]) 
 		_validate_bool(value.taunt, "%s.taunt" % location, issues)
 	if value.has("self_copy_every_round"):
 		_validate_bool(value.self_copy_every_round, "%s.self_copy_every_round" % location, issues)
-	for field in ["draw_reduction", "first_card_cost_bonus", "discard_on_first_card", "max_vitality_reduction"]:
+	for field in [
+		"draw_reduction", "first_card_cost_bonus", "discard_on_first_card", "max_vitality_reduction"
+	]:
 		if value.has(field):
 			_validate_int(value[field], "%s.%s" % [location, field], 1, issues)
 	if value.has("on_complete_effects"):
 		_validate_effects(
-			value.on_complete_effects,
-			"battle",
-			"%s.on_complete_effects" % location,
-			issues,
-			false
+			value.on_complete_effects, "battle", "%s.on_complete_effects" % location, issues, false
 		)
 		if _is_array(value.on_complete_effects):
 			for effect: Variant in value.on_complete_effects:
@@ -1571,8 +1569,10 @@ func _validate_task(value: Dictionary, location: String, issues: Array[String]) 
 					)
 				elif op == "remove_status" and str(effect.get("category", "")) == "negative":
 					issues.append(
-						"%s.on_complete_effects cannot use a negative remove_status choice"
-						% location
+						(
+							"%s.on_complete_effects cannot use a negative remove_status choice"
+							% location
+						)
 					)
 	var phases: Variant = value.get("phases")
 	if not _is_array(phases) or phases.is_empty():
@@ -1670,9 +1670,7 @@ func _validate_intent(value: Variant, location: String, issues: Array[String]) -
 	if value.has("self_destruct"):
 		_validate_bool(value.self_destruct, "%s.self_destruct" % location, issues)
 	if value.has("pressure_per_vitality"):
-		_validate_int(
-			value.pressure_per_vitality, "%s.pressure_per_vitality" % location, 1, issues
-		)
+		_validate_int(value.pressure_per_vitality, "%s.pressure_per_vitality" % location, 1, issues)
 		_validate_int(
 			value.get("pressure_vitality_step", 10),
 			"%s.pressure_vitality_step" % location,
@@ -1688,7 +1686,10 @@ func _validate_intent(value: Variant, location: String, issues: Array[String]) -
 		if value.has(field):
 			_validate_int(value[field], "%s.%s" % [location, field], 1, issues)
 	if value.has("pressure_per_card_type"):
-		if not _is_dictionary(value.pressure_per_card_type) or value.pressure_per_card_type.is_empty():
+		if (
+			not _is_dictionary(value.pressure_per_card_type)
+			or value.pressure_per_card_type.is_empty()
+		):
 			issues.append("%s.pressure_per_card_type must be a non-empty object" % location)
 		else:
 			for card_type in value.pressure_per_card_type:
@@ -1714,10 +1715,7 @@ func _validate_intent(value: Variant, location: String, issues: Array[String]) -
 				)
 				if _is_dictionary(spec):
 					var summoned_task: Variant = spec.get("task")
-					if (
-						typeof(summoned_task) != TYPE_STRING
-						or str(summoned_task).is_empty()
-					):
+					if typeof(summoned_task) != TYPE_STRING or str(summoned_task).is_empty():
 						issues.append("%s.summon_tasks[].task must be an id" % location)
 					_validate_int(
 						spec.get("count"), "%s.summon_tasks[].count" % location, 1, issues
@@ -2244,11 +2242,7 @@ func _is_safe_id(value: String) -> bool:
 		return true
 	if value.is_empty() or value.length() > 100:
 		return false
-	if (
-		value.begins_with("-")
-		or value.ends_with("-")
-		or value.contains("--")
-	):
+	if value.begins_with("-") or value.ends_with("-") or value.contains("--"):
 		return false
 	return value.replace("-", "_").replace("+", "_").is_valid_identifier()
 

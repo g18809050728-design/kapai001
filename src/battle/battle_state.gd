@@ -59,7 +59,11 @@ func _init(values: Dictionary = {}) -> void:
 	next_creation_order = values.get("next_creation_order", 1)
 	next_instance_seq = values.get("next_instance_seq", 1)
 	source_registry = values.get("source_registry", {}).duplicate(true)
-	v3 = values.get("v3", {}).duplicate(true) if typeof(values.get("v3", {})) == TYPE_DICTIONARY else {}
+	v3 = (
+		values.get("v3", {}).duplicate(true)
+		if typeof(values.get("v3", {})) == TYPE_DICTIONARY
+		else {}
+	)
 
 
 func copy() -> BattleState:

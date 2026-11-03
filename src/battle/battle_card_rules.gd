@@ -80,10 +80,13 @@ func _apply_exam_substitution(state: BattleState, face: Dictionary) -> GameResul
 			if matches:
 				face["target"] = str(exam.get("target", face.get("target", "self")))
 				face["effects"] = (
-					exam.get("upgrade_effects", [])
-					if int(face.get("upgrade_level", 0)) > 0
-					else exam.get("effects", [])
-				).duplicate(true)
+					(
+						exam.get("upgrade_effects", [])
+						if int(face.get("upgrade_level", 0)) > 0
+						else exam.get("effects", [])
+					)
+					. duplicate(true)
+				)
 				face["pre_effects"] = []
 				var exam_requirements: Array = []
 				for requirement: Variant in face.get("requirements", []):

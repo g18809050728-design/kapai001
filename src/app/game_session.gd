@@ -55,9 +55,9 @@ func _load_catalog(manifest_id: String) -> GameResult:
 	if not _is_manifest_allowed(manifest_id):
 		return _failure(GameConstants.ERROR_VERSION_MISMATCH, "error.run.manifest")
 	var candidate: ContentDB = (
-		_catalog_factory.call() if _catalog_factory.is_valid() else ContentDB.new(
-			str(MANIFEST_ROOTS.get(manifest_id, "res://data"))
-		)
+		_catalog_factory.call()
+		if _catalog_factory.is_valid()
+		else ContentDB.new(str(MANIFEST_ROOTS.get(manifest_id, "res://data")))
 	)
 	var loaded := candidate.load(manifest_id)
 	return GameResult.success(candidate) if loaded.ok else loaded

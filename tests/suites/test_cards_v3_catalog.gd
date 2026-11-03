@@ -21,7 +21,9 @@ func run() -> Array[String]:
 		)
 		return failures
 	var meta := catalog.get_catalog_meta()
-	_check(int(meta.get("total", 0)) == EXPECTED_TOTAL, "cards v3 catalog has 174 entries", failures)
+	_check(
+		int(meta.get("total", 0)) == EXPECTED_TOTAL, "cards v3 catalog has 174 entries", failures
+	)
 	_check(
 		meta.get("permanent_owners", {}) == EXPECTED_PERMANENT_OWNERS,
 		"cards v3 permanent owner counts",
@@ -81,14 +83,17 @@ func run() -> Array[String]:
 	if failures.is_empty():
 		print(
 			"CARDS_V3_CATALOG_EVIDENCE=",
-			JSON.stringify(
-				{
-					"total": cards.size(),
-					"owners": meta.get("permanent_owners", {}),
-					"runtime_enabled": runtime_enabled,
-					"missing_effects": missing_effects,
-					"loader": "CardCatalogV3",
-				}
+			(
+				JSON
+				. stringify(
+					{
+						"total": cards.size(),
+						"owners": meta.get("permanent_owners", {}),
+						"runtime_enabled": runtime_enabled,
+						"missing_effects": missing_effects,
+						"loader": "CardCatalogV3",
+					}
+				)
 			)
 		)
 	return failures

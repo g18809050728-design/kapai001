@@ -5,14 +5,46 @@ const MANIFEST := "test_cards_v3_p03"
 const TASK_A := "R3_TEST_TASK_A"
 const TASK_B := "R3_TEST_TASK_B"
 const P03_IDS := [
-	"R3-P03-01", "R3-P03-02", "R3-P03-03", "R3-P03-04", "R3-P03-05",
-	"R3-P03-06", "R3-P03-07", "R3-P03-08", "R3-P03-09", "R3-P03-10",
-	"R3-P03-11", "R3-P03-12", "R3-P03-13", "R3-P03-14", "R3-P03-15",
-	"R3-P03-16", "R3-P03-17", "R3-P03-18", "R3-P03-19", "R3-P03-20",
-	"R3-P03-21", "R3-P03-22", "R3-P03-23", "R3-P03-24", "R3-P03-25",
-	"R3-P03-26", "R3-P03-27", "R3-P03-28", "R3-P03-29", "R3-P03-30",
-	"R3-P03-31", "R3-P03-32", "R3-P03-33", "R3-P03-34", "R3-P03-35",
-	"R3-P03-36", "R3-P03-37", "R3-P03-38", "R3-P03-39", "R3-P03-40",
+	"R3-P03-01",
+	"R3-P03-02",
+	"R3-P03-03",
+	"R3-P03-04",
+	"R3-P03-05",
+	"R3-P03-06",
+	"R3-P03-07",
+	"R3-P03-08",
+	"R3-P03-09",
+	"R3-P03-10",
+	"R3-P03-11",
+	"R3-P03-12",
+	"R3-P03-13",
+	"R3-P03-14",
+	"R3-P03-15",
+	"R3-P03-16",
+	"R3-P03-17",
+	"R3-P03-18",
+	"R3-P03-19",
+	"R3-P03-20",
+	"R3-P03-21",
+	"R3-P03-22",
+	"R3-P03-23",
+	"R3-P03-24",
+	"R3-P03-25",
+	"R3-P03-26",
+	"R3-P03-27",
+	"R3-P03-28",
+	"R3-P03-29",
+	"R3-P03-30",
+	"R3-P03-31",
+	"R3-P03-32",
+	"R3-P03-33",
+	"R3-P03-34",
+	"R3-P03-35",
+	"R3-P03-36",
+	"R3-P03-37",
+	"R3-P03-38",
+	"R3-P03-39",
+	"R3-P03-40",
 ]
 
 var _fixture_root := ""
@@ -51,26 +83,46 @@ func _check_erosion(engine: BattleEngine, failures: Array[String]) -> void:
 	_move_to_hand(state, "R3-P03-02", 1)
 	var applied := _play(engine, begun, "R3-P03-02", [_target_a(begun)])
 	_check(applied.ok, "P03 erosion card resolves", failures)
-	var ended := engine.apply(applied.data.state, ActionDraft.new(GameConstants.ACTION_END_TURN, {}), applied.data.rng_state)
+	var ended := engine.apply(
+		applied.data.state,
+		ActionDraft.new(GameConstants.ACTION_END_TURN, {}),
+		applied.data.rng_state
+	)
 	_check(ended.ok, "P03 erosion window resolves", failures)
 	if ended.ok:
-		_check(_task(ended, TASK_A).work_remaining == 47, "P03 erosion deals 3 at prepare", failures)
+		_check(
+			_task(ended, TASK_A).work_remaining == 47, "P03 erosion deals 3 at prepare", failures
+		)
 		_check(_task_status(ended, TASK_A, "erosion") == 2, "P03 erosion decays by one", failures)
 
 	begun = _begin(engine, _deck([["R3-P03-10", 1], ["R3-P03-02", 1]]), rng)
 	state = begun.data.state
 	_move_to_hand(state, "R3-P03-10", 1)
 	var ability := _play(engine, begun, "R3-P03-10", [])
-	var ability_end := engine.apply(ability.data.state, ActionDraft.new(GameConstants.ACTION_END_TURN, {}), ability.data.rng_state)
+	var ability_end := engine.apply(
+		ability.data.state,
+		ActionDraft.new(GameConstants.ACTION_END_TURN, {}),
+		ability.data.rng_state
+	)
 	if ability_end.ok:
 		ability_end.data.state.player.focus = 10
 		_move_to_hand(ability_end.data.state, "R3-P03-02", 1)
 	var second := _play(engine, ability_end, "R3-P03-02", [_target_a(ability_end)])
-	var second_end := engine.apply(second.data.state, ActionDraft.new(GameConstants.ACTION_END_TURN, {}), second.data.rng_state)
+	var second_end := engine.apply(
+		second.data.state, ActionDraft.new(GameConstants.ACTION_END_TURN, {}), second.data.rng_state
+	)
 	_check(second_end.ok, "P03 erosion acceleration resolves", failures)
 	if second_end.ok:
-		_check(_task(second_end, TASK_A).work_remaining == 45, "P03 erosion window runs twice", failures)
-		_check(_task_status(second_end, TASK_A, "erosion") == 1, "P03 accelerated erosion decays twice", failures)
+		_check(
+			_task(second_end, TASK_A).work_remaining == 45,
+			"P03 erosion window runs twice",
+			failures
+		)
+		_check(
+			_task_status(second_end, TASK_A, "erosion") == 1,
+			"P03 accelerated erosion decays twice",
+			failures
+		)
 
 
 func _check_induced(engine: BattleEngine, failures: Array[String]) -> void:
@@ -84,10 +136,26 @@ func _check_induced(engine: BattleEngine, failures: Array[String]) -> void:
 	var triggered := _play(engine, induced, "R3-P03-12", [_target_a(induced)])
 	_check(triggered.ok, "P03 induced window resolves", failures)
 	if triggered.ok:
-		_check(_task(triggered, TASK_A).work_remaining == 46, "P03 induced adds one status completion", failures)
-		_check(_task_status(triggered, TASK_A, "induced") == 1, "P03 induced is not consumed by the trigger", failures)
-		var ended := engine.apply(triggered.data.state, ActionDraft.new(GameConstants.ACTION_END_TURN, {}), triggered.data.rng_state)
-		_check(ended.ok and _task_status(ended, TASK_A, "induced") == 0, "P03 induced clears at action end", failures)
+		_check(
+			_task(triggered, TASK_A).work_remaining == 46,
+			"P03 induced adds one status completion",
+			failures
+		)
+		_check(
+			_task_status(triggered, TASK_A, "induced") == 1,
+			"P03 induced is not consumed by the trigger",
+			failures
+		)
+		var ended := engine.apply(
+			triggered.data.state,
+			ActionDraft.new(GameConstants.ACTION_END_TURN, {}),
+			triggered.data.rng_state
+		)
+		_check(
+			ended.ok and _task_status(ended, TASK_A, "induced") == 0,
+			"P03 induced clears at action end",
+			failures
+		)
 
 	begun = _begin(engine, _deck([["R3-P03-11", 1], ["R3-P03-18", 1]]), rng)
 	state = begun.data.state
@@ -96,7 +164,11 @@ func _check_induced(engine: BattleEngine, failures: Array[String]) -> void:
 	_move_to_hand(state, "R3-P03-18", 1)
 	var i1 := _play(engine, begun, "R3-P03-11", [_target_a(begun)])
 	var extra := _play(engine, i1, "R3-P03-18", [_target_a(i1)])
-	_check(extra.ok and _task(extra, TASK_A).work_remaining == 42, "P03 extra induced trigger shares the window", failures)
+	_check(
+		extra.ok and _task(extra, TASK_A).work_remaining == 42,
+		"P03 extra induced trigger shares the window",
+		failures
+	)
 
 
 func _check_compound(engine: BattleEngine, failures: Array[String]) -> void:
@@ -109,24 +181,50 @@ func _check_compound(engine: BattleEngine, failures: Array[String]) -> void:
 	var first := _play(engine, begun, "R3-P03-17", [_target_a(begun)])
 	_check(first.ok, "P03 compound starter resolves", failures)
 	if first.ok:
-		_check(_task_status(first, TASK_A, "vulnerability") == 2, "P03 compound adds one vulnerability", failures)
-		_check(_task_status(first, TASK_A, "induced") == 1, "P03 compound keeps the first status", failures)
-		_check(bool(first.data.state.v3.get("turn", {}).get("compound_used", false)), "P03 compound is consumed", failures)
+		_check(
+			_task_status(first, TASK_A, "vulnerability") == 2,
+			"P03 compound adds one vulnerability",
+			failures
+		)
+		_check(
+			_task_status(first, TASK_A, "induced") == 1,
+			"P03 compound keeps the first status",
+			failures
+		)
+		_check(
+			bool(first.data.state.v3.get("turn", {}).get("compound_used", false)),
+			"P03 compound is consumed",
+			failures
+		)
 	var second := _play(engine, first, "R3-P03-21", [_target_a(first)])
 	_check(second.ok, "P03 second compound card resolves", failures)
 	if second.ok:
-		_check(_task_status(second, TASK_A, "weakness") == 1, "P03 compound does not fire twice", failures)
-		_check(_task_status(second, TASK_A, "feebleness") == 1, "P03 second new debuff remains one", failures)
+		_check(
+			_task_status(second, TASK_A, "weakness") == 1,
+			"P03 compound does not fire twice",
+			failures
+		)
+		_check(
+			_task_status(second, TASK_A, "feebleness") == 1,
+			"P03 second new debuff remains one",
+			failures
+		)
 
 
 func _check_poison_count(engine: BattleEngine, failures: Array[String]) -> void:
 	var rng := _rng()
-	var begun := _begin(engine, _deck([["R3-P03-19", 1], ["R3-P03-02", 1], ["R3-P03-03", 1], ["R3-P03-08", 1]]), rng)
+	var begun := _begin(
+		engine, _deck([["R3-P03-19", 1], ["R3-P03-02", 1], ["R3-P03-03", 1], ["R3-P03-08", 1]]), rng
+	)
 	var state: BattleState = begun.data.state
 	state.player.focus = 10
 	_move_to_hand(state, "R3-P03-19", 1)
 	var ability := _play(engine, begun, "R3-P03-19", [])
-	var ended := engine.apply(ability.data.state, ActionDraft.new(GameConstants.ACTION_END_TURN, {}), ability.data.rng_state)
+	var ended := engine.apply(
+		ability.data.state,
+		ActionDraft.new(GameConstants.ACTION_END_TURN, {}),
+		ability.data.rng_state
+	)
 	if ended.ok:
 		ended.data.state.player.focus = 10
 		_move_to_hand(ended.data.state, "R3-P03-02", 1)
@@ -137,8 +235,16 @@ func _check_poison_count(engine: BattleEngine, failures: Array[String]) -> void:
 	var three := _play(engine, two, "R3-P03-08", [_target_a(two)])
 	_check(three.ok, "P03 poison count sequence resolves", failures)
 	if three.ok:
-		_check(_task(three, TASK_A).work_remaining == 46, "P03 third erosion event completes task A", failures)
-		_check(_task(three, TASK_B).work_remaining == 46, "P03 third erosion event completes task B", failures)
+		_check(
+			_task(three, TASK_A).work_remaining == 46,
+			"P03 third erosion event completes task A",
+			failures
+		)
+		_check(
+			_task(three, TASK_B).work_remaining == 46,
+			"P03 third erosion event completes task B",
+			failures
+		)
 
 
 func _check_abilities(engine: BattleEngine, failures: Array[String]) -> void:
@@ -147,35 +253,53 @@ func _check_abilities(engine: BattleEngine, failures: Array[String]) -> void:
 	var state: BattleState = begun.data.state
 	_move_to_hand(state, "R3-P03-04", 1)
 	var auto := _play(engine, begun, "R3-P03-04", [])
-	var auto_end := engine.apply(auto.data.state, ActionDraft.new(GameConstants.ACTION_END_TURN, {}), auto.data.rng_state)
+	var auto_end := engine.apply(
+		auto.data.state, ActionDraft.new(GameConstants.ACTION_END_TURN, {}), auto.data.rng_state
+	)
 	_check(auto_end.ok, "P03 auto-erosion ability resolves", failures)
 	if auto_end.ok:
-		_check(_task_status(auto_end, TASK_A, "erosion") == 1, "P03 auto-erosion hits task A", failures)
-		_check(_task_status(auto_end, TASK_B, "erosion") == 1, "P03 auto-erosion hits task B", failures)
+		_check(
+			_task_status(auto_end, TASK_A, "erosion") == 1, "P03 auto-erosion hits task A", failures
+		)
+		_check(
+			_task_status(auto_end, TASK_B, "erosion") == 1, "P03 auto-erosion hits task B", failures
+		)
 
 	begun = _begin(engine, _deck([["R3-P03-20", 1], ["R3-P03-11", 1], ["R3-P03-12", 1]]), rng)
 	state = begun.data.state
 	_move_to_hand(state, "R3-P03-20", 1)
 	var p20 := _play(engine, begun, "R3-P03-20", [])
-	var p20_end := engine.apply(p20.data.state, ActionDraft.new(GameConstants.ACTION_END_TURN, {}), p20.data.rng_state)
+	var p20_end := engine.apply(
+		p20.data.state, ActionDraft.new(GameConstants.ACTION_END_TURN, {}), p20.data.rng_state
+	)
 	if p20_end.ok:
 		p20_end.data.state.player.focus = 10
 		_move_to_hand(p20_end.data.state, "R3-P03-11", 1)
 		_move_to_hand(p20_end.data.state, "R3-P03-12", 1)
 	var p20_i := _play(engine, p20_end, "R3-P03-11", [_target_a(p20_end)])
 	var p20_w := _play(engine, p20_i, "R3-P03-12", [_target_a(p20_i)])
-	_check(p20_w.ok and _task(p20_w, TASK_A).work_remaining == 43, "P03-20 adds 3 on the first induced trigger", failures)
+	_check(
+		p20_w.ok and _task(p20_w, TASK_A).work_remaining == 43,
+		"P03-20 adds 3 on the first induced trigger",
+		failures
+	)
 
 	begun = _begin(engine, _deck([["R3-P03-40", 1], ["R3-P03-17", 1]]), rng)
 	state = begun.data.state
 	_move_to_hand(state, "R3-P03-40", 1)
 	var p40 := _play(engine, begun, "R3-P03-40", [])
-	var p40_end := engine.apply(p40.data.state, ActionDraft.new(GameConstants.ACTION_END_TURN, {}), p40.data.rng_state)
+	var p40_end := engine.apply(
+		p40.data.state, ActionDraft.new(GameConstants.ACTION_END_TURN, {}), p40.data.rng_state
+	)
 	if p40_end.ok:
 		p40_end.data.state.player.focus = 10
 		_move_to_hand(p40_end.data.state, "R3-P03-17", 1)
 	var p40_card := _play(engine, p40_end, "R3-P03-17", [_target_a(p40_end)])
-	_check(p40_card.ok and p40_card.data.state.player.relax == 3, "P03-40 triggers on compound reaction", failures)
+	_check(
+		p40_card.ok and p40_card.data.state.player.relax == 3,
+		"P03-40 triggers on compound reaction",
+		failures
+	)
 
 	begun = _begin(engine, _deck([["R3-P03-16", 1], ["R3-P03-03", 1], ["R3-P03-12", 8]]), rng)
 	state = begun.data.state
@@ -186,14 +310,24 @@ func _check_abilities(engine: BattleEngine, failures: Array[String]) -> void:
 	var chain_work := _play(engine, chain, "R3-P03-03", [_target_a(chain)])
 	_check(chain_work.ok, "P03 chain resolves", failures)
 	if chain_work.ok:
-		_check(_task_status(chain_work, TASK_A, "erosion") == 3, "P03 chain adds erosion to the target", failures)
-		_check(_task_status(chain_work, TASK_B, "erosion") == 1, "P03 chain adds erosion to all tasks", failures)
+		_check(
+			_task_status(chain_work, TASK_A, "erosion") == 3,
+			"P03 chain adds erosion to the target",
+			failures
+		)
+		_check(
+			_task_status(chain_work, TASK_B, "erosion") == 1,
+			"P03 chain adds erosion to all tasks",
+			failures
+		)
 
 	begun = _begin(engine, _deck([["R3-P03-30", 1]]), rng)
 	state = begun.data.state
 	_move_to_hand(state, "R3-P03-30", 1)
 	var p30 := _play(engine, begun, "R3-P03-30", [])
-	var p30_end := engine.apply(p30.data.state, ActionDraft.new(GameConstants.ACTION_END_TURN, {}), p30.data.rng_state)
+	var p30_end := engine.apply(
+		p30.data.state, ActionDraft.new(GameConstants.ACTION_END_TURN, {}), p30.data.rng_state
+	)
 	if p30_end.ok:
 		p30_end.data.state.player.focus = 10
 		var id30 := _target_a(p30_end)
@@ -208,7 +342,11 @@ func _check_abilities(engine: BattleEngine, failures: Array[String]) -> void:
 	_check(p30_prepare.ok, "P03-30 prepare trigger resolves", failures)
 	if p30_prepare.ok:
 		_check(p30_prepare.data.state.player.relax == 5, "P03-30 grants relax at prepare", failures)
-		_check(_task(p30_prepare, TASK_A).work_remaining == 45, "P03-30 adds status completion", failures)
+		_check(
+			_task(p30_prepare, TASK_A).work_remaining == 45,
+			"P03-30 adds status completion",
+			failures
+		)
 
 
 func _check_pressure_and_shield(engine: BattleEngine, failures: Array[String]) -> void:
@@ -219,8 +357,14 @@ func _check_pressure_and_shield(engine: BattleEngine, failures: Array[String]) -
 	_add_task_status(state, _target_a(begun), "feebleness", 2, "battle")
 	_add_task_status(state, _target_a(begun), "weakness", 1, "pressure_window")
 	state.tasks[0].intent_snapshot.pressure = 8
-	var ended := engine.apply(state, ActionDraft.new(GameConstants.ACTION_END_TURN, {}), begun.data.rng_state)
-	_check(ended.ok and ended.data.state.player.vitality == 68, "P03 feebleness applies before weakness", failures)
+	var ended := engine.apply(
+		state, ActionDraft.new(GameConstants.ACTION_END_TURN, {}), begun.data.rng_state
+	)
+	_check(
+		ended.ok and ended.data.state.player.vitality == 68,
+		"P03 feebleness applies before weakness",
+		failures
+	)
 
 	begun = _begin(engine, _deck([["R3-P03-14", 20]]), rng)
 	state = begun.data.state
@@ -230,8 +374,7 @@ func _check_pressure_and_shield(engine: BattleEngine, failures: Array[String]) -
 	ruleset.load(MANIFEST)
 	var rules := ruleset.get_definition("ruleset", "campus_v1")
 	_check(
-		rules.ok
-		and engine._scaled_shield(state, rules.data, shield_task_id, 8) == 4,
+		rules.ok and engine._scaled_shield(state, rules.data, shield_task_id, 8) == 4,
 		"P03 brittle halves new shields",
 		failures
 	)
@@ -242,7 +385,11 @@ func _check_pressure_and_shield(engine: BattleEngine, failures: Array[String]) -
 	_add_task_status(state, _target_a(begun), "vulnerability", 1, "pressure_window")
 	_move_to_hand(state, "R3-C-09", 1)
 	var vulnerable := _play(engine, begun, "R3-C-09", [_target_a(begun)])
-	_check(vulnerable.ok and _task(vulnerable, TASK_A).work_remaining == 45, "P03 vulnerability boosts direct work", failures)
+	_check(
+		vulnerable.ok and _task(vulnerable, TASK_A).work_remaining == 45,
+		"P03 vulnerability boosts direct work",
+		failures
+	)
 
 
 func _check_all_cards_resolve(
@@ -250,10 +397,16 @@ func _check_all_cards_resolve(
 ) -> void:
 	for card_id in P03_IDS:
 		var rng := _rng()
-		var deck := _deck([
-			[card_id, 5], ["R3-P03-11", 1], ["R3-P03-17", 1],
-			["R3-P03-12", 1], ["R3-P03-23", 1], ["R3-P03-02", 1],
-		])
+		var deck := _deck(
+			[
+				[card_id, 5],
+				["R3-P03-11", 1],
+				["R3-P03-17", 1],
+				["R3-P03-12", 1],
+				["R3-P03-23", 1],
+				["R3-P03-02", 1],
+			]
+		)
 		var begun := _begin(engine, deck, rng)
 		_check(begun.ok, card_id + " smoke battle starts", failures)
 		if not begun.ok:
@@ -325,29 +478,35 @@ func _deck(entries: Array) -> Array[Dictionary]:
 		var definition_id := str(entry[0])
 		for index in int(entry[1]):
 			serial += 1
-			result.append(
-				{
-					"card_id": "card_%03d" % serial,
-					"definition_id": definition_id,
-					"upgrade_level": 0,
-				}
+			(
+				result
+				. append(
+					{
+						"card_id": "card_%03d" % serial,
+						"definition_id": definition_id,
+						"upgrade_level": 0,
+					}
+				)
 			)
 	return result
 
 
 func _begin(engine: BattleEngine, deck: Array[Dictionary], rng: Dictionary) -> GameResult:
-	return engine.begin(
-		{
-			"battle_id": "r3_p03_%d" % Time.get_ticks_usec(),
-			"encounter_id": "R3_TEST",
-			"character_id": "P03",
-			"difficulty": "normal",
-			"vitality": 72,
-			"max_vitality": 72,
-			"cards": deck,
-			"relics": [],
-			"rng_state": rng.duplicate(true),
-		}
+	return (
+		engine
+		. begin(
+			{
+				"battle_id": "r3_p03_%d" % Time.get_ticks_usec(),
+				"encounter_id": "R3_TEST",
+				"character_id": "P03",
+				"difficulty": "normal",
+				"vitality": 72,
+				"max_vitality": 72,
+				"cards": deck,
+				"relics": [],
+				"rng_state": rng.duplicate(true),
+			}
+		)
 	)
 
 
@@ -360,13 +519,14 @@ func _play(
 	var card_id := _hand_card(state, definition_id)
 	if card_id.is_empty():
 		return GameResult.failure(
-			ApiError.new(GameConstants.ERROR_INVALID_TARGET, "test.card_not_in_hand", {"id": definition_id})
+			ApiError.new(
+				GameConstants.ERROR_INVALID_TARGET, "test.card_not_in_hand", {"id": definition_id}
+			)
 		)
 	var result := engine.apply(
 		state,
 		ActionDraft.new(
-			GameConstants.ACTION_PLAY_CARD,
-			{"card_instance_id": card_id, "target_ids": target_ids}
+			GameConstants.ACTION_PLAY_CARD, {"card_instance_id": card_id, "target_ids": target_ids}
 		),
 		step.data.rng_state
 	)
@@ -472,28 +632,36 @@ func _task_status(step: GameResult, task_definition: String, status_id: String) 
 func _add_task_status(
 	state: BattleState, task_id: String, status_id: String, stacks: int, expiry: String
 ) -> void:
-	state.statuses.append(
-		{
-			"status_id": status_id,
-			"instance_id": "test_%s_%s" % [status_id, task_id],
-			"source_id": "",
-			"target_id": task_id,
-			"stacks": stacks,
-			"expiry": expiry,
-		}
+	(
+		state
+		. statuses
+		. append(
+			{
+				"status_id": status_id,
+				"instance_id": "test_%s_%s" % [status_id, task_id],
+				"source_id": "",
+				"target_id": task_id,
+				"stacks": stacks,
+				"expiry": expiry,
+			}
+		)
 	)
 
 
 func _add_anxiety(state: BattleState) -> void:
-	state.statuses.append(
-		{
-			"status_id": "anxiety",
-			"instance_id": "anxiety_test_1",
-			"source_id": "",
-			"target_id": str(state.player.get("entity_id", "")),
-			"stacks": 1,
-			"expiry": "next_prepare",
-		}
+	(
+		state
+		. statuses
+		. append(
+			{
+				"status_id": "anxiety",
+				"instance_id": "anxiety_test_1",
+				"source_id": "",
+				"target_id": str(state.player.get("entity_id", "")),
+				"stacks": 1,
+				"expiry": "next_prepare",
+			}
+		)
 	)
 
 

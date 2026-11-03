@@ -571,7 +571,10 @@ func _start_card_resolution(
 			var reuse_origin := str(card.get("origin_card_id", ""))
 			var is_chapter_reuse := false
 			for entry: Variant in _v3_paper(state).chapters:
-				if typeof(entry) == TYPE_DICTIONARY and str(entry.get("card_id", "")) == reuse_origin:
+				if (
+					typeof(entry) == TYPE_DICTIONARY
+					and str(entry.get("card_id", "")) == reuse_origin
+				):
 					is_chapter_reuse = true
 					break
 			if not is_chapter_reuse:
@@ -632,9 +635,7 @@ func _start_card_resolution(
 	)
 	state.counters[any_played_key] = int(state.counters.get(any_played_key, 0)) + 1
 	if int(state.counters[any_played_key]) == 1:
-		var discard_result := _random_discard(
-			state, _task_first_card_discard(state), rng, events
-		)
+		var discard_result := _random_discard(state, _task_first_card_discard(state), rng, events)
 		if not discard_result.ok:
 			return discard_result
 	var played_type := str(face.get("type", ""))
@@ -704,16 +705,18 @@ func _start_card_resolution(
 		"v3_compound_candidates": [],
 		"v3_induced_snapshot": induced_snapshot,
 		"v3_target_induced_snapshot": target_induced,
-		"v3_link": str(face.get("type", "")) == "work" and str(v3_turn.get("previous_card_type", "")) == "strategy",
+		"v3_link":
+		(
+			str(face.get("type", "")) == "work"
+			and str(v3_turn.get("previous_card_type", "")) == "strategy"
+		),
 		"v3_previous_card_type": str(v3_turn.get("previous_card_type", "")),
 		"v3_previous_card_instance_id": str(v3_turn.get("previous_card_instance_id", "")),
 		"v3_previous_card_definition_id": str(v3_turn.get("previous_card_definition_id", "")),
-		"v3_instance_was_played_before": int(
-			v3_battle.get("instance_plays", {}).get(card_id, 0)
-		) > 0,
-		"v3_played_type_counts": (
-			v3_turn.get("played_types", {}).duplicate(true) if v3_enabled else {}
-		),
+		"v3_instance_was_played_before":
+		int(v3_battle.get("instance_plays", {}).get(card_id, 0)) > 0,
+		"v3_played_type_counts":
+		v3_turn.get("played_types", {}).duplicate(true) if v3_enabled else {},
 		"v3_link_work_count": int(v3_turn.get("link_work_count", 0)),
 		"v3_base_cost": int(face.get("cost", 0)),
 		"v3_cost_discount_applied": v3_discount,
@@ -962,7 +965,9 @@ func _end_turn(
 					var played_key := BattleState.counter_key(
 						GameConstants.COUNTER_SCOPE_BATTLE, "card_type:" + str(card_type), &"played"
 					)
-					pressure += int(per_card_type[card_type]) * int(state.counters.get(played_key, 0))
+					pressure += (
+						int(per_card_type[card_type]) * int(state.counters.get(played_key, 0))
+					)
 			if state.units.is_empty():
 				var no_unit_mult := int(intent.get("pressure_no_unit_mult", 100))
 				if no_unit_mult != 100:
@@ -986,7 +991,11 @@ func _end_turn(
 			for segment_index in times:
 				if pressure > 0:
 					_apply_pressure(
-						state, pressure, bool(intent.get("pressure_all", false)), events, segment_index
+						state,
+						pressure,
+						bool(intent.get("pressure_all", false)),
+						events,
+						segment_index
 					)
 					if state.phase == "finished":
 						return GameResult.success(null)
@@ -1052,14 +1061,12 @@ func _end_turn(
 					cursor = cursor % intents.size()
 				task.intent_cursor = cursor
 				task.intent_snapshot = intents[cursor].duplicate(true)
-				task.shield = (
-					_scaled_shield(
-						state,
-						ruleset_result.data,
-						str(task.get("task_id", "")),
-						int(task.intent_snapshot.get("shield", 0))
-					)
-				)
+				task.shield = (_scaled_shield(
+					state,
+					ruleset_result.data,
+					str(task.get("task_id", "")),
+					int(task.intent_snapshot.get("shield", 0))
+				))
 	var self_copy_pending: Array[Dictionary] = []
 	for task: Dictionary in state.tasks.duplicate(true):
 		var self_copy_def := _catalog.get_definition("task", str(task.get("definition_id", "")))
@@ -1257,18 +1264,14 @@ func _execute_intent_skill(
 	return GameResult.success(null)
 
 
-func _scaled_shield(
-	state: BattleState, ruleset: Dictionary, task_id: String, amount: int
-) -> int:
+func _scaled_shield(state: BattleState, ruleset: Dictionary, task_id: String, amount: int) -> int:
 	var per_stack := int(
 		ruleset.get("statuses", {}).get("confusion", {}).get("shield_per_stack", 0)
 	)
 	if per_stack > 0:
 		amount += _status_stacks(state, "confusion", task_id) * per_stack
 	if _status_stacks(state, "brittle", task_id) > 0:
-		var percent := int(
-			ruleset.get("statuses", {}).get("brittle", {}).get("shield_percent", 50)
-		)
+		var percent := int(ruleset.get("statuses", {}).get("brittle", {}).get("shield_percent", 50))
 		amount = int(floor(amount * percent / 100.0))
 	return amount
 
@@ -1390,9 +1393,7 @@ func _transform_task(
 	return GameResult.success(null)
 
 
-func _self_destruct_task(
-	state: BattleState, task_index: int, events: Array[RuleEvent]
-) -> void:
+func _self_destruct_task(state: BattleState, task_index: int, events: Array[RuleEvent]) -> void:
 	if task_index < 0 or task_index >= state.tasks.size():
 		return
 	var task: Dictionary = state.tasks[task_index]
@@ -1463,7 +1464,9 @@ func _run_player_prepare(
 	if max_reduction > 0:
 		var max_before := int(state.player.get("max_vitality", 0))
 		state.player.max_vitality = maxi(1, max_before - max_reduction)
-		state.player.vitality = mini(int(state.player.get("vitality", 0)), state.player.max_vitality)
+		state.player.vitality = mini(
+			int(state.player.get("vitality", 0)), state.player.max_vitality
+		)
 	var anxiety := _status_stacks(state, "anxiety", "player")
 	var focus_before := int(state.player.get("focus", 0))
 	var focus_amount := maxi(0, int(ruleset.battle.focus_per_round) - anxiety)
@@ -1510,9 +1513,11 @@ func _run_player_prepare(
 		return phase_to_draw
 	var draw_amount := maxi(
 		0,
-		int(ruleset.battle.draw_per_round)
-		- _status_stacks(state, "procrastination", "player")
-		- _task_draw_reduction(state)
+		(
+			int(ruleset.battle.draw_per_round)
+			- _status_stacks(state, "procrastination", "player")
+			- _task_draw_reduction(state)
+		)
 	)
 	_clear_expiring_statuses(state, "draw", events)
 	_draw_cards(state, draw_amount, rng, events)
@@ -1923,18 +1928,18 @@ func _execute_v3_card_effect(
 			var per_link := int(effect.get("per_link_work", 0))
 			if per_link > 0 and typeof(state.resolution) == TYPE_DICTIONARY:
 				var link_count := mini(
-					int(effect.get("cap", 3)),
-					int(state.resolution.get("v3_link_work_count", 0))
+					int(effect.get("cap", 3)), int(state.resolution.get("v3_link_work_count", 0))
 				)
 				completion["amount"] = int(completion.amount) + per_link * link_count
 			var bonus: Variant = effect.get("bonus")
-			if typeof(bonus) == TYPE_DICTIONARY and _v3_condition(state, bonus.get("condition", {})):
+			if (
+				typeof(bonus) == TYPE_DICTIONARY
+				and _v3_condition(state, bonus.get("condition", {}))
+			):
 				completion["amount"] = int(completion.amount) + int(bonus.get("amount", 0))
 			var per_partner := int(effect.get("per_partner", 0))
 			if per_partner > 0:
-				var partner_count := mini(
-					int(effect.get("cap", 3)), state.units.size()
-				)
+				var partner_count := mini(int(effect.get("cap", 3)), state.units.size())
 				completion["amount"] = int(completion.amount) + per_partner * partner_count
 			var per_spent := int(effect.get("per_spent", 0))
 			if per_spent > 0 and typeof(state.resolution) == TYPE_DICTIONARY:
@@ -1946,10 +1951,12 @@ func _execute_v3_card_effect(
 			if per_other_chapter > 0 and typeof(state.resolution) == TYPE_DICTIONARY:
 				completion["amount"] = (
 					int(completion.amount)
-					+ per_other_chapter
-					* mini(
-						int(effect.get("cap", 2)),
-						int(state.resolution.get("v3_other_chapter_count", 0))
+					+ (
+						per_other_chapter
+						* mini(
+							int(effect.get("cap", 2)),
+							int(state.resolution.get("v3_other_chapter_count", 0))
+						)
 					)
 				)
 			var per_kind := int(effect.get("per_debuff_kind", 0))
@@ -1976,8 +1983,7 @@ func _execute_v3_card_effect(
 			var relax_per_spent := int(effect.get("per_spent", 0))
 			if relax_per_spent > 0 and typeof(state.resolution) == TYPE_DICTIONARY:
 				relax_amount += (
-					relax_per_spent
-					* int(state.resolution.get("v3_last_synergy_spent", 0))
+					relax_per_spent * int(state.resolution.get("v3_last_synergy_spent", 0))
 				)
 			relax_amount += _v3_card_amplify(state)
 			state.player.relax = int(state.player.get("relax", 0)) + relax_amount
@@ -2004,9 +2010,7 @@ func _execute_v3_card_effect(
 		"draw":
 			var draw_amount: Variant = effect.get("amount", 0)
 			if typeof(draw_amount) == TYPE_DICTIONARY:
-				draw_amount = int(
-					state.resolution.get("v3_discarded_count", 0)
-				)
+				draw_amount = int(state.resolution.get("v3_discarded_count", 0))
 			var draw_total := maxi(0, int(draw_amount)) + _v3_card_amplify(state)
 			_draw_cards(state, draw_total, rng, events)
 			return GameResult.success(null)
@@ -2025,9 +2029,7 @@ func _execute_v3_card_effect(
 			return GameResult.success(null)
 		"cost_discount_next":
 			_v3_add_cost_discount(
-				state,
-				int(effect.get("amount", 0)),
-				int(effect.get("min_base_cost", 2))
+				state, int(effect.get("amount", 0)), int(effect.get("min_base_cost", 2))
 			)
 			return GameResult.success(null)
 		"gain_focus":
@@ -2170,7 +2172,9 @@ func _execute_v3_card_effect(
 			return GameResult.success(null)
 		"paper_amplify":
 			var paper_state := _v3_paper(state)
-			paper_state.amplify = mini(5, int(paper_state.amplify) + maxi(0, int(effect.get("amount", 0))))
+			paper_state.amplify = mini(
+				5, int(paper_state.amplify) + maxi(0, int(effect.get("amount", 0)))
+			)
 			return GameResult.success(null)
 		"paper_publish":
 			return _v3_paper_publish(state, state.resolution, rng, events)
@@ -2198,7 +2202,11 @@ func _execute_v3_card_effect(
 				return deployed
 			if typeof(deployed.data) == TYPE_DICTIONARY:
 				return deployed
-			if deployed.data is bool and deployed.data and typeof(state.resolution) == TYPE_DICTIONARY:
+			if (
+				deployed.data is bool
+				and deployed.data
+				and typeof(state.resolution) == TYPE_DICTIONARY
+			):
 				state.resolution["v3_chapter_deploy"] = true
 			return GameResult.success(null)
 		"chapter_run":
@@ -2207,8 +2215,7 @@ func _execute_v3_card_effect(
 			var returned := _v3_chapter_return(state, int(effect.get("amount", 1)), events)
 			if effect.has("modifier_per_chapter"):
 				_v3_paper(state).modifier = (
-					int(_v3_paper(state).modifier)
-					+ returned * int(effect.modifier_per_chapter)
+					int(_v3_paper(state).modifier) + returned * int(effect.modifier_per_chapter)
 				)
 			return GameResult.success(null)
 		"swap_chapter_slots":
@@ -2287,9 +2294,7 @@ func _execute_v3_card_effect(
 			return GameResult.success(null)
 		"spend_synergy":
 			var optional := bool(effect.get("optional", false))
-			var spent := _v3_spend_synergy(
-				state, int(effect.get("amount", 0)), optional
-			)
+			var spent := _v3_spend_synergy(state, int(effect.get("amount", 0)), optional)
 			if spent < 0:
 				return _failure(
 					GameConstants.ERROR_INSUFFICIENT_RESOURCE,
@@ -2339,9 +2344,7 @@ func _execute_v3_card_effect(
 			return GameResult.success(null)
 		_:
 			return _failure(
-				GameConstants.ERROR_ENGINE_NOT_READY,
-				"battle.v3.effect_not_ready",
-				{"op": op}
+				GameConstants.ERROR_ENGINE_NOT_READY, "battle.v3.effect_not_ready", {"op": op}
 			)
 
 
@@ -2400,7 +2403,10 @@ func _v3_condition(state: BattleState, condition: Variant, context: Dictionary =
 		"prev_card_type_is":
 			return (
 				typeof(state.resolution) == TYPE_DICTIONARY
-				and str(state.resolution.get("v3_previous_card_type", "")) == str(condition.get("value", ""))
+				and (
+					str(state.resolution.get("v3_previous_card_type", ""))
+					== str(condition.get("value", ""))
+				)
 			)
 		"played_type_count_turn":
 			var played_types: Dictionary = _v3_turn(state).played_types
@@ -2408,18 +2414,29 @@ func _v3_condition(state: BattleState, condition: Variant, context: Dictionary =
 				var snapshot: Variant = state.resolution.get("v3_played_type_counts", null)
 				if typeof(snapshot) == TYPE_DICTIONARY:
 					played_types = snapshot
-			return int(played_types.get(str(condition.get("value", "")), 0)) >= int(condition.get("min", 1))
+			return (
+				int(played_types.get(str(condition.get("value", "")), 0))
+				>= int(condition.get("min", 1))
+			)
 		"no_strategy_played_turn":
 			return int(_v3_turn(state).played_types.get("strategy", 0)) == 0
 		"instance_plays_battle":
 			var before := bool(context.get("instance_was_played_before", false))
 			if typeof(state.resolution) == TYPE_DICTIONARY:
 				before = bool(state.resolution.get("v3_instance_was_played_before", before))
-			return before or (
-				typeof(state.resolution) == TYPE_DICTIONARY
-				and int(_v3_battle(state).instance_plays.get(
-					str(state.resolution.get("card_instance_id", "")), 0
-				)) >= int(condition.get("min", 1))
+			return (
+				before
+				or (
+					typeof(state.resolution) == TYPE_DICTIONARY
+					and (
+						int(
+							_v3_battle(state).instance_plays.get(
+								str(state.resolution.get("card_instance_id", "")), 0
+							)
+						)
+						>= int(condition.get("min", 1))
+					)
+				)
 			)
 		"instance_played_before":
 			if context.has("instance_was_played_before"):
@@ -2432,8 +2449,9 @@ func _v3_condition(state: BattleState, condition: Variant, context: Dictionary =
 			if typeof(state.resolution) != TYPE_DICTIONARY:
 				return false
 			var previous_id := str(state.resolution.get("v3_previous_card_instance_id", ""))
-			return int(_v3_battle(state).instance_plays.get(previous_id, 0)) >= int(
-				condition.get("value", 1)
+			return (
+				int(_v3_battle(state).instance_plays.get(previous_id, 0))
+				>= int(condition.get("value", 1))
 			)
 		"retrieved_strategy_this_turn":
 			return bool(_v3_turn(state).retrieved_strategy)
@@ -2460,14 +2478,16 @@ func _v3_condition(state: BattleState, condition: Variant, context: Dictionary =
 		"paper_progress_min":
 			return int(_v3_paper(state).progress) >= int(condition.get("value", 0))
 		"paper_name_unused":
-			if typeof(state.resolution) == TYPE_DICTIONARY and state.resolution.has(
-				"v3_paper_name_was_used"
+			if (
+				typeof(state.resolution) == TYPE_DICTIONARY
+				and state.resolution.has("v3_paper_name_was_used")
 			):
 				return not bool(state.resolution.v3_paper_name_was_used)
 			return false
 		"paper_name_used":
-			if typeof(state.resolution) == TYPE_DICTIONARY and state.resolution.has(
-				"v3_paper_name_was_used"
+			if (
+				typeof(state.resolution) == TYPE_DICTIONARY
+				and state.resolution.has("v3_paper_name_was_used")
 			):
 				return bool(state.resolution.v3_paper_name_was_used)
 			return false
@@ -2551,17 +2571,16 @@ func _v3_condition(state: BattleState, condition: Variant, context: Dictionary =
 			return false
 		"any_task_debuff_kinds_min":
 			for task: Dictionary in state.tasks:
-				if _v3_debuff_kinds(state, str(task.get("task_id", ""))).size() >= int(
-					condition.get("value", 0)
+				if (
+					_v3_debuff_kinds(state, str(task.get("task_id", ""))).size()
+					>= int(condition.get("value", 0))
 				):
 					return true
 			return false
 		"two_tasks":
 			return state.tasks.size() >= 2
 		"erosion_applied_events_min":
-			return int(_v3_turn(state).get("erosion_events", 0)) >= int(
-				condition.get("value", 0)
-			)
+			return int(_v3_turn(state).get("erosion_events", 0)) >= int(condition.get("value", 0))
 		"first_induced_trigger":
 			return bool(context.get("first_induced_trigger", false))
 		"compound_reaction_success":
@@ -2638,10 +2657,7 @@ func _tick_pressure_window_statuses(state: BattleState, events: Array[RuleEvent]
 func _execute_card_effect(
 	state: BattleState, effect: Dictionary, rng: RandomSource, events: Array[RuleEvent]
 ) -> GameResult:
-	if (
-		typeof(state.resolution) == TYPE_DICTIONARY
-		and bool(state.resolution.get("v3", false))
-	):
+	if typeof(state.resolution) == TYPE_DICTIONARY and bool(state.resolution.get("v3", false)):
 		return _execute_v3_card_effect(state, effect, rng, events)
 	var op := str(effect.get("op", ""))
 	var amount := int(effect.get("amount", effect.get("stacks", 0)))
@@ -2749,11 +2765,17 @@ func _execute_card_effect(
 		"reduce_max_vitality":
 			var max_before: int = int(state.player.get("max_vitality", 0))
 			state.player.max_vitality = maxi(1, max_before - maxi(0, amount))
-			state.player.vitality = mini(int(state.player.get("vitality", 0)), state.player.max_vitality)
+			state.player.vitality = mini(
+				int(state.player.get("vitality", 0)), state.player.max_vitality
+			)
 			return GameResult.success(null)
 		"restore_max_vitality":
-			var max_base: int = int(state.player.get("max_vitality_base", state.player.get("max_vitality", 0)))
-			state.player.max_vitality = mini(max_base, int(state.player.get("max_vitality", 0)) + maxi(0, amount))
+			var max_base: int = int(
+				state.player.get("max_vitality_base", state.player.get("max_vitality", 0))
+			)
+			state.player.max_vitality = mini(
+				max_base, int(state.player.get("max_vitality", 0)) + maxi(0, amount)
+			)
 			return GameResult.success(null)
 		"reduce_focus":
 			var focus_before: int = int(state.player.get("focus", 0))
@@ -2777,7 +2799,10 @@ func _execute_card_effect(
 			return _summon_tasks(
 				state,
 				str(state.resolution.get("card_instance_id", "")),
-				{"task": str(effect.get("task", "")), "count": maxi(1, int(effect.get("count", 1)))},
+				{
+					"task": str(effect.get("task", "")),
+					"count": maxi(1, int(effect.get("count", 1)))
+				},
 				events
 			)
 		_:
@@ -2862,7 +2887,9 @@ func _task_has_taunt(state: BattleState, task_id: String) -> bool:
 	var task_index := _task_index(state, task_id)
 	if task_index < 0:
 		return false
-	var definition := _catalog.get_definition("task", str(state.tasks[task_index].get("definition_id", "")))
+	var definition := _catalog.get_definition(
+		"task", str(state.tasks[task_index].get("definition_id", ""))
+	)
 	return definition.ok and bool(definition.data.get("taunt", false))
 
 
@@ -2974,8 +3001,7 @@ func _apply_completion(
 			and bool(effect.get("per_target", false))
 		):
 			var kinds := mini(
-				int(effect.get("per_debuff_cap", 6)),
-				_v3_debuff_kinds(state, str(task_id)).size()
+				int(effect.get("per_debuff_cap", 6)), _v3_debuff_kinds(state, str(task_id)).size()
 			)
 			requested_for_target += int(effect.per_debuff_kind) * kinds
 		if (
@@ -3372,15 +3398,14 @@ func _draw_cards(
 		amount -= 1
 
 
-func _v3_retrieve_allowed(
-	state: BattleState, card_id: String, effect: Dictionary
-) -> bool:
+func _v3_retrieve_allowed(state: BattleState, card_id: String, effect: Dictionary) -> bool:
 	var card: Dictionary = state.card_by_id.get(card_id, {})
 	var definition := _catalog.get_definition("card", str(card.get("definition_id", "")))
 	if not definition.ok:
 		return false
-	if bool(effect.get("permanent_only", false)) and not bool(
-		definition.data.get("permanent", true)
+	if (
+		bool(effect.get("permanent_only", false))
+		and not bool(definition.data.get("permanent", true))
 	):
 		return false
 	var card_kind := str(effect.get("card_kind", ""))
@@ -3412,8 +3437,9 @@ func _start_card_choice(state: BattleState, effect: Dictionary, op: String) -> G
 		"recall_from_discard":
 			kind = "recall"
 			for card_id in state.zones.discard:
-				if bool(resolution.get("v3", false)) and not _v3_retrieve_allowed(
-					state, str(card_id), effect
+				if (
+					bool(resolution.get("v3", false))
+					and not _v3_retrieve_allowed(state, str(card_id), effect)
 				):
 					continue
 				candidates.append(_card_candidate(state, str(card_id)))
@@ -3601,9 +3627,7 @@ func _confirm_effect_choice(
 		"chapter_replace":
 			if selected.is_empty():
 				return _failure(
-					GameConstants.ERROR_INVALID_TARGET,
-					"error.play.no_chapter_replace",
-					{}
+					GameConstants.ERROR_INVALID_TARGET, "error.play.no_chapter_replace", {}
 				)
 			var removed_id := str(selected[0])
 			var paper_replace := _v3_paper(state)
@@ -3623,12 +3647,16 @@ func _confirm_effect_choice(
 			state.zones.discard.append(removed_id)
 			var current_id := str(choice.get("source_card_id", ""))
 			var current_card: Dictionary = state.card_by_id.get(current_id, {})
-			paper_replace.chapters.append(
-				{
-					"card_id": current_id,
-					"definition_id": str(current_card.get("definition_id", "")),
-					"deployed_round": state.round_index,
-				}
+			(
+				paper_replace
+				. chapters
+				. append(
+					{
+						"card_id": current_id,
+						"definition_id": str(current_card.get("definition_id", "")),
+						"deployed_round": state.round_index,
+					}
+				)
 			)
 			resolution.v3_chapter_deploy = true
 			resolution.choice_counts[kind] = 1
@@ -4106,7 +4134,10 @@ func _v3_record_card_played(
 		var strategy_trigger := _v3_run_ability_trigger(
 			state,
 			"strategy_resolved",
-			{"instance_was_played_before": bool(resolution.get("v3_instance_was_played_before", false))},
+			{
+				"instance_was_played_before":
+				bool(resolution.get("v3_instance_was_played_before", false))
+			},
 			rng,
 			events
 		)
@@ -4230,7 +4261,9 @@ func _v3_execute_ability_effect(
 ) -> GameResult:
 	match str(effect.get("op", "")):
 		"relax":
-			state.player.relax = int(state.player.get("relax", 0)) + maxi(0, int(effect.get("amount", 0)))
+			state.player.relax = (
+				int(state.player.get("relax", 0)) + maxi(0, int(effect.get("amount", 0)))
+			)
 			return GameResult.success(null)
 		"draw":
 			_draw_cards(state, maxi(0, int(effect.get("amount", 0))), rng, events)
@@ -4320,10 +4353,7 @@ func _v3_execute_effects(
 
 
 func _v3_card_amplify(state: BattleState) -> int:
-	if (
-		typeof(state.resolution) == TYPE_DICTIONARY
-		and bool(state.resolution.get("v3_auto", false))
-	):
+	if typeof(state.resolution) == TYPE_DICTIONARY and bool(state.resolution.get("v3_auto", false)):
 		return 0
 	return _v3_consume_amplify(state)
 
@@ -4533,24 +4563,31 @@ func _v3_chapter_deploy(
 			if typeof(entry) == TYPE_DICTIONARY:
 				candidates.append(_card_candidate(state, str(entry.get("card_id", ""))))
 		var choice_id := _new_instance_id(state, "ch")
-		return GameResult.success(
+		return (
+			GameResult
+			. success(
+				{
+					"choice_id": choice_id,
+					"kind": "chapter_replace",
+					"prompt_key": "choice.battle.chapter_replace",
+					"candidates": candidates,
+					"min_count": 1,
+					"max_count": 1,
+					"source_card_id": card_id,
+					"effect_amount": 1,
+				}
+			)
+		)
+	(
+		paper
+		. chapters
+		. append(
 			{
-				"choice_id": choice_id,
-				"kind": "chapter_replace",
-				"prompt_key": "choice.battle.chapter_replace",
-				"candidates": candidates,
-				"min_count": 1,
-				"max_count": 1,
-				"source_card_id": card_id,
-				"effect_amount": 1,
+				"card_id": card_id,
+				"definition_id": definition_id,
+				"deployed_round": state.round_index,
 			}
 		)
-	paper.chapters.append(
-		{
-			"card_id": card_id,
-			"definition_id": definition_id,
-			"deployed_round": state.round_index,
-		}
 	)
 	_add_event(events, "chapter_deployed", card_id, [card_id], {"definition_id": definition_id})
 	return GameResult.success(true)
@@ -4660,9 +4697,7 @@ func _v3_chapter_run(
 	return GameResult.success(null)
 
 
-func _v3_chapter_return(
-	state: BattleState, amount: int, events: Array[RuleEvent]
-) -> int:
+func _v3_chapter_return(state: BattleState, amount: int, events: Array[RuleEvent]) -> int:
 	var paper := _v3_paper(state)
 	var removed := 0
 	for index in mini(maxi(0, amount), paper.chapters.size()):
@@ -4693,7 +4728,17 @@ func _v3_search_draw_chapter(
 			state.zones.draw.erase(card_id)
 			if state.zones.hand.size() < 10:
 				state.zones.hand.append(card_id)
-				_add_event(events, "card_drawn", "", [card_id], {"definition_id": str(card.get("definition_id", "")), "from_zone": "draw", "to_zone": "hand"})
+				_add_event(
+					events,
+					"card_drawn",
+					"",
+					[card_id],
+					{
+						"definition_id": str(card.get("definition_id", "")),
+						"from_zone": "draw",
+						"to_zone": "hand"
+					}
+				)
 			else:
 				state.zones.discard.append(card_id)
 			var shuffled := rng.shuffle(GameConstants.RNG_STREAM_BATTLE, state.zones.draw)
@@ -4774,7 +4819,10 @@ func _v3_unit_action(
 	if not bool(unit.get("support_replaces_cooperation", false)):
 		var task_id := str(unit.get("target_id", ""))
 		var task_index := _task_index(state, task_id)
-		if task_index < 0 or int(state.tasks[task_index].get("eligible_round", 1)) > state.round_index:
+		if (
+			task_index < 0
+			or int(state.tasks[task_index].get("eligible_round", 1)) > state.round_index
+		):
 			task_id = _first_eligible_task(state)
 			task_index = _task_index(state, task_id)
 		if task_index >= 0:
@@ -4899,9 +4947,7 @@ func _v3_partner_retreat(
 			target = ordered.front()
 	var index := _unit_index(state, target)
 	if index < 0:
-		return _failure(
-			GameConstants.ERROR_INVALID_TARGET, "error.play.no_partner_to_retreat", {}
-		)
+		return _failure(GameConstants.ERROR_INVALID_TARGET, "error.play.no_partner_to_retreat", {})
 	var unit: Dictionary = state.units[index]
 	state.units.remove_at(index)
 	_remove_holder_statuses(state, target)
@@ -4953,13 +4999,16 @@ func _v3_apply_status_batch(
 			var task_index := _task_index(state, target_id)
 			if task_index >= 0 and typeof(state.resolution) == TYPE_DICTIONARY:
 				var candidates: Array = state.resolution.get("v3_compound_candidates", [])
-				candidates.append(
-					{
-						"task_id": target_id,
-						"status_id": status_id,
-						"order": candidates.size(),
-						"entered_order": int(state.tasks[task_index].get("entered_order", 0)),
-					}
+				(
+					candidates
+					. append(
+						{
+							"task_id": target_id,
+							"status_id": status_id,
+							"order": candidates.size(),
+							"entered_order": int(state.tasks[task_index].get("entered_order", 0)),
+						}
+					)
 				)
 				state.resolution.v3_compound_candidates = candidates
 	if count_event and status_id == "erosion" and gained_any:
@@ -5214,7 +5263,10 @@ func _register_v3_ability(
 	var abilities: Array = state.v3.abilities
 	if str(ability.get("stack", "unique_name")) == "unique_name":
 		for existing: Variant in abilities:
-			if typeof(existing) == TYPE_DICTIONARY and str(existing.get("definition_id", "")) == definition_id:
+			if (
+				typeof(existing) == TYPE_DICTIONARY
+				and str(existing.get("definition_id", "")) == definition_id
+			):
 				return GameResult.success(null)
 	var upgrade_level := int(face.get("upgrade_level", 0))
 	for index in triggers.size():
@@ -5225,23 +5277,29 @@ func _register_v3_ability(
 		if upgrade_level > 0 and typeof(trigger.get("upgrade_effects")) == TYPE_ARRAY:
 			effects = trigger.upgrade_effects
 		var ability_id := _new_instance_id(state, "ab")
-		abilities.append(
-			{
-				"ability_id": ability_id,
-				"definition_id": definition_id,
-				"name_key": str(face.get("name_key", definition_id)),
-				"trigger": str(trigger.get("on", "")),
-				"effects": effects.duplicate(true),
-				"activate_round":
-				state.round_index + (1 if str(ability.get("activate", "next_round")) == "next_round" else 0),
-				"limit": str(trigger.get("limit", "")),
-				"condition": ability.get("condition", {}).duplicate(true),
-				"last_round": 0,
-				"uses_round": 0,
-				"uses_this_round": 0,
-				"extra_effects": ability.get("extra_effects", []).duplicate(true),
-				"stack": str(ability.get("stack", "unique_name")),
-			}
+		(
+			abilities
+			. append(
+				{
+					"ability_id": ability_id,
+					"definition_id": definition_id,
+					"name_key": str(face.get("name_key", definition_id)),
+					"trigger": str(trigger.get("on", "")),
+					"effects": effects.duplicate(true),
+					"activate_round":
+					(
+						state.round_index
+						+ (1 if str(ability.get("activate", "next_round")) == "next_round" else 0)
+					),
+					"limit": str(trigger.get("limit", "")),
+					"condition": ability.get("condition", {}).duplicate(true),
+					"last_round": 0,
+					"uses_round": 0,
+					"uses_this_round": 0,
+					"extra_effects": ability.get("extra_effects", []).duplicate(true),
+					"stack": str(ability.get("stack", "unique_name")),
+				}
+			)
 		)
 	_add_event(
 		events,

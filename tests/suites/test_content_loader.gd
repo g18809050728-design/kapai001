@@ -229,9 +229,7 @@ func run() -> Array[String]:
 		isolated_db, isolated_root, "task", elite_task, stable_hash
 	)
 	_check(
-		not accepted_elite,
-		"elite task with clamp intent loop is accepted by the schema",
-		failures
+		not accepted_elite, "elite task with clamp intent loop is accepted by the schema", failures
 	)
 	# The accepted load republishes content, so later rejections compare against its hash.
 	stable_hash = isolated_db.get_info().content_hash
@@ -264,13 +262,9 @@ func run() -> Array[String]:
 		failures
 	)
 	var bad_summon_reference := elite_task.duplicate(true)
-	bad_summon_reference.phases[0].intents[0].summon_tasks = [
-		{"task": "missing_task", "count": 1}
-	]
+	bad_summon_reference.phases[0].intents[0].summon_tasks = [{"task": "missing_task", "count": 1}]
 	_check(
-		_reject_definition(
-			isolated_db, isolated_root, "task", bad_summon_reference, stable_hash
-		),
+		_reject_definition(isolated_db, isolated_root, "task", bad_summon_reference, stable_hash),
 		"summon_tasks reject disabled or missing task references",
 		failures
 	)
@@ -297,9 +291,7 @@ func run() -> Array[String]:
 	var bad_on_complete_choice := elite_task.duplicate(true)
 	bad_on_complete_choice.on_complete_effects = [{"op": "discard", "amount": 1}]
 	_check(
-		_reject_definition(
-			isolated_db, isolated_root, "task", bad_on_complete_choice, stable_hash
-		),
+		_reject_definition(isolated_db, isolated_root, "task", bad_on_complete_choice, stable_hash),
 		"on_complete_effects reject effects that require a player choice",
 		failures
 	)

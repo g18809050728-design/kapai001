@@ -12,23 +12,29 @@ func run() -> Array[String]:
 		return failures
 	var p02_open := catalog.get_definition("card", "R3-P02-01")
 	_check(
-		p02_open.ok
-		and UiStyle.label("R3-P02-01") != "R3-P02-01"
-		and UiStyle.describe_effects(p02_open.data.effects).contains("开题"),
+		(
+			p02_open.ok
+			and UiStyle.label("R3-P02-01") != "R3-P02-01"
+			and UiStyle.describe_effects(p02_open.data.effects).contains("开题")
+		),
 		"v3 card labels and effect text render",
 		failures
 	)
 	_check(
-		UiStyle.label("task.R3-AC-TASK-A.name") == "小组作业A"
-		and UiStyle.label("encounter.R3-AC.name") == "验收遭遇"
-		and UiStyle.label("main") == "主阶段",
+		(
+			UiStyle.label("task.R3-AC-TASK-A.name") == "小组作业A"
+			and UiStyle.label("encounter.R3-AC.name") == "验收遭遇"
+			and UiStyle.label("main") == "主阶段"
+		),
 		"v3 task/encounter/phase labels render",
 		failures
 	)
 	_check(
-		UiStyle.label("chapter_deployed") == "部署章节"
-		and UiStyle.label("paper_published") == "论文发表"
-		and UiStyle.label("card_exhausted") == "消耗卡牌",
+		(
+			UiStyle.label("chapter_deployed") == "部署章节"
+			and UiStyle.label("paper_published") == "论文发表"
+			and UiStyle.label("card_exhausted") == "消耗卡牌"
+		),
 		"v3 event log labels render",
 		failures
 	)
@@ -65,10 +71,12 @@ func run() -> Array[String]:
 	)
 	var encounter_pool := catalog.get_candidates({"kind": "encounter", "terms": 1})
 	_check(
-		encounter_pool.size() >= 3
-		and encounter_pool.has("N01")
-		and encounter_pool.has("N02")
-		and encounter_pool.has("R3-AC"),
+		(
+			encounter_pool.size() >= 3
+			and encounter_pool.has("N01")
+			and encounter_pool.has("N02")
+			and encounter_pool.has("R3-AC")
+		),
 		"v3 term-1 encounter pool has multiple encounters",
 		failures
 	)
@@ -80,25 +88,35 @@ func run() -> Array[String]:
 		)
 	var enabled := catalog.get_info().enabled
 	_check(
-		enabled.task.size() >= 50
-		and enabled.encounter.size() >= 40
-		and enabled.event.size() == 4
-		and enabled.relic.size() >= 8,
+		(
+			enabled.task.size() >= 50
+			and enabled.encounter.size() >= 40
+			and enabled.event.size() == 4
+			and enabled.relic.size() >= 8
+		),
 		"v3 production content pools are populated",
 		failures
 	)
 	var p01_passive: Dictionary = catalog.get_definition("character", "P01").data.passive
 	var p04_passive: Dictionary = catalog.get_definition("character", "P04").data.passive
 	_check(
-		str(p01_passive.id) == "r3_p01_link_replay"
-		and str(p04_passive.id) == "r3_p04_teamwork"
-		and str(p04_passive.trigger) == "cooperation_card_resolved",
+		(
+			str(p01_passive.id) == "r3_p01_link_replay"
+			and str(p04_passive.id) == "r3_p04_teamwork"
+			and str(p04_passive.trigger) == "cooperation_card_resolved"
+		),
 		"v3 character passives are role-specific",
 		failures
 	)
 	var generator := RewardGenerator.new(catalog)
 	var run := RunState.new(
-		{"run_id": "v3_prod", "character_id": "P02", "ruleset_id": "campus_v1", "manifest_id": "campus_v3", "term": 1}
+		{
+			"run_id": "v3_prod",
+			"character_id": "P02",
+			"ruleset_id": "campus_v1",
+			"manifest_id": "campus_v3",
+			"term": 1
+		}
 	)
 	var cards := generator.card_candidates(run, 3, _rng(), {"white": 1, "blue": 1, "purple": 1})
 	_check(cards.ok and cards.data.size() == 3, "v3 reward candidate generation succeeds", failures)
@@ -129,7 +147,9 @@ func run() -> Array[String]:
 		SaveStore.new("user://v3-prod-%s-%s" % [Time.get_ticks_usec(), OS.get_process_id()])
 	)
 	var setup := session.get_setup_options()
-	_check(setup.ok and setup.data.characters.size() == 4, "v3 setup exposes four characters", failures)
+	_check(
+		setup.ok and setup.data.characters.size() == 4, "v3 setup exposes four characters", failures
+	)
 	if setup.ok:
 		var manifest_ids: Array[String] = []
 		for manifest in setup.data.manifests:
@@ -155,7 +175,9 @@ func run() -> Array[String]:
 				CommandContext.new(view.run_id, view.revision),
 				GameAction.new(&"enter_node", {"node_id": str(reachable[0])})
 			)
-			_check(entered.accepted and entered.view.battle != null, "v3 node enters battle", failures)
+			_check(
+				entered.accepted and entered.view.battle != null, "v3 node enters battle", failures
+			)
 			if entered.accepted and entered.view.battle != null:
 				_check(
 					not str(entered.view.battle.get("encounter_id", "")).is_empty(),
@@ -174,9 +196,11 @@ func run() -> Array[String]:
 	shell.refresh()
 	_check(shell.press("menu:new"), "v3 setup opens through the real menu", failures)
 	_check(
-		shell.page != null
-		and shell.page.button_uids().has("setup:character:P02")
-		and shell.page.button_uids().has("setup:character:P03"),
+		(
+			shell.page != null
+			and shell.page.button_uids().has("setup:character:P02")
+			and shell.page.button_uids().has("setup:character:P03")
+		),
 		"v3 setup shows P02 and P03",
 		failures
 	)
@@ -188,9 +212,11 @@ func run() -> Array[String]:
 	_check(shell.press("setup:start"), "v3 setup starts P02", failures)
 	var ui_view := ui_session.get_view()
 	_check(
-		ui_view.screen == &"map"
-		and str(ui_view.run.get("manifest_id", "")) == "campus_v3"
-		and str(ui_view.run.get("character_id", "")) == "P02",
+		(
+			ui_view.screen == &"map"
+			and str(ui_view.run.get("manifest_id", "")) == "campus_v3"
+			and str(ui_view.run.get("character_id", "")) == "P02"
+		),
 		"v3 UI start reaches map with campus_v3 P02",
 		failures
 	)
@@ -233,10 +259,7 @@ func run() -> Array[String]:
 						var face: Dictionary = value.card_data.get(
 							"face", value.card_data.get("effective_card", {})
 						)
-						if (
-							not value.disabled
-							and str(face.get("target", "")) == "task"
-						):
+						if not value.disabled and str(face.get("target", "")) == "task":
 							first_card = str(uid)
 							break
 						if first_card.is_empty() and not value.disabled:
@@ -245,9 +268,11 @@ func run() -> Array[String]:
 				if not first_card.is_empty():
 					_check(shell.press(first_card), "v3 card selection button responds", failures)
 					_check(
-						not battle._selected_card_id.is_empty()
-						or shell.session.get_view().pending_choice != null
-						or shell.last_error == null,
+						(
+							not battle._selected_card_id.is_empty()
+							or shell.session.get_view().pending_choice != null
+							or shell.last_error == null
+						),
 						"v3 card selection registers without a code error",
 						failures
 					)
@@ -256,15 +281,19 @@ func run() -> Array[String]:
 						if str(uid).begins_with("task:") and not battle._buttons[uid].disabled:
 							target_uid = str(uid)
 							break
-					_check(not target_uid.is_empty(), "v3 target selection exposes a task button", failures)
+					_check(
+						not target_uid.is_empty(),
+						"v3 target selection exposes a task button",
+						failures
+					)
 					if not target_uid.is_empty():
 						_check(shell.press(target_uid), "v3 task target button responds", failures)
 					var live: BattleState = ui_session._state.battle
 					for index in 2:
 						var unit_id := "test_unit_%d" % index
-						var unit_def: Dictionary = catalog.get_definition(
-							"unit", str(["R3-U01", "R3-U02"][index])
-						).data
+						var unit_def: Dictionary = (
+							catalog.get_definition("unit", str(["R3-U01", "R3-U02"][index])).data
+						)
 						var unit: Dictionary = unit_def.duplicate(true)
 						unit["unit_id"] = unit_id
 						unit["definition_id"] = str(["R3-U01", "R3-U02"][index])
@@ -289,20 +318,26 @@ func run() -> Array[String]:
 					if refreshed != null:
 						var unit_card_uid := "card:" + unit_card_id
 						_check(
-							refreshed._buttons.has(unit_card_uid)
-							and shell.press(unit_card_uid),
+							refreshed._buttons.has(unit_card_uid) and shell.press(unit_card_uid),
 							"v3 unit-target card can be selected",
 							failures
 						)
 						var enabled_units := 0
 						var chosen_unit := ""
 						for uid in refreshed._buttons:
-							if str(uid).begins_with("unit:") and not refreshed._buttons[uid].disabled:
+							if (
+								str(uid).begins_with("unit:")
+								and not refreshed._buttons[uid].disabled
+							):
 								enabled_units += 1
 								chosen_unit = str(uid)
 						_check(enabled_units >= 2, "v3 two units are selectable targets", failures)
 						if not chosen_unit.is_empty():
-							_check(shell.press(chosen_unit), "v3 unit target selection responds", failures)
+							_check(
+								shell.press(chosen_unit),
+								"v3 unit target selection responds",
+								failures
+							)
 	shell.free()
 	if failures.is_empty():
 		print("V3_PRODUCTION_INTEGRATION=passed")

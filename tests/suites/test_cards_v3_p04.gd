@@ -5,14 +5,46 @@ const MANIFEST := "test_cards_v3_p04"
 const TASK_A := "R3_TEST_TASK_A"
 const TASK_B := "R3_TEST_TASK_B"
 const P04_IDS := [
-	"R3-P04-01", "R3-P04-02", "R3-P04-03", "R3-P04-04", "R3-P04-05",
-	"R3-P04-06", "R3-P04-07", "R3-P04-08", "R3-P04-09", "R3-P04-10",
-	"R3-P04-11", "R3-P04-12", "R3-P04-13", "R3-P04-14", "R3-P04-15",
-	"R3-P04-16", "R3-P04-17", "R3-P04-18", "R3-P04-19", "R3-P04-20",
-	"R3-P04-21", "R3-P04-22", "R3-P04-23", "R3-P04-24", "R3-P04-25",
-	"R3-P04-26", "R3-P04-27", "R3-P04-28", "R3-P04-29", "R3-P04-30",
-	"R3-P04-31", "R3-P04-32", "R3-P04-33", "R3-P04-34", "R3-P04-35",
-	"R3-P04-36", "R3-P04-37", "R3-P04-38", "R3-P04-39", "R3-P04-40",
+	"R3-P04-01",
+	"R3-P04-02",
+	"R3-P04-03",
+	"R3-P04-04",
+	"R3-P04-05",
+	"R3-P04-06",
+	"R3-P04-07",
+	"R3-P04-08",
+	"R3-P04-09",
+	"R3-P04-10",
+	"R3-P04-11",
+	"R3-P04-12",
+	"R3-P04-13",
+	"R3-P04-14",
+	"R3-P04-15",
+	"R3-P04-16",
+	"R3-P04-17",
+	"R3-P04-18",
+	"R3-P04-19",
+	"R3-P04-20",
+	"R3-P04-21",
+	"R3-P04-22",
+	"R3-P04-23",
+	"R3-P04-24",
+	"R3-P04-25",
+	"R3-P04-26",
+	"R3-P04-27",
+	"R3-P04-28",
+	"R3-P04-29",
+	"R3-P04-30",
+	"R3-P04-31",
+	"R3-P04-32",
+	"R3-P04-33",
+	"R3-P04-34",
+	"R3-P04-35",
+	"R3-P04-36",
+	"R3-P04-37",
+	"R3-P04-38",
+	"R3-P04-39",
+	"R3-P04-40",
 ]
 
 var _fixture_root := ""
@@ -56,7 +88,11 @@ func _check_synergy(engine: BattleEngine, failures: Array[String]) -> void:
 	state.v3["synergy"] = 3
 	_move_to_hand(state, "R3-P04-30", 1)
 	var all_in := _play(engine, begun, "R3-P04-30", [_target_a(begun)])
-	_check(all_in.ok and _task(all_in, TASK_A).work_remaining == 29, "P04-30 spends all synergy for completion", failures)
+	_check(
+		all_in.ok and _task(all_in, TASK_A).work_remaining == 29,
+		"P04-30 spends all synergy for completion",
+		failures
+	)
 	_check(all_in.ok and _synergy(all_in) == 0, "P04-30 empties synergy", failures)
 
 	begun = _begin(engine, _deck([["R3-P04-40", 10]]), rng)
@@ -65,8 +101,14 @@ func _check_synergy(engine: BattleEngine, failures: Array[String]) -> void:
 	state.v3["synergy"] = 2
 	_move_to_hand(state, "R3-P04-40", 1)
 	var group := _play(engine, begun, "R3-P04-40", [])
-	_check(group.ok and _task(group, TASK_A).work_remaining == 40, "P04-40 spends synergy on group completion", failures)
-	_check(group.ok and _task(group, TASK_B).work_remaining == 40, "P04-40 hits both tasks", failures)
+	_check(
+		group.ok and _task(group, TASK_A).work_remaining == 40,
+		"P04-40 spends synergy on group completion",
+		failures
+	)
+	_check(
+		group.ok and _task(group, TASK_B).work_remaining == 40, "P04-40 hits both tasks", failures
+	)
 
 
 func _check_partners(engine: BattleEngine, failures: Array[String]) -> void:
@@ -80,9 +122,11 @@ func _check_partners(engine: BattleEngine, failures: Array[String]) -> void:
 	if summoned.ok:
 		var unit: Dictionary = summoned.data.state.units[0]
 		_check(
-			str(unit.definition_id) == "R3-U01"
-			and int(unit.vitality) == 3
-			and int(unit.cooperation) == 2,
+			(
+				str(unit.definition_id) == "R3-U01"
+				and int(unit.vitality) == 3
+				and int(unit.cooperation) == 2
+			),
 			"P04 summons U01 with its base stats",
 			failures
 		)
@@ -101,7 +145,11 @@ func _check_partners(engine: BattleEngine, failures: Array[String]) -> void:
 	var lead := _play(engine, begun, "R3-P04-01", [])
 	var unit_id := str(lead.data.state.units[0].unit_id)
 	var command := _play(engine, lead, "R3-P04-06", [unit_id])
-	_check(command.ok and _task(command, TASK_A).work_remaining == 48, "P04-06 gives a partner an extra action", failures)
+	_check(
+		command.ok and _task(command, TASK_A).work_remaining == 48,
+		"P04-06 gives a partner an extra action",
+		failures
+	)
 	_check(command.ok and _synergy(command) == 1, "P04-06 spends synergy", failures)
 
 	begun = _begin(engine, _deck([["R3-P04-01", 2], ["R3-P04-10", 1]]), rng)
@@ -111,7 +159,11 @@ func _check_partners(engine: BattleEngine, failures: Array[String]) -> void:
 	_move_to_hand(state, "R3-P04-10", 1)
 	lead = _play(engine, begun, "R3-P04-01", [])
 	var group := _play(engine, lead, "R3-P04-10", [])
-	_check(group.ok and _task(group, TASK_A).work_remaining == 46, "P04-10 gives all partners extra actions", failures)
+	_check(
+		group.ok and _task(group, TASK_A).work_remaining == 46,
+		"P04-10 gives all partners extra actions",
+		failures
+	)
 	_check(group.ok and group.data.state.units.size() == 2, "P04-10 summons another U01", failures)
 
 	begun = _begin(engine, _deck([["R3-P04-01", 1], ["R3-P04-12", 1]]), rng)
@@ -142,7 +194,11 @@ func _check_partners(engine: BattleEngine, failures: Array[String]) -> void:
 	lead = _play(engine, begun, "R3-P04-01", [])
 	unit_id = str(lead.data.state.units[0].unit_id)
 	var retreated := _play(engine, lead, "R3-P04-15", [unit_id])
-	_check(retreated.ok and retreated.data.state.units.is_empty(), "P04-15 retreats a partner", failures)
+	_check(
+		retreated.ok and retreated.data.state.units.is_empty(),
+		"P04-15 retreats a partner",
+		failures
+	)
 	_check(retreated.ok and _synergy(retreated) == 2, "P04-15 gains synergy", failures)
 
 
@@ -155,7 +211,9 @@ func _check_exam(engine: BattleEngine, failures: Array[String]) -> void:
 	_move_to_hand(state, "R3-P04-01", 1)
 	var exam := _play(engine, begun, "R3-P04-01", [_target_a(begun)])
 	_check(exam.ok and exam.data.state.units.is_empty(), "P04 exam face does not summon", failures)
-	_check(exam.ok and _task(exam, TASK_A).work_remaining == 45, "P04 exam face completes 5", failures)
+	_check(
+		exam.ok and _task(exam, TASK_A).work_remaining == 45, "P04 exam face completes 5", failures
+	)
 
 	begun = _begin(engine, _deck([["R3-P04-10", 10]]), rng)
 	state = begun.data.state
@@ -164,9 +222,11 @@ func _check_exam(engine: BattleEngine, failures: Array[String]) -> void:
 	_move_to_hand(state, "R3-P04-10", 1)
 	var exam_group := _play(engine, begun, "R3-P04-10", [])
 	_check(
-		exam_group.ok
-		and _task(exam_group, TASK_A).work_remaining == 43
-		and _task(exam_group, TASK_B).work_remaining == 43,
+		(
+			exam_group.ok
+			and _task(exam_group, TASK_A).work_remaining == 43
+			and _task(exam_group, TASK_B).work_remaining == 43
+		),
 		"P04 exam face completes all tasks for 7",
 		failures
 	)
@@ -179,9 +239,11 @@ func _check_exam(engine: BattleEngine, failures: Array[String]) -> void:
 	_move_to_hand(state, "R3-P04-06", 1)
 	var exam_command := _play(engine, begun, "R3-P04-06", [_target_a(begun)])
 	_check(
-		exam_command.ok
-		and _task(exam_command, TASK_A).work_remaining == 41
-		and _synergy(exam_command) == 0,
+		(
+			exam_command.ok
+			and _task(exam_command, TASK_A).work_remaining == 41
+			and _synergy(exam_command) == 0
+		),
 		"P04-06 exam face spends synergy without a partner",
 		failures
 	)
@@ -196,7 +258,11 @@ func _check_conditions(engine: BattleEngine, failures: Array[String]) -> void:
 	_move_to_hand(state, "R3-P04-13", 1)
 	var lead := _play(engine, begun, "R3-P04-01", [])
 	var support := _play(engine, lead, "R3-P04-13", [_target_a(lead)])
-	_check(support.ok and _task(support, TASK_A).work_remaining == 40, "P04-13 counts partners", failures)
+	_check(
+		support.ok and _task(support, TASK_A).work_remaining == 40,
+		"P04-13 counts partners",
+		failures
+	)
 
 	begun = _begin(engine, _deck([["R3-P04-01", 2], ["R3-P04-27", 1]]), rng)
 	state = begun.data.state
@@ -221,13 +287,21 @@ func _check_conditions(engine: BattleEngine, failures: Array[String]) -> void:
 	var unit_id := str(lead.data.state.units[0].unit_id)
 	var heal := _play(engine, lead, "R3-P04-12", [unit_id])
 	var handoff := _play(engine, heal, "R3-P04-19", [_target_a(heal)])
-	_check(handoff.ok and handoff.data.state.player.relax == 7, "P04-19 reads partner healing", failures)
+	_check(
+		handoff.ok and handoff.data.state.player.relax == 7,
+		"P04-19 reads partner healing",
+		failures
+	)
 
 	begun = _begin(engine, _deck([["R3-P04-17", 1], ["R3-P04-01", 1], ["R3-P04-12", 8]]), rng)
 	state = begun.data.state
 	_move_to_hand(state, "R3-P04-17", 1)
 	var ability := _play(engine, begun, "R3-P04-17", [])
-	var ended := engine.apply(ability.data.state, ActionDraft.new(GameConstants.ACTION_END_TURN, {}), ability.data.rng_state)
+	var ended := engine.apply(
+		ability.data.state,
+		ActionDraft.new(GameConstants.ACTION_END_TURN, {}),
+		ability.data.rng_state
+	)
 	if ended.ok:
 		ended.data.state.player.focus = 10
 		_move_to_hand(ended.data.state, "R3-P04-01", 1)
@@ -235,13 +309,9 @@ func _check_conditions(engine: BattleEngine, failures: Array[String]) -> void:
 	var cooperation := _play(engine, ended, "R3-P04-01", [])
 	var ability_used := false
 	if cooperation.ok and not cooperation.data.state.v3.get("abilities", []).is_empty():
-		ability_used = int(
-			cooperation.data.state.v3.abilities[0].get("uses_this_round", 0)
-		) == 1
+		ability_used = int(cooperation.data.state.v3.abilities[0].get("uses_this_round", 0)) == 1
 	_check(
-		cooperation.ok
-		and cooperation.data.state.zones.hand.size() == hand_before
-		and ability_used,
+		cooperation.ok and cooperation.data.state.zones.hand.size() == hand_before and ability_used,
 		"P04-17 draws after the first cooperation",
 		failures
 	)
@@ -250,7 +320,9 @@ func _check_conditions(engine: BattleEngine, failures: Array[String]) -> void:
 	state = begun.data.state
 	_move_to_hand(state, "R3-P04-20", 1)
 	var p20 := _play(engine, begun, "R3-P04-20", [])
-	var p20_end := engine.apply(p20.data.state, ActionDraft.new(GameConstants.ACTION_END_TURN, {}), p20.data.rng_state)
+	var p20_end := engine.apply(
+		p20.data.state, ActionDraft.new(GameConstants.ACTION_END_TURN, {}), p20.data.rng_state
+	)
 	if p20_end.ok:
 		p20_end.data.state.player.focus = 10
 		_move_to_hand(p20_end.data.state, "R3-P04-01", 1)
@@ -282,10 +354,12 @@ func _check_conditions(engine: BattleEngine, failures: Array[String]) -> void:
 	_move_to_hand(state, "R3-P04-25", 1)
 	var p25 := _play(engine, begun, "R3-P04-25", [])
 	_check(
-		p25.ok
-		and _synergy(p25) == 0
-		and p25.data.state.player.relax == 11
-		and not _has_player_status(p25.data.state, "anxiety"),
+		(
+			p25.ok
+			and _synergy(p25) == 0
+			and p25.data.state.player.relax == 11
+			and not _has_player_status(p25.data.state, "anxiety")
+		),
 		"P04-25 spends up to two synergy",
 		failures
 	)
@@ -294,8 +368,12 @@ func _check_conditions(engine: BattleEngine, failures: Array[String]) -> void:
 	state = begun.data.state
 	_move_to_hand(state, "R3-P04-22", 1)
 	var p22 := _play(engine, begun, "R3-P04-22", [])
-	var p22_end := engine.apply(p22.data.state, ActionDraft.new(GameConstants.ACTION_END_TURN, {}), p22.data.rng_state)
-	_check(p22_end.ok and _synergy(p22_end) == 1, "P04-22 grants synergy without partners", failures)
+	var p22_end := engine.apply(
+		p22.data.state, ActionDraft.new(GameConstants.ACTION_END_TURN, {}), p22.data.rng_state
+	)
+	_check(
+		p22_end.ok and _synergy(p22_end) == 1, "P04-22 grants synergy without partners", failures
+	)
 
 	begun = _begin(engine, _deck([["R3-P04-39", 10]]), rng)
 	state = begun.data.state
@@ -311,10 +389,15 @@ func _check_all_cards_resolve(
 ) -> void:
 	for card_id in P04_IDS:
 		var rng := _rng()
-		var deck := _deck([
-			[card_id, 5], ["R3-P04-01", 2], ["R3-P04-12", 1],
-			["R3-P04-27", 1], ["R3-P04-03", 1],
-		])
+		var deck := _deck(
+			[
+				[card_id, 5],
+				["R3-P04-01", 2],
+				["R3-P04-12", 1],
+				["R3-P04-27", 1],
+				["R3-P04-03", 1],
+			]
+		)
 		var begun := _begin(engine, deck, rng)
 		_check(begun.ok, card_id + " smoke battle starts", failures)
 		if not begun.ok:
@@ -387,29 +470,35 @@ func _deck(entries: Array) -> Array[Dictionary]:
 		var definition_id := str(entry[0])
 		for index in int(entry[1]):
 			serial += 1
-			result.append(
-				{
-					"card_id": "card_%03d" % serial,
-					"definition_id": definition_id,
-					"upgrade_level": 0,
-				}
+			(
+				result
+				. append(
+					{
+						"card_id": "card_%03d" % serial,
+						"definition_id": definition_id,
+						"upgrade_level": 0,
+					}
+				)
 			)
 	return result
 
 
 func _begin(engine: BattleEngine, deck: Array[Dictionary], rng: Dictionary) -> GameResult:
-	return engine.begin(
-		{
-			"battle_id": "r3_p04_%d" % Time.get_ticks_usec(),
-			"encounter_id": "R3_TEST",
-			"character_id": "P04",
-			"difficulty": "normal",
-			"vitality": 72,
-			"max_vitality": 72,
-			"cards": deck,
-			"relics": [],
-			"rng_state": rng.duplicate(true),
-		}
+	return (
+		engine
+		. begin(
+			{
+				"battle_id": "r3_p04_%d" % Time.get_ticks_usec(),
+				"encounter_id": "R3_TEST",
+				"character_id": "P04",
+				"difficulty": "normal",
+				"vitality": 72,
+				"max_vitality": 72,
+				"cards": deck,
+				"relics": [],
+				"rng_state": rng.duplicate(true),
+			}
+		)
 	)
 
 
@@ -422,13 +511,14 @@ func _play(
 	var card_id := _hand_card(state, definition_id)
 	if card_id.is_empty():
 		return GameResult.failure(
-			ApiError.new(GameConstants.ERROR_INVALID_TARGET, "test.card_not_in_hand", {"id": definition_id})
+			ApiError.new(
+				GameConstants.ERROR_INVALID_TARGET, "test.card_not_in_hand", {"id": definition_id}
+			)
 		)
 	var result := engine.apply(
 		state,
 		ActionDraft.new(
-			GameConstants.ACTION_PLAY_CARD,
-			{"card_instance_id": card_id, "target_ids": target_ids}
+			GameConstants.ACTION_PLAY_CARD, {"card_instance_id": card_id, "target_ids": target_ids}
 		),
 		step.data.rng_state
 	)
@@ -509,15 +599,19 @@ func _has_player_status(state: BattleState, status_id: String) -> bool:
 
 
 func _add_anxiety(state: BattleState) -> void:
-	state.statuses.append(
-		{
-			"status_id": "anxiety",
-			"instance_id": "anxiety_test_1",
-			"source_id": "",
-			"target_id": str(state.player.get("entity_id", "")),
-			"stacks": 1,
-			"expiry": "next_prepare",
-		}
+	(
+		state
+		. statuses
+		. append(
+			{
+				"status_id": "anxiety",
+				"instance_id": "anxiety_test_1",
+				"source_id": "",
+				"target_id": str(state.player.get("entity_id", "")),
+				"stacks": 1,
+				"expiry": "next_prepare",
+			}
+		)
 	)
 
 

@@ -55,11 +55,7 @@ func _check_direct(engine: BattleEngine, failures: Array[String]) -> void:
 	begun = _begin(engine, _deck("R3-C-04", 10), rng)
 	step = _play(engine, begun, "R3-C-04", [])
 	_check(step.ok and step.data.state.player.relax == 3, "C-04 gains 3 relax", failures)
-	_check(
-		step.ok and step.data.state.zones.exhaust.size() == 1,
-		"C-04 exhausts itself",
-		failures
-	)
+	_check(step.ok and step.data.state.zones.exhaust.size() == 1, "C-04 exhausts itself", failures)
 
 	begun = _begin(engine, _deck("R3-C-05", 10), rng)
 	begun.data.state.player.vitality = 50
@@ -73,11 +69,17 @@ func _check_direct(engine: BattleEngine, failures: Array[String]) -> void:
 	begun = _begin(engine, _deck("R3-C-07", 10), rng)
 	begun.data.state.ddl = 3
 	step = _play(engine, begun, "R3-C-07", [_task_id(begun.data.state, TASK_A)])
-	_check(step.ok and _task(step, TASK_A).work_remaining == 38, "C-07 adds the DDL bonus", failures)
+	_check(
+		step.ok and _task(step, TASK_A).work_remaining == 38, "C-07 adds the DDL bonus", failures
+	)
 
 	begun = _begin(engine, _deck("R3-C-09", 10), rng)
 	step = _play(engine, begun, "R3-C-09", [_task_id(begun.data.state, TASK_A)])
-	_check(step.ok and _task(step, TASK_A).work_remaining == 45, "C-09 vulnerability boosts completion", failures)
+	_check(
+		step.ok and _task(step, TASK_A).work_remaining == 45,
+		"C-09 vulnerability boosts completion",
+		failures
+	)
 	_check(_has_status(step, TASK_A, "vulnerability"), "C-09 applies vulnerability", failures)
 
 	begun = _begin(engine, _deck("R3-C-10", 10), rng)
@@ -87,10 +89,16 @@ func _check_direct(engine: BattleEngine, failures: Array[String]) -> void:
 		var state: BattleState = step.data.state
 		state.player.relax = 0
 		state.tasks[0].intent_snapshot.pressure = 1
-		var ended := engine.apply(state, ActionDraft.new(GameConstants.ACTION_END_TURN, {}), step.data.rng_state)
+		var ended := engine.apply(
+			state, ActionDraft.new(GameConstants.ACTION_END_TURN, {}), step.data.rng_state
+		)
 		_check(ended.ok, "C-10 end turn resolves", failures)
 		if ended.ok:
-			_check(ended.data.state.player.vitality == 72, "C-10 weakness reduces pressure to zero", failures)
+			_check(
+				ended.data.state.player.vitality == 72,
+				"C-10 weakness reduces pressure to zero",
+				failures
+			)
 			_check(
 				not _has_status(ended, TASK_A, "weakness"),
 				"C-10 weakness expires after the pressure window",
@@ -101,7 +109,11 @@ func _check_direct(engine: BattleEngine, failures: Array[String]) -> void:
 	begun.data.state.tasks[0].shield = 6
 	step = _play(engine, begun, "R3-C-11", [_task_id(begun.data.state, TASK_A)])
 	_check(step.ok and _task(step, TASK_A).shield == 0, "C-11 removes the shield", failures)
-	_check(step.ok and _task(step, TASK_A).work_remaining == 45, "C-11 completes after removing shield", failures)
+	_check(
+		step.ok and _task(step, TASK_A).work_remaining == 45,
+		"C-11 completes after removing shield",
+		failures
+	)
 
 	begun = _begin(engine, _deck("R3-C-12", 10), rng)
 	step = _play(engine, begun, "R3-C-12", [])
@@ -132,7 +144,11 @@ func _check_ability(engine: BattleEngine, failures: Array[String]) -> void:
 	if not ended.ok:
 		return
 	var work := _play(engine, ended, "R3-C-01", [_task_id(ended.data.state, TASK_A)])
-	_check(work.ok and _task(work, TASK_A).work_remaining == 42, "C-06 adds 2 to the first work card", failures)
+	_check(
+		work.ok and _task(work, TASK_A).work_remaining == 42,
+		"C-06 adds 2 to the first work card",
+		failures
+	)
 
 
 func _check_scene(engine: BattleEngine, failures: Array[String]) -> void:
@@ -148,9 +164,7 @@ func _check_scene(engine: BattleEngine, failures: Array[String]) -> void:
 		failures
 	)
 	var ended := engine.apply(
-		scene.data.state,
-		ActionDraft.new(GameConstants.ACTION_END_TURN, {}),
-		scene.data.rng_state
+		scene.data.state, ActionDraft.new(GameConstants.ACTION_END_TURN, {}), scene.data.rng_state
 	)
 	_check(ended.ok and ended.data.state.player.relax == 3, "C-08 scene grants 3 relax", failures)
 
@@ -183,11 +197,7 @@ func _check_codec(engine: BattleEngine, failures: Array[String]) -> void:
 	var decoded := BattleCodec.decode(encoded.data, catalog)
 	_check(decoded.ok, "v3 state decodes", failures)
 	if decoded.ok:
-		_check(
-			decoded.data.v3 == ended.data.state.v3,
-			"v3 ability state round-trips",
-			failures
-		)
+		_check(decoded.data.v3 == ended.data.state.v3, "v3 ability state round-trips", failures)
 
 
 var _fixture_root := ""
@@ -237,29 +247,35 @@ func _rng() -> Dictionary:
 func _deck(definition_id: String, count: int) -> Array[Dictionary]:
 	var result: Array[Dictionary] = []
 	for index in count:
-		result.append(
-			{
-				"card_id": "%s_%02d" % [definition_id, index + 1],
-				"definition_id": definition_id,
-				"upgrade_level": 0,
-			}
+		(
+			result
+			. append(
+				{
+					"card_id": "%s_%02d" % [definition_id, index + 1],
+					"definition_id": definition_id,
+					"upgrade_level": 0,
+				}
+			)
 		)
 	return result
 
 
 func _begin(engine: BattleEngine, deck: Array[Dictionary], rng: Dictionary) -> GameResult:
-	var result := engine.begin(
-		{
-			"battle_id": "r3_engine_%d" % Time.get_ticks_usec(),
-			"encounter_id": "R3_TEST",
-			"character_id": "R3_TEST_CHAR",
-			"difficulty": "normal",
-			"vitality": 72,
-			"max_vitality": 72,
-			"cards": deck,
-			"relics": [],
-			"rng_state": rng.duplicate(true),
-		}
+	var result := (
+		engine
+		. begin(
+			{
+				"battle_id": "r3_engine_%d" % Time.get_ticks_usec(),
+				"encounter_id": "R3_TEST",
+				"character_id": "R3_TEST_CHAR",
+				"difficulty": "normal",
+				"vitality": 72,
+				"max_vitality": 72,
+				"cards": deck,
+				"relics": [],
+				"rng_state": rng.duplicate(true),
+			}
+		)
 	)
 	if not result.ok:
 		print("V3_BEGIN_ERROR=", JSON.stringify(result.error.to_dictionary()))
@@ -275,13 +291,14 @@ func _play(
 	var card_id := _hand_card(state, definition_id)
 	if card_id.is_empty():
 		return GameResult.failure(
-			ApiError.new(GameConstants.ERROR_INVALID_TARGET, "test.card_not_in_hand", {"id": definition_id})
+			ApiError.new(
+				GameConstants.ERROR_INVALID_TARGET, "test.card_not_in_hand", {"id": definition_id}
+			)
 		)
 	var result := engine.apply(
 		state,
 		ActionDraft.new(
-			GameConstants.ACTION_PLAY_CARD,
-			{"card_instance_id": card_id, "target_ids": target_ids}
+			GameConstants.ACTION_PLAY_CARD, {"card_instance_id": card_id, "target_ids": target_ids}
 		),
 		step.data.rng_state
 	)
@@ -342,7 +359,10 @@ func _has_status(step: GameResult, task_definition: String, status_id: String) -
 	var state: BattleState = step.data.state
 	var task_id := _task_id(state, task_definition)
 	for status: Dictionary in state.statuses:
-		if str(status.get("status_id", "")) == status_id and str(status.get("target_id", "")) == task_id:
+		if (
+			str(status.get("status_id", "")) == status_id
+			and str(status.get("target_id", "")) == task_id
+		):
 			return true
 	return false
 

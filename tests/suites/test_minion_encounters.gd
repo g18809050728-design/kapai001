@@ -78,14 +78,15 @@ func _check_opening(engine: BattleEngine, rng_state: Dictionary, failures: Array
 func _check_content_contract(catalog: ContentDB, failures: Array[String]) -> void:
 	var n14 := _task(catalog, "N14")
 	_check(
-		_first_phase(n14).get("intents", [])[0].get("gain_status", {}).get("status", "") == "drowsiness",
+		(
+			_first_phase(n14).get("intents", [])[0].get("gain_status", {}).get("status", "")
+			== "drowsiness"
+		),
 		"N14 applies drowsiness in its first intent",
 		failures
 	)
 	_check(
-		not n14.get("on_complete_effects", []).is_empty(),
-		"N14 declares a deathrattle",
-		failures
+		not n14.get("on_complete_effects", []).is_empty(), "N14 declares a deathrattle", failures
 	)
 	var n23 := _task(catalog, "N23")
 	_check(
@@ -103,9 +104,7 @@ func _check_content_contract(catalog: ContentDB, failures: Array[String]) -> voi
 	_check(int(n26.get("draw_reduction", 0)) == 1, "N26 reduces the player draw", failures)
 	var n34 := _task(catalog, "N34")
 	_check(
-		int(n34.get("discard_on_first_card", 0)) == 1,
-		"N34 discards after the first card",
-		failures
+		int(n34.get("discard_on_first_card", 0)) == 1, "N34 discards after the first card", failures
 	)
 	var n28 := _task(catalog, "N28")
 	_check(int(n28.get("first_card_cost_bonus", 0)) == 1, "N28 taxes the first card", failures)
@@ -119,8 +118,10 @@ func _check_content_contract(catalog: ContentDB, failures: Array[String]) -> voi
 	)
 	var n24 := _task(catalog, "N24")
 	_check(
-		_first_phase(n24).get("intent_loop", "") == "clamp"
-		and _first_phase(n24).get("intents", []).size() == 4,
+		(
+			_first_phase(n24).get("intent_loop", "") == "clamp"
+			and _first_phase(n24).get("intents", []).size() == 4
+		),
 		"N24 escalates pressure and clamps",
 		failures
 	)
@@ -138,7 +139,14 @@ func _check_content_contract(catalog: ContentDB, failures: Array[String]) -> voi
 	)
 	var n38 := _task(catalog, "N38")
 	_check(
-		int(_first_phase(n38).get("intents", [])[0].get("pressure_per_card_type", {}).get("cooperation", 0)) == 1,
+		(
+			int(
+				_first_phase(n38).get("intents", [])[0].get("pressure_per_card_type", {}).get(
+					"cooperation", 0
+				)
+			)
+			== 1
+		),
 		"N38 scales pressure by cooperation cards",
 		failures
 	)
@@ -151,13 +159,14 @@ func _check_content_contract(catalog: ContentDB, failures: Array[String]) -> voi
 	var n37 := _task(catalog, "N37")
 	var n37_final: Dictionary = _first_phase(n37).get("intents", [])[1]
 	_check(
-		bool(n37_final.get("self_destruct", false))
-		and bool(n37_final.get("pressure_all", false)),
+		bool(n37_final.get("self_destruct", false)) and bool(n37_final.get("pressure_all", false)),
 		"N37 explodes after its countdown",
 		failures
 	)
 	var x03 := catalog.get_definition("card", "X03")
-	_check(x03.ok and bool(x03.data.get("unplayable", false)), "X03 is an unplayable card", failures)
+	_check(
+		x03.ok and bool(x03.data.get("unplayable", false)), "X03 is an unplayable card", failures
+	)
 	for encounter_id in MINION_EXPECTATIONS:
 		_check(
 			UiStyle.label(encounter_id) != encounter_id,
@@ -186,8 +195,7 @@ func _check_on_complete(
 	var applied := engine.apply(
 		state,
 		ActionDraft.new(
-			GameConstants.ACTION_PLAY_CARD,
-			{"card_instance_id": card_id, "target_ids": [task_id]}
+			GameConstants.ACTION_PLAY_CARD, {"card_instance_id": card_id, "target_ids": [task_id]}
 		),
 		begun.data.rng_state
 	)
@@ -226,9 +234,7 @@ func _check_first_card_discard(
 	)
 	_check(second.ok, "N34 second card resolves", failures)
 	_check(
-		not _has_event(second, "card_discarded"),
-		"N34 discards only after the first card",
-		failures
+		not _has_event(second, "card_discarded"), "N34 discards only after the first card", failures
 	)
 
 
@@ -249,7 +255,9 @@ func _check_soak(engine: BattleEngine, rng_state: Dictionary, failures: Array[St
 				break
 		_check(step.ok, encounter_id + " soak turns never fail", failures)
 		if not step.ok:
-			print("MINION_SOAK_ERROR=", encounter_id, "=", JSON.stringify(step.error.to_dictionary()))
+			print(
+				"MINION_SOAK_ERROR=", encounter_id, "=", JSON.stringify(step.error.to_dictionary())
+			)
 			continue
 		_check(
 			step.data.state.phase == "finished" and step.data.state.outcome != null,
@@ -297,25 +305,23 @@ func _begin(
 
 
 func _end_turn(engine: BattleEngine, step: GameResult) -> GameResult:
-	return (
-		engine
-		. apply(
-			step.data.state,
-			ActionDraft.new(GameConstants.ACTION_END_TURN, {}),
-			step.data.rng_state
-		)
+	return engine.apply(
+		step.data.state, ActionDraft.new(GameConstants.ACTION_END_TURN, {}), step.data.rng_state
 	)
 
 
 func _deck(definition_id: String, count: int) -> Array[Dictionary]:
 	var cards: Array[Dictionary] = []
 	for index in count:
-		cards.append(
-			{
-				"card_id": "origin_%s_%02d" % [definition_id, index + 1],
-				"definition_id": definition_id,
-				"upgrade_level": 0,
-			}
+		(
+			cards
+			. append(
+				{
+					"card_id": "origin_%s_%02d" % [definition_id, index + 1],
+					"definition_id": definition_id,
+					"upgrade_level": 0,
+				}
+			)
 		)
 	return cards
 

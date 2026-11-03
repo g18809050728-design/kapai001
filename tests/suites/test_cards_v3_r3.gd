@@ -55,7 +55,12 @@ func _check_manifest(failures: Array[String]) -> void:
 
 
 func _check_paper_rules(failures: Array[String]) -> void:
-	var begun := _begin("P02", _deck([["R3-P02-01", 2], ["R3-P02-03", 2], ["R3-P02-06", 1], ["R3-T201", 1], ["R3-P02-23", 6]]))
+	var begun := _begin(
+		"P02",
+		_deck(
+			[["R3-P02-01", 2], ["R3-P02-03", 2], ["R3-P02-06", 1], ["R3-T201", 1], ["R3-P02-23", 6]]
+		)
+	)
 	_check(begun.ok, "R3-T04 paper battle starts", failures)
 	if not begun.ok:
 		return
@@ -68,17 +73,11 @@ func _check_paper_rules(failures: Array[String]) -> void:
 	_check(opened.ok and _paper(opened).open, "R3-T04 paper opens", failures)
 	var first := _play(opened, "R3-P02-03", [])
 	_check(
-		first.ok and int(_paper(first).progress) == 1,
-		"R3-T04 new name records progress",
-		failures
+		first.ok and int(_paper(first).progress) == 1, "R3-T04 new name records progress", failures
 	)
 	_move_to_hand(first.data.state, "R3-P02-03", 1)
 	var repeat_same_turn := _play(first, "R3-P02-03", [])
-	_check(
-		repeat_same_turn.ok == false,
-		"R3-T04 same name is unavailable in one turn",
-		failures
-	)
+	_check(repeat_same_turn.ok == false, "R3-T04 same name is unavailable in one turn", failures)
 	var ended := _end_turn(first)
 	if ended.ok:
 		ended.data.state.player.focus = 10
@@ -90,7 +89,9 @@ func _check_paper_rules(failures: Array[String]) -> void:
 		failures
 	)
 
-	var pay_begun := _begin("P02", _deck([["R3-P02-01", 1], ["R3-P02-06", 1], ["R3-T201", 1], ["R3-P02-23", 8]]))
+	var pay_begun := _begin(
+		"P02", _deck([["R3-P02-01", 1], ["R3-P02-06", 1], ["R3-T201", 1], ["R3-P02-23", 8]])
+	)
 	if not pay_begun.ok:
 		_check(false, "R3-T05 citation battle starts", failures)
 		return
@@ -117,7 +118,9 @@ func _check_paper_rules(failures: Array[String]) -> void:
 	if published.ok:
 		_check(_task(published, TASK_B).work_remaining == 10, "R3-T06 C=80 gives 90/40", failures)
 		_check(not _paper(published).open, "R3-T10 publication closes the paper", failures)
-		_check(_paper(published).chapters.is_empty(), "R3-T10 publication clears chapters", failures)
+		_check(
+			_paper(published).chapters.is_empty(), "R3-T10 publication clears chapters", failures
+		)
 
 	var unique_begun := _begin("P02", _deck([["R3-P02-01", 2], ["R3-T201", 1], ["R3-P02-23", 8]]))
 	if unique_begun.ok:
@@ -131,16 +134,18 @@ func _check_paper_rules(failures: Array[String]) -> void:
 			_move_to_hand(uturn.data.state, "R3-P02-01", 1)
 			var ureopen := _play(uturn, "R3-P02-01", [])
 			_check(
-				ureopen.ok
-				and _count_definition(ureopen.data.state, "R3-T201") == 1
-				and _has_hand(ureopen.data.state, "R3-T201"),
+				(
+					ureopen.ok
+					and _count_definition(ureopen.data.state, "R3-T201") == 1
+					and _has_hand(ureopen.data.state, "R3-T201")
+				),
 				"R3-T07 only one publication instance survives reopening",
 				failures
 			)
 
-	var chapter_begun := _begin("P02", _deck([
-		["R3-P02-01", 1], ["R3-P02-11", 2], ["R3-P02-13", 1], ["R3-P02-23", 8]
-	]))
+	var chapter_begun := _begin(
+		"P02", _deck([["R3-P02-01", 1], ["R3-P02-11", 2], ["R3-P02-13", 1], ["R3-P02-23", 8]])
+	)
 	if chapter_begun.ok:
 		chapter_begun.data.state.player.focus = 10
 		_move_to_hand(chapter_begun.data.state, "R3-P02-01", 1)
@@ -177,8 +182,10 @@ func _check_exams(failures: Array[String]) -> void:
 				failures
 			)
 			_check(
-				not exam.get("effects", []).is_empty()
-				and not exam.get("upgrade_effects", []).is_empty(),
+				(
+					not exam.get("effects", []).is_empty()
+					and not exam.get("upgrade_effects", []).is_empty()
+				),
 				"R3-T19 exam has both faces " + card_id,
 				failures
 			)
@@ -189,17 +196,13 @@ func _check_exams(failures: Array[String]) -> void:
 			continue
 		var exam: Dictionary = definition.data.exam
 		var condition := str(exam.get("condition", ""))
-		var encounter_id := (
-			"R3-AC-FIXED" if condition == "fixed_exam_room" else "R3-AC-INDEP"
-		)
+		var encounter_id := "R3-AC-FIXED" if condition == "fixed_exam_room" else "R3-AC-INDEP"
 		var character_id := "P01"
 		if str(definition.data.owner) == "P02":
 			character_id = "P02"
 		elif str(definition.data.owner) == "P04":
 			character_id = "P04"
-		var begun := _begin(
-			character_id, _deck([[card_id, 1], ["R3-C-01", 8]]), encounter_id
-		)
+		var begun := _begin(character_id, _deck([[card_id, 1], ["R3-C-01", 8]]), encounter_id)
 		if not begun.ok:
 			_check(false, "R3-T19 exam battle starts " + card_id, failures)
 			continue
@@ -225,9 +228,11 @@ func _check_acquisition(failures: Array[String]) -> void:
 	for token_id in ["R3-T201", "R3-T202"]:
 		var token := _catalog.get_definition("card", token_id)
 		_check(
-			token.ok
-			and not bool(token.data.get("permanent", true))
-			and str(token.data.get("rarity", "")) == "token",
+			(
+				token.ok
+				and not bool(token.data.get("permanent", true))
+				and str(token.data.get("rarity", "")) == "token"
+			),
 			"R3-T20 " + token_id + " is a non-permanent token",
 			failures
 		)
@@ -260,14 +265,16 @@ func _check_save(failures: Array[String]) -> void:
 		if decoded.ok:
 			var paper: Dictionary = decoded.data.v3.get("paper", {})
 			_check(
-				bool(paper.get("open", false))
-				and int(paper.get("progress", 0)) == 1
-				and int(paper.get("citations", 0)) == 2
-				and int(paper.get("modifier", 0)) == 3
-				and int(paper.get("amplify", 0)) == 4
-				and paper.get("turn_names", []) == ["R3-P02-01", "R3-P02-11"]
-				and paper.get("chapters", []).size() == 1
-				and not str(paper.get("publication_id", "")).is_empty(),
+				(
+					bool(paper.get("open", false))
+					and int(paper.get("progress", 0)) == 1
+					and int(paper.get("citations", 0)) == 2
+					and int(paper.get("modifier", 0)) == 3
+					and int(paper.get("amplify", 0)) == 4
+					and paper.get("turn_names", []) == ["R3-P02-01", "R3-P02-11"]
+					and paper.get("chapters", []).size() == 1
+					and not str(paper.get("publication_id", "")).is_empty()
+				),
 				"R3-T21 chapters/paper/publication round-trip",
 				failures
 			)
@@ -290,16 +297,36 @@ func _check_overdraft(failures: Array[String]) -> void:
 
 func _check_scenarios(failures: Array[String]) -> void:
 	var samples := [
-		{"id": "P01-normal", "character": "P01", "encounter": ENCOUNTER,
-			"deck": [["R3-P01-01", 1], ["R3-P01-02", 1], ["R3-C-01", 10]]},
-		{"id": "P02-exam", "character": "P02", "encounter": "R3-AC-INDEP",
-			"deck": [["R3-P02-01", 1], ["R3-P02-11", 1], ["R3-C-01", 10]]},
-		{"id": "P03-normal", "character": "P03", "encounter": ENCOUNTER,
-			"deck": [["R3-P03-01", 1], ["R3-P03-21", 1], ["R3-C-01", 10]]},
-		{"id": "P04-multi", "character": "P04", "encounter": ENCOUNTER,
-			"deck": [["R3-P04-01", 1], ["R3-P04-02", 1], ["R3-C-01", 10]]},
-		{"id": "P02-no-rare", "character": "P02", "encounter": ENCOUNTER,
-			"deck": [["R3-P02-01", 1], ["R3-P02-11", 1], ["R3-C-03", 10]]},
+		{
+			"id": "P01-normal",
+			"character": "P01",
+			"encounter": ENCOUNTER,
+			"deck": [["R3-P01-01", 1], ["R3-P01-02", 1], ["R3-C-01", 10]]
+		},
+		{
+			"id": "P02-exam",
+			"character": "P02",
+			"encounter": "R3-AC-INDEP",
+			"deck": [["R3-P02-01", 1], ["R3-P02-11", 1], ["R3-C-01", 10]]
+		},
+		{
+			"id": "P03-normal",
+			"character": "P03",
+			"encounter": ENCOUNTER,
+			"deck": [["R3-P03-01", 1], ["R3-P03-21", 1], ["R3-C-01", 10]]
+		},
+		{
+			"id": "P04-multi",
+			"character": "P04",
+			"encounter": ENCOUNTER,
+			"deck": [["R3-P04-01", 1], ["R3-P04-02", 1], ["R3-C-01", 10]]
+		},
+		{
+			"id": "P02-no-rare",
+			"character": "P02",
+			"encounter": ENCOUNTER,
+			"deck": [["R3-P02-01", 1], ["R3-P02-11", 1], ["R3-C-03", 10]]
+		},
 	]
 	var report: Array = []
 	for sample in samples:
@@ -308,13 +335,16 @@ func _check_scenarios(failures: Array[String]) -> void:
 		)
 		_check(played.get("started", false), "R3-T23 " + str(sample.id) + " starts", failures)
 		_check(played.get("actions", 0) > 0, "R3-T23 " + str(sample.id) + " advances", failures)
-		report.append(
-			{
-				"id": sample.id,
-				"outcome": played.get("outcome", ""),
-				"actions": played.get("actions", 0),
-				"round": played.get("round", 0),
-			}
+		(
+			report
+			. append(
+				{
+					"id": sample.id,
+					"outcome": played.get("outcome", ""),
+					"actions": played.get("actions", 0),
+					"round": played.get("round", 0),
+				}
+			)
 		)
 	print("V3_R3_SAMPLES=", JSON.stringify(report))
 
@@ -426,18 +456,21 @@ func _matrix() -> Dictionary:
 func _begin(
 	character_id: String, deck: Array[Dictionary], encounter_id: String = ENCOUNTER
 ) -> GameResult:
-	return _engine.begin(
-		{
-			"battle_id": "r3_ac_%d" % Time.get_ticks_usec(),
-			"encounter_id": encounter_id,
-			"character_id": character_id,
-			"difficulty": "normal",
-			"vitality": 72,
-			"max_vitality": 72,
-			"cards": deck,
-			"relics": [],
-			"rng_state": RandomSource.new("r3-acceptance").export_state().to_dictionary(),
-		}
+	return (
+		_engine
+		. begin(
+			{
+				"battle_id": "r3_ac_%d" % Time.get_ticks_usec(),
+				"encounter_id": encounter_id,
+				"character_id": character_id,
+				"difficulty": "normal",
+				"vitality": 72,
+				"max_vitality": 72,
+				"cards": deck,
+				"relics": [],
+				"rng_state": RandomSource.new("r3-acceptance").export_state().to_dictionary(),
+			}
+		)
 	)
 
 
@@ -447,12 +480,15 @@ func _deck(entries: Array) -> Array[Dictionary]:
 	for entry in entries:
 		for _index in int(entry[1]):
 			serial += 1
-			result.append(
-				{
-					"card_id": "card_%03d" % serial,
-					"definition_id": str(entry[0]),
-					"upgrade_level": 0,
-				}
+			(
+				result
+				. append(
+					{
+						"card_id": "card_%03d" % serial,
+						"definition_id": str(entry[0]),
+						"upgrade_level": 0,
+					}
+				)
 			)
 	return result
 
@@ -464,13 +500,14 @@ func _play(step: GameResult, definition_id: String, target_ids: Array) -> GameRe
 	var card_id := _hand_card(state, definition_id)
 	if card_id.is_empty():
 		return GameResult.failure(
-			ApiError.new(GameConstants.ERROR_INVALID_TARGET, "test.card_not_in_hand", {"id": definition_id})
+			ApiError.new(
+				GameConstants.ERROR_INVALID_TARGET, "test.card_not_in_hand", {"id": definition_id}
+			)
 		)
 	var result := _engine.apply(
 		state,
 		ActionDraft.new(
-			GameConstants.ACTION_PLAY_CARD,
-			{"card_instance_id": card_id, "target_ids": target_ids}
+			GameConstants.ACTION_PLAY_CARD, {"card_instance_id": card_id, "target_ids": target_ids}
 		),
 		step.data.rng_state
 	)
@@ -497,9 +534,7 @@ func _end_turn(step: GameResult) -> GameResult:
 	if not step.ok:
 		return step
 	return _engine.apply(
-		step.data.state,
-		ActionDraft.new(GameConstants.ACTION_END_TURN, {}),
-		step.data.rng_state
+		step.data.state, ActionDraft.new(GameConstants.ACTION_END_TURN, {}), step.data.rng_state
 	)
 
 
