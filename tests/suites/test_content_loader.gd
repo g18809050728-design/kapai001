@@ -384,6 +384,36 @@ func run() -> Array[String]:
 		"hook keys are scoped to their registered timing point",
 		failures
 	)
+	var bad_status_prevention := bad_relic.duplicate(true)
+	bad_status_prevention.hooks = [
+		{"at": "before_status_gain", "status": "drowsiness", "prevent_stacks": 0,
+		"limit": {"per": "battle", "times": 1}}
+	]
+	_check(
+		_reject_definition(isolated_db, isolated_root, "relic", bad_status_prevention, stable_hash),
+		"status prevention requires a positive stack count",
+		failures
+	)
+	var bad_work_segment := bad_relic.duplicate(true)
+	bad_work_segment.hooks = [
+		{"at": "work_segment", "first_work_card": true, "segment_index": 0,
+		"max_ddl": 0, "completion_bonus": 2, "limit": {"per": "round", "times": 1}}
+	]
+	_check(
+		_reject_definition(isolated_db, isolated_root, "relic", bad_work_segment, stable_hash),
+		"work segment hook rejects an invalid deadline",
+		failures
+	)
+	var bad_stage_effect := bad_relic.duplicate(true)
+	bad_stage_effect.hooks = [
+		{"at": "stage_entered", "effects": [{"op": "unregistered_op"}],
+		"limit": {"per": "battle", "times": 1}}
+	]
+	_check(
+		_reject_definition(isolated_db, isolated_root, "relic", bad_stage_effect, stable_hash),
+		"stage hook rejects an unregistered effect",
+		failures
+	)
 	_remove_fixture(isolated_root)
 	return failures
 

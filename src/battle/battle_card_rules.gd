@@ -122,16 +122,24 @@ func calculate_cost(state: BattleState, card_id: String) -> GameResult:
 			)
 			if int(state.counters.get(counter_key, 0)) >= int(limit.get("times", 1)):
 				continue
+			var available_focus := maxi(0, focus_base + focus_added - focus_discount)
+			var nominal_discount := int(hook.get("discount", 0))
+			var applied_discount := mini(available_focus, nominal_discount)
+			var require_actual_discount := bool(hook.get("require_actual_discount", false))
+			var skip_vitality := bool(hook.get("skip_vitality_cost", false))
+			if require_actual_discount and applied_discount == 0:
+				continue
+			var source_discount := applied_discount if require_actual_discount else nominal_discount
 			var source := {
 				"relic_id": relic_id,
 				"hook_index": hook_index,
 				"counter_key": counter_key,
-				"discount": int(hook.get("discount", 0)),
-				"skip_vitality_cost": bool(hook.get("skip_vitality_cost", false)),
+				"discount": source_discount,
+				"skip_vitality_cost": skip_vitality,
 			}
 			sources.append(source)
-			focus_discount += int(source.discount)
-			if bool(source.skip_vitality_cost):
+			focus_discount += source_discount
+			if skip_vitality:
 				vitality_discount = vitality_base
 	return (
 		GameResult

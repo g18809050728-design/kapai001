@@ -746,7 +746,19 @@ func _end_turn(
 					}
 				)
 				if int(task.work_remaining) == 0:
-					_advance_or_remove_task(state, task_index, events, rng)
+					var advanced := _advance_or_remove_task(state, task_index, events, rng)
+					if not advanced.ok:
+						return advanced
+					if (
+						state.phase != "finished"
+						and int(state.player.get("vitality", 0)) > 0
+						and not _has_required_task(state)
+					):
+						var winning_unit_relics := _run_relic_hooks(
+							state, "unit_action_completed", {}, rng, events
+						)
+						if not winning_unit_relics.ok:
+							return winning_unit_relics
 				_check_battle_outcome(state, events)
 				if state.phase == "finished":
 					return GameResult.success(null)
@@ -770,6 +782,9 @@ func _end_turn(
 				[unit_id],
 				{"definition_id": str(unit.definition_id), "reason": "exhausted"}
 			)
+		var unit_relics := _run_relic_hooks(state, "unit_action_completed", {}, rng, events)
+		if not unit_relics.ok:
+			return unit_relics
 		_check_battle_outcome(state, events)
 		if state.phase == "finished":
 			return GameResult.success(null)
@@ -1770,8 +1785,7 @@ func _execute_card_effect(
 	var amount := int(effect.get("amount", effect.get("stacks", 0)))
 	match op:
 		"complete":
-			_apply_completion(state, effect, rng, events)
-			return GameResult.success(null)
+			return _apply_completion(state, effect, rng, events)
 		"relax":
 			var before: int = int(state.player.get("relax", 0))
 			state.player.relax = before + maxi(0, amount)
@@ -1992,7 +2006,7 @@ func _task_has_taunt(state: BattleState, task_id: String) -> bool:
 
 func _apply_completion(
 	state: BattleState, effect: Dictionary, rng: RandomSource, events: Array[RuleEvent]
-) -> void:
+) -> GameResult:
 	var resolution: Dictionary = state.resolution
 	var targets: Array = resolution.get("target_ids", [])
 	if bool(resolution.get("all_tasks", false)):
@@ -2023,31 +2037,10 @@ func _apply_completion(
 			_status_stacks(state, "work_boost", "player")
 			* int(ruleset.data.statuses.get("work_boost", {}).get("completion_per_stack", 0))
 		)
-		if bool(resolution.get("first_work_card", false)):
-			for relic_id in state.relics:
-				var relic_result := _catalog.get_definition("relic", relic_id)
-				if not relic_result.ok:
-					continue
-				var relic: Dictionary = relic_result.data
-				if not relic.has("modifiers") or not relic.modifiers.has("work_flat_bonus"):
-					continue
-				var limit: Dictionary = relic.get("limit", {})
-				var counter_key := BattleState.counter_key(
-					StringName(str(limit.get("per", "round"))),
-					"relic_modifier:%s:work_flat_bonus" % relic_id,
-					&"modifier"
-				)
-				if int(state.counters.get(counter_key, 0)) >= int(limit.get("times", 1)):
-					continue
-				state.counters[counter_key] = int(state.counters.get(counter_key, 0)) + 1
-				requested += int(relic.modifiers.work_flat_bonus)
-				_add_event(
-					events,
-					"relic_triggered",
-					relic_id,
-					[str(resolution.get("card_instance_id", ""))],
-					{"relic_id": relic_id, "at": "work_flat_bonus"}
-				)
+		var segment_bonus := _work_segment_relic_bonus(state, segment_index, events)
+		if not segment_bonus.ok:
+			return segment_bonus
+		requested += int(segment_bonus.data)
 		if state.scene is Dictionary:
 			var scene_result := _catalog.get_definition(
 				"scene", str(state.scene.get("definition_id", ""))
@@ -2105,11 +2098,65 @@ func _apply_completion(
 			}
 		)
 		if int(task.work_remaining) == 0:
-			_advance_or_remove_task(state, task_index, events, rng)
+			var advanced := _advance_or_remove_task(state, task_index, events, rng)
+			if not advanced.ok:
+				return advanced
 			_check_battle_outcome(state, events)
 			if state.phase == "finished":
-				return
+				return GameResult.success(null)
 		_check_battle_outcome(state, events)
+	return GameResult.success(null)
+
+
+func _work_segment_relic_bonus(
+	state: BattleState, segment_index: int, events: Array[RuleEvent]
+) -> GameResult:
+	var resolution: Dictionary = state.resolution
+	if str(resolution.get("card_type", "")) != "work":
+		return GameResult.success(0)
+	var bonus := 0
+	for relic_id in state.relics:
+		var relic_result := _catalog.get_definition("relic", relic_id)
+		if not relic_result.ok:
+			return relic_result
+		var relic: Dictionary = relic_result.data
+		if bool(resolution.get("first_work_card", false)) and relic.get("modifiers", {}).has("work_flat_bonus"):
+			var modifier_limit: Dictionary = relic.get("limit", {})
+			var modifier_key := BattleState.counter_key(
+				StringName(str(modifier_limit.get("per", "round"))),
+				"relic_modifier:%s:work_flat_bonus" % relic_id, &"modifier"
+			)
+			if int(state.counters.get(modifier_key, 0)) < int(modifier_limit.get("times", 1)):
+				state.counters[modifier_key] = int(state.counters.get(modifier_key, 0)) + 1
+				bonus += int(relic.modifiers.work_flat_bonus)
+				_add_event(events, "relic_triggered", relic_id,
+					[str(resolution.get("card_instance_id", ""))],
+					{"relic_id": relic_id, "at": "work_flat_bonus"})
+		var hooks: Array = relic.get("hooks", [])
+		for hook_index in hooks.size():
+			var hook: Dictionary = hooks[hook_index]
+			if hook.get("at") != "work_segment":
+				continue
+			if (bool(hook.get("first_work_card", false)) and not bool(resolution.get("first_work_card", false))
+				or segment_index != int(hook.get("segment_index", -1))
+				or state.ddl > int(hook.get("max_ddl", 0))):
+				continue
+			var limit: Dictionary = hook.get("limit", {})
+			var key := BattleState.counter_key(
+				StringName(str(limit.get("per", "round"))),
+				"relic_hook:%s:%d" % [relic_id, hook_index], &"hook"
+			)
+			if int(state.counters.get(key, 0)) >= int(limit.get("times", 1)):
+				continue
+			state.counters[key] = int(state.counters.get(key, 0)) + 1
+			var added := int(hook.get("completion_bonus", 0))
+			bonus += added
+			_add_event(events, "relic_triggered", relic_id,
+				[str(resolution.get("card_instance_id", ""))], {
+					"relic_id": relic_id, "hook_index": hook_index,
+					"at": "work_segment", "amount": added
+				})
+	return GameResult.success(bonus)
 
 
 func _completion_bonus_matches(state: BattleState, condition: Dictionary) -> bool:
@@ -2170,12 +2217,12 @@ func _run_on_complete_effects(
 
 
 func _advance_or_remove_task(
-	state: BattleState, task_index: int, events: Array[RuleEvent], rng: RandomSource = null
-) -> void:
+	state: BattleState, task_index: int, events: Array[RuleEvent], rng: RandomSource
+) -> GameResult:
 	var previous: Dictionary = state.tasks[task_index]
 	var definition_result := _catalog.get_definition("task", str(previous.get("definition_id", "")))
 	if not definition_result.ok:
-		return
+		return definition_result
 	var phases: Array = definition_result.data.get("phases", [])
 	_remove_holder_statuses(state, str(previous.task_id))
 	var current_index := -1
@@ -2216,10 +2263,12 @@ func _advance_or_remove_task(
 				"phase_key": next_phase.phase_key
 			}
 		)
-		return
+		return _run_relic_hooks(state, "stage_entered", {}, rng, events)
 	var on_complete: Array = definition_result.data.get("on_complete_effects", [])
-	if not on_complete.is_empty() and rng != null:
-		_run_on_complete_effects(state, str(previous.task_id), on_complete, rng, events)
+	if not on_complete.is_empty():
+		var completed := _run_on_complete_effects(state, str(previous.task_id), on_complete, rng, events)
+		if not completed.ok:
+			return completed
 	state.tasks.remove_at(task_index)
 	_add_event(
 		events,
@@ -2228,6 +2277,7 @@ func _advance_or_remove_task(
 		[str(previous.task_id)],
 		{"definition_id": str(previous.definition_id), "phase_key": str(previous.phase_key)}
 	)
+	return GameResult.success(null)
 
 
 func _check_battle_outcome(state: BattleState, events: Array[RuleEvent]) -> void:
@@ -2654,6 +2704,14 @@ func _gain_status_on_target(
 	var after := mini(int(status_rule.get("cap", before + stacks)), before + stacks)
 	if status_id == "guard":
 		after = 1
+	if status_id == "drowsiness" and target_id == str(state.player.get("entity_id", "")):
+		var incoming := after - before
+		var prevention := _prevent_status_gain(state, status_id, incoming, target_id, events)
+		if not prevention.ok:
+			return prevention
+		after = before + int(prevention.data)
+		if incoming > 0 and after == before:
+			return GameResult.success(false)
 	if index >= 0:
 		state.statuses[index].stacks = after
 	else:
@@ -2696,6 +2754,41 @@ func _gain_status_on_target(
 		}
 	)
 	return GameResult.success(true)
+
+
+func _prevent_status_gain(
+	state: BattleState, status_id: String, incoming: int, target_id: String,
+	events: Array[RuleEvent]
+) -> GameResult:
+	var remaining := incoming
+	for relic_id in state.relics:
+		if remaining <= 0:
+			break
+		var relic := _catalog.get_definition("relic", relic_id)
+		if not relic.ok:
+			return relic
+		for hook_index in relic.data.get("hooks", []).size():
+			var hook: Dictionary = relic.data.hooks[hook_index]
+			if hook.get("at") != "before_status_gain" or hook.get("status") != status_id:
+				continue
+			var limit: Dictionary = hook.get("limit", {})
+			var key := BattleState.counter_key(
+				StringName(str(limit.get("per", "battle"))),
+				"relic_hook:%s:%d" % [relic_id, hook_index], &"hook"
+			)
+			if int(state.counters.get(key, 0)) >= int(limit.get("times", 1)):
+				continue
+			var prevented := mini(remaining, int(hook.get("prevent_stacks", 0)))
+			if prevented <= 0:
+				continue
+			remaining -= prevented
+			state.counters[key] = int(state.counters.get(key, 0)) + 1
+			_add_event(events, "relic_triggered", relic_id, [target_id], {
+				"relic_id": relic_id, "hook_index": hook_index,
+				"at": "before_status_gain", "status_definition_id": status_id,
+				"amount": prevented
+			})
+	return GameResult.success(remaining)
 
 
 func _task_index(state: BattleState, task_id: String) -> int:
@@ -3210,7 +3303,10 @@ func _validate_input(input: Dictionary) -> GameResult:
 				continue
 			if (
 				str(hook.get("at", ""))
-				not in ["round_start", "draw", "card_resolved", "cost_quote"]
+				not in [
+					"round_start", "draw", "card_resolved", "cost_quote",
+					"before_status_gain", "work_segment", "unit_action_completed", "stage_entered"
+				]
 			):
 				return _failure(
 					GameConstants.ERROR_ENGINE_NOT_READY,

@@ -106,10 +106,14 @@ static func describe_relic(detail: Dictionary) -> String:
 		var prefix := str(
 			(
 				{
-					"round_start": "回合开始",
-					"draw": "抽牌阶段",
-					"cost_quote": "打出",
-					"card_resolved": "打出后",
+					"round_start": "玩家准备阶段",
+					"draw": "基础抽牌后",
+					"cost_quote": "费用报价",
+					"card_resolved": "牌结算后",
+					"before_status_gain": "每战首次获得困倦前",
+					"work_segment": "工作牌完成量结算时",
+					"unit_action_completed": "合作单位行动完成后",
+					"stage_entered": "任务完成并进入下一阶段后",
 					"shop_price": "商店购买"
 				}
 				. get(trigger, trigger)
@@ -118,12 +122,27 @@ static func describe_relic(detail: Dictionary) -> String:
 		if hook.has("rounds"):
 			prefix += "（第 %s 回合）" % "/".join(hook.rounds.map(func(value): return str(value)))
 		if hook.has("card_type"):
-			prefix += "·" + UiStyle.label(str(hook.card_type)) + "牌"
+			var card_type := str(hook.card_type)
+			prefix += "·" + ("工作" if card_type == "work" else UiStyle.label(card_type)) + "牌"
 		if hook.has("definition_id"):
 			prefix += "·" + UiStyle.label(str(hook.definition_id))
+		if hook.has("status") and trigger != "before_status_gain":
+			prefix += "·" + UiStyle.label(str(hook.status))
+		if hook.get("first_work_card", false):
+			prefix += "·本回合首张工作牌"
+		if hook.has("segment_index"):
+			prefix += "·第 %s 段" % (int(hook.segment_index) + 1)
+		if hook.has("max_ddl"):
+			prefix += "·DDL≤%s" % hook.max_ddl
 		var effects := UiStyle.describe_effects(hook.get("effects", []))
+		if hook.has("prevent_stacks"):
+			effects = "抵消 %s 层" % hook.prevent_stacks
+		if hook.has("completion_bonus"):
+			effects = "完成量 +%s" % hook.completion_bonus
 		if hook.has("discount"):
 			effects += "专注费用 -%s" % hook.discount
+			if hook.get("require_actual_discount", false):
+				effects += "（仅实际减免时计次）"
 		if hook.get("skip_vitality_cost", false):
 			effects += "免除精力费用"
 		if hook.has("multiplier_percent"):

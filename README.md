@@ -6,6 +6,8 @@
 
 2026-11-02：第一学期精英池定为 `Q01`、`E01`、`E02`、`E03`、`Q0B`、`Q0C`（`Q0B`/`Q0C` 提前到第 1 学期）。用机器人对起始牌组做了难度下限试玩：`Q0B`/`Q0C` 两人物 100% 胜偏易，`E02`/`E03` 为 50–100%，`E01` 对 P04 仅 4%；`Q0A`/`Q0D` 近似必败，已明确排除出第一学期。数据与复现见实现记录 §7。
 
+2026-11-03：现有 v1 程序已加入 A25–A48 共 24 件通用饰品；规则、奖励/商店与存档集成、既有 UI 套件及启动冒烟已在 Godot 4.7.2 实跑通过，证据见[饰品实现记录](docs/饰品实现记录_20261103.md)与[规则日志摘要](artifacts/verification/relic-expansion-tests-20261103/summary.md)。怪物和 A49–A52 留待后续。当前生产包没有能力牌，因此 A27 在生产局无法触发、A46 的能力分支不可达；隔离 fixture 测试不能证明生产可用。人工视觉、平衡与完整用户路径仍未验证，此项不代表 v3.1 已实现或通过新版阶段。
+
 ## 本轮交付与阅读顺序
 
 | 阅读入口 | 内容 |
@@ -32,6 +34,7 @@
 | [项目计划](docs/交大四年_DDL战争_项目计划书.md)、[规则书](docs/交大四年_DDL战争_游戏规则书.md)、[统一设计](docs/交大四年_DDL战争_统一设计文档.md)、[设计思路](docs/交大四年_DDL战争_完整设计思路.md) | 当前v2上游，已直接重写；旧来源原文/hash可从 Git 历史查阅 |
 | [G0登记](docs/baselines/g0.json)、[需求追踪](docs/G0需求追踪.md)、[G0记录](docs/G0基线执行记录.md) | v1 精确生产范围、裁决和历史核验 |
 | [精英敌人实现记录](docs/精英敌人实现记录_20261101.md) | 2026-11-01/02 精英遭遇的内容/引擎扩充、首期名单与试玩、未完成项与验证状态 |
+| [饰品实现记录](docs/饰品实现记录_20261103.md) | v1 A25–A48 的范围、触发规则、实现与实测状态；A49–A52 及怪物仍待后续 |
 | [架构](docs/初步架构设计.md)、[接口](docs/接口文档.md)、[存储设计](docs/数据库与实体关系设计.md) | 模块边界、公共 API、稳定存档与恢复 |
 | [内容契约](docs/内容层契约.md)、[战斗契约](docs/战斗模块契约.md)、[局流程契约](docs/局流程契约.md)、[界面契约](docs/界面层契约.md) | v2目标行为；现有代码/schema/API仍v1，新版待冻结 |
 | [玩家术语说明](docs/卡牌名词与Buff效果说明.md) | v2名词、人物资源、合作、场景与考试说明 |
@@ -43,12 +46,12 @@
 
 ## 启动与核验
 
-使用 Godot `4.7.2.stable`（本机版本串 `4.7.2.stable.official.ed1daf0bf`）。2026-11-01 实测安装位置为 `D:\Godot\Godot_v4.7.2-stable_win64_console.exe`；旧记录的 `F:\GoDot` 在本机不存在。`tools/verify_*.ps1` 现依次尝试 `F:\GoDot`、`D:\Godot`、`C:\Godot` 与 `godot` 命令，也可用 `GODOT_BIN` 或 `-GodotPath` 显式指定。
+使用 Godot `4.7.2.stable`（本机版本串 `4.7.2.stable.official.ed1daf0bf`）。2026-11-01 的实测记录使用 `D:\Godot\Godot_v4.7.2-stable_win64_console.exe`；2026-11-03 本机当前可运行路径为 `D:\chrome\godot\Godot_v4.7.2-stable_win64_console.exe`。`tools/verify_*.ps1` 的内置搜索路径仍为 `F:\GoDot`、`D:\Godot`、`C:\Godot` 与 `godot` 命令；在本机用 `GODOT_BIN` 或 `-GodotPath` 显式指定当前路径。
 
 **首次运行或删除 `.godot/` 后必须先做一次编辑器导入**，否则 `class_name` 全局类没有注册，所有测试会以 `Could not find type …` 整体失败：
 
 ```powershell
-$env:GODOT_BIN = 'D:\Godot\Godot_v4.7.2-stable_win64_console.exe'
+$env:GODOT_BIN = 'D:\chrome\godot\Godot_v4.7.2-stable_win64_console.exe'
 & $env:GODOT_BIN --headless --editor --path . --quit
 & $env:GODOT_BIN --headless --path . --script res://tests/run_tests.gd
 & $env:GODOT_BIN --headless --path . --script res://tests/run_ui_tests.gd

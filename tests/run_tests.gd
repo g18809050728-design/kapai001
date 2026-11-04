@@ -52,6 +52,8 @@ func _initialize() -> void:
 		"test_snapshot_codec",
 		"test_session_storage",
 		"test_relic_battle_entry",
+		"test_relic_expansion",
+		"test_relic_integration",
 		"test_production_boss",
 		"test_elite_encounters",
 		"test_minion_encounters"

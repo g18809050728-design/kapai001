@@ -1539,22 +1539,40 @@ func _validate_hook(value: Variant, location: String, issues: Array[String]) -> 
 		"draw": ["at", "effects", "rounds", "limit"],
 		"card_resolved": ["at", "effects", "card_type", "definition_id", "limit"],
 		"cost_quote":
-		["at", "limit", "card_type", "definition_id", "discount", "skip_vitality_cost"],
+		["at", "limit", "card_type", "definition_id", "discount", "skip_vitality_cost", "require_actual_discount"],
+		"before_status_gain": ["at", "status", "prevent_stacks", "limit"],
+		"work_segment": ["at", "first_work_card", "segment_index", "max_ddl", "completion_bonus", "limit"],
+		"unit_action_completed": ["at", "effects", "limit"],
+		"stage_entered": ["at", "effects", "limit"],
 		"shop_price": ["at", "kinds", "multiplier_percent", "rounding"],
 	}
 	if not fields_by_at.has(at):
 		issues.append("%s hook.at is not registered" % location)
 		return
-	var required := (
-		["at", "kinds", "multiplier_percent", "rounding"]
-		if at == "shop_price"
-		else ["at", "limit"] if at == "cost_quote" else ["at", "effects"]
-	)
+	var required := ["at", "effects"]
+	match at:
+		"shop_price":
+			required = ["at", "kinds", "multiplier_percent", "rounding"]
+		"cost_quote":
+			required = ["at", "limit"]
+		"before_status_gain":
+			required = ["at", "status", "prevent_stacks", "limit"]
+		"work_segment":
+			required = ["at", "first_work_card", "segment_index", "max_ddl", "completion_bonus", "limit"]
 	_validate_fields(value, fields_by_at[at], required, "%s.hooks[]" % location, issues)
 	if value.has("limit"):
 		_validate_limit(value.limit, "%s.hooks[].limit" % location, issues)
-	if at in ["round_start", "draw", "card_resolved"] and value.has("effects"):
+	if at in ["round_start", "draw", "card_resolved", "unit_action_completed", "stage_entered"] and value.has("effects"):
 		_validate_effects(value.effects, "battle", "%s.hooks[].effects" % location, issues, false)
+	if at == "before_status_gain":
+		if value.get("status") != "drowsiness":
+			issues.append("%s before_status_gain supports drowsiness only" % location)
+		_validate_int(value.get("prevent_stacks"), "%s.hooks[].prevent_stacks" % location, 1, issues)
+	if at == "work_segment":
+		if value.get("first_work_card") != true or value.get("segment_index") != 0:
+			issues.append("%s work_segment requires first_work_card and first segment" % location)
+		_validate_int(value.get("max_ddl"), "%s.hooks[].max_ddl" % location, 1, issues)
+		_validate_int(value.get("completion_bonus"), "%s.hooks[].completion_bonus" % location, 1, issues)
 	if value.has("rounds"):
 		_validate_int_array(value.rounds, "%s.hooks[].rounds" % location, 1, issues)
 	if (
@@ -1571,6 +1589,9 @@ func _validate_hook(value: Variant, location: String, issues: Array[String]) -> 
 			_validate_int(value.discount, "%s.hooks[].discount" % location, 1, issues)
 		if value.has("skip_vitality_cost") and value.skip_vitality_cost != true:
 			issues.append("%s skip_vitality_cost must be true" % location)
+		if value.has("require_actual_discount"):
+			if value.require_actual_discount != true or not value.has("discount"):
+				issues.append("%s require_actual_discount requires a focus discount" % location)
 	if at == "shop_price":
 		_validate_string_array(value.get("kinds"), "%s.hooks[].kinds" % location, issues)
 		if (
