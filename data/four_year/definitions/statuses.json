@@ -1,0 +1,145 @@
+[
+  {
+    "id": "inspiration",
+    "name_key": "status.inspiration.name",
+    "target": "player",
+    "stack_policy": "capped",
+    "duration_policy": "work_or_round_end",
+    "dispel_policy": "explicit",
+    "numeric_rule_key": "inspiration"
+  },
+  {
+    "id": "compile",
+    "name_key": "status.compile.name",
+    "target": "player",
+    "stack_policy": "capped",
+    "duration_policy": "battle",
+    "dispel_policy": "explicit",
+    "numeric_rule_key": "compile"
+  },
+  {
+    "id": "anxiety",
+    "name_key": "status.anxiety.name",
+    "target": "player",
+    "stack_policy": "capped",
+    "duration_policy": "next_prepare",
+    "dispel_policy": "negative",
+    "numeric_rule_key": "anxiety"
+  },
+  {
+    "id": "procrastination",
+    "name_key": "status.procrastination.name",
+    "target": "player",
+    "stack_policy": "capped",
+    "duration_policy": "next_draw",
+    "dispel_policy": "negative",
+    "numeric_rule_key": "procrastination"
+  },
+  {
+    "id": "drowsiness",
+    "name_key": "status.drowsiness.name",
+    "target": "player",
+    "stack_policy": "capped",
+    "duration_policy": "next_player_action_end",
+    "dispel_policy": "negative",
+    "numeric_rule_key": "drowsiness"
+  },
+  {
+    "id": "extra_requirements",
+    "name_key": "status.extra_requirements.name",
+    "target": "task",
+    "stack_policy": "capped",
+    "duration_policy": "battle",
+    "dispel_policy": "explicit",
+    "numeric_rule_key": "extra_requirements"
+  },
+  {
+    "id": "guard",
+    "name_key": "status.guard.name",
+    "target": "unit",
+    "stack_policy": "presence",
+    "duration_policy": "unit_departure",
+    "dispel_policy": "none"
+  },
+  {
+    "id": "brainstorm",
+    "name_key": "status.brainstorm.name",
+    "target": "task",
+    "stack_policy": "capped",
+    "duration_policy": "battle",
+    "dispel_policy": "explicit",
+    "numeric_rule_key": "brainstorm"
+  },
+  {
+    "id": "confusion",
+    "name_key": "status.confusion.name",
+    "target": "task",
+    "stack_policy": "capped",
+    "duration_policy": "battle",
+    "dispel_policy": "explicit",
+    "numeric_rule_key": "confusion"
+  },
+  {
+    "id": "work_boost",
+    "name_key": "status.work_boost.name",
+    "target": "player",
+    "stack_policy": "capped",
+    "duration_policy": "battle",
+    "dispel_policy": "explicit",
+    "numeric_rule_key": "work_boost"
+  },
+  {
+    "id": "vulnerability",
+    "name_key": "status.vulnerability.name",
+    "target": "task",
+    "stack_policy": "capped",
+    "duration_policy": "pressure_window",
+    "dispel_policy": "explicit",
+    "numeric_rule_key": "vulnerability"
+  },
+  {
+    "id": "weakness",
+    "name_key": "status.weakness.name",
+    "target": "task",
+    "stack_policy": "capped",
+    "duration_policy": "pressure_window",
+    "dispel_policy": "explicit",
+    "numeric_rule_key": "weakness"
+  },
+  {
+    "id": "brittle",
+    "name_key": "status.brittle.name",
+    "target": "task",
+    "stack_policy": "capped",
+    "duration_policy": "pressure_window",
+    "dispel_policy": "explicit",
+    "numeric_rule_key": "brittle"
+  },
+  {
+    "id": "feebleness",
+    "name_key": "status.feebleness.name",
+    "target": "task",
+    "stack_policy": "capped",
+    "duration_policy": "battle",
+    "dispel_policy": "explicit",
+    "numeric_rule_key": "feebleness"
+  },
+  {
+    "id": "erosion",
+    "name_key": "status.erosion.name",
+    "target": "task",
+    "stack_policy": "capped",
+    "duration_policy": "battle",
+    "dispel_policy": "explicit",
+    "numeric_rule_key": "erosion"
+  },
+  {
+    "id": "induced",
+    "name_key": "status.induced.name",
+    "target": "task",
+    "stack_policy": "capped",
+    "duration_policy": "next_player_action_end",
+    "dispel_policy": "explicit",
+    "numeric_rule_key": "induced"
+  }
+]

@@ -62,7 +62,9 @@ func _initialize() -> void:
 		"test_cards_v3_p04",
 		"test_cards_v3_p02",
 		"test_cards_v3_r3",
-		"test_cards_v3_production"
+		"test_cards_v3_production",
+		"test_four_year",
+		"test_four_year_passives"
 	]:
 		var run_script: Script = load("res://tests/suites/%s.gd" % path)
 		if run_script != null and run_script.can_instantiate():

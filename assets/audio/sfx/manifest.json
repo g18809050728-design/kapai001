@@ -1,0 +1,97 @@
+{
+  "version": "soft-paper-wood-v2",
+  "seed": 20261105,
+  "sample_rate": 44100,
+  "clips": [
+    {
+      "name": "ui_hover",
+      "duration": 0.06,
+      "peak_target": 0.025
+    },
+    {
+      "name": "ui_click",
+      "duration": 0.1,
+      "peak_target": 0.065
+    },
+    {
+      "name": "ui_back",
+      "duration": 0.12,
+      "peak_target": 0.06
+    },
+    {
+      "name": "detail_open",
+      "duration": 0.16,
+      "peak_target": 0.055
+    },
+    {
+      "name": "error",
+      "duration": 0.22,
+      "peak_target": 0.09
+    },
+    {
+      "name": "choice",
+      "duration": 0.24,
+      "peak_target": 0.085
+    },
+    {
+      "name": "card_draw",
+      "duration": 0.16,
+      "peak_target": 0.055
+    },
+    {
+      "name": "card_play",
+      "duration": 0.18,
+      "peak_target": 0.115
+    },
+    {
+      "name": "card_discard",
+      "duration": 0.16,
+      "peak_target": 0.05
+    },
+    {
+      "name": "card_exhaust",
+      "duration": 0.22,
+      "peak_target": 0.065
+    },
+    {
+      "name": "status",
+      "duration": 0.15,
+      "peak_target": 0.045
+    },
+    {
+      "name": "task_hit",
+      "duration": 0.18,
+      "peak_target": 0.105
+    },
+    {
+      "name": "task_done",
+      "duration": 0.34,
+      "peak_target": 0.13
+    },
+    {
+      "name": "ddl",
+      "duration": 0.18,
+      "peak_target": 0.065
+    },
+    {
+      "name": "paper",
+      "duration": 0.2,
+      "peak_target": 0.06
+    },
+    {
+      "name": "chapter",
+      "duration": 0.2,
+      "peak_target": 0.065
+    },
+    {
+      "name": "victory",
+      "duration": 0.72,
+      "peak_target": 0.17
+    },
+    {
+      "name": "defeat",
+      "duration": 0.64,
+      "peak_target": 0.135
+    }
+  ]
+}

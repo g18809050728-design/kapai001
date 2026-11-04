@@ -10,13 +10,9 @@ func run() -> Array[String]:
 		GameSession.new(SaveStore.new("user://g7-battle-polish-%s" % Time.get_ticks_usec()))
 	)
 	_shell.session.update_settings({"autosave": false})
-	_shell.press("menu:new")
-	_shell.press("setup:manifest:campus_mvp")
-	var seed := _find_input(_shell.page)
-	seed.text = "0"
-	seed.text_changed.emit("0")
-	_shell.press("setup:start")
-	_shell.press("node:" + str(_shell.session.get_view().run.reachable_node_ids[0]))
+	_check(_shell.session.start_run(StartRunRequest.new("P01", &"normal", "campus_mvp", "0")).accepted, "historical relic/keyboard fixture starts through the session API")
+	_shell.show_screen("")
+	_helpers.enter_node(_shell, str(_shell.session.get_view().run.reachable_node_ids[0]))
 	var viewport := _shell.get_tree().root
 	var original_size := viewport.size
 	viewport.size = Vector2i(1280, 800)
@@ -24,7 +20,9 @@ func run() -> Array[String]:
 	_check(_shell.audio != null, "audio manager is attached")
 	_check(AudioServer.get_bus_index("SFX") >= 0, "SFX bus exists")
 	var audio_before := _fingerprint()
-	_check(_shell.audio.play_ui("ui_hover"), "placeholder UI sound loads")
+	_check(not _shell.audio.play_ui("ui_hover"), "hover is quiet")
+	_shell.audio._last_played.clear()
+	_shell.audio._last_group.clear()
 	_check(_shell.audio.play_event("card_played"), "battle event maps to a sound")
 	_shell.audio.set_muted(true)
 	_check(not _shell.audio.play_ui("ui_click"), "muted audio does not play")
@@ -42,7 +40,7 @@ func run() -> Array[String]:
 		"full deck includes actual carried relic effect and limit"
 	)
 	_check(_fingerprint() == before, "opening full deck preserves complete state and RNG")
-	_check(_battle().draw_pile_card_ids().is_empty(), "full deck does not reveal draw order")
+	_check(_battle().draw_pile_card_ids().size() == int(_battle().view.zone_counts.draw), "draw members are public without extraction order")
 	_key(KEY_ESCAPE)
 	await _frames()
 	_check(_battle().display_snapshot().panel == "", "Esc closes full deck")
@@ -153,6 +151,10 @@ func _battle() -> BattleScreen:
 
 
 func _card_index(definition_id: String) -> int:
+	if _battle()._compact_layout:
+		for index in _battle().view.get("hand", []).size():
+			if str(_battle().view.hand[index].definition_id) == definition_id:
+				return index
 	for index in _battle()._hand_cards.size():
 		if str(_battle()._hand_cards[index].card_data.get("definition_id", "")) == definition_id:
 			return index

@@ -14,7 +14,11 @@ func _run() -> void:
 		"test_ui_flow_feedback",
 		"test_ui_battle_choice",
 		"test_ui_battle_pointer",
-		"test_ui_battle_polish"
+		"test_ui_battle_polish",
+		"test_ui_battle_layout",
+		"test_ui_four_year",
+		"test_ui_experience",
+		"test_ui_followup"
 	]:
 		var script: Script = load("res://tests/suites/%s.gd" % path)
 		if script == null or not script.can_instantiate():
@@ -22,6 +26,8 @@ func _run() -> void:
 			continue
 		var result = await script.new().run()
 		failures.append_array(result)
+	# Let AudioServer retire stopped playback before the headless process exits.
+	await create_timer(0.1).timeout
 	if failures.is_empty():
 		print("G7 UI tests passed")
 		quit(0)

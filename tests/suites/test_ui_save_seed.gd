@@ -26,6 +26,7 @@ func _check_clean_and_random() -> void:
 	_check(not shell.press("menu:continue"), "clean download has no resumable run")
 	_check(not store.load("current_run").ok, "opening menu creates no player save")
 	_check(shell.press("menu:new"), "clean menu offers new run")
+	shell.press("setup:advanced")
 	var first := _seed(shell)
 	_check(first.is_valid_int() and first.length() <= 19, "default seed is a decimal int64")
 	shell.refresh()
@@ -47,6 +48,7 @@ func _check_clean_and_random() -> void:
 	var before := _helpers.fingerprint(shell.session) as String
 	_check(shell.press("map:menu") and shell.press("menu:new"), "active run can open setup")
 	_check(_seed(shell) != "9223372036854775807", "new configuration gets fresh default seed")
+	shell.press("setup:advanced")
 	_check(shell.press("setup:seed_random"), "active run permits seed draft changes")
 	_set_seed(shell, "1234567890123456789")
 	_check(shell.press("setup:start"), "old run requests replacement confirmation")
@@ -202,6 +204,8 @@ func _seed(shell: GameShell) -> String:
 
 
 func _set_seed(shell: GameShell, value: String) -> void:
+	if _helpers._line_edit(shell.page) == null:
+		shell.press("setup:advanced")
 	var input := _helpers._line_edit(shell.page) as LineEdit
 	_check(input != null, "seed field exists")
 	if input != null:

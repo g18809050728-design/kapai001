@@ -1,0 +1,77 @@
+[
+  {
+    "id": "F01",
+    "name_key": "unit.F01.name",
+    "vitality": 10,
+    "cooperation": 2,
+    "guard": true,
+    "support": {
+      "kind": "none"
+    }
+  },
+  {
+    "id": "F02",
+    "name_key": "unit.F02.name",
+    "vitality": 4,
+    "cooperation": 6,
+    "guard": false,
+    "support": {
+      "kind": "none"
+    }
+  },
+  {
+    "id": "F03",
+    "name_key": "unit.F03.name",
+    "vitality": 6,
+    "cooperation": 1,
+    "guard": false,
+    "support": {
+      "kind": "cleanse_or_relax",
+      "status": "anxiety",
+      "amount": 1,
+      "fallback_relax": 2
+    }
+  },
+  {
+    "id": "F04",
+    "name_key": "unit.F04.name",
+    "vitality": 12,
+    "cooperation": 2,
+    "guard": true,
+    "support": {
+      "kind": "self_relax",
+      "amount": 2
+    }
+  },
+  {
+    "id": "R3-U01",
+    "name_key": "unit.R3-U01.name",
+    "vitality": 3,
+    "cooperation": 2,
+    "guard": false,
+    "support": {
+      "kind": "none"
+    }
+  },
+  {
+    "id": "R3-U02",
+    "name_key": "unit.R3-U02.name",
+    "vitality": 4,
+    "cooperation": 1,
+    "guard": false,
+    "support": {
+      "kind": "relax",
+      "amount": 2
+    }
+  },
+  {
+    "id": "R3-U03",
+    "name_key": "unit.R3-U03.name",
+    "vitality": 5,
+    "cooperation": 3,
+    "guard": true,
+    "support": {
+      "kind": "none"
+    }
+  }
+]

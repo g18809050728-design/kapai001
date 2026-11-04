@@ -24,7 +24,10 @@ func generate(source: Variant, run: RunState, rng: RandomSource) -> GameResult:
 	if kind not in ["normal", "elite", "boss", "term"]:
 		return _error(GameConstants.ERROR_INVALID_ARGUMENT, "reward.source.invalid")
 	var weights: Dictionary = rules.rewards.card_rarity_weights[kind]
-	var cards := card_candidates(run, int(rules.rewards.candidate_count), rng, weights)
+	var count := int(rules.rewards.candidate_count)
+	if CampaignService.enabled(run) and kind == "elite" and int(run.campaign.resume) >= 4:
+		count += 1
+	var cards := card_candidates(run, count, rng, weights)
 	if not cards.ok:
 		return cards
 	var items: Array[Dictionary] = []
@@ -38,7 +41,7 @@ func generate(source: Variant, run: RunState, rng: RandomSource) -> GameResult:
 			money += int(rules.rewards.elite_money_bonus)
 	elif kind == "boss":
 		money = int(rules.rewards.nonfinal_boss_money)
-	if kind in ["elite", "boss"]:
+	if kind in ["elite", "boss"] and not CampaignService.enabled(run):
 		var relic_count := 1 if kind == "elite" else int(rules.rewards.candidate_count)
 		var relic_weights: Dictionary = rules.rewards.relic_rarity_weights[
 			"general" if kind == "elite" else "boss"

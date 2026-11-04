@@ -1,0 +1,105 @@
+{
+  "batch_id": "R3-ATLAS-FIX-01",
+  "prompt_file": "docs/art/atlas-prompts-v3/R3-ATLAS-FIX-01.txt",
+  "source_file": "output/imagegen/card-atlas-v3-unified/R3-ATLAS-FIX-01.png",
+  "slots": [
+    {
+      "slot": 1,
+      "row": 1,
+      "column": 1,
+      "card_id": "R3-P02-20",
+      "crop": [
+        16,
+        12,
+        496,
+        372
+      ]
+    },
+    {
+      "slot": 2,
+      "row": 1,
+      "column": 2,
+      "card_id": "R3-P03-11",
+      "crop": [
+        528,
+        12,
+        1008,
+        372
+      ]
+    },
+    {
+      "slot": 3,
+      "row": 2,
+      "column": 1,
+      "card_id": "R3-P03-18",
+      "crop": [
+        16,
+        396,
+        496,
+        756
+      ]
+    },
+    {
+      "slot": 4,
+      "row": 2,
+      "column": 2,
+      "card_id": "R3-P03-24",
+      "crop": [
+        528,
+        396,
+        1008,
+        756
+      ]
+    },
+    {
+      "slot": 5,
+      "row": 3,
+      "column": 1,
+      "card_id": "R3-P03-09",
+      "crop": [
+        16,
+        780,
+        496,
+        1140
+      ]
+    },
+    {
+      "slot": 6,
+      "row": 3,
+      "column": 2,
+      "card_id": "R3-P03-12",
+      "crop": [
+        528,
+        780,
+        1008,
+        1140
+      ]
+    },
+    {
+      "slot": 7,
+      "row": 4,
+      "column": 1,
+      "card_id": "R3-P03-30",
+      "crop": [
+        16,
+        1164,
+        496,
+        1524
+      ]
+    },
+    {
+      "slot": 8,
+      "row": 4,
+      "column": 2,
+      "card_id": "R3-P02-23",
+      "crop": [
+        528,
+        1164,
+        1008,
+        1524
+      ]
+    }
+  ],
+  "reference_image": "output/imagegen/card-atlas-v3-unified/objects-only-style-reference.png",
+  "reason": "AI visual review found P01 face leakage and punctuation; consolidate 8 related refinements into one atlas"
+}

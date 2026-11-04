@@ -1,0 +1,16 @@
+Use case: illustration-story. Produce ONE production sprite atlas of EIGHT separate campus card illustrations.
+Canvas: exactly 1024 x 1536 pixels, portrait. Strict 2 columns x 4 rows, equal 512 x 384 cells. Read row-major from top left.
+The entire canvas is filled by these eight cells. No outer margin, gutters, border, title, labels or numbering. Separate scenes at the exact halfway vertical boundary and four equal horizontal bands. NEVER combine cells or change their size/order.
+Shared art direction: 大学校园题材策略卡牌插画，成年大学生的日常与抽象思考相结合，精细手绘线条，水粉与彩铅质感，薄纸纹理，电影感柔光，克制的超现实表达，主体清晰、动作一眼可辨，统一米白与深青基调，画面干净，有叙事细节，横向4:3独立插画。只画插画，不画卡框、文字或界面。
+Each cell is one horizontal 4:3 independent scene, NOT a card frame or a panel of a continuing comic. Clear single main action, natural adult hands, understated campus gouache and pencil illustration on warm ivory paper. Consistent fine dark teal lines and soft daylight across every cell.
+Composition within EACH cell: essential objects and gestures inside central 70%, expendable quiet background at edges. The crop removes 16px from left/right and 12px from top/bottom of EACH cell. No subject, light trail, limb or object may cross into another cell.
+No readable text, letters, numerals, equations, branding, campus logos, watermarks, labels, UI, speech bubbles, trading card frames, exaggerated anatomy, weapons or horror. Blank pages and simple geometric diagrams only. Slot IDs below are instructions, NEVER draw them.
+Row 1, column 1: 许知微系列：墨蓝与淡紫；书页、书签、引用丝线和三层书页结构作为母题。优先成年学生手部、肩后或背影构图，不新增固定面部身份。 主体场景：三个不同角度的证据纸模型共同托起一个稳定结论球体。
+Row 1, column 2: 许知微系列：墨蓝与淡紫；书页、书签、引用丝线和三层书页结构作为母题。优先成年学生手部、肩后或背影构图，不新增固定面部身份。 主体场景：随身研究札记翻开，观察碎片被保存为温柔的图形记号。
+Row 2, column 1: 许知微系列：墨蓝与淡紫；书页、书签、引用丝线和三层书页结构作为母题。优先成年学生手部、肩后或背影构图，不新增固定面部身份。 主体场景：第一层展开的书页像入口，远处校园研究主题逐渐显现。
+Row 2, column 2: 许知微系列：墨蓝与淡紫；书页、书签、引用丝线和三层书页结构作为母题。优先成年学生手部、肩后或背影构图，不新增固定面部身份。 主体场景：第二层书页展开为一座有序实验装置，步骤清楚可见。
+Row 3, column 1: 许知微系列：墨蓝与淡紫；书页、书签、引用丝线和三层书页结构作为母题。优先成年学生手部、肩后或背影构图，不新增固定面部身份。 主体场景：第三层书页托起三颗不同高度的结果光点，比较关系直观。
+Row 3, column 2: 许知微系列：墨蓝与淡紫；书页、书签、引用丝线和三层书页结构作为母题。优先成年学生手部、肩后或背影构图，不新增固定面部身份。 主体场景：两条相反观点丝线围绕书本交汇，形成开放讨论圆环。
+Row 4, column 1: 许知微系列：墨蓝与淡紫；书页、书签、引用丝线和三层书页结构作为母题。优先成年学生手部、肩后或背影构图，不新增固定面部身份。 主体场景：多本书籍像花瓣一样围绕一本综述手册排列，视角俯拍。
+Row 4, column 2: 许知微系列：墨蓝与淡紫；书页、书签、引用丝线和三层书页结构作为母题。优先成年学生手部、肩后或背影构图，不新增固定面部身份。 主体场景：散开的三束蓝紫线在最后一页收束成一个清晰光点。
+Final count check: exactly 2 columns and 4 equal-height rows. Keep every requested scene in its assigned slot. No additional panels or outer margin.

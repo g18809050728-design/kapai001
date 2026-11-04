@@ -69,6 +69,7 @@ const DEFINITION_FIELDS := {
 		"effects",
 		"hooks",
 		"modifiers",
+		"campaign",
 		"limit",
 		"art_key"
 	],
@@ -856,6 +857,14 @@ func _validate_definition(
 			):
 				issues.append("%s must have a behavior" % location)
 		"relic":
+			if definition.has("campaign"):
+				var before := issues.size()
+				_validate_fields(definition.campaign, ["year", "effect", "amount"], ["year", "effect", "amount"], location + ".campaign", issues)
+				if issues.size() == before:
+					_validate_int(definition.campaign.year, location + ".campaign.year", 1, issues)
+					_validate_int(definition.campaign.amount, location + ".campaign.amount", 1, issues)
+					if int(definition.campaign.year) > 4 or int(definition.campaign.amount) > 20 or definition.campaign.effect not in ["event_money", "rest_heal", "service_discount", "service_money", "elite_money", "battle_money"]:
+						issues.append(location + ".campaign value invalid")
 			if not ["starter", "drop"].has(definition.get("availability")):
 				issues.append("%s.availability is invalid" % location)
 			if definition.get("availability") == "starter":
@@ -880,6 +889,7 @@ func _validate_definition(
 			if (
 				(not (definition.get("effects") is Array and not definition.effects.is_empty()))
 				and not (definition.get("hooks") is Array and not definition.hooks.is_empty())
+				and not definition.has("campaign")
 				and not (
 					definition.get("modifiers") is Dictionary
 					and not definition.modifiers.is_empty()

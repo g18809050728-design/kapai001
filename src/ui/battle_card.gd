@@ -87,7 +87,7 @@ func _draw() -> void:
 		Color("fff2d5")
 	)
 	var face: Dictionary = card_data.get("face", card_data.get("effective_card", {}))
-	var effect := UiStyle.describe_effects(face.get("effects", []))
+	var effect := UiContentText.card_summary(face)
 	if effect.is_empty():
 		effect = str(card_data.get("description", ""))
 	var requirements := UiStyle.describe_conditions(face.get("requirements", []))

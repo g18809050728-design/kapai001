@@ -1,0 +1,215 @@
+{
+  "status": "passed",
+  "total": 9,
+  "failed": 0,
+  "duplicates": 0,
+  "expected_size": [
+    1024,
+    1536
+  ],
+  "require_alpha": false,
+  "visual_review": "not_performed_by_script",
+  "contact_sheets": [
+    "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\atlas-contact.jpg"
+  ],
+  "images": [
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\FY-ART-01-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 2275635,
+      "sha256": "302804fb5d7be7b3123bf22a787ce5e365b6fb6a23f1febf95031b31efd6a723",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\FY-ART-02-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 2431396,
+      "sha256": "c4fe0fa40510b98f214e4e6610b597aee611f5975e954e0cf782452877619616",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\FY-ART-03-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 2551905,
+      "sha256": "d058bc3581390c18d17cfd2e7db534a1a53418021480e343bb06552f80f4308e",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\FY-ART-04-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 2622591,
+      "sha256": "559243f01dbfe32b4e3647e95967682d3482bf84fe3d857b8bbb490f7e7aa3dc",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\FY-ART-05-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 2573802,
+      "sha256": "af939926306296eb4aea86017cd1432ce19ca05b7cb34aa8c666ab1a1d8a6900",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\FY-ART-06-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 2659882,
+      "sha256": "91fd2256cd1d7e54ff9bd83287568fbdd181671238b1e5871862a6c8c4010cfa",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\FY-ART-07-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 2663088,
+      "sha256": "54986b8f7d98acb9a04e2d34f7ef40726c7bb943896f7a590b3cc71f2e42a9b3",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\FY-ART-08-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 2644371,
+      "sha256": "7c7d32f1fe76580215a800ee2bfa13032095e96dbee57c2f39b9c02e4b3dbc43",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\FY-ART-09-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 2336812,
+      "sha256": "35b27752130472e4761c4f7339ad256e200a39c9c16873e6262c1258828471d6",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    }
+  ]
+}

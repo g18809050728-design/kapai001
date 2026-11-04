@@ -155,8 +155,8 @@ func run() -> Array[String]:
 		for manifest in setup.data.manifests:
 			manifest_ids.append(str(manifest.id))
 		_check(
-			manifest_ids == ["campus_v3", "campus_mvp"],
-			"setup exposes both production manifests",
+			manifest_ids == ["campus_four_year"],
+			"new-game setup exposes only the four-year campaign",
 			failures
 		)
 	var started := session.start_run(StartRunRequest.new("P02", &"normal", "campus_v3", "42"))
@@ -205,6 +205,8 @@ func run() -> Array[String]:
 		failures
 	)
 	_check(shell.press("setup:character:P02"), "v3 setup selects P02", failures)
+	for uid in shell.page.button_uids():
+		_check(not str(uid).begins_with("setup:manifest:"), "setup has no version selector", failures)
 	var seed_input := _line_edit(shell)
 	if seed_input != null:
 		seed_input.text = "42"
@@ -214,15 +216,15 @@ func run() -> Array[String]:
 	_check(
 		(
 			ui_view.screen == &"map"
-			and str(ui_view.run.get("manifest_id", "")) == "campus_v3"
+			and str(ui_view.run.get("manifest_id", "")) == "campus_four_year"
 			and str(ui_view.run.get("character_id", "")) == "P02"
 		),
-		"v3 UI start reaches map with campus_v3 P02",
+		"UI start reaches the four-year map with P02",
 		failures
 	)
 	if ui_view.screen == &"map":
 		var reachable: Array = ui_view.run.reachable_node_ids
-		if not reachable.is_empty() and shell.press("node:" + str(reachable[0])):
+		if not reachable.is_empty() and shell.press("node:" + str(reachable[0])) and shell.press("map:enter"):
 			var battle := shell.page as BattleScreen
 			_check(battle != null, "v3 UI enters battle", failures)
 			if battle != null:

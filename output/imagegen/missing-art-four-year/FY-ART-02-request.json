@@ -1,0 +1,26 @@
+﻿{
+    "exit_code":  0,
+    "ended_utc":  "2026-11-04T13:24:18.5491955Z",
+    "provider":  "https://api-slb.jiji.cc/v1",
+    "batch_id":  "FY-ART-02",
+    "started_utc":  "2026-11-04T13:22:22.1630191Z",
+    "model":  "gpt-image-2.5-sunburst",
+    "cli_arguments":  [
+                          "edit",
+                          "--model",
+                          "gpt-image-2.5-sunburst",
+                          "--image",
+                          "output/imagegen/card-atlas-v3-unified/style-reference.png",
+                          "--prompt-file",
+                          "docs/art/missing-art-prompts/FY-ART-02.txt",
+                          "--size",
+                          "1024x1536",
+                          "--quality",
+                          "medium",
+                          "--n",
+                          "1",
+                          "--no-augment",
+                          "--out",
+                          "output/imagegen/missing-art-four-year/FY-ART-02-v1.png"
+                      ]
+}

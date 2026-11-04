@@ -48,16 +48,16 @@ func run() -> Array[String]:
 			"repeated terminal save is idempotent"
 		)
 		_check(shell.press("settings:back"), "settings returns to menu")
-		_check(shell.press("menu:continue"), "terminal session remains resumable")
-		_check(shell.press("summary:retry"), "retry opens setup without releasing old session")
+		_check(not shell.press("menu:continue"), "terminal session cannot continue gameplay")
+		_check(shell.press("menu:new"), "finished run opens a new configuration")
 		_check(
 			shell.session.get_view().run_id == view.run_id,
 			"retry configuration retains completed session until confirmation"
 		)
 		_check(shell.page.button_uids().has("setup:start"), "retry opens real setup page")
-		_check(shell.press("setup:start"), "retry asks for replacement confirmation")
-		_check(shell.press("setup:restart_confirm"), "retry replaces completed session")
-		_check(shell.session.get_view().run_id != view.run_id, "confirmed retry creates new run")
+		_check(shell.press("setup:start"), "finished run starts directly without replacement confirmation")
+		_check(not shell.page.button_uids().has("setup:restart_confirm"), "finished run needs no old-run confirmation")
+		_check(shell.session.get_view().run_id != view.run_id, "direct start creates new run")
 		_check(
 			shell.session.get_profile().completed_run_ids == profile.completed_run_ids,
 			"restart preserves permanent progress"
@@ -124,7 +124,8 @@ func drive_semester(shell: GameShell, claim_first: bool = false) -> void:
 		if layer == 1:
 			for node in shell.session.get_view().run.nodes:
 				if int(node.layer) == 6:
-					assert_disabled_unchanged(shell, "node:" + str(node.node_id))
+					shell.press("node:" + str(node.node_id))
+					assert_disabled_unchanged(shell, "map:enter")
 		_check(shell.session.get_view().screen == &"map", "every next layer waits for a map click")
 		if not press_rule(shell, "node:" + node_id):
 			return
@@ -207,7 +208,8 @@ func drive_semester(shell: GameShell, claim_first: bool = false) -> void:
 			if not press_rule(shell, uid):
 				return
 			_check(shell.session.get_view().screen == &"shop", "purchase keeps shop open")
-			assert_disabled_unchanged(shell, uid)
+			shell.press(uid.replace("shop:buy:", "shop:pick:"))
+			assert_disabled_unchanged(shell, "shop:confirm")
 			if not press_rule(shell, "shop:leave"):
 				return
 		elif kind == "rest":
@@ -252,6 +254,7 @@ func finish_battle(shell: GameShell) -> bool:
 
 func press_rule(shell: GameShell, uid: String, automatic_commands: int = 0) -> bool:
 	var revision := shell.session.get_view().revision
+	uid = prepare_rule(shell, uid)
 	var draft := shell.page.action_draft(uid)
 	var pressed := shell.press(uid)
 	var accepted := (
@@ -352,6 +355,7 @@ func _check_production_start() -> void:
 		"production setup excludes fixtures"
 	)
 	_check(shell.press("setup:character:P01"), "production character button works")
+	shell.press("setup:advanced")
 	var input := _line_edit(shell.page)
 	_check(input != null, "setup exposes editable seed")
 	if input != null:
@@ -362,8 +366,8 @@ func _check_production_start() -> void:
 	_check(view.screen == &"map", "production start reaches map")
 	if view.run is Dictionary:
 		_check(
-			view.run.manifest_id == "campus_v3" and view.run.character_id == "P01",
-			"production start uses approved manifest and character"
+			view.run.manifest_id == "campus_four_year" and view.run.character_id == "P01",
+			"production start defaults to four-year manifest and selected character"
 		)
 		for card in view.run.cards:
 			_check(
@@ -493,6 +497,32 @@ func _check_terminal_restart(source: GameSession) -> void:
 		"replacement merges exactly one old terminal summary"
 	)
 	session.free()
+
+
+func enter_node(shell: GameShell, id: String) -> bool:
+	var before := fingerprint(shell.session)
+	var picked := shell.press("node:" + id)
+	_check(fingerprint(shell.session) == before, "map preselection is read-only")
+	return picked and shell.press("map:enter")
+
+
+func prepare_rule(shell: GameShell, uid: String) -> String:
+	if uid.begins_with("node:"):
+		shell.press(uid)
+		return "map:enter"
+	if uid.begins_with("reward:") and uid.ends_with(":skip"):
+		shell.press(uid)
+		return uid + "_confirm"
+	if uid.begins_with("event:"):
+		shell.press(uid)
+		return "event:confirm"
+	if uid.begins_with("shop:buy:"):
+		shell.press(uid.replace("shop:buy:", "shop:pick:"))
+		return "shop:confirm"
+	if uid.begins_with("rest:take:upgrade:"):
+		shell.press(uid.replace("rest:take:upgrade:", "rest:upgrade:"))
+		return "rest:confirm"
+	return uid
 
 
 func _line_edit(node: Node) -> LineEdit:

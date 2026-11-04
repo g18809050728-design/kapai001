@@ -10,13 +10,9 @@ func run() -> Array[String]:
 		GameSession.new(SaveStore.new("user://g7-pointer-%s" % Time.get_ticks_usec()))
 	)
 	_shell.session.update_settings({"autosave": false})
-	_shell.press("menu:new")
-	_shell.press("setup:manifest:campus_mvp")
-	var input := _find_input(_shell.page)
-	input.text = "0"
-	input.text_changed.emit("0")
-	_shell.press("setup:start")
-	_shell.press("node:" + str(_shell.session.get_view().run.reachable_node_ids[0]))
+	_check(_shell.session.start_run(StartRunRequest.new("P01", &"normal", "campus_mvp", "0")).accepted, "historical pointer fixture starts through the session API")
+	_shell.show_screen("")
+	_helpers.enter_node(_shell, str(_shell.session.get_view().run.reachable_node_ids[0]))
 	_shell.get_tree().root.size = Vector2i(1280, 800)
 	await _frames()
 	var original := _fingerprint()
@@ -176,18 +172,17 @@ func run() -> Array[String]:
 	_mouse_button(confirm_point, false)
 	await _frames()
 	_check(not _battle().is_locked(), "physical confirmation closes pending choice")
-	# The entire battle adapts to the supported small window without a page scroll.
+	# Small windows use native text and independently scrolling content with fixed actions.
 	var old_size := _shell.get_tree().root.size
 	_shell.get_tree().root.size = Vector2i(960, 640)
 	await _frames()
-	_check(not _battle().get_child(0) is ScrollContainer, "battle has no whole-page scroll")
-	var stage_rect := Rect2(
-		_battle()._stage.global_position, Vector2(1280, 800) * _battle()._stage.scale
-	)
+	_check(_battle()._compact_layout and _battle()._stage.scale == Vector2.ONE, "small battle uses native layout without whole-screen shrinking")
+	var stage_rect := _battle()._stage.get_global_rect()
 	_check(
 		stage_rect.size.x <= _shell.size.x + 1 and stage_rect.size.y <= _shell.size.y + 1,
 		"small-window stage remains inside viewport"
 	)
+	_check(Rect2(Vector2.ZERO, Vector2(960, 640)).encloses(_battle()._buttons["battle:end_turn"].get_global_rect()), "end turn remains fixed and visible")
 	_shell.get_tree().root.size = old_size
 	print(
 		"G7_POINTER_EVIDENCE=",

@@ -1,0 +1,17 @@
+Use case: illustration-story. Create ONE sprite atlas containing EIGHT independent campus-game assets, not eight variants.
+Input image is a STYLE REFERENCE from this game's installed art. Match its delicate dark-teal ink contours, simplified adult proportions, luminous ivory paper, flat translucent watercolor washes and sparse shadows. Do not copy its six subjects or 3x2 layout.
+Canvas exactly 1024 x 1536 pixels. Strict 2 columns x 4 rows of equal 512 x 384 cells, row-major from top left. No outer margin, gutters, borders, title, numbering or labels. No merged cells, extra panels or cross-cell objects.
+Shared art direction: 严格匹配当前游戏的明亮二维校园水彩插画：纤细清楚的深青墨线勾勒，简化平面水彩铺色，轻微米白纸纹，大面积暖米白负空间；鼠尾草绿、深青与少量暖黄/砖红。成年大学生自然比例，单一动作或物件，背景仅少量轮廓，平静漫射日光，柔和且稀少的阴影。禁止摄影、写实渲染、电影暗调、密集材质、高反差体积光或复杂实验室。克制的抽象思考点缀，整体保持原有手绘清爽感。每格横向4:3独立插画，只画插画，不画卡框、文字或界面。
+Every cell has at least 35 percent quiet pale ivory background. One readable subject, simplified objects, gentle natural light. No photorealism, dense room scenery, dramatic shadows, horror, weapons, or poisoning people.
+No readable text, letters, numerals, equations, logos, official university crests, watermarks, UI or speech bubbles. All pages, cards, badges and screens use blank geometry. Asset IDs are instructions only, NEVER draw them.
+PORTRAIT cells: a single waist-up adult, complete hair/head and hands contained in the central narrow 4:5 portrait window, local pixel x=112..400 and y=12..372. No full-width landscape or multiple people in a portrait cell. Light ivory side areas are disposable.
+OBJECT/TASK cells: one compact scene with the important subject inside central 70 percent. Final crop is local x=16..496 and y=12..372; keep all essential objects in that rectangle. No elements across cell boundaries.
+Row 1, column 1, OBJECT/TASK: Advanced English vocabulary revision represented by a small ring of blank flashcards, colored divider tabs and a closed pocket dictionary.
+Row 1, column 2, OBJECT/TASK: Pre-exam revision represented by a short stack of review booklets with colored tabs, a simple hourglass and a pencil, not frantic.
+Row 2, column 1, OBJECT/TASK: Self-introduction practice represented by a tabletop microphone, blank profile card and a small round mirror, warm uncluttered still life.
+Row 2, column 2, OBJECT/TASK: A group presentation represented by a small projection screen showing three abstract chart shapes and a shared folder on a lectern, no text.
+Row 3, column 1, OBJECT/TASK: A campus physical fitness test represented by running shoes, a whistle and a plain stopwatch without digits, sage track curve in the background.
+Row 3, column 2, OBJECT/TASK: An advisor meeting represented by two tea cups across a small table, open research notebook and a simple fountain pen, no people required.
+Row 4, column 1, OBJECT/TASK: Lecture attendance represented by a folded lecture leaflet, plain ticket and several softly suggested auditorium seats, no lettering.
+Row 4, column 2, OBJECT/TASK: A collaborative assignment represented by three hands arranging blank color-coded cards around a shared notebook, natural hands, simple close view.
+Final check: exactly 2 columns and 4 equal rows. Keep every assigned subject in its own slot and its specified safe crop. No text or extra decoration.

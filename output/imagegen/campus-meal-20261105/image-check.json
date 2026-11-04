@@ -1,0 +1,39 @@
+{
+  "status": "passed",
+  "total": 1,
+  "failed": 0,
+  "duplicates": 0,
+  "expected_size": [
+    1024,
+    1024
+  ],
+  "require_alpha": false,
+  "visual_review": "not_performed_by_script",
+  "contact_sheets": [
+    "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\campus-meal-20261105\\contact-sheet.png"
+  ],
+  "images": [
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\campus-meal-20261105\\campus-meal.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 2129933,
+      "sha256": "f6b1115a7059ff29712c26f6773a4abee7999edbed3cc12171866768d25c7174",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    }
+  ]
+}

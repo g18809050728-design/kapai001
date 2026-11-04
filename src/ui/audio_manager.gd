@@ -2,7 +2,7 @@ class_name AudioManager
 extends Node
 
 const SFX_DIR := "res://assets/audio/sfx/"
-const SFX_POOL := 8
+const SFX_POOL := 3
 const BUS_NAMES := ["Music", "Ambience", "SFX", "UI"]
 const BUS_VOLUMES := {"Music": 0.7, "Ambience": 0.5, "SFX": 0.8, "UI": 0.7}
 
@@ -12,6 +12,9 @@ var _sfx_index := 0
 var _cache: Dictionary = {}
 var _muted := false
 var _volumes: Dictionary = BUS_VOLUMES.duplicate()
+var _last_played: Dictionary = {}
+var _last_group: Dictionary = {}
+const REPEAT_WINDOW_MS := 180
 
 
 func _ready() -> void:
@@ -26,7 +29,6 @@ func _exit_tree() -> void:
 		if is_instance_valid(player):
 			player.stop()
 			player.stream = null
-	_sfx_players.clear()
 	_cache.clear()
 
 
@@ -60,18 +62,30 @@ func play_ui(id: String) -> bool:
 	return _play(_ui_player, id)
 
 
-func play_sfx(id: String) -> bool:
+func play_sfx(id: String, pitch: float = 1.0) -> bool:
+	if not is_inside_tree():
+		return false
 	_ensure_ready()
 	if _muted or _sfx_players.is_empty():
 		return false
 	var stream := _load_sfx(id)
 	if stream == null:
 		return false
+	if not _allow_sound(id):
+		return false
 	var player := _sfx_players[_sfx_index]
 	_sfx_index = (_sfx_index + 1) % _sfx_players.size()
+	if id in ["victory", "defeat", "choice"]:
+		for playing in _sfx_players:
+			playing.stop()
 	player.stream = stream
+	player.pitch_scale = clampf(pitch, 0.5, 2.0)
 	player.play()
 	return true
+
+
+func play_deadline(remaining: int) -> bool:
+	return play_sfx("ddl", 0.6 if remaining <= 1 else (0.8 if remaining <= 3 else 1.0))
 
 
 func play_event(event_type: String) -> bool:
@@ -90,9 +104,11 @@ func event_sfx(event_type: String) -> String:
 		"card_exhausted":
 			return "card_exhaust"
 		"status_gained", "status_changed", "status_removed":
-			return "status"
-		"task_advanced", "pressure_applied", "task_summoned", "task_transformed", "task_self_destructed":
+			return ""
+		"pressure_applied", "task_summoned", "task_transformed", "task_self_destructed":
 			return "task_hit"
+		"task_advanced":
+			return "chapter"
 		"task_completed":
 			return "task_done"
 		"ddl_ticked", "deadline_expired":
@@ -103,6 +119,10 @@ func event_sfx(event_type: String) -> String:
 			return "chapter"
 		"choice_requested":
 			return "choice"
+		"unit_entered", "unit_summoned", "unit_replaced", "unit_left", "ally_target_changed":
+			return "chapter"
+		"reward_claimed", "year_reward_created", "campaign_reward_claimed", "item_purchased", "card_upgraded":
+			return "task_done"
 		"battle_finished":
 			return "victory"
 		"battle_lost":
@@ -122,6 +142,8 @@ func is_muted() -> bool:
 
 
 func set_bus_volume(bus_name: String, linear: float) -> void:
+	if bus_name not in ["Master"] + BUS_NAMES:
+		return
 	_volumes[bus_name] = clampf(linear, 0.0, 1.0)
 	var index := AudioServer.get_bus_index(bus_name)
 	if index >= 0:
@@ -133,14 +155,38 @@ func get_bus_volume(bus_name: String) -> float:
 
 
 func _play(player: AudioStreamPlayer, id: String) -> bool:
-	if _muted:
+	if _muted or not is_inside_tree() or not is_instance_valid(player) or not player.is_inside_tree():
 		return false
 	var stream := _load_sfx(id)
 	if stream == null:
 		return false
+	if not _allow_sound(id):
+		return false
 	player.stream = stream
 	player.play()
 	return true
+
+
+func _allow_sound(id: String) -> bool:
+	if id == "ui_hover":
+		return false
+	var now := Time.get_ticks_msec()
+	if now - int(_last_played.get(id, -10000)) < REPEAT_WINDOW_MS:
+		return false
+	var group := "important" if id in ["victory", "defeat", "choice", "error", "task_done"] else ("ui" if id.begins_with("ui_") or id == "detail_open" else "battle")
+	var quiet_window := 80 if group == "ui" else 160
+	if group != "important" and (now - int(_last_group.get(group, -10000)) < quiet_window or now - int(_last_group.get("important", -10000)) < 220):
+		return false
+	_last_played[id] = now
+	_last_group[group] = now
+	return true
+
+
+func apply_settings(settings: Dictionary) -> void:
+	_ensure_buses()
+	for bus in ["Master"] + BUS_NAMES:
+		set_bus_volume(bus, int(settings.get(bus, 100)) / 100.0)
+	set_muted(bool(settings.get("muted", false)))
 
 
 func _load_sfx(id: String) -> AudioStream:

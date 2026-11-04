@@ -1,0 +1,19 @@
+{
+  "requirement": "FY-ART-003",
+  "provider": "https://api-slb.jiji.cc/v1",
+  "model": "gpt-image-2.5-sunburst",
+  "mode": "edit",
+  "quality": "medium",
+  "size": [
+    1024,
+    1024
+  ],
+  "reference_uploaded": true,
+  "visual_review": "AI inspected actual output: complete tray, rice, tomato and eggs, greens, soup, chopsticks; ivory paper and calm watercolor match; no text or frame; final human acceptance pending",
+  "files": {
+    "output/imagegen/card-atlas-v3-unified/style-reference.png": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+    "output/imagegen/campus-meal-20261105/campus-meal.png": "f6b1115a7059ff29712c26f6773a4abee7999edbed3cc12171866768d25c7174",
+    "output/imagegen/campus-meal-20261105/prompt.txt": "77f82a40bc28982a853e87a9b23d457d4163eb4aa719615a6039f2f9abe31759",
+    "assets/art/four-year/items/campus-meal.png": "f6b1115a7059ff29712c26f6773a4abee7999edbed3cc12171866768d25c7174"
+  }
+}

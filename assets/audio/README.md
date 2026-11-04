@@ -1,11 +1,13 @@
-# Placeholder audio
+# 原型音效
 
-`sfx/*.wav` 是本地原型用的程序化占位音效，由 `tools/generate_sfx.py` 生成，不含外部采样或第三方旋律。格式：44.1 kHz、16-bit、单声道 WAV。
+`sfx/*.wav` 是本地程序化合成音效，由 `tools/generate_sfx.py` 确定性生成，不含外部采样或第三方旋律。格式为 44.1 kHz、16-bit、单声道 WAV，保留现有 18 个资源 ID。
 
-- 生成日期：2026-11-04
-- 生成命令：`python tools/generate_sfx.py`
-- 用途：UI 悬停/点击、抽牌/出牌、任务反馈、DDL、词条/详情、胜负。
-- 当前批次：18 条全部重做，按设计文档 §5.2–5.3 的方向合成纸张、木扣、玻璃、钟表、笔尖、盖章与低音层；保留原 ID、事件映射和单声道 WAV 格式。
-- 相对响度：悬停 0.16、DDL 0.32、普通卡牌 0.42–0.55、胜负 0.52–0.58（线性峰值，均不高于 -3 dBFS）；同一脚本重复运行哈希一致。
-- 边界：占位音效，不是最终混音或人工视听签收；音乐仍未制作。
-- 替换或新增资源时同步更新 `src/ui/audio_manager.gd` 的事件映射与 `需求台账.md`。
+2026-11-05 按 FY-AUD-003 重做为柔和的纸张、木质与低频短音，使用低通噪声、正弦音和渐入渐出包络。线性峰值为 0.025–0.17，18 条的峰值及 RMS 均低于替换前；首尾采样为零、无削波、重复合成字节一致。生成命令为 `python tools/generate_sfx.py`，逐文件参数及 SHA256 见 [manifest](sfx/manifest.json)。
+
+播放策略在 `src/ui/audio_manager.gd`：悬停与普通状态变化静音，同 ID 180ms 冷却，普通战斗反馈组 160ms、UI 组 80ms；重要提示后为其他反馈保留 220ms 安静窗口。SFX 播放槽从 8 个减至 3 个；选择、胜利、失败提示会停止较低优先级的 SFX，避免连续抽弃牌与状态事件叠加。DDL 剩余 >3 / ≤3 / ≤1 时仍使用 1.0/0.8/0.6 音高。
+
+Master/Music/Ambience/SFX/UI 五路音量及静音保留设置页持久化，默认 100/70/50/80/70%；不重置个人设置。脱树停止播放并清缓存，战斗音频仍由事件演出单点消费。
+
+替换前的 WAV 与生成器保存在 [audio-before.zip](../../artifacts/verification/ui-followup-20261105/audio-before.zip)，解码、峰值/RMS、包络、确定性及 hash 检查见 [asset-verification.json](../../artifacts/verification/ui-followup-20261105/asset-verification.json)。真实事件节流测试和运行证据见[本轮记录](../../docs/UI追加反馈实施记录_20261105.md)。机器指标不代表已经完成人工听感验收。
+
+Music/Ambience 尚无素材与循环播放器；音乐、环境循环、正式混音和最终人工听感仍待完成。

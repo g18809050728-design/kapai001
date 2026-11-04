@@ -36,19 +36,24 @@ func build(screen: BattleScreen) -> void:
 	_player()
 	_tasks()
 	_units()
+	_rect(stage, Rect2(176, 761, 920, 39), Color(0.04, 0.1, 0.13, 0.85))
 	_hand()
 	_controls()
+	_v3_summary()
 	page._aim = BattleAim.new()
 	page._aim.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	page._aim.z_index = 70
 	stage.add_child(page._aim)
 	page._feedback_label = _text(
-		stage, Rect2(290, 78, 710, 44), page._feedback_text, 16, LIGHT, HORIZONTAL_ALIGNMENT_CENTER
+		stage, Rect2(26, 78, 210, 34) if not page._dict(page.view.get("v3")).is_empty() else Rect2(290, 78, 710, 44), page._feedback_text, 13 if not page._dict(page.view.get("v3")).is_empty() else 16, LIGHT, HORIZONTAL_ALIGNMENT_CENTER
 	)
 	page._feedback_label.visible = not page._feedback_text.is_empty()
 	page._hint_label = _text(
-		stage, Rect2(280, 505, 720, 35), _selection_hint(), 16, LIGHT, HORIZONTAL_ALIGNMENT_CENTER
+		stage, Rect2(176, 762, 920, 23), _selection_hint(), 14, LIGHT, HORIZONTAL_ALIGNMENT_CENTER
 	)
+	page._hint_label.name = "HandActionHint"
+	page._hint_label.max_lines_visible = 1
+	page._hint_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	_hover_window()
 	if not page._panel_text.is_empty():
 		_info_panel()
@@ -61,8 +66,9 @@ func build(screen: BattleScreen) -> void:
 
 
 func _hover_window() -> void:
+	var factor := UiStyle.text_scale if page._compact_layout else 1.0
 	var panel := Panel.new()
-	panel.size = Vector2(360, 168)
+	panel.size = Vector2(360, 168) * factor
 	panel.visible = false
 	panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	panel.z_index = 120
@@ -75,22 +81,22 @@ func _hover_window() -> void:
 	panel.add_theme_stylebox_override("panel", style)
 	stage.add_child(panel)
 	page._hover_panel = panel
-	page._hover_title = _text(panel, Rect2(16, 10, 328, 28), "", 19, LIGHT)
-	page._hover_meta = _text(panel, Rect2(16, 38, 328, 22), "", 13, Color("e5c894"))
-	page._hover_body = _text(panel, Rect2(16, 62, 328, 82), "", 14, LIGHT)
+	page._hover_title = _text(panel, Rect2(Vector2(16, 10) * factor, Vector2(328, 28) * factor), "", roundi(19 * factor), LIGHT)
+	page._hover_meta = _text(panel, Rect2(Vector2(16, 38) * factor, Vector2(328, 22) * factor), "", roundi(13 * factor), Color("e5c894"))
+	page._hover_body = _text(panel, Rect2(Vector2(16, 62) * factor, Vector2(328, 82) * factor), "", roundi(14 * factor), LIGHT)
 	page._hover_body.max_lines_visible = 4
-	_text(panel, Rect2(16, 146, 328, 16), "I 查看详情", 12, Color("f1c989"), HORIZONTAL_ALIGNMENT_RIGHT)
+	_text(panel, Rect2(Vector2(16, 146) * factor, Vector2(328, 16) * factor), "I 查看详情", roundi(12 * factor), Color("f1c989"), HORIZONTAL_ALIGNMENT_RIGHT)
 
 
 func _header() -> void:
 	_rect(stage, Rect2(0, 0, 1280, 66), Color(0.035, 0.09, 0.11, 0.9))
-	_text(stage, Rect2(26, 10, 350, 23), "DDL 战争  /  第一学期", 16, Color("e6c68d"))
+	_text(stage, Rect2(26, 10, 350, 23), "DDL 战争  /  " + str(page.view.get("year_label", "第一学期")), 16, Color("e6c68d"))
 	_text(stage, Rect2(26, 34, 400, 25), page._battle_subtitle(), 18, LIGHT)
 	_text(
 		stage,
 		Rect2(414, 14, 320, 38),
 		(
-			"第 %s 回合   ·   %s   |   DDL %s"
+			"第 %s 回合 · %s | DDL %s次轮末"
 			% [
 				page.view.get("round_index", 0),
 				UiStyle.label(str(page.view.get("phase", ""))),
@@ -98,12 +104,14 @@ func _header() -> void:
 			]
 		),
 		17,
-		LIGHT,
+		Color("ffab91") if int(page.view.get("ddl", 0)) <= 1 else (Color("f6d184") if int(page.view.get("ddl", 0)) <= 3 else LIGHT),
 		HORIZONTAL_ALIGNMENT_CENTER
 	)
-	_button(Rect2(752, 14, 72, 36), "battle:deck", "牌组", {}, Callable(page, "_show_deck"))
-	_button(Rect2(830, 14, 72, 36), "battle:rules", "规则", {}, Callable(page, "_show_rules"))
-	_button(Rect2(908, 14, 72, 36), "battle:log", "记录", {}, Callable(page, "_show_log"))
+	if int(page.view.get("ddl", 0)) <= 3:
+		_text(stage, Rect2(430, 53, 290, 22), "DDL 紧迫：请尽快完成任务" if int(page.view.get("ddl", 0)) > 1 else "DDL 仅剩 1：本轮必须推进", 13, Color("ffcbab"), HORIZONTAL_ALIGNMENT_CENTER)
+	_pile_button(Rect2(752, 3, 72, 58), "deck", Callable(page, "_show_deck"))
+	_pile_button(Rect2(830, 3, 72, 58), "log", Callable(page, "_show_log"))
+	_button(Rect2(908, 14, 72, 36), "battle:rules", "规则", {}, Callable(page, "_show_rules"))
 	_button(
 		Rect2(986, 14, 62, 36),
 		"battle:speed",
@@ -152,11 +160,11 @@ func _player() -> void:
 		if str(page._dict(value).get("target_id", "")) == player_id:
 			player_statuses.append(value)
 	if not player_statuses.is_empty():
-		_text(
-			stage, Rect2(35, 484, 220, 68), page._status_text(player_statuses), 14, Color("e5c894")
-		)
+		var status_label := _text(stage, Rect2(26, 484, 148, 68), page._status_text(player_statuses), 14, Color("e5c894"))
+		status_label.max_lines_visible = 3
+		status_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 		var status_hit := _button(
-			Rect2(35, 484, 220, 68),
+			Rect2(26, 484, 148, 68),
 			"statuses:player",
 			"",
 			{},
@@ -164,7 +172,7 @@ func _player() -> void:
 		)
 		_transparent_target(status_hit)
 	var scene := page._dict(page.view.get("scene"))
-	if not scene.is_empty():
+	if not scene.is_empty() and page._dict(page.view.get("v3")).is_empty():
 		_text(
 			stage,
 			Rect2(280, 86, 310, 30),
@@ -172,6 +180,44 @@ func _player() -> void:
 			16,
 			SOFT
 		)
+
+
+func _v3_summary() -> void:
+	var v3 := page._dict(page.view.get("v3"))
+	if v3.is_empty():
+		return
+	var paper := page._dict(v3.get("paper"))
+	var turn := page._dict(v3.get("turn"))
+	var lines: Array[String] = []
+	if str(page.view.get("character_id", "")) == "P02":
+		lines.append("论文%s · 进度%d/10 · 引用%d/5 · 修正%d · 增幅%d · 持续能力%d" % ["进行中" if paper.get("open", false) else "未开题", int(paper.get("progress", 0)), int(paper.get("citations", 0)), int(paper.get("modifier", 0)), int(paper.get("amplify", 0)), page._array(v3.get("abilities")).size()])
+		var slots: Array[String] = []
+		var chapters := page._array(paper.get("chapters"))
+		for index in 3:
+			var name := "空槽"
+			if index < chapters.size():
+				name = UiStyle.label(str(page._dict(chapters[index]).get("definition_id", "")))
+			slots.append("章节%d：%s" % [index + 1, name])
+		lines.append("　".join(slots) + "　I 详情 · G 帮助")
+	else:
+		var info := page._dict(page.view.get("character_info"))
+		var opportunity := "可用" if info.get("passive_available", true) else "本回合已使用"
+		match str(page.view.get("character_id", "")):
+			"P01":
+				lines.append("前牌：%s · 策略→工作触发连携 · 步骤复用：%s" % [UiStyle.label(str(turn.get("previous_card_type", "无"))), opportunity])
+			"P03":
+				lines.append("复合反应：%s · 在已有负面的任务上施加不同负面" % opportunity)
+			_:
+				lines.append("协同%d/6 · 首张合作机会：%s · 伙伴状态见协作区" % [int(v3.get("synergy", 0)), opportunity])
+		lines.append("持续能力%d · 点击资源说明 / I 详情 · G 帮助" % page._array(v3.get("abilities")).size())
+	var scene := page._dict(page.view.get("scene"))
+	if not scene.is_empty():
+		lines[0] += "　场景：" + UiStyle.label(str(scene.get("definition_id", "")))
+	var panel := _panel(stage, Rect2(255, 74, 1000, 58), Color(0.05, 0.12, 0.15, 0.96), Color("6b8c85"))
+	panel.name = "V3Summary"
+	_text(panel, Rect2(12, 4, 976, 50), "\n".join(lines), 17, LIGHT)
+	var info_hit := _button(Rect2(255, 74, 1000, 58), "battle:resources", "", {}, func(): page._open_detail_for_uid("battle:resources"))
+	_transparent_target(info_hit)
 
 
 func _tasks() -> void:
@@ -227,10 +273,10 @@ func _tasks() -> void:
 			)
 		var remaining := int(task.get("work_remaining", 0))
 		var maximum := maxi(1, int(task.get("work_max", 1)))
-		_bar(stage, Rect2(x, 454, width, 12), float(remaining) / maximum, Color("b77566"))
+		_bar(stage, Rect2(x, 447, width, 10), float(remaining) / maximum, Color("b77566"))
 		_text(
 			stage,
-			Rect2(x - 4, 472, width + 8, 28),
+			Rect2(x - 4, 463, width + 8, 24),
 			"剩余 %s/%s  ·  屏障 %s" % [remaining, maximum, task.get("shield", 0)],
 			16,
 			LIGHT,
@@ -239,6 +285,17 @@ func _tasks() -> void:
 		var target := _button(Rect2(x, 207, width, 236), "task:" + id, "", {}, page._bind_task(id))
 		_transparent_target(target)
 		page._target_frames["task:" + id] = frame
+		var status_text := _task_status_text(id)
+		if not status_text.is_empty():
+			var statuses := _text(stage, Rect2(x + 7, 312, width - 14, 44), status_text, 13, Color("ffe0aa"), HORIZONTAL_ALIGNMENT_CENTER)
+			statuses.name = "TaskStatus_" + id.validate_node_name()
+			var status_style := UiStyle.box(Color("233d43"))
+			status_style.set_content_margin_all(3)
+			statuses.add_theme_stylebox_override("normal", status_style)
+			statuses.max_lines_visible = 2
+			statuses.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+			statuses.z_index = 2
+			statuses.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 
 func _task_status_text(task_id: String) -> String:
@@ -300,7 +357,7 @@ func _units() -> void:
 
 func _hand() -> void:
 	var cards := page._array(page.view.get("hand"))
-	var step := minf(146, 778.0 / maxi(1, cards.size() - 1))
+	var step := minf(146, 720.0 / maxi(1, cards.size() - 1))
 	var start := 640 - (step * (cards.size() - 1) + BattleCard.FACE_SIZE.x) * 0.5
 	for index in cards.size():
 		var data := page._dict(cards[index])
@@ -311,8 +368,8 @@ func _hand() -> void:
 		card.set_meta("uid", "card:" + id)
 		card.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		var offset := float(index) - (cards.size() - 1) * 0.5
-		card.home_rotation = deg_to_rad(clampf(offset * 3.4, -16, 16))
-		card.home_position = Vector2(start + index * step, 525 + minf(absf(offset), 3) * 4)
+		card.home_rotation = deg_to_rad(clampf(offset * 1.6, -5, 5))
+		card.home_position = Vector2(start + index * step, 495 + minf(absf(offset), 3) * 2)
 		card.home_order = 10 + index
 		card.position = card.home_position
 		card.rotation = card.home_rotation
@@ -332,9 +389,9 @@ func _hand() -> void:
 		)
 	_text(
 		stage,
-		Rect2(390, 775, 500, 22),
+		Rect2(300, 786, 680, 14),
 		"1—9 选牌 / 点击或拖拽出牌 / I 详情 / 右键或 Esc 取消",
-		13,
+		11,
 		SOFT,
 		HORIZONTAL_ALIGNMENT_CENTER
 	)
@@ -343,45 +400,17 @@ func _hand() -> void:
 
 func _controls() -> void:
 	var player := page._dict(page.view.get("player"))
-	var orb := _panel(stage, Rect2(40, 572, 120, 92), Color("284d53"), Color("ceba80"))
-	_text(
-		orb,
-		Rect2(5, 5, 110, 49),
-		str(player.get("focus", 0)),
-		37,
-		Color("f3dc9f"),
-		HORIZONTAL_ALIGNMENT_CENTER
-	)
-	_text(orb, Rect2(5, 55, 110, 27), "可用专注", 15, LIGHT, HORIZONTAL_ALIGNMENT_CENTER)
-	var counts := page._dict(page.view.get("zone_counts"))
-	_button(
-		Rect2(28, 704, 132, 61),
-		"battle:draw",
-		"抽牌堆  %s" % counts.get("draw", 0),
-		{},
-		Callable(page, "_show_draw")
-	)
-	_button(
-		Rect2(1120, 704, 132, 61),
-		"battle:discard",
-		(
-			"弃牌堆  %s"
-			% counts.get(
-				"discard",
-				page._array(page._dict(page.view.get("zones_public")).get("discard")).size()
-			)
-		),
-		{},
-		Callable(page, "_show_discard")
-	)
-	_button(
-		Rect2(1120, 768, 132, 27),
-		"battle:exhaust",
-		"消耗 %s" % counts.get("exhaust", 0),
-		{},
-		Callable(page, "_show_exhaust")
-	)
-	_button(Rect2(1102, 587, 150, 72), "battle:end_turn", "结束回合  ›", page._end_turn_draft())
+	var orb := BattleActionButton.new()
+	orb.configure("focus", int(player.get("focus", 0)))
+	orb.position = Vector2(40, 572)
+	orb.size = Vector2(120, 92)
+	orb.tooltip_text = "专注用于支付卡牌费用，准备阶段恢复。"
+	orb.focus_mode = Control.FOCUS_NONE
+	stage.add_child(orb)
+	_pile_button(Rect2(40, 684, 104, 108), "draw", Callable(page, "_show_draw"))
+	_pile_button(Rect2(1106, 690, 72, 102), "discard", Callable(page, "_show_discard"))
+	_pile_button(Rect2(1188, 690, 72, 102), "exhaust", Callable(page, "_show_exhaust"))
+	page.add_end_turn(stage, Rect2(1102, 587, 150, 72))
 	var cancel := _button(
 		Rect2(1102, 541, 150, 34),
 		"battle:cancel",
@@ -391,7 +420,17 @@ func _controls() -> void:
 	)
 	cancel.visible = not page._selected_card_id.is_empty() or not page._selected_unit_id.is_empty()
 	cancel.disabled = not cancel.visible
-	_text(stage, Rect2(22, 670, 235, 25), str(page.view.get("notice", "")), 12, SOFT)
+	var notice := _text(stage, Rect2(22, 666, 148, 20), str(page.view.get("notice", "")), 12, SOFT)
+	notice.max_lines_visible = 1
+	notice.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+
+
+func _pile_button(bounds: Rect2, kind: String, callback: Callable) -> BattlePileButton:
+	var button := page._add_pile_button(stage, kind, callback)
+	button.custom_minimum_size = Vector2.ZERO
+	button.position = bounds.position
+	button.size = bounds.size
+	return button
 
 
 func _retention() -> void:
@@ -445,6 +484,11 @@ func _selection_hint() -> String:
 			% [focus, UiStyle.label(page._unit_definition(page._selected_unit_id))]
 		)
 	return "剩余专注 %s · 选择手牌，或结束回合恢复专注" % focus
+
+
+func _hint_for(screen: BattleScreen) -> String:
+	page = screen
+	return _selection_hint()
 
 
 func _choice_panel() -> void:
@@ -523,8 +567,7 @@ func _info_panel() -> void:
 	scroll.size = Vector2(1010, 310)
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	overlay.add_child(scroll)
-	var label := page.add_text(scroll, page._panel_text, 19, LIGHT)
-	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	page.populate_info(scroll, true)
 	if not page._detail_terms.is_empty():
 		var terms_row := HBoxContainer.new()
 		terms_row.position = Vector2(40, 400)
@@ -639,6 +682,7 @@ func _panel(parent: Node, bounds: Rect2, color: Color, border: Color) -> Panel:
 
 func _art(parent: Node, id: String, bounds: Rect2) -> void:
 	var art := TextureRect.new()
+	art.set_meta("art_id", id)
 	art.texture = UiStyle.texture(id)
 	art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED

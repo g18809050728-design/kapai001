@@ -1,0 +1,127 @@
+{
+  "status": "passed",
+  "total": 5,
+  "failed": 0,
+  "duplicates": 0,
+  "expected_size": [
+    288,
+    360
+  ],
+  "require_alpha": false,
+  "visual_review": "not_performed_by_script",
+  "contact_sheets": [
+    "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\portrait-contact.jpg"
+  ],
+  "images": [
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\P02-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 168274,
+      "sha256": "f17a6c3f3aa17475e390596f8a174612781b13371f8b8fd0c8a39c67cb1271b7",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        288,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\P03-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 170853,
+      "sha256": "3c0a1b3a858b63136b411038c606dec6c55b2fe15dc35c437a3ae7bcde2d943e",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        288,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\R3-U01-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 175135,
+      "sha256": "107e7b7bd165c0452f502ac4e24a9ab43e5a331558e200d898a4e6e8af0e2dab",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        288,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\R3-U02-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 170161,
+      "sha256": "6172dca8e92af882e1e6f320a1cf9fcdebcc7029103733596c53cb018cc6ba2b",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        288,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\R3-U03-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 163155,
+      "sha256": "d91e64f1cbc77a68e2ba11eda4cf96fb7dfdc841cedca8f70852331c86d3b392",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        288,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    }
+  ]
+}

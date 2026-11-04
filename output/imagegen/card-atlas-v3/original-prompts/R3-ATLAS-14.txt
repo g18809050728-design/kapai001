@@ -1,0 +1,16 @@
+Use case: illustration-story. Produce ONE production sprite atlas of EIGHT separate campus card illustrations.
+Canvas: exactly 1024 x 1536 pixels, portrait. Strict 2 columns x 4 rows, equal 512 x 384 cells. Read row-major from top left.
+The entire canvas is filled by these eight cells. No outer margin, gutters, border, title, labels or numbering. Separate scenes at the exact halfway vertical boundary and four equal horizontal bands. NEVER combine cells or change their size/order.
+Shared art direction: 大学校园题材策略卡牌插画，成年大学生的日常与抽象思考相结合，精细手绘线条，水粉与彩铅质感，薄纸纹理，电影感柔光，克制的超现实表达，主体清晰、动作一眼可辨，统一米白与深青基调，画面干净，有叙事细节，横向4:3独立插画。只画插画，不画卡框、文字或界面。
+Each cell is one horizontal 4:3 independent scene, NOT a card frame or a panel of a continuing comic. Clear single main action, natural adult hands, understated campus gouache and pencil illustration on warm ivory paper. Consistent fine dark teal lines and soft daylight across every cell.
+Composition within EACH cell: essential objects and gestures inside central 70%, expendable quiet background at edges. The crop removes 16px from left/right and 12px from top/bottom of EACH cell. No subject, light trail, limb or object may cross into another cell.
+No readable text, letters, numerals, equations, branding, campus logos, watermarks, labels, UI, speech bubbles, trading card frames, exaggerated anatomy, weapons or horror. Blank pages and simple geometric diagrams only. Slot IDs below are instructions, NEVER draw them.
+Row 1, column 1: 沈见章系列：墨绿与紫红；墨迹、放大镜、证据线和渐扩涟漪表现侵蚀与诱发。优先成年学生手部、肩后或背影构图，不新增固定面部身份，不画生化武器。 主体场景：两个观点纸模型在桌中央相遇，碰撞只表现为墨色涟漪。
+Row 1, column 2: 沈见章系列：墨绿与紫红；墨迹、放大镜、证据线和渐扩涟漪表现侵蚀与诱发。优先成年学生手部、肩后或背影构图，不新增固定面部身份，不画生化武器。 主体场景：三种证据被配置成稳定的三角结构，颜色融合却保留边界。
+Row 2, column 1: 沈见章系列：墨绿与紫红；墨迹、放大镜、证据线和渐扩涟漪表现侵蚀与诱发。优先成年学生手部、肩后或背影构图，不新增固定面部身份，不画生化武器。 主体场景：混在一起的两束线被分到左右，分歧位置清晰可辨。
+Row 2, column 2: 沈见章系列：墨绿与紫红；墨迹、放大镜、证据线和渐扩涟漪表现侵蚀与诱发。优先成年学生手部、肩后或背影构图，不新增固定面部身份，不画生化武器。 主体场景：放大镜旁的沙漏延长出柔和观察轨迹，目标没有被催动。
+Row 3, column 1: 沈见章系列：墨绿与紫红；墨迹、放大镜、证据线和渐扩涟漪表现侵蚀与诱发。优先成年学生手部、肩后或背影构图，不新增固定面部身份，不画生化武器。 主体场景：环形灯从各个方向照亮证据模型，盲区逐一消失。
+Row 3, column 2: 沈见章系列：墨绿与紫红；墨迹、放大镜、证据线和渐扩涟漪表现侵蚀与诱发。优先成年学生手部、肩后或背影构图，不新增固定面部身份，不画生化武器。 主体场景：沈见章沿有标记的小步路径推进，每一步都有支撑点。
+Row 4, column 1: 沈见章系列：墨绿与紫红；墨迹、放大镜、证据线和渐扩涟漪表现侵蚀与诱发。优先成年学生手部、肩后或背影构图，不新增固定面部身份，不画生化武器。 主体场景：繁杂墨线被梳理成三束平行线，桌面恢复呼吸感。
+Row 4, column 2: 沈见章系列：墨绿与紫红；墨迹、放大镜、证据线和渐扩涟漪表现侵蚀与诱发。优先成年学生手部、肩后或背影构图，不新增固定面部身份，不画生化武器。 主体场景：两只对峙的笔轻轻放下，未解决的问题被妥善夹起。
+Final count check: exactly 2 columns and 4 equal-height rows. Keep every requested scene in its assigned slot. No additional panels or outer margin.

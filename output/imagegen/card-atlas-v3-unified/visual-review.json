@@ -1,0 +1,694 @@
+{
+  "R3-ATLAS-01": {
+    "source_sha256": "b3ecc821e59774c4d6d56668e52f7c24533e31e9cbb0cefe4c3d5ff0ec0205e5",
+    "approved_for_prototype": true,
+    "review_type": "AI visual inspection, not human acceptance",
+    "reviewed_utc": "2026-11-04T12:11:58.257907+00:00",
+    "method": "Viewed all five 174-crop contact pages, 22-atlas overview, correction original and existing-art reference with view_image",
+    "active_card_ids": [
+      "R3-P01-01",
+      "R3-P01-02",
+      "R3-P01-03",
+      "R3-P01-04",
+      "R3-P01-05",
+      "R3-P01-06",
+      "R3-P01-07",
+      "R3-P01-08"
+    ],
+    "superseded_card_ids": [],
+    "observations": "Viewed atlas overview and final crop sheets: teal jacket, glasses, process cards and hands/models match the existing P01 visual motifs; no obvious cross-cell subjects or embedded card labels.",
+    "limits": "Contact sheets support composition/style/crop screening; fine anatomy, complete subject fidelity and final aesthetic acceptance require separate human review.",
+    "evidence": [
+      "output/imagegen/card-atlas-v3-unified/atlas-contact.jpg",
+      "output/imagegen/card-atlas-v3-unified/R3-ATLAS-FIX-01.png",
+      "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-2.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-3.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-4.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-5.jpg"
+    ]
+  },
+  "R3-ATLAS-02": {
+    "source_sha256": "d1b018994276500f57d38f27c134cf27e2d226fd643102bb2428b3e374abdae8",
+    "approved_for_prototype": true,
+    "review_type": "AI visual inspection, not human acceptance",
+    "reviewed_utc": "2026-11-04T12:11:58.259969+00:00",
+    "method": "Viewed all five 174-crop contact pages, 22-atlas overview, correction original and existing-art reference with view_image",
+    "active_card_ids": [
+      "R3-P01-09",
+      "R3-P01-10",
+      "R3-P01-11",
+      "R3-P01-12",
+      "R3-P01-13",
+      "R3-P01-14",
+      "R3-P01-15",
+      "R3-P01-16"
+    ],
+    "superseded_card_ids": [],
+    "observations": "Viewed atlas overview and final crop sheets: teal jacket, glasses, process cards and hands/models match the existing P01 visual motifs; no obvious cross-cell subjects or embedded card labels.",
+    "limits": "Contact sheets support composition/style/crop screening; fine anatomy, complete subject fidelity and final aesthetic acceptance require separate human review.",
+    "evidence": [
+      "output/imagegen/card-atlas-v3-unified/atlas-contact.jpg",
+      "output/imagegen/card-atlas-v3-unified/R3-ATLAS-FIX-01.png",
+      "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-2.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-3.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-4.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-5.jpg"
+    ]
+  },
+  "R3-ATLAS-03": {
+    "source_sha256": "79a03cebeba72e7f51e047432b217aa7ec54d37346a2847ac749d450271c7982",
+    "approved_for_prototype": true,
+    "review_type": "AI visual inspection, not human acceptance",
+    "reviewed_utc": "2026-11-04T12:11:58.262155+00:00",
+    "method": "Viewed all five 174-crop contact pages, 22-atlas overview, correction original and existing-art reference with view_image",
+    "active_card_ids": [
+      "R3-P01-17",
+      "R3-P01-18",
+      "R3-P01-19",
+      "R3-P01-20",
+      "R3-P01-21",
+      "R3-P01-22",
+      "R3-P01-23",
+      "R3-P01-24"
+    ],
+    "superseded_card_ids": [],
+    "observations": "Viewed atlas overview and final crop sheets: teal jacket, glasses, process cards and hands/models match the existing P01 visual motifs; no obvious cross-cell subjects or embedded card labels.",
+    "limits": "Contact sheets support composition/style/crop screening; fine anatomy, complete subject fidelity and final aesthetic acceptance require separate human review.",
+    "evidence": [
+      "output/imagegen/card-atlas-v3-unified/atlas-contact.jpg",
+      "output/imagegen/card-atlas-v3-unified/R3-ATLAS-FIX-01.png",
+      "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-2.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-3.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-4.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-5.jpg"
+    ]
+  },
+  "R3-ATLAS-04": {
+    "source_sha256": "0d01db5d1aa3173e61bb97c7ff9548543e72b74ca097737a3c6cf302117b6779",
+    "approved_for_prototype": true,
+    "review_type": "AI visual inspection, not human acceptance",
+    "reviewed_utc": "2026-11-04T12:11:58.264125+00:00",
+    "method": "Viewed all five 174-crop contact pages, 22-atlas overview, correction original and existing-art reference with view_image",
+    "active_card_ids": [
+      "R3-P01-25",
+      "R3-P01-26",
+      "R3-P01-27",
+      "R3-P01-28",
+      "R3-P01-29",
+      "R3-P01-30",
+      "R3-P01-31",
+      "R3-P01-32"
+    ],
+    "superseded_card_ids": [],
+    "observations": "Viewed atlas overview and final crop sheets: teal jacket, glasses, process cards and hands/models match the existing P01 visual motifs; no obvious cross-cell subjects or embedded card labels.",
+    "limits": "Contact sheets support composition/style/crop screening; fine anatomy, complete subject fidelity and final aesthetic acceptance require separate human review.",
+    "evidence": [
+      "output/imagegen/card-atlas-v3-unified/atlas-contact.jpg",
+      "output/imagegen/card-atlas-v3-unified/R3-ATLAS-FIX-01.png",
+      "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-2.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-3.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-4.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-5.jpg"
+    ]
+  },
+  "R3-ATLAS-05": {
+    "source_sha256": "6d5b95dc81eecf99e092633045fe3fb3cb50cb1accec9c83567fdebddf7e2287",
+    "approved_for_prototype": true,
+    "review_type": "AI visual inspection, not human acceptance",
+    "reviewed_utc": "2026-11-04T12:11:58.266520+00:00",
+    "method": "Viewed all five 174-crop contact pages, 22-atlas overview, correction original and existing-art reference with view_image",
+    "active_card_ids": [
+      "R3-P01-33",
+      "R3-P01-34",
+      "R3-P01-35",
+      "R3-P01-36",
+      "R3-P01-37",
+      "R3-P01-38",
+      "R3-P01-39",
+      "R3-P01-40"
+    ],
+    "superseded_card_ids": [],
+    "observations": "Viewed atlas overview and final crop sheets: teal jacket, glasses, process cards and hands/models match the existing P01 visual motifs; no obvious cross-cell subjects or embedded card labels.",
+    "limits": "Contact sheets support composition/style/crop screening; fine anatomy, complete subject fidelity and final aesthetic acceptance require separate human review.",
+    "evidence": [
+      "output/imagegen/card-atlas-v3-unified/atlas-contact.jpg",
+      "output/imagegen/card-atlas-v3-unified/R3-ATLAS-FIX-01.png",
+      "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-2.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-3.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-4.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-5.jpg"
+    ]
+  },
+  "R3-ATLAS-06": {
+    "source_sha256": "1bdb13017d04b02f1063d8431cb43146cf15f8237d0448777aac664ae09b43c8",
+    "approved_for_prototype": true,
+    "review_type": "AI visual inspection, not human acceptance",
+    "reviewed_utc": "2026-11-04T12:11:58.268641+00:00",
+    "method": "Viewed all five 174-crop contact pages, 22-atlas overview, correction original and existing-art reference with view_image",
+    "active_card_ids": [
+      "R3-P02-01",
+      "R3-P02-02",
+      "R3-P02-03",
+      "R3-P02-04",
+      "R3-P02-05",
+      "R3-P02-06",
+      "R3-P02-07",
+      "R3-P02-08"
+    ],
+    "superseded_card_ids": [],
+    "observations": "Viewed atlas overview and final crop sheets: books, tabs and blue-purple diagrams remain readable as research motifs; hands/back/over-shoulder views are acceptable for prototype use, without fixing a new P02 face identity.",
+    "limits": "Contact sheets support composition/style/crop screening; fine anatomy, complete subject fidelity and final aesthetic acceptance require separate human review.",
+    "evidence": [
+      "output/imagegen/card-atlas-v3-unified/atlas-contact.jpg",
+      "output/imagegen/card-atlas-v3-unified/R3-ATLAS-FIX-01.png",
+      "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-2.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-3.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-4.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-5.jpg"
+    ]
+  },
+  "R3-ATLAS-07": {
+    "source_sha256": "2a434a5b20129a91b682fb140716d844e753e331e40c9235caf7d6bca8f1e25e",
+    "approved_for_prototype": true,
+    "review_type": "AI visual inspection, not human acceptance",
+    "reviewed_utc": "2026-11-04T12:11:58.270613+00:00",
+    "method": "Viewed all five 174-crop contact pages, 22-atlas overview, correction original and existing-art reference with view_image",
+    "active_card_ids": [
+      "R3-P02-09",
+      "R3-P02-10",
+      "R3-P02-11",
+      "R3-P02-12",
+      "R3-P02-13",
+      "R3-P02-14",
+      "R3-P02-15",
+      "R3-P02-16"
+    ],
+    "superseded_card_ids": [],
+    "observations": "Viewed atlas overview and final crop sheets: books, tabs and blue-purple diagrams remain readable as research motifs; hands/back/over-shoulder views are acceptable for prototype use, without fixing a new P02 face identity.",
+    "limits": "Contact sheets support composition/style/crop screening; fine anatomy, complete subject fidelity and final aesthetic acceptance require separate human review.",
+    "evidence": [
+      "output/imagegen/card-atlas-v3-unified/atlas-contact.jpg",
+      "output/imagegen/card-atlas-v3-unified/R3-ATLAS-FIX-01.png",
+      "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-2.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-3.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-4.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-5.jpg"
+    ]
+  },
+  "R3-ATLAS-08": {
+    "source_sha256": "e2dc234d60f0eab549ff01b087f7508869abc20842f483e90f06bf92ff385261",
+    "approved_for_prototype": true,
+    "review_type": "AI visual inspection, not human acceptance",
+    "reviewed_utc": "2026-11-04T12:11:58.272657+00:00",
+    "method": "Viewed all five 174-crop contact pages, 22-atlas overview, correction original and existing-art reference with view_image",
+    "active_card_ids": [
+      "R3-P02-17",
+      "R3-P02-18",
+      "R3-P02-19",
+      "R3-P02-21",
+      "R3-P02-22",
+      "R3-P02-24"
+    ],
+    "superseded_card_ids": [
+      "R3-P02-20",
+      "R3-P02-23"
+    ],
+    "observations": "Viewed atlas overview and final crop sheets: books, tabs and blue-purple diagrams remain readable as research motifs; hands/back/over-shoulder views are acceptable for prototype use, without fixing a new P02 face identity.",
+    "limits": "Contact sheets support composition/style/crop screening; fine anatomy, complete subject fidelity and final aesthetic acceptance require separate human review.",
+    "evidence": [
+      "output/imagegen/card-atlas-v3-unified/atlas-contact.jpg",
+      "output/imagegen/card-atlas-v3-unified/R3-ATLAS-FIX-01.png",
+      "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-2.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-3.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-4.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-5.jpg"
+    ]
+  },
+  "R3-ATLAS-09": {
+    "source_sha256": "19cd75e8dbeb8f265a90087f7ba364e9e49f0442a709cc9215dafd2e4b294112",
+    "approved_for_prototype": true,
+    "review_type": "AI visual inspection, not human acceptance",
+    "reviewed_utc": "2026-11-04T12:11:58.274777+00:00",
+    "method": "Viewed all five 174-crop contact pages, 22-atlas overview, correction original and existing-art reference with view_image",
+    "active_card_ids": [
+      "R3-P02-25",
+      "R3-P02-26",
+      "R3-P02-27",
+      "R3-P02-28",
+      "R3-P02-29",
+      "R3-P02-30",
+      "R3-P02-31",
+      "R3-P02-32"
+    ],
+    "superseded_card_ids": [],
+    "observations": "Viewed atlas overview and final crop sheets: books, tabs and blue-purple diagrams remain readable as research motifs; hands/back/over-shoulder views are acceptable for prototype use, without fixing a new P02 face identity.",
+    "limits": "Contact sheets support composition/style/crop screening; fine anatomy, complete subject fidelity and final aesthetic acceptance require separate human review.",
+    "evidence": [
+      "output/imagegen/card-atlas-v3-unified/atlas-contact.jpg",
+      "output/imagegen/card-atlas-v3-unified/R3-ATLAS-FIX-01.png",
+      "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-2.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-3.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-4.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-5.jpg"
+    ]
+  },
+  "R3-ATLAS-10": {
+    "source_sha256": "92452c0f27bfc0da433ac1c6983387ce7fa2dcb78438f5fff17e537912e25576",
+    "approved_for_prototype": true,
+    "review_type": "AI visual inspection, not human acceptance",
+    "reviewed_utc": "2026-11-04T12:11:58.277008+00:00",
+    "method": "Viewed all five 174-crop contact pages, 22-atlas overview, correction original and existing-art reference with view_image",
+    "active_card_ids": [
+      "R3-P02-33",
+      "R3-P02-34",
+      "R3-P02-35",
+      "R3-P02-36",
+      "R3-P02-37",
+      "R3-P02-38",
+      "R3-P02-39",
+      "R3-P02-40"
+    ],
+    "superseded_card_ids": [],
+    "observations": "Viewed atlas overview and final crop sheets: books, tabs and blue-purple diagrams remain readable as research motifs; hands/back/over-shoulder views are acceptable for prototype use, without fixing a new P02 face identity.",
+    "limits": "Contact sheets support composition/style/crop screening; fine anatomy, complete subject fidelity and final aesthetic acceptance require separate human review.",
+    "evidence": [
+      "output/imagegen/card-atlas-v3-unified/atlas-contact.jpg",
+      "output/imagegen/card-atlas-v3-unified/R3-ATLAS-FIX-01.png",
+      "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-2.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-3.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-4.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-5.jpg"
+    ]
+  },
+  "R3-ATLAS-11": {
+    "source_sha256": "1677c60b9a1ad089134990a33bcf1146bdf346df5d0054039675bd3a0b285709",
+    "approved_for_prototype": true,
+    "review_type": "AI visual inspection, not human acceptance",
+    "reviewed_utc": "2026-11-04T12:11:58.279356+00:00",
+    "method": "Viewed all five 174-crop contact pages, 22-atlas overview, correction original and existing-art reference with view_image",
+    "active_card_ids": [
+      "R3-P03-01",
+      "R3-P03-02",
+      "R3-P03-03",
+      "R3-P03-04",
+      "R3-P03-05",
+      "R3-P03-06",
+      "R3-P03-07",
+      "R3-P03-08"
+    ],
+    "superseded_card_ids": [],
+    "observations": "Viewed atlas overview and final crop sheets: ink dots, evidence lines, magnifiers and paper objects retain green-purple watercolor motifs. Excluded face/punctuation cells use the correction atlas.",
+    "limits": "Contact sheets support composition/style/crop screening; fine anatomy, complete subject fidelity and final aesthetic acceptance require separate human review.",
+    "evidence": [
+      "output/imagegen/card-atlas-v3-unified/atlas-contact.jpg",
+      "output/imagegen/card-atlas-v3-unified/R3-ATLAS-FIX-01.png",
+      "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-2.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-3.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-4.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-5.jpg"
+    ]
+  },
+  "R3-ATLAS-12": {
+    "source_sha256": "12cc7c206894d0479f0b54b28cb252e5bad6c1ada11b521174a724725c4f59d2",
+    "approved_for_prototype": true,
+    "review_type": "AI visual inspection, not human acceptance",
+    "reviewed_utc": "2026-11-04T12:11:58.281439+00:00",
+    "method": "Viewed all five 174-crop contact pages, 22-atlas overview, correction original and existing-art reference with view_image",
+    "active_card_ids": [
+      "R3-P03-10",
+      "R3-P03-13",
+      "R3-P03-14",
+      "R3-P03-15",
+      "R3-P03-16"
+    ],
+    "superseded_card_ids": [
+      "R3-P03-09",
+      "R3-P03-11",
+      "R3-P03-12"
+    ],
+    "observations": "Viewed atlas overview and final crop sheets: ink dots, evidence lines, magnifiers and paper objects retain green-purple watercolor motifs. Excluded face/punctuation cells use the correction atlas.",
+    "limits": "Contact sheets support composition/style/crop screening; fine anatomy, complete subject fidelity and final aesthetic acceptance require separate human review.",
+    "evidence": [
+      "output/imagegen/card-atlas-v3-unified/atlas-contact.jpg",
+      "output/imagegen/card-atlas-v3-unified/R3-ATLAS-FIX-01.png",
+      "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-2.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-3.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-4.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-5.jpg"
+    ]
+  },
+  "R3-ATLAS-13": {
+    "source_sha256": "10e0b7acbf5b449f14ec249e3db4911330f69096bb9adb700e6f7ed6183034f4",
+    "approved_for_prototype": true,
+    "review_type": "AI visual inspection, not human acceptance",
+    "reviewed_utc": "2026-11-04T12:11:58.283566+00:00",
+    "method": "Viewed all five 174-crop contact pages, 22-atlas overview, correction original and existing-art reference with view_image",
+    "active_card_ids": [
+      "R3-P03-17",
+      "R3-P03-19",
+      "R3-P03-20",
+      "R3-P03-21",
+      "R3-P03-22",
+      "R3-P03-23"
+    ],
+    "superseded_card_ids": [
+      "R3-P03-18",
+      "R3-P03-24"
+    ],
+    "observations": "Viewed atlas overview and final crop sheets: ink dots, evidence lines, magnifiers and paper objects retain green-purple watercolor motifs. Excluded face/punctuation cells use the correction atlas.",
+    "limits": "Contact sheets support composition/style/crop screening; fine anatomy, complete subject fidelity and final aesthetic acceptance require separate human review.",
+    "evidence": [
+      "output/imagegen/card-atlas-v3-unified/atlas-contact.jpg",
+      "output/imagegen/card-atlas-v3-unified/R3-ATLAS-FIX-01.png",
+      "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-2.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-3.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-4.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-5.jpg"
+    ]
+  },
+  "R3-ATLAS-14": {
+    "source_sha256": "eb58145f47305aea34b86db52603cc2349e9f9f69908913a593a6eae8b41e2f7",
+    "approved_for_prototype": true,
+    "review_type": "AI visual inspection, not human acceptance",
+    "reviewed_utc": "2026-11-04T12:11:58.285606+00:00",
+    "method": "Viewed all five 174-crop contact pages, 22-atlas overview, correction original and existing-art reference with view_image",
+    "active_card_ids": [
+      "R3-P03-25",
+      "R3-P03-26",
+      "R3-P03-27",
+      "R3-P03-28",
+      "R3-P03-29",
+      "R3-P03-31",
+      "R3-P03-32"
+    ],
+    "superseded_card_ids": [
+      "R3-P03-30"
+    ],
+    "observations": "Viewed atlas overview and final crop sheets: ink dots, evidence lines, magnifiers and paper objects retain green-purple watercolor motifs. Excluded face/punctuation cells use the correction atlas.",
+    "limits": "Contact sheets support composition/style/crop screening; fine anatomy, complete subject fidelity and final aesthetic acceptance require separate human review.",
+    "evidence": [
+      "output/imagegen/card-atlas-v3-unified/atlas-contact.jpg",
+      "output/imagegen/card-atlas-v3-unified/R3-ATLAS-FIX-01.png",
+      "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-2.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-3.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-4.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-5.jpg"
+    ]
+  },
+  "R3-ATLAS-15": {
+    "source_sha256": "aec0d4289604cd5f962ef7b947bce5c016ef94d8dcf0e7d9d70d363af22c469f",
+    "approved_for_prototype": true,
+    "review_type": "AI visual inspection, not human acceptance",
+    "reviewed_utc": "2026-11-04T12:11:58.287743+00:00",
+    "method": "Viewed all five 174-crop contact pages, 22-atlas overview, correction original and existing-art reference with view_image",
+    "active_card_ids": [
+      "R3-P03-33",
+      "R3-P03-34",
+      "R3-P03-35",
+      "R3-P03-36",
+      "R3-P03-37",
+      "R3-P03-38",
+      "R3-P03-39",
+      "R3-P03-40"
+    ],
+    "superseded_card_ids": [],
+    "observations": "Viewed atlas overview and final crop sheets: ink dots, evidence lines, magnifiers and paper objects retain green-purple watercolor motifs. Excluded face/punctuation cells use the correction atlas.",
+    "limits": "Contact sheets support composition/style/crop screening; fine anatomy, complete subject fidelity and final aesthetic acceptance require separate human review.",
+    "evidence": [
+      "output/imagegen/card-atlas-v3-unified/atlas-contact.jpg",
+      "output/imagegen/card-atlas-v3-unified/R3-ATLAS-FIX-01.png",
+      "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-2.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-3.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-4.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-5.jpg"
+    ]
+  },
+  "R3-ATLAS-16": {
+    "source_sha256": "e395b1f4b6c1b0979ae623dd916ce78f35621b1ea680f96815b6fa1ad802d066",
+    "approved_for_prototype": true,
+    "review_type": "AI visual inspection, not human acceptance",
+    "reviewed_utc": "2026-11-04T12:11:58.289763+00:00",
+    "method": "Viewed all five 174-crop contact pages, 22-atlas overview, correction original and existing-art reference with view_image",
+    "active_card_ids": [
+      "R3-P04-01",
+      "R3-P04-02",
+      "R3-P04-03",
+      "R3-P04-04",
+      "R3-P04-05",
+      "R3-P04-06",
+      "R3-P04-07",
+      "R3-P04-08"
+    ],
+    "superseded_card_ids": [],
+    "observations": "Viewed atlas overview and final crop sheets: bun hairstyle, ivory cardigan and lanyard resemble P04 reference; handoffs and cooperation are readable. Multi-character identity consistency still needs human review.",
+    "limits": "Contact sheets support composition/style/crop screening; fine anatomy, complete subject fidelity and final aesthetic acceptance require separate human review.",
+    "evidence": [
+      "output/imagegen/card-atlas-v3-unified/atlas-contact.jpg",
+      "output/imagegen/card-atlas-v3-unified/R3-ATLAS-FIX-01.png",
+      "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-2.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-3.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-4.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-5.jpg"
+    ]
+  },
+  "R3-ATLAS-17": {
+    "source_sha256": "cd78df44b129ade6ec1655b25d966d16ec3d59e1362f2c6336d00f99e5283943",
+    "approved_for_prototype": true,
+    "review_type": "AI visual inspection, not human acceptance",
+    "reviewed_utc": "2026-11-04T12:11:58.291944+00:00",
+    "method": "Viewed all five 174-crop contact pages, 22-atlas overview, correction original and existing-art reference with view_image",
+    "active_card_ids": [
+      "R3-P04-09",
+      "R3-P04-10",
+      "R3-P04-11",
+      "R3-P04-12",
+      "R3-P04-13",
+      "R3-P04-14",
+      "R3-P04-15",
+      "R3-P04-16"
+    ],
+    "superseded_card_ids": [],
+    "observations": "Viewed atlas overview and final crop sheets: bun hairstyle, ivory cardigan and lanyard resemble P04 reference; handoffs and cooperation are readable. Multi-character identity consistency still needs human review.",
+    "limits": "Contact sheets support composition/style/crop screening; fine anatomy, complete subject fidelity and final aesthetic acceptance require separate human review.",
+    "evidence": [
+      "output/imagegen/card-atlas-v3-unified/atlas-contact.jpg",
+      "output/imagegen/card-atlas-v3-unified/R3-ATLAS-FIX-01.png",
+      "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-2.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-3.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-4.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-5.jpg"
+    ]
+  },
+  "R3-ATLAS-18": {
+    "source_sha256": "87e2e654030851cffc64777eb1a7df4b547d315ad6e312ed47961c79f6f3e268",
+    "approved_for_prototype": true,
+    "review_type": "AI visual inspection, not human acceptance",
+    "reviewed_utc": "2026-11-04T12:11:58.294016+00:00",
+    "method": "Viewed all five 174-crop contact pages, 22-atlas overview, correction original and existing-art reference with view_image",
+    "active_card_ids": [
+      "R3-P04-17",
+      "R3-P04-18",
+      "R3-P04-19",
+      "R3-P04-20",
+      "R3-P04-21",
+      "R3-P04-22",
+      "R3-P04-23",
+      "R3-P04-24"
+    ],
+    "superseded_card_ids": [],
+    "observations": "Viewed atlas overview and final crop sheets: bun hairstyle, ivory cardigan and lanyard resemble P04 reference; handoffs and cooperation are readable. Multi-character identity consistency still needs human review.",
+    "limits": "Contact sheets support composition/style/crop screening; fine anatomy, complete subject fidelity and final aesthetic acceptance require separate human review.",
+    "evidence": [
+      "output/imagegen/card-atlas-v3-unified/atlas-contact.jpg",
+      "output/imagegen/card-atlas-v3-unified/R3-ATLAS-FIX-01.png",
+      "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-2.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-3.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-4.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-5.jpg"
+    ]
+  },
+  "R3-ATLAS-19": {
+    "source_sha256": "f0fe03a8203bd2b944ce37b66d22532818b99afe2e15fb7a0b59de948d3a285c",
+    "approved_for_prototype": true,
+    "review_type": "AI visual inspection, not human acceptance",
+    "reviewed_utc": "2026-11-04T12:11:58.296061+00:00",
+    "method": "Viewed all five 174-crop contact pages, 22-atlas overview, correction original and existing-art reference with view_image",
+    "active_card_ids": [
+      "R3-P04-25",
+      "R3-P04-26",
+      "R3-P04-27",
+      "R3-P04-28",
+      "R3-P04-29",
+      "R3-P04-30",
+      "R3-P04-31",
+      "R3-P04-32"
+    ],
+    "superseded_card_ids": [],
+    "observations": "Viewed atlas overview and final crop sheets: bun hairstyle, ivory cardigan and lanyard resemble P04 reference; handoffs and cooperation are readable. Multi-character identity consistency still needs human review.",
+    "limits": "Contact sheets support composition/style/crop screening; fine anatomy, complete subject fidelity and final aesthetic acceptance require separate human review.",
+    "evidence": [
+      "output/imagegen/card-atlas-v3-unified/atlas-contact.jpg",
+      "output/imagegen/card-atlas-v3-unified/R3-ATLAS-FIX-01.png",
+      "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-2.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-3.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-4.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-5.jpg"
+    ]
+  },
+  "R3-ATLAS-20": {
+    "source_sha256": "55da4774e906ab0276b101165300d60f8c75ebb98101c41168c1213f5b153741",
+    "approved_for_prototype": true,
+    "review_type": "AI visual inspection, not human acceptance",
+    "reviewed_utc": "2026-11-04T12:11:58.298311+00:00",
+    "method": "Viewed all five 174-crop contact pages, 22-atlas overview, correction original and existing-art reference with view_image",
+    "active_card_ids": [
+      "R3-P04-33",
+      "R3-P04-34",
+      "R3-P04-35",
+      "R3-P04-36",
+      "R3-P04-37",
+      "R3-P04-38",
+      "R3-P04-39",
+      "R3-P04-40"
+    ],
+    "superseded_card_ids": [],
+    "observations": "Viewed atlas overview and final crop sheets: bun hairstyle, ivory cardigan and lanyard resemble P04 reference; handoffs and cooperation are readable. Multi-character identity consistency still needs human review.",
+    "limits": "Contact sheets support composition/style/crop screening; fine anatomy, complete subject fidelity and final aesthetic acceptance require separate human review.",
+    "evidence": [
+      "output/imagegen/card-atlas-v3-unified/atlas-contact.jpg",
+      "output/imagegen/card-atlas-v3-unified/R3-ATLAS-FIX-01.png",
+      "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-2.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-3.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-4.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-5.jpg"
+    ]
+  },
+  "R3-ATLAS-21": {
+    "source_sha256": "7fc5393c025a83afcb372a67e30bc13b227a05fee1a9a5169983dbadbc33f017",
+    "approved_for_prototype": true,
+    "review_type": "AI visual inspection, not human acceptance",
+    "reviewed_utc": "2026-11-04T12:11:58.300376+00:00",
+    "method": "Viewed all five 174-crop contact pages, 22-atlas overview, correction original and existing-art reference with view_image",
+    "active_card_ids": [
+      "R3-C-01",
+      "R3-C-02",
+      "R3-C-03",
+      "R3-C-04",
+      "R3-C-05",
+      "R3-C-06",
+      "R3-C-07",
+      "R3-C-08"
+    ],
+    "superseded_card_ids": [],
+    "observations": "Viewed atlas overview and final crop sheets: everyday campus gestures, objects and derived-paper illustrations use bright quiet watercolor. Unused final cells remain empty; no obvious cross-cell subjects or embedded card labels.",
+    "limits": "Contact sheets support composition/style/crop screening; fine anatomy, complete subject fidelity and final aesthetic acceptance require separate human review.",
+    "evidence": [
+      "output/imagegen/card-atlas-v3-unified/atlas-contact.jpg",
+      "output/imagegen/card-atlas-v3-unified/R3-ATLAS-FIX-01.png",
+      "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-2.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-3.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-4.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-5.jpg"
+    ]
+  },
+  "R3-ATLAS-22": {
+    "source_sha256": "e04f108116c578d40a57f6f08989cc9d19f526b89fdb021d2ae6531e6c05a118",
+    "approved_for_prototype": true,
+    "review_type": "AI visual inspection, not human acceptance",
+    "reviewed_utc": "2026-11-04T12:11:58.302247+00:00",
+    "method": "Viewed all five 174-crop contact pages, 22-atlas overview, correction original and existing-art reference with view_image",
+    "active_card_ids": [
+      "R3-C-09",
+      "R3-C-10",
+      "R3-C-11",
+      "R3-C-12",
+      "R3-T201",
+      "R3-T202"
+    ],
+    "superseded_card_ids": [],
+    "observations": "Viewed atlas overview and final crop sheets: everyday campus gestures, objects and derived-paper illustrations use bright quiet watercolor. Unused final cells remain empty; no obvious cross-cell subjects or embedded card labels.",
+    "limits": "Contact sheets support composition/style/crop screening; fine anatomy, complete subject fidelity and final aesthetic acceptance require separate human review.",
+    "evidence": [
+      "output/imagegen/card-atlas-v3-unified/atlas-contact.jpg",
+      "output/imagegen/card-atlas-v3-unified/R3-ATLAS-FIX-01.png",
+      "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-2.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-3.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-4.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-5.jpg"
+    ]
+  },
+  "R3-ATLAS-FIX-01": {
+    "source_sha256": "14843be0db1aa60f2c58cf526ecb1a5820cc7387be118c56648c975d44b2e1da",
+    "approved_for_prototype": true,
+    "review_type": "AI visual inspection, not human acceptance",
+    "reviewed_utc": "2026-11-04T12:11:58.304175+00:00",
+    "method": "Viewed all five 174-crop contact pages, 22-atlas overview, correction original and existing-art reference with view_image",
+    "active_card_ids": [
+      "R3-P02-20",
+      "R3-P03-11",
+      "R3-P03-18",
+      "R3-P03-24",
+      "R3-P03-09",
+      "R3-P03-12",
+      "R3-P03-30",
+      "R3-P02-23"
+    ],
+    "superseded_card_ids": [],
+    "observations": "Viewed full correction atlas and five final crop sheets: discussion hands, envelope, broken ring, paper model, layered pages, pen/line, stairs, and revisited book occupy their assigned cells. Replaces the eight registered face-leakage/punctuation candidates.",
+    "limits": "Contact sheets support composition/style/crop screening; fine anatomy, complete subject fidelity and final aesthetic acceptance require separate human review.",
+    "evidence": [
+      "output/imagegen/card-atlas-v3-unified/atlas-contact.jpg",
+      "output/imagegen/card-atlas-v3-unified/R3-ATLAS-FIX-01.png",
+      "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-2.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-3.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-4.jpg",
+      "output/imagegen/card-atlas-v3-unified/reviewed-contact-5.jpg"
+    ]
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "FY-ART-01": {
+    "source_sha256": "302804fb5d7be7b3123bf22a787ce5e365b6fb6a23f1febf95031b31efd6a723",
+    "approved_for_prototype": true,
+    "reviewer": "AI visual inspection of source atlas using view_image",
+    "reviewed_utc": "2026-11-04T13:29:26.767640+00:00",
+    "notes": "Five distinct adult campus portraits and guide, meal-card, bookmark match ivory watercolor reference. Strict 2x4 cells. Portrait crop moved up 12px to retain hair; some peripheral torso/held-card edges remain intentionally outside portrait framing. No visible readable text or watermark.",
+    "human_acceptance": "pending"
+  },
+  "FY-ART-02": {
+    "source_sha256": "c4fe0fa40510b98f214e4e6610b597aee611f5975e954e0cf782452877619616",
+    "approved_for_prototype": true,
+    "reviewer": "AI visual inspection of source atlas using view_image",
+    "reviewed_utc": "2026-11-04T13:29:26.769493+00:00",
+    "notes": "Pin, access badge, medal, engineering notebook, bookmark, internship badge, letter, research notebook are distinguishable with teal/sage washes and sparse shadows. Ruler has abstract marks, no readable labels. Upper medal ribbon/background book edges may touch framing; primary subjects retained.",
+    "human_acceptance": "pending"
+  },
+  "FY-ART-03": {
+    "source_sha256": "d058bc3581390c18d17cfd2e7db534a1a53418021480e343bb06552f80f4308e",
+    "approved_for_prototype": true,
+    "reviewer": "AI visual inspection of source atlas using view_image",
+    "reviewed_utc": "2026-11-04T13:29:26.771486+00:00",
+    "notes": "Transit token, pen, graduation photo, ticket, degree pin and three task scenes follow grid. Tiny anonymous photo faces are simplified. No readable lettering; core objects and task intent clear.",
+    "human_acceptance": "pending"
+  },
+  "FY-ART-04": {
+    "source_sha256": "559243f01dbfe32b4e3647e95967682d3482bf84fe3d857b8bbb490f7e7aa3dc",
+    "approved_for_prototype": true,
+    "reviewer": "AI visual inspection of source atlas using view_image",
+    "reviewed_utc": "2026-11-04T13:29:26.773519+00:00",
+    "notes": "Modeling/programming/manuscript/research-camp/interview/resit/requirements/documentation subjects match order and reference. Several desk/table/book peripherals extend to cell edges; fixed inset retains each focal subject. No cross-cell objects or visible watermark.",
+    "human_acceptance": "pending"
+  },
+  "FY-ART-05": {
+    "source_sha256": "af939926306296eb4aea86017cd1432ce19ca05b7cb34aa8c666ab1a1d8a6900",
+    "approved_for_prototype": true,
+    "reviewer": "AI visual inspection of source atlas using view_image",
+    "reviewed_utc": "2026-11-04T13:29:26.775568+00:00",
+    "notes": "Development/test/defense/listening-exam/project requirement scenes match order; simple geometry replaces writing. Exams distinguished by extra booklet/hourglass and project attachments by rust versus mustard accents. No visible text or mixed cells.",
+    "human_acceptance": "pending"
+  },
+  "FY-ART-06": {
+    "source_sha256": "91fd2256cd1d7e54ff9bd83287568fbdd181671238b1e5871862a6c8c4010cfa",
+    "approved_for_prototype": true,
+    "reviewer": "AI visual inspection of source atlas using view_image",
+    "reviewed_utc": "2026-11-04T13:29:26.777597+00:00",
+    "notes": "Homework, mathematics, program, preparation, reading, writing, project scenes match order and pale paper palette. Some secondary pages/books naturally extend beyond crop; essential instruments/screens retained. No visible readable lettering.",
+    "human_acceptance": "pending"
+  },
+  "FY-ART-07": {
+    "source_sha256": "54986b8f7d98acb9a04e2d34f7ef40726c7bb943896f7a590b3cc71f2e42a9b3",
+    "approved_for_prototype": true,
+    "reviewer": "AI visual inspection of source atlas using view_image",
+    "reviewed_utc": "2026-11-04T13:30:55.660547+00:00",
+    "notes": "Flashcards, revision, self-introduction, presentation, fitness, advisor meeting, lecture and collaborative assignment match grid and muted watercolor. Three visible collaborative hands have coherent grips in source view. Secondary furniture/cable edges are cropped as normal framing; focal subjects retained.",
+    "human_acceptance": "pending"
+  },
+  "FY-ART-08": {
+    "source_sha256": "7c7d32f1fe76580215a800ee2bfa13032095e96dbee57c2f39b9c02e4b3dbc43",
+    "approved_for_prototype": true,
+    "reviewer": "AI visual inspection of source atlas using view_image",
+    "reviewed_utc": "2026-11-04T13:30:55.662517+00:00",
+    "notes": "Morning class, network fault, research update, advisor reminder, scholarship, similarity check, library seat, internship interview are distinct and match order. Network X is a status icon, pages use blank line geometry. Sage/cream palette stays consistent. Furniture and book edges naturally meet frame.",
+    "human_acceptance": "pending"
+  },
+  "FY-ART-09": {
+    "source_sha256": "35b27752130472e4761c4f7339ad256e200a39c9c16873e6262c1258828471d6",
+    "approved_for_prototype": true,
+    "reviewer": "AI visual inspection using view_image of full source atlas and object-contact-2.jpg/object-contact.jpg",
+    "reviewed_utc": "2026-11-04T13:40:26.471918+00:00",
+    "notes": "Seven assigned subjects match grid: test registration, online exam, peer evaluation, and four year-end academic milestones. Final lower-right cell is empty. Ivory paper, teal/sage watercolor and sparse shadows match the uploaded game reference. Key subjects remain in fixed 480x360 crops; a secondary laptop edge and thesis/book edge meet crop boundaries. No readable text or watermark observed.",
+    "human_acceptance": "pending"
+  }
+}

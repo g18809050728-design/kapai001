@@ -1,0 +1,17 @@
+Use case: illustration-story. Produce ONE production sprite atlas of EIGHT separate campus card illustrations.
+Input image is a STYLE REFERENCE and P01/P04 identity reference from this game's existing art. Match its thin ink contours, bright ivory paper, flat translucent watercolor washes, simplified forms and spacious quiet backgrounds. Do NOT copy its 3x2 layout or its six subjects. Draw the eight NEW assigned scenes below in a strict 2x4 layout.
+Canvas: exactly 1024 x 1536 pixels, portrait. Strict 2 columns x 4 rows, equal 512 x 384 cells. Read row-major from top left.
+The entire canvas is filled by these eight cells. No outer margin, gutters, border, title, labels or numbering. Separate scenes at the exact halfway vertical boundary and four equal horizontal bands. NEVER combine cells or change their size/order.
+Shared art direction: 严格匹配当前游戏的明亮二维校园水彩插画：纤细清楚的深青墨线勾勒，简化平面水彩铺色，轻微米白纸纹，大面积暖米白负空间；鼠尾草绿、深青与少量暖黄/砖红。成年大学生自然比例，单一动作或物件，背景仅少量轮廓，平静漫射日光，柔和且稀少的阴影。禁止摄影、写实渲染、电影暗调、密集材质、高反差体积光或复杂实验室。克制的抽象思考点缀，整体保持原有手绘清爽感。每格横向4:3独立插画，只画插画，不画卡框、文字或界面。
+Each cell is one horizontal 4:3 independent scene, NOT a card frame or a panel of a continuing comic. Match the existing game's gentle 2D ink-and-watercolor drawing, NOT realistic painting. Each scene should have at least 35 percent calm pale ivory background. Simple broad color washes; minimal material detail; one readable silhouette, natural adult hands. No dense laboratory scenery or dark cinematic shadows. The reference's linework and brightness take priority over descriptive complexity.
+Composition within EACH cell: essential objects and gestures inside central 70%, expendable quiet background at edges. The crop removes 16px from left/right and 12px from top/bottom of EACH cell. No subject, light trail, limb or object may cross into another cell.
+No readable text, letters, numerals, equations, branding, campus logos, watermarks, labels, UI, speech bubbles, trading card frames, exaggerated anatomy, weapons or horror. Blank pages and simple geometric diagrams only. Slot IDs below are instructions, NEVER draw them.
+Row 1, column 1: 沈见章系列：墨绿与紫红；墨迹、放大镜、证据线和渐扩涟漪表现侵蚀与诱发。优先成年学生手部、肩后或背影构图，不新增固定面部身份，不画生化武器。 主体场景：两滴不同色墨在纸面相遇，产生相互叠加的缓慢渗染。
+Row 1, column 2: 沈见章系列：墨绿与紫红；墨迹、放大镜、证据线和渐扩涟漪表现侵蚀与诱发。优先成年学生手部、肩后或背影构图，不新增固定面部身份，不画生化武器。 主体场景：已经闭合的疑问圆环再次打开，第二束光照进中心。
+Row 2, column 1: 沈见章系列：墨绿与紫红；墨迹、放大镜、证据线和渐扩涟漪表现侵蚀与诱发。优先成年学生手部、肩后或背影构图，不新增固定面部身份，不画生化武器。 主体场景：多张证据卡汇聚，墨绿光点在中央形成一次清晰爆发。
+Row 2, column 2: 沈见章系列：墨绿与紫红；墨迹、放大镜、证据线和渐扩涟漪表现侵蚀与诱发。优先成年学生手部、肩后或背影构图，不新增固定面部身份，不画生化武器。 主体场景：小小墨滴通过层层透镜被逐级放大，画面保持克制。
+Row 3, column 1: 沈见章系列：墨绿与紫红；墨迹、放大镜、证据线和渐扩涟漪表现侵蚀与诱发。优先成年学生手部、肩后或背影构图，不新增固定面部身份，不画生化武器。 主体场景：支撑纸论点的一束虚光渐暗，真实结构重新显现。
+Row 3, column 2: 沈见章系列：墨绿与紫红；墨迹、放大镜、证据线和渐扩涟漪表现侵蚀与诱发。优先成年学生手部、肩后或背影构图，不新增固定面部身份，不画生化武器。 主体场景：层叠纸盾被有序拆开，暴露出内部脆弱的连接点。
+Row 4, column 1: 沈见章系列：墨绿与紫红；墨迹、放大镜、证据线和渐扩涟漪表现侵蚀与诱发。优先成年学生手部、肩后或背影构图，不新增固定面部身份，不画生化武器。 主体场景：盖在模型底部的遮布被揭开，隐藏支架与条件全部可见。
+Row 4, column 2: 沈见章系列：墨绿与紫红；墨迹、放大镜、证据线和渐扩涟漪表现侵蚀与诱发。优先成年学生手部、肩后或背影构图，不新增固定面部身份，不画生化武器。 主体场景：沈见章以开放手势与同学讨论，紫红光线柔和而清楚。
+Final count check: exactly 2 columns and 4 equal-height rows. Keep every requested scene in its assigned slot. No additional panels or outer margin.

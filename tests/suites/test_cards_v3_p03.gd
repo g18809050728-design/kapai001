@@ -65,6 +65,7 @@ func run() -> Array[String]:
 	_check_induced(engine, failures)
 	_check_compound(engine, failures)
 	_check_poison_count(engine, failures)
+	_check_burst_activation_and_limit(engine, failures)
 	_check_abilities(engine, failures)
 	_check_pressure_and_shield(engine, failures)
 	_check_all_cards_resolve(engine, catalog, failures)
@@ -245,6 +246,30 @@ func _check_poison_count(engine: BattleEngine, failures: Array[String]) -> void:
 			"P03 third erosion event completes task B",
 			failures
 		)
+
+
+func _check_burst_activation_and_limit(engine: BattleEngine, failures: Array[String]) -> void:
+	for level in [0, 1]:
+		var deck := _deck([["R3-P03-19", 1], ["R3-P03-02", 6]])
+		deck[0].upgrade_level = level
+		var step := _begin(engine, deck, _rng())
+		step.data.state.player.focus = 30
+		step = _play(engine, step, "R3-P03-19", [])
+		for i in 3:
+			step = _play(engine, step, "R3-P03-02", [_target_a(step)])
+		_check(step.ok and _task(step, TASK_B).work_remaining == 50, "burst stays dormant during its deployment turn", failures)
+		if not step.ok:
+			continue
+		step = engine.apply(step.data.state, ActionDraft.new(GameConstants.ACTION_END_TURN, {}), step.data.rng_state)
+		step.data.state.player.focus = 30
+		for i in 4:
+			step = _play(engine, step, "R3-P03-02", [_target_a(step)])
+			_check(step.ok, "burst erosion sequence resolves", failures)
+			if not step.ok:
+				break
+			var expected := 50 if i < 2 else (44 if level > 0 else 46)
+			_check(_task(step, TASK_B).work_remaining == expected, "burst triggers at third event exactly once with correct upgrade amount", failures)
+	print("BURST_CARD_RULES=base4 upgrade6 next_round third_event once_per_turn")
 
 
 func _check_abilities(engine: BattleEngine, failures: Array[String]) -> void:

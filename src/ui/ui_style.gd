@@ -9,9 +9,16 @@ const GOLD := Color("dda957")
 const RED := Color("bd6b64")
 const LABELS = preload("res://src/ui/ui_labels.json")
 static var _textures: Dictionary = {}
+static var text_scale := 1.0
+static var reduced_motion := false
 
 
 static func label(id: String) -> String:
+	var rarities := {"basic": "初始", "common": "普通", "advanced": "进阶", "rare": "稀有", "uncommon": "少见", "starter": "初始"}
+	if rarities.has(id):
+		return rarities[id]
+	if id == "ability":
+		return "能力"
 	var labels: Dictionary = LABELS.data.get("labels", {})
 	if labels.has(id):
 		return str(labels[id])
@@ -45,7 +52,7 @@ static func describe_effects(effects: Array) -> String:
 		if not effect is Dictionary:
 			continue
 		var op := str(effect.get("op", ""))
-		var amount := str(effect.get("amount", effect.get("stacks", "")))
+		var amount := describe_amount(effect.get("amount", effect.get("stacks", "")))
 		var names := {
 			"complete": "完成量",
 			"relax": "放松",
@@ -74,6 +81,12 @@ static func describe_effects(effects: Array) -> String:
 			"recall_from_discard": "从弃牌堆取回手牌",
 			"remove_status": "移除状态",
 			"lose_vitality": "失去精力",
+			"reduce_relax": "减少放松",
+			"reduce_focus": "减少专注",
+			"reduce_max_vitality": "降低精力上限",
+			"restore_max_vitality": "恢复精力上限",
+			"random_discard": "随机弃牌",
+			"summon_task": "新增任务",
 			"restore_work": "恢复任务量",
 			"pressure": "施加压力",
 			"paper_open": "开题",
@@ -109,7 +122,10 @@ static func describe_effects(effects: Array) -> String:
 			"trigger_erosion": "触发侵蚀",
 			"trigger_induced": "触发诱发",
 			"shuffle_draw": "洗牌",
-			"search_draw_for_type": "检索卡牌"
+			"search_draw_for_type": "检索卡牌",
+			"add_work_bonus": "下张工作完成量加值",
+			"status_complete": "状态完成量",
+			"modify_erosion_window": "侵蚀结算窗口（当前引擎尚未应用数值修正）"
 		}
 		var phrase := str(names.get(op, op))
 		if bool(effect.get("up_to", false)):
@@ -118,7 +134,7 @@ static func describe_effects(effects: Array) -> String:
 			phrase += "·" + label(str(effect.status))
 		elif effect.get("category") == "negative":
 			phrase += "·负面状态"
-		for key in ["unit", "unit_id", "scene", "scene_id", "card", "card_id", "relic_id"]:
+		for key in ["unit", "unit_id", "scene", "scene_id", "card", "card_id", "relic_id", "task"]:
 			if effect.has(key):
 				phrase += "·" + label(str(effect[key]))
 		if not amount.is_empty():
@@ -131,7 +147,7 @@ static func describe_effects(effects: Array) -> String:
 		if effect.has("target"):
 			phrase += (
 				"（%s）"
-				% {"player": "我方", "task": "所选任务", "all_tasks": "所有任务", "self": "自身"}.get(
+				% {"player": "我方", "task": "所选任务", "all_tasks": "所有任务", "self": "自身", "one": "一位伙伴", "all": "全体", "earliest_task": "最早任务", "other_task": "另一个任务"}.get(
 					str(effect.target), label(str(effect.target))
 				)
 			)
@@ -149,10 +165,85 @@ static func describe_effects(effects: Array) -> String:
 			var condition_text := describe_condition(effect.condition)
 			if not condition_text.is_empty():
 				phrase += "（需：%s）" % condition_text
-		if str(effect.get("limit", "")) == "once_per_turn":
-			phrase += "（每回合一次）"
+		var effect_limit := str(effect.get("limit", ""))
+		if effect_limit in ["once_per_turn", "twice_per_turn", "three_per_turn"]:
+			phrase += "（%s）" % {"once_per_turn": "每回合一次", "twice_per_turn": "每回合两次", "three_per_turn": "每回合三次"}[effect_limit]
+		phrase += _describe_effect_details(effect)
 		phrases.append(phrase)
 	return " / ".join(phrases)
+
+
+static func _describe_effect_details(effect: Dictionary) -> String:
+	var details: PackedStringArray = []
+	var op := str(effect.get("op", ""))
+	var bonus: Dictionary = effect.get("bonus", {})
+	if not bonus.is_empty():
+		details.append("%s时额外 +%s" % [describe_condition(bonus.get("condition", {})), bonus.get("amount", 0)])
+	for entry in [["per_link_work", "本次连携工作次数", 3], ["per_partner", "在场伙伴数量", 3], ["per_other_chapter", "本窗口其他已运行章节数量", 2], ["per_debuff_kind", "目标负面种类数", 6]]:
+		if effect.has(entry[0]):
+			details.append("按%s每个额外 +%s，至多计 %s 个%s" % [entry[1], effect[entry[0]], effect.get("cap", entry[2]), "，每个目标分别计算" if bool(effect.get("per_target", false)) else ""])
+	if effect.has("per_spent"):
+		details.append("本次每消耗 1 协同额外 +%s" % effect.per_spent)
+	if op == "retrieve":
+		details.append("从弃牌堆取回本角色卡牌到手牌")
+		if effect.has("card_kind"):
+			details.append("仅%s牌" % label(str(effect.card_kind)))
+		if bool(effect.get("permanent_only", false)):
+			details.append("仅永久牌")
+		if effect.has("base_cost_min"):
+			details.append("基础费用至少 %s" % effect.base_cost_min)
+	if op == "search_draw_for_type":
+		details.append("取回抽牌堆首张章节到手牌，随后洗切抽牌堆；没有章节则抽 1 张；满手转入弃牌堆")
+	if op == "chapter_return":
+		details.append("按槽位顺序撤入弃牌堆")
+		if effect.has("modifier_per_chapter"):
+			details.append("每收回 1 章，论文修正 %+d" % int(effect.modifier_per_chapter))
+	if op == "change_topic":
+		details.append("若有已用牌名，移除最早记录，论文修正 %+d" % int(effect.get("modifier", -1)))
+	if op == "cost_discount_next":
+		details.append("用于下一张基础费用至少 %s 的卡牌" % effect.get("min_base_cost", 2))
+	if op == "summon_partner":
+		for entry in [["vitality", "入场精力"], ["max_vitality", "精力上限"], ["cooperation", "合作值"]]:
+			if effect.has(entry[0]):
+				details.append("%s %s" % [entry[1], effect[entry[0]]])
+	if op == "generate_card":
+		details.append("加入手牌，满手转入弃牌堆" if effect.get("zone", "hand") == "hand" else "加入弃牌堆")
+	if op == "extend_timed_debuffs":
+		details.append("仅延长已有易伤、虚弱、脆化，各自上限 3")
+	if op == "trigger_erosion":
+		details.append("按当前侵蚀层数额外结算一次" + ("，不衰减" if not bool(effect.get("decay", true)) else "，随后衰减 1 层"))
+	if op == "paper_citation":
+		details.append("上限 5；第 3/4/5 层额外支付 1/2/3 专注，不足时改抽 1 张")
+	if op == "summon_task":
+		details.append("数量 %s" % effect.get("count", 1))
+	if op == "spend_synergy_up_to":
+		details.append("最多消耗所示数量，协同为 0 也执行后续")
+	if op == "spend_all_synergy":
+		details.append("协同为 0 也执行后续")
+	if op == "spend_synergy" and bool(effect.get("optional", false)):
+		details.append("足够时自动消耗；不足时跳过此项及其后续收益")
+	if effect.has("then"):
+		details.append("随后：" + describe_effects(effect.then))
+	if effect.has("if_spent"):
+		details.append("成功消耗后：" + describe_effects(effect.if_spent))
+	if effect.has("after"):
+		details.append("最后：" + describe_effects(effect.after))
+	return "" if details.is_empty() else "（" + "；".join(details) + "）"
+
+
+static func describe_amount(value: Variant) -> String:
+	if not value is Dictionary:
+		return str(value)
+	var op := str(value.get("op", ""))
+	var names := {"source_stacks": "所选源任务的%s层数" % label(str(value.get("status", ""))), "synergy": "当前协同", "paper_progress": "论文进度", "citation": "引用层数", "modifier": "论文修正", "consumed_synergy": "本次消耗的协同"}
+	var text := str(names.get(op, "按当前状态计算"))
+	if value.has("cap"):
+		text += "（最多 %s）" % value.cap
+	if value.has("multiplier"):
+		text += " × %s" % value.multiplier
+	if value.has("bonus"):
+		text += "，再 +%s" % value.bonus
+	return text
 
 
 static func describe_conditions(conditions: Array) -> String:
@@ -170,10 +261,39 @@ static func describe_condition(condition: Variant) -> String:
 	if condition.has("all"):
 		return describe_conditions(condition.all)
 	if condition.has("any"):
-		return describe_conditions(condition.any)
+		var options: PackedStringArray = []
+		for item in condition.any:
+			options.append(describe_condition(item))
+		return " 或 ".join(options)
 	var kind := str(condition.get("kind", ""))
 	var value: Variant = condition.get("value", "")
 	var names := {
+		"link": "连携：前一张为策略、本张为工作",
+		"link_work_resolved": "连携工作结算后",
+		"paper_progress_gained": "获得论文进度后",
+		"paper_name_turn_unused": "本回合尚未使用该牌名",
+		"two_tasks": "至少有两个任务",
+		"prev_card_type_is": "前牌为%s" % label(str(condition.get("value", ""))),
+		"hand_other_min": "其他手牌至少%s张" % condition.get("value", 1),
+		"no_strategy_played_turn": "本回合尚未打出策略",
+		"instance_plays_battle": "本实例本场已使用至少%s次" % condition.get("min", 1),
+		"instance_played_before": "本实例本场使用过",
+		"previous_strategy_plays_min": "前一策略实例已使用至少%s次" % condition.get("value", 1),
+		"retrieved_strategy_this_turn": "本回合被动已取回策略",
+		"paid_citation_focus_this_turn": "本回合为引用支付过专注",
+		"base_cost_min": "基础费用至少%s" % condition.get("value", 0),
+		"card_discarded_this_effect": "本次效果已弃牌",
+		"passive_retrieve_success": "被动成功取回后",
+		"target_status_kinds": "目标负面种类至少%s、至多%s" % [condition.get("min", 0), condition.get("max", 6)],
+		"target_has_any_timed_debuff": "目标有易伤、虚弱或脆化",
+		"target_has_induced": "目标有诱发",
+		"target_had_induced_at_play_start": "出牌开始时目标有诱发",
+		"any_task_has_induced": "存在带诱发的任务",
+		"any_task_debuff_kinds_min": "某任务有至少%s种负面" % condition.get("value", 1),
+		"erosion_applied_events_min": "本回合已成功施加侵蚀至少%s次" % condition.get("value", 1),
+		"first_induced_trigger": "本回合首次诱发触发",
+		"compound_reaction_success": "复合反应成功后",
+		"prepare_window": "准备阶段",
 		"paper_open": "已开题",
 		"paper_closed": "未开题",
 		"paper_name_unused": "本篇未用牌名",
@@ -190,8 +310,8 @@ static func describe_condition(condition: Variant) -> String:
 		"independent_exam": "独立作答",
 		"fixed_exam_room": "固定考场",
 		"first_cooperation_resolved": "本回合首张合作牌",
-		"played_type_count_turn": "本回合已打出类型牌",
-		"target_has_status": "目标有状态",
+		"played_type_count_turn": "本回合已打出%s牌至少%s张" % [label(str(condition.get("card_type", ""))), condition.get("min", condition.get("value", 1))],
+		"target_has_status": "目标有%s" % label(str(condition.get("status", "状态"))),
 		"target_still_alive": "目标仍存活",
 		"healed_partner_turn": "本回合治疗过伙伴",
 		"summoned_partner_turn": "本回合召入过伙伴"

@@ -19,6 +19,7 @@ const ACTION_KEYS := {
 	"choose_term_option": ["settlement_id", "step_id", "option_id", "candidate_id"],
 	"choose_ending": ["ending_id"],
 	"abandon_run": ["confirmed"],
+	"choose_campaign": ["offer_id", "option_id", "candidate_id", "replace_relic_id"],
 }
 
 
@@ -91,8 +92,12 @@ func create(request: Variant, profile: Variant = {}) -> GameResult:
 		return _error(GameConstants.ERROR_CONTENT_INVALID, "run.starter.size")
 	for definition_id in starter:
 		_transaction_resolver.add_card(run, str(definition_id), "starter")
-	_transaction_resolver.add_relic(run, str(character.starter_relic_id), "", 0)
-	run.nodes = RunMap.build(run.run_id, int(rules.run.term_count))
+	if CampaignService.enabled(run):
+		run.campaign = CampaignService.initial()
+		run.nodes = CampaignMap.build(run.run_id)
+	else:
+		_transaction_resolver.add_relic(run, str(character.starter_relic_id), "", 0)
+		run.nodes = RunMap.build(run.run_id, int(rules.run.term_count))
 	var rng := RandomSource.new(seed)
 	var events: Array[RuleEvent] = []
 	return GameResult.success(
@@ -140,6 +145,8 @@ func preview(state: RunState, draft: Variant) -> GameResult:
 			)
 		"choose_term_option":
 			checked = _choose_term(state.copy_for_write(), payload)
+		"choose_campaign":
+			checked = CampaignService.new(_catalog).choose(state.copy_for_write(), payload) if CampaignService.enabled(state) else _error(GameConstants.ERROR_INVALID_ARGUMENT, "run.campaign.inactive")
 		"choose_ending":
 			checked = _choose_ending(state.copy_for_write(), payload)
 		_:
@@ -197,6 +204,12 @@ func apply(state: RunState, action: Variant, rng_states: Dictionary) -> GameResu
 			applied = _leave_node(work, payload, rng)
 		"choose_term_option":
 			applied = _choose_term(work, payload)
+		"choose_campaign":
+			if not CampaignService.enabled(work):
+				return _error(GameConstants.ERROR_INVALID_ARGUMENT, "run.campaign.inactive")
+			applied = CampaignService.new(_catalog).choose(work, payload)
+			if applied.ok and applied.data.get("graduated", false):
+				summary = _finalize(work, "won", "four_years_completed", str(work.campaign.destination))
 		"choose_ending":
 			applied = _choose_ending(work, payload)
 			if applied.ok:
@@ -261,6 +274,12 @@ func settle_battle(state: RunState, outcome: Dictionary, rng_states: Dictionary)
 	var summary: RunSummary = null
 	if outcome.result == "lost" or vitality == 0:
 		summary = _finalize(work, "lost", str(outcome.get("reason", "battle_lost")))
+	elif CampaignService.enabled(work) and node.kind == "boss":
+		_complete_node(work, node)
+		var generated := CampaignService.new(_catalog).grand(work, node, rng)
+		if not generated.ok:
+			return generated
+		_event(events, "year_reward_created", node.node_id, {"year": work.term})
 	elif node.kind == "boss" and work.term == int(_rules(work).run.term_count):
 		_complete_node(work, node)
 		_event(events, "node_completed", node.node_id, {"node_id": node.node_id, "kind": node.kind})
@@ -276,6 +295,11 @@ func settle_battle(state: RunState, outcome: Dictionary, rng_states: Dictionary)
 			return generated
 		work.pending_reward = generated.data
 		work.money += int(work.pending_reward.meta.get("money", 0))
+		if CampaignService.enabled(work):
+			var campaign_service := CampaignService.new(_catalog)
+			work.money += campaign_service.bonus(work, "battle_money")
+			if node.kind == "elite":
+				work.money += campaign_service.bonus(work, "elite_money") + (10 if work.campaign.direction == "competition" else 0)
 		_event(
 			events,
 			"reward_created",
@@ -313,6 +337,8 @@ func _gate(state: RunState, type: String) -> GameResult:
 		return _error(GameConstants.ERROR_WRONG_PHASE, "run.ending.pending")
 	if not state.active_battle_id.is_empty():
 		return _error(GameConstants.ERROR_WRONG_PHASE, "run.battle.active")
+	if CampaignService.enabled(state) and not state.campaign.pending.is_empty() and type not in ["choose_campaign", "abandon_run"]:
+		return _error(GameConstants.ERROR_CHOICE_PENDING, "run.campaign.pending")
 	if (
 		state.pending_reward != null
 		and not state.pending_reward.is_complete()
@@ -350,6 +376,8 @@ func _enter_node(
 	work.current_node_id = node.node_id
 	work.pending_reward = null
 	node.status = "active"
+	if CampaignService.enabled(work):
+		CampaignService.new(_catalog).enter(work, node)
 	var fallback := false
 	if node.kind == "event":
 		var entered := _node_service.enter_event(work, node, rng)
@@ -382,6 +410,15 @@ func _enter_node(
 		)
 	var chosen := rng.draw_int("map", 0, pool.size() - 1)
 	var encounter_id: String = pool[int(chosen.data)]
+	if CampaignService.enabled(work) and node.kind == "elite":
+		var title: String = CampaignMap.metadata(node.node_id).title
+		var fixed: String = {"随堂小测": "Q01", "期中考试": "E01", "课程设计中期检查": "E02", "小组项目冲刺": "E03", "实习群面": "E06", "保研夏令营": "E05", "补考": "E07", "学科竞赛": "E02"}.get(title, "")
+		if not fixed.is_empty():
+			encounter_id = fixed
+	if CampaignService.enabled(work) and node.kind == "boss":
+		encounter_id = "FY_B%d" % work.term
+		if work.term == 4:
+			encounter_id = "FY_FINAL_" + ("deferred" if int(work.campaign.thesis) < 2 else str(work.campaign.destination))
 	if fallback:
 		_event(
 			events,
@@ -457,6 +494,8 @@ func _leave_node(work: RunState, payload: Dictionary, rng: RandomSource) -> Game
 		return checked
 	var node := work.find_node(work.current_node_id)
 	_complete_node(work, node)
+	if CampaignService.enabled(work):
+		return CampaignService.new(_catalog).completed(work, node, rng)
 	if node.kind == "boss":
 		var rules := _rules(work)
 		work.vitality = mini(
@@ -610,6 +649,10 @@ func make_view(state: RunState) -> Dictionary:
 	var view := state.to_dictionary()
 	view.term_count = int(rules.run.term_count)
 	view.nodes_per_term = 8
+	if CampaignService.enabled(state):
+		view.nodes_per_term = int(CampaignMap.MAPS[state.term - 1].nodes.size())
+		view.year_layers = int(CampaignMap.MAPS[state.term - 1].layers)
+		view.year_title = str(CampaignMap.MAPS[state.term - 1].title)
 	view.relic_slots = int(rules.run.relic_slots)
 	view.deck_size = state.cards.size()
 	view.reachable_node_ids = state.reachable_node_ids()
@@ -697,6 +740,20 @@ func make_view(state: RunState) -> Dictionary:
 			view.screen = "shop"
 		elif node.kind == "event":
 			view.event = _node_service.event_view(state, node)
+			for option in view.event.get("options", []):
+				option.candidate_details = {}
+				for index in option.effects.size():
+					var effect: Dictionary = option.effects[index]
+					if effect.op not in ["gain_card", "gain_relic"]:
+						continue
+					var kind := "card" if effect.op == "gain_card" else "relic"
+					var candidates: Array = option.candidates.get(str(index), [])
+					var fixed_id := str(effect.get("card_id", effect.get("relic_id", "")))
+					if candidates.is_empty() and not fixed_id.is_empty():
+						candidates = [fixed_id]
+						option.candidates[str(index)] = candidates
+					for id in candidates:
+						option.candidate_details[str(id)] = _reward_candidate_view(kind, str(id), rules)
 			view.screen = "event"
 		elif node.kind == "rest":
 			view.rest = _node_service.rest_view(state, node)
@@ -712,7 +769,62 @@ func make_view(state: RunState) -> Dictionary:
 		view.screen = "summary"
 	if state.awaiting_ending:
 		view.screen = "ending"
+	if CampaignService.enabled(state) and state.outcome.is_empty() and not state.campaign.pending.is_empty():
+		view.screen = "campaign"
+		view.campaign_offer = state.campaign.pending.duplicate(true)
+		view.campaign_offer.details = {}
+		for id in view.campaign_offer.candidates:
+			view.campaign_offer.details[id] = _reward_candidate_view("relic" if view.campaign_offer.kind == "relic" else "card", id, rules)
+		var meta := CampaignMap.metadata(str(view.campaign_offer.source_node_id))
+		view.campaign_offer.node_meta = meta
+		view.campaign_offer.service_cost = CampaignService.new(_catalog).service_cost(state, str(meta.get("subtype", "")))
+		view.campaign_offer.previews = _campaign_previews(state)
+	if CampaignService.enabled(state):
+		for item in view.nodes:
+			item.merge(CampaignMap.metadata(str(item.node_id)), false)
+			item.preview_random = item.kind in ["normal", "elite"] and str(item.encounter_id).is_empty()
 	return view
+
+
+func _campaign_previews(state: RunState) -> Dictionary:
+	# Run the existing service on detached copies: these previews publish nothing.
+	var pending: Dictionary = state.campaign.pending
+	var kind := str(pending.kind)
+	var requests: Array = []
+	var result := {}
+	if kind in ["direction", "destination"]:
+		for id in (CampaignService.DIRECTIONS if kind == "direction" else CampaignService.DESTINATIONS):
+			requests.append([id, "", ""])
+	elif kind == "grand":
+		for id in pending.candidates:
+			requests.append(["card", id, ""])
+		requests.append_array([["resources", "", ""], ["skip", "", ""]])
+	elif kind == "relic":
+		requests.append(["skip", "", ""])
+		for id in pending.candidates:
+			requests.append_array([["claim", id, ""], ["convert", id, ""]])
+			for relic in state.relics:
+				requests.append(["claim", id, relic.relic_id])
+	else:
+		for option in ["heal", "money", "progress", "skip"]:
+			requests.append([option, "", ""])
+		for direction in CampaignService.DIRECTIONS:
+			requests.append(["direction_" + direction, "", ""])
+	if kind in ["grand", "service"]:
+		for card in state.cards:
+			requests.append_array([["upgrade", card.card_id, ""], ["remove", card.card_id, ""]])
+	for request in requests:
+		var copy := state.copy_for_write()
+		var checked := CampaignService.new(_catalog).choose(copy, {"offer_id": pending.offer_id, "option_id": request[0], "candidate_id": request[1], "replace_relic_id": request[2]})
+		var entry := {"ok": checked.ok, "money_delta": copy.money - state.money if checked.ok else 0, "vitality_delta": copy.vitality - state.vitality if checked.ok else 0, "deck_delta": copy.cards.size() - state.cards.size() if checked.ok else 0}
+		if not checked.ok:
+			entry.error_key = str(checked.error.message_key)
+		if kind == "destination":
+			entry.consequence = "毕设不足2时进入延期答辩；达到2后按所选去向进入终局挑战。当前毕设 %d/5。" % int(state.campaign.thesis)
+		elif kind == "direction":
+			entry.consequence = "大二第7层起的服务中，可支付30金钱更换一次方向。"
+		result["%s|%s|%s" % request] = entry
+	return result
 
 
 func _reward_candidate_view(
@@ -876,6 +988,10 @@ func _action_events(
 					"card_id": payload.get("card_instance_id")
 				}
 			)
+		"choose_campaign":
+			_event(events, "campaign_reward_claimed", before.current_node_id, {"offer_id": payload.offer_id, "option_id": payload.option_id})
+			if after.term != before.term:
+				_event(events, "year_completed", before.current_node_id, {"year": before.term, "next_year": after.term})
 		"choose_term_option":
 			if after.term != before.term:
 				_event(
