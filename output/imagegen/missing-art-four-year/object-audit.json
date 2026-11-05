@@ -1,0 +1,1470 @@
+{
+  "status": "passed",
+  "total": 66,
+  "failed": 0,
+  "duplicates": 0,
+  "expected_size": [
+    480,
+    360
+  ],
+  "require_alpha": false,
+  "visual_review": "not_performed_by_script",
+  "contact_sheets": [
+    "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\object-contact.jpg",
+    "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\object-contact-2.jpg"
+  ],
+  "images": [
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\E01-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 264452,
+      "sha256": "5827b6dcf067fd06649cd79a00fb73ad10593999eb13c3f9302f54f82ac6f718",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\E02-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 254909,
+      "sha256": "1d700821ee7d526af20d7b0ea6b8b789f19beb992487af5fed28170f2368841d",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\E03-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 236194,
+      "sha256": "5602ba0aa6722459ab06d94d52446035b62b312c2fe2ab5dee5e20f1f354556f",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\E04_1-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 251567,
+      "sha256": "2715302cb1d250c671a6a944984ceae30573ea66fc14131358b1a72970bbecd4",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\E04_2-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 258053,
+      "sha256": "a5224d88fa101ed19c64a4164b39230e02cd9cd30ec1c99fc24029571652edd2",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\E04_3-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 238153,
+      "sha256": "8669efec1e35079fbc2d1d83c3258862e1e31a7599934c45c59f77fb2adbb408",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\E05-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 265012,
+      "sha256": "f8c554cffd44a4ea1a8210c1fe0fe2b6391b69ca7b31a8d1af45f76149f24b87",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\E06-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 276501,
+      "sha256": "214abf10b962bf9a2cd5b1bd3986f866108b910930effb6a6b832727474f377f",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\E07-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 260336,
+      "sha256": "173c8bf24e2f1eec07c62276adca32b5c80b8f55a180a48527b61a5b6c0a572b",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\FY_B1_TASK-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 246695,
+      "sha256": "8f684acc5d5ba1959780ed84e035b7e3b43265af84914f879b5d3121da47a760",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\FY_B2_TASK-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 258560,
+      "sha256": "df5167c33dbc148b3da4fd37bea4e615e2cd802fa3353f9d7a7b21905cbf8a81",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\FY_B3_TASK-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 238391,
+      "sha256": "826defb32c80e4eba6c5e73c57f0920d65af7b13d435225a6dfc8cf939f3fb5a",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\FY_B4_TASK-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 245653,
+      "sha256": "e29a72c3effc4cf5afc061cdc8b210db5061062964963f8df27f95cb51d7962f",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\FY_Y1_1-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 244276,
+      "sha256": "dcc50f741291eb449c35c0fa66e6d5ce14369a0eed0888753c7939c500d409ed",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\FY_Y1_2-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 229907,
+      "sha256": "1dcbbf3f70be51f1c3edaf27e44cf93578004886c005b4b99618b97d7896ff5d",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\FY_Y1_3-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 220038,
+      "sha256": "53c0f6e56da5c1e9567c2cc695a2343250d9c7cb7b4fd66cf5ce481e14a9fbcd",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\FY_Y1_4-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 233130,
+      "sha256": "d402926085a3cdba672346e4582074a2d82d807907bcea2907d4b87f9064cf5b",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\FY_Y2_1-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 255459,
+      "sha256": "a01f306530961bde4e142091ff19bb3618bda88820f402632d34b0d2c53d4684",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\FY_Y2_2-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 252854,
+      "sha256": "d4c8d2ebc60253e057eb8af09e33d69768139324dfac0f9567c64b579a6e99c5",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\FY_Y2_3-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 296158,
+      "sha256": "3cfdd3a22c9a6bd2aea880f5f209adf0d411c3e22c62e14cdfaafd81bacd2fc3",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\FY_Y2_4-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 280348,
+      "sha256": "7049bac141313deb43d68cb58f22a2c64426063a1a4e10a4952d46b77927c7e5",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\FY_Y3_1-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 253988,
+      "sha256": "a7ee9427d245d6d21b513fbd6e346c53b8933163d4a549a6cacf27cc0af2e1e1",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\FY_Y3_2-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 233306,
+      "sha256": "bd5367e6a39e943d73b9ee232193e87b3bd4d8abc8a2376647de28ceccadaa92",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\FY_Y3_3-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 259009,
+      "sha256": "ab5e73ac8d8659f1b1e56c3a0e305f70b9443614ad0c7b87f06684ef7798c023",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\FY_Y3_4-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 250975,
+      "sha256": "707db7b60dbde82a460049bf54456e0dfdfce7620d774f151687a57f4ba12e80",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\FY_Y4_1-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 230125,
+      "sha256": "2f6a334df4221c050d8bd5219ecd576e01bb6a978709d3dcad0cfec97f9e1183",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\FY_Y4_2-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 281644,
+      "sha256": "847b65c2b5b42fbda93a4cf49024c92e9030e962f8ea6facbf86c83179c3524e",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\FY_Y4_3-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 236215,
+      "sha256": "ea32cd1df13b1e78154f56675ec6a1cf5069d0ecd078044ffaa1b1179a4d012b",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\FY_Y4_4-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 239147,
+      "sha256": "7958484943b517501a202f0604ddcaf714e361c4fa089c056f45a725d4db0a10",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\N13-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 249603,
+      "sha256": "3cd0a71a6f31c9ed9bbffaff485f7d44b0d6ffa0115425f67c2c0ee14f3152b7",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\N14-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 275790,
+      "sha256": "5e15234222c319d3f30f3ccb833fa863a7d1d2c932b11346b07470c23abd8bbe",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\N15-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 253160,
+      "sha256": "9319e8ff83c899315bccb840d4b963f27b1287d4dc9992d7100a7fbc23aff855",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\N16-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 272014,
+      "sha256": "0bea6502566986cfe69f75acd1aa1c06086c8d7aa4fc3cde951b770d17f75462",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\N17-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 263366,
+      "sha256": "e228f39429af5661ee9e15757dc9ebae79e981d275983431a3f98438697a04e6",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\N18-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 250548,
+      "sha256": "0fe9b05d110b687ec9293fd14c91488f90e69dff337053a50399f183177ad1bd",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\N19-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 270048,
+      "sha256": "311c2a9198cca140a6c8ff7253b005309cc014d64eca080e1f6a0a293bed10b5",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\N20-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 244725,
+      "sha256": "850e79bd97afe4ec956dfadb0eb5514e739bb3f3e999ae408c3d554192b21fdc",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\N21-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 252295,
+      "sha256": "c469396a417f1f939aa5f273725854a9875615e4ebab1a89b404692ced6e9b65",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\N22-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 251076,
+      "sha256": "9b5cfba9849e0894626ff19c26b48bdd2125aa56bdb6e968c974e743b02b5f9a",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\N23-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 235380,
+      "sha256": "7003a607a23d54b2ab66a6af3c8fbd32b19f22dead4df8b0041bf8c131b1d198",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\N24-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 274804,
+      "sha256": "5daf90763b316df713ee3acb19a4ae0457c1c562c6b9c5b2df18f038ac07118a",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\N25-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 262399,
+      "sha256": "c1588d101d3b0f37f3ed11c0991897b2a5e4e21a60e0407c0c086723ecb3c551",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\N26-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 279976,
+      "sha256": "2003f75c66e63c1d33131e9d2933e418d371fef1e52da0b1912e5b72ef5def23",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\N27-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 253771,
+      "sha256": "b3c58db22d927c4789802a70a5c41ea0d78ccd689305891ad60faec876b8a480",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\N28-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 254250,
+      "sha256": "23d53bc2b43217996bd72dd5388a685a9d4bcba9484e158361c87f1a7e8e7c44",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\N29-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 234890,
+      "sha256": "af2466af8ec3ca8c9c69ee3e283b6815dd95f076fc5888c55713a6034423f5b2",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\N30-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 255824,
+      "sha256": "95e5bd525ab8c54f260b6fe942df3729c503bd5dd56b39633048807057c1dddd",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\N31-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 258955,
+      "sha256": "94d739114c48a1abb19d01cdbc7ac2f288dcb50b3429cb2a80f231f491e0c5c0",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\N32-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 249157,
+      "sha256": "d5be0925e68da18d1ea213ae42e87d76c08455e9e2b02f9e42c2f603f0af9538",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\N33-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 222099,
+      "sha256": "387e1991a6a80e82a7c5cb3dfcd3459bba96fe20783900a5a80bafa07ad7c999",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\N34-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 269275,
+      "sha256": "858ca8c19aef4041f131b64cf59d94bf71d00f95e4e628a92e2d5012c5f588bc",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\N35-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 271182,
+      "sha256": "f40b2e04a0241cad222f5a216334cbd39b9c7dfe5fca31877420a2df0ee9d69f",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\N36-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 215216,
+      "sha256": "03dd8fd0b83e4a2f1afc21bf483dd4727b5df562954891baf17f7fadc7bd43fd",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\N37-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 226303,
+      "sha256": "9e85913a3d30e03faa7cd7d412bfd0fd2bd9833fd697bdc79e66d12a521208ae",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\N38-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 221560,
+      "sha256": "71b682f34fa5b56538f69f2cda2c84e15d85e2480ed4c6b31ae2bc1874ee2ceb",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\Q0A_1-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 225019,
+      "sha256": "85d55b7d81ba29ef6aff2ef8281093770f72dbf2f35a9bd081aedc3ef2aa7258",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\Q0A_2-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 258719,
+      "sha256": "1b5de31c48be70a965a0164a2928db206e46cecc8612f721957991f5ba24639a",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\Q0A_3_1-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 237202,
+      "sha256": "8649ffb39801cd85a2d14c61576c2ab0a498e771b7c51134826f74ae24f20cbf",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\Q0A_3-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 242958,
+      "sha256": "94c1c50748030cd72d4bf11147e4512878667d4fa4a5d241e5ae8c1279eb5f97",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\Q0B_1-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 248867,
+      "sha256": "80098167c00fec1f20825fe196d141d8c3d7e47faaa4c56a75877f9bccd1be2f",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\Q0B_2-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 230692,
+      "sha256": "9a2a4350cd47e71bba770f2dfccdeb9113b4692ba57be9c34ea6e061f9cf717e",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\Q0C-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 261237,
+      "sha256": "4192bf84f9c1f652c526957619b2d65805f1452ab381c6822c31c77e8d03730e",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\Q0D-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 266090,
+      "sha256": "e3fb7fab9d513813dee26729e60e30a5a03c45fd6a029dc568852a036b453bd3",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\Q0E_1-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 257660,
+      "sha256": "cec43f3351aca9fae59d3bf8ff338544212947b5d106df4615143adbaf7827ec",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\Q0E_2-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 235186,
+      "sha256": "3440a728a55665c6b490290dbbcef027143290f7eaf1152c4eeabba92c770267",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\missing-art-four-year\\crops\\Q0E_3-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 253508,
+      "sha256": "63b2c11ec289ab71285e18b9869fb93251dff9ca0a8b3f7b5f6cbda9756b2af4",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        480,
+        360
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    }
+  ]
+}

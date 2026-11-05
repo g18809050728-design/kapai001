@@ -111,7 +111,7 @@ func _shop_scroll() -> void:
 		"user://g7-scroll-%s" % Time.get_ticks_usec()
 	)
 	var session: GameSession = shell.session
-	shell.press("node:" + str(session.get_view().run.reachable_node_ids[0]))
+	_helpers.enter_node(shell, str(session.get_view().run.reachable_node_ids[0]))
 	if not _helpers.finish_battle(shell):
 		_check(false, "scroll regression reaches rewards")
 		shell.free()
@@ -121,24 +121,25 @@ func _shop_scroll() -> void:
 			break
 		for item in session.get_view().run.pending_reward.items:
 			if item.status == "pending":
-				shell.press("reward:%s:skip" % item.item_id)
+				_helpers.press_rule(shell, "reward:%s:skip" % item.item_id, 1 if session.get_view().run.pending_reward.items.filter(func(value): return value.status == "pending").size() == 1 else 0)
 				break
 	for node in session.get_view().run.nodes:
 		if int(node.layer) == 2 and node.kind == "event":
-			shell.press("node:" + str(node.node_id))
+			_helpers.enter_node(shell, str(node.node_id))
 			break
-	shell.press("event:option:leave")
+	_helpers.press_rule(shell, "event:option:leave", 1)
 	_check(session.get_view().screen == &"map", "single successor waits on map")
-	shell.press("node:" + str(session.get_view().run.reachable_node_ids[0]))
+	_helpers.enter_node(shell, str(session.get_view().run.reachable_node_ids[0]))
 	await _frames()
 	var scroll: ScrollContainer = shell.page.get_child(0)
 	scroll.scroll_vertical = 180
 	var position := scroll.scroll_vertical
 	_check(position > 0, "shop content really scrolls")
-	_check(_visible_text(shell.page).contains("完成量"), "shop shows card effects before buying")
+	_check(shell.page.button_uids().has("shop:pick:" + str(session.get_view().run.shop.stocks[0].stock_id)), "shop has inspectable card objects before buying")
 	var revision: int = session.get_view().revision
 	var stock_id: String = session.get_view().run.shop.stocks[0].stock_id
-	shell.press("shop:buy:" + stock_id)
+	shell.press("shop:pick:" + stock_id)
+	shell.press("shop:confirm")
 	await _frames()
 	scroll = shell.page.get_child(0)
 	_check(session.get_view().revision == revision + 1, "shop purchase succeeds through session")
@@ -169,9 +170,7 @@ func _collection_and_upgrades() -> void:
 		button.focus_mode == Control.FOCUS_NONE,
 		"collection panel isolates background keyboard focus"
 	)
-	_check(
-		_visible_text(page._inspector).contains("完成量"), "deck inspection includes actual effects"
-	)
+	_check(not page._inspector.find_children("*", "UiOfferCard", true, false).is_empty() or page.button_uids().has("inspect:card:" + str(shell.session.get_view().run.cards[0].card_id)), "deck inspection includes inspectable card objects")
 	_check(page.press("inspect:close"), "collection panel closes")
 	_check(scroll.scroll_vertical == offset, "closing collection preserves page scroll")
 	_check(shell.press("inspect:relics"), "relic inspection is available")
@@ -193,6 +192,7 @@ func _collection_and_upgrades() -> void:
 	page.render(data)
 	_check(not _visible_text(page).contains("升级后："), "rest hides unselected card targets")
 	_check(page.press("rest:option:upgrade"), "rest upgrade option can be selected")
+	page.press("rest:upgrade:" + str(data.cards[0].card_id))
 	var text := _visible_text(page)
 	_check(
 		text.contains("当前：") and text.contains("升级后："),

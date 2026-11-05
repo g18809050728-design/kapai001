@@ -12,19 +12,16 @@ func run() -> Array[String]:
 		animated.session.update_settings({"autosave": false}).ok,
 		"disable autosave for isolated A/B"
 	)
-	animated.press("menu:new")
-	var input := _find_input(animated.page)
-	if input != null:
-		input.text = "0"
-		input.text_changed.emit("0")
-	_check(animated.press("setup:start"), "production starts through real setup")
+	# Preserve K-card compatibility coverage without a historical version UI.
+	_check(animated.session.start_run(StartRunRequest.new("P01", &"normal", "campus_mvp", "0")).accepted, "historical K-card compatibility run starts through the session API")
+	animated.show_screen("")
 	var initial := animated.session.get_view()
 	if initial.run_id == null:
 		_check(false, "production session exists")
 		animated.free()
 		return _failures
 	_check(
-		animated.press("node:" + str(initial.run.reachable_node_ids[0])),
+		_helpers.enter_node(animated, str(initial.run.reachable_node_ids[0])),
 		"production enters battle through map"
 	)
 	_check(animated.press("battle:save"), "save common A/B starting boundary")
@@ -80,18 +77,15 @@ func _check_restart_pending() -> void:
 	var path := _root + "/restart"
 	var shell := _helpers.attach_shell(GameSession.new(SaveStore.new(path))) as GameShell
 	_check(shell.session.update_settings({"autosave": false}).ok, "isolate pending restart save")
-	shell.press("menu:new")
-	var input := _find_input(shell.page)
-	input.text = "0"
-	input.text_changed.emit("0")
-	_check(shell.press("setup:start"), "start independent production run for pending restart")
+	_check(shell.session.start_run(StartRunRequest.new("P01", &"normal", "campus_mvp", "0")).accepted, "start historical compatibility run for pending restart")
+	shell.show_screen("")
 	var initial := shell.session.get_view()
 	if initial.run_id == null:
 		_check(false, "pending restart production session exists")
 		shell.free()
 		return
 	_check(
-		shell.press("node:" + str(initial.run.reachable_node_ids[0])),
+		_helpers.enter_node(shell, str(initial.run.reachable_node_ids[0])),
 		"enter independent battle for pending restart"
 	)
 	var card_id := _card_id(shell, "K03")
@@ -129,15 +123,16 @@ func _check_local_actions(shell: GameShell) -> void:
 	if battle == null:
 		return
 	var before := _fingerprint(shell)
-	_check(battle.draw_pile_card_ids().is_empty(), "draw pile reveals no hidden card identities")
+	_check(battle.draw_pile_card_ids().size() == int(battle.view.zone_counts.draw), "draw pile exposes only its public members")
 	for uid in [
 		"battle:draw",
 		"battle:discard",
 		"battle:exhaust",
 		"battle:rules",
-		"battle:close_panel",
 		"battle:speed"
 	]:
+		if not (shell.page as BattleScreen)._panel_text.is_empty():
+			_check(shell.press("battle:close_panel"), "close inspection before the next local action")
 		_check(shell.press(uid), "local control is reachable: " + uid)
 		_check(
 			_fingerprint(shell) == before, "local control preserves complete state and RNG: " + uid

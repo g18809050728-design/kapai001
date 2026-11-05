@@ -1,0 +1,17 @@
+Use case: illustration-story. Create ONE sprite atlas containing EIGHT independent campus-game assets, not eight variants.
+Input image is a STYLE REFERENCE from this game's installed art. Match its delicate dark-teal ink contours, simplified adult proportions, luminous ivory paper, flat translucent watercolor washes and sparse shadows. Do not copy its six subjects or 3x2 layout.
+Canvas exactly 1024 x 1536 pixels. Strict 2 columns x 4 rows of equal 512 x 384 cells, row-major from top left. No outer margin, gutters, borders, title, numbering or labels. No merged cells, extra panels or cross-cell objects.
+Shared art direction: 严格匹配当前游戏的明亮二维校园水彩插画：纤细清楚的深青墨线勾勒，简化平面水彩铺色，轻微米白纸纹，大面积暖米白负空间；鼠尾草绿、深青与少量暖黄/砖红。成年大学生自然比例，单一动作或物件，背景仅少量轮廓，平静漫射日光，柔和且稀少的阴影。禁止摄影、写实渲染、电影暗调、密集材质、高反差体积光或复杂实验室。克制的抽象思考点缀，整体保持原有手绘清爽感。每格横向4:3独立插画，只画插画，不画卡框、文字或界面。
+Every cell has at least 35 percent quiet pale ivory background. One readable subject, simplified objects, gentle natural light. No photorealism, dense room scenery, dramatic shadows, horror, weapons, or poisoning people.
+No readable text, letters, numerals, equations, logos, official university crests, watermarks, UI or speech bubbles. All pages, cards, badges and screens use blank geometry. Asset IDs are instructions only, NEVER draw them.
+PORTRAIT cells: a single waist-up adult, complete hair/head and hands contained in the central narrow 4:5 portrait window, local pixel x=112..400 and y=12..372. No full-width landscape or multiple people in a portrait cell. Light ivory side areas are disposable.
+OBJECT/TASK cells: one compact scene with the important subject inside central 70 percent. Final crop is local x=16..496 and y=12..372; keep all essential objects in that rectangle. No elements across cell boundaries.
+Row 1, column 1, OBJECT/TASK: An early morning class represented by a sunrise window, a plain alarm clock with no digits and a half-open textbook, soft warm yellow light.
+Row 1, column 2, OBJECT/TASK: Unreliable campus networking represented by a small router, laptop with a broken dotted connection symbol and a loose cable, gentle humorous academic nuisance.
+Row 2, column 1, OBJECT/TASK: A research group update represented by an open laptop, small chart-only presentation board and neatly clipped progress sheets.
+Row 2, column 2, OBJECT/TASK: An advisor's progress reminder represented by a desk calendar with empty squares, a growing folder stack and a small plain notification bell, no chat text.
+Row 3, column 1, OBJECT/TASK: Scholarship evaluation represented by a simple laurel token, a portfolio folder and three blank assessment sheets, no medals with writing.
+Row 3, column 2, OBJECT/TASK: Academic similarity checking represented by two manuscript sheets under a magnifying glass, matching abstract lines linked by a small loop, no percentages.
+Row 4, column 1, OBJECT/TASK: Library seat reservation represented by one empty wooden study chair, a closed book and a backpack beside the desk, quiet pale background.
+Row 4, column 2, OBJECT/TASK: An internship interview represented by a blank resume folder, two chairs across a small table and a neutral office plant, no faces needed.
+Final check: exactly 2 columns and 4 equal rows. Keep every assigned subject in its own slot and its specified safe crop. No text or extra decoration.

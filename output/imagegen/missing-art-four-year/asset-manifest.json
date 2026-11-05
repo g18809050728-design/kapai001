@@ -1,0 +1,4492 @@
+{
+  "version": 1,
+  "requirement_id": "FY-ART-002",
+  "planned_count": 71,
+  "generated_count": 71,
+  "selected_count": 71,
+  "assets": [
+    {
+      "asset_id": "P02",
+      "kind": "character",
+      "category": "portraits",
+      "name": "许知微",
+      "brief": "One adult Chinese woman, shoulder-length dark hair tied in a low ponytail, thin oval glasses, navy cardigan with a small muted lavender accent, holding a research notebook with blank tabbed pages. Calm organized expression; distinct from the reference's high-bun woman. Waist-up single portrait, front three-quarter view.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/characters.json",
+      "output": "assets/art/four-year/portraits/P02-v1.png",
+      "batch_id": "FY-ART-01",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-01-v1.png",
+      "source_sha256": "302804fb5d7be7b3123bf22a787ce5e365b6fb6a23f1febf95031b31efd6a723",
+      "slot": {
+        "slot": 1,
+        "row": 1,
+        "column": 1,
+        "asset_id": "P02",
+        "crop": [
+          112,
+          0,
+          400,
+          360
+        ],
+        "crop_adjustment": "After first-atlas visual review: retain full hair by moving the fixed portrait crop up 12px; no resampling or API regeneration."
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-01.txt",
+      "prompt_sha256": "b11720b9d6895d264549b407cbdfd9d83b775c6c6ddcca68e891195e29b80856",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        288,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/P02-v1.png",
+      "sha256": "f17a6c3f3aa17475e390596f8a174612781b13371f8b8fd0c8a39c67cb1271b7",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "302804fb5d7be7b3123bf22a787ce5e365b6fb6a23f1febf95031b31efd6a723",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:29:26.767640+00:00",
+        "notes": "Five distinct adult campus portraits and guide, meal-card, bookmark match ivory watercolor reference. Strict 2x4 cells. Portrait crop moved up 12px to retain hair; some peripheral torso/held-card edges remain intentionally outside portrait framing. No visible readable text or watermark.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:26.719724+00:00"
+    },
+    {
+      "asset_id": "P03",
+      "kind": "character",
+      "category": "portraits",
+      "name": "沈见章",
+      "brief": "One adult Chinese man with neat side-parted short dark hair, no glasses, sage-green jacket and a small muted plum accent, holding two blank index cards connected by a simple diagram. Thoughtful gently questioning expression; distinct from the reference's tousled-haired man. Waist-up single portrait, front three-quarter view. No poison, weapons or sinister costume.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/characters.json",
+      "output": "assets/art/four-year/portraits/P03-v1.png",
+      "batch_id": "FY-ART-01",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-01-v1.png",
+      "source_sha256": "302804fb5d7be7b3123bf22a787ce5e365b6fb6a23f1febf95031b31efd6a723",
+      "slot": {
+        "slot": 2,
+        "row": 1,
+        "column": 2,
+        "asset_id": "P03",
+        "crop": [
+          624,
+          0,
+          912,
+          360
+        ],
+        "crop_adjustment": "After first-atlas visual review: retain full hair by moving the fixed portrait crop up 12px; no resampling or API regeneration."
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-01.txt",
+      "prompt_sha256": "b11720b9d6895d264549b407cbdfd9d83b775c6c6ddcca68e891195e29b80856",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        288,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/P03-v1.png",
+      "sha256": "3c0a1b3a858b63136b411038c606dec6c55b2fe15dc35c437a3ae7bcde2d943e",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "302804fb5d7be7b3123bf22a787ce5e365b6fb6a23f1febf95031b31efd6a723",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:29:26.767640+00:00",
+        "notes": "Five distinct adult campus portraits and guide, meal-card, bookmark match ivory watercolor reference. Strict 2x4 cells. Portrait crop moved up 12px to retain hair; some peripheral torso/held-card edges remain intentionally outside portrait framing. No visible readable text or watermark.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:26.743848+00:00"
+    },
+    {
+      "asset_id": "R3-U01",
+      "kind": "unit",
+      "category": "portraits",
+      "name": "学习搭子",
+      "brief": "One friendly adult Chinese student with short softly wavy hair, pale blue hoodie, holding an open exercise notebook, relaxed study companion. Waist-up single portrait, no glasses, no readable marks.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/units.json",
+      "output": "assets/art/four-year/portraits/R3-U01-v1.png",
+      "batch_id": "FY-ART-01",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-01-v1.png",
+      "source_sha256": "302804fb5d7be7b3123bf22a787ce5e365b6fb6a23f1febf95031b31efd6a723",
+      "slot": {
+        "slot": 3,
+        "row": 2,
+        "column": 1,
+        "asset_id": "R3-U01",
+        "crop": [
+          112,
+          384,
+          400,
+          744
+        ],
+        "crop_adjustment": "After first-atlas visual review: retain full hair by moving the fixed portrait crop up 12px; no resampling or API regeneration."
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-01.txt",
+      "prompt_sha256": "b11720b9d6895d264549b407cbdfd9d83b775c6c6ddcca68e891195e29b80856",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        288,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/R3-U01-v1.png",
+      "sha256": "107e7b7bd165c0452f502ac4e24a9ab43e5a331558e200d898a4e6e8af0e2dab",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "302804fb5d7be7b3123bf22a787ce5e365b6fb6a23f1febf95031b31efd6a723",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:29:26.767640+00:00",
+        "notes": "Five distinct adult campus portraits and guide, meal-card, bookmark match ivory watercolor reference. Strict 2x4 cells. Portrait crop moved up 12px to retain hair; some peripheral torso/held-card edges remain intentionally outside portrait framing. No visible readable text or watermark.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:26.765521+00:00"
+    },
+    {
+      "asset_id": "R3-U02",
+      "kind": "unit",
+      "category": "portraits",
+      "name": "旁听同学",
+      "brief": "One attentive adult Chinese student with straight chin-length dark hair, mustard-yellow sweater, holding a closed book and simple pencil, quiet lecture-auditing classmate. Waist-up single portrait.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/units.json",
+      "output": "assets/art/four-year/portraits/R3-U02-v1.png",
+      "batch_id": "FY-ART-01",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-01-v1.png",
+      "source_sha256": "302804fb5d7be7b3123bf22a787ce5e365b6fb6a23f1febf95031b31efd6a723",
+      "slot": {
+        "slot": 4,
+        "row": 2,
+        "column": 2,
+        "asset_id": "R3-U02",
+        "crop": [
+          624,
+          384,
+          912,
+          744
+        ],
+        "crop_adjustment": "After first-atlas visual review: retain full hair by moving the fixed portrait crop up 12px; no resampling or API regeneration."
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-01.txt",
+      "prompt_sha256": "b11720b9d6895d264549b407cbdfd9d83b775c6c6ddcca68e891195e29b80856",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        288,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/R3-U02-v1.png",
+      "sha256": "6172dca8e92af882e1e6f320a1cf9fcdebcc7029103733596c53cb018cc6ba2b",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "302804fb5d7be7b3123bf22a787ce5e365b6fb6a23f1febf95031b31efd6a723",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:29:26.767640+00:00",
+        "notes": "Five distinct adult campus portraits and guide, meal-card, bookmark match ivory watercolor reference. Strict 2x4 cells. Portrait crop moved up 12px to retain hair; some peripheral torso/held-card edges remain intentionally outside portrait framing. No visible readable text or watermark.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:26.787787+00:00"
+    },
+    {
+      "asset_id": "R3-U03",
+      "kind": "unit",
+      "category": "portraits",
+      "name": "项目队友",
+      "brief": "One dependable adult Chinese student with short cropped hair, rust-red overshirt over ivory T-shirt, holding a slim project folder with blank geometric tabs. Confident collaborative expression. Waist-up single portrait.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/units.json",
+      "output": "assets/art/four-year/portraits/R3-U03-v1.png",
+      "batch_id": "FY-ART-01",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-01-v1.png",
+      "source_sha256": "302804fb5d7be7b3123bf22a787ce5e365b6fb6a23f1febf95031b31efd6a723",
+      "slot": {
+        "slot": 5,
+        "row": 3,
+        "column": 1,
+        "asset_id": "R3-U03",
+        "crop": [
+          112,
+          768,
+          400,
+          1128
+        ],
+        "crop_adjustment": "After first-atlas visual review: retain full hair by moving the fixed portrait crop up 12px; no resampling or API regeneration."
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-01.txt",
+      "prompt_sha256": "b11720b9d6895d264549b407cbdfd9d83b775c6c6ddcca68e891195e29b80856",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        288,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/R3-U03-v1.png",
+      "sha256": "d91e64f1cbc77a68e2ba11eda4cf96fb7dfdc841cedca8f70852331c86d3b392",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "302804fb5d7be7b3123bf22a787ce5e365b6fb6a23f1febf95031b31efd6a723",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:29:26.767640+00:00",
+        "notes": "Five distinct adult campus portraits and guide, meal-card, bookmark match ivory watercolor reference. Strict 2x4 cells. Portrait crop moved up 12px to retain hair; some peripheral torso/held-card edges remain intentionally outside portrait framing. No visible readable text or watermark.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:26.809830+00:00"
+    },
+    {
+      "asset_id": "FY_Y1_1",
+      "kind": "relic",
+      "category": "relics",
+      "name": "校园导览册",
+      "brief": "A small folded campus guide booklet with a simple tree-lined campus map made of geometric paths, sage cover, no letters or numbers.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/relics.json",
+      "output": "assets/art/four-year/relics/FY_Y1_1-v1.png",
+      "batch_id": "FY-ART-01",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-01-v1.png",
+      "source_sha256": "302804fb5d7be7b3123bf22a787ce5e365b6fb6a23f1febf95031b31efd6a723",
+      "slot": {
+        "slot": 6,
+        "row": 3,
+        "column": 2,
+        "asset_id": "FY_Y1_1",
+        "crop": [
+          528,
+          780,
+          1008,
+          1140
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-01.txt",
+      "prompt_sha256": "b11720b9d6895d264549b407cbdfd9d83b775c6c6ddcca68e891195e29b80856",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/FY_Y1_1-v1.png",
+      "sha256": "dcc50f741291eb449c35c0fa66e6d5ce14369a0eed0888753c7939c500d409ed",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "302804fb5d7be7b3123bf22a787ce5e365b6fb6a23f1febf95031b31efd6a723",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:29:26.767640+00:00",
+        "notes": "Five distinct adult campus portraits and guide, meal-card, bookmark match ivory watercolor reference. Strict 2x4 cells. Portrait crop moved up 12px to retain hair; some peripheral torso/held-card edges remain intentionally outside portrait framing. No visible readable text or watermark.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:26.842460+00:00"
+    },
+    {
+      "asset_id": "FY_Y1_2",
+      "kind": "relic",
+      "category": "relics",
+      "name": "食堂饭卡",
+      "brief": "A warm yellow canteen meal card beside a small ceramic rice bowl and chopsticks, simple original card graphic without text or logo.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/relics.json",
+      "output": "assets/art/four-year/relics/FY_Y1_2-v1.png",
+      "batch_id": "FY-ART-01",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-01-v1.png",
+      "source_sha256": "302804fb5d7be7b3123bf22a787ce5e365b6fb6a23f1febf95031b31efd6a723",
+      "slot": {
+        "slot": 7,
+        "row": 4,
+        "column": 1,
+        "asset_id": "FY_Y1_2",
+        "crop": [
+          16,
+          1164,
+          496,
+          1524
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-01.txt",
+      "prompt_sha256": "b11720b9d6895d264549b407cbdfd9d83b775c6c6ddcca68e891195e29b80856",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/FY_Y1_2-v1.png",
+      "sha256": "1dcbbf3f70be51f1c3edaf27e44cf93578004886c005b4b99618b97d7896ff5d",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "302804fb5d7be7b3123bf22a787ce5e365b6fb6a23f1febf95031b31efd6a723",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:29:26.767640+00:00",
+        "notes": "Five distinct adult campus portraits and guide, meal-card, bookmark match ivory watercolor reference. Strict 2x4 cells. Portrait crop moved up 12px to retain hair; some peripheral torso/held-card edges remain intentionally outside portrait framing. No visible readable text or watermark.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:26.873289+00:00"
+    },
+    {
+      "asset_id": "FY_Y1_3",
+      "kind": "relic",
+      "category": "relics",
+      "name": "旧书签",
+      "brief": "One old cream paper bookmark, softened corners, a pressed leaf and muted green tassel, gently worn but carefully kept.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/relics.json",
+      "output": "assets/art/four-year/relics/FY_Y1_3-v1.png",
+      "batch_id": "FY-ART-01",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-01-v1.png",
+      "source_sha256": "302804fb5d7be7b3123bf22a787ce5e365b6fb6a23f1febf95031b31efd6a723",
+      "slot": {
+        "slot": 8,
+        "row": 4,
+        "column": 2,
+        "asset_id": "FY_Y1_3",
+        "crop": [
+          528,
+          1164,
+          1008,
+          1524
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-01.txt",
+      "prompt_sha256": "b11720b9d6895d264549b407cbdfd9d83b775c6c6ddcca68e891195e29b80856",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/FY_Y1_3-v1.png",
+      "sha256": "53c0f6e56da5c1e9567c2cc695a2343250d9c7cb7b4fd66cf5ce481e14a9fbcd",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "302804fb5d7be7b3123bf22a787ce5e365b6fb6a23f1febf95031b31efd6a723",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:29:26.767640+00:00",
+        "notes": "Five distinct adult campus portraits and guide, meal-card, bookmark match ivory watercolor reference. Strict 2x4 cells. Portrait crop moved up 12px to retain hair; some peripheral torso/held-card edges remain intentionally outside portrait framing. No visible readable text or watermark.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:26.907296+00:00"
+    },
+    {
+      "asset_id": "FY_Y1_4",
+      "kind": "relic",
+      "category": "relics",
+      "name": "社团徽章",
+      "brief": "One round student-club enamel pin with an abstract sprout emblem, teal and warm yellow, no lettering or official crest.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/relics.json",
+      "output": "assets/art/four-year/relics/FY_Y1_4-v1.png",
+      "batch_id": "FY-ART-02",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-02-v1.png",
+      "source_sha256": "c4fe0fa40510b98f214e4e6610b597aee611f5975e954e0cf782452877619616",
+      "slot": {
+        "slot": 1,
+        "row": 1,
+        "column": 1,
+        "asset_id": "FY_Y1_4",
+        "crop": [
+          16,
+          12,
+          496,
+          372
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-02.txt",
+      "prompt_sha256": "f9e7c6878a670bbda3a3d42095f4c194ab9809d5d82cdcd50b50320ddd4af5eb",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/FY_Y1_4-v1.png",
+      "sha256": "d402926085a3cdba672346e4582074a2d82d807907bcea2907d4b87f9064cf5b",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "c4fe0fa40510b98f214e4e6610b597aee611f5975e954e0cf782452877619616",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:29:26.769493+00:00",
+        "notes": "Pin, access badge, medal, engineering notebook, bookmark, internship badge, letter, research notebook are distinguishable with teal/sage washes and sparse shadows. Ruler has abstract marks, no readable labels. Upper medal ribbon/background book edges may touch framing; primary subjects retained.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:26.962421+00:00"
+    },
+    {
+      "asset_id": "FY_Y2_1",
+      "kind": "relic",
+      "category": "relics",
+      "name": "实验室门卡",
+      "brief": "One plain sage laboratory access card with a minimal geometric chip and short blue lanyard, no lettering or portrait.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/relics.json",
+      "output": "assets/art/four-year/relics/FY_Y2_1-v1.png",
+      "batch_id": "FY-ART-02",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-02-v1.png",
+      "source_sha256": "c4fe0fa40510b98f214e4e6610b597aee611f5975e954e0cf782452877619616",
+      "slot": {
+        "slot": 2,
+        "row": 1,
+        "column": 2,
+        "asset_id": "FY_Y2_1",
+        "crop": [
+          528,
+          12,
+          1008,
+          372
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-02.txt",
+      "prompt_sha256": "f9e7c6878a670bbda3a3d42095f4c194ab9809d5d82cdcd50b50320ddd4af5eb",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/FY_Y2_1-v1.png",
+      "sha256": "a01f306530961bde4e142091ff19bb3618bda88820f402632d34b0d2c53d4684",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "c4fe0fa40510b98f214e4e6610b597aee611f5975e954e0cf782452877619616",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:29:26.769493+00:00",
+        "notes": "Pin, access badge, medal, engineering notebook, bookmark, internship badge, letter, research notebook are distinguishable with teal/sage washes and sparse shadows. Ruler has abstract marks, no readable labels. Upper medal ribbon/background book edges may touch framing; primary subjects retained.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:26.990283+00:00"
+    },
+    {
+      "asset_id": "FY_Y2_2",
+      "kind": "relic",
+      "category": "relics",
+      "name": "竞赛纪念章",
+      "brief": "One small bronze competition commemorative medal with abstract interlocking shapes, sage ribbon, no text or numerals.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/relics.json",
+      "output": "assets/art/four-year/relics/FY_Y2_2-v1.png",
+      "batch_id": "FY-ART-02",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-02-v1.png",
+      "source_sha256": "c4fe0fa40510b98f214e4e6610b597aee611f5975e954e0cf782452877619616",
+      "slot": {
+        "slot": 3,
+        "row": 2,
+        "column": 1,
+        "asset_id": "FY_Y2_2",
+        "crop": [
+          16,
+          396,
+          496,
+          756
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-02.txt",
+      "prompt_sha256": "f9e7c6878a670bbda3a3d42095f4c194ab9809d5d82cdcd50b50320ddd4af5eb",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/FY_Y2_2-v1.png",
+      "sha256": "d4c8d2ebc60253e057eb8af09e33d69768139324dfac0f9567c64b579a6e99c5",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "c4fe0fa40510b98f214e4e6610b597aee611f5975e954e0cf782452877619616",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:29:26.769493+00:00",
+        "notes": "Pin, access badge, medal, engineering notebook, bookmark, internship badge, letter, research notebook are distinguishable with teal/sage washes and sparse shadows. Ruler has abstract marks, no readable labels. Upper medal ribbon/background book edges may touch framing; primary subjects retained.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:27.022870+00:00"
+    },
+    {
+      "asset_id": "FY_Y2_3",
+      "kind": "relic",
+      "category": "relics",
+      "name": "工程笔记本",
+      "brief": "One sturdy engineering notebook with squared blank pages, short ruler and simple mechanical sketch made of circles and lines, muted navy cover.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/relics.json",
+      "output": "assets/art/four-year/relics/FY_Y2_3-v1.png",
+      "batch_id": "FY-ART-02",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-02-v1.png",
+      "source_sha256": "c4fe0fa40510b98f214e4e6610b597aee611f5975e954e0cf782452877619616",
+      "slot": {
+        "slot": 4,
+        "row": 2,
+        "column": 2,
+        "asset_id": "FY_Y2_3",
+        "crop": [
+          528,
+          396,
+          1008,
+          756
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-02.txt",
+      "prompt_sha256": "f9e7c6878a670bbda3a3d42095f4c194ab9809d5d82cdcd50b50320ddd4af5eb",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/FY_Y2_3-v1.png",
+      "sha256": "3cfdd3a22c9a6bd2aea880f5f209adf0d411c3e22c62e14cdfaafd81bacd2fc3",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "c4fe0fa40510b98f214e4e6610b597aee611f5975e954e0cf782452877619616",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:29:26.769493+00:00",
+        "notes": "Pin, access badge, medal, engineering notebook, bookmark, internship badge, letter, research notebook are distinguishable with teal/sage washes and sparse shadows. Ruler has abstract marks, no readable labels. Upper medal ribbon/background book edges may touch framing; primary subjects retained.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:27.051495+00:00"
+    },
+    {
+      "asset_id": "FY_Y2_4",
+      "kind": "relic",
+      "category": "relics",
+      "name": "专业书签",
+      "brief": "One slim deep-teal academic bookmark with a simple geometric cutout and lavender thread, neatly placed over a closed textbook.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/relics.json",
+      "output": "assets/art/four-year/relics/FY_Y2_4-v1.png",
+      "batch_id": "FY-ART-02",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-02-v1.png",
+      "source_sha256": "c4fe0fa40510b98f214e4e6610b597aee611f5975e954e0cf782452877619616",
+      "slot": {
+        "slot": 5,
+        "row": 3,
+        "column": 1,
+        "asset_id": "FY_Y2_4",
+        "crop": [
+          16,
+          780,
+          496,
+          1140
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-02.txt",
+      "prompt_sha256": "f9e7c6878a670bbda3a3d42095f4c194ab9809d5d82cdcd50b50320ddd4af5eb",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/FY_Y2_4-v1.png",
+      "sha256": "7049bac141313deb43d68cb58f22a2c64426063a1a4e10a4952d46b77927c7e5",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "c4fe0fa40510b98f214e4e6610b597aee611f5975e954e0cf782452877619616",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:29:26.769493+00:00",
+        "notes": "Pin, access badge, medal, engineering notebook, bookmark, internship badge, letter, research notebook are distinguishable with teal/sage washes and sparse shadows. Ruler has abstract marks, no readable labels. Upper medal ribbon/background book edges may touch framing; primary subjects retained.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:27.080179+00:00"
+    },
+    {
+      "asset_id": "FY_Y3_1",
+      "kind": "relic",
+      "category": "relics",
+      "name": "实习工牌",
+      "brief": "One unbranded internship identity badge on a short rust-red lanyard, abstract portrait silhouette and blank color bars only.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/relics.json",
+      "output": "assets/art/four-year/relics/FY_Y3_1-v1.png",
+      "batch_id": "FY-ART-02",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-02-v1.png",
+      "source_sha256": "c4fe0fa40510b98f214e4e6610b597aee611f5975e954e0cf782452877619616",
+      "slot": {
+        "slot": 6,
+        "row": 3,
+        "column": 2,
+        "asset_id": "FY_Y3_1",
+        "crop": [
+          528,
+          780,
+          1008,
+          1140
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-02.txt",
+      "prompt_sha256": "f9e7c6878a670bbda3a3d42095f4c194ab9809d5d82cdcd50b50320ddd4af5eb",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/FY_Y3_1-v1.png",
+      "sha256": "a7ee9427d245d6d21b513fbd6e346c53b8933163d4a549a6cacf27cc0af2e1e1",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "c4fe0fa40510b98f214e4e6610b597aee611f5975e954e0cf782452877619616",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:29:26.769493+00:00",
+        "notes": "Pin, access badge, medal, engineering notebook, bookmark, internship badge, letter, research notebook are distinguishable with teal/sage washes and sparse shadows. Ruler has abstract marks, no readable labels. Upper medal ribbon/background book edges may touch framing; primary subjects retained.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:27.111582+00:00"
+    },
+    {
+      "asset_id": "FY_Y3_2",
+      "kind": "relic",
+      "category": "relics",
+      "name": "推荐信封",
+      "brief": "One ivory recommendation envelope with a muted sage wax seal and a plain folded sheet peeking out, no writing.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/relics.json",
+      "output": "assets/art/four-year/relics/FY_Y3_2-v1.png",
+      "batch_id": "FY-ART-02",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-02-v1.png",
+      "source_sha256": "c4fe0fa40510b98f214e4e6610b597aee611f5975e954e0cf782452877619616",
+      "slot": {
+        "slot": 7,
+        "row": 4,
+        "column": 1,
+        "asset_id": "FY_Y3_2",
+        "crop": [
+          16,
+          1164,
+          496,
+          1524
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-02.txt",
+      "prompt_sha256": "f9e7c6878a670bbda3a3d42095f4c194ab9809d5d82cdcd50b50320ddd4af5eb",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/FY_Y3_2-v1.png",
+      "sha256": "bd5367e6a39e943d73b9ee232193e87b3bd4d8abc8a2376647de28ceccadaa92",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "c4fe0fa40510b98f214e4e6610b597aee611f5975e954e0cf782452877619616",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:29:26.769493+00:00",
+        "notes": "Pin, access badge, medal, engineering notebook, bookmark, internship badge, letter, research notebook are distinguishable with teal/sage washes and sparse shadows. Ruler has abstract marks, no readable labels. Upper medal ribbon/background book edges may touch framing; primary subjects retained.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:27.141895+00:00"
+    },
+    {
+      "asset_id": "FY_Y3_3",
+      "kind": "relic",
+      "category": "relics",
+      "name": "科研笔记",
+      "brief": "One lavender-bound research notebook opened to blank diagrams and colored tabs, small pencil resting diagonally, no equations or writing.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/relics.json",
+      "output": "assets/art/four-year/relics/FY_Y3_3-v1.png",
+      "batch_id": "FY-ART-02",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-02-v1.png",
+      "source_sha256": "c4fe0fa40510b98f214e4e6610b597aee611f5975e954e0cf782452877619616",
+      "slot": {
+        "slot": 8,
+        "row": 4,
+        "column": 2,
+        "asset_id": "FY_Y3_3",
+        "crop": [
+          528,
+          1164,
+          1008,
+          1524
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-02.txt",
+      "prompt_sha256": "f9e7c6878a670bbda3a3d42095f4c194ab9809d5d82cdcd50b50320ddd4af5eb",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/FY_Y3_3-v1.png",
+      "sha256": "ab5e73ac8d8659f1b1e56c3a0e305f70b9443614ad0c7b87f06684ef7798c023",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "c4fe0fa40510b98f214e4e6610b597aee611f5975e954e0cf782452877619616",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:29:26.769493+00:00",
+        "notes": "Pin, access badge, medal, engineering notebook, bookmark, internship badge, letter, research notebook are distinguishable with teal/sage washes and sparse shadows. Ruler has abstract marks, no readable labels. Upper medal ribbon/background book edges may touch framing; primary subjects retained.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:27.173939+00:00"
+    },
+    {
+      "asset_id": "FY_Y3_4",
+      "kind": "relic",
+      "category": "relics",
+      "name": "通勤卡",
+      "brief": "One unbranded teal transit card and a small simple bus token, abstract route dots only, no letters or digits.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/relics.json",
+      "output": "assets/art/four-year/relics/FY_Y3_4-v1.png",
+      "batch_id": "FY-ART-03",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-03-v1.png",
+      "source_sha256": "d058bc3581390c18d17cfd2e7db534a1a53418021480e343bb06552f80f4308e",
+      "slot": {
+        "slot": 1,
+        "row": 1,
+        "column": 1,
+        "asset_id": "FY_Y3_4",
+        "crop": [
+          16,
+          12,
+          496,
+          372
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-03.txt",
+      "prompt_sha256": "b7c2910522d7e9ba79cf9075092f592de04309f7e87c5b684a28513f05909b64",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/FY_Y3_4-v1.png",
+      "sha256": "707db7b60dbde82a460049bf54456e0dfdfce7620d774f151687a57f4ba12e80",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "d058bc3581390c18d17cfd2e7db534a1a53418021480e343bb06552f80f4308e",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:29:26.771486+00:00",
+        "notes": "Transit token, pen, graduation photo, ticket, degree pin and three task scenes follow grid. Tiny anonymous photo faces are simplified. No readable lettering; core objects and task intent clear.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:27.233946+00:00"
+    },
+    {
+      "asset_id": "FY_Y4_1",
+      "kind": "relic",
+      "category": "relics",
+      "name": "答辩纪念笔",
+      "brief": "One elegant deep-teal commemorative fountain pen with a small brass clip, beside its plain ivory presentation sleeve, no inscription.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/relics.json",
+      "output": "assets/art/four-year/relics/FY_Y4_1-v1.png",
+      "batch_id": "FY-ART-03",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-03-v1.png",
+      "source_sha256": "d058bc3581390c18d17cfd2e7db534a1a53418021480e343bb06552f80f4308e",
+      "slot": {
+        "slot": 2,
+        "row": 1,
+        "column": 2,
+        "asset_id": "FY_Y4_1",
+        "crop": [
+          528,
+          12,
+          1008,
+          372
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-03.txt",
+      "prompt_sha256": "b7c2910522d7e9ba79cf9075092f592de04309f7e87c5b684a28513f05909b64",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/FY_Y4_1-v1.png",
+      "sha256": "2f6a334df4221c050d8bd5219ecd576e01bb6a978709d3dcad0cfec97f9e1183",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "d058bc3581390c18d17cfd2e7db534a1a53418021480e343bb06552f80f4308e",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:29:26.771486+00:00",
+        "notes": "Transit token, pen, graduation photo, ticket, degree pin and three task scenes follow grid. Tiny anonymous photo faces are simplified. No readable lettering; core objects and task intent clear.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:27.268830+00:00"
+    },
+    {
+      "asset_id": "FY_Y4_2",
+      "kind": "relic",
+      "category": "relics",
+      "name": "毕业合影",
+      "brief": "One small landscape graduation group photograph showing several simplified adult students in gowns under leafy campus trees, ivory photo border, no caption; anonymous miniature faces.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/relics.json",
+      "output": "assets/art/four-year/relics/FY_Y4_2-v1.png",
+      "batch_id": "FY-ART-03",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-03-v1.png",
+      "source_sha256": "d058bc3581390c18d17cfd2e7db534a1a53418021480e343bb06552f80f4308e",
+      "slot": {
+        "slot": 3,
+        "row": 2,
+        "column": 1,
+        "asset_id": "FY_Y4_2",
+        "crop": [
+          16,
+          396,
+          496,
+          756
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-03.txt",
+      "prompt_sha256": "b7c2910522d7e9ba79cf9075092f592de04309f7e87c5b684a28513f05909b64",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/FY_Y4_2-v1.png",
+      "sha256": "847b65c2b5b42fbda93a4cf49024c92e9030e962f8ea6facbf86c83179c3524e",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "d058bc3581390c18d17cfd2e7db534a1a53418021480e343bb06552f80f4308e",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:29:26.771486+00:00",
+        "notes": "Transit token, pen, graduation photo, ticket, degree pin and three task scenes follow grid. Tiny anonymous photo faces are simplified. No readable lettering; core objects and task intent clear.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:27.299238+00:00"
+    },
+    {
+      "asset_id": "FY_Y4_3",
+      "kind": "relic",
+      "category": "relics",
+      "name": "远行车票",
+      "brief": "One pale cream train ticket with a small generic train silhouette and abstract perforations, rust-red travel tag, no letters or numbers.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/relics.json",
+      "output": "assets/art/four-year/relics/FY_Y4_3-v1.png",
+      "batch_id": "FY-ART-03",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-03-v1.png",
+      "source_sha256": "d058bc3581390c18d17cfd2e7db534a1a53418021480e343bb06552f80f4308e",
+      "slot": {
+        "slot": 4,
+        "row": 2,
+        "column": 2,
+        "asset_id": "FY_Y4_3",
+        "crop": [
+          528,
+          396,
+          1008,
+          756
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-03.txt",
+      "prompt_sha256": "b7c2910522d7e9ba79cf9075092f592de04309f7e87c5b684a28513f05909b64",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/FY_Y4_3-v1.png",
+      "sha256": "ea32cd1df13b1e78154f56675ec6a1cf5069d0ecd078044ffaa1b1179a4d012b",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "d058bc3581390c18d17cfd2e7db534a1a53418021480e343bb06552f80f4308e",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:29:26.771486+00:00",
+        "notes": "Transit token, pen, graduation photo, ticket, degree pin and three task scenes follow grid. Tiny anonymous photo faces are simplified. No readable lettering; core objects and task intent clear.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:27.332389+00:00"
+    },
+    {
+      "asset_id": "FY_Y4_4",
+      "kind": "relic",
+      "category": "relics",
+      "name": "学位纪念章",
+      "brief": "One modest gold-colored degree commemorative pin with an abstract open-book and laurel emblem, sage ribbon, no university logo or letters.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/relics.json",
+      "output": "assets/art/four-year/relics/FY_Y4_4-v1.png",
+      "batch_id": "FY-ART-03",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-03-v1.png",
+      "source_sha256": "d058bc3581390c18d17cfd2e7db534a1a53418021480e343bb06552f80f4308e",
+      "slot": {
+        "slot": 5,
+        "row": 3,
+        "column": 1,
+        "asset_id": "FY_Y4_4",
+        "crop": [
+          16,
+          780,
+          496,
+          1140
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-03.txt",
+      "prompt_sha256": "b7c2910522d7e9ba79cf9075092f592de04309f7e87c5b684a28513f05909b64",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/FY_Y4_4-v1.png",
+      "sha256": "7958484943b517501a202f0604ddcaf714e361c4fa089c056f45a725d4db0a10",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "d058bc3581390c18d17cfd2e7db534a1a53418021480e343bb06552f80f4308e",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:29:26.771486+00:00",
+        "notes": "Transit token, pen, graduation photo, ticket, degree pin and three task scenes follow grid. Tiny anonymous photo faces are simplified. No readable lettering; core objects and task intent clear.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:27.367563+00:00"
+    },
+    {
+      "asset_id": "E01",
+      "kind": "task",
+      "category": "tasks",
+      "name": "期中考试",
+      "brief": "A substantial midterm exam paper stack, closed textbook and a simple hourglass, composed as a serious but friendly academic challenge, blank diagrams only.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/E01-v1.png",
+      "batch_id": "FY-ART-03",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-03-v1.png",
+      "source_sha256": "d058bc3581390c18d17cfd2e7db534a1a53418021480e343bb06552f80f4308e",
+      "slot": {
+        "slot": 6,
+        "row": 3,
+        "column": 2,
+        "asset_id": "E01",
+        "crop": [
+          528,
+          780,
+          1008,
+          1140
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-03.txt",
+      "prompt_sha256": "b7c2910522d7e9ba79cf9075092f592de04309f7e87c5b684a28513f05909b64",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/E01-v1.png",
+      "sha256": "5827b6dcf067fd06649cd79a00fb73ad10593999eb13c3f9302f54f82ac6f718",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "d058bc3581390c18d17cfd2e7db534a1a53418021480e343bb06552f80f4308e",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:29:26.771486+00:00",
+        "notes": "Transit token, pen, graduation photo, ticket, degree pin and three task scenes follow grid. Tiny anonymous photo faces are simplified. No readable lettering; core objects and task intent clear.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:27.398820+00:00"
+    },
+    {
+      "asset_id": "E02",
+      "kind": "task",
+      "category": "tasks",
+      "name": "课程设计中期检查",
+      "brief": "A course-design review folder, small cardboard engineering prototype and a pencil, neatly arranged for a mid-project check, no labels.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/E02-v1.png",
+      "batch_id": "FY-ART-03",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-03-v1.png",
+      "source_sha256": "d058bc3581390c18d17cfd2e7db534a1a53418021480e343bb06552f80f4308e",
+      "slot": {
+        "slot": 7,
+        "row": 4,
+        "column": 1,
+        "asset_id": "E02",
+        "crop": [
+          16,
+          1164,
+          496,
+          1524
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-03.txt",
+      "prompt_sha256": "b7c2910522d7e9ba79cf9075092f592de04309f7e87c5b684a28513f05909b64",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/E02-v1.png",
+      "sha256": "1d700821ee7d526af20d7b0ea6b8b789f19beb992487af5fed28170f2368841d",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "d058bc3581390c18d17cfd2e7db534a1a53418021480e343bb06552f80f4308e",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:29:26.771486+00:00",
+        "notes": "Transit token, pen, graduation photo, ticket, degree pin and three task scenes follow grid. Tiny anonymous photo faces are simplified. No readable lettering; core objects and task intent clear.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:27.432039+00:00"
+    },
+    {
+      "asset_id": "E03",
+      "kind": "task",
+      "category": "tasks",
+      "name": "小组项目冲刺",
+      "brief": "A group-project sprint desk with three blank sticky-note columns, a small timer and shared folder, energetic but uncluttered.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/E03-v1.png",
+      "batch_id": "FY-ART-03",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-03-v1.png",
+      "source_sha256": "d058bc3581390c18d17cfd2e7db534a1a53418021480e343bb06552f80f4308e",
+      "slot": {
+        "slot": 8,
+        "row": 4,
+        "column": 2,
+        "asset_id": "E03",
+        "crop": [
+          528,
+          1164,
+          1008,
+          1524
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-03.txt",
+      "prompt_sha256": "b7c2910522d7e9ba79cf9075092f592de04309f7e87c5b684a28513f05909b64",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/E03-v1.png",
+      "sha256": "5602ba0aa6722459ab06d94d52446035b62b312c2fe2ab5dee5e20f1f354556f",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "d058bc3581390c18d17cfd2e7db534a1a53418021480e343bb06552f80f4308e",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:29:26.771486+00:00",
+        "notes": "Transit token, pen, graduation photo, ticket, degree pin and three task scenes follow grid. Tiny anonymous photo faces are simplified. No readable lettering; core objects and task intent clear.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:27.467033+00:00"
+    },
+    {
+      "asset_id": "E04_1",
+      "kind": "task",
+      "category": "tasks",
+      "name": "建模",
+      "brief": "A modeling assignment represented by a small wireframe geometric model on a blank graph sheet and drafting compass, no formulae.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/E04_1-v1.png",
+      "batch_id": "FY-ART-04",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-04-v1.png",
+      "source_sha256": "559243f01dbfe32b4e3647e95967682d3482bf84fe3d857b8bbb490f7e7aa3dc",
+      "slot": {
+        "slot": 1,
+        "row": 1,
+        "column": 1,
+        "asset_id": "E04_1",
+        "crop": [
+          16,
+          12,
+          496,
+          372
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-04.txt",
+      "prompt_sha256": "4213a8fad4b9141b81974c972cf9b47c10d988db9c53741bb7a4d07a2933679f",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/E04_1-v1.png",
+      "sha256": "2715302cb1d250c671a6a944984ceae30573ea66fc14131358b1a72970bbecd4",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "559243f01dbfe32b4e3647e95967682d3482bf84fe3d857b8bbb490f7e7aa3dc",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:29:26.773519+00:00",
+        "notes": "Modeling/programming/manuscript/research-camp/interview/resit/requirements/documentation subjects match order and reference. Several desk/table/book peripherals extend to cell edges; fixed inset retains each focal subject. No cross-cell objects or visible watermark.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:27.527373+00:00"
+    },
+    {
+      "asset_id": "E04_2",
+      "kind": "task",
+      "category": "tasks",
+      "name": "编程",
+      "brief": "A programming assignment represented by one laptop with simple colored code-like blocks and a small flowchart sheet, no actual text.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/E04_2-v1.png",
+      "batch_id": "FY-ART-04",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-04-v1.png",
+      "source_sha256": "559243f01dbfe32b4e3647e95967682d3482bf84fe3d857b8bbb490f7e7aa3dc",
+      "slot": {
+        "slot": 2,
+        "row": 1,
+        "column": 2,
+        "asset_id": "E04_2",
+        "crop": [
+          528,
+          12,
+          1008,
+          372
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-04.txt",
+      "prompt_sha256": "4213a8fad4b9141b81974c972cf9b47c10d988db9c53741bb7a4d07a2933679f",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/E04_2-v1.png",
+      "sha256": "a5224d88fa101ed19c64a4164b39230e02cd9cd30ec1c99fc24029571652edd2",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "559243f01dbfe32b4e3647e95967682d3482bf84fe3d857b8bbb490f7e7aa3dc",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:29:26.773519+00:00",
+        "notes": "Modeling/programming/manuscript/research-camp/interview/resit/requirements/documentation subjects match order and reference. Several desk/table/book peripherals extend to cell edges; fixed inset retains each focal subject. No cross-cell objects or visible watermark.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:27.555001+00:00"
+    },
+    {
+      "asset_id": "E04_3",
+      "kind": "task",
+      "category": "tasks",
+      "name": "论文",
+      "brief": "A research-paper assignment represented by a bound cream manuscript, lavender tabs and an open reference book, no writing.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/E04_3-v1.png",
+      "batch_id": "FY-ART-04",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-04-v1.png",
+      "source_sha256": "559243f01dbfe32b4e3647e95967682d3482bf84fe3d857b8bbb490f7e7aa3dc",
+      "slot": {
+        "slot": 3,
+        "row": 2,
+        "column": 1,
+        "asset_id": "E04_3",
+        "crop": [
+          16,
+          396,
+          496,
+          756
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-04.txt",
+      "prompt_sha256": "4213a8fad4b9141b81974c972cf9b47c10d988db9c53741bb7a4d07a2933679f",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/E04_3-v1.png",
+      "sha256": "8669efec1e35079fbc2d1d83c3258862e1e31a7599934c45c59f77fb2adbb408",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "559243f01dbfe32b4e3647e95967682d3482bf84fe3d857b8bbb490f7e7aa3dc",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:29:26.773519+00:00",
+        "notes": "Modeling/programming/manuscript/research-camp/interview/resit/requirements/documentation subjects match order and reference. Several desk/table/book peripherals extend to cell edges; fixed inset retains each focal subject. No cross-cell objects or visible watermark.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:27.585231+00:00"
+    },
+    {
+      "asset_id": "E05",
+      "kind": "task",
+      "category": "tasks",
+      "name": "保研夏令营",
+      "brief": "A graduate summer research camp review represented by a presentation folder, campus building silhouette and small research diagram cards, no badges or lettering.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/E05-v1.png",
+      "batch_id": "FY-ART-04",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-04-v1.png",
+      "source_sha256": "559243f01dbfe32b4e3647e95967682d3482bf84fe3d857b8bbb490f7e7aa3dc",
+      "slot": {
+        "slot": 4,
+        "row": 2,
+        "column": 2,
+        "asset_id": "E05",
+        "crop": [
+          528,
+          396,
+          1008,
+          756
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-04.txt",
+      "prompt_sha256": "4213a8fad4b9141b81974c972cf9b47c10d988db9c53741bb7a4d07a2933679f",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/E05-v1.png",
+      "sha256": "f8c554cffd44a4ea1a8210c1fe0fe2b6391b69ca7b31a8d1af45f76149f24b87",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "559243f01dbfe32b4e3647e95967682d3482bf84fe3d857b8bbb490f7e7aa3dc",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:29:26.773519+00:00",
+        "notes": "Modeling/programming/manuscript/research-camp/interview/resit/requirements/documentation subjects match order and reference. Several desk/table/book peripherals extend to cell edges; fixed inset retains each focal subject. No cross-cell objects or visible watermark.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:27.613015+00:00"
+    },
+    {
+      "asset_id": "E06",
+      "kind": "task",
+      "category": "tasks",
+      "name": "实习群面",
+      "brief": "An internship group interview represented by three empty chairs around a small table, a shared case-study folder and blank name cards, no people needed.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/E06-v1.png",
+      "batch_id": "FY-ART-04",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-04-v1.png",
+      "source_sha256": "559243f01dbfe32b4e3647e95967682d3482bf84fe3d857b8bbb490f7e7aa3dc",
+      "slot": {
+        "slot": 5,
+        "row": 3,
+        "column": 1,
+        "asset_id": "E06",
+        "crop": [
+          16,
+          780,
+          496,
+          1140
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-04.txt",
+      "prompt_sha256": "4213a8fad4b9141b81974c972cf9b47c10d988db9c53741bb7a4d07a2933679f",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/E06-v1.png",
+      "sha256": "214abf10b962bf9a2cd5b1bd3986f866108b910930effb6a6b832727474f377f",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "559243f01dbfe32b4e3647e95967682d3482bf84fe3d857b8bbb490f7e7aa3dc",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:29:26.773519+00:00",
+        "notes": "Modeling/programming/manuscript/research-camp/interview/resit/requirements/documentation subjects match order and reference. Several desk/table/book peripherals extend to cell edges; fixed inset retains each focal subject. No cross-cell objects or visible watermark.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:27.638655+00:00"
+    },
+    {
+      "asset_id": "E07",
+      "kind": "task",
+      "category": "tasks",
+      "name": "补考",
+      "brief": "A resit examination represented by a fresh exam sheet placed over a worn closed workbook, eraser and small hourglass, hopeful restrained mood.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/E07-v1.png",
+      "batch_id": "FY-ART-04",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-04-v1.png",
+      "source_sha256": "559243f01dbfe32b4e3647e95967682d3482bf84fe3d857b8bbb490f7e7aa3dc",
+      "slot": {
+        "slot": 6,
+        "row": 3,
+        "column": 2,
+        "asset_id": "E07",
+        "crop": [
+          528,
+          780,
+          1008,
+          1140
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-04.txt",
+      "prompt_sha256": "4213a8fad4b9141b81974c972cf9b47c10d988db9c53741bb7a4d07a2933679f",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/E07-v1.png",
+      "sha256": "173c8bf24e2f1eec07c62276adca32b5c80b8f55a180a48527b61a5b6c0a572b",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "559243f01dbfe32b4e3647e95967682d3482bf84fe3d857b8bbb490f7e7aa3dc",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:29:26.773519+00:00",
+        "notes": "Modeling/programming/manuscript/research-camp/interview/resit/requirements/documentation subjects match order and reference. Several desk/table/book peripherals extend to cell edges; fixed inset retains each focal subject. No cross-cell objects or visible watermark.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:27.669850+00:00"
+    },
+    {
+      "asset_id": "Q0A_1",
+      "kind": "task",
+      "category": "tasks",
+      "name": "需求分析",
+      "brief": "Requirements analysis represented by blank sticky notes connected by three clean arrows, small magnifying glass, ordered desk arrangement.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/Q0A_1-v1.png",
+      "batch_id": "FY-ART-04",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-04-v1.png",
+      "source_sha256": "559243f01dbfe32b4e3647e95967682d3482bf84fe3d857b8bbb490f7e7aa3dc",
+      "slot": {
+        "slot": 7,
+        "row": 4,
+        "column": 1,
+        "asset_id": "Q0A_1",
+        "crop": [
+          16,
+          1164,
+          496,
+          1524
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-04.txt",
+      "prompt_sha256": "4213a8fad4b9141b81974c972cf9b47c10d988db9c53741bb7a4d07a2933679f",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/Q0A_1-v1.png",
+      "sha256": "85d55b7d81ba29ef6aff2ef8281093770f72dbf2f35a9bd081aedc3ef2aa7258",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "559243f01dbfe32b4e3647e95967682d3482bf84fe3d857b8bbb490f7e7aa3dc",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:29:26.773519+00:00",
+        "notes": "Modeling/programming/manuscript/research-camp/interview/resit/requirements/documentation subjects match order and reference. Several desk/table/book peripherals extend to cell edges; fixed inset retains each focal subject. No cross-cell objects or visible watermark.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:27.700180+00:00"
+    },
+    {
+      "asset_id": "Q0A_2",
+      "kind": "task",
+      "category": "tasks",
+      "name": "文档编写",
+      "brief": "Documentation writing represented by a tidy open binder, blank page blocks and a capped pen, sage divider tabs.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/Q0A_2-v1.png",
+      "batch_id": "FY-ART-04",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-04-v1.png",
+      "source_sha256": "559243f01dbfe32b4e3647e95967682d3482bf84fe3d857b8bbb490f7e7aa3dc",
+      "slot": {
+        "slot": 8,
+        "row": 4,
+        "column": 2,
+        "asset_id": "Q0A_2",
+        "crop": [
+          528,
+          1164,
+          1008,
+          1524
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-04.txt",
+      "prompt_sha256": "4213a8fad4b9141b81974c972cf9b47c10d988db9c53741bb7a4d07a2933679f",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/Q0A_2-v1.png",
+      "sha256": "1b5de31c48be70a965a0164a2928db206e46cecc8612f721957991f5ba24639a",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "559243f01dbfe32b4e3647e95967682d3482bf84fe3d857b8bbb490f7e7aa3dc",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:29:26.773519+00:00",
+        "notes": "Modeling/programming/manuscript/research-camp/interview/resit/requirements/documentation subjects match order and reference. Several desk/table/book peripherals extend to cell edges; fixed inset retains each focal subject. No cross-cell objects or visible watermark.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:27.731081+00:00"
+    },
+    {
+      "asset_id": "Q0A_3",
+      "kind": "task",
+      "category": "tasks",
+      "name": "代码开发",
+      "brief": "Code development represented by a laptop with abstract colored module blocks and small branching diagram cards, no real code.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/Q0A_3-v1.png",
+      "batch_id": "FY-ART-05",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-05-v1.png",
+      "source_sha256": "af939926306296eb4aea86017cd1432ce19ca05b7cb34aa8c666ab1a1d8a6900",
+      "slot": {
+        "slot": 1,
+        "row": 1,
+        "column": 1,
+        "asset_id": "Q0A_3",
+        "crop": [
+          16,
+          12,
+          496,
+          372
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-05.txt",
+      "prompt_sha256": "376203dfc1f43662460fb9564c2256476415764072a613baa486f842a6a046f1",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/Q0A_3-v1.png",
+      "sha256": "94c1c50748030cd72d4bf11147e4512878667d4fa4a5d241e5ae8c1279eb5f97",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "af939926306296eb4aea86017cd1432ce19ca05b7cb34aa8c666ab1a1d8a6900",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:29:26.775568+00:00",
+        "notes": "Development/test/defense/listening-exam/project requirement scenes match order; simple geometry replaces writing. Exams distinguished by extra booklet/hourglass and project attachments by rust versus mustard accents. No visible text or mixed cells.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:27.790311+00:00"
+    },
+    {
+      "asset_id": "Q0A_3_1",
+      "kind": "task",
+      "category": "tasks",
+      "name": "测试运行",
+      "brief": "Software test execution represented by a laptop with simple green check shapes and one amber warning shape, small desk timer, no text.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/Q0A_3_1-v1.png",
+      "batch_id": "FY-ART-05",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-05-v1.png",
+      "source_sha256": "af939926306296eb4aea86017cd1432ce19ca05b7cb34aa8c666ab1a1d8a6900",
+      "slot": {
+        "slot": 2,
+        "row": 1,
+        "column": 2,
+        "asset_id": "Q0A_3_1",
+        "crop": [
+          528,
+          12,
+          1008,
+          372
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-05.txt",
+      "prompt_sha256": "376203dfc1f43662460fb9564c2256476415764072a613baa486f842a6a046f1",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/Q0A_3_1-v1.png",
+      "sha256": "8649ffb39801cd85a2d14c61576c2ab0a498e771b7c51134826f74ae24f20cbf",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "af939926306296eb4aea86017cd1432ce19ca05b7cb34aa8c666ab1a1d8a6900",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:29:26.775568+00:00",
+        "notes": "Development/test/defense/listening-exam/project requirement scenes match order; simple geometry replaces writing. Exams distinguished by extra booklet/hourglass and project attachments by rust versus mustard accents. No visible text or mixed cells.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:27.822032+00:00"
+    },
+    {
+      "asset_id": "Q0B_1",
+      "kind": "task",
+      "category": "tasks",
+      "name": "答辩作业",
+      "brief": "A defense assignment represented by a thick project report and a simple poster board of diagrams waiting beside a chair, no text.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/Q0B_1-v1.png",
+      "batch_id": "FY-ART-05",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-05-v1.png",
+      "source_sha256": "af939926306296eb4aea86017cd1432ce19ca05b7cb34aa8c666ab1a1d8a6900",
+      "slot": {
+        "slot": 3,
+        "row": 2,
+        "column": 1,
+        "asset_id": "Q0B_1",
+        "crop": [
+          16,
+          396,
+          496,
+          756
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-05.txt",
+      "prompt_sha256": "376203dfc1f43662460fb9564c2256476415764072a613baa486f842a6a046f1",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/Q0B_1-v1.png",
+      "sha256": "80098167c00fec1f20825fe196d141d8c3d7e47faaa4c56a75877f9bccd1be2f",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "af939926306296eb4aea86017cd1432ce19ca05b7cb34aa8c666ab1a1d8a6900",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:29:26.775568+00:00",
+        "notes": "Development/test/defense/listening-exam/project requirement scenes match order; simple geometry replaces writing. Exams distinguished by extra booklet/hourglass and project attachments by rust versus mustard accents. No visible text or mixed cells.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:27.851894+00:00"
+    },
+    {
+      "asset_id": "Q0B_2",
+      "kind": "task",
+      "category": "tasks",
+      "name": "作业答辩",
+      "brief": "An oral assignment defense represented by a small lectern, three blank question cards and a simple desktop microphone, no people or writing.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/Q0B_2-v1.png",
+      "batch_id": "FY-ART-05",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-05-v1.png",
+      "source_sha256": "af939926306296eb4aea86017cd1432ce19ca05b7cb34aa8c666ab1a1d8a6900",
+      "slot": {
+        "slot": 4,
+        "row": 2,
+        "column": 2,
+        "asset_id": "Q0B_2",
+        "crop": [
+          528,
+          396,
+          1008,
+          756
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-05.txt",
+      "prompt_sha256": "376203dfc1f43662460fb9564c2256476415764072a613baa486f842a6a046f1",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/Q0B_2-v1.png",
+      "sha256": "9a2a4350cd47e71bba770f2dfccdeb9113b4692ba57be9c34ea6e061f9cf717e",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "af939926306296eb4aea86017cd1432ce19ca05b7cb34aa8c666ab1a1d8a6900",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:29:26.775568+00:00",
+        "notes": "Development/test/defense/listening-exam/project requirement scenes match order; simple geometry replaces writing. Exams distinguished by extra booklet/hourglass and project attachments by rust versus mustard accents. No visible text or mixed cells.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:27.882945+00:00"
+    },
+    {
+      "asset_id": "Q0C",
+      "kind": "task",
+      "category": "tasks",
+      "name": "英语四级",
+      "brief": "An English proficiency examination represented by listening headphones, an answer sheet of empty bubbles and a pencil, no letters or numbers.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/Q0C-v1.png",
+      "batch_id": "FY-ART-05",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-05-v1.png",
+      "source_sha256": "af939926306296eb4aea86017cd1432ce19ca05b7cb34aa8c666ab1a1d8a6900",
+      "slot": {
+        "slot": 5,
+        "row": 3,
+        "column": 1,
+        "asset_id": "Q0C",
+        "crop": [
+          16,
+          780,
+          496,
+          1140
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-05.txt",
+      "prompt_sha256": "376203dfc1f43662460fb9564c2256476415764072a613baa486f842a6a046f1",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/Q0C-v1.png",
+      "sha256": "4192bf84f9c1f652c526957619b2d65805f1452ab381c6822c31c77e8d03730e",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "af939926306296eb4aea86017cd1432ce19ca05b7cb34aa8c666ab1a1d8a6900",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:29:26.775568+00:00",
+        "notes": "Development/test/defense/listening-exam/project requirement scenes match order; simple geometry replaces writing. Exams distinguished by extra booklet/hourglass and project attachments by rust versus mustard accents. No visible text or mixed cells.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:27.913560+00:00"
+    },
+    {
+      "asset_id": "Q0D",
+      "kind": "task",
+      "category": "tasks",
+      "name": "英语六级",
+      "brief": "An advanced English proficiency examination represented by listening headphones, a thicker blank reading booklet and a small hourglass, a muted lavender accent.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/Q0D-v1.png",
+      "batch_id": "FY-ART-05",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-05-v1.png",
+      "source_sha256": "af939926306296eb4aea86017cd1432ce19ca05b7cb34aa8c666ab1a1d8a6900",
+      "slot": {
+        "slot": 6,
+        "row": 3,
+        "column": 2,
+        "asset_id": "Q0D",
+        "crop": [
+          528,
+          780,
+          1008,
+          1140
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-05.txt",
+      "prompt_sha256": "376203dfc1f43662460fb9564c2256476415764072a613baa486f842a6a046f1",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/Q0D-v1.png",
+      "sha256": "e3fb7fab9d513813dee26729e60e30a5a03c45fd6a029dc568852a036b453bd3",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "af939926306296eb4aea86017cd1432ce19ca05b7cb34aa8c666ab1a1d8a6900",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:29:26.775568+00:00",
+        "notes": "Development/test/defense/listening-exam/project requirement scenes match order; simple geometry replaces writing. Exams distinguished by extra booklet/hourglass and project attachments by rust versus mustard accents. No visible text or mixed cells.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:27.942702+00:00"
+    },
+    {
+      "asset_id": "Q0E_1",
+      "kind": "task",
+      "category": "tasks",
+      "name": "大项目",
+      "brief": "A large academic project represented by a tall but tidy folder stack, cardboard prototype and one broad schedule diagram, no words.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/Q0E_1-v1.png",
+      "batch_id": "FY-ART-05",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-05-v1.png",
+      "source_sha256": "af939926306296eb4aea86017cd1432ce19ca05b7cb34aa8c666ab1a1d8a6900",
+      "slot": {
+        "slot": 7,
+        "row": 4,
+        "column": 1,
+        "asset_id": "Q0E_1",
+        "crop": [
+          16,
+          1164,
+          496,
+          1524
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-05.txt",
+      "prompt_sha256": "376203dfc1f43662460fb9564c2256476415764072a613baa486f842a6a046f1",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/Q0E_1-v1.png",
+      "sha256": "cec43f3351aca9fae59d3bf8ff338544212947b5d106df4615143adbaf7827ec",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "af939926306296eb4aea86017cd1432ce19ca05b7cb34aa8c666ab1a1d8a6900",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:29:26.775568+00:00",
+        "notes": "Development/test/defense/listening-exam/project requirement scenes match order; simple geometry replaces writing. Exams distinguished by extra booklet/hourglass and project attachments by rust versus mustard accents. No visible text or mixed cells.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:27.969713+00:00"
+    },
+    {
+      "asset_id": "Q0E_2",
+      "kind": "task",
+      "category": "tasks",
+      "name": "额外需求1",
+      "brief": "An additional project requirement represented by one rust-red sticky-note attachment clipped to a sage project folder, simple new diagram block, no text.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/Q0E_2-v1.png",
+      "batch_id": "FY-ART-05",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-05-v1.png",
+      "source_sha256": "af939926306296eb4aea86017cd1432ce19ca05b7cb34aa8c666ab1a1d8a6900",
+      "slot": {
+        "slot": 8,
+        "row": 4,
+        "column": 2,
+        "asset_id": "Q0E_2",
+        "crop": [
+          528,
+          1164,
+          1008,
+          1524
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-05.txt",
+      "prompt_sha256": "376203dfc1f43662460fb9564c2256476415764072a613baa486f842a6a046f1",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/Q0E_2-v1.png",
+      "sha256": "3440a728a55665c6b490290dbbcef027143290f7eaf1152c4eeabba92c770267",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "af939926306296eb4aea86017cd1432ce19ca05b7cb34aa8c666ab1a1d8a6900",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:29:26.775568+00:00",
+        "notes": "Development/test/defense/listening-exam/project requirement scenes match order; simple geometry replaces writing. Exams distinguished by extra booklet/hourglass and project attachments by rust versus mustard accents. No visible text or mixed cells.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:27.998320+00:00"
+    },
+    {
+      "asset_id": "Q0E_3",
+      "kind": "task",
+      "category": "tasks",
+      "name": "额外需求2",
+      "brief": "A further project requirement represented by a mustard sticky-note attachment and two small new diagram sheets beside a project folder, distinct from the red attachment.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/Q0E_3-v1.png",
+      "batch_id": "FY-ART-06",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-06-v1.png",
+      "source_sha256": "91fd2256cd1d7e54ff9bd83287568fbdd181671238b1e5871862a6c8c4010cfa",
+      "slot": {
+        "slot": 1,
+        "row": 1,
+        "column": 1,
+        "asset_id": "Q0E_3",
+        "crop": [
+          16,
+          12,
+          496,
+          372
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-06.txt",
+      "prompt_sha256": "f2ef36e06731c6238732b8e407d65261ec6036578e0cee6f5bc40a4868f4cdbe",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/Q0E_3-v1.png",
+      "sha256": "63b2c11ec289ab71285e18b9869fb93251dff9ca0a8b3f7b5f6cbda9756b2af4",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "91fd2256cd1d7e54ff9bd83287568fbdd181671238b1e5871862a6c8c4010cfa",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:29:26.777597+00:00",
+        "notes": "Homework, mathematics, program, preparation, reading, writing, project scenes match order and pale paper palette. Some secondary pages/books naturally extend beyond crop; essential instruments/screens retained. No visible readable lettering.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:28.053708+00:00"
+    },
+    {
+      "asset_id": "N13",
+      "kind": "task",
+      "category": "tasks",
+      "name": "课后作业",
+      "brief": "An everyday homework pile with a pale blue exercise book, blunt pencil and three blank practice sheets, modest campus desk still life.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/N13-v1.png",
+      "batch_id": "FY-ART-06",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-06-v1.png",
+      "source_sha256": "91fd2256cd1d7e54ff9bd83287568fbdd181671238b1e5871862a6c8c4010cfa",
+      "slot": {
+        "slot": 2,
+        "row": 1,
+        "column": 2,
+        "asset_id": "N13",
+        "crop": [
+          528,
+          12,
+          1008,
+          372
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-06.txt",
+      "prompt_sha256": "f2ef36e06731c6238732b8e407d65261ec6036578e0cee6f5bc40a4868f4cdbe",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/N13-v1.png",
+      "sha256": "3cd0a71a6f31c9ed9bbffaff485f7d44b0d6ffa0115425f67c2c0ee14f3152b7",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "91fd2256cd1d7e54ff9bd83287568fbdd181671238b1e5871862a6c8c4010cfa",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:29:26.777597+00:00",
+        "notes": "Homework, mathematics, program, preparation, reading, writing, project scenes match order and pale paper palette. Some secondary pages/books naturally extend beyond crop; essential instruments/screens retained. No visible readable lettering.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:28.082982+00:00"
+    },
+    {
+      "asset_id": "N14",
+      "kind": "task",
+      "category": "tasks",
+      "name": "数学基础",
+      "brief": "Foundational mathematics represented by a graph notebook with simple triangles and curves, wooden ruler and drafting compass, no equations.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/N14-v1.png",
+      "batch_id": "FY-ART-06",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-06-v1.png",
+      "source_sha256": "91fd2256cd1d7e54ff9bd83287568fbdd181671238b1e5871862a6c8c4010cfa",
+      "slot": {
+        "slot": 3,
+        "row": 2,
+        "column": 1,
+        "asset_id": "N14",
+        "crop": [
+          16,
+          396,
+          496,
+          756
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-06.txt",
+      "prompt_sha256": "f2ef36e06731c6238732b8e407d65261ec6036578e0cee6f5bc40a4868f4cdbe",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/N14-v1.png",
+      "sha256": "5e15234222c319d3f30f3ccb833fa863a7d1d2c932b11346b07470c23abd8bbe",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "91fd2256cd1d7e54ff9bd83287568fbdd181671238b1e5871862a6c8c4010cfa",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:29:26.777597+00:00",
+        "notes": "Homework, mathematics, program, preparation, reading, writing, project scenes match order and pale paper palette. Some secondary pages/books naturally extend beyond crop; essential instruments/screens retained. No visible readable lettering.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:28.114506+00:00"
+    },
+    {
+      "asset_id": "N15",
+      "kind": "task",
+      "category": "tasks",
+      "name": "程序",
+      "brief": "A computer program represented by a small laptop, abstract branching blocks on its ivory screen and a tidy keyboard, no readable code.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/N15-v1.png",
+      "batch_id": "FY-ART-06",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-06-v1.png",
+      "source_sha256": "91fd2256cd1d7e54ff9bd83287568fbdd181671238b1e5871862a6c8c4010cfa",
+      "slot": {
+        "slot": 4,
+        "row": 2,
+        "column": 2,
+        "asset_id": "N15",
+        "crop": [
+          528,
+          396,
+          1008,
+          756
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-06.txt",
+      "prompt_sha256": "f2ef36e06731c6238732b8e407d65261ec6036578e0cee6f5bc40a4868f4cdbe",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/N15-v1.png",
+      "sha256": "9319e8ff83c899315bccb840d4b963f27b1287d4dc9992d7100a7fbc23aff855",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "91fd2256cd1d7e54ff9bd83287568fbdd181671238b1e5871862a6c8c4010cfa",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:29:26.777597+00:00",
+        "notes": "Homework, mathematics, program, preparation, reading, writing, project scenes match order and pale paper palette. Some secondary pages/books naturally extend beyond crop; essential instruments/screens retained. No visible readable lettering.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:28.144303+00:00"
+    },
+    {
+      "asset_id": "N16",
+      "kind": "task",
+      "category": "tasks",
+      "name": "预习",
+      "brief": "Class preparation represented by an open textbook, blank sticky tabs, highlighter and a small cup of tea, quiet pale desk.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/N16-v1.png",
+      "batch_id": "FY-ART-06",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-06-v1.png",
+      "source_sha256": "91fd2256cd1d7e54ff9bd83287568fbdd181671238b1e5871862a6c8c4010cfa",
+      "slot": {
+        "slot": 5,
+        "row": 3,
+        "column": 1,
+        "asset_id": "N16",
+        "crop": [
+          16,
+          780,
+          496,
+          1140
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-06.txt",
+      "prompt_sha256": "f2ef36e06731c6238732b8e407d65261ec6036578e0cee6f5bc40a4868f4cdbe",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/N16-v1.png",
+      "sha256": "0bea6502566986cfe69f75acd1aa1c06086c8d7aa4fc3cde951b770d17f75462",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "91fd2256cd1d7e54ff9bd83287568fbdd181671238b1e5871862a6c8c4010cfa",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:29:26.777597+00:00",
+        "notes": "Homework, mathematics, program, preparation, reading, writing, project scenes match order and pale paper palette. Some secondary pages/books naturally extend beyond crop; essential instruments/screens retained. No visible readable lettering.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:28.172337+00:00"
+    },
+    {
+      "asset_id": "N17",
+      "kind": "task",
+      "category": "tasks",
+      "name": "文献阅读",
+      "brief": "Literature reading represented by two open reference books, page clips and a magnifying glass over blank paragraph blocks.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/N17-v1.png",
+      "batch_id": "FY-ART-06",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-06-v1.png",
+      "source_sha256": "91fd2256cd1d7e54ff9bd83287568fbdd181671238b1e5871862a6c8c4010cfa",
+      "slot": {
+        "slot": 6,
+        "row": 3,
+        "column": 2,
+        "asset_id": "N17",
+        "crop": [
+          528,
+          780,
+          1008,
+          1140
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-06.txt",
+      "prompt_sha256": "f2ef36e06731c6238732b8e407d65261ec6036578e0cee6f5bc40a4868f4cdbe",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/N17-v1.png",
+      "sha256": "e228f39429af5661ee9e15757dc9ebae79e981d275983431a3f98438697a04e6",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "91fd2256cd1d7e54ff9bd83287568fbdd181671238b1e5871862a6c8c4010cfa",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:29:26.777597+00:00",
+        "notes": "Homework, mathematics, program, preparation, reading, writing, project scenes match order and pale paper palette. Some secondary pages/books naturally extend beyond crop; essential instruments/screens retained. No visible readable lettering.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:28.201329+00:00"
+    },
+    {
+      "asset_id": "N18",
+      "kind": "task",
+      "category": "tasks",
+      "name": "英语作文",
+      "brief": "An English writing assignment represented by a cream writing notebook, simple speech-shape paper cutout and blue pen, no alphabet.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/N18-v1.png",
+      "batch_id": "FY-ART-06",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-06-v1.png",
+      "source_sha256": "91fd2256cd1d7e54ff9bd83287568fbdd181671238b1e5871862a6c8c4010cfa",
+      "slot": {
+        "slot": 7,
+        "row": 4,
+        "column": 1,
+        "asset_id": "N18",
+        "crop": [
+          16,
+          1164,
+          496,
+          1524
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-06.txt",
+      "prompt_sha256": "f2ef36e06731c6238732b8e407d65261ec6036578e0cee6f5bc40a4868f4cdbe",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/N18-v1.png",
+      "sha256": "0fe9b05d110b687ec9293fd14c91488f90e69dff337053a50399f183177ad1bd",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "91fd2256cd1d7e54ff9bd83287568fbdd181671238b1e5871862a6c8c4010cfa",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:29:26.777597+00:00",
+        "notes": "Homework, mathematics, program, preparation, reading, writing, project scenes match order and pale paper palette. Some secondary pages/books naturally extend beyond crop; essential instruments/screens retained. No visible readable lettering.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:28.231317+00:00"
+    },
+    {
+      "asset_id": "N19",
+      "kind": "task",
+      "category": "tasks",
+      "name": "项目",
+      "brief": "A course project represented by a compact cardboard model, project folder and two connected planning cards, no letters.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/N19-v1.png",
+      "batch_id": "FY-ART-06",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-06-v1.png",
+      "source_sha256": "91fd2256cd1d7e54ff9bd83287568fbdd181671238b1e5871862a6c8c4010cfa",
+      "slot": {
+        "slot": 8,
+        "row": 4,
+        "column": 2,
+        "asset_id": "N19",
+        "crop": [
+          528,
+          1164,
+          1008,
+          1524
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-06.txt",
+      "prompt_sha256": "f2ef36e06731c6238732b8e407d65261ec6036578e0cee6f5bc40a4868f4cdbe",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/N19-v1.png",
+      "sha256": "311c2a9198cca140a6c8ff7253b005309cc014d64eca080e1f6a0a293bed10b5",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "91fd2256cd1d7e54ff9bd83287568fbdd181671238b1e5871862a6c8c4010cfa",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:29:26.777597+00:00",
+        "notes": "Homework, mathematics, program, preparation, reading, writing, project scenes match order and pale paper palette. Some secondary pages/books naturally extend beyond crop; essential instruments/screens retained. No visible readable lettering.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:28.259777+00:00"
+    },
+    {
+      "asset_id": "N20",
+      "kind": "task",
+      "category": "tasks",
+      "name": "六级英语词汇",
+      "brief": "Advanced English vocabulary revision represented by a small ring of blank flashcards, colored divider tabs and a closed pocket dictionary.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/N20-v1.png",
+      "batch_id": "FY-ART-07",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-07-v1.png",
+      "source_sha256": "54986b8f7d98acb9a04e2d34f7ef40726c7bb943896f7a590b3cc71f2e42a9b3",
+      "slot": {
+        "slot": 1,
+        "row": 1,
+        "column": 1,
+        "asset_id": "N20",
+        "crop": [
+          16,
+          12,
+          496,
+          372
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-07.txt",
+      "prompt_sha256": "ff6b7fd99b89449cb72f1eb91ab7178b286fc5ed9ccbb9a6144ab33148d61694",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/N20-v1.png",
+      "sha256": "850e79bd97afe4ec956dfadb0eb5514e739bb3f3e999ae408c3d554192b21fdc",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "54986b8f7d98acb9a04e2d34f7ef40726c7bb943896f7a590b3cc71f2e42a9b3",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:30:55.660547+00:00",
+        "notes": "Flashcards, revision, self-introduction, presentation, fitness, advisor meeting, lecture and collaborative assignment match grid and muted watercolor. Three visible collaborative hands have coherent grips in source view. Secondary furniture/cable edges are cropped as normal framing; focal subjects retained.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:28.318119+00:00"
+    },
+    {
+      "asset_id": "N21",
+      "kind": "task",
+      "category": "tasks",
+      "name": "考前复习",
+      "brief": "Pre-exam revision represented by a short stack of review booklets with colored tabs, a simple hourglass and a pencil, not frantic.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/N21-v1.png",
+      "batch_id": "FY-ART-07",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-07-v1.png",
+      "source_sha256": "54986b8f7d98acb9a04e2d34f7ef40726c7bb943896f7a590b3cc71f2e42a9b3",
+      "slot": {
+        "slot": 2,
+        "row": 1,
+        "column": 2,
+        "asset_id": "N21",
+        "crop": [
+          528,
+          12,
+          1008,
+          372
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-07.txt",
+      "prompt_sha256": "ff6b7fd99b89449cb72f1eb91ab7178b286fc5ed9ccbb9a6144ab33148d61694",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/N21-v1.png",
+      "sha256": "c469396a417f1f939aa5f273725854a9875615e4ebab1a89b404692ced6e9b65",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "54986b8f7d98acb9a04e2d34f7ef40726c7bb943896f7a590b3cc71f2e42a9b3",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:30:55.660547+00:00",
+        "notes": "Flashcards, revision, self-introduction, presentation, fitness, advisor meeting, lecture and collaborative assignment match grid and muted watercolor. Three visible collaborative hands have coherent grips in source view. Secondary furniture/cable edges are cropped as normal framing; focal subjects retained.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:28.349515+00:00"
+    },
+    {
+      "asset_id": "N22",
+      "kind": "task",
+      "category": "tasks",
+      "name": "自我介绍",
+      "brief": "Self-introduction practice represented by a tabletop microphone, blank profile card and a small round mirror, warm uncluttered still life.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/N22-v1.png",
+      "batch_id": "FY-ART-07",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-07-v1.png",
+      "source_sha256": "54986b8f7d98acb9a04e2d34f7ef40726c7bb943896f7a590b3cc71f2e42a9b3",
+      "slot": {
+        "slot": 3,
+        "row": 2,
+        "column": 1,
+        "asset_id": "N22",
+        "crop": [
+          16,
+          396,
+          496,
+          756
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-07.txt",
+      "prompt_sha256": "ff6b7fd99b89449cb72f1eb91ab7178b286fc5ed9ccbb9a6144ab33148d61694",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/N22-v1.png",
+      "sha256": "9b5cfba9849e0894626ff19c26b48bdd2125aa56bdb6e968c974e743b02b5f9a",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "54986b8f7d98acb9a04e2d34f7ef40726c7bb943896f7a590b3cc71f2e42a9b3",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:30:55.660547+00:00",
+        "notes": "Flashcards, revision, self-introduction, presentation, fitness, advisor meeting, lecture and collaborative assignment match grid and muted watercolor. Three visible collaborative hands have coherent grips in source view. Secondary furniture/cable edges are cropped as normal framing; focal subjects retained.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:28.379940+00:00"
+    },
+    {
+      "asset_id": "N23",
+      "kind": "task",
+      "category": "tasks",
+      "name": "小组展示",
+      "brief": "A group presentation represented by a small projection screen showing three abstract chart shapes and a shared folder on a lectern, no text.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/N23-v1.png",
+      "batch_id": "FY-ART-07",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-07-v1.png",
+      "source_sha256": "54986b8f7d98acb9a04e2d34f7ef40726c7bb943896f7a590b3cc71f2e42a9b3",
+      "slot": {
+        "slot": 4,
+        "row": 2,
+        "column": 2,
+        "asset_id": "N23",
+        "crop": [
+          528,
+          396,
+          1008,
+          756
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-07.txt",
+      "prompt_sha256": "ff6b7fd99b89449cb72f1eb91ab7178b286fc5ed9ccbb9a6144ab33148d61694",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/N23-v1.png",
+      "sha256": "7003a607a23d54b2ab66a6af3c8fbd32b19f22dead4df8b0041bf8c131b1d198",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "54986b8f7d98acb9a04e2d34f7ef40726c7bb943896f7a590b3cc71f2e42a9b3",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:30:55.660547+00:00",
+        "notes": "Flashcards, revision, self-introduction, presentation, fitness, advisor meeting, lecture and collaborative assignment match grid and muted watercolor. Three visible collaborative hands have coherent grips in source view. Secondary furniture/cable edges are cropped as normal framing; focal subjects retained.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:28.411974+00:00"
+    },
+    {
+      "asset_id": "N24",
+      "kind": "task",
+      "category": "tasks",
+      "name": "体育测试",
+      "brief": "A campus physical fitness test represented by running shoes, a whistle and a plain stopwatch without digits, sage track curve in the background.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/N24-v1.png",
+      "batch_id": "FY-ART-07",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-07-v1.png",
+      "source_sha256": "54986b8f7d98acb9a04e2d34f7ef40726c7bb943896f7a590b3cc71f2e42a9b3",
+      "slot": {
+        "slot": 5,
+        "row": 3,
+        "column": 1,
+        "asset_id": "N24",
+        "crop": [
+          16,
+          780,
+          496,
+          1140
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-07.txt",
+      "prompt_sha256": "ff6b7fd99b89449cb72f1eb91ab7178b286fc5ed9ccbb9a6144ab33148d61694",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/N24-v1.png",
+      "sha256": "5daf90763b316df713ee3acb19a4ae0457c1c562c6b9c5b2df18f038ac07118a",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "54986b8f7d98acb9a04e2d34f7ef40726c7bb943896f7a590b3cc71f2e42a9b3",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:30:55.660547+00:00",
+        "notes": "Flashcards, revision, self-introduction, presentation, fitness, advisor meeting, lecture and collaborative assignment match grid and muted watercolor. Three visible collaborative hands have coherent grips in source view. Secondary furniture/cable edges are cropped as normal framing; focal subjects retained.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:28.440067+00:00"
+    },
+    {
+      "asset_id": "N25",
+      "kind": "task",
+      "category": "tasks",
+      "name": "导师约谈",
+      "brief": "An advisor meeting represented by two tea cups across a small table, open research notebook and a simple fountain pen, no people required.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/N25-v1.png",
+      "batch_id": "FY-ART-07",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-07-v1.png",
+      "source_sha256": "54986b8f7d98acb9a04e2d34f7ef40726c7bb943896f7a590b3cc71f2e42a9b3",
+      "slot": {
+        "slot": 6,
+        "row": 3,
+        "column": 2,
+        "asset_id": "N25",
+        "crop": [
+          528,
+          780,
+          1008,
+          1140
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-07.txt",
+      "prompt_sha256": "ff6b7fd99b89449cb72f1eb91ab7178b286fc5ed9ccbb9a6144ab33148d61694",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/N25-v1.png",
+      "sha256": "c1588d101d3b0f37f3ed11c0991897b2a5e4e21a60e0407c0c086723ecb3c551",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "54986b8f7d98acb9a04e2d34f7ef40726c7bb943896f7a590b3cc71f2e42a9b3",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:30:55.660547+00:00",
+        "notes": "Flashcards, revision, self-introduction, presentation, fitness, advisor meeting, lecture and collaborative assignment match grid and muted watercolor. Three visible collaborative hands have coherent grips in source view. Secondary furniture/cable edges are cropped as normal framing; focal subjects retained.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:28.469150+00:00"
+    },
+    {
+      "asset_id": "N26",
+      "kind": "task",
+      "category": "tasks",
+      "name": "讲座考勤",
+      "brief": "Lecture attendance represented by a folded lecture leaflet, plain ticket and several softly suggested auditorium seats, no lettering.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/N26-v1.png",
+      "batch_id": "FY-ART-07",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-07-v1.png",
+      "source_sha256": "54986b8f7d98acb9a04e2d34f7ef40726c7bb943896f7a590b3cc71f2e42a9b3",
+      "slot": {
+        "slot": 7,
+        "row": 4,
+        "column": 1,
+        "asset_id": "N26",
+        "crop": [
+          16,
+          1164,
+          496,
+          1524
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-07.txt",
+      "prompt_sha256": "ff6b7fd99b89449cb72f1eb91ab7178b286fc5ed9ccbb9a6144ab33148d61694",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/N26-v1.png",
+      "sha256": "2003f75c66e63c1d33131e9d2933e418d371fef1e52da0b1912e5b72ef5def23",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "54986b8f7d98acb9a04e2d34f7ef40726c7bb943896f7a590b3cc71f2e42a9b3",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:30:55.660547+00:00",
+        "notes": "Flashcards, revision, self-introduction, presentation, fitness, advisor meeting, lecture and collaborative assignment match grid and muted watercolor. Three visible collaborative hands have coherent grips in source view. Secondary furniture/cable edges are cropped as normal framing; focal subjects retained.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:28.491893+00:00"
+    },
+    {
+      "asset_id": "N27",
+      "kind": "task",
+      "category": "tasks",
+      "name": "小组作业",
+      "brief": "A collaborative assignment represented by three hands arranging blank color-coded cards around a shared notebook, natural hands, simple close view.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/N27-v1.png",
+      "batch_id": "FY-ART-07",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-07-v1.png",
+      "source_sha256": "54986b8f7d98acb9a04e2d34f7ef40726c7bb943896f7a590b3cc71f2e42a9b3",
+      "slot": {
+        "slot": 8,
+        "row": 4,
+        "column": 2,
+        "asset_id": "N27",
+        "crop": [
+          528,
+          1164,
+          1008,
+          1524
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-07.txt",
+      "prompt_sha256": "ff6b7fd99b89449cb72f1eb91ab7178b286fc5ed9ccbb9a6144ab33148d61694",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/N27-v1.png",
+      "sha256": "b3c58db22d927c4789802a70a5c41ea0d78ccd689305891ad60faec876b8a480",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "54986b8f7d98acb9a04e2d34f7ef40726c7bb943896f7a590b3cc71f2e42a9b3",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:30:55.660547+00:00",
+        "notes": "Flashcards, revision, self-introduction, presentation, fitness, advisor meeting, lecture and collaborative assignment match grid and muted watercolor. Three visible collaborative hands have coherent grips in source view. Secondary furniture/cable edges are cropped as normal framing; focal subjects retained.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:28.521159+00:00"
+    },
+    {
+      "asset_id": "N28",
+      "kind": "task",
+      "category": "tasks",
+      "name": "早八",
+      "brief": "An early morning class represented by a sunrise window, a plain alarm clock with no digits and a half-open textbook, soft warm yellow light.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/N28-v1.png",
+      "batch_id": "FY-ART-08",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-08-v1.png",
+      "source_sha256": "7c7d32f1fe76580215a800ee2bfa13032095e96dbee57c2f39b9c02e4b3dbc43",
+      "slot": {
+        "slot": 1,
+        "row": 1,
+        "column": 1,
+        "asset_id": "N28",
+        "crop": [
+          16,
+          12,
+          496,
+          372
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-08.txt",
+      "prompt_sha256": "c0bc177ad1a89839a96134459d14eac0d4a71f5ce7fab84a2b27b25d8fe3dcc1",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/N28-v1.png",
+      "sha256": "23d53bc2b43217996bd72dd5388a685a9d4bcba9484e158361c87f1a7e8e7c44",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "7c7d32f1fe76580215a800ee2bfa13032095e96dbee57c2f39b9c02e4b3dbc43",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:30:55.662517+00:00",
+        "notes": "Morning class, network fault, research update, advisor reminder, scholarship, similarity check, library seat, internship interview are distinct and match order. Network X is a status icon, pages use blank line geometry. Sage/cream palette stays consistent. Furniture and book edges naturally meet frame.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:28.579295+00:00"
+    },
+    {
+      "asset_id": "N29",
+      "kind": "task",
+      "category": "tasks",
+      "name": "校园网发力",
+      "brief": "Unreliable campus networking represented by a small router, laptop with a broken dotted connection symbol and a loose cable, gentle humorous academic nuisance.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/N29-v1.png",
+      "batch_id": "FY-ART-08",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-08-v1.png",
+      "source_sha256": "7c7d32f1fe76580215a800ee2bfa13032095e96dbee57c2f39b9c02e4b3dbc43",
+      "slot": {
+        "slot": 2,
+        "row": 1,
+        "column": 2,
+        "asset_id": "N29",
+        "crop": [
+          528,
+          12,
+          1008,
+          372
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-08.txt",
+      "prompt_sha256": "c0bc177ad1a89839a96134459d14eac0d4a71f5ce7fab84a2b27b25d8fe3dcc1",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/N29-v1.png",
+      "sha256": "af2466af8ec3ca8c9c69ee3e283b6815dd95f076fc5888c55713a6034423f5b2",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "7c7d32f1fe76580215a800ee2bfa13032095e96dbee57c2f39b9c02e4b3dbc43",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:30:55.662517+00:00",
+        "notes": "Morning class, network fault, research update, advisor reminder, scholarship, similarity check, library seat, internship interview are distinct and match order. Network X is a status icon, pages use blank line geometry. Sage/cream palette stays consistent. Furniture and book edges naturally meet frame.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:28.609189+00:00"
+    },
+    {
+      "asset_id": "N30",
+      "kind": "task",
+      "category": "tasks",
+      "name": "组会汇报",
+      "brief": "A research group update represented by an open laptop, small chart-only presentation board and neatly clipped progress sheets.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/N30-v1.png",
+      "batch_id": "FY-ART-08",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-08-v1.png",
+      "source_sha256": "7c7d32f1fe76580215a800ee2bfa13032095e96dbee57c2f39b9c02e4b3dbc43",
+      "slot": {
+        "slot": 3,
+        "row": 2,
+        "column": 1,
+        "asset_id": "N30",
+        "crop": [
+          16,
+          396,
+          496,
+          756
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-08.txt",
+      "prompt_sha256": "c0bc177ad1a89839a96134459d14eac0d4a71f5ce7fab84a2b27b25d8fe3dcc1",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/N30-v1.png",
+      "sha256": "95e5bd525ab8c54f260b6fe942df3729c503bd5dd56b39633048807057c1dddd",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "7c7d32f1fe76580215a800ee2bfa13032095e96dbee57c2f39b9c02e4b3dbc43",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:30:55.662517+00:00",
+        "notes": "Morning class, network fault, research update, advisor reminder, scholarship, similarity check, library seat, internship interview are distinct and match order. Network X is a status icon, pages use blank line geometry. Sage/cream palette stays consistent. Furniture and book edges naturally meet frame.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:28.640264+00:00"
+    },
+    {
+      "asset_id": "N31",
+      "kind": "task",
+      "category": "tasks",
+      "name": "导师催进度",
+      "brief": "An advisor's progress reminder represented by a desk calendar with empty squares, a growing folder stack and a small plain notification bell, no chat text.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/N31-v1.png",
+      "batch_id": "FY-ART-08",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-08-v1.png",
+      "source_sha256": "7c7d32f1fe76580215a800ee2bfa13032095e96dbee57c2f39b9c02e4b3dbc43",
+      "slot": {
+        "slot": 4,
+        "row": 2,
+        "column": 2,
+        "asset_id": "N31",
+        "crop": [
+          528,
+          396,
+          1008,
+          756
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-08.txt",
+      "prompt_sha256": "c0bc177ad1a89839a96134459d14eac0d4a71f5ce7fab84a2b27b25d8fe3dcc1",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/N31-v1.png",
+      "sha256": "94d739114c48a1abb19d01cdbc7ac2f288dcb50b3429cb2a80f231f491e0c5c0",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "7c7d32f1fe76580215a800ee2bfa13032095e96dbee57c2f39b9c02e4b3dbc43",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:30:55.662517+00:00",
+        "notes": "Morning class, network fault, research update, advisor reminder, scholarship, similarity check, library seat, internship interview are distinct and match order. Network X is a status icon, pages use blank line geometry. Sage/cream palette stays consistent. Furniture and book edges naturally meet frame.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:28.670774+00:00"
+    },
+    {
+      "asset_id": "N32",
+      "kind": "task",
+      "category": "tasks",
+      "name": "奖学金评定",
+      "brief": "Scholarship evaluation represented by a simple laurel token, a portfolio folder and three blank assessment sheets, no medals with writing.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/N32-v1.png",
+      "batch_id": "FY-ART-08",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-08-v1.png",
+      "source_sha256": "7c7d32f1fe76580215a800ee2bfa13032095e96dbee57c2f39b9c02e4b3dbc43",
+      "slot": {
+        "slot": 5,
+        "row": 3,
+        "column": 1,
+        "asset_id": "N32",
+        "crop": [
+          16,
+          780,
+          496,
+          1140
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-08.txt",
+      "prompt_sha256": "c0bc177ad1a89839a96134459d14eac0d4a71f5ce7fab84a2b27b25d8fe3dcc1",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/N32-v1.png",
+      "sha256": "d5be0925e68da18d1ea213ae42e87d76c08455e9e2b02f9e42c2f603f0af9538",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "7c7d32f1fe76580215a800ee2bfa13032095e96dbee57c2f39b9c02e4b3dbc43",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:30:55.662517+00:00",
+        "notes": "Morning class, network fault, research update, advisor reminder, scholarship, similarity check, library seat, internship interview are distinct and match order. Network X is a status icon, pages use blank line geometry. Sage/cream palette stays consistent. Furniture and book edges naturally meet frame.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:28.704545+00:00"
+    },
+    {
+      "asset_id": "N33",
+      "kind": "task",
+      "category": "tasks",
+      "name": "论文查重",
+      "brief": "Academic similarity checking represented by two manuscript sheets under a magnifying glass, matching abstract lines linked by a small loop, no percentages.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/N33-v1.png",
+      "batch_id": "FY-ART-08",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-08-v1.png",
+      "source_sha256": "7c7d32f1fe76580215a800ee2bfa13032095e96dbee57c2f39b9c02e4b3dbc43",
+      "slot": {
+        "slot": 6,
+        "row": 3,
+        "column": 2,
+        "asset_id": "N33",
+        "crop": [
+          528,
+          780,
+          1008,
+          1140
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-08.txt",
+      "prompt_sha256": "c0bc177ad1a89839a96134459d14eac0d4a71f5ce7fab84a2b27b25d8fe3dcc1",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/N33-v1.png",
+      "sha256": "387e1991a6a80e82a7c5cb3dfcd3459bba96fe20783900a5a80bafa07ad7c999",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "7c7d32f1fe76580215a800ee2bfa13032095e96dbee57c2f39b9c02e4b3dbc43",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:30:55.662517+00:00",
+        "notes": "Morning class, network fault, research update, advisor reminder, scholarship, similarity check, library seat, internship interview are distinct and match order. Network X is a status icon, pages use blank line geometry. Sage/cream palette stays consistent. Furniture and book edges naturally meet frame.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:28.737465+00:00"
+    },
+    {
+      "asset_id": "N34",
+      "kind": "task",
+      "category": "tasks",
+      "name": "图书馆占座",
+      "brief": "Library seat reservation represented by one empty wooden study chair, a closed book and a backpack beside the desk, quiet pale background.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/N34-v1.png",
+      "batch_id": "FY-ART-08",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-08-v1.png",
+      "source_sha256": "7c7d32f1fe76580215a800ee2bfa13032095e96dbee57c2f39b9c02e4b3dbc43",
+      "slot": {
+        "slot": 7,
+        "row": 4,
+        "column": 1,
+        "asset_id": "N34",
+        "crop": [
+          16,
+          1164,
+          496,
+          1524
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-08.txt",
+      "prompt_sha256": "c0bc177ad1a89839a96134459d14eac0d4a71f5ce7fab84a2b27b25d8fe3dcc1",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/N34-v1.png",
+      "sha256": "858ca8c19aef4041f131b64cf59d94bf71d00f95e4e628a92e2d5012c5f588bc",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "7c7d32f1fe76580215a800ee2bfa13032095e96dbee57c2f39b9c02e4b3dbc43",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:30:55.662517+00:00",
+        "notes": "Morning class, network fault, research update, advisor reminder, scholarship, similarity check, library seat, internship interview are distinct and match order. Network X is a status icon, pages use blank line geometry. Sage/cream palette stays consistent. Furniture and book edges naturally meet frame.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:28.764678+00:00"
+    },
+    {
+      "asset_id": "N35",
+      "kind": "task",
+      "category": "tasks",
+      "name": "实习面试",
+      "brief": "An internship interview represented by a blank resume folder, two chairs across a small table and a neutral office plant, no faces needed.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/N35-v1.png",
+      "batch_id": "FY-ART-08",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-08-v1.png",
+      "source_sha256": "7c7d32f1fe76580215a800ee2bfa13032095e96dbee57c2f39b9c02e4b3dbc43",
+      "slot": {
+        "slot": 8,
+        "row": 4,
+        "column": 2,
+        "asset_id": "N35",
+        "crop": [
+          528,
+          1164,
+          1008,
+          1524
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-08.txt",
+      "prompt_sha256": "c0bc177ad1a89839a96134459d14eac0d4a71f5ce7fab84a2b27b25d8fe3dcc1",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/N35-v1.png",
+      "sha256": "f40b2e04a0241cad222f5a216334cbd39b9c7dfe5fca31877420a2df0ee9d69f",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "7c7d32f1fe76580215a800ee2bfa13032095e96dbee57c2f39b9c02e4b3dbc43",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection of source atlas using view_image",
+        "reviewed_utc": "2026-11-04T13:30:55.662517+00:00",
+        "notes": "Morning class, network fault, research update, advisor reminder, scholarship, similarity check, library seat, internship interview are distinct and match order. Network X is a status icon, pages use blank line geometry. Sage/cream palette stays consistent. Furniture and book edges naturally meet frame.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:28.792106+00:00"
+    },
+    {
+      "asset_id": "N36",
+      "kind": "task",
+      "category": "tasks",
+      "name": "四六级报名",
+      "brief": "Language-test registration represented by a plain application form of empty boxes, pencil and unbranded student card, no letters or digits.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/N36-v1.png",
+      "batch_id": "FY-ART-09",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-09-v1.png",
+      "source_sha256": "35b27752130472e4761c4f7339ad256e200a39c9c16873e6262c1258828471d6",
+      "slot": {
+        "slot": 1,
+        "row": 1,
+        "column": 1,
+        "asset_id": "N36",
+        "crop": [
+          16,
+          12,
+          496,
+          372
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-09.txt",
+      "prompt_sha256": "9e92a54ad078e6894b129423b190b6a457db72cf05544a83910b9e0891535ead",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/N36-v1.png",
+      "sha256": "03dd8fd0b83e4a2f1afc21bf483dd4727b5df562954891baf17f7fadc7bd43fd",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "35b27752130472e4761c4f7339ad256e200a39c9c16873e6262c1258828471d6",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection using view_image of full source atlas and object-contact-2.jpg/object-contact.jpg",
+        "reviewed_utc": "2026-11-04T13:40:26.471918+00:00",
+        "notes": "Seven assigned subjects match grid: test registration, online exam, peer evaluation, and four year-end academic milestones. Final lower-right cell is empty. Ivory paper, teal/sage watercolor and sparse shadows match the uploaded game reference. Key subjects remain in fixed 480x360 crops; a secondary laptop edge and thesis/book edge meet crop boundaries. No readable text or watermark observed.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:28.849590+00:00"
+    },
+    {
+      "asset_id": "N37",
+      "kind": "task",
+      "category": "tasks",
+      "name": "线上考试",
+      "brief": "An online examination represented by one laptop with a blank question-sheet layout, small webcam and simple unnumbered timer, no text.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/N37-v1.png",
+      "batch_id": "FY-ART-09",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-09-v1.png",
+      "source_sha256": "35b27752130472e4761c4f7339ad256e200a39c9c16873e6262c1258828471d6",
+      "slot": {
+        "slot": 2,
+        "row": 1,
+        "column": 2,
+        "asset_id": "N37",
+        "crop": [
+          528,
+          12,
+          1008,
+          372
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-09.txt",
+      "prompt_sha256": "9e92a54ad078e6894b129423b190b6a457db72cf05544a83910b9e0891535ead",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/N37-v1.png",
+      "sha256": "9e85913a3d30e03faa7cd7d412bfd0fd2bd9833fd697bdc79e66d12a521208ae",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "35b27752130472e4761c4f7339ad256e200a39c9c16873e6262c1258828471d6",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection using view_image of full source atlas and object-contact-2.jpg/object-contact.jpg",
+        "reviewed_utc": "2026-11-04T13:40:26.471918+00:00",
+        "notes": "Seven assigned subjects match grid: test registration, online exam, peer evaluation, and four year-end academic milestones. Final lower-right cell is empty. Ivory paper, teal/sage watercolor and sparse shadows match the uploaded game reference. Key subjects remain in fixed 480x360 crops; a secondary laptop edge and thesis/book edge meet crop boundaries. No readable text or watermark observed.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:28.880446+00:00"
+    },
+    {
+      "asset_id": "N38",
+      "kind": "task",
+      "category": "tasks",
+      "name": "小组互评",
+      "brief": "Peer evaluation represented by three blank evaluation cards with simple colored dots, several pencils and a shared project folder, no stars with numbers.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/N38-v1.png",
+      "batch_id": "FY-ART-09",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-09-v1.png",
+      "source_sha256": "35b27752130472e4761c4f7339ad256e200a39c9c16873e6262c1258828471d6",
+      "slot": {
+        "slot": 3,
+        "row": 2,
+        "column": 1,
+        "asset_id": "N38",
+        "crop": [
+          16,
+          396,
+          496,
+          756
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-09.txt",
+      "prompt_sha256": "9e92a54ad078e6894b129423b190b6a457db72cf05544a83910b9e0891535ead",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/N38-v1.png",
+      "sha256": "71b682f34fa5b56538f69f2cda2c84e15d85e2480ed4c6b31ae2bc1874ee2ceb",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "35b27752130472e4761c4f7339ad256e200a39c9c16873e6262c1258828471d6",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection using view_image of full source atlas and object-contact-2.jpg/object-contact.jpg",
+        "reviewed_utc": "2026-11-04T13:40:26.471918+00:00",
+        "notes": "Seven assigned subjects match grid: test registration, online exam, peer evaluation, and four year-end academic milestones. Final lower-right cell is empty. Ivory paper, teal/sage watercolor and sparse shadows match the uploaded game reference. Key subjects remain in fixed 480x360 crops; a secondary laptop edge and thesis/book edge meet crop boundaries. No readable text or watermark observed.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:28.911849+00:00"
+    },
+    {
+      "asset_id": "FY_B1_TASK",
+      "kind": "task",
+      "category": "tasks",
+      "name": "大一学年综合考核",
+      "brief": "A first-year comprehensive assessment represented by an open mathematics workbook, small lab notebook and fresh green campus sprout, clear ceremonial arrangement with lots of ivory space.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/FY_B1_TASK-v1.png",
+      "batch_id": "FY-ART-09",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-09-v1.png",
+      "source_sha256": "35b27752130472e4761c4f7339ad256e200a39c9c16873e6262c1258828471d6",
+      "slot": {
+        "slot": 4,
+        "row": 2,
+        "column": 2,
+        "asset_id": "FY_B1_TASK",
+        "crop": [
+          528,
+          396,
+          1008,
+          756
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-09.txt",
+      "prompt_sha256": "9e92a54ad078e6894b129423b190b6a457db72cf05544a83910b9e0891535ead",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/FY_B1_TASK-v1.png",
+      "sha256": "8f684acc5d5ba1959780ed84e035b7e3b43265af84914f879b5d3121da47a760",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "35b27752130472e4761c4f7339ad256e200a39c9c16873e6262c1258828471d6",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection using view_image of full source atlas and object-contact-2.jpg/object-contact.jpg",
+        "reviewed_utc": "2026-11-04T13:40:26.471918+00:00",
+        "notes": "Seven assigned subjects match grid: test registration, online exam, peer evaluation, and four year-end academic milestones. Final lower-right cell is empty. Ivory paper, teal/sage watercolor and sparse shadows match the uploaded game reference. Key subjects remain in fixed 480x360 crops; a secondary laptop edge and thesis/book edge meet crop boundaries. No readable text or watermark observed.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:28.943706+00:00"
+    },
+    {
+      "asset_id": "FY_B2_TASK",
+      "kind": "task",
+      "category": "tasks",
+      "name": "大二学年综合评测",
+      "brief": "A second-year comprehensive assessment represented by an engineering prototype, structured course binder and bronze competition token, sage and muted blue, uncluttered.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/FY_B2_TASK-v1.png",
+      "batch_id": "FY-ART-09",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-09-v1.png",
+      "source_sha256": "35b27752130472e4761c4f7339ad256e200a39c9c16873e6262c1258828471d6",
+      "slot": {
+        "slot": 5,
+        "row": 3,
+        "column": 1,
+        "asset_id": "FY_B2_TASK",
+        "crop": [
+          16,
+          780,
+          496,
+          1140
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-09.txt",
+      "prompt_sha256": "9e92a54ad078e6894b129423b190b6a457db72cf05544a83910b9e0891535ead",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/FY_B2_TASK-v1.png",
+      "sha256": "df5167c33dbc148b3da4fd37bea4e615e2cd802fa3353f9d7a7b21905cbf8a81",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "35b27752130472e4761c4f7339ad256e200a39c9c16873e6262c1258828471d6",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection using view_image of full source atlas and object-contact-2.jpg/object-contact.jpg",
+        "reviewed_utc": "2026-11-04T13:40:26.471918+00:00",
+        "notes": "Seven assigned subjects match grid: test registration, online exam, peer evaluation, and four year-end academic milestones. Final lower-right cell is empty. Ivory paper, teal/sage watercolor and sparse shadows match the uploaded game reference. Key subjects remain in fixed 480x360 crops; a secondary laptop edge and thesis/book edge meet crop boundaries. No readable text or watermark observed.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:28.973091+00:00"
+    },
+    {
+      "asset_id": "FY_B3_TASK",
+      "kind": "task",
+      "category": "tasks",
+      "name": "大三学年综合评测",
+      "brief": "A third-year comprehensive review represented by a research portfolio, small chart board and an internship badge, calm mature academic milestone, no writing.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/FY_B3_TASK-v1.png",
+      "batch_id": "FY-ART-09",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-09-v1.png",
+      "source_sha256": "35b27752130472e4761c4f7339ad256e200a39c9c16873e6262c1258828471d6",
+      "slot": {
+        "slot": 6,
+        "row": 3,
+        "column": 2,
+        "asset_id": "FY_B3_TASK",
+        "crop": [
+          528,
+          780,
+          1008,
+          1140
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-09.txt",
+      "prompt_sha256": "9e92a54ad078e6894b129423b190b6a457db72cf05544a83910b9e0891535ead",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/FY_B3_TASK-v1.png",
+      "sha256": "826defb32c80e4eba6c5e73c57f0920d65af7b13d435225a6dfc8cf939f3fb5a",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "35b27752130472e4761c4f7339ad256e200a39c9c16873e6262c1258828471d6",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection using view_image of full source atlas and object-contact-2.jpg/object-contact.jpg",
+        "reviewed_utc": "2026-11-04T13:40:26.471918+00:00",
+        "notes": "Seven assigned subjects match grid: test registration, online exam, peer evaluation, and four year-end academic milestones. Final lower-right cell is empty. Ivory paper, teal/sage watercolor and sparse shadows match the uploaded game reference. Key subjects remain in fixed 480x360 crops; a secondary laptop edge and thesis/book edge meet crop boundaries. No readable text or watermark observed.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:29.003420+00:00"
+    },
+    {
+      "asset_id": "FY_B4_TASK",
+      "kind": "task",
+      "category": "tasks",
+      "name": "毕业答辩",
+      "brief": "A graduation defense represented by a completed thesis, small lectern and a graduation cap with sage tassel, restrained warm celebratory academic challenge, no text or official insignia.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/FY_B4_TASK-v1.png",
+      "batch_id": "FY-ART-09",
+      "generated": true,
+      "selected": true,
+      "status": "selected_for_prototype",
+      "version": 1,
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-09-v1.png",
+      "source_sha256": "35b27752130472e4761c4f7339ad256e200a39c9c16873e6262c1258828471d6",
+      "slot": {
+        "slot": 7,
+        "row": 4,
+        "column": 1,
+        "asset_id": "FY_B4_TASK",
+        "crop": [
+          16,
+          1164,
+          496,
+          1524
+        ]
+      },
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-09.txt",
+      "prompt_sha256": "9e92a54ad078e6894b129423b190b6a457db72cf05544a83910b9e0891535ead",
+      "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+      "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit with uploaded style reference, n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "candidate_file": "output/imagegen/missing-art-four-year/crops/FY_B4_TASK-v1.png",
+      "sha256": "e29a72c3effc4cf5afc061cdc8b210db5061062964963f8df27f95cb51d7962f",
+      "processing": "Pillow fixed crop to RGB PNG; no resampling",
+      "ai_visual_review": {
+        "source_sha256": "35b27752130472e4761c4f7339ad256e200a39c9c16873e6262c1258828471d6",
+        "approved_for_prototype": true,
+        "reviewer": "AI visual inspection using view_image of full source atlas and object-contact-2.jpg/object-contact.jpg",
+        "reviewed_utc": "2026-11-04T13:40:26.471918+00:00",
+        "notes": "Seven assigned subjects match grid: test registration, online exam, peer evaluation, and four year-end academic milestones. Final lower-right cell is empty. Ivory paper, teal/sage watercolor and sparse shadows match the uploaded game reference. Key subjects remain in fixed 480x360 crops; a secondary laptop edge and thesis/book edge meet crop boundaries. No readable text or watermark observed.",
+        "human_acceptance": "pending"
+      },
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T13:40:29.033204+00:00"
+    }
+  ],
+  "installed_root": "E:\\desktop\\项目设计\\项目设计",
+  "production_manifest_file": "docs/art/missing-art-assets.json",
+  "usage_record": "docs/缺图素材生产与接入_20261104.md",
+  "installation_evidence": "artifacts/verification/missing-art-usage-20261104/installation.json",
+  "new_paid_image_requests_in_this_continuation": 0
+}

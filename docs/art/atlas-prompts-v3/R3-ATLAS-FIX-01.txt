@@ -1,0 +1,12 @@
+Use case: illustration-story. ONE image with exactly EIGHT independent illustrations. 1024x1536 portrait canvas; strict 2 columns x 4 rows of equal 512x384 horizontal cells, row-major order. No outer margin, no gutters, no titles or labels.
+Input image is an actual existing-game STYLE REFERENCE ONLY. Match its bright ivory paper background, thin dark-teal ink outlines, simple translucent watercolor, calm spacious backgrounds and adult hands. Do NOT copy the input two-panel layout or its exact subjects.
+Every scene is object/hand-focused, at least 35% pale quiet paper background. No faces, heads or named character portraits anywhere. Natural simple hands; essential objects within central70%. Edges are expendable; crop16px from left/right and12px top/bottom within each cell.
+No readable text, letters, numbers, equations, punctuation, question marks, watermarks, logos, card frames, UI, realism, dense textures, cinematic lighting or cross-cell objects.
+Row 1, column 1: Three adult students discuss research around a table. TOP-DOWN CLOSE-UP showing ONLY their hands, open books and the blue-purple lines meeting in the center. All heads and faces completely outside the frame.
+Row 1, column 2: An unopened document folder on an ivory tabletop. One thin magenta evidence thread leads toward an empty reserve page. A geometric loop only, NO question mark or text.
+Row 2, column 1: A once-closed charcoal-green and muted purple evidence circle opens again, a second pale beam illuminating its center. Abstract broken ring only. NO question mark, punctuation or text.
+Row 2, column 2: Two adult students discuss a paper model with open, friendly hands across a tabletop. TIGHT CLOSE-UP on hands, paper and a gentle purple line. All faces and heads outside the frame.
+Row 3, column 1: A thin dark-green evidence line penetrates layered translucent paper screens and reaches a central evidence dot. Close view of paper and line, no person.
+Row 3, column 2: An adult student gently lifts a pen over paper, a short curved green line returning the problem to the center of the page. Frame ONLY fingers, pen and page, no person or face.
+Row 4, column 1: Small paper stepping stones form a supported path forward, every step has a little support pillar. One adult hand gently places the next stone, no person or face.
+Row 4, column 2: Adult hands turn back to a completed research chapter. Past blue-purple trails softly glow again between stacked pages. Top-down close-up, no person or face.

@@ -1,0 +1,3228 @@
+[
+  {
+    "id": "R3-C-01",
+    "name_key": "R3-C-01",
+    "type": "work",
+    "rarity": "basic",
+    "tags": [
+      "基础输出"
+    ],
+    "cost": 1,
+    "target": "task",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "complete",
+        "amount": 6
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "complete",
+          "amount": 9
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "C",
+    "permanent": true,
+    "flags": {
+      "innate": false,
+      "retain": false,
+      "exhaust": false,
+      "unique": false,
+      "upgradable": true,
+      "paper_record": true
+    },
+    "limits": {},
+    "requirements": []
+  },
+  {
+    "id": "R3-C-02",
+    "name_key": "R3-C-02",
+    "type": "strategy",
+    "rarity": "basic",
+    "tags": [
+      "基础防护"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "relax",
+        "amount": 5
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "relax",
+          "amount": 8
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "C",
+    "permanent": true,
+    "flags": {
+      "innate": false,
+      "retain": false,
+      "exhaust": false,
+      "unique": false,
+      "upgradable": true,
+      "paper_record": true
+    },
+    "limits": {},
+    "requirements": []
+  },
+  {
+    "id": "R3-C-03",
+    "name_key": "R3-C-03",
+    "type": "strategy",
+    "rarity": "common",
+    "tags": [
+      "筛选"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "draw",
+        "amount": 2
+      },
+      {
+        "op": "discard",
+        "amount": 1,
+        "up_to": false,
+        "mode": "choose"
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "draw",
+          "amount": 3
+        },
+        {
+          "op": "discard",
+          "amount": 1,
+          "up_to": false,
+          "mode": "choose"
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "C",
+    "permanent": true,
+    "flags": {
+      "innate": false,
+      "retain": false,
+      "exhaust": false,
+      "unique": false,
+      "upgradable": true,
+      "paper_record": true
+    },
+    "limits": {},
+    "requirements": []
+  },
+  {
+    "id": "R3-C-04",
+    "name_key": "R3-C-04",
+    "type": "strategy",
+    "rarity": "common",
+    "tags": [
+      "低费防护"
+    ],
+    "cost": 0,
+    "target": "self",
+    "exhaust": true,
+    "effects": [
+      {
+        "op": "relax",
+        "amount": 3
+      }
+    ],
+    "upgrade": {
+      "cost": 0,
+      "effects": [
+        {
+          "op": "relax",
+          "amount": 5
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "C",
+    "permanent": true,
+    "flags": {
+      "innate": false,
+      "retain": false,
+      "exhaust": true,
+      "unique": false,
+      "upgradable": true,
+      "paper_record": true
+    },
+    "limits": {},
+    "requirements": []
+  },
+  {
+    "id": "R3-C-05",
+    "name_key": "R3-C-05",
+    "type": "strategy",
+    "rarity": "common",
+    "tags": [
+      "续航"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": true,
+    "effects": [
+      {
+        "op": "heal",
+        "amount": 3
+      },
+      {
+        "op": "relax",
+        "amount": 3
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "heal",
+          "amount": 4
+        },
+        {
+          "op": "relax",
+          "amount": 5
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "C",
+    "permanent": true,
+    "flags": {
+      "innate": false,
+      "retain": false,
+      "exhaust": true,
+      "unique": false,
+      "upgradable": true,
+      "paper_record": true
+    },
+    "limits": {},
+    "requirements": []
+  },
+  {
+    "id": "R3-C-06",
+    "name_key": "R3-C-06",
+    "type": "ability",
+    "rarity": "advanced",
+    "tags": [
+      "工作加成"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": true,
+    "effects": [],
+    "upgrade": {
+      "cost": 1,
+      "effects": []
+    },
+    "v3": true,
+    "owner": "C",
+    "permanent": true,
+    "flags": {
+      "innate": false,
+      "retain": false,
+      "exhaust": false,
+      "unique": false,
+      "upgradable": true,
+      "paper_record": true
+    },
+    "limits": {},
+    "requirements": [],
+    "ability": {
+      "activate": "next_round",
+      "stack": "unique_name",
+      "condition": {},
+      "triggers": [
+        {
+          "on": "first_work_card_resolving",
+          "effects": [
+            {
+              "op": "add_work_bonus",
+              "amount": 2,
+              "first_segment": true,
+              "limit": "once_per_turn"
+            }
+          ],
+          "upgrade_effects": [
+            {
+              "op": "add_work_bonus",
+              "amount": 3,
+              "first_segment": true,
+              "limit": "once_per_turn"
+            }
+          ],
+          "limit": "",
+          "no_compound_reaction": false
+        }
+      ]
+    }
+  },
+  {
+    "id": "R3-C-07",
+    "name_key": "R3-C-07",
+    "type": "work",
+    "rarity": "common",
+    "tags": [
+      "临期交付"
+    ],
+    "cost": 1,
+    "target": "task",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "complete",
+        "amount": 8,
+        "bonus": {
+          "condition": {
+            "kind": "ddl_lte",
+            "value": 3
+          },
+          "amount": 4,
+          "same_segment": true
+        }
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "complete",
+          "amount": 11,
+          "bonus": {
+            "condition": {
+              "kind": "ddl_lte",
+              "value": 3
+            },
+            "amount": 6,
+            "same_segment": true
+          }
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "C",
+    "permanent": true,
+    "flags": {
+      "innate": false,
+      "retain": false,
+      "exhaust": false,
+      "unique": false,
+      "upgradable": true,
+      "paper_record": true
+    },
+    "limits": {},
+    "requirements": []
+  },
+  {
+    "id": "R3-C-08",
+    "name_key": "R3-C-08",
+    "type": "scene",
+    "rarity": "advanced",
+    "tags": [
+      "场景防护"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": true,
+    "effects": [
+      {
+        "op": "establish_scene",
+        "scene": "R3-S01"
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "establish_scene",
+          "scene": "R3-S01+"
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "C",
+    "permanent": true,
+    "flags": {
+      "innate": false,
+      "retain": false,
+      "exhaust": true,
+      "unique": false,
+      "upgradable": true,
+      "paper_record": true
+    },
+    "limits": {},
+    "requirements": [],
+    "exam": {
+      "condition": "fixed_exam_room",
+      "target": "self",
+      "effects": [
+        {
+          "op": "draw",
+          "amount": 1
+        },
+        {
+          "op": "relax",
+          "amount": 5
+        }
+      ],
+      "upgrade_effects": [
+        {
+          "op": "draw",
+          "amount": 1
+        },
+        {
+          "op": "relax",
+          "amount": 8
+        }
+      ]
+    }
+  },
+  {
+    "id": "R3-C-09",
+    "name_key": "R3-C-09",
+    "type": "work",
+    "rarity": "common",
+    "tags": [
+      "通用易伤"
+    ],
+    "cost": 1,
+    "target": "task",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "apply_status",
+        "status": "vulnerability",
+        "stacks": 1,
+        "target": "task"
+      },
+      {
+        "op": "complete",
+        "amount": 4
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "apply_status",
+          "status": "vulnerability",
+          "stacks": 2,
+          "target": "task"
+        },
+        {
+          "op": "complete",
+          "amount": 6
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "C",
+    "permanent": true,
+    "flags": {
+      "innate": false,
+      "retain": false,
+      "exhaust": false,
+      "unique": false,
+      "upgradable": true,
+      "paper_record": true
+    },
+    "limits": {},
+    "requirements": []
+  },
+  {
+    "id": "R3-C-10",
+    "name_key": "R3-C-10",
+    "type": "strategy",
+    "rarity": "common",
+    "tags": [
+      "通用虚弱"
+    ],
+    "cost": 1,
+    "target": "task",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "apply_status",
+        "status": "weakness",
+        "stacks": 1,
+        "target": "task"
+      },
+      {
+        "op": "relax",
+        "amount": 4
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "apply_status",
+          "status": "weakness",
+          "stacks": 2,
+          "target": "task"
+        },
+        {
+          "op": "relax",
+          "amount": 6
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "C",
+    "permanent": true,
+    "flags": {
+      "innate": false,
+      "retain": false,
+      "exhaust": false,
+      "unique": false,
+      "upgradable": true,
+      "paper_record": true
+    },
+    "limits": {},
+    "requirements": []
+  },
+  {
+    "id": "R3-C-11",
+    "name_key": "R3-C-11",
+    "type": "work",
+    "rarity": "common",
+    "tags": [
+      "通用破盾"
+    ],
+    "cost": 1,
+    "target": "task",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "remove_shield",
+        "amount": 6,
+        "target": "task",
+        "up_to": true
+      },
+      {
+        "op": "complete",
+        "amount": 5
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "remove_shield",
+          "amount": 9,
+          "target": "task",
+          "up_to": true
+        },
+        {
+          "op": "complete",
+          "amount": 7
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "C",
+    "permanent": true,
+    "flags": {
+      "innate": false,
+      "retain": false,
+      "exhaust": false,
+      "unique": false,
+      "upgradable": true,
+      "paper_record": true
+    },
+    "limits": {},
+    "requirements": []
+  },
+  {
+    "id": "R3-C-12",
+    "name_key": "R3-C-12",
+    "type": "work",
+    "rarity": "common",
+    "tags": [
+      "通用群攻"
+    ],
+    "cost": 1,
+    "target": "all_tasks",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "complete",
+        "amount": 4
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "complete",
+          "amount": 6
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "C",
+    "permanent": true,
+    "flags": {
+      "innate": false,
+      "retain": false,
+      "exhaust": false,
+      "unique": false,
+      "upgradable": true,
+      "paper_record": true
+    },
+    "limits": {},
+    "requirements": []
+  },
+  {
+    "id": "R3-P02-01",
+    "name_key": "R3-P02-01",
+    "type": "strategy",
+    "rarity": "common",
+    "tags": [
+      "开题入口"
+    ],
+    "cost": 0,
+    "target": "self",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "paper_open"
+      }
+    ],
+    "upgrade": {
+      "cost": 0,
+      "effects": [
+        {
+          "op": "paper_open"
+        },
+        {
+          "op": "relax",
+          "amount": 3
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P02",
+    "permanent": true,
+    "flags": {
+      "innate": true,
+      "retain": false,
+      "exhaust": false,
+      "unique": false,
+      "upgradable": true,
+      "paper_record": false,
+      "permanent": true
+    },
+    "limits": {
+      "per_instance_per_turn": 1
+    },
+    "requirements": [
+      {
+        "kind": "paper_closed"
+      },
+      {
+        "kind": "paper_name_turn_unused"
+      }
+    ]
+  },
+  {
+    "id": "R3-P02-02",
+    "name_key": "R3-P02-02",
+    "type": "strategy",
+    "rarity": "common",
+    "tags": [
+      "铺名筛选"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "draw",
+        "amount": 3
+      },
+      {
+        "op": "discard",
+        "amount": 1,
+        "up_to": false,
+        "mode": "choose"
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "draw",
+          "amount": 4
+        },
+        {
+          "op": "discard",
+          "amount": 1,
+          "up_to": false,
+          "mode": "choose"
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P02",
+    "permanent": true,
+    "flags": {
+      "innate": false,
+      "retain": false,
+      "exhaust": false,
+      "unique": false,
+      "upgradable": true,
+      "paper_record": true
+    },
+    "limits": {},
+    "requirements": [
+      {
+        "kind": "paper_name_turn_unused"
+      }
+    ]
+  },
+  {
+    "id": "R3-P02-03",
+    "name_key": "R3-P02-03",
+    "type": "strategy",
+    "rarity": "common",
+    "tags": [
+      "新名防护"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "relax",
+        "amount": 5
+      },
+      {
+        "op": "draw",
+        "amount": 1,
+        "condition": {
+          "all": [
+            {
+              "kind": "paper_open"
+            },
+            {
+              "kind": "paper_name_unused"
+            }
+          ]
+        }
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "relax",
+          "amount": 8
+        },
+        {
+          "op": "draw",
+          "amount": 1,
+          "condition": {
+            "all": [
+              {
+                "kind": "paper_open"
+              },
+              {
+                "kind": "paper_name_unused"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P02",
+    "permanent": true,
+    "flags": {
+      "innate": false,
+      "retain": false,
+      "exhaust": false,
+      "unique": false,
+      "upgradable": true,
+      "paper_record": true
+    },
+    "limits": {},
+    "requirements": [
+      {
+        "kind": "paper_name_turn_unused"
+      }
+    ]
+  },
+  {
+    "id": "R3-P02-04",
+    "name_key": "R3-P02-04",
+    "type": "strategy",
+    "rarity": "common",
+    "tags": [
+      "有限借名"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": true,
+    "effects": [
+      {
+        "op": "generate_card",
+        "card": "R3-T202",
+        "amount": 1,
+        "zone": "hand"
+      },
+      {
+        "op": "draw",
+        "amount": 1
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "generate_card",
+          "card": "R3-T202",
+          "amount": 1,
+          "zone": "hand"
+        },
+        {
+          "op": "draw",
+          "amount": 2
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P02",
+    "permanent": true,
+    "flags": {
+      "innate": false,
+      "retain": false,
+      "exhaust": true,
+      "unique": false,
+      "upgradable": true,
+      "paper_record": true
+    },
+    "limits": {},
+    "requirements": [
+      {
+        "kind": "paper_name_turn_unused"
+      }
+    ]
+  },
+  {
+    "id": "R3-P02-05",
+    "name_key": "R3-P02-05",
+    "type": "strategy",
+    "rarity": "common",
+    "tags": [
+      "发表计划"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "relax",
+        "amount": 6
+      },
+      {
+        "op": "retain",
+        "amount": 1,
+        "choose": "other_hand"
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "relax",
+          "amount": 9
+        },
+        {
+          "op": "retain",
+          "amount": 1,
+          "choose": "other_hand"
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P02",
+    "permanent": true,
+    "flags": {
+      "innate": false,
+      "retain": false,
+      "exhaust": false,
+      "unique": false,
+      "upgradable": true,
+      "paper_record": true
+    },
+    "limits": {},
+    "requirements": [
+      {
+        "kind": "paper_name_turn_unused"
+      }
+    ]
+  },
+  {
+    "id": "R3-P02-06",
+    "name_key": "R3-P02-06",
+    "type": "strategy",
+    "rarity": "advanced",
+    "tags": [
+      "引用补足"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "paper_citation",
+        "amount": 1,
+        "layered_payment": true,
+        "condition": {
+          "kind": "paper_open"
+        }
+      },
+      {
+        "op": "relax",
+        "amount": 5
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "paper_citation",
+          "amount": 1,
+          "layered_payment": true,
+          "condition": {
+            "kind": "paper_open"
+          }
+        },
+        {
+          "op": "relax",
+          "amount": 8
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P02",
+    "permanent": true,
+    "flags": {
+      "innate": false,
+      "retain": false,
+      "exhaust": false,
+      "unique": false,
+      "upgradable": true,
+      "paper_record": true
+    },
+    "limits": {},
+    "requirements": [
+      {
+        "kind": "paper_name_turn_unused"
+      }
+    ]
+  },
+  {
+    "id": "R3-P02-07",
+    "name_key": "R3-P02-07",
+    "type": "strategy",
+    "rarity": "advanced",
+    "tags": [
+      "进度补足"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": true,
+    "effects": [
+      {
+        "op": "paper_progress",
+        "amount": 1
+      },
+      {
+        "op": "relax",
+        "amount": 3
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "paper_progress",
+          "amount": 1
+        },
+        {
+          "op": "relax",
+          "amount": 6
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P02",
+    "permanent": true,
+    "flags": {
+      "innate": false,
+      "retain": false,
+      "exhaust": true,
+      "unique": false,
+      "upgradable": true,
+      "paper_record": true
+    },
+    "limits": {},
+    "requirements": [
+      {
+        "kind": "paper_open"
+      },
+      {
+        "kind": "paper_name_turn_unused"
+      }
+    ]
+  },
+  {
+    "id": "R3-P02-08",
+    "name_key": "R3-P02-08",
+    "type": "strategy",
+    "rarity": "advanced",
+    "tags": [
+      "修正补足"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": true,
+    "effects": [
+      {
+        "op": "paper_modifier",
+        "amount": 5
+      },
+      {
+        "op": "draw",
+        "amount": 1
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "paper_modifier",
+          "amount": 8
+        },
+        {
+          "op": "draw",
+          "amount": 1
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P02",
+    "permanent": true,
+    "flags": {
+      "innate": false,
+      "retain": false,
+      "exhaust": true,
+      "unique": false,
+      "upgradable": true,
+      "paper_record": true
+    },
+    "limits": {},
+    "requirements": [
+      {
+        "kind": "paper_open"
+      },
+      {
+        "kind": "paper_name_turn_unused"
+      }
+    ]
+  },
+  {
+    "id": "R3-P02-09",
+    "name_key": "R3-P02-09",
+    "type": "strategy",
+    "rarity": "rare",
+    "tags": [
+      "发表冲刺"
+    ],
+    "cost": 2,
+    "target": "self",
+    "exhaust": true,
+    "effects": [
+      {
+        "op": "paper_modifier",
+        "amount": 12
+      },
+      {
+        "op": "relax",
+        "amount": 6
+      }
+    ],
+    "upgrade": {
+      "cost": 2,
+      "effects": [
+        {
+          "op": "paper_modifier",
+          "amount": 16
+        },
+        {
+          "op": "relax",
+          "amount": 9
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P02",
+    "permanent": true,
+    "flags": {
+      "innate": false,
+      "retain": false,
+      "exhaust": true,
+      "unique": false,
+      "upgradable": true,
+      "paper_record": true
+    },
+    "limits": {},
+    "requirements": [
+      {
+        "kind": "paper_open"
+      },
+      {
+        "kind": "paper_progress_min",
+        "value": 7
+      },
+      {
+        "kind": "paper_name_turn_unused"
+      }
+    ]
+  },
+  {
+    "id": "R3-P02-10",
+    "name_key": "R3-P02-10",
+    "type": "ability",
+    "rarity": "rare",
+    "tags": [
+      "铺名引擎"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": true,
+    "effects": [],
+    "upgrade": {
+      "cost": 1,
+      "effects": []
+    },
+    "v3": true,
+    "owner": "P02",
+    "permanent": true,
+    "flags": {
+      "innate": false,
+      "retain": false,
+      "exhaust": false,
+      "unique": false,
+      "upgradable": true,
+      "paper_record": true
+    },
+    "limits": {},
+    "requirements": [
+      {
+        "kind": "paper_name_turn_unused"
+      }
+    ],
+    "ability": {
+      "activate": "next_round",
+      "stack": "unique_name",
+      "condition": {},
+      "triggers": [
+        {
+          "on": "paper_progress_gained",
+          "effects": [
+            {
+              "op": "draw",
+              "amount": 1,
+              "condition": {
+                "kind": "paper_progress_gained"
+              },
+              "limit": "once_per_turn"
+            },
+            {
+              "op": "relax",
+              "amount": 2
+            }
+          ],
+          "upgrade_effects": [
+            {
+              "op": "draw",
+              "amount": 1,
+              "condition": {
+                "kind": "paper_progress_gained"
+              },
+              "limit": "once_per_turn"
+            },
+            {
+              "op": "relax",
+              "amount": 4
+            }
+          ],
+          "limit": "",
+          "no_compound_reaction": false
+        }
+      ]
+    }
+  },
+  {
+    "id": "R3-P02-11",
+    "name_key": "R3-P02-11",
+    "type": "strategy",
+    "rarity": "common",
+    "tags": [
+      "章节",
+      "抽牌"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "relax",
+        "amount": 3
+      },
+      {
+        "op": "chapter_deploy"
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "relax",
+          "amount": 5
+        },
+        {
+          "op": "chapter_deploy"
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P02",
+    "permanent": true,
+    "flags": {
+      "innate": false,
+      "retain": false,
+      "exhaust": false,
+      "unique": false,
+      "upgradable": true,
+      "paper_record": true
+    },
+    "limits": {},
+    "requirements": [
+      {
+        "kind": "paper_open"
+      },
+      {
+        "kind": "paper_name_turn_unused"
+      }
+    ],
+    "chapter": {
+      "activate": "next_round",
+      "deploy": {
+        "requires": "paper_open"
+      },
+      "resident": {
+        "on": "prepare",
+        "effects": [
+          {
+            "op": "draw",
+            "amount": 1
+          }
+        ]
+      },
+      "upgraded_resident": {
+        "on": "prepare",
+        "effects": [
+          {
+            "op": "draw",
+            "amount": 1
+          },
+          {
+            "op": "relax",
+            "amount": 2
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "R3-P02-12",
+    "name_key": "R3-P02-12",
+    "type": "strategy",
+    "rarity": "common",
+    "tags": [
+      "章节",
+      "防护"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "relax",
+        "amount": 4
+      },
+      {
+        "op": "chapter_deploy"
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "relax",
+          "amount": 6
+        },
+        {
+          "op": "chapter_deploy"
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P02",
+    "permanent": true,
+    "flags": {
+      "innate": false,
+      "retain": false,
+      "exhaust": false,
+      "unique": false,
+      "upgradable": true,
+      "paper_record": true
+    },
+    "limits": {},
+    "requirements": [
+      {
+        "kind": "paper_open"
+      },
+      {
+        "kind": "paper_name_turn_unused"
+      }
+    ],
+    "chapter": {
+      "activate": "next_round",
+      "deploy": {
+        "requires": "paper_open"
+      },
+      "resident": {
+        "on": "prepare",
+        "effects": [
+          {
+            "op": "relax",
+            "amount": 3,
+            "bonus": {
+              "condition": {
+                "kind": "chapter_count_min",
+                "value": 2
+              },
+              "amount": 2
+            }
+          }
+        ]
+      },
+      "upgraded_resident": {
+        "on": "prepare",
+        "effects": [
+          {
+            "op": "relax",
+            "amount": 5,
+            "bonus": {
+              "condition": {
+                "kind": "chapter_count_min",
+                "value": 2
+              },
+              "amount": 3
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "R3-P02-13",
+    "name_key": "R3-P02-13",
+    "type": "strategy",
+    "rarity": "common",
+    "tags": [
+      "章节",
+      "持续输出"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "draw",
+        "amount": 1
+      },
+      {
+        "op": "chapter_deploy"
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "draw",
+          "amount": 1
+        },
+        {
+          "op": "relax",
+          "amount": 2
+        },
+        {
+          "op": "chapter_deploy"
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P02",
+    "permanent": true,
+    "flags": {
+      "innate": false,
+      "retain": false,
+      "exhaust": false,
+      "unique": false,
+      "upgradable": true,
+      "paper_record": true
+    },
+    "limits": {},
+    "requirements": [
+      {
+        "kind": "paper_open"
+      },
+      {
+        "kind": "paper_name_turn_unused"
+      }
+    ],
+    "chapter": {
+      "activate": "next_round",
+      "deploy": {
+        "requires": "paper_open"
+      },
+      "resident": {
+        "on": "prepare",
+        "effects": [
+          {
+            "op": "complete",
+            "amount": 4,
+            "target": "earliest_task"
+          }
+        ]
+      },
+      "upgraded_resident": {
+        "on": "prepare",
+        "effects": [
+          {
+            "op": "complete",
+            "amount": 6,
+            "target": "earliest_task"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "R3-P02-14",
+    "name_key": "R3-P02-14",
+    "type": "strategy",
+    "rarity": "common",
+    "tags": [
+      "章节",
+      "联动防护"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "relax",
+        "amount": 3
+      },
+      {
+        "op": "chapter_deploy"
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "relax",
+          "amount": 5
+        },
+        {
+          "op": "chapter_deploy"
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P02",
+    "permanent": true,
+    "flags": {
+      "innate": false,
+      "retain": false,
+      "exhaust": false,
+      "unique": false,
+      "upgradable": true,
+      "paper_record": true
+    },
+    "limits": {},
+    "requirements": [
+      {
+        "kind": "paper_open"
+      },
+      {
+        "kind": "paper_name_turn_unused"
+      }
+    ],
+    "chapter": {
+      "activate": "next_round",
+      "deploy": {
+        "requires": "paper_open"
+      },
+      "resident": {
+        "on": "prepare",
+        "effects": [
+          {
+            "op": "relax",
+            "amount": 2
+          },
+          {
+            "op": "draw",
+            "amount": 1,
+            "condition": {
+              "kind": "other_chapter_ran_window"
+            }
+          }
+        ]
+      },
+      "upgraded_resident": {
+        "on": "prepare",
+        "effects": [
+          {
+            "op": "relax",
+            "amount": 4
+          },
+          {
+            "op": "draw",
+            "amount": 1,
+            "condition": {
+              "kind": "other_chapter_ran_window"
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "R3-P02-15",
+    "name_key": "R3-P02-15",
+    "type": "strategy",
+    "rarity": "common",
+    "tags": [
+      "章节",
+      "增幅"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "draw",
+        "amount": 1
+      },
+      {
+        "op": "discard",
+        "amount": 1,
+        "up_to": false,
+        "mode": "choose"
+      },
+      {
+        "op": "chapter_deploy"
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "draw",
+          "amount": 2
+        },
+        {
+          "op": "discard",
+          "amount": 1,
+          "up_to": false,
+          "mode": "choose"
+        },
+        {
+          "op": "chapter_deploy"
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P02",
+    "permanent": true,
+    "flags": {
+      "innate": false,
+      "retain": false,
+      "exhaust": false,
+      "unique": false,
+      "upgradable": true,
+      "paper_record": true
+    },
+    "limits": {},
+    "requirements": [
+      {
+        "kind": "paper_open"
+      },
+      {
+        "kind": "paper_name_turn_unused"
+      }
+    ],
+    "chapter": {
+      "activate": "next_round",
+      "deploy": {
+        "requires": "paper_open"
+      },
+      "resident": {
+        "on": "prepare",
+        "effects": [
+          {
+            "op": "paper_amplify",
+            "amount": 1
+          }
+        ]
+      },
+      "upgraded_resident": {
+        "on": "prepare",
+        "effects": [
+          {
+            "op": "paper_amplify",
+            "amount": 2
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "R3-P02-16",
+    "name_key": "R3-P02-16",
+    "type": "strategy",
+    "rarity": "advanced",
+    "tags": [
+      "章节",
+      "联动输出"
+    ],
+    "cost": 2,
+    "target": "self",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "relax",
+        "amount": 5
+      },
+      {
+        "op": "chapter_deploy"
+      }
+    ],
+    "upgrade": {
+      "cost": 2,
+      "effects": [
+        {
+          "op": "relax",
+          "amount": 8
+        },
+        {
+          "op": "chapter_deploy"
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P02",
+    "permanent": true,
+    "flags": {
+      "innate": false,
+      "retain": false,
+      "exhaust": false,
+      "unique": false,
+      "upgradable": true,
+      "paper_record": true
+    },
+    "limits": {},
+    "requirements": [
+      {
+        "kind": "paper_open"
+      },
+      {
+        "kind": "paper_name_turn_unused"
+      }
+    ],
+    "chapter": {
+      "activate": "next_round",
+      "deploy": {
+        "requires": "paper_open"
+      },
+      "resident": {
+        "on": "prepare",
+        "effects": [
+          {
+            "op": "complete",
+            "amount": 3,
+            "target": "earliest_task",
+            "per_other_chapter": 2,
+            "cap": 2
+          }
+        ]
+      },
+      "upgraded_resident": {
+        "on": "prepare",
+        "effects": [
+          {
+            "op": "complete",
+            "amount": 5,
+            "target": "earliest_task",
+            "per_other_chapter": 3,
+            "cap": 2
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "R3-P02-17",
+    "name_key": "R3-P02-17",
+    "type": "strategy",
+    "rarity": "advanced",
+    "tags": [
+      "引擎编排"
+    ],
+    "cost": 0,
+    "target": "self",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "swap_chapter_slots",
+        "amount": 2
+      },
+      {
+        "op": "relax",
+        "amount": 3
+      }
+    ],
+    "upgrade": {
+      "cost": 0,
+      "effects": [
+        {
+          "op": "swap_chapter_slots",
+          "amount": 2
+        },
+        {
+          "op": "relax",
+          "amount": 5
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P02",
+    "permanent": true,
+    "flags": {
+      "innate": false,
+      "retain": false,
+      "exhaust": false,
+      "unique": false,
+      "upgradable": true,
+      "paper_record": true
+    },
+    "limits": {
+      "per_instance_per_turn": 1
+    },
+    "requirements": [
+      {
+        "kind": "chapter_count_min",
+        "value": 2
+      },
+      {
+        "kind": "paper_name_turn_unused"
+      }
+    ]
+  },
+  {
+    "id": "R3-P02-18",
+    "name_key": "R3-P02-18",
+    "type": "strategy",
+    "rarity": "advanced",
+    "tags": [
+      "章节检索"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "search_draw_for_type",
+        "card_type": "strategy",
+        "tag": "chapter",
+        "amount": 1,
+        "fallback_draw": 1
+      },
+      {
+        "op": "shuffle_draw"
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "search_draw_for_type",
+          "card_type": "strategy",
+          "tag": "chapter",
+          "amount": 1,
+          "fallback_draw": 1
+        },
+        {
+          "op": "shuffle_draw"
+        },
+        {
+          "op": "relax",
+          "amount": 3
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P02",
+    "permanent": true,
+    "flags": {
+      "innate": false,
+      "retain": false,
+      "exhaust": false,
+      "unique": false,
+      "upgradable": true,
+      "paper_record": true
+    },
+    "limits": {},
+    "requirements": [
+      {
+        "kind": "paper_name_turn_unused"
+      }
+    ]
+  },
+  {
+    "id": "R3-P02-19",
+    "name_key": "R3-P02-19",
+    "type": "ability",
+    "rarity": "advanced",
+    "tags": [
+      "引擎续航"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": true,
+    "effects": [],
+    "upgrade": {
+      "cost": 1,
+      "effects": []
+    },
+    "v3": true,
+    "owner": "P02",
+    "permanent": true,
+    "flags": {
+      "innate": false,
+      "retain": false,
+      "exhaust": false,
+      "unique": false,
+      "upgradable": true,
+      "paper_record": true
+    },
+    "limits": {},
+    "requirements": [
+      {
+        "kind": "paper_name_turn_unused"
+      }
+    ],
+    "ability": {
+      "activate": "next_round",
+      "stack": "unique_name",
+      "condition": {},
+      "triggers": [
+        {
+          "on": "chapter_window_end",
+          "effects": [
+            {
+              "op": "relax",
+              "amount": 4,
+              "condition": {
+                "kind": "chapter_count_min",
+                "value": 2
+              },
+              "limit": "once_per_turn"
+            }
+          ],
+          "upgrade_effects": [
+            {
+              "op": "relax",
+              "amount": 6,
+              "condition": {
+                "kind": "chapter_count_min",
+                "value": 2
+              },
+              "limit": "once_per_turn"
+            }
+          ],
+          "limit": "",
+          "no_compound_reaction": false
+        }
+      ]
+    }
+  },
+  {
+    "id": "R3-P02-20",
+    "name_key": "R3-P02-20",
+    "type": "strategy",
+    "rarity": "rare",
+    "tags": [
+      "引擎爆发"
+    ],
+    "cost": 2,
+    "target": "self",
+    "exhaust": true,
+    "effects": [
+      {
+        "op": "chapter_run",
+        "amount": 1,
+        "extra": true
+      }
+    ],
+    "upgrade": {
+      "cost": 2,
+      "effects": [
+        {
+          "op": "chapter_run",
+          "amount": 2,
+          "extra": true
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P02",
+    "permanent": true,
+    "flags": {
+      "innate": false,
+      "retain": false,
+      "exhaust": true,
+      "unique": false,
+      "upgradable": true,
+      "paper_record": true
+    },
+    "limits": {},
+    "requirements": [
+      {
+        "kind": "chapter_count_min",
+        "value": 1
+      },
+      {
+        "kind": "paper_name_turn_unused"
+      }
+    ]
+  },
+  {
+    "id": "R3-P02-21",
+    "name_key": "R3-P02-21",
+    "type": "strategy",
+    "rarity": "common",
+    "tags": [
+      "牌名调整"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": true,
+    "effects": [
+      {
+        "op": "change_topic",
+        "optional": true,
+        "modifier": -1
+      },
+      {
+        "op": "draw",
+        "amount": 1
+      }
+    ],
+    "upgrade": {
+      "cost": 0,
+      "effects": [
+        {
+          "op": "change_topic",
+          "optional": true,
+          "modifier": -1
+        },
+        {
+          "op": "draw",
+          "amount": 1
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P02",
+    "permanent": true,
+    "flags": {
+      "innate": false,
+      "retain": false,
+      "exhaust": true,
+      "unique": false,
+      "upgradable": true,
+      "paper_record": true
+    },
+    "limits": {},
+    "requirements": [
+      {
+        "kind": "paper_open"
+      },
+      {
+        "kind": "paper_name_turn_unused"
+      }
+    ]
+  },
+  {
+    "id": "R3-P02-22",
+    "name_key": "R3-P02-22",
+    "type": "strategy",
+    "rarity": "common",
+    "tags": [
+      "白名单增幅"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": true,
+    "effects": [
+      {
+        "op": "draw",
+        "amount": 2
+      },
+      {
+        "op": "paper_amplify",
+        "amount": 1
+      }
+    ],
+    "upgrade": {
+      "cost": 0,
+      "effects": [
+        {
+          "op": "draw",
+          "amount": 2
+        },
+        {
+          "op": "paper_amplify",
+          "amount": 1
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P02",
+    "permanent": true,
+    "flags": {
+      "innate": false,
+      "retain": false,
+      "exhaust": true,
+      "unique": false,
+      "upgradable": true,
+      "paper_record": true
+    },
+    "limits": {},
+    "requirements": [
+      {
+        "kind": "paper_name_turn_unused"
+      }
+    ]
+  },
+  {
+    "id": "R3-P02-23",
+    "name_key": "R3-P02-23",
+    "type": "strategy",
+    "rarity": "common",
+    "tags": [
+      "跨回合复用"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": true,
+    "effects": [
+      {
+        "op": "retrieve",
+        "card_kind": "strategy",
+        "base_cost_min": 1,
+        "amount": 1,
+        "zone": "discard",
+        "permanent_only": true
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "retrieve",
+          "card_kind": "strategy",
+          "base_cost_min": 1,
+          "amount": 1,
+          "zone": "discard",
+          "permanent_only": true
+        },
+        {
+          "op": "relax",
+          "amount": 3
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P02",
+    "permanent": true,
+    "flags": {
+      "innate": false,
+      "retain": false,
+      "exhaust": true,
+      "unique": false,
+      "upgradable": true,
+      "paper_record": true
+    },
+    "limits": {},
+    "requirements": [
+      {
+        "kind": "paper_name_turn_unused"
+      }
+    ]
+  },
+  {
+    "id": "R3-P02-24",
+    "name_key": "R3-P02-24",
+    "type": "strategy",
+    "rarity": "common",
+    "tags": [
+      "同名收益"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "relax",
+        "amount": 6
+      },
+      {
+        "op": "draw",
+        "amount": 1,
+        "condition": {
+          "all": [
+            {
+              "kind": "paper_open"
+            },
+            {
+              "kind": "paper_name_used"
+            }
+          ]
+        }
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "relax",
+          "amount": 9
+        },
+        {
+          "op": "draw",
+          "amount": 1,
+          "condition": {
+            "all": [
+              {
+                "kind": "paper_open"
+              },
+              {
+                "kind": "paper_name_used"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P02",
+    "permanent": true,
+    "flags": {
+      "innate": false,
+      "retain": false,
+      "exhaust": false,
+      "unique": false,
+      "upgradable": true,
+      "paper_record": true
+    },
+    "limits": {},
+    "requirements": [
+      {
+        "kind": "paper_name_turn_unused"
+      }
+    ]
+  },
+  {
+    "id": "R3-P02-25",
+    "name_key": "R3-P02-25",
+    "type": "strategy",
+    "rarity": "common",
+    "tags": [
+      "启动缓冲"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "relax",
+        "amount": 5
+      },
+      {
+        "op": "draw",
+        "amount": 1
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "relax",
+          "amount": 8
+        },
+        {
+          "op": "draw",
+          "amount": 1
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P02",
+    "permanent": true,
+    "flags": {
+      "innate": false,
+      "retain": false,
+      "exhaust": false,
+      "unique": false,
+      "upgradable": true,
+      "paper_record": true
+    },
+    "limits": {},
+    "requirements": [
+      {
+        "kind": "paper_name_turn_unused"
+      }
+    ]
+  },
+  {
+    "id": "R3-P02-26",
+    "name_key": "R3-P02-26",
+    "type": "strategy",
+    "rarity": "advanced",
+    "tags": [
+      "引用转换"
+    ],
+    "cost": 0,
+    "target": "self",
+    "exhaust": true,
+    "effects": [
+      {
+        "op": "spend_citation",
+        "amount": 1
+      },
+      {
+        "op": "paper_modifier",
+        "amount": 3
+      },
+      {
+        "op": "draw",
+        "amount": 1
+      }
+    ],
+    "upgrade": {
+      "cost": 0,
+      "effects": [
+        {
+          "op": "spend_citation",
+          "amount": 1
+        },
+        {
+          "op": "paper_modifier",
+          "amount": 5
+        },
+        {
+          "op": "draw",
+          "amount": 1
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P02",
+    "permanent": true,
+    "flags": {
+      "innate": false,
+      "retain": false,
+      "exhaust": true,
+      "unique": false,
+      "upgradable": true,
+      "paper_record": true
+    },
+    "limits": {},
+    "requirements": [
+      {
+        "kind": "paper_open"
+      },
+      {
+        "kind": "citation_min",
+        "value": 1
+      },
+      {
+        "kind": "paper_name_turn_unused"
+      }
+    ]
+  },
+  {
+    "id": "R3-P02-27",
+    "name_key": "R3-P02-27",
+    "type": "strategy",
+    "rarity": "advanced",
+    "tags": [
+      "有限复制"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": true,
+    "effects": [
+      {
+        "op": "copy_chapter_to_hand",
+        "amount": 1
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "copy_chapter_to_hand",
+          "amount": 1
+        },
+        {
+          "op": "relax",
+          "amount": 3
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P02",
+    "permanent": true,
+    "flags": {
+      "innate": false,
+      "retain": false,
+      "exhaust": true,
+      "unique": false,
+      "upgradable": true,
+      "paper_record": true
+    },
+    "limits": {},
+    "requirements": [
+      {
+        "kind": "chapter_count_min",
+        "value": 1
+      },
+      {
+        "kind": "paper_name_turn_unused"
+      }
+    ]
+  },
+  {
+    "id": "R3-P02-28",
+    "name_key": "R3-P02-28",
+    "type": "strategy",
+    "rarity": "advanced",
+    "tags": [
+      "提前交付"
+    ],
+    "cost": 0,
+    "target": "self",
+    "exhaust": true,
+    "effects": [
+      {
+        "op": "publication_cost_discount",
+        "amount": 1
+      },
+      {
+        "op": "relax",
+        "amount": 3
+      }
+    ],
+    "upgrade": {
+      "cost": 0,
+      "effects": [
+        {
+          "op": "publication_cost_discount",
+          "amount": 1
+        },
+        {
+          "op": "relax",
+          "amount": 6
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P02",
+    "permanent": true,
+    "flags": {
+      "innate": false,
+      "retain": false,
+      "exhaust": true,
+      "unique": false,
+      "upgradable": true,
+      "paper_record": true
+    },
+    "limits": {},
+    "requirements": [
+      {
+        "kind": "paper_open"
+      },
+      {
+        "kind": "paper_name_turn_unused"
+      }
+    ]
+  },
+  {
+    "id": "R3-P02-29",
+    "name_key": "R3-P02-29",
+    "type": "strategy",
+    "rarity": "advanced",
+    "tags": [
+      "手牌修正"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": true,
+    "effects": [
+      {
+        "op": "discard",
+        "amount": 2,
+        "up_to": true,
+        "mode": "choose"
+      },
+      {
+        "op": "draw",
+        "amount": {
+          "ref": "actual_discarded"
+        }
+      },
+      {
+        "op": "paper_modifier",
+        "amount": 3,
+        "condition": {
+          "kind": "paper_open"
+        }
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "discard",
+          "amount": 2,
+          "up_to": true,
+          "mode": "choose"
+        },
+        {
+          "op": "draw",
+          "amount": {
+            "ref": "actual_discarded"
+          }
+        },
+        {
+          "op": "paper_modifier",
+          "amount": 5,
+          "condition": {
+            "kind": "paper_open"
+          }
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P02",
+    "permanent": true,
+    "flags": {
+      "innate": false,
+      "retain": false,
+      "exhaust": true,
+      "unique": false,
+      "upgradable": true,
+      "paper_record": true
+    },
+    "limits": {},
+    "requirements": [
+      {
+        "kind": "paper_name_turn_unused"
+      }
+    ]
+  },
+  {
+    "id": "R3-P02-30",
+    "name_key": "R3-P02-30",
+    "type": "strategy",
+    "rarity": "rare",
+    "tags": [
+      "引擎转发表"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": true,
+    "effects": [
+      {
+        "op": "chapter_return",
+        "amount": 2,
+        "up_to": true,
+        "modifier_per_chapter": 4
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "chapter_return",
+          "amount": 2,
+          "up_to": true,
+          "modifier_per_chapter": 6
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P02",
+    "permanent": true,
+    "flags": {
+      "innate": false,
+      "retain": false,
+      "exhaust": true,
+      "unique": false,
+      "upgradable": true,
+      "paper_record": true
+    },
+    "limits": {},
+    "requirements": [
+      {
+        "kind": "paper_open"
+      },
+      {
+        "kind": "chapter_count_min",
+        "value": 1
+      },
+      {
+        "kind": "paper_name_turn_unused"
+      }
+    ]
+  },
+  {
+    "id": "R3-P02-31",
+    "name_key": "R3-P02-31",
+    "type": "strategy",
+    "rarity": "common",
+    "tags": [
+      "过牌"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "draw",
+        "amount": 2
+      },
+      {
+        "op": "relax",
+        "amount": 3
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "draw",
+          "amount": 2
+        },
+        {
+          "op": "relax",
+          "amount": 6
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P02",
+    "permanent": true,
+    "flags": {
+      "innate": false,
+      "retain": false,
+      "exhaust": false,
+      "unique": false,
+      "upgradable": true,
+      "paper_record": true
+    },
+    "limits": {},
+    "requirements": [
+      {
+        "kind": "paper_name_turn_unused"
+      }
+    ]
+  },
+  {
+    "id": "R3-P02-32",
+    "name_key": "R3-P02-32",
+    "type": "strategy",
+    "rarity": "common",
+    "tags": [
+      "防护"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "relax",
+        "amount": 8
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "relax",
+          "amount": 11
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P02",
+    "permanent": true,
+    "flags": {
+      "innate": false,
+      "retain": false,
+      "exhaust": false,
+      "unique": false,
+      "upgradable": true,
+      "paper_record": true
+    },
+    "limits": {},
+    "requirements": [
+      {
+        "kind": "paper_name_turn_unused"
+      }
+    ]
+  },
+  {
+    "id": "R3-P02-33",
+    "name_key": "R3-P02-33",
+    "type": "strategy",
+    "rarity": "common",
+    "tags": [
+      "纠错"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "remove_status",
+        "status": "anxiety",
+        "amount": 1,
+        "target": "self",
+        "up_to": true
+      },
+      {
+        "op": "draw",
+        "amount": 1
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "remove_status",
+          "status": "anxiety",
+          "amount": 2,
+          "target": "self",
+          "up_to": true
+        },
+        {
+          "op": "draw",
+          "amount": 1
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P02",
+    "permanent": true,
+    "flags": {
+      "innate": false,
+      "retain": false,
+      "exhaust": false,
+      "unique": false,
+      "upgradable": true,
+      "paper_record": true
+    },
+    "limits": {},
+    "requirements": [
+      {
+        "kind": "paper_name_turn_unused"
+      }
+    ]
+  },
+  {
+    "id": "R3-P02-34",
+    "name_key": "R3-P02-34",
+    "type": "strategy",
+    "rarity": "common",
+    "tags": [
+      "引用减压"
+    ],
+    "cost": 1,
+    "target": "task",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "apply_status",
+        "status": "weakness",
+        "stacks": 1,
+        "target": "task"
+      },
+      {
+        "op": "relax",
+        "amount": 4,
+        "bonus": {
+          "condition": {
+            "kind": "paid_citation_focus_this_turn"
+          },
+          "amount": 2
+        }
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "apply_status",
+          "status": "weakness",
+          "stacks": 2,
+          "target": "task"
+        },
+        {
+          "op": "relax",
+          "amount": 6,
+          "bonus": {
+            "condition": {
+              "kind": "paid_citation_focus_this_turn"
+            },
+            "amount": 3
+          }
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P02",
+    "permanent": true,
+    "flags": {
+      "innate": false,
+      "retain": false,
+      "exhaust": false,
+      "unique": false,
+      "upgradable": true,
+      "paper_record": true
+    },
+    "limits": {},
+    "requirements": [
+      {
+        "kind": "paper_name_turn_unused"
+      }
+    ]
+  },
+  {
+    "id": "R3-P02-35",
+    "name_key": "R3-P02-35",
+    "type": "work",
+    "rarity": "common",
+    "tags": [
+      "考试易伤"
+    ],
+    "cost": 1,
+    "target": "task",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "apply_status",
+        "status": "vulnerability",
+        "stacks": 1,
+        "target": "task"
+      },
+      {
+        "op": "complete",
+        "amount": 5,
+        "bonus": {
+          "condition": {
+            "kind": "fixed_exam_room"
+          },
+          "amount": 3,
+          "same_segment": true
+        }
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "apply_status",
+          "status": "vulnerability",
+          "stacks": 2,
+          "target": "task"
+        },
+        {
+          "op": "complete",
+          "amount": 7,
+          "bonus": {
+            "condition": {
+              "kind": "fixed_exam_room"
+            },
+            "amount": 4,
+            "same_segment": true
+          }
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P02",
+    "permanent": true,
+    "flags": {
+      "innate": false,
+      "retain": false,
+      "exhaust": false,
+      "unique": false,
+      "upgradable": true,
+      "paper_record": true
+    },
+    "limits": {},
+    "requirements": [
+      {
+        "kind": "paper_name_turn_unused"
+      }
+    ]
+  },
+  {
+    "id": "R3-P02-36",
+    "name_key": "R3-P02-36",
+    "type": "scene",
+    "rarity": "advanced",
+    "tags": [
+      "场景过牌"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": true,
+    "effects": [
+      {
+        "op": "establish_scene",
+        "scene": "R3-S02"
+      }
+    ],
+    "upgrade": {
+      "cost": 1,
+      "effects": [
+        {
+          "op": "establish_scene",
+          "scene": "R3-S02+"
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P02",
+    "permanent": true,
+    "flags": {
+      "innate": false,
+      "retain": false,
+      "exhaust": true,
+      "unique": false,
+      "upgradable": true,
+      "paper_record": true
+    },
+    "limits": {},
+    "requirements": [
+      {
+        "kind": "paper_name_turn_unused"
+      }
+    ],
+    "exam": {
+      "condition": "fixed_exam_room",
+      "target": "self",
+      "effects": [
+        {
+          "op": "draw",
+          "amount": 2
+        },
+        {
+          "op": "relax",
+          "amount": 3
+        }
+      ],
+      "upgrade_effects": [
+        {
+          "op": "draw",
+          "amount": 3
+        },
+        {
+          "op": "relax",
+          "amount": 5
+        }
+      ]
+    }
+  },
+  {
+    "id": "R3-P02-37",
+    "name_key": "R3-P02-37",
+    "type": "strategy",
+    "rarity": "advanced",
+    "tags": [
+      "有限透支"
+    ],
+    "cost": 0,
+    "target": "self",
+    "exhaust": true,
+    "effects": [
+      {
+        "op": "draw",
+        "amount": 2
+      },
+      {
+        "op": "lose_vitality",
+        "amount": 2,
+        "can_kill": true
+      }
+    ],
+    "upgrade": {
+      "cost": 0,
+      "effects": [
+        {
+          "op": "draw",
+          "amount": 3
+        },
+        {
+          "op": "lose_vitality",
+          "amount": 2,
+          "can_kill": true
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P02",
+    "permanent": true,
+    "flags": {
+      "innate": false,
+      "retain": false,
+      "exhaust": true,
+      "unique": false,
+      "upgradable": true,
+      "paper_record": true
+    },
+    "limits": {},
+    "requirements": [
+      {
+        "kind": "paper_name_turn_unused"
+      }
+    ]
+  },
+  {
+    "id": "R3-P02-38",
+    "name_key": "R3-P02-38",
+    "type": "strategy",
+    "rarity": "advanced",
+    "tags": [
+      "有限专注"
+    ],
+    "cost": 0,
+    "target": "self",
+    "exhaust": true,
+    "effects": [
+      {
+        "op": "gain_focus",
+        "amount": 2
+      },
+      {
+        "op": "lose_vitality",
+        "amount": 3,
+        "can_kill": true
+      }
+    ],
+    "upgrade": {
+      "cost": 0,
+      "effects": [
+        {
+          "op": "gain_focus",
+          "amount": 3
+        },
+        {
+          "op": "lose_vitality",
+          "amount": 3,
+          "can_kill": true
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P02",
+    "permanent": true,
+    "flags": {
+      "innate": false,
+      "retain": false,
+      "exhaust": true,
+      "unique": false,
+      "upgradable": true,
+      "paper_record": true
+    },
+    "limits": {},
+    "requirements": [
+      {
+        "kind": "paper_name_turn_unused"
+      }
+    ]
+  },
+  {
+    "id": "R3-P02-39",
+    "name_key": "R3-P02-39",
+    "type": "strategy",
+    "rarity": "advanced",
+    "tags": [
+      "重新开题"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": true,
+    "effects": [
+      {
+        "op": "retrieve",
+        "card_kind": "strategy",
+        "base_cost_min": 0,
+        "amount": 1,
+        "zone": "discard",
+        "permanent_only": true,
+        "card_id": "R3-P02-01"
+      }
+    ],
+    "upgrade": {
+      "cost": 0,
+      "effects": [
+        {
+          "op": "retrieve",
+          "card_kind": "strategy",
+          "base_cost_min": 0,
+          "amount": 1,
+          "zone": "discard",
+          "permanent_only": true,
+          "card_id": "R3-P02-01"
+        }
+      ]
+    },
+    "v3": true,
+    "owner": "P02",
+    "permanent": true,
+    "flags": {
+      "innate": false,
+      "retain": false,
+      "exhaust": true,
+      "unique": false,
+      "upgradable": true,
+      "paper_record": true
+    },
+    "limits": {},
+    "requirements": [
+      {
+        "kind": "paper_closed"
+      },
+      {
+        "kind": "paper_name_turn_unused"
+      }
+    ]
+  },
+  {
+    "id": "R3-P02-40",
+    "name_key": "R3-P02-40",
+    "type": "ability",
+    "rarity": "rare",
+    "tags": [
+      "双路线续航"
+    ],
+    "cost": 1,
+    "target": "self",
+    "exhaust": true,
+    "effects": [],
+    "upgrade": {
+      "cost": 1,
+      "effects": []
+    },
+    "v3": true,
+    "owner": "P02",
+    "permanent": true,
+    "flags": {
+      "innate": false,
+      "retain": false,
+      "exhaust": false,
+      "unique": false,
+      "upgradable": true,
+      "paper_record": true
+    },
+    "limits": {},
+    "requirements": [
+      {
+        "kind": "paper_name_turn_unused"
+      }
+    ],
+    "ability": {
+      "activate": "next_round",
+      "stack": "unique_name",
+      "condition": {},
+      "triggers": [
+        {
+          "on": "first_unused_permanent_card_resolved",
+          "effects": [
+            {
+              "op": "relax",
+              "amount": 3,
+              "condition": {
+                "all": [
+                  {
+                    "kind": "paper_open"
+                  },
+                  {
+                    "kind": "paper_name_unused"
+                  }
+                ]
+              },
+              "limit": "once_per_turn"
+            }
+          ],
+          "upgrade_effects": [
+            {
+              "op": "relax",
+              "amount": 5,
+              "condition": {
+                "all": [
+                  {
+                    "kind": "paper_open"
+                  },
+                  {
+                    "kind": "paper_name_unused"
+                  }
+                ]
+              },
+              "limit": "once_per_turn"
+            }
+          ],
+          "limit": "",
+          "no_compound_reaction": false
+        }
+      ]
+    }
+  },
+  {
+    "id": "R3-T201",
+    "name_key": "R3-T201",
+    "type": "work",
+    "rarity": "token",
+    "tags": [
+      "唯一发表"
+    ],
+    "cost": 2,
+    "target": "all_tasks",
+    "exhaust": false,
+    "effects": [
+      {
+        "op": "paper_publish"
+      }
+    ],
+    "upgrade": {
+      "cost": 2,
+      "effects": []
+    },
+    "v3": true,
+    "owner": "P02",
+    "permanent": false,
+    "flags": {
+      "innate": false,
+      "retain": true,
+      "exhaust": false,
+      "unique": true,
+      "upgradable": false,
+      "paper_record": false,
+      "permanent": false
+    },
+    "limits": {},
+    "requirements": [
+      {
+        "kind": "paper_open"
+      },
+      {
+        "kind": "paper_name_turn_unused"
+      }
+    ]
+  },
+  {
+    "id": "R3-T202",
+    "name_key": "R3-T202",
+    "type": "strategy",
+    "rarity": "token",
+    "tags": [
+      "有限借名"
+    ],
+    "cost": 0,
+    "target": "self",
+    "exhaust": true,
+    "effects": [
+      {
+        "op": "draw",
+        "amount": 1
+      }
+    ],
+    "upgrade": {
+      "cost": 0,
+      "effects": []
+    },
+    "v3": true,
+    "owner": "P02",
+    "permanent": false,
+    "flags": {
+      "innate": false,
+      "retain": false,
+      "exhaust": true,
+      "unique": false,
+      "upgradable": false,
+      "paper_record": true,
+      "permanent": false
+    },
+    "limits": {},
+    "requirements": [
+      {
+        "kind": "paper_name_turn_unused"
+      }
+    ]
+  }
+]

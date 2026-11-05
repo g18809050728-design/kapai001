@@ -5,12 +5,7 @@ const ELITE_EXPECTATIONS := {
 	"E02": {"ddl": 8, "tasks": ["E02"], "exam_flags": ["independent_answer"]},
 	"E03": {"ddl": 9, "tasks": ["E03"], "exam_flags": []},
 	"E04": {"ddl": 7, "tasks": ["E04_1", "E04_2", "E04_3"], "exam_flags": ["independent_answer"]},
-	"E05":
-	{
-		"ddl": 10,
-		"tasks": ["E05"],
-		"exam_flags": ["independent_answer", "fixed_exam_room"]
-	},
+	"E05": {"ddl": 10, "tasks": ["E05"], "exam_flags": ["independent_answer", "fixed_exam_room"]},
 	"E06": {"ddl": 8, "tasks": ["E06"], "exam_flags": ["independent_answer"]},
 	"E07": {"ddl": 6, "tasks": ["E07"], "exam_flags": ["independent_answer"]},
 	"Q0A": {"ddl": 8, "tasks": ["Q0A_1", "Q0A_2", "Q0A_3"], "exam_flags": []},
@@ -51,9 +46,7 @@ func run() -> Array[String]:
 	return failures
 
 
-func _check_opening(
-	engine: BattleEngine, rng_state: Dictionary, failures: Array[String]
-) -> void:
+func _check_opening(engine: BattleEngine, rng_state: Dictionary, failures: Array[String]) -> void:
 	var deck := _deck("K01", 10)
 	for encounter_id in ELITE_EXPECTATIONS:
 		var expected: Dictionary = ELITE_EXPECTATIONS[encounter_id]
@@ -89,18 +82,22 @@ func _check_opening(
 func _check_content_contract(catalog: ContentDB, failures: Array[String]) -> void:
 	var e01 := _task(catalog, "E01")
 	_check(
-		e01.phases.size() == 3
-		and e01.phases[0].work_max == 16
-		and e01.phases[1].work_max == 22
-		and e01.phases[2].work_max == 28,
+		(
+			e01.phases.size() == 3
+			and e01.phases[0].work_max == 16
+			and e01.phases[1].work_max == 22
+			and e01.phases[2].work_max == 28
+		),
 		"E01 keeps the 16/22/28 phase totals",
 		failures
 	)
 	if e01.phases.size() == 3:
 		var anxiety: Dictionary = e01.phases[0].intents[1]
 		_check(
-			int(anxiety.get("shield", 0)) == 6
-			and str(anxiety.get("gain_status", {}).get("status", "")) == "anxiety",
+			(
+				int(anxiety.get("shield", 0)) == 6
+				and str(anxiety.get("gain_status", {}).get("status", "")) == "anxiety"
+			),
 			"E01 phase 1 B shields and applies anxiety",
 			failures
 		)
@@ -114,8 +111,10 @@ func _check_content_contract(catalog: ContentDB, failures: Array[String]) -> voi
 	if e02.phases.size() == 2:
 		var interrogation: Dictionary = e02.phases[1].intents[1]
 		_check(
-			str(interrogation.get("add_card", {}).get("card", "")) == "X01"
-			and str(interrogation.get("add_card", {}).get("zone", "")) == "discard",
+			(
+				str(interrogation.get("add_card", {}).get("card", "")) == "X01"
+				and str(interrogation.get("add_card", {}).get("zone", "")) == "discard"
+			),
 			"E02 interrogation B injects X01 into the discard pile",
 			failures
 		)
@@ -135,8 +134,7 @@ func _check_content_contract(catalog: ContentDB, failures: Array[String]) -> voi
 	if e05.phases.size() == 3:
 		var interview: Dictionary = e05.phases[2].intents[1]
 		_check(
-			int(interview.get("pressure", 0)) == 7
-			and int(interview.get("pressure_times", 1)) == 2,
+			int(interview.get("pressure", 0)) == 7 and int(interview.get("pressure_times", 1)) == 2,
 			"E05 interview B is a two-segment pressure",
 			failures
 		)
@@ -144,21 +142,23 @@ func _check_content_contract(catalog: ContentDB, failures: Array[String]) -> voi
 	if e06.phases.size() == 2:
 		var intro: Dictionary = e06.phases[0].intents[0]
 		_check(
-			str(intro.get("add_card", {}).get("card", "")) == "X02"
-			and str(intro.get("add_card", {}).get("zone", "")) == "hand",
+			(
+				str(intro.get("add_card", {}).get("card", "")) == "X02"
+				and str(intro.get("add_card", {}).get("zone", "")) == "hand"
+			),
 			"E06 puts an interview question into the hand",
 			failures
 		)
 	var e04 := _encounter(catalog, "E04")
 	_check(e04.members.size() == 3, "E04 starts three parallel tasks", failures)
-	_check(
-		not e04.has("initial_members"), "E04 places every member at battle start", failures
-	)
+	_check(not e04.has("initial_members"), "E04 places every member at battle start", failures)
 	var q0c := _task(catalog, "Q0C")
 	var q0d := _task(catalog, "Q0D")
 	_check(
-		_first_phase(q0c).get("intent_loop", "") == "clamp"
-		and _first_phase(q0d).get("intent_loop", "") == "clamp",
+		(
+			_first_phase(q0c).get("intent_loop", "") == "clamp"
+			and _first_phase(q0d).get("intent_loop", "") == "clamp"
+		),
 		"Q0C/Q0D repeat the buff intent after the opening burst",
 		failures
 	)
@@ -176,8 +176,10 @@ func _check_content_contract(catalog: ContentDB, failures: Array[String]) -> voi
 		failures
 	)
 	_check(
-		not bool(_task(catalog, "Q0E_2").get("victory_required", true))
-		and not bool(_task(catalog, "Q0E_3").get("victory_required", true)),
+		(
+			not bool(_task(catalog, "Q0E_2").get("victory_required", true))
+			and not bool(_task(catalog, "Q0E_3").get("victory_required", true))
+		),
 		"Q0E extra requirements are optional for victory",
 		failures
 	)
@@ -186,8 +188,10 @@ func _check_content_contract(catalog: ContentDB, failures: Array[String]) -> voi
 	if q0b_intents.size() >= 3:
 		var transform: Dictionary = q0b_intents[2]
 		_check(
-			str(transform.get("transform_task", {}).get("task", "")) == "Q0B_1"
-			and int(transform.get("ddl_bonus", 0)) == 1,
+			(
+				str(transform.get("transform_task", {}).get("task", "")) == "Q0B_1"
+				and int(transform.get("ddl_bonus", 0)) == 1
+			),
 			"Q0B_2 converts into the defense form and extends the deadline",
 			failures
 		)
@@ -195,11 +199,7 @@ func _check_content_contract(catalog: ContentDB, failures: Array[String]) -> voi
 		_check(false, "Q0B_2 keeps three intents", failures)
 	var confusion := catalog.get_definition("status", "confusion")
 	var brainstorm := catalog.get_definition("status", "brainstorm")
-	_check(
-		confusion.ok and confusion.data.target == "task",
-		"confusion is a task buff",
-		failures
-	)
+	_check(confusion.ok and confusion.data.target == "task", "confusion is a task buff", failures)
 	_check(
 		brainstorm.ok and brainstorm.data.numeric_rule_key == "brainstorm",
 		"brainstorm is a numeric task buff",
@@ -260,8 +260,13 @@ func _check_attention_elite(
 	_check(state.player.vitality == TEST_VITALITY - 5, "E01 phase 1 A pressures for 5", failures)
 	_check(state.round_index == 2, "E01 advances to round 2", failures)
 	_check(
-		int(state.tasks[0].intent_snapshot.get("shield", 0)) == 6
-		and str(state.tasks[0].intent_snapshot.get("gain_status", {}).get("status", "")) == "anxiety",
+		(
+			int(state.tasks[0].intent_snapshot.get("shield", 0)) == 6
+			and (
+				str(state.tasks[0].intent_snapshot.get("gain_status", {}).get("status", ""))
+				== "anxiety"
+			)
+		),
 		"E01 announces the anxiety turn before it resolves",
 		failures
 	)
@@ -333,8 +338,7 @@ func _check_unit_scaling(
 	var played := engine.apply(
 		state,
 		ActionDraft.new(
-			GameConstants.ACTION_PLAY_CARD,
-			{"card_instance_id": cooperation_card, "target_ids": []}
+			GameConstants.ACTION_PLAY_CARD, {"card_instance_id": cooperation_card, "target_ids": []}
 		),
 		begun.data.rng_state
 	)
@@ -362,15 +366,13 @@ func _check_unit_scaling(
 	for event: RuleEvent in ended.data.events:
 		if event.type == &"completion_applied":
 			cooperation_segments.append(event.data)
-	_check(
-		cooperation_segments.size() == 1,
-		"E03 unit applies one cooperation segment",
-		failures
-	)
+	_check(cooperation_segments.size() == 1, "E03 unit applies one cooperation segment", failures)
 	if cooperation_segments.size() == 1:
 		_check(
-			int(cooperation_segments[0].get("shield_before", -1)) == 6
-			and int(cooperation_segments[0].get("shield_after", -1)) == 4,
+			(
+				int(cooperation_segments[0].get("shield_before", -1)) == 6
+				and int(cooperation_segments[0].get("shield_after", -1)) == 4
+			),
 			"E03 cooperation strips two shield points from the task",
 			failures
 		)
@@ -412,8 +414,10 @@ func _check_transformation(
 		return
 	_check(int(state.tasks[0].work_max) == 15, "Q0B defense form starts a 15 work bar", failures)
 	_check(
-		int(state.tasks[0].intent_snapshot.get("shield", 0)) == 5
-		and int(state.tasks[0].intent_snapshot.get("work_restore", 0)) == 5,
+		(
+			int(state.tasks[0].intent_snapshot.get("shield", 0)) == 5
+			and int(state.tasks[0].intent_snapshot.get("work_restore", 0)) == 5
+		),
 		"Q0B defense form opens on the shield/restore intent",
 		failures
 	)
@@ -425,9 +429,7 @@ func _check_transformation(
 	)
 
 
-func _check_summons(
-	engine: BattleEngine, rng_state: Dictionary, failures: Array[String]
-) -> void:
+func _check_summons(engine: BattleEngine, rng_state: Dictionary, failures: Array[String]) -> void:
 	var begun := _begin(engine, "Q0E", _deck("K01", 10), rng_state)
 	_check(begun.ok, "Q0E starts for the summon check", failures)
 	if not begun.ok:
@@ -450,8 +452,7 @@ func _check_summons(
 	for task: Dictionary in state.tasks:
 		if str(task.definition_id) == "Q0E_2":
 			_check(
-				int(task.work_remaining) == 15
-				and int(task.intent_snapshot.get("shield", 0)) == 8,
+				int(task.work_remaining) == 15 and int(task.intent_snapshot.get("shield", 0)) == 8,
 				"Q0E extra requirement 1 opens on its shield intent",
 				failures
 			)
@@ -547,9 +548,7 @@ func _check_burden_injection(
 			questions += 1
 	_check(questions == 1, "E06 adds one interview question to the hand", failures)
 	_check(
-		state.player.vitality == TEST_VITALITY - 6,
-		"E06 opening intent pressures for 6",
-		failures
+		state.player.vitality == TEST_VITALITY - 6, "E06 opening intent pressures for 6", failures
 	)
 
 
@@ -570,8 +569,10 @@ func _check_shield_window(
 		failures
 	)
 	_check(
-		int(first.data.state.tasks[0].shield) == 0
-		and int(first.data.state.tasks[0].intent_snapshot.get("pressure", 0)) == 5,
+		(
+			int(first.data.state.tasks[0].shield) == 0
+			and int(first.data.state.tasks[0].intent_snapshot.get("pressure", 0)) == 5
+		),
 		"E02 announces the empty pressure round after the shield",
 		failures
 	)
@@ -649,9 +650,7 @@ func _check_codec_roundtrip(
 				_check(
 					(
 						SnapshotCodec.canonical_json(resumed_next.data.state.to_dictionary())
-						== SnapshotCodec.canonical_json(
-							control_next.data.state.to_dictionary()
-						)
+						== SnapshotCodec.canonical_json(control_next.data.state.to_dictionary())
 					),
 					"resumed summoned battle matches the uninterrupted control",
 					failures
@@ -684,9 +683,7 @@ func _check_codec_roundtrip(
 			)
 
 
-func _check_soak(
-	engine: BattleEngine, rng_state: Dictionary, failures: Array[String]
-) -> void:
+func _check_soak(engine: BattleEngine, rng_state: Dictionary, failures: Array[String]) -> void:
 	for encounter_id in ELITE_EXPECTATIONS:
 		var begun := _begin(engine, encounter_id, _deck("K01", 10), rng_state)
 		if not begun.ok:
@@ -701,11 +698,7 @@ func _check_soak(
 				break
 			var encoded := BattleCodec.encode(step.data.state)
 			if not encoded.ok:
-				_check(
-					false,
-					"%s stays saveable after round %s" % [encounter_id, rounds],
-					failures
-				)
+				_check(false, "%s stays saveable after round %s" % [encounter_id, rounds], failures)
 				break
 		_check(step.ok, encounter_id + " soak turns never fail", failures)
 		if not step.ok:
@@ -719,9 +712,11 @@ func _check_soak(
 		if state.outcome == null:
 			continue
 		_check(
-			str(state.outcome.result) == "lost"
-			and str(state.outcome.reason) == "deadline_expired"
-			and state.ddl == 0,
+			(
+				str(state.outcome.result) == "lost"
+				and str(state.outcome.reason) == "deadline_expired"
+				and state.ddl == 0
+			),
 			encounter_id + " ends on deadline expiry without player damage",
 			failures
 		)
@@ -755,13 +750,8 @@ func _begin(
 
 
 func _end_turn(engine: BattleEngine, step: GameResult) -> GameResult:
-	return (
-		engine
-		. apply(
-			step.data.state,
-			ActionDraft.new(GameConstants.ACTION_END_TURN, {}),
-			step.data.rng_state
-		)
+	return engine.apply(
+		step.data.state, ActionDraft.new(GameConstants.ACTION_END_TURN, {}), step.data.rng_state
 	)
 
 

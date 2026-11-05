@@ -28,6 +28,7 @@ var active_encounter_id: String
 var outcome: String
 var awaiting_ending: bool
 var ending_draft: Dictionary
+var campaign: Dictionary
 
 
 func _init(values: Dictionary = {}) -> void:
@@ -74,6 +75,7 @@ func _init(values: Dictionary = {}) -> void:
 	outcome = values.get("outcome", "")
 	awaiting_ending = values.get("awaiting_ending", false)
 	ending_draft = values.get("ending_draft", {}).duplicate(true)
+	campaign = values.get("campaign", {}).duplicate(true)
 
 
 func copy() -> RunState:
@@ -93,7 +95,7 @@ func copy_for_write() -> RunState:
 
 
 func to_dictionary() -> Dictionary:
-	return {
+	var data := {
 		"run_id": run_id,
 		"character_id": character_id,
 		"ruleset_id": ruleset_id,
@@ -123,6 +125,9 @@ func to_dictionary() -> Dictionary:
 		"awaiting_ending": awaiting_ending,
 		"ending_draft": ending_draft.duplicate(true),
 	}
+	if not campaign.is_empty():
+		data["campaign"] = campaign.duplicate(true)
+	return data
 
 
 func find_node(node_id: String) -> RunNodeState:
@@ -136,7 +141,10 @@ func reachable_node_ids() -> Array[String]:
 	var result: Array[String] = []
 	if not outcome.is_empty() or awaiting_ending or settlement != null:
 		return result
-	if current_node_id.is_empty():
+	if not campaign.get("pending", {}).is_empty():
+		return result
+	var current := find_node(current_node_id)
+	if current_node_id.is_empty() or (CampaignService.enabled(self) and current != null and current.term < term):
 		for node in nodes:
 			if node.term == term and node.layer == 1 and node.status == "pending":
 				result.append(node.node_id)
@@ -201,7 +209,15 @@ func validate(relic_slots: int = 2147483647) -> Array[String]:
 	if max_term > 8 or nodes.is_empty():
 		issues.append("run map term count is invalid")
 		return issues
-	var expected := RunMap.build(run_id, max_term)
+	var expected := CampaignMap.build(run_id) if CampaignService.enabled(self) else RunMap.build(run_id, max_term)
+	if CampaignService.enabled(self):
+		CampaignService.validate(campaign, issues)
+		if not campaign.get("pending", {}).is_empty():
+			var source := find_node(str(campaign.pending.get("source_node_id", "")))
+			if source == null or source.node_id != current_node_id:
+				issues.append("campaign pending source invalid")
+	elif not campaign.is_empty():
+		issues.append("legacy run cannot contain campaign state")
 	if nodes.size() != expected.size():
 		issues.append("run map is incomplete")
 	for template in expected:

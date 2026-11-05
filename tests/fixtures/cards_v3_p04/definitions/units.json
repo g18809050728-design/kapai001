@@ -1,0 +1,33 @@
+[
+  {
+    "id": "R3-U01",
+    "name_key": "unit.R3-U01.name",
+    "vitality": 3,
+    "cooperation": 2,
+    "guard": false,
+    "support": {
+      "kind": "none"
+    }
+  },
+  {
+    "id": "R3-U02",
+    "name_key": "unit.R3-U02.name",
+    "vitality": 4,
+    "cooperation": 1,
+    "guard": false,
+    "support": {
+      "kind": "relax",
+      "amount": 2
+    }
+  },
+  {
+    "id": "R3-U03",
+    "name_key": "unit.R3-U03.name",
+    "vitality": 5,
+    "cooperation": 3,
+    "guard": true,
+    "support": {
+      "kind": "none"
+    }
+  }
+]

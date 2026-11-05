@@ -1,0 +1,2303 @@
+{
+  "version": 1,
+  "columns": 2,
+  "rows": 4,
+  "requested_size": [
+    1024,
+    1536
+  ],
+  "crop_size": [
+    480,
+    360
+  ],
+  "batches": [
+    {
+      "batch_id": "R3-ATLAS-01",
+      "prompt_file": "docs/art/atlas-prompts-v3/R3-ATLAS-01.txt",
+      "prompt_sha256": "0c727d06d260a99c86e67b717f16826238559e168c8c3c64a3db86c404373e31",
+      "source_file": "output/imagegen/card-atlas-v3/R3-ATLAS-01.png",
+      "slots": [
+        {
+          "slot": 1,
+          "row": 1,
+          "column": 1,
+          "card_id": "R3-P01-01",
+          "crop": [
+            16,
+            12,
+            496,
+            372
+          ]
+        },
+        {
+          "slot": 2,
+          "row": 1,
+          "column": 2,
+          "card_id": "R3-P01-02",
+          "crop": [
+            528,
+            12,
+            1008,
+            372
+          ]
+        },
+        {
+          "slot": 3,
+          "row": 2,
+          "column": 1,
+          "card_id": "R3-P01-03",
+          "crop": [
+            16,
+            396,
+            496,
+            756
+          ]
+        },
+        {
+          "slot": 4,
+          "row": 2,
+          "column": 2,
+          "card_id": "R3-P01-04",
+          "crop": [
+            528,
+            396,
+            1008,
+            756
+          ]
+        },
+        {
+          "slot": 5,
+          "row": 3,
+          "column": 1,
+          "card_id": "R3-P01-05",
+          "crop": [
+            16,
+            780,
+            496,
+            1140
+          ]
+        },
+        {
+          "slot": 6,
+          "row": 3,
+          "column": 2,
+          "card_id": "R3-P01-06",
+          "crop": [
+            528,
+            780,
+            1008,
+            1140
+          ]
+        },
+        {
+          "slot": 7,
+          "row": 4,
+          "column": 1,
+          "card_id": "R3-P01-07",
+          "crop": [
+            16,
+            1164,
+            496,
+            1524
+          ]
+        },
+        {
+          "slot": 8,
+          "row": 4,
+          "column": 2,
+          "card_id": "R3-P01-08",
+          "crop": [
+            528,
+            1164,
+            1008,
+            1524
+          ]
+        }
+      ]
+    },
+    {
+      "batch_id": "R3-ATLAS-02",
+      "prompt_file": "docs/art/atlas-prompts-v3/R3-ATLAS-02.txt",
+      "prompt_sha256": "fc735979b5ef5d42ea321ea9388e96778acee1f445277dc0e5f361dc885b58a3",
+      "source_file": "output/imagegen/card-atlas-v3/R3-ATLAS-02.png",
+      "slots": [
+        {
+          "slot": 1,
+          "row": 1,
+          "column": 1,
+          "card_id": "R3-P01-09",
+          "crop": [
+            16,
+            12,
+            496,
+            372
+          ]
+        },
+        {
+          "slot": 2,
+          "row": 1,
+          "column": 2,
+          "card_id": "R3-P01-10",
+          "crop": [
+            528,
+            12,
+            1008,
+            372
+          ]
+        },
+        {
+          "slot": 3,
+          "row": 2,
+          "column": 1,
+          "card_id": "R3-P01-11",
+          "crop": [
+            16,
+            396,
+            496,
+            756
+          ]
+        },
+        {
+          "slot": 4,
+          "row": 2,
+          "column": 2,
+          "card_id": "R3-P01-12",
+          "crop": [
+            528,
+            396,
+            1008,
+            756
+          ]
+        },
+        {
+          "slot": 5,
+          "row": 3,
+          "column": 1,
+          "card_id": "R3-P01-13",
+          "crop": [
+            16,
+            780,
+            496,
+            1140
+          ]
+        },
+        {
+          "slot": 6,
+          "row": 3,
+          "column": 2,
+          "card_id": "R3-P01-14",
+          "crop": [
+            528,
+            780,
+            1008,
+            1140
+          ]
+        },
+        {
+          "slot": 7,
+          "row": 4,
+          "column": 1,
+          "card_id": "R3-P01-15",
+          "crop": [
+            16,
+            1164,
+            496,
+            1524
+          ]
+        },
+        {
+          "slot": 8,
+          "row": 4,
+          "column": 2,
+          "card_id": "R3-P01-16",
+          "crop": [
+            528,
+            1164,
+            1008,
+            1524
+          ]
+        }
+      ]
+    },
+    {
+      "batch_id": "R3-ATLAS-03",
+      "prompt_file": "docs/art/atlas-prompts-v3/R3-ATLAS-03.txt",
+      "prompt_sha256": "378d21f14c4b4250d303ebbc32938060fedb0a374a5afadad11939d5bad66f46",
+      "source_file": "output/imagegen/card-atlas-v3/R3-ATLAS-03.png",
+      "slots": [
+        {
+          "slot": 1,
+          "row": 1,
+          "column": 1,
+          "card_id": "R3-P01-17",
+          "crop": [
+            16,
+            12,
+            496,
+            372
+          ]
+        },
+        {
+          "slot": 2,
+          "row": 1,
+          "column": 2,
+          "card_id": "R3-P01-18",
+          "crop": [
+            528,
+            12,
+            1008,
+            372
+          ]
+        },
+        {
+          "slot": 3,
+          "row": 2,
+          "column": 1,
+          "card_id": "R3-P01-19",
+          "crop": [
+            16,
+            396,
+            496,
+            756
+          ]
+        },
+        {
+          "slot": 4,
+          "row": 2,
+          "column": 2,
+          "card_id": "R3-P01-20",
+          "crop": [
+            528,
+            396,
+            1008,
+            756
+          ]
+        },
+        {
+          "slot": 5,
+          "row": 3,
+          "column": 1,
+          "card_id": "R3-P01-21",
+          "crop": [
+            16,
+            780,
+            496,
+            1140
+          ]
+        },
+        {
+          "slot": 6,
+          "row": 3,
+          "column": 2,
+          "card_id": "R3-P01-22",
+          "crop": [
+            528,
+            780,
+            1008,
+            1140
+          ]
+        },
+        {
+          "slot": 7,
+          "row": 4,
+          "column": 1,
+          "card_id": "R3-P01-23",
+          "crop": [
+            16,
+            1164,
+            496,
+            1524
+          ]
+        },
+        {
+          "slot": 8,
+          "row": 4,
+          "column": 2,
+          "card_id": "R3-P01-24",
+          "crop": [
+            528,
+            1164,
+            1008,
+            1524
+          ]
+        }
+      ]
+    },
+    {
+      "batch_id": "R3-ATLAS-04",
+      "prompt_file": "docs/art/atlas-prompts-v3/R3-ATLAS-04.txt",
+      "prompt_sha256": "5f59c954462b36b376503b13030d0757526046bb467cbb4dd1d06f25f7a14e3b",
+      "source_file": "output/imagegen/card-atlas-v3/R3-ATLAS-04.png",
+      "slots": [
+        {
+          "slot": 1,
+          "row": 1,
+          "column": 1,
+          "card_id": "R3-P01-25",
+          "crop": [
+            16,
+            12,
+            496,
+            372
+          ]
+        },
+        {
+          "slot": 2,
+          "row": 1,
+          "column": 2,
+          "card_id": "R3-P01-26",
+          "crop": [
+            528,
+            12,
+            1008,
+            372
+          ]
+        },
+        {
+          "slot": 3,
+          "row": 2,
+          "column": 1,
+          "card_id": "R3-P01-27",
+          "crop": [
+            16,
+            396,
+            496,
+            756
+          ]
+        },
+        {
+          "slot": 4,
+          "row": 2,
+          "column": 2,
+          "card_id": "R3-P01-28",
+          "crop": [
+            528,
+            396,
+            1008,
+            756
+          ]
+        },
+        {
+          "slot": 5,
+          "row": 3,
+          "column": 1,
+          "card_id": "R3-P01-29",
+          "crop": [
+            16,
+            780,
+            496,
+            1140
+          ]
+        },
+        {
+          "slot": 6,
+          "row": 3,
+          "column": 2,
+          "card_id": "R3-P01-30",
+          "crop": [
+            528,
+            780,
+            1008,
+            1140
+          ]
+        },
+        {
+          "slot": 7,
+          "row": 4,
+          "column": 1,
+          "card_id": "R3-P01-31",
+          "crop": [
+            16,
+            1164,
+            496,
+            1524
+          ]
+        },
+        {
+          "slot": 8,
+          "row": 4,
+          "column": 2,
+          "card_id": "R3-P01-32",
+          "crop": [
+            528,
+            1164,
+            1008,
+            1524
+          ]
+        }
+      ]
+    },
+    {
+      "batch_id": "R3-ATLAS-05",
+      "prompt_file": "docs/art/atlas-prompts-v3/R3-ATLAS-05.txt",
+      "prompt_sha256": "5f0848e81e3e28b85d1ec58d9d09e1bd5da885a627dc304eb4967feeb5a3f1d9",
+      "source_file": "output/imagegen/card-atlas-v3/R3-ATLAS-05.png",
+      "slots": [
+        {
+          "slot": 1,
+          "row": 1,
+          "column": 1,
+          "card_id": "R3-P01-33",
+          "crop": [
+            16,
+            12,
+            496,
+            372
+          ]
+        },
+        {
+          "slot": 2,
+          "row": 1,
+          "column": 2,
+          "card_id": "R3-P01-34",
+          "crop": [
+            528,
+            12,
+            1008,
+            372
+          ]
+        },
+        {
+          "slot": 3,
+          "row": 2,
+          "column": 1,
+          "card_id": "R3-P01-35",
+          "crop": [
+            16,
+            396,
+            496,
+            756
+          ]
+        },
+        {
+          "slot": 4,
+          "row": 2,
+          "column": 2,
+          "card_id": "R3-P01-36",
+          "crop": [
+            528,
+            396,
+            1008,
+            756
+          ]
+        },
+        {
+          "slot": 5,
+          "row": 3,
+          "column": 1,
+          "card_id": "R3-P01-37",
+          "crop": [
+            16,
+            780,
+            496,
+            1140
+          ]
+        },
+        {
+          "slot": 6,
+          "row": 3,
+          "column": 2,
+          "card_id": "R3-P01-38",
+          "crop": [
+            528,
+            780,
+            1008,
+            1140
+          ]
+        },
+        {
+          "slot": 7,
+          "row": 4,
+          "column": 1,
+          "card_id": "R3-P01-39",
+          "crop": [
+            16,
+            1164,
+            496,
+            1524
+          ]
+        },
+        {
+          "slot": 8,
+          "row": 4,
+          "column": 2,
+          "card_id": "R3-P01-40",
+          "crop": [
+            528,
+            1164,
+            1008,
+            1524
+          ]
+        }
+      ]
+    },
+    {
+      "batch_id": "R3-ATLAS-06",
+      "prompt_file": "docs/art/atlas-prompts-v3/R3-ATLAS-06.txt",
+      "prompt_sha256": "168fc02818c4999ad0ff63a4f3cedd798ed481b781d8a086cf80076bf74366a1",
+      "source_file": "output/imagegen/card-atlas-v3/R3-ATLAS-06.png",
+      "slots": [
+        {
+          "slot": 1,
+          "row": 1,
+          "column": 1,
+          "card_id": "R3-P02-01",
+          "crop": [
+            16,
+            12,
+            496,
+            372
+          ]
+        },
+        {
+          "slot": 2,
+          "row": 1,
+          "column": 2,
+          "card_id": "R3-P02-02",
+          "crop": [
+            528,
+            12,
+            1008,
+            372
+          ]
+        },
+        {
+          "slot": 3,
+          "row": 2,
+          "column": 1,
+          "card_id": "R3-P02-03",
+          "crop": [
+            16,
+            396,
+            496,
+            756
+          ]
+        },
+        {
+          "slot": 4,
+          "row": 2,
+          "column": 2,
+          "card_id": "R3-P02-04",
+          "crop": [
+            528,
+            396,
+            1008,
+            756
+          ]
+        },
+        {
+          "slot": 5,
+          "row": 3,
+          "column": 1,
+          "card_id": "R3-P02-05",
+          "crop": [
+            16,
+            780,
+            496,
+            1140
+          ]
+        },
+        {
+          "slot": 6,
+          "row": 3,
+          "column": 2,
+          "card_id": "R3-P02-06",
+          "crop": [
+            528,
+            780,
+            1008,
+            1140
+          ]
+        },
+        {
+          "slot": 7,
+          "row": 4,
+          "column": 1,
+          "card_id": "R3-P02-07",
+          "crop": [
+            16,
+            1164,
+            496,
+            1524
+          ]
+        },
+        {
+          "slot": 8,
+          "row": 4,
+          "column": 2,
+          "card_id": "R3-P02-08",
+          "crop": [
+            528,
+            1164,
+            1008,
+            1524
+          ]
+        }
+      ]
+    },
+    {
+      "batch_id": "R3-ATLAS-07",
+      "prompt_file": "docs/art/atlas-prompts-v3/R3-ATLAS-07.txt",
+      "prompt_sha256": "73bdae54155cb156d83c41d988a3135132fadafca1531ef73667db1a47170fc7",
+      "source_file": "output/imagegen/card-atlas-v3/R3-ATLAS-07.png",
+      "slots": [
+        {
+          "slot": 1,
+          "row": 1,
+          "column": 1,
+          "card_id": "R3-P02-09",
+          "crop": [
+            16,
+            12,
+            496,
+            372
+          ]
+        },
+        {
+          "slot": 2,
+          "row": 1,
+          "column": 2,
+          "card_id": "R3-P02-10",
+          "crop": [
+            528,
+            12,
+            1008,
+            372
+          ]
+        },
+        {
+          "slot": 3,
+          "row": 2,
+          "column": 1,
+          "card_id": "R3-P02-11",
+          "crop": [
+            16,
+            396,
+            496,
+            756
+          ]
+        },
+        {
+          "slot": 4,
+          "row": 2,
+          "column": 2,
+          "card_id": "R3-P02-12",
+          "crop": [
+            528,
+            396,
+            1008,
+            756
+          ]
+        },
+        {
+          "slot": 5,
+          "row": 3,
+          "column": 1,
+          "card_id": "R3-P02-13",
+          "crop": [
+            16,
+            780,
+            496,
+            1140
+          ]
+        },
+        {
+          "slot": 6,
+          "row": 3,
+          "column": 2,
+          "card_id": "R3-P02-14",
+          "crop": [
+            528,
+            780,
+            1008,
+            1140
+          ]
+        },
+        {
+          "slot": 7,
+          "row": 4,
+          "column": 1,
+          "card_id": "R3-P02-15",
+          "crop": [
+            16,
+            1164,
+            496,
+            1524
+          ]
+        },
+        {
+          "slot": 8,
+          "row": 4,
+          "column": 2,
+          "card_id": "R3-P02-16",
+          "crop": [
+            528,
+            1164,
+            1008,
+            1524
+          ]
+        }
+      ]
+    },
+    {
+      "batch_id": "R3-ATLAS-08",
+      "prompt_file": "docs/art/atlas-prompts-v3/R3-ATLAS-08.txt",
+      "prompt_sha256": "9e9c029b0fdc2a83dc77fb7e9c09905da74c463e0886db7f29028ad06a6b9841",
+      "source_file": "output/imagegen/card-atlas-v3/R3-ATLAS-08.png",
+      "slots": [
+        {
+          "slot": 1,
+          "row": 1,
+          "column": 1,
+          "card_id": "R3-P02-17",
+          "crop": [
+            16,
+            12,
+            496,
+            372
+          ]
+        },
+        {
+          "slot": 2,
+          "row": 1,
+          "column": 2,
+          "card_id": "R3-P02-18",
+          "crop": [
+            528,
+            12,
+            1008,
+            372
+          ]
+        },
+        {
+          "slot": 3,
+          "row": 2,
+          "column": 1,
+          "card_id": "R3-P02-19",
+          "crop": [
+            16,
+            396,
+            496,
+            756
+          ]
+        },
+        {
+          "slot": 4,
+          "row": 2,
+          "column": 2,
+          "card_id": "R3-P02-20",
+          "crop": [
+            528,
+            396,
+            1008,
+            756
+          ]
+        },
+        {
+          "slot": 5,
+          "row": 3,
+          "column": 1,
+          "card_id": "R3-P02-21",
+          "crop": [
+            16,
+            780,
+            496,
+            1140
+          ]
+        },
+        {
+          "slot": 6,
+          "row": 3,
+          "column": 2,
+          "card_id": "R3-P02-22",
+          "crop": [
+            528,
+            780,
+            1008,
+            1140
+          ]
+        },
+        {
+          "slot": 7,
+          "row": 4,
+          "column": 1,
+          "card_id": "R3-P02-23",
+          "crop": [
+            16,
+            1164,
+            496,
+            1524
+          ]
+        },
+        {
+          "slot": 8,
+          "row": 4,
+          "column": 2,
+          "card_id": "R3-P02-24",
+          "crop": [
+            528,
+            1164,
+            1008,
+            1524
+          ]
+        }
+      ]
+    },
+    {
+      "batch_id": "R3-ATLAS-09",
+      "prompt_file": "docs/art/atlas-prompts-v3/R3-ATLAS-09.txt",
+      "prompt_sha256": "85615e94839ae259edbbc31da0afc712e71f25565bf0ebf8964d2cfcaa81f4ec",
+      "source_file": "output/imagegen/card-atlas-v3/R3-ATLAS-09.png",
+      "slots": [
+        {
+          "slot": 1,
+          "row": 1,
+          "column": 1,
+          "card_id": "R3-P02-25",
+          "crop": [
+            16,
+            12,
+            496,
+            372
+          ]
+        },
+        {
+          "slot": 2,
+          "row": 1,
+          "column": 2,
+          "card_id": "R3-P02-26",
+          "crop": [
+            528,
+            12,
+            1008,
+            372
+          ]
+        },
+        {
+          "slot": 3,
+          "row": 2,
+          "column": 1,
+          "card_id": "R3-P02-27",
+          "crop": [
+            16,
+            396,
+            496,
+            756
+          ]
+        },
+        {
+          "slot": 4,
+          "row": 2,
+          "column": 2,
+          "card_id": "R3-P02-28",
+          "crop": [
+            528,
+            396,
+            1008,
+            756
+          ]
+        },
+        {
+          "slot": 5,
+          "row": 3,
+          "column": 1,
+          "card_id": "R3-P02-29",
+          "crop": [
+            16,
+            780,
+            496,
+            1140
+          ]
+        },
+        {
+          "slot": 6,
+          "row": 3,
+          "column": 2,
+          "card_id": "R3-P02-30",
+          "crop": [
+            528,
+            780,
+            1008,
+            1140
+          ]
+        },
+        {
+          "slot": 7,
+          "row": 4,
+          "column": 1,
+          "card_id": "R3-P02-31",
+          "crop": [
+            16,
+            1164,
+            496,
+            1524
+          ]
+        },
+        {
+          "slot": 8,
+          "row": 4,
+          "column": 2,
+          "card_id": "R3-P02-32",
+          "crop": [
+            528,
+            1164,
+            1008,
+            1524
+          ]
+        }
+      ]
+    },
+    {
+      "batch_id": "R3-ATLAS-10",
+      "prompt_file": "docs/art/atlas-prompts-v3/R3-ATLAS-10.txt",
+      "prompt_sha256": "a547c13bd594a6e075c4bef0931bd4f6a0745ad6f0f5254fd9e0789581a443d5",
+      "source_file": "output/imagegen/card-atlas-v3/R3-ATLAS-10.png",
+      "slots": [
+        {
+          "slot": 1,
+          "row": 1,
+          "column": 1,
+          "card_id": "R3-P02-33",
+          "crop": [
+            16,
+            12,
+            496,
+            372
+          ]
+        },
+        {
+          "slot": 2,
+          "row": 1,
+          "column": 2,
+          "card_id": "R3-P02-34",
+          "crop": [
+            528,
+            12,
+            1008,
+            372
+          ]
+        },
+        {
+          "slot": 3,
+          "row": 2,
+          "column": 1,
+          "card_id": "R3-P02-35",
+          "crop": [
+            16,
+            396,
+            496,
+            756
+          ]
+        },
+        {
+          "slot": 4,
+          "row": 2,
+          "column": 2,
+          "card_id": "R3-P02-36",
+          "crop": [
+            528,
+            396,
+            1008,
+            756
+          ]
+        },
+        {
+          "slot": 5,
+          "row": 3,
+          "column": 1,
+          "card_id": "R3-P02-37",
+          "crop": [
+            16,
+            780,
+            496,
+            1140
+          ]
+        },
+        {
+          "slot": 6,
+          "row": 3,
+          "column": 2,
+          "card_id": "R3-P02-38",
+          "crop": [
+            528,
+            780,
+            1008,
+            1140
+          ]
+        },
+        {
+          "slot": 7,
+          "row": 4,
+          "column": 1,
+          "card_id": "R3-P02-39",
+          "crop": [
+            16,
+            1164,
+            496,
+            1524
+          ]
+        },
+        {
+          "slot": 8,
+          "row": 4,
+          "column": 2,
+          "card_id": "R3-P02-40",
+          "crop": [
+            528,
+            1164,
+            1008,
+            1524
+          ]
+        }
+      ]
+    },
+    {
+      "batch_id": "R3-ATLAS-11",
+      "prompt_file": "docs/art/atlas-prompts-v3/R3-ATLAS-11.txt",
+      "prompt_sha256": "05393c418f64e240b078f4a32c476e94ed0e9d76dfefbf446370f34bfbbdae3a",
+      "source_file": "output/imagegen/card-atlas-v3/R3-ATLAS-11.png",
+      "slots": [
+        {
+          "slot": 1,
+          "row": 1,
+          "column": 1,
+          "card_id": "R3-P03-01",
+          "crop": [
+            16,
+            12,
+            496,
+            372
+          ]
+        },
+        {
+          "slot": 2,
+          "row": 1,
+          "column": 2,
+          "card_id": "R3-P03-02",
+          "crop": [
+            528,
+            12,
+            1008,
+            372
+          ]
+        },
+        {
+          "slot": 3,
+          "row": 2,
+          "column": 1,
+          "card_id": "R3-P03-03",
+          "crop": [
+            16,
+            396,
+            496,
+            756
+          ]
+        },
+        {
+          "slot": 4,
+          "row": 2,
+          "column": 2,
+          "card_id": "R3-P03-04",
+          "crop": [
+            528,
+            396,
+            1008,
+            756
+          ]
+        },
+        {
+          "slot": 5,
+          "row": 3,
+          "column": 1,
+          "card_id": "R3-P03-05",
+          "crop": [
+            16,
+            780,
+            496,
+            1140
+          ]
+        },
+        {
+          "slot": 6,
+          "row": 3,
+          "column": 2,
+          "card_id": "R3-P03-06",
+          "crop": [
+            528,
+            780,
+            1008,
+            1140
+          ]
+        },
+        {
+          "slot": 7,
+          "row": 4,
+          "column": 1,
+          "card_id": "R3-P03-07",
+          "crop": [
+            16,
+            1164,
+            496,
+            1524
+          ]
+        },
+        {
+          "slot": 8,
+          "row": 4,
+          "column": 2,
+          "card_id": "R3-P03-08",
+          "crop": [
+            528,
+            1164,
+            1008,
+            1524
+          ]
+        }
+      ]
+    },
+    {
+      "batch_id": "R3-ATLAS-12",
+      "prompt_file": "docs/art/atlas-prompts-v3/R3-ATLAS-12.txt",
+      "prompt_sha256": "35e4c511f7d3b549f8c3ad382fe2e48e475347da13453b976152218f947baaaa",
+      "source_file": "output/imagegen/card-atlas-v3/R3-ATLAS-12.png",
+      "slots": [
+        {
+          "slot": 1,
+          "row": 1,
+          "column": 1,
+          "card_id": "R3-P03-09",
+          "crop": [
+            16,
+            12,
+            496,
+            372
+          ]
+        },
+        {
+          "slot": 2,
+          "row": 1,
+          "column": 2,
+          "card_id": "R3-P03-10",
+          "crop": [
+            528,
+            12,
+            1008,
+            372
+          ]
+        },
+        {
+          "slot": 3,
+          "row": 2,
+          "column": 1,
+          "card_id": "R3-P03-11",
+          "crop": [
+            16,
+            396,
+            496,
+            756
+          ]
+        },
+        {
+          "slot": 4,
+          "row": 2,
+          "column": 2,
+          "card_id": "R3-P03-12",
+          "crop": [
+            528,
+            396,
+            1008,
+            756
+          ]
+        },
+        {
+          "slot": 5,
+          "row": 3,
+          "column": 1,
+          "card_id": "R3-P03-13",
+          "crop": [
+            16,
+            780,
+            496,
+            1140
+          ]
+        },
+        {
+          "slot": 6,
+          "row": 3,
+          "column": 2,
+          "card_id": "R3-P03-14",
+          "crop": [
+            528,
+            780,
+            1008,
+            1140
+          ]
+        },
+        {
+          "slot": 7,
+          "row": 4,
+          "column": 1,
+          "card_id": "R3-P03-15",
+          "crop": [
+            16,
+            1164,
+            496,
+            1524
+          ]
+        },
+        {
+          "slot": 8,
+          "row": 4,
+          "column": 2,
+          "card_id": "R3-P03-16",
+          "crop": [
+            528,
+            1164,
+            1008,
+            1524
+          ]
+        }
+      ]
+    },
+    {
+      "batch_id": "R3-ATLAS-13",
+      "prompt_file": "docs/art/atlas-prompts-v3/R3-ATLAS-13.txt",
+      "prompt_sha256": "d8013cfde0c8e9cf32cf3365996253da73e34d04da2428e98156048bd2f1b5e5",
+      "source_file": "output/imagegen/card-atlas-v3/R3-ATLAS-13.png",
+      "slots": [
+        {
+          "slot": 1,
+          "row": 1,
+          "column": 1,
+          "card_id": "R3-P03-17",
+          "crop": [
+            16,
+            12,
+            496,
+            372
+          ]
+        },
+        {
+          "slot": 2,
+          "row": 1,
+          "column": 2,
+          "card_id": "R3-P03-18",
+          "crop": [
+            528,
+            12,
+            1008,
+            372
+          ]
+        },
+        {
+          "slot": 3,
+          "row": 2,
+          "column": 1,
+          "card_id": "R3-P03-19",
+          "crop": [
+            16,
+            396,
+            496,
+            756
+          ]
+        },
+        {
+          "slot": 4,
+          "row": 2,
+          "column": 2,
+          "card_id": "R3-P03-20",
+          "crop": [
+            528,
+            396,
+            1008,
+            756
+          ]
+        },
+        {
+          "slot": 5,
+          "row": 3,
+          "column": 1,
+          "card_id": "R3-P03-21",
+          "crop": [
+            16,
+            780,
+            496,
+            1140
+          ]
+        },
+        {
+          "slot": 6,
+          "row": 3,
+          "column": 2,
+          "card_id": "R3-P03-22",
+          "crop": [
+            528,
+            780,
+            1008,
+            1140
+          ]
+        },
+        {
+          "slot": 7,
+          "row": 4,
+          "column": 1,
+          "card_id": "R3-P03-23",
+          "crop": [
+            16,
+            1164,
+            496,
+            1524
+          ]
+        },
+        {
+          "slot": 8,
+          "row": 4,
+          "column": 2,
+          "card_id": "R3-P03-24",
+          "crop": [
+            528,
+            1164,
+            1008,
+            1524
+          ]
+        }
+      ]
+    },
+    {
+      "batch_id": "R3-ATLAS-14",
+      "prompt_file": "docs/art/atlas-prompts-v3/R3-ATLAS-14.txt",
+      "prompt_sha256": "14b7810ac5da558b14da83e7cfa88d31604d165e149673dd909070c7f469661a",
+      "source_file": "output/imagegen/card-atlas-v3/R3-ATLAS-14.png",
+      "slots": [
+        {
+          "slot": 1,
+          "row": 1,
+          "column": 1,
+          "card_id": "R3-P03-25",
+          "crop": [
+            16,
+            12,
+            496,
+            372
+          ]
+        },
+        {
+          "slot": 2,
+          "row": 1,
+          "column": 2,
+          "card_id": "R3-P03-26",
+          "crop": [
+            528,
+            12,
+            1008,
+            372
+          ]
+        },
+        {
+          "slot": 3,
+          "row": 2,
+          "column": 1,
+          "card_id": "R3-P03-27",
+          "crop": [
+            16,
+            396,
+            496,
+            756
+          ]
+        },
+        {
+          "slot": 4,
+          "row": 2,
+          "column": 2,
+          "card_id": "R3-P03-28",
+          "crop": [
+            528,
+            396,
+            1008,
+            756
+          ]
+        },
+        {
+          "slot": 5,
+          "row": 3,
+          "column": 1,
+          "card_id": "R3-P03-29",
+          "crop": [
+            16,
+            780,
+            496,
+            1140
+          ]
+        },
+        {
+          "slot": 6,
+          "row": 3,
+          "column": 2,
+          "card_id": "R3-P03-30",
+          "crop": [
+            528,
+            780,
+            1008,
+            1140
+          ]
+        },
+        {
+          "slot": 7,
+          "row": 4,
+          "column": 1,
+          "card_id": "R3-P03-31",
+          "crop": [
+            16,
+            1164,
+            496,
+            1524
+          ]
+        },
+        {
+          "slot": 8,
+          "row": 4,
+          "column": 2,
+          "card_id": "R3-P03-32",
+          "crop": [
+            528,
+            1164,
+            1008,
+            1524
+          ]
+        }
+      ]
+    },
+    {
+      "batch_id": "R3-ATLAS-15",
+      "prompt_file": "docs/art/atlas-prompts-v3/R3-ATLAS-15.txt",
+      "prompt_sha256": "0e151b1a3fb5722d9c21f7834a0e48f397574487696c2936ee2b4e58491ce1c5",
+      "source_file": "output/imagegen/card-atlas-v3/R3-ATLAS-15.png",
+      "slots": [
+        {
+          "slot": 1,
+          "row": 1,
+          "column": 1,
+          "card_id": "R3-P03-33",
+          "crop": [
+            16,
+            12,
+            496,
+            372
+          ]
+        },
+        {
+          "slot": 2,
+          "row": 1,
+          "column": 2,
+          "card_id": "R3-P03-34",
+          "crop": [
+            528,
+            12,
+            1008,
+            372
+          ]
+        },
+        {
+          "slot": 3,
+          "row": 2,
+          "column": 1,
+          "card_id": "R3-P03-35",
+          "crop": [
+            16,
+            396,
+            496,
+            756
+          ]
+        },
+        {
+          "slot": 4,
+          "row": 2,
+          "column": 2,
+          "card_id": "R3-P03-36",
+          "crop": [
+            528,
+            396,
+            1008,
+            756
+          ]
+        },
+        {
+          "slot": 5,
+          "row": 3,
+          "column": 1,
+          "card_id": "R3-P03-37",
+          "crop": [
+            16,
+            780,
+            496,
+            1140
+          ]
+        },
+        {
+          "slot": 6,
+          "row": 3,
+          "column": 2,
+          "card_id": "R3-P03-38",
+          "crop": [
+            528,
+            780,
+            1008,
+            1140
+          ]
+        },
+        {
+          "slot": 7,
+          "row": 4,
+          "column": 1,
+          "card_id": "R3-P03-39",
+          "crop": [
+            16,
+            1164,
+            496,
+            1524
+          ]
+        },
+        {
+          "slot": 8,
+          "row": 4,
+          "column": 2,
+          "card_id": "R3-P03-40",
+          "crop": [
+            528,
+            1164,
+            1008,
+            1524
+          ]
+        }
+      ]
+    },
+    {
+      "batch_id": "R3-ATLAS-16",
+      "prompt_file": "docs/art/atlas-prompts-v3/R3-ATLAS-16.txt",
+      "prompt_sha256": "bbe91b492dc65d85c11b13b628678d18bc312b1fd7e30e35abb6821a4b846e26",
+      "source_file": "output/imagegen/card-atlas-v3/R3-ATLAS-16.png",
+      "slots": [
+        {
+          "slot": 1,
+          "row": 1,
+          "column": 1,
+          "card_id": "R3-P04-01",
+          "crop": [
+            16,
+            12,
+            496,
+            372
+          ]
+        },
+        {
+          "slot": 2,
+          "row": 1,
+          "column": 2,
+          "card_id": "R3-P04-02",
+          "crop": [
+            528,
+            12,
+            1008,
+            372
+          ]
+        },
+        {
+          "slot": 3,
+          "row": 2,
+          "column": 1,
+          "card_id": "R3-P04-03",
+          "crop": [
+            16,
+            396,
+            496,
+            756
+          ]
+        },
+        {
+          "slot": 4,
+          "row": 2,
+          "column": 2,
+          "card_id": "R3-P04-04",
+          "crop": [
+            528,
+            396,
+            1008,
+            756
+          ]
+        },
+        {
+          "slot": 5,
+          "row": 3,
+          "column": 1,
+          "card_id": "R3-P04-05",
+          "crop": [
+            16,
+            780,
+            496,
+            1140
+          ]
+        },
+        {
+          "slot": 6,
+          "row": 3,
+          "column": 2,
+          "card_id": "R3-P04-06",
+          "crop": [
+            528,
+            780,
+            1008,
+            1140
+          ]
+        },
+        {
+          "slot": 7,
+          "row": 4,
+          "column": 1,
+          "card_id": "R3-P04-07",
+          "crop": [
+            16,
+            1164,
+            496,
+            1524
+          ]
+        },
+        {
+          "slot": 8,
+          "row": 4,
+          "column": 2,
+          "card_id": "R3-P04-08",
+          "crop": [
+            528,
+            1164,
+            1008,
+            1524
+          ]
+        }
+      ]
+    },
+    {
+      "batch_id": "R3-ATLAS-17",
+      "prompt_file": "docs/art/atlas-prompts-v3/R3-ATLAS-17.txt",
+      "prompt_sha256": "c6221683b29bf932ea07010172dd1a8f5de0fc6723e0147f44ffbf541118d9b9",
+      "source_file": "output/imagegen/card-atlas-v3/R3-ATLAS-17.png",
+      "slots": [
+        {
+          "slot": 1,
+          "row": 1,
+          "column": 1,
+          "card_id": "R3-P04-09",
+          "crop": [
+            16,
+            12,
+            496,
+            372
+          ]
+        },
+        {
+          "slot": 2,
+          "row": 1,
+          "column": 2,
+          "card_id": "R3-P04-10",
+          "crop": [
+            528,
+            12,
+            1008,
+            372
+          ]
+        },
+        {
+          "slot": 3,
+          "row": 2,
+          "column": 1,
+          "card_id": "R3-P04-11",
+          "crop": [
+            16,
+            396,
+            496,
+            756
+          ]
+        },
+        {
+          "slot": 4,
+          "row": 2,
+          "column": 2,
+          "card_id": "R3-P04-12",
+          "crop": [
+            528,
+            396,
+            1008,
+            756
+          ]
+        },
+        {
+          "slot": 5,
+          "row": 3,
+          "column": 1,
+          "card_id": "R3-P04-13",
+          "crop": [
+            16,
+            780,
+            496,
+            1140
+          ]
+        },
+        {
+          "slot": 6,
+          "row": 3,
+          "column": 2,
+          "card_id": "R3-P04-14",
+          "crop": [
+            528,
+            780,
+            1008,
+            1140
+          ]
+        },
+        {
+          "slot": 7,
+          "row": 4,
+          "column": 1,
+          "card_id": "R3-P04-15",
+          "crop": [
+            16,
+            1164,
+            496,
+            1524
+          ]
+        },
+        {
+          "slot": 8,
+          "row": 4,
+          "column": 2,
+          "card_id": "R3-P04-16",
+          "crop": [
+            528,
+            1164,
+            1008,
+            1524
+          ]
+        }
+      ]
+    },
+    {
+      "batch_id": "R3-ATLAS-18",
+      "prompt_file": "docs/art/atlas-prompts-v3/R3-ATLAS-18.txt",
+      "prompt_sha256": "5aed90edd43468e6d29b3191eda16a237b773464bd53f22538e077f17cbc03f3",
+      "source_file": "output/imagegen/card-atlas-v3/R3-ATLAS-18.png",
+      "slots": [
+        {
+          "slot": 1,
+          "row": 1,
+          "column": 1,
+          "card_id": "R3-P04-17",
+          "crop": [
+            16,
+            12,
+            496,
+            372
+          ]
+        },
+        {
+          "slot": 2,
+          "row": 1,
+          "column": 2,
+          "card_id": "R3-P04-18",
+          "crop": [
+            528,
+            12,
+            1008,
+            372
+          ]
+        },
+        {
+          "slot": 3,
+          "row": 2,
+          "column": 1,
+          "card_id": "R3-P04-19",
+          "crop": [
+            16,
+            396,
+            496,
+            756
+          ]
+        },
+        {
+          "slot": 4,
+          "row": 2,
+          "column": 2,
+          "card_id": "R3-P04-20",
+          "crop": [
+            528,
+            396,
+            1008,
+            756
+          ]
+        },
+        {
+          "slot": 5,
+          "row": 3,
+          "column": 1,
+          "card_id": "R3-P04-21",
+          "crop": [
+            16,
+            780,
+            496,
+            1140
+          ]
+        },
+        {
+          "slot": 6,
+          "row": 3,
+          "column": 2,
+          "card_id": "R3-P04-22",
+          "crop": [
+            528,
+            780,
+            1008,
+            1140
+          ]
+        },
+        {
+          "slot": 7,
+          "row": 4,
+          "column": 1,
+          "card_id": "R3-P04-23",
+          "crop": [
+            16,
+            1164,
+            496,
+            1524
+          ]
+        },
+        {
+          "slot": 8,
+          "row": 4,
+          "column": 2,
+          "card_id": "R3-P04-24",
+          "crop": [
+            528,
+            1164,
+            1008,
+            1524
+          ]
+        }
+      ]
+    },
+    {
+      "batch_id": "R3-ATLAS-19",
+      "prompt_file": "docs/art/atlas-prompts-v3/R3-ATLAS-19.txt",
+      "prompt_sha256": "271dbc82a2acd839579ade12b6537a0579d9845e11d6bb527193f80d88646be9",
+      "source_file": "output/imagegen/card-atlas-v3/R3-ATLAS-19.png",
+      "slots": [
+        {
+          "slot": 1,
+          "row": 1,
+          "column": 1,
+          "card_id": "R3-P04-25",
+          "crop": [
+            16,
+            12,
+            496,
+            372
+          ]
+        },
+        {
+          "slot": 2,
+          "row": 1,
+          "column": 2,
+          "card_id": "R3-P04-26",
+          "crop": [
+            528,
+            12,
+            1008,
+            372
+          ]
+        },
+        {
+          "slot": 3,
+          "row": 2,
+          "column": 1,
+          "card_id": "R3-P04-27",
+          "crop": [
+            16,
+            396,
+            496,
+            756
+          ]
+        },
+        {
+          "slot": 4,
+          "row": 2,
+          "column": 2,
+          "card_id": "R3-P04-28",
+          "crop": [
+            528,
+            396,
+            1008,
+            756
+          ]
+        },
+        {
+          "slot": 5,
+          "row": 3,
+          "column": 1,
+          "card_id": "R3-P04-29",
+          "crop": [
+            16,
+            780,
+            496,
+            1140
+          ]
+        },
+        {
+          "slot": 6,
+          "row": 3,
+          "column": 2,
+          "card_id": "R3-P04-30",
+          "crop": [
+            528,
+            780,
+            1008,
+            1140
+          ]
+        },
+        {
+          "slot": 7,
+          "row": 4,
+          "column": 1,
+          "card_id": "R3-P04-31",
+          "crop": [
+            16,
+            1164,
+            496,
+            1524
+          ]
+        },
+        {
+          "slot": 8,
+          "row": 4,
+          "column": 2,
+          "card_id": "R3-P04-32",
+          "crop": [
+            528,
+            1164,
+            1008,
+            1524
+          ]
+        }
+      ]
+    },
+    {
+      "batch_id": "R3-ATLAS-20",
+      "prompt_file": "docs/art/atlas-prompts-v3/R3-ATLAS-20.txt",
+      "prompt_sha256": "8a97310a03defc864efef0491d320a4d9251e7bf7d6ed93e0ccf7f8e57601603",
+      "source_file": "output/imagegen/card-atlas-v3/R3-ATLAS-20.png",
+      "slots": [
+        {
+          "slot": 1,
+          "row": 1,
+          "column": 1,
+          "card_id": "R3-P04-33",
+          "crop": [
+            16,
+            12,
+            496,
+            372
+          ]
+        },
+        {
+          "slot": 2,
+          "row": 1,
+          "column": 2,
+          "card_id": "R3-P04-34",
+          "crop": [
+            528,
+            12,
+            1008,
+            372
+          ]
+        },
+        {
+          "slot": 3,
+          "row": 2,
+          "column": 1,
+          "card_id": "R3-P04-35",
+          "crop": [
+            16,
+            396,
+            496,
+            756
+          ]
+        },
+        {
+          "slot": 4,
+          "row": 2,
+          "column": 2,
+          "card_id": "R3-P04-36",
+          "crop": [
+            528,
+            396,
+            1008,
+            756
+          ]
+        },
+        {
+          "slot": 5,
+          "row": 3,
+          "column": 1,
+          "card_id": "R3-P04-37",
+          "crop": [
+            16,
+            780,
+            496,
+            1140
+          ]
+        },
+        {
+          "slot": 6,
+          "row": 3,
+          "column": 2,
+          "card_id": "R3-P04-38",
+          "crop": [
+            528,
+            780,
+            1008,
+            1140
+          ]
+        },
+        {
+          "slot": 7,
+          "row": 4,
+          "column": 1,
+          "card_id": "R3-P04-39",
+          "crop": [
+            16,
+            1164,
+            496,
+            1524
+          ]
+        },
+        {
+          "slot": 8,
+          "row": 4,
+          "column": 2,
+          "card_id": "R3-P04-40",
+          "crop": [
+            528,
+            1164,
+            1008,
+            1524
+          ]
+        }
+      ]
+    },
+    {
+      "batch_id": "R3-ATLAS-21",
+      "prompt_file": "docs/art/atlas-prompts-v3/R3-ATLAS-21.txt",
+      "prompt_sha256": "7445c2f7df9f5d2e0064afe3c5df81255e0ffec618ed5139ec8ed07e7afed93a",
+      "source_file": "output/imagegen/card-atlas-v3/R3-ATLAS-21.png",
+      "slots": [
+        {
+          "slot": 1,
+          "row": 1,
+          "column": 1,
+          "card_id": "R3-C-01",
+          "crop": [
+            16,
+            12,
+            496,
+            372
+          ]
+        },
+        {
+          "slot": 2,
+          "row": 1,
+          "column": 2,
+          "card_id": "R3-C-02",
+          "crop": [
+            528,
+            12,
+            1008,
+            372
+          ]
+        },
+        {
+          "slot": 3,
+          "row": 2,
+          "column": 1,
+          "card_id": "R3-C-03",
+          "crop": [
+            16,
+            396,
+            496,
+            756
+          ]
+        },
+        {
+          "slot": 4,
+          "row": 2,
+          "column": 2,
+          "card_id": "R3-C-04",
+          "crop": [
+            528,
+            396,
+            1008,
+            756
+          ]
+        },
+        {
+          "slot": 5,
+          "row": 3,
+          "column": 1,
+          "card_id": "R3-C-05",
+          "crop": [
+            16,
+            780,
+            496,
+            1140
+          ]
+        },
+        {
+          "slot": 6,
+          "row": 3,
+          "column": 2,
+          "card_id": "R3-C-06",
+          "crop": [
+            528,
+            780,
+            1008,
+            1140
+          ]
+        },
+        {
+          "slot": 7,
+          "row": 4,
+          "column": 1,
+          "card_id": "R3-C-07",
+          "crop": [
+            16,
+            1164,
+            496,
+            1524
+          ]
+        },
+        {
+          "slot": 8,
+          "row": 4,
+          "column": 2,
+          "card_id": "R3-C-08",
+          "crop": [
+            528,
+            1164,
+            1008,
+            1524
+          ]
+        }
+      ]
+    },
+    {
+      "batch_id": "R3-ATLAS-22",
+      "prompt_file": "docs/art/atlas-prompts-v3/R3-ATLAS-22.txt",
+      "prompt_sha256": "3eec2e3f0b2604c9c0147c8bc55577bc746d7ac22feae75728f951fcff327a47",
+      "source_file": "output/imagegen/card-atlas-v3/R3-ATLAS-22.png",
+      "slots": [
+        {
+          "slot": 1,
+          "row": 1,
+          "column": 1,
+          "card_id": "R3-C-09",
+          "crop": [
+            16,
+            12,
+            496,
+            372
+          ]
+        },
+        {
+          "slot": 2,
+          "row": 1,
+          "column": 2,
+          "card_id": "R3-C-10",
+          "crop": [
+            528,
+            12,
+            1008,
+            372
+          ]
+        },
+        {
+          "slot": 3,
+          "row": 2,
+          "column": 1,
+          "card_id": "R3-C-11",
+          "crop": [
+            16,
+            396,
+            496,
+            756
+          ]
+        },
+        {
+          "slot": 4,
+          "row": 2,
+          "column": 2,
+          "card_id": "R3-C-12",
+          "crop": [
+            528,
+            396,
+            1008,
+            756
+          ]
+        },
+        {
+          "slot": 5,
+          "row": 3,
+          "column": 1,
+          "card_id": "R3-T201",
+          "crop": [
+            16,
+            780,
+            496,
+            1140
+          ]
+        },
+        {
+          "slot": 6,
+          "row": 3,
+          "column": 2,
+          "card_id": "R3-T202",
+          "crop": [
+            528,
+            780,
+            1008,
+            1140
+          ]
+        },
+        {
+          "slot": 7,
+          "row": 4,
+          "column": 1,
+          "card_id": null,
+          "crop": [
+            16,
+            1164,
+            496,
+            1524
+          ]
+        },
+        {
+          "slot": 8,
+          "row": 4,
+          "column": 2,
+          "card_id": null,
+          "crop": [
+            528,
+            1164,
+            1008,
+            1524
+          ]
+        }
+      ]
+    }
+  ]
+}

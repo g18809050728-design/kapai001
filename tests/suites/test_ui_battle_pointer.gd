@@ -10,12 +10,9 @@ func run() -> Array[String]:
 		GameSession.new(SaveStore.new("user://g7-pointer-%s" % Time.get_ticks_usec()))
 	)
 	_shell.session.update_settings({"autosave": false})
-	_shell.press("menu:new")
-	var input := _find_input(_shell.page)
-	input.text = "0"
-	input.text_changed.emit("0")
-	_shell.press("setup:start")
-	_shell.press("node:" + str(_shell.session.get_view().run.reachable_node_ids[0]))
+	_check(_shell.session.start_run(StartRunRequest.new("P01", &"normal", "campus_mvp", "0")).accepted, "historical pointer fixture starts through the session API")
+	_shell.show_screen("")
+	_helpers.enter_node(_shell, str(_shell.session.get_view().run.reachable_node_ids[0]))
 	_shell.get_tree().root.size = Vector2i(1280, 800)
 	await _frames()
 	var original := _fingerprint()
@@ -29,6 +26,46 @@ func run() -> Array[String]:
 	await _frames()
 	_check(_battle()._hovered_card == card, "mouse hover raises the physical card")
 	_check(_fingerprint() == original, "hover preserves state and RNG")
+	_check(
+		(
+			_battle()._hover_panel.visible
+			and not _battle()._hover_title.text.is_empty()
+			and not _battle()._hover_body.text.is_empty()
+		),
+		"hover popup is visible with title and body"
+	)
+	_check(
+		not _battle()._hover_panel.get_global_rect().intersects(card.get_global_rect()),
+		"hover popup avoids covering the hovered card"
+	)
+	_check(card.tooltip_text == "", "card native tooltip is suppressed")
+	var detail_before := _fingerprint()
+	_key(KEY_I)
+	await _frames()
+	var detail_panel: String = _battle().display_snapshot().panel
+	_check(detail_panel.contains("专注"), "I opens card detail with cost text")
+	_check(not _battle()._detail_terms.is_empty(), "card detail exposes glossary terms")
+	var term_key := str(_battle()._detail_terms[0])
+	var term_chip: Button = _battle()._buttons.get("term:" + term_key)
+	var close_button: Button = _battle()._buttons.get("battle:close_panel")
+	_check(
+		(
+			term_chip != null
+			and close_button != null
+			and not term_chip.get_global_rect().intersects(close_button.get_global_rect())
+		),
+		"term chips do not overlap the close button"
+	)
+	_shell.press("term:" + term_key)
+	await _frames()
+	_check(
+		_battle().display_snapshot().panel.contains("来源："),
+		"term chip appends the glossary explanation"
+	)
+	_check(_fingerprint() == detail_before, "card detail preserves state and RNG")
+	_key(KEY_ESCAPE)
+	await _frames()
+	_check(_battle().display_snapshot().panel == "", "Esc closes card detail")
 	# Drag out, then drop back in the hand: no command is submitted.
 	_mouse_button(source, true)
 	_mouse_move(_stage_point(Vector2(650, 300)), true)
@@ -64,6 +101,26 @@ func run() -> Array[String]:
 	var task_id := str(_shell.session.get_view().battle.tasks[0].task_id)
 	var target: Button = _battle()._buttons["task:" + task_id]
 	var destination := target.get_global_rect().get_center()
+	_mouse_move(destination)
+	await _frames()
+	_check(
+		(
+			_battle()._hover_panel.visible
+			and _battle()._hover_meta.text.contains("阶段")
+			and _battle()._hover_meta.text.contains("剩余")
+		),
+		"task hover popup shows phase and remaining work"
+	)
+	var task_before := _fingerprint()
+	_key(KEY_I)
+	await _frames()
+	var task_panel: String = _battle().display_snapshot().panel
+	_check(task_panel.contains("未完成量"), "I opens task detail with remaining work")
+	_check(not _battle()._detail_terms.is_empty(), "task detail exposes status terms")
+	_check(_fingerprint() == task_before, "task detail preserves state and RNG")
+	_key(KEY_ESCAPE)
+	await _frames()
+	_check(_battle().display_snapshot().panel == "", "Esc closes task detail")
 	var revision: int = _shell.session.get_view().revision
 	card = _card("K14")
 	_mouse_button(_point(card, Vector2(85, 80)), true)
@@ -115,18 +172,17 @@ func run() -> Array[String]:
 	_mouse_button(confirm_point, false)
 	await _frames()
 	_check(not _battle().is_locked(), "physical confirmation closes pending choice")
-	# The entire battle adapts to the supported small window without a page scroll.
+	# Small windows use native text and independently scrolling content with fixed actions.
 	var old_size := _shell.get_tree().root.size
 	_shell.get_tree().root.size = Vector2i(960, 640)
 	await _frames()
-	_check(not _battle().get_child(0) is ScrollContainer, "battle has no whole-page scroll")
-	var stage_rect := Rect2(
-		_battle()._stage.global_position, Vector2(1280, 800) * _battle()._stage.scale
-	)
+	_check(_battle()._compact_layout and _battle()._stage.scale == Vector2.ONE, "small battle uses native layout without whole-screen shrinking")
+	var stage_rect := _battle()._stage.get_global_rect()
 	_check(
 		stage_rect.size.x <= _shell.size.x + 1 and stage_rect.size.y <= _shell.size.y + 1,
 		"small-window stage remains inside viewport"
 	)
+	_check(Rect2(Vector2.ZERO, Vector2(960, 640)).encloses(_battle()._buttons["battle:end_turn"].get_global_rect()), "end turn remains fixed and visible")
 	_shell.get_tree().root.size = old_size
 	print(
 		"G7_POINTER_EVIDENCE=",
@@ -179,6 +235,13 @@ func _mouse_button(point: Vector2, pressed: bool, button: MouseButton = MOUSE_BU
 	event.global_position = point
 	event.button_index = button
 	event.pressed = pressed
+	_shell.get_tree().root.push_input(event, true)
+
+
+func _key(code: int) -> void:
+	var event := InputEventKey.new()
+	event.keycode = code
+	event.pressed = true
 	_shell.get_tree().root.push_input(event, true)
 
 

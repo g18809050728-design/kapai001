@@ -1,0 +1,17 @@
+Use case: illustration-story. Produce ONE production sprite atlas of EIGHT separate campus card illustrations.
+Input image is a STYLE REFERENCE and P01/P04 identity reference from this game's existing art. Match its thin ink contours, bright ivory paper, flat translucent watercolor washes, simplified forms and spacious quiet backgrounds. Do NOT copy its 3x2 layout or its six subjects. Draw the eight NEW assigned scenes below in a strict 2x4 layout.
+Canvas: exactly 1024 x 1536 pixels, portrait. Strict 2 columns x 4 rows, equal 512 x 384 cells. Read row-major from top left.
+The entire canvas is filled by these eight cells. No outer margin, gutters, border, title, labels or numbering. Separate scenes at the exact halfway vertical boundary and four equal horizontal bands. NEVER combine cells or change their size/order.
+Shared art direction: 严格匹配当前游戏的明亮二维校园水彩插画：纤细清楚的深青墨线勾勒，简化平面水彩铺色，轻微米白纸纹，大面积暖米白负空间；鼠尾草绿、深青与少量暖黄/砖红。成年大学生自然比例，单一动作或物件，背景仅少量轮廓，平静漫射日光，柔和且稀少的阴影。禁止摄影、写实渲染、电影暗调、密集材质、高反差体积光或复杂实验室。克制的抽象思考点缀，整体保持原有手绘清爽感。每格横向4:3独立插画，只画插画，不画卡框、文字或界面。
+Each cell is one horizontal 4:3 independent scene, NOT a card frame or a panel of a continuing comic. Match the existing game's gentle 2D ink-and-watercolor drawing, NOT realistic painting. Each scene should have at least 35 percent calm pale ivory background. Simple broad color washes; minimal material detail; one readable silhouette, natural adult hands. No dense laboratory scenery or dark cinematic shadows. The reference's linework and brightness take priority over descriptive complexity.
+Composition within EACH cell: essential objects and gestures inside central 70%, expendable quiet background at edges. The crop removes 16px from left/right and 12px from top/bottom of EACH cell. No subject, light trail, limb or object may cross into another cell.
+No readable text, letters, numerals, equations, branding, campus logos, watermarks, labels, UI, speech bubbles, trading card frames, exaggerated anatomy, weapons or horror. Blank pages and simple geometric diagrams only. Slot IDs below are instructions, NEVER draw them.
+Row 1, column 1: 林序系列：深青与铜橙；方格纸、流程卡片、调试灯和有序连线作为母题。成年男大学生，蓬松黑短发、细圆框眼镜、深青外套与米白内搭。优先手部和桌面近景。 主体场景：林序在铺开的流程卡片间用细束灯光迅速找出关键卡。
+Row 1, column 2: 林序系列：深青与铜橙；方格纸、流程卡片、调试灯和有序连线作为母题。成年男大学生，蓬松黑短发、细圆框眼镜、深青外套与米白内搭。优先手部和桌面近景。 主体场景：双手把一座木制阶梯的第一块小模块稳稳放好。
+Row 2, column 1: 林序系列：深青与铜橙；方格纸、流程卡片、调试灯和有序连线作为母题。成年男大学生，蓬松黑短发、细圆框眼镜、深青外套与米白内搭。优先手部和桌面近景。 主体场景：铅笔在流程图空缺旁添上简洁图形标记，无文字。
+Row 2, column 2: 林序系列：深青与铜橙；方格纸、流程卡片、调试灯和有序连线作为母题。成年男大学生，蓬松黑短发、细圆框眼镜、深青外套与米白内搭。优先手部和桌面近景。 主体场景：输入卡片进入桌面小型分拣器，手指确认入口方向。
+Row 3, column 1: 林序系列：深青与铜橙；方格纸、流程卡片、调试灯和有序连线作为母题。成年男大学生，蓬松黑短发、细圆框眼镜、深青外套与米白内搭。优先手部和桌面近景。 主体场景：一只手搭建模型，另一只手用量尺即时核对。
+Row 3, column 2: 林序系列：深青与铜橙；方格纸、流程卡片、调试灯和有序连线作为母题。成年男大学生，蓬松黑短发、细圆框眼镜、深青外套与米白内搭。优先手部和桌面近景。 主体场景：三段串联的实验指示灯依次亮起，林序按下第一段开关。
+Row 4, column 1: 林序系列：深青与铜橙；方格纸、流程卡片、调试灯和有序连线作为母题。成年男大学生，蓬松黑短发、细圆框眼镜、深青外套与米白内搭。优先手部和桌面近景。 主体场景：两张半透明蓝图叠在灯箱上，相交处出现铜色光点。
+Row 4, column 2: 林序系列：深青与铜橙；方格纸、流程卡片、调试灯和有序连线作为母题。成年男大学生，蓬松黑短发、细圆框眼镜、深青外套与米白内搭。优先手部和桌面近景。 主体场景：两组形状互补的接口模块精准合拢，连接处闪起柔光。
+Final count check: exactly 2 columns and 4 equal-height rows. Keep every requested scene in its assigned slot. No additional panels or outer margin.

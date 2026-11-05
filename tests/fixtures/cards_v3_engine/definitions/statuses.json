@@ -1,0 +1,20 @@
+[
+  {
+    "id": "vulnerability",
+    "name_key": "status.vulnerability.name",
+    "target": "task",
+    "stack_policy": "capped",
+    "duration_policy": "pressure_window",
+    "dispel_policy": "explicit",
+    "numeric_rule_key": "vulnerability"
+  },
+  {
+    "id": "weakness",
+    "name_key": "status.weakness.name",
+    "target": "task",
+    "stack_policy": "capped",
+    "duration_policy": "pressure_window",
+    "dispel_policy": "explicit",
+    "numeric_rule_key": "weakness"
+  }
+]

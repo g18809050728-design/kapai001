@@ -259,7 +259,7 @@ func _session_cases() -> void:
 		SaveStore.new("user://g4-session-%s-%s" % [Time.get_ticks_usec(), OS.get_process_id()])
 	)
 	var setup := session.get_setup_options()
-	_check(setup.ok and setup.data.characters.size() == 2, "session exposes production setup")
+	_check(setup.ok and setup.data.characters.size() == 4, "session exposes v3 production setup")
 	var forbidden := session.start_run(
 		StartRunRequest.new("test_P01", &"normal", "test_run_g4", "42")
 	)

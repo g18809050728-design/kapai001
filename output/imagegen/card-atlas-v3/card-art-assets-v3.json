@@ -1,0 +1,408 @@
+{
+  "version": 1,
+  "requirement_id": "FY-ART-001",
+  "assets": [
+    {
+      "asset_id": "R3-P01-01",
+      "requirement_id": "FY-ART-001",
+      "version": 1,
+      "generated": true,
+      "selected": false,
+      "status": "generated_candidate",
+      "batch_id": "R3-ATLAS-01",
+      "prompt_file": "docs/art/atlas-prompts-v3/R3-ATLAS-01.txt",
+      "prompt_sha256": "74a4421c40407effbdcc9255ca24db780683649f2c1e63e40de9008f04265187",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI generate-batch; n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "source_file": "output/imagegen/card-atlas-v3/R3-ATLAS-01.png",
+      "source_sha256": "73658c9319b262f7bac362f8281b2b744c74bcbc1f480bde22908f4c0925d997",
+      "slot": {
+        "slot": 1,
+        "row": 1,
+        "column": 1,
+        "card_id": "R3-P01-01",
+        "crop": [
+          16,
+          12,
+          496,
+          372
+        ]
+      },
+      "processing": "Pillow crop then RGB PNG, no resampling",
+      "size": [
+        480,
+        360
+      ],
+      "output": "output/imagegen/card-atlas-v3/crops/R3-P01-01.png",
+      "sha256": "c4717246e048127d45f7daf15af1836f78f401d3baf4056ef282f7f33a847ab2",
+      "reference_mode": "text-only; inspected P01/P04 old portraits, no image uploaded",
+      "seed": null,
+      "ai_visual_review": null,
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T10:59:55.760709+00:00"
+    },
+    {
+      "asset_id": "R3-P01-02",
+      "requirement_id": "FY-ART-001",
+      "version": 1,
+      "generated": true,
+      "selected": false,
+      "status": "generated_candidate",
+      "batch_id": "R3-ATLAS-01",
+      "prompt_file": "docs/art/atlas-prompts-v3/R3-ATLAS-01.txt",
+      "prompt_sha256": "74a4421c40407effbdcc9255ca24db780683649f2c1e63e40de9008f04265187",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI generate-batch; n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "source_file": "output/imagegen/card-atlas-v3/R3-ATLAS-01.png",
+      "source_sha256": "73658c9319b262f7bac362f8281b2b744c74bcbc1f480bde22908f4c0925d997",
+      "slot": {
+        "slot": 2,
+        "row": 1,
+        "column": 2,
+        "card_id": "R3-P01-02",
+        "crop": [
+          528,
+          12,
+          1008,
+          372
+        ]
+      },
+      "processing": "Pillow crop then RGB PNG, no resampling",
+      "size": [
+        480,
+        360
+      ],
+      "output": "output/imagegen/card-atlas-v3/crops/R3-P01-02.png",
+      "sha256": "f12a8e3307bfc4972b53e497aafa09b5f28f07b3ffa172c4657a6991bd04a271",
+      "reference_mode": "text-only; inspected P01/P04 old portraits, no image uploaded",
+      "seed": null,
+      "ai_visual_review": null,
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T10:59:55.779123+00:00"
+    },
+    {
+      "asset_id": "R3-P01-03",
+      "requirement_id": "FY-ART-001",
+      "version": 1,
+      "generated": true,
+      "selected": false,
+      "status": "generated_candidate",
+      "batch_id": "R3-ATLAS-01",
+      "prompt_file": "docs/art/atlas-prompts-v3/R3-ATLAS-01.txt",
+      "prompt_sha256": "74a4421c40407effbdcc9255ca24db780683649f2c1e63e40de9008f04265187",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI generate-batch; n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "source_file": "output/imagegen/card-atlas-v3/R3-ATLAS-01.png",
+      "source_sha256": "73658c9319b262f7bac362f8281b2b744c74bcbc1f480bde22908f4c0925d997",
+      "slot": {
+        "slot": 3,
+        "row": 2,
+        "column": 1,
+        "card_id": "R3-P01-03",
+        "crop": [
+          16,
+          396,
+          496,
+          756
+        ]
+      },
+      "processing": "Pillow crop then RGB PNG, no resampling",
+      "size": [
+        480,
+        360
+      ],
+      "output": "output/imagegen/card-atlas-v3/crops/R3-P01-03.png",
+      "sha256": "cdcbeffba3f55d966d0a7ee7160e2515c59ff70ad6da5f00275af4c1d207e219",
+      "reference_mode": "text-only; inspected P01/P04 old portraits, no image uploaded",
+      "seed": null,
+      "ai_visual_review": null,
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T10:59:55.799455+00:00"
+    },
+    {
+      "asset_id": "R3-P01-04",
+      "requirement_id": "FY-ART-001",
+      "version": 1,
+      "generated": true,
+      "selected": false,
+      "status": "generated_candidate",
+      "batch_id": "R3-ATLAS-01",
+      "prompt_file": "docs/art/atlas-prompts-v3/R3-ATLAS-01.txt",
+      "prompt_sha256": "74a4421c40407effbdcc9255ca24db780683649f2c1e63e40de9008f04265187",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI generate-batch; n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "source_file": "output/imagegen/card-atlas-v3/R3-ATLAS-01.png",
+      "source_sha256": "73658c9319b262f7bac362f8281b2b744c74bcbc1f480bde22908f4c0925d997",
+      "slot": {
+        "slot": 4,
+        "row": 2,
+        "column": 2,
+        "card_id": "R3-P01-04",
+        "crop": [
+          528,
+          396,
+          1008,
+          756
+        ]
+      },
+      "processing": "Pillow crop then RGB PNG, no resampling",
+      "size": [
+        480,
+        360
+      ],
+      "output": "output/imagegen/card-atlas-v3/crops/R3-P01-04.png",
+      "sha256": "06543659f35c1e2cdce25a6b281e5253294dfccf667bbb697344ca4f5b1c0cf3",
+      "reference_mode": "text-only; inspected P01/P04 old portraits, no image uploaded",
+      "seed": null,
+      "ai_visual_review": null,
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T10:59:55.819212+00:00"
+    },
+    {
+      "asset_id": "R3-P01-05",
+      "requirement_id": "FY-ART-001",
+      "version": 1,
+      "generated": true,
+      "selected": false,
+      "status": "generated_candidate",
+      "batch_id": "R3-ATLAS-01",
+      "prompt_file": "docs/art/atlas-prompts-v3/R3-ATLAS-01.txt",
+      "prompt_sha256": "74a4421c40407effbdcc9255ca24db780683649f2c1e63e40de9008f04265187",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI generate-batch; n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "source_file": "output/imagegen/card-atlas-v3/R3-ATLAS-01.png",
+      "source_sha256": "73658c9319b262f7bac362f8281b2b744c74bcbc1f480bde22908f4c0925d997",
+      "slot": {
+        "slot": 5,
+        "row": 3,
+        "column": 1,
+        "card_id": "R3-P01-05",
+        "crop": [
+          16,
+          780,
+          496,
+          1140
+        ]
+      },
+      "processing": "Pillow crop then RGB PNG, no resampling",
+      "size": [
+        480,
+        360
+      ],
+      "output": "output/imagegen/card-atlas-v3/crops/R3-P01-05.png",
+      "sha256": "48875ad9655446bc94b8625d625a294cf0fb68f1732146867708dda74143108c",
+      "reference_mode": "text-only; inspected P01/P04 old portraits, no image uploaded",
+      "seed": null,
+      "ai_visual_review": null,
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T10:59:55.838778+00:00"
+    },
+    {
+      "asset_id": "R3-P01-06",
+      "requirement_id": "FY-ART-001",
+      "version": 1,
+      "generated": true,
+      "selected": false,
+      "status": "generated_candidate",
+      "batch_id": "R3-ATLAS-01",
+      "prompt_file": "docs/art/atlas-prompts-v3/R3-ATLAS-01.txt",
+      "prompt_sha256": "74a4421c40407effbdcc9255ca24db780683649f2c1e63e40de9008f04265187",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI generate-batch; n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "source_file": "output/imagegen/card-atlas-v3/R3-ATLAS-01.png",
+      "source_sha256": "73658c9319b262f7bac362f8281b2b744c74bcbc1f480bde22908f4c0925d997",
+      "slot": {
+        "slot": 6,
+        "row": 3,
+        "column": 2,
+        "card_id": "R3-P01-06",
+        "crop": [
+          528,
+          780,
+          1008,
+          1140
+        ]
+      },
+      "processing": "Pillow crop then RGB PNG, no resampling",
+      "size": [
+        480,
+        360
+      ],
+      "output": "output/imagegen/card-atlas-v3/crops/R3-P01-06.png",
+      "sha256": "b2b21bb5d89f0c5bbfdcfa07bc0508b82f3997e4f67f5c44693596e3caea7a6e",
+      "reference_mode": "text-only; inspected P01/P04 old portraits, no image uploaded",
+      "seed": null,
+      "ai_visual_review": null,
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T10:59:55.858212+00:00"
+    },
+    {
+      "asset_id": "R3-P01-07",
+      "requirement_id": "FY-ART-001",
+      "version": 1,
+      "generated": true,
+      "selected": false,
+      "status": "generated_candidate",
+      "batch_id": "R3-ATLAS-01",
+      "prompt_file": "docs/art/atlas-prompts-v3/R3-ATLAS-01.txt",
+      "prompt_sha256": "74a4421c40407effbdcc9255ca24db780683649f2c1e63e40de9008f04265187",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI generate-batch; n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "source_file": "output/imagegen/card-atlas-v3/R3-ATLAS-01.png",
+      "source_sha256": "73658c9319b262f7bac362f8281b2b744c74bcbc1f480bde22908f4c0925d997",
+      "slot": {
+        "slot": 7,
+        "row": 4,
+        "column": 1,
+        "card_id": "R3-P01-07",
+        "crop": [
+          16,
+          1164,
+          496,
+          1524
+        ]
+      },
+      "processing": "Pillow crop then RGB PNG, no resampling",
+      "size": [
+        480,
+        360
+      ],
+      "output": "output/imagegen/card-atlas-v3/crops/R3-P01-07.png",
+      "sha256": "4543610b0c92ed641e99be3964a77c4a54b036980361c053f48d6b5ad3d998e3",
+      "reference_mode": "text-only; inspected P01/P04 old portraits, no image uploaded",
+      "seed": null,
+      "ai_visual_review": null,
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T10:59:55.878846+00:00"
+    },
+    {
+      "asset_id": "R3-P01-08",
+      "requirement_id": "FY-ART-001",
+      "version": 1,
+      "generated": true,
+      "selected": false,
+      "status": "generated_candidate",
+      "batch_id": "R3-ATLAS-01",
+      "prompt_file": "docs/art/atlas-prompts-v3/R3-ATLAS-01.txt",
+      "prompt_sha256": "74a4421c40407effbdcc9255ca24db780683649f2c1e63e40de9008f04265187",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI generate-batch; n=1",
+      "quality": "medium",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "source_file": "output/imagegen/card-atlas-v3/R3-ATLAS-01.png",
+      "source_sha256": "73658c9319b262f7bac362f8281b2b744c74bcbc1f480bde22908f4c0925d997",
+      "slot": {
+        "slot": 8,
+        "row": 4,
+        "column": 2,
+        "card_id": "R3-P01-08",
+        "crop": [
+          528,
+          1164,
+          1008,
+          1524
+        ]
+      },
+      "processing": "Pillow crop then RGB PNG, no resampling",
+      "size": [
+        480,
+        360
+      ],
+      "output": "output/imagegen/card-atlas-v3/crops/R3-P01-08.png",
+      "sha256": "87779c583e0fb72248cf57cd45ab84506765574d384c1162a52ad29b9a252c17",
+      "reference_mode": "text-only; inspected P01/P04 old portraits, no image uploaded",
+      "seed": null,
+      "ai_visual_review": null,
+      "human_acceptance": "pending",
+      "license_review": "provider terms not independently verified",
+      "recorded_utc": "2026-11-04T10:59:55.898608+00:00"
+    }
+  ],
+  "generated_count": 8,
+  "selected_count": 0
+}

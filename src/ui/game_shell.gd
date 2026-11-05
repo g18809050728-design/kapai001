@@ -3,8 +3,9 @@ extends Control
 
 var session: GameSession
 var page: UiPage
+var audio: AudioManager
 var last_error: ApiError
-var notice: String = "准备好开始你的第一学期了吗？"
+var notice: String = "准备好开始你的四年冒险了吗？"
 var _ui_screen := "menu"
 var _back_screen := "menu"
 var _page_key := ""
@@ -20,6 +21,8 @@ var _frame_column: VBoxContainer
 var _frame_panel: PanelContainer
 var _restart_confirmation := false
 var _advance_paused := false
+var _submitted_scope := ""
+var _business_notice := ""
 
 
 func _ready() -> void:
@@ -29,6 +32,11 @@ func _ready() -> void:
 		session = GameSession.new()
 	if session.get_parent() == null:
 		add_child(session)
+	if audio == null:
+		audio = AudioManager.new()
+		add_child(audio)
+	audio.apply_settings(session.get_audio_settings())
+	_apply_presentation()
 	_build_frame()
 	refresh()
 
@@ -50,7 +58,7 @@ func _build_frame() -> void:
 	_frame_margin = margin
 	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	for side in ["left", "right", "top", "bottom"]:
-		margin.add_theme_constant_override("margin_" + side, 20)
+		margin.add_theme_constant_override("margin_" + side, 10)
 	add_child(margin)
 	var column := VBoxContainer.new()
 	_frame_column = column
@@ -69,7 +77,7 @@ func _build_frame() -> void:
 	_host.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	panel.add_child(_host)
 	_notice_label = Label.new()
-	_notice_label.custom_minimum_size.y = 48
+	_notice_label.custom_minimum_size.y = 32
 	_notice_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_notice_label.add_theme_font_size_override("font_size", 15)
 	column.add_child(_notice_label)
@@ -114,6 +122,8 @@ func refresh() -> void:
 		"settings":
 			data = _storage_view()
 			data.settings = {"autosave": session.get_profile().autosave}
+			data.settings.audio = session.get_audio_settings()
+			data.settings.presentation = session.get_presentation_settings()
 			data.can_restore = (
 				current.run_id == null
 				and data.backup_meta is Dictionary
@@ -133,6 +143,7 @@ func refresh() -> void:
 				data.can_save = current.can_save
 				data.notice = notice
 				if current.run is Dictionary:
+					data.year_label = ("大" + ["一", "二", "三", "四"][int(current.run.term)-1]) if current.run.has("campaign") else "第一学期"
 					data.character_id = current.run.get("character_id", "P01")
 					data.max_vitality = current.run.get("max_vitality", 1)
 					data.money = current.run.get("money", 0)
@@ -146,6 +157,8 @@ func refresh() -> void:
 			data.can_save = current.can_save
 			data.terminal_summary = current.terminal_summary
 			data.profile_commit_status = current.profile_commit_status
+	data.run_id = str(current.run_id) if current.run_id != null else ""
+	data.revision = current.revision
 	if page == null or _page_key != screen:
 		if page != null:
 			_host.remove_child(page)
@@ -154,14 +167,21 @@ func refresh() -> void:
 			page = BattleScreen.new()
 			page.preview_callback = Callable(self, "_preview")
 		else:
-			page = UiFlowPage.new()
+			page = UiExperiencePage.new()
 			page.screen = screen
+		page.audio = audio
 		_host.add_child(page)
 		page.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		page.action_requested.connect(submit_action)
 		page.local_selection_changed.connect(func(_selection: Dictionary): _regate())
 		_page_key = screen
 	_set_battle_frame(screen == "battle")
+	if page is BattleScreen:
+		var preferences := session.get_presentation_settings()
+		if page.get_meta("presentation", {}) != preferences:
+			page.animation_enabled = int(preferences.animation_speed) > 0 and not preferences.reduced_motion
+			page.speed_scale = maxf(1, int(preferences.animation_speed))
+			page.set_meta("presentation", preferences.duplicate(true))
 	page.render(data)
 	_regate()
 	var background_id: String = (
@@ -174,8 +194,9 @@ func refresh() -> void:
 	_status_label.text = "交大四年  /  DDL 战争"
 	if current.run is Dictionary:
 		_status_label.text += (
-			"    第一学期 · %s    精力 %s/%s    金钱 %s"
+			"    %s · %s    精力 %s/%s    金钱 %s"
 			% [
+				("大" + ["一", "二", "三", "四"][int(current.run.term)-1]) if current.run.has("campaign") else "第一学期",
 				UiStyle.label(str(current.run.character_id)),
 				current.run.vitality,
 				current.run.max_vitality,
@@ -193,11 +214,11 @@ func refresh() -> void:
 
 func _set_battle_frame(battle: bool) -> void:
 	for side in ["left", "right", "top", "bottom"]:
-		_frame_margin.add_theme_constant_override("margin_" + side, 0 if battle else 20)
+		_frame_margin.add_theme_constant_override("margin_" + side, 0 if battle else 10)
 	_frame_column.add_theme_constant_override("separation", 0 if battle else 10)
 	_status_label.visible = not battle
 	_notice_label.visible = not battle
-	_notice_label.custom_minimum_size.y = 28 if battle else 48
+	_notice_label.custom_minimum_size.y = 28 if battle else 32
 	if battle:
 		_frame_panel.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
 	else:
@@ -208,7 +229,7 @@ func _storage_view() -> Dictionary:
 	var inspected := session.inspect_saves()
 	if not inspected.ok:
 		return {
-			"has_active_session": session.get_view().run_id != null,
+			"has_active_session": session.get_view().run_id != null and session.get_view().terminal_summary == null,
 			"has_save": false,
 			"can_continue": false,
 			"save_meta": null,
@@ -262,6 +283,9 @@ func _regate() -> void:
 			"ok": preview != null and preview.can_submit,
 			"reason": "" if preview != null and preview.can_submit else reason
 		}
+		# Incomplete local selections must stay disabled even for single-candidate offers.
+		if draft_requires_selection(page.action_draft(uid)):
+			gates[uid] = {"ok": false, "reason": "请先预选具体对象"}
 	var current := session.get_view()
 	for uid in page.button_uids():
 		var draft := page.action_draft(uid)
@@ -269,7 +293,7 @@ func _regate() -> void:
 		if type == "ui.save":
 			gates[uid] = {
 				"ok": current.can_save,
-				"reason": "请先完成当前选择" if current.pending_choice != null else "尚未开始学期"
+				"reason": "请先完成当前选择" if current.pending_choice != null else "尚未开始冒险"
 			}
 		elif (
 			current.pending_choice != null
@@ -291,6 +315,13 @@ func _regate() -> void:
 	page.apply_gating(gates)
 
 
+func draft_requires_selection(draft: Dictionary) -> bool:
+	var payload: Dictionary = draft.get("payload", {})
+	if draft.get("type", "") == "claim_reward":
+		return str(payload.get("candidate_id", "")).is_empty()
+	return false
+
+
 func press(uid: String) -> bool:
 	return page.press(uid) if page != null else false
 
@@ -305,17 +336,32 @@ func submit_action(draft: Dictionary) -> void:
 		_navigate(type, payload)
 		return
 	var current := session.get_view()
+	var scope := "%s|%s" % [current.run_id, current.revision]
+	if scope == _submitted_scope:
+		return
+	if str(draft.get("source_run_id", page.view.get("run_id", ""))) != str(current.run_id) or int(draft.get("source_revision", page.view.get("revision", -1))) != current.revision:
+		last_error = ApiError.new(&"STALE_STATE", "ui.stale")
+		notice = "界面已过期，请重新选择并确认。"
+		refresh()
+		return
+	_submitted_scope = scope
+	_business_notice = _describe_action(draft)
 	var result := session.submit(
 		CommandContext.new(str(current.run_id), current.revision),
 		GameAction.new(StringName(type), payload)
 	)
 	if not result.accepted:
+		_submitted_scope = ""
 		_report_error(result.error)
 		refresh()
 		return
 	_ui_screen = ""
+	_business_notice = _describe_result(draft, current, result.view)
+	if current.run is Dictionary and result.view.run is Dictionary and not _business_notice.is_empty():
+		_business_notice += " · 金钱 %+d · 精力 %+d" % [int(result.view.run.money) - int(current.run.money), int(result.view.run.vitality) - int(current.run.vitality)]
 	_action_notice(result)
 	refresh()
+	_present_card_gain(current, result.view)
 	var final_view := session.get_view()
 	if (
 		page is BattleScreen
@@ -325,11 +371,20 @@ func submit_action(draft: Dictionary) -> void:
 		and result.view.battle.battle_id == final_view.battle.battle_id
 	):
 		page.consume_events(result.events, str(result.view.run_id), result.revision)
+	elif audio != null:
+		for event in result.events:
+			if event.type == &"ddl_ticked":
+				audio.play_deadline(int(event.data.get("after", 0)))
+			else:
+				audio.play_event(str(event.type))
 
 
 func _has_previous_run() -> bool:
+	var current := session.get_view()
+	if current.run_id != null:
+		return current.terminal_summary == null
 	var storage := _storage_view()
-	return storage.has_active_session or storage.has_save or storage.backup_meta != null
+	return storage.has_active_session or (storage.has_save and not (storage.save_meta is Dictionary and storage.save_meta.get("unfinished") == false)) or (not storage.has_save and storage.backup_meta != null)
 
 
 func _advance_completed_nodes() -> void:
@@ -362,7 +417,7 @@ func _advance_completed_nodes() -> void:
 
 
 func _action_notice(result: ActionResult) -> void:
-	notice = _persistence_notice(result.persistence, result.profile_merge, result.profile_cleanup)
+	notice = (_business_notice + " · " if not _business_notice.is_empty() else "") + _persistence_notice(result.persistence, result.profile_merge, result.profile_cleanup)
 	_advance_paused = (
 		result.persistence == &"failed"
 		or result.profile_merge in [&"failed", &"pending"]
@@ -399,7 +454,7 @@ func _navigate(type: String, payload: Dictionary) -> void:
 				_setup_defaults.default_character_id = str(current.run.character_id)
 			_restart_confirmation = false
 			_ui_screen = "setup"
-			notice = "配置好新学期后开始；返回菜单可继续原来的学期。"
+			notice = "配置好新冒险后开始；返回菜单可继续原来的进度。"
 		"ui.random_seed":
 			var generated := session.generate_run_seed()
 			if generated.ok:
@@ -423,7 +478,7 @@ func _navigate(type: String, payload: Dictionary) -> void:
 				str(payload.get("seed", "0"))
 			)
 			var started := (
-				session.restart_run(request, true) if replacing else session.start_run(request)
+				session.restart_run(request, true) if replacing or session.get_view().run_id != null else session.start_run(request)
 			)
 			if started.accepted:
 				_active_seed = request.seed
@@ -431,7 +486,7 @@ func _navigate(type: String, payload: Dictionary) -> void:
 				_restart_confirmation = false
 				_advance_paused = started.persistence == &"failed"
 				notice = (
-					"学期开始。选择地图上的第一个节点。 "
+					"冒险开始。选择地图上的第一个节点。 "
 					+ _persistence_notice(
 						started.persistence, started.profile_merge, started.profile_cleanup
 					)
@@ -450,7 +505,8 @@ func _navigate(type: String, payload: Dictionary) -> void:
 					refresh()
 					return
 			_ui_screen = ""
-			notice = "已返回当前学期。"
+			_submitted_scope = ""
+			notice = "已返回当前冒险。"
 		"ui.settings":
 			_back_screen = _ui_screen
 			_ui_screen = "settings"
@@ -462,6 +518,8 @@ func _navigate(type: String, payload: Dictionary) -> void:
 		"ui.save_settings":
 			var changed := session.update_settings(payload)
 			if changed.ok:
+				audio.apply_settings(session.get_audio_settings())
+				_apply_presentation()
 				notice = "设置已保存。" + ("自动保存已开启。" if changed.data.autosave else "自动保存已关闭，请手动保存进度。")
 			else:
 				_report_error(changed.error)
@@ -479,6 +537,82 @@ func _navigate(type: String, payload: Dictionary) -> void:
 					return
 			get_tree().quit()
 	refresh()
+
+
+func _apply_presentation() -> void:
+	var preferences := session.get_presentation_settings()
+	UiStyle.text_scale = int(preferences.text_scale) / 100.0
+	UiStyle.reduced_motion = bool(preferences.reduced_motion)
+
+
+func _describe_action(draft: Dictionary) -> String:
+	var payload: Dictionary = draft.get("payload", {})
+	match str(draft.get("type", "")):
+		"claim_reward":
+			return "已获得：" + UiStyle.label(str(payload.get("candidate_id", "")))
+		"skip_reward":
+			return "已跳过此项奖励"
+		"remove_card":
+			return "已支付金钱并移除所选卡牌"
+		"buy_item":
+			return "购买成功，商品已到账"
+		"take_rest":
+			return "休整完成"
+		"choose_event":
+			return "事件选择已生效"
+		"choose_campaign":
+			return "学年选择已生效：" + str({"card": "卡牌已加入牌组", "upgrade": "卡牌已升级", "remove": "卡牌已移除", "claim": "饰品领取已完成", "convert": "饰品已折算金钱", "resources": "资源已领取", "skip": "已跳过"}.get(str(payload.get("option_id", "")), "方向 / 去向已确认"))
+	return ""
+
+
+func _describe_result(draft: Dictionary, before: SessionView, after: SessionView) -> String:
+	if not before.run is Dictionary or not after.run is Dictionary:
+		return _describe_action(draft)
+	var payload: Dictionary = draft.get("payload", {})
+	var candidate := str(payload.get("candidate_id", ""))
+	if draft.get("type", "") == "choose_campaign" and payload.get("option_id", "") == "claim":
+		var old_ids: Array = before.run.relics.map(func(relic): return str(relic.definition_id))
+		if old_ids.has(candidate):
+			return "重复饰品已折算金钱：" + UiStyle.label(candidate)
+		var replacement := str(payload.get("replace_relic_id", ""))
+		for relic in before.run.relics:
+			if str(relic.relic_id) == replacement:
+				return "饰品已替换：" + UiStyle.label(str(relic.definition_id)) + " → " + UiStyle.label(candidate)
+		return "已获得饰品：" + UiStyle.label(candidate)
+	var old_cards: Array = before.run.cards.map(func(card): return str(card.card_id))
+	for card in after.run.cards:
+		if not old_cards.has(str(card.card_id)):
+			return "已加入牌组：" + UiStyle.label(str(card.definition_id))
+	return _describe_action(draft)
+
+
+func _present_card_gain(before: SessionView, after: SessionView) -> void:
+	var preferences := session.get_presentation_settings()
+	if preferences.reduced_motion or int(preferences.animation_speed) == 0 or not before.run is Dictionary or not after.run is Dictionary:
+		return
+	var ids: Array = before.run.cards.map(func(card): return str(card.card_id))
+	for card in after.run.cards:
+		if ids.has(str(card.card_id)):
+			continue
+		var image := TextureRect.new()
+		image.texture = UiStyle.texture(str(card.definition_id))
+		image.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		image.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		image.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		image.size = Vector2(100, 140)
+		image.position = size * 0.5 - image.size * 0.5
+		image.z_index = 300
+		add_child(image)
+		var destination := Vector2(40, 80)
+		if page._buttons.has("inspect:deck"):
+			destination = page._buttons["inspect:deck"].global_position - global_position
+		var tween := create_tween().set_parallel(true)
+		var duration := 0.35 / maxf(1, int(preferences.animation_speed))
+		tween.tween_property(image, "position", destination, duration)
+		tween.tween_property(image, "scale", Vector2(0.25, 0.25), duration)
+		tween.tween_property(image, "modulate:a", 0.0, duration)
+		tween.chain().tween_callback(image.queue_free)
+		return
 
 
 func _handle_save(result: GameResult) -> bool:
@@ -507,3 +641,5 @@ func _persistence_notice(saved: StringName, merged: StringName, cleanup: StringN
 func _report_error(error: ApiError) -> void:
 	last_error = error
 	notice = UiStyle.error_text(error)
+	if audio != null:
+		audio.play_ui("error")

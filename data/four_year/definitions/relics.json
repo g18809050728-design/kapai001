@@ -1,0 +1,226 @@
+[
+  {
+    "id": "FY_Y1_1",
+    "name_key": "校园导览册",
+    "availability": "drop",
+    "rarity": "white",
+    "tags": [
+      "four_year"
+    ],
+    "campaign": {
+      "year": 1,
+      "effect": "event_money",
+      "amount": 5
+    }
+  },
+  {
+    "id": "FY_Y1_2",
+    "name_key": "食堂饭卡",
+    "availability": "drop",
+    "rarity": "blue",
+    "tags": [
+      "four_year"
+    ],
+    "campaign": {
+      "year": 1,
+      "effect": "rest_heal",
+      "amount": 3
+    }
+  },
+  {
+    "id": "FY_Y1_3",
+    "name_key": "旧书签",
+    "availability": "drop",
+    "rarity": "purple",
+    "tags": [
+      "four_year"
+    ],
+    "campaign": {
+      "year": 1,
+      "effect": "service_discount",
+      "amount": 5
+    }
+  },
+  {
+    "id": "FY_Y1_4",
+    "name_key": "社团徽章",
+    "availability": "drop",
+    "rarity": "gold",
+    "tags": [
+      "four_year"
+    ],
+    "campaign": {
+      "year": 1,
+      "effect": "service_money",
+      "amount": 5
+    }
+  },
+  {
+    "id": "FY_Y2_1",
+    "name_key": "实验室门卡",
+    "availability": "drop",
+    "rarity": "white",
+    "tags": [
+      "four_year"
+    ],
+    "campaign": {
+      "year": 2,
+      "effect": "service_discount",
+      "amount": 8
+    }
+  },
+  {
+    "id": "FY_Y2_2",
+    "name_key": "竞赛纪念章",
+    "availability": "drop",
+    "rarity": "blue",
+    "tags": [
+      "four_year"
+    ],
+    "campaign": {
+      "year": 2,
+      "effect": "elite_money",
+      "amount": 8
+    }
+  },
+  {
+    "id": "FY_Y2_3",
+    "name_key": "工程笔记本",
+    "availability": "drop",
+    "rarity": "purple",
+    "tags": [
+      "four_year"
+    ],
+    "campaign": {
+      "year": 2,
+      "effect": "battle_money",
+      "amount": 4
+    }
+  },
+  {
+    "id": "FY_Y2_4",
+    "name_key": "专业书签",
+    "availability": "drop",
+    "rarity": "gold",
+    "tags": [
+      "four_year"
+    ],
+    "campaign": {
+      "year": 2,
+      "effect": "rest_heal",
+      "amount": 4
+    }
+  },
+  {
+    "id": "FY_Y3_1",
+    "name_key": "实习工牌",
+    "availability": "drop",
+    "rarity": "white",
+    "tags": [
+      "four_year"
+    ],
+    "campaign": {
+      "year": 3,
+      "effect": "service_money",
+      "amount": 10
+    }
+  },
+  {
+    "id": "FY_Y3_2",
+    "name_key": "推荐信封",
+    "availability": "drop",
+    "rarity": "blue",
+    "tags": [
+      "four_year"
+    ],
+    "campaign": {
+      "year": 3,
+      "effect": "event_money",
+      "amount": 8
+    }
+  },
+  {
+    "id": "FY_Y3_3",
+    "name_key": "科研笔记",
+    "availability": "drop",
+    "rarity": "purple",
+    "tags": [
+      "four_year"
+    ],
+    "campaign": {
+      "year": 3,
+      "effect": "elite_money",
+      "amount": 12
+    }
+  },
+  {
+    "id": "FY_Y3_4",
+    "name_key": "通勤卡",
+    "availability": "drop",
+    "rarity": "gold",
+    "tags": [
+      "four_year"
+    ],
+    "campaign": {
+      "year": 3,
+      "effect": "battle_money",
+      "amount": 6
+    }
+  },
+  {
+    "id": "FY_Y4_1",
+    "name_key": "答辩纪念笔",
+    "availability": "drop",
+    "rarity": "white",
+    "tags": [
+      "four_year"
+    ],
+    "campaign": {
+      "year": 4,
+      "effect": "service_discount",
+      "amount": 10
+    }
+  },
+  {
+    "id": "FY_Y4_2",
+    "name_key": "毕业合影",
+    "availability": "drop",
+    "rarity": "blue",
+    "tags": [
+      "four_year"
+    ],
+    "campaign": {
+      "year": 4,
+      "effect": "rest_heal",
+      "amount": 6
+    }
+  },
+  {
+    "id": "FY_Y4_3",
+    "name_key": "远行车票",
+    "availability": "drop",
+    "rarity": "purple",
+    "tags": [
+      "four_year"
+    ],
+    "campaign": {
+      "year": 4,
+      "effect": "service_money",
+      "amount": 12
+    }
+  },
+  {
+    "id": "FY_Y4_4",
+    "name_key": "学位纪念章",
+    "availability": "drop",
+    "rarity": "gold",
+    "tags": [
+      "four_year"
+    ],
+    "campaign": {
+      "year": 4,
+      "effect": "battle_money",
+      "amount": 8
+    }
+  }
+]

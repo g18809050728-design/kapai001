@@ -11,6 +11,7 @@ var _seed: String = ""
 var _seed_revision := -1
 var _autosave: bool = true
 var _settings_loaded: bool = false
+var _audio_settings: Dictionary = {}
 var _confirm_abandon: bool = false
 var _inspector: Control
 var _inspect_return_focus: Control
@@ -29,6 +30,8 @@ func render(data: Dictionary) -> void:
 			_render_map()
 		"reward":
 			_render_reward()
+		"campaign":
+			_render_campaign()
 		"shop":
 			_render_shop()
 		"event":
@@ -42,29 +45,32 @@ func render(data: Dictionary) -> void:
 		"battle", "battle_entry":
 			_render_battle_entry()
 		_:
-			reset_page("校园生活", "请从主菜单继续当前学期。")
+			reset_page("校园生活", "请从主菜单继续当前冒险。")
 			add_button(body, "page:menu", "返回主菜单", _ui("menu"))
 
 
 func _render_menu() -> void:
 	reset_page("DDL 战争", "把校园日常，打成自己的牌。")
 	add_art(body, "BG_home", Vector2(760, 250))
-	add_text(body, "第一学期 · 校园卡牌冒险", 24)
-	add_text(body, "选择角色，规划路线，在作业与休息之间迎接期末挑战。")
+	add_text(body, "四学年 · 校园卡牌冒险", 24)
+	add_text(body, "选择角色，规划四年路线，在作业与休息之间迎接学年挑战。")
 	var row: HBoxContainer = add_row(body)
 	add_button(row, "menu:new", "开始新一局", _ui("new_run"))
-	var resume: Button = add_button(row, "menu:continue", "继续学期", _ui("continue"))
+	var resume: Button = add_button(row, "menu:continue", "继续冒险", _ui("continue"))
 	resume.disabled = (
 		not bool(view.get("has_active_session", false))
 		and not bool(view.get("can_continue", false))
 	)
 	if resume.disabled:
+		resume.add_theme_color_override("font_disabled_color", Color("8b938d"))
+		var disabled_style := UiStyle.box(Color("dedfd7"))
+		resume.add_theme_stylebox_override("disabled", disabled_style)
 		resume.tooltip_text = str(view.get("save_error", ""))
 		if resume.tooltip_text.is_empty():
-			resume.tooltip_text = "还没有可以继续的学期。"
+			resume.tooltip_text = "还没有可以继续的冒险。"
 	add_button(row, "menu:settings", "设置与存档", _ui("settings"))
 	if bool(view.get("has_active_session", false)):
-		add_text(body, "当前学期已保留，可以随时继续。", 16)
+		add_text(body, "当前冒险已保留，可以随时继续。", 16)
 	if view.get("save_error") != null and not str(view.get("save_error", "")).is_empty():
 		add_text(body, "存档暂时不可用：" + str(view.save_error), 16)
 		add_text(body, "可在设置中检查备份，或开始新一局；重开会先保留旧存档原件。", 16)
@@ -73,7 +79,7 @@ func _render_menu() -> void:
 		add_text(
 			body,
 			(
-				"已解锁角色 %d · 已完成学期 %d"
+				"已解锁角色 %d · 已完成冒险 %d"
 				% [
 					_array(profile.get("unlocked_characters")).size(),
 					_array(profile.get("completed_run_ids")).size()
@@ -84,8 +90,11 @@ func _render_menu() -> void:
 
 
 func _render_setup() -> void:
-	reset_page("开启第一学期", "选好角色和难度，再出发。")
+	reset_page("开启校园冒险", "选好角色和难度，再出发。")
 	var characters: Array = _array(view.get("characters"))
+	var manifests: Array = _array(view.get("manifests"))
+	if not manifests.is_empty():
+		_manifest = _option_id(manifests[0])
 	if _character.is_empty():
 		_character = str(view.get("default_character_id", ""))
 	if _character.is_empty():
@@ -103,8 +112,13 @@ func _render_setup() -> void:
 		var panel: VBoxContainer = add_panel(grid)
 		add_art(panel, id, Vector2(220, 180))
 		add_text(panel, UiStyle.label(id), 22)
+		var passive := UiContentText.describe_character_passive(str(entry.get("passive_id", "")))
+		if not passive.is_empty():
+			add_text(panel, passive, 16)
 		var relic_id: String = str(entry.get("starter_relic_id", ""))
-		if not relic_id.is_empty():
+		if _manifest == "campus_four_year":
+			add_text(panel, "四学年模式：沿途领取饰品，开局无饰品。", 16)
+		elif not relic_id.is_empty():
 			add_text(panel, "初始饰品：" + UiStyle.label(relic_id), 16)
 		var starter_names: Array[String] = []
 		for card in _array(entry.get("starter_cards")):
@@ -137,25 +151,10 @@ func _render_setup() -> void:
 			{},
 			func() -> void: _select_setup("difficulty", id)
 		)
-	var manifests: Array = _array(view.get("manifests"))
-	if _manifest.is_empty() and not manifests.is_empty():
-		_manifest = _option_id(manifests[0])
-	if manifests.size() > 1:
-		add_text(body, "内容清单", 22)
-		var manifest_row: HBoxContainer = add_row(body)
-		for manifest in manifests:
-			var id: String = _option_id(manifest)
-			add_button(
-				manifest_row,
-				"setup:manifest:" + id,
-				("● " if id == _manifest else "○ ") + UiStyle.label(id),
-				{},
-				func() -> void: _select_setup("manifest", id)
-			)
 	if _seed_revision != int(view.get("seed_revision", 0)):
 		_seed = str(view.get("default_seed", ""))
 		_seed_revision = int(view.get("seed_revision", 0))
-	add_text(body, "学期种子", 22)
+	add_text(body, "本局种子", 22)
 	var seed_row: HBoxContainer = add_row(body)
 	var seed_input := LineEdit.new()
 	seed_input.text = _seed
@@ -164,14 +163,14 @@ func _render_setup() -> void:
 	seed_input.text_changed.connect(func(value: String) -> void: _seed = value)
 	seed_row.add_child(seed_input)
 	add_button(seed_row, "setup:seed_random", "随机种子", _ui("random_seed"))
-	add_text(body, "相同种子可重现同一学期；种子和难度将在开局后锁定。", 15)
+	add_text(body, "相同种子可重现同一局；种子和难度将在开局后锁定。", 15)
 	var confirming := bool(view.get("confirm_restart", false))
 	if bool(view.get("replaces_run", false)):
 		add_text(body, "开始新一局会结束原来的局并替换当前存档；返回可继续原来的局。", 18)
 	if bool(view.get("unreadable_save", false)):
 		add_text(body, "旧存档无法继续。确认后会先保留旧文件及备份原件，再开始新一局。", 18)
 	if confirming:
-		add_text(body, "确定结束原来的局，并按以上配置重新开始第一学期吗？", 21)
+		add_text(body, "确定结束原来的局，并按以上配置重新开始冒险吗？", 21)
 	var footer: HBoxContainer = add_row(body)
 	add_button(
 		footer,
@@ -195,8 +194,13 @@ func _render_setup() -> void:
 
 
 func _render_map() -> void:
-	reset_page("校园路线", "沿着箭头选择下一站，准备迎接期末。")
+	reset_page("校园路线", "沿着箭头选择下一站，完成本学年的挑战。" if view.has("campaign") else "沿着箭头选择下一站，准备迎接期末。")
 	_run_bar(body)
+	if view.has("campaign"):
+		add_text(body, "大%s · %s｜本图 %s 层，完成第 %s 层后领取饰品" % [["一", "二", "三", "四"][int(view.term)-1], view.get("year_title", ""), view.get("year_layers", 0), "、".join(CampaignMap.MAPS[int(view.term)-1].relic_layers.map(func(value): return str(value)))], 20)
+		var c: Dictionary = view.campaign
+		add_text(body, "探索 %s/6　方向 %s　履历 %s/6　毕设 %s/5　去向 %s" % [c.exploration, _campaign_label(c.direction), c.resume, c.thesis, _campaign_label(c.destination)], 18)
+		add_text(body, "每图末层为学年 Boss；领奖后进入下一学年。实验室与竞赛路线请留意后继和费用。", 17)
 	var reachable: Array = _array(view.get("reachable_node_ids"))
 	var nodes: Array = _array(view.get("nodes"))
 	var completed := 0
@@ -211,13 +215,15 @@ func _render_map() -> void:
 			continue
 		var panel := add_panel(next_row)
 		add_text(
-			panel, "第 %s 层 · %s" % [node.get("layer", 0), _node_name(str(node.get("kind", "")))], 22
+			panel, "第 %s 层 · %s" % [node.get("layer", 0), _map_node_title(node)], 22
 		)
 		add_text(panel, _node_hint(str(node.get("kind", ""))), 17)
+		if node.has("subtype"):
+			add_text(panel, _campaign_node_hint(node), 17)
 		add_button(
 			panel,
 			"node:" + id,
-			"进入 · " + _node_name(str(node.get("kind", ""))),
+			"进入 · " + _map_node_title(node),
 			_action("enter_node", {"node_id": id})
 		)
 	if reachable.is_empty():
@@ -247,12 +253,12 @@ func _render_map() -> void:
 			elif reachable.has(id):
 				status = "可进入"
 			if reachable.has(id):
-				add_text(panel, _node_name(str(node.get("kind", ""))) + " · " + status, 18)
+				add_text(panel, _map_node_title(node) + " · " + status, 18)
 			else:
 				add_button(
 					panel,
 					"node:" + id,
-					_node_name(str(node.get("kind", ""))) + " · " + status,
+					_map_node_title(node) + " · " + status,
 					_action("enter_node", {"node_id": id})
 				)
 			var next_names: Array[String] = []
@@ -264,7 +270,7 @@ func _render_map() -> void:
 								"第%s层 %s"
 								% [
 									destination.get("layer", ""),
-									_node_name(str(destination.get("kind", "")))
+								_map_node_title(destination)
 								]
 							)
 						)
@@ -276,14 +282,14 @@ func _render_map() -> void:
 	add_button(
 		footer,
 		"map:abandon",
-		"放弃本学期",
+		"放弃本局",
 		{},
 		func() -> void:
 			_confirm_abandon = not _confirm_abandon
 			refresh_local()
 	)
 	if _confirm_abandon:
-		add_text(body, "确定放弃本学期？此操作会结束当前学期。", 18)
+		add_text(body, "确定放弃本局？此操作会结束当前冒险。", 18)
 		add_button(body, "map:abandon_confirm", "确认放弃", _action("abandon_run", {"confirmed": true}))
 	_deck_summary(body)
 
@@ -310,7 +316,7 @@ func _render_reward() -> void:
 		for candidate in candidates:
 			var id: String = _candidate_id(candidate)
 			var choice: VBoxContainer = add_panel(row)
-			add_art(choice, id, Vector2(120, 155) if kind == "card" else Vector2(120, 110))
+			add_art(choice, id, Vector2(192, 144) if kind == "card" else Vector2(120, 110))
 			add_text(choice, UiStyle.label(id), 20)
 			var detail: Dictionary = _dict(details.get(id))
 			var description := (
@@ -358,6 +364,102 @@ func _render_reward() -> void:
 	_flow_navigation("reward")
 
 
+func _render_campaign() -> void:
+	var offer: Dictionary = _dict(view.get("campaign_offer"))
+	_scope(str(offer.get("offer_id", "")))
+	var kind := str(offer.get("kind", ""))
+	reset_page(str({"relic": "学年纪念饰品", "grand": "学年大奖励", "service": "校园服务", "direction": "选择学习方向", "destination": "选择毕业去向", "familiar": "校园熟人"}.get(kind, "学年选择")), "选择完成后继续当前路线；奖励候选已固定，存档不会重新抽取。")
+	_run_bar(body)
+	if kind in ["direction", "destination"]:
+		for id in (CampaignService.DIRECTIONS if kind == "direction" else CampaignService.DESTINATIONS):
+			add_button(body, "campaign:" + id, _campaign_label(id), _campaign_action(offer, id))
+		return
+	if kind in ["relic", "grand"]:
+		if kind == "relic":
+			add_text(body, "三选一｜重复自动折算25金钱｜满3槽可替换或折算30金钱｜跳过20金钱", 18)
+			if _relics_full():
+				_replacement_picker(body, "campaign", "campaign:replace")
+		else:
+			add_text(body, "以下奖励互斥，只能选一项：高阶卡牌 / 升级或移除 / 60金钱与20%精力。", 18)
+		var grid := GridContainer.new()
+		grid.columns = 3
+		grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		grid.add_theme_constant_override("h_separation", 14)
+		body.add_child(grid)
+		for id in _array(offer.get("candidates")):
+			var panel := add_panel(grid)
+			var detail: Dictionary = _dict(offer.get("details", {}).get(id))
+			add_art(panel, str(id), Vector2(192, 144))
+			add_text(panel, UiStyle.label(str(id)), 23)
+			add_text(panel, UiContentText.describe_relic(detail) if kind == "relic" else UiContentText.describe_card(detail), 18)
+			var row := add_row(panel)
+			add_button(row, "campaign:claim:" + str(id), "领取" + ("（替换所选饰品）" if kind == "relic" and _relics_full() else ""), func() -> Dictionary:
+				var action := _campaign_action(offer, "claim" if kind == "relic" else "card", str(id))
+				if kind == "relic" and _choices.has("campaign:replace"):
+					action.payload.replace_relic_id = _choices["campaign:replace"]
+				return action)
+			if kind == "relic" and _relics_full():
+				add_button(row, "campaign:convert:" + str(id), "折算金钱", _campaign_action(offer, "convert", str(id)))
+	if kind == "grand":
+		_campaign_card_choices(offer, false)
+		var extra := 20 if (int(view.term) == 1 and int(view.campaign.exploration) >= 6) or (int(view.term) == 4 and int(view.campaign.thesis) >= 4) else 0
+		add_button(body, "campaign:resources", "%d金钱，回复%d精力（上限%d）" % [60 + extra, int(floor(int(view.max_vitality) * 0.2)), int(view.max_vitality)], _campaign_action(offer, "resources"))
+	elif kind == "service":
+		var meta: Dictionary = offer.get("node_meta", {})
+		var sub := str(meta.get("subtype", ""))
+		add_text(body, str(meta.get("title", "")), 23)
+		if sub in ["L", "LAB", "T"]:
+			add_text(body, "一次服务费用：%d金钱%s" % [int(offer.service_cost), "与5精力（至少保留1）" if sub == "LAB" else ""], 18)
+			_campaign_card_choices(offer, sub == "LAB")
+		elif sub == "C":
+			add_button(body, "campaign:heal", "回复8精力", _campaign_action(offer, "heal"))
+			add_button(body, "campaign:money", "社团活动：15金钱 + 饰品/方向加成", _campaign_action(offer, "money"))
+		elif sub == "I":
+			add_button(body, "campaign:money", "实习招聘：25金钱 + 饰品/方向加成", _campaign_action(offer, "money"))
+		else:
+			add_button(body, "campaign:progress", "完成阶段事项，回复4精力", _campaign_action(offer, "progress"))
+		if int(view.term) == 2 and int(meta.get("layer", 0)) >= 7 and not bool(view.campaign.direction_changed):
+			add_text(body, "可花30金钱更换一次方向（本次服务改为转向）：", 18)
+			for id in CampaignService.DIRECTIONS:
+				add_button(body, "campaign:direction:" + id, "改为" + _campaign_label(id), _campaign_action(offer, "direction_" + id))
+	elif kind == "familiar":
+		add_button(body, "campaign:familiar", "向校园熟人咨询，获得10金钱", _campaign_action(offer, "money"))
+	add_button(body, "campaign:skip", "放弃（%s金钱）" % ("20" if kind == "relic" else ("30" if kind == "grand" else "0")), _campaign_action(offer, "skip"))
+	var navigation := add_row(body)
+	add_button(navigation, "campaign:save", "保存进度", _ui("save"))
+	add_button(navigation, "campaign:menu", "主菜单", _ui("menu"))
+
+
+func _campaign_card_choices(offer: Dictionary, upgrade_only: bool) -> void:
+	for card in _array(view.get("cards")):
+		var row := add_row(body)
+		var art := add_art(row, str(card.get("definition_id", "")), Vector2(112, 84))
+		art.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+		add_text(row, _card_name(card), 18)
+		if card.get("upgrade_detail") is Dictionary:
+			var upgrade := add_button(row, "campaign:upgrade:" + str(card.card_id), "升级", _campaign_action(offer, "upgrade", str(card.card_id)))
+			upgrade.tooltip_text = UiContentText.describe_card(card.upgrade_detail)
+		if not upgrade_only:
+			add_button(row, "campaign:remove:" + str(card.card_id), "移除", _campaign_action(offer, "remove", str(card.card_id)))
+
+
+func _campaign_action(offer: Dictionary, option: String, candidate: String = "") -> Dictionary:
+	return _action("choose_campaign", {"offer_id": str(offer.get("offer_id", "")), "option_id": option, "candidate_id": candidate})
+
+
+func _campaign_label(id: String) -> String:
+	return str({"": "未选择", "theory": "理论：图书馆费用-10", "engineering": "工程：实验室费用-10", "competition": "竞赛：精英胜利额外10金钱", "practice": "实践：社团/实习额外10金钱", "job": "就业", "exam": "考研", "research": "保研", "abroad": "出国"}.get(id, id))
+
+
+func _map_node_title(node: Dictionary) -> String:
+	return str(node.get("title", _node_name(str(node.get("kind", "")))))
+
+
+func _campaign_node_hint(node: Dictionary) -> String:
+	var sub := str(node.get("subtype", ""))
+	return str({"N": "普通战斗 · 标准风险", "EL": "精英战斗 · 高风险 · 稀有奖励", "K": "竞赛精英 · 高风险 · 履历来源", "B": "学年终点 · 胜利后大奖励", "S": "购买/删牌/餐食", "R": "安全 · 回复/升级", "E": "校园事件 · 互斥选项", "L": "图书馆 · 20金钱升级或移除（可减免）", "LAB": "实验室 · 15金钱与5精力升级；注意限定后继", "T": "导师 · 10金钱升级或移除（可减免）", "C": "社团 · 回复8精力或15金钱", "I": "实习招聘 · 25金钱与履历", "ST": "剧情事项 · 毕设进度与4精力"}.get(sub, ""))
+
+
 func _render_shop() -> void:
 	var shop: Dictionary = _dict(view.get("shop"))
 	_scope(str(shop.get("shop_id", "")))
@@ -375,7 +477,7 @@ func _render_shop() -> void:
 		var kind: String = str(stock.get("kind", ""))
 		var panel: VBoxContainer = add_panel(grid)
 		if kind != "meal":
-			add_art(panel, definition_id, Vector2(110, 135))
+			add_art(panel, definition_id, Vector2(176, 132) if kind == "card" else Vector2(110, 135))
 		add_text(panel, "校园餐食" if kind == "meal" else UiStyle.label(definition_id), 20)
 		var detail := _dict(stock.get("detail"))
 		if kind == "meal":
@@ -436,8 +538,7 @@ func _render_shop() -> void:
 	for card in _array(view.get("cards")):
 		var card_id: String = str(card.get("card_id", ""))
 		var card_panel := add_panel(removal_panel)
-		add_text(card_panel, _card_name(card), 20)
-		add_text(card_panel, UiContentText.describe_card(_dict(card.get("detail"))), 16)
+		_card_comparison(card_panel, card, false)
 		add_button(
 			card_panel,
 			"shop:remove:" + card_id,
@@ -453,7 +554,7 @@ func _render_shop() -> void:
 func _render_event() -> void:
 	var event: Dictionary = _dict(view.get("event"))
 	_scope(str(event.get("event_instance_id", "")))
-	reset_page(UiStyle.label(str(event.get("definition_id", ""))), "校园里的小插曲，也会改变这一学期。")
+	reset_page(UiStyle.label(str(event.get("definition_id", ""))), "校园里的小插曲，也会改变这次冒险。")
 	_run_bar(body)
 	for option in _array(event.get("options")):
 		var option_id: String = str(option.get("option_id", ""))
@@ -491,7 +592,7 @@ func _render_event() -> void:
 				for candidate in candidates:
 					var id: String = _candidate_id(candidate)
 					var candidate_panel: VBoxContainer = add_panel(candidate_row)
-					add_art(candidate_panel, id, Vector2(100, 125))
+					add_art(candidate_panel, id, Vector2(160, 120) if op == "gain_card" else Vector2(100, 125))
 					if op == "gain_card" and not effect.has("card_id") and candidates.size() > 1:
 						add_button(
 							candidate_panel,
@@ -623,12 +724,12 @@ func _render_summary() -> void:
 	var result: String = str(summary.get("result", view.get("outcome", "")))
 	var won: bool = result == "won"
 	reset_page(
-		"第一学期完成" if won else ("本学期已放弃" if result == "abandoned" else "本学期结束"),
-		"校园里的每一次选择，都成为了这学期的回忆。" if won else "稍作休息，再尝试一条新的校园路线。"
+		("四年冒险完成" if view.has("campaign") else "第一学期完成") if won else ("本局已放弃" if result == "abandoned" else "本局结束"),
+		"校园里的每一次选择，都成为了这段旅程的回忆。" if won else "稍作休息，再尝试一条新的校园路线。"
 	)
 	add_art(body, "BG_success" if won else "BG_failure", Vector2(760, 280))
 	if won:
-		add_text(body, "你已完成当前版本的全部学期内容。第二学期尚未开放；再开一局会重新开始第一学期。", 20)
+		add_text(body, "你已完成大一至大四的全部地图。毕业去向：" + _campaign_label(str(view.campaign.destination)) if view.has("campaign") else "你已完成历史版本的第一学期切片。第二学期尚未开放；再开一局会重新开始第一学期。", 20)
 	add_text(
 		body,
 		(
@@ -664,7 +765,7 @@ func _render_summary() -> void:
 		if str(commit.get("profile_merge", "")) == "merged":
 			add_text(body, "已永久解锁：" + _labels(unlocked), 18)
 		else:
-			add_text(body, "本学期解锁待保存：" + _labels(unlocked), 18)
+			add_text(body, "本局解锁待保存：" + _labels(unlocked), 18)
 	if str(commit.get("profile_merge", "")) in ["failed", "pending"]:
 		add_text(body, "本局已保存，长期进度待更新。请返回设置重试保存。", 18)
 	elif str(commit.get("profile_cleanup", "")) == "failed":
@@ -677,6 +778,7 @@ func _render_summary() -> void:
 func _render_settings() -> void:
 	if not _settings_loaded:
 		_autosave = bool(_dict(view.get("settings")).get("autosave", true))
+		_audio_settings = _dict(view.get("settings")).get("audio", {"Master": 100, "Music": 70, "Ambience": 50, "SFX": 80, "UI": 70, "muted": false}).duplicate(true)
 		_settings_loaded = true
 	reset_page("设置与存档", "管理自动保存，或显式恢复备份中的进度。")
 	var panel: VBoxContainer = add_panel(body)
@@ -696,14 +798,48 @@ func _render_settings() -> void:
 	add_button(
 		panel,
 		"settings:apply",
-		"保存设置",
-		func() -> Dictionary: return _ui("save_settings", {"autosave": _autosave})
+		"应用设置",
+		func() -> Dictionary: return _ui("save_settings", {"autosave": _autosave, "audio": _audio_settings.duplicate(true)})
 	)
+	var audio_panel: VBoxContainer = add_panel(body)
+	add_text(audio_panel, "音效", 23)
+	add_text(audio_panel, "音量与静音在点击“应用设置”后保存。音乐与环境声尚未配置正式资源。", 17)
+	for bus in ["Master", "Music", "Ambience", "SFX", "UI"]:
+		var volume_row := add_row(audio_panel)
+		var volume_label := add_text(volume_row, str({"Master": "总音量", "Music": "音乐", "Ambience": "环境", "SFX": "效果", "UI": "界面"}[bus]) + " %d%%" % int(_audio_settings.get(bus, 100)), 18)
+		volume_label.custom_minimum_size.x = 170
+		var slider := HSlider.new()
+		slider.name = "Volume" + bus
+		slider.min_value = 0
+		slider.max_value = 100
+		slider.step = 1
+		slider.value = int(_audio_settings.get(bus, 100))
+		slider.custom_minimum_size = Vector2(250, 40)
+		slider.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		volume_row.add_child(slider)
+		slider.value_changed.connect(func(value: float) -> void:
+			_audio_settings[bus] = int(value)
+			if audio != null:
+				audio.set_bus_volume(bus, value / 100.0)
+			volume_label.text = str({"Master": "总音量", "Music": "音乐", "Ambience": "环境", "SFX": "效果", "UI": "界面"}[bus]) + " %d%%" % int(value))
+	var audio_row: HBoxContainer = add_row(audio_panel)
+	if audio != null:
+		for muted in [false, true]:
+			add_button(
+				audio_row,
+				"settings:audio:" + str(muted),
+				("● " if bool(_audio_settings.get("muted", false)) == muted else "○ ") + ("静音" if muted else "开启"),
+				{},
+				func() -> void:
+					_audio_settings.muted = muted
+					audio.set_muted(muted)
+					refresh_local()
+			)
 	var saves: VBoxContainer = add_panel(body)
-	add_text(saves, "学期进度", 23)
+	add_text(saves, "冒险进度", 23)
 	add_text(saves, "正式存档：" + _save_description(view.get("save_meta")), 17)
 	add_text(saves, "备份存档：" + _save_description(view.get("backup_meta")), 17)
-	add_button(saves, "settings:save", "手动保存当前学期", _ui("save"))
+	add_button(saves, "settings:save", "手动保存当前进度", _ui("save"))
 	var restore: Button = add_button(
 		saves, "settings:restore_backup", "恢复备份", _ui("restore_backup")
 	)
@@ -759,13 +895,15 @@ func _replacement_picker(parent: Node, uid_prefix: String, choice_key: String) -
 			func() -> void: _choose(choice_key, id)
 		)
 		button.tooltip_text = UiContentText.describe_relic(_dict(relic.get("detail")))
+		if view.has("campaign"):
+			add_text(parent, button.tooltip_text, 16)
 
 
 func _run_bar(parent: Node) -> void:
 	add_text(
 		parent,
 		(
-			"第 %s 学期　精力 %s/%s　金钱 %s　牌组 %s 张"
+			("第 %s 学年　精力 %s/%s　金钱 %s　牌组 %s 张" if view.has("campaign") else "第 %s 学期　精力 %s/%s　金钱 %s　牌组 %s 张")
 			% [
 				view.get("term", 1),
 				view.get("vitality", 0),
@@ -799,12 +937,18 @@ func _run_bar(parent: Node) -> void:
 
 
 func _card_comparison(parent: Node, card: Dictionary, upgrading: bool) -> void:
-	add_text(parent, _card_name(card), 20)
-	add_text(parent, "当前：" + UiContentText.describe_card(_dict(card.get("detail"))), 16)
+	var row := add_row(parent)
+	var art := add_art(row, str(card.get("definition_id", "")), Vector2(112, 84))
+	art.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	var description := VBoxContainer.new()
+	description.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.add_child(description)
+	add_text(description, _card_name(card), 20)
+	add_text(description, "当前：" + UiContentText.describe_card(_dict(card.get("detail"))), 16)
 	if upgrading:
 		var next_detail := _dict(card.get("upgrade_detail"))
 		add_text(
-			parent,
+			description,
 			(
 				"升级后：" + UiContentText.describe_card(next_detail)
 				if not next_detail.is_empty()
@@ -860,7 +1004,7 @@ func _open_inspector(kind: String) -> void:
 		var item := add_panel(grid)
 		var id := str(entry.get("definition_id", ""))
 		var row := add_row(item)
-		var art := add_art(row, id, Vector2(70, 92) if kind == "deck" else Vector2(70, 70))
+		var art := add_art(row, id, Vector2(112, 84) if kind == "deck" else Vector2(70, 70))
 		art.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 		add_text(row, _card_name(entry) if kind == "deck" else UiStyle.label(id), 21)
 		var detail := _dict(entry.get("detail"))
@@ -921,8 +1065,6 @@ func _select_setup(kind: String, value: String) -> void:
 			_character = value
 		"difficulty":
 			_difficulty = value
-		"manifest":
-			_manifest = value
 	refresh_local()
 
 
@@ -999,6 +1141,10 @@ func _node_name(kind: String) -> String:
 
 
 func _node_hint(kind: String) -> String:
+	if view.has("campaign") and kind == "boss":
+		return "本学年的最终挑战，共三个阶段；胜利后选择一项学年大奖励。"
+	if view.has("campaign") and kind == "shop":
+		return "购买卡牌或餐食，也可以精简牌组。饰品来自学年路线奖励。"
 	return str(
 		(
 			{

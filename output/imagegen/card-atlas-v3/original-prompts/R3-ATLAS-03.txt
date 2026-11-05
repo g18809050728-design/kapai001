@@ -1,0 +1,16 @@
+Use case: illustration-story. Produce ONE production sprite atlas of EIGHT separate campus card illustrations.
+Canvas: exactly 1024 x 1536 pixels, portrait. Strict 2 columns x 4 rows, equal 512 x 384 cells. Read row-major from top left.
+The entire canvas is filled by these eight cells. No outer margin, gutters, border, title, labels or numbering. Separate scenes at the exact halfway vertical boundary and four equal horizontal bands. NEVER combine cells or change their size/order.
+Shared art direction: 大学校园题材策略卡牌插画，成年大学生的日常与抽象思考相结合，精细手绘线条，水粉与彩铅质感，薄纸纹理，电影感柔光，克制的超现实表达，主体清晰、动作一眼可辨，统一米白与深青基调，画面干净，有叙事细节，横向4:3独立插画。只画插画，不画卡框、文字或界面。
+Each cell is one horizontal 4:3 independent scene, NOT a card frame or a panel of a continuing comic. Clear single main action, natural adult hands, understated campus gouache and pencil illustration on warm ivory paper. Consistent fine dark teal lines and soft daylight across every cell.
+Composition within EACH cell: essential objects and gestures inside central 70%, expendable quiet background at edges. The crop removes 16px from left/right and 12px from top/bottom of EACH cell. No subject, light trail, limb or object may cross into another cell.
+No readable text, letters, numerals, equations, branding, campus logos, watermarks, labels, UI, speech bubbles, trading card frames, exaggerated anatomy, weapons or horror. Blank pages and simple geometric diagrams only. Slot IDs below are instructions, NEVER draw them.
+Row 1, column 1: 林序系列：深青与铜橙；方格纸、流程卡片、调试灯和有序连线作为母题。成年男大学生，蓬松黑短发、细圆框眼镜、深青外套与米白内搭。优先手部和桌面近景。 主体场景：同一小模型被依次搭建三次，动作由模糊到流畅。
+Row 1, column 2: 林序系列：深青与铜橙；方格纸、流程卡片、调试灯和有序连线作为母题。成年男大学生，蓬松黑短发、细圆框眼镜、深青外套与米白内搭。优先手部和桌面近景。 主体场景：多次使用的便签册翻开，同样的图形步骤再次点亮。
+Row 2, column 1: 林序系列：深青与铜橙；方格纸、流程卡片、调试灯和有序连线作为母题。成年男大学生，蓬松黑短发、细圆框眼镜、深青外套与米白内搭。优先手部和桌面近景。 主体场景：天平两端分别放着结果模型和参考模板，平衡光线稳定。
+Row 2, column 2: 林序系列：深青与铜橙；方格纸、流程卡片、调试灯和有序连线作为母题。成年男大学生，蓬松黑短发、细圆框眼镜、深青外套与米白内搭。优先手部和桌面近景。 主体场景：许多零散工具被收进有层次的木盒，形成一套成熟方法。
+Row 3, column 1: 林序系列：深青与铜橙；方格纸、流程卡片、调试灯和有序连线作为母题。成年男大学生，蓬松黑短发、细圆框眼镜、深青外套与米白内搭。优先手部和桌面近景。 主体场景：五张空白流程卡按先后排成缓慢上升的台阶。
+Row 3, column 2: 林序系列：深青与铜橙；方格纸、流程卡片、调试灯和有序连线作为母题。成年男大学生，蓬松黑短发、细圆框眼镜、深青外套与米白内搭。优先手部和桌面近景。 主体场景：在桥梁起点逐一检查承重支架，尚未行动的路线保持暗色。
+Row 4, column 1: 林序系列：深青与铜橙；方格纸、流程卡片、调试灯和有序连线作为母题。成年男大学生，蓬松黑短发、细圆框眼镜、深青外套与米白内搭。优先手部和桌面近景。 主体场景：许多细小光束汇成一束，穿透纸墙中央单一薄弱点。
+Row 4, column 2: 林序系列：深青与铜橙；方格纸、流程卡片、调试灯和有序连线作为母题。成年男大学生，蓬松黑短发、细圆框眼镜、深青外套与米白内搭。优先手部和桌面近景。 主体场景：张开的需求丝线收束进一个边界清楚的纸盒。
+Final count check: exactly 2 columns and 4 equal-height rows. Keep every requested scene in its assigned slot. No additional panels or outer margin.

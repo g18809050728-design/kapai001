@@ -1,0 +1,799 @@
+[
+  {
+    "id": "N01",
+    "name_key": "encounter.n01.name",
+    "kind": "normal",
+    "members": [
+      "N01"
+    ],
+    "base_ddl": 8,
+    "terms": [
+      1
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "N02",
+    "name_key": "encounter.n02.name",
+    "kind": "normal",
+    "members": [
+      "N02"
+    ],
+    "base_ddl": 8,
+    "terms": [
+      1
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "N03",
+    "name_key": "encounter.n03.name",
+    "kind": "normal",
+    "members": [
+      "N03"
+    ],
+    "base_ddl": 8,
+    "terms": [
+      1,
+      2
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "N04",
+    "name_key": "encounter.n04.name",
+    "kind": "normal",
+    "members": [
+      "N04"
+    ],
+    "base_ddl": 8,
+    "terms": [
+      1,
+      2
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "Q01",
+    "name_key": "encounter.q01.name",
+    "kind": "elite",
+    "members": [
+      "Q01"
+    ],
+    "base_ddl": 6,
+    "terms": [
+      1
+    ],
+    "exam_flags": [
+      "independent_answer"
+    ]
+  },
+  {
+    "id": "B01",
+    "name_key": "encounter.b01.name",
+    "kind": "boss",
+    "members": [
+      "B01"
+    ],
+    "base_ddl": 10,
+    "terms": [
+      1
+    ],
+    "exam_flags": [
+      "independent_answer",
+      "fixed_exam_room"
+    ]
+  },
+  {
+    "id": "E01",
+    "name_key": "encounter.e01.name",
+    "kind": "elite",
+    "members": [
+      "E01"
+    ],
+    "base_ddl": 9,
+    "terms": [
+      1,
+      2
+    ],
+    "exam_flags": [
+      "independent_answer"
+    ]
+  },
+  {
+    "id": "E02",
+    "name_key": "encounter.e02.name",
+    "kind": "elite",
+    "members": [
+      "E02"
+    ],
+    "base_ddl": 8,
+    "terms": [
+      1,
+      2
+    ],
+    "exam_flags": [
+      "independent_answer"
+    ]
+  },
+  {
+    "id": "E03",
+    "name_key": "encounter.e03.name",
+    "kind": "elite",
+    "members": [
+      "E03"
+    ],
+    "base_ddl": 9,
+    "terms": [
+      1,
+      2
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "E04",
+    "name_key": "encounter.e04.name",
+    "kind": "elite",
+    "members": [
+      "E04_1",
+      "E04_2",
+      "E04_3"
+    ],
+    "base_ddl": 7,
+    "terms": [
+      1,
+      2
+    ],
+    "exam_flags": [
+      "independent_answer"
+    ]
+  },
+  {
+    "id": "E05",
+    "name_key": "encounter.e05.name",
+    "kind": "elite",
+    "members": [
+      "E05"
+    ],
+    "base_ddl": 10,
+    "terms": [
+      2,
+      3
+    ],
+    "exam_flags": [
+      "independent_answer",
+      "fixed_exam_room"
+    ]
+  },
+  {
+    "id": "E06",
+    "name_key": "encounter.e06.name",
+    "kind": "elite",
+    "members": [
+      "E06"
+    ],
+    "base_ddl": 8,
+    "terms": [
+      1,
+      2
+    ],
+    "exam_flags": [
+      "independent_answer"
+    ]
+  },
+  {
+    "id": "E07",
+    "name_key": "encounter.e07.name",
+    "kind": "elite",
+    "members": [
+      "E07"
+    ],
+    "base_ddl": 6,
+    "terms": [
+      2,
+      3
+    ],
+    "exam_flags": [
+      "independent_answer"
+    ]
+  },
+  {
+    "id": "Q0A",
+    "name_key": "encounter.q0a.name",
+    "kind": "elite",
+    "members": [
+      "Q0A_1",
+      "Q0A_2",
+      "Q0A_3",
+      "Q0A_3_1"
+    ],
+    "base_ddl": 8,
+    "terms": [
+      1,
+      2,
+      3
+    ],
+    "exam_flags": [],
+    "initial_members": [
+      "Q0A_1",
+      "Q0A_2",
+      "Q0A_3"
+    ],
+    "absorb_cooperation": {
+      "draw_per_card": 1,
+      "focus_per_card": 1
+    }
+  },
+  {
+    "id": "Q0B",
+    "name_key": "encounter.q0b.name",
+    "kind": "elite",
+    "members": [
+      "Q0B_1",
+      "Q0B_2"
+    ],
+    "base_ddl": 8,
+    "terms": [
+      1,
+      2
+    ],
+    "exam_flags": [],
+    "initial_members": [
+      "Q0B_2"
+    ]
+  },
+  {
+    "id": "Q0C",
+    "name_key": "encounter.q0c.name",
+    "kind": "elite",
+    "members": [
+      "Q0C"
+    ],
+    "base_ddl": 10,
+    "terms": [
+      1,
+      2,
+      3
+    ],
+    "exam_flags": [
+      "independent_answer"
+    ]
+  },
+  {
+    "id": "Q0D",
+    "name_key": "encounter.q0d.name",
+    "kind": "elite",
+    "members": [
+      "Q0D"
+    ],
+    "base_ddl": 8,
+    "terms": [
+      1,
+      2,
+      3
+    ],
+    "exam_flags": [
+      "independent_answer"
+    ]
+  },
+  {
+    "id": "Q0E",
+    "name_key": "encounter.q0e.name",
+    "kind": "elite",
+    "members": [
+      "Q0E_1",
+      "Q0E_2",
+      "Q0E_3"
+    ],
+    "base_ddl": 10,
+    "terms": [
+      1,
+      2
+    ],
+    "exam_flags": [],
+    "initial_members": [
+      "Q0E_1"
+    ]
+  },
+  {
+    "id": "N13",
+    "name_key": "encounter.n13.name",
+    "kind": "normal",
+    "members": [
+      "N13"
+    ],
+    "base_ddl": 8,
+    "terms": [
+      1
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "N14",
+    "name_key": "encounter.n14.name",
+    "kind": "normal",
+    "members": [
+      "N14"
+    ],
+    "base_ddl": 8,
+    "terms": [
+      1,
+      2
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "N15",
+    "name_key": "encounter.n15.name",
+    "kind": "normal",
+    "members": [
+      "N15"
+    ],
+    "base_ddl": 8,
+    "terms": [
+      1,
+      2
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "N16",
+    "name_key": "encounter.n16.name",
+    "kind": "normal",
+    "members": [
+      "N16"
+    ],
+    "base_ddl": 8,
+    "terms": [
+      1
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "N17",
+    "name_key": "encounter.n17.name",
+    "kind": "normal",
+    "members": [
+      "N17"
+    ],
+    "base_ddl": 8,
+    "terms": [
+      1,
+      2
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "N18",
+    "name_key": "encounter.n18.name",
+    "kind": "normal",
+    "members": [
+      "N18"
+    ],
+    "base_ddl": 8,
+    "terms": [
+      1
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "N19",
+    "name_key": "encounter.n19.name",
+    "kind": "normal",
+    "members": [
+      "N19"
+    ],
+    "base_ddl": 9,
+    "terms": [
+      2
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "N20",
+    "name_key": "encounter.n20.name",
+    "kind": "normal",
+    "members": [
+      "N20"
+    ],
+    "base_ddl": 8,
+    "terms": [
+      2,
+      3
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "N21",
+    "name_key": "encounter.n21.name",
+    "kind": "normal",
+    "members": [
+      "N21"
+    ],
+    "base_ddl": 8,
+    "terms": [
+      3,
+      4
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "N22",
+    "name_key": "encounter.n22.name",
+    "kind": "normal",
+    "members": [
+      "N22"
+    ],
+    "base_ddl": 8,
+    "terms": [
+      1,
+      2
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "N23",
+    "name_key": "encounter.n23.name",
+    "kind": "normal",
+    "members": [
+      "N23"
+    ],
+    "base_ddl": 8,
+    "terms": [
+      1,
+      2
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "N24",
+    "name_key": "encounter.n24.name",
+    "kind": "normal",
+    "members": [
+      "N24"
+    ],
+    "base_ddl": 7,
+    "terms": [
+      2,
+      3
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "N25",
+    "name_key": "encounter.n25.name",
+    "kind": "normal",
+    "members": [
+      "N25"
+    ],
+    "base_ddl": 8,
+    "terms": [
+      1,
+      2
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "N26",
+    "name_key": "encounter.n26.name",
+    "kind": "normal",
+    "members": [
+      "N26"
+    ],
+    "base_ddl": 8,
+    "terms": [
+      1
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "N27",
+    "name_key": "encounter.n27.name",
+    "kind": "normal",
+    "members": [
+      "N27"
+    ],
+    "base_ddl": 9,
+    "terms": [
+      2
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "N28",
+    "name_key": "encounter.n28.name",
+    "kind": "normal",
+    "members": [
+      "N28"
+    ],
+    "base_ddl": 8,
+    "terms": [
+      1
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "N29",
+    "name_key": "encounter.n29.name",
+    "kind": "normal",
+    "members": [
+      "N29"
+    ],
+    "base_ddl": 8,
+    "terms": [
+      1,
+      2
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "N30",
+    "name_key": "encounter.n30.name",
+    "kind": "normal",
+    "members": [
+      "N30"
+    ],
+    "base_ddl": 9,
+    "terms": [
+      2,
+      3
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "N31",
+    "name_key": "encounter.n31.name",
+    "kind": "normal",
+    "members": [
+      "N31"
+    ],
+    "base_ddl": 9,
+    "terms": [
+      2,
+      3
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "N32",
+    "name_key": "encounter.n32.name",
+    "kind": "normal",
+    "members": [
+      "N32"
+    ],
+    "base_ddl": 9,
+    "terms": [
+      3,
+      4
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "N33",
+    "name_key": "encounter.n33.name",
+    "kind": "normal",
+    "members": [
+      "N33"
+    ],
+    "base_ddl": 10,
+    "terms": [
+      3,
+      4
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "N34",
+    "name_key": "encounter.n34.name",
+    "kind": "normal",
+    "members": [
+      "N34"
+    ],
+    "base_ddl": 8,
+    "terms": [
+      1,
+      2
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "N35",
+    "name_key": "encounter.n35.name",
+    "kind": "normal",
+    "members": [
+      "N35"
+    ],
+    "base_ddl": 9,
+    "terms": [
+      2,
+      3
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "N36",
+    "name_key": "encounter.n36.name",
+    "kind": "normal",
+    "members": [
+      "N36"
+    ],
+    "base_ddl": 8,
+    "terms": [
+      1,
+      2
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "N37",
+    "name_key": "encounter.n37.name",
+    "kind": "normal",
+    "members": [
+      "N37"
+    ],
+    "base_ddl": 9,
+    "terms": [
+      2,
+      3
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "N38",
+    "name_key": "encounter.n38.name",
+    "kind": "normal",
+    "members": [
+      "N38"
+    ],
+    "base_ddl": 9,
+    "terms": [
+      2,
+      3
+    ],
+    "exam_flags": []
+  },
+  {
+    "id": "FY_B1",
+    "name_key": "大一学年综合考核",
+    "kind": "boss",
+    "members": [
+      "FY_B1_TASK"
+    ],
+    "base_ddl": 10,
+    "terms": [
+      1
+    ],
+    "exam_flags": [
+      "independent_answer",
+      "fixed_exam_room"
+    ]
+  },
+  {
+    "id": "FY_B2",
+    "name_key": "大二学年综合评测",
+    "kind": "boss",
+    "members": [
+      "FY_B2_TASK"
+    ],
+    "base_ddl": 10,
+    "terms": [
+      2
+    ],
+    "exam_flags": [
+      "independent_answer",
+      "fixed_exam_room"
+    ]
+  },
+  {
+    "id": "FY_B3",
+    "name_key": "大三学年综合评测",
+    "kind": "boss",
+    "members": [
+      "FY_B3_TASK"
+    ],
+    "base_ddl": 10,
+    "terms": [
+      3
+    ],
+    "exam_flags": [
+      "independent_answer",
+      "fixed_exam_room"
+    ]
+  },
+  {
+    "id": "FY_B4",
+    "name_key": "毕业答辩",
+    "kind": "boss",
+    "members": [
+      "FY_B4_TASK"
+    ],
+    "base_ddl": 10,
+    "terms": [
+      4
+    ],
+    "exam_flags": [
+      "independent_answer",
+      "fixed_exam_room"
+    ]
+  },
+  {
+    "id": "FY_FINAL_job",
+    "name_key": "秋招终面",
+    "kind": "boss",
+    "members": [
+      "FY_B4_TASK"
+    ],
+    "base_ddl": 10,
+    "terms": [
+      4
+    ],
+    "exam_flags": [
+      "independent_answer",
+      "fixed_exam_room"
+    ]
+  },
+  {
+    "id": "FY_FINAL_exam",
+    "name_key": "考研复试",
+    "kind": "boss",
+    "members": [
+      "FY_B4_TASK"
+    ],
+    "base_ddl": 10,
+    "terms": [
+      4
+    ],
+    "exam_flags": [
+      "independent_answer",
+      "fixed_exam_room"
+    ]
+  },
+  {
+    "id": "FY_FINAL_research",
+    "name_key": "保研答辩",
+    "kind": "boss",
+    "members": [
+      "FY_B4_TASK"
+    ],
+    "base_ddl": 10,
+    "terms": [
+      4
+    ],
+    "exam_flags": [
+      "independent_answer",
+      "fixed_exam_room"
+    ]
+  },
+  {
+    "id": "FY_FINAL_abroad",
+    "name_key": "留学面试",
+    "kind": "boss",
+    "members": [
+      "FY_B4_TASK"
+    ],
+    "base_ddl": 10,
+    "terms": [
+      4
+    ],
+    "exam_flags": [
+      "independent_answer",
+      "fixed_exam_room"
+    ]
+  },
+  {
+    "id": "FY_FINAL_deferred",
+    "name_key": "延期答辩",
+    "kind": "boss",
+    "members": [
+      "FY_B4_TASK"
+    ],
+    "base_ddl": 13,
+    "terms": [
+      4
+    ],
+    "exam_flags": [
+      "independent_answer",
+      "fixed_exam_room"
+    ]
+  }
+]

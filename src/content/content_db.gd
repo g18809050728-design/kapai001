@@ -34,7 +34,30 @@ const DEFINITION_FIELDS := {
 		"pre_effects",
 		"upgrade",
 		"limit",
-		"art_key"
+		"art_key",
+		"v3",
+		"owner",
+		"character",
+		"group",
+		"permanent",
+		"requirements",
+		"conditions",
+		"triggers",
+		"ability",
+		"flags",
+		"limits",
+		"implementation",
+		"base_text",
+		"upgraded_text",
+		"upgrade_effects",
+		"upgrade_requirements",
+		"exam",
+		"chapter",
+		"exam_condition",
+		"exam_text",
+		"exam_upgraded_text",
+		"chapter_text",
+		"chapter_upgraded_text"
 	],
 	"relic":
 	[
@@ -46,6 +69,7 @@ const DEFINITION_FIELDS := {
 		"effects",
 		"hooks",
 		"modifiers",
+		"campaign",
 		"limit",
 		"art_key"
 	],
@@ -256,11 +280,126 @@ const REFERENCE_KEYS := {
 	"relic_id": "relic",
 	"members": "task",
 	"initial_members": "task",
+	"task": "task",
 	"unit": "unit",
 	"scene": "scene",
 	"status": "status",
 	"ruleset_id": "ruleset",
 }
+const V3_CARD_OPS := [
+	"complete",
+	"relax",
+	"heal",
+	"draw",
+	"discard",
+	"retain",
+	"retrieve",
+	"exhaust_other",
+	"remove_status",
+	"apply_status",
+	"remove_shield",
+	"establish_scene",
+	"add_work_bonus",
+	"work_bonus_next",
+	"cost_discount_next",
+	"trigger_erosion",
+	"trigger_induced",
+	"status_complete",
+	"extend_timed_debuffs",
+	"arm_erosion_on_next_draws",
+	"modify_erosion_window",
+	"summon_partner",
+	"gain_synergy",
+	"spend_synergy",
+	"spend_synergy_up_to",
+	"spend_all_synergy",
+	"partner_heal",
+	"partner_retreat",
+	"partner_extra_action",
+	"paper_open",
+	"paper_progress",
+	"paper_citation",
+	"paper_modifier",
+	"paper_amplify",
+	"paper_publish",
+	"spend_citation",
+	"change_topic",
+	"chapter_deploy",
+	"chapter_run",
+	"chapter_return",
+	"swap_chapter_slots",
+	"search_draw_for_type",
+	"shuffle_draw",
+	"copy_chapter_to_hand",
+	"publication_cost_discount",
+	"generate_card",
+	"lose_vitality",
+	"gain_focus",
+]
+const V3_EFFECT_CONDITIONS := [
+	"ddl_lte",
+	"link",
+	"prev_card_type_is",
+	"played_type_count_turn",
+	"no_strategy_played_turn",
+	"instance_plays_battle",
+	"instance_played_before",
+	"previous_strategy_plays_min",
+	"retrieved_strategy_this_turn",
+	"base_cost_min",
+	"card_discarded_this_effect",
+	"passive_retrieve_success",
+	"link_work_resolved",
+	"synergy_min",
+	"synergy_is_zero",
+	"partner_count_min",
+	"no_partner",
+	"independent_exam",
+	"summoned_partner_turn",
+	"healed_partner_turn",
+	"first_cooperation_resolved",
+	"paper_open",
+	"paper_closed",
+	"paper_progress_min",
+	"paper_name_unused",
+	"paper_name_used",
+	"paper_name_turn_unused",
+	"paper_progress_gained",
+	"chapter_count_min",
+	"other_chapter_ran_window",
+	"citation_min",
+	"paid_citation_focus_this_turn",
+	"fixed_exam_room",
+	"target_has_status",
+	"target_still_alive",
+	"target_status_kinds",
+	"target_has_any_timed_debuff",
+	"target_has_induced",
+	"target_had_induced_at_play_start",
+	"any_task_has_induced",
+	"any_task_debuff_kinds_min",
+	"two_tasks",
+	"erosion_applied_events_min",
+	"first_induced_trigger",
+	"compound_reaction_success",
+	"prepare_window",
+]
+const V3_TRIGGERS := [
+	"first_work_card_resolving",
+	"link_work_resolved",
+	"passive_retrieve_success",
+	"strategy_resolved",
+	"work_resolved",
+	"erosion_applied_event",
+	"induced_trigger",
+	"compound_reaction_success",
+	"first_cooperation_resolved",
+	"paper_progress_gained",
+	"first_unused_permanent_card_resolved",
+	"chapter_window_end",
+	"prepare",
+	"passive_rule",
+]
 const STATUS_POLICY := {
 	"inspiration": ["player", "capped", "work_or_round_end", "explicit"],
 	"compile": ["player", "capped", "battle", "explicit"],
@@ -276,6 +415,12 @@ const STATUS_POLICY := {
 	"confusion": ["task", "capped", "battle", "explicit"],
 	"work_boost": ["player", "capped", "battle", "explicit"],
 	"guard": ["unit", "presence", "unit_departure", "none"],
+	"vulnerability": ["task", "capped", "pressure_window", "explicit"],
+	"weakness": ["task", "capped", "pressure_window", "explicit"],
+	"brittle": ["task", "capped", "pressure_window", "explicit"],
+	"feebleness": ["task", "capped", "battle", "explicit"],
+	"erosion": ["task", "capped", "battle", "explicit"],
+	"induced": ["task", "capped", "next_player_action_end", "explicit"],
 }
 const STATUS_RULE_FIELDS := {
 	"inspiration": ["cap", "completion_per_stack"],
@@ -291,6 +436,12 @@ const STATUS_RULE_FIELDS := {
 	"brainstorm": ["cap", "pressure_per_stack"],
 	"confusion": ["cap", "shield_per_stack"],
 	"work_boost": ["cap", "completion_per_stack"],
+	"vulnerability": ["cap", "completion_percent"],
+	"weakness": ["cap", "pressure_percent"],
+	"brittle": ["cap", "shield_percent"],
+	"feebleness": ["cap", "pressure_flat"],
+	"erosion": ["cap", "completion_per_stack"],
+	"induced": ["cap", "max_triggers_per_turn"],
 }
 
 var _data_root: String
@@ -420,9 +571,20 @@ func get_candidates(query: Dictionary) -> Array[String]:
 				return []
 			seen[value] = true
 	var ids: Array[String] = []
+	var rarity_aliases: Array = []
+	if query.has("rarity"):
+		rarity_aliases = [query.rarity]
+		if kind == "card":
+			match str(query.rarity):
+				"white":
+					rarity_aliases.append("common")
+				"blue":
+					rarity_aliases.append("advanced")
+				"purple":
+					rarity_aliases.append("rare")
 	for id in _definitions[kind]:
 		var definition: Dictionary = _definitions[kind][id]
-		if query.has("rarity") and definition.get("rarity") != query.rarity:
+		if query.has("rarity") and not rarity_aliases.has(definition.get("rarity")):
 			continue
 		if query.has("availability") and definition.get("availability") != query.availability:
 			continue
@@ -590,6 +752,9 @@ func _validate_definition(
 		issues.append("%s.name_key must be non-empty" % location)
 	match kind:
 		"card":
+			if bool(definition.get("v3", false)):
+				_validate_v3_card(definition, location, issues)
+				return
 			if not ["work", "strategy", "ability", "cooperation", "scene"].has(
 				definition.get("type")
 			):
@@ -692,6 +857,14 @@ func _validate_definition(
 			):
 				issues.append("%s must have a behavior" % location)
 		"relic":
+			if definition.has("campaign"):
+				var before := issues.size()
+				_validate_fields(definition.campaign, ["year", "effect", "amount"], ["year", "effect", "amount"], location + ".campaign", issues)
+				if issues.size() == before:
+					_validate_int(definition.campaign.year, location + ".campaign.year", 1, issues)
+					_validate_int(definition.campaign.amount, location + ".campaign.amount", 1, issues)
+					if int(definition.campaign.year) > 4 or int(definition.campaign.amount) > 20 or definition.campaign.effect not in ["event_money", "rest_heal", "service_discount", "service_money", "elite_money", "battle_money"]:
+						issues.append(location + ".campaign value invalid")
 			if not ["starter", "drop"].has(definition.get("availability")):
 				issues.append("%s.availability is invalid" % location)
 			if definition.get("availability") == "starter":
@@ -716,6 +889,7 @@ func _validate_definition(
 			if (
 				(not (definition.get("effects") is Array and not definition.effects.is_empty()))
 				and not (definition.get("hooks") is Array and not definition.hooks.is_empty())
+				and not definition.has("campaign")
 				and not (
 					definition.get("modifiers") is Dictionary
 					and not definition.modifiers.is_empty()
@@ -756,9 +930,7 @@ func _validate_definition(
 							func(member): return not definition.members.has(member)
 						)
 					):
-						issues.append(
-							"%s.initial_members must be encounter members" % location
-						)
+						issues.append("%s.initial_members must be encounter members" % location)
 			if definition.has("absorb_cooperation"):
 				_validate_fields(
 					definition.absorb_cooperation,
@@ -818,7 +990,8 @@ func _validate_definition(
 					"next_draw",
 					"next_player_action_end",
 					"work_or_round_end",
-					"unit_departure"
+					"unit_departure",
+					"pressure_window"
 				]
 				. has(definition.get("duration_policy"))
 			):
@@ -836,6 +1009,107 @@ func _validate_definition(
 				issues.append("%s.numeric_rule_key must equal status id" % location)
 		"ruleset":
 			_validate_ruleset(definition, location, issues)
+
+
+func _validate_v3_card(value: Dictionary, location: String, issues: Array[String]) -> void:
+	if not ["work", "strategy", "ability", "cooperation", "scene"].has(value.get("type")):
+		issues.append("%s.type is invalid" % location)
+	if not ["basic", "common", "advanced", "rare", "token"].has(value.get("rarity")):
+		issues.append("%s.rarity is invalid" % location)
+	if not ["self", "task", "unit", "all_tasks", "discard", "paper", "earliest_task"].has(
+		value.get("target")
+	):
+		issues.append("%s.target is invalid" % location)
+	_validate_string_array(value.get("tags", []), "%s.tags" % location, issues)
+	_validate_int(value.get("cost"), "%s.cost" % location, 0, issues)
+	if value.has("upgraded_cost"):
+		_validate_int(value.upgraded_cost, "%s.upgraded_cost" % location, 0, issues)
+	if value.has("owner") and not ["C", "P01", "P02", "P03", "P04"].has(value.owner):
+		issues.append("%s.owner is invalid" % location)
+	if value.has("permanent"):
+		_validate_bool(value.permanent, "%s.permanent" % location, issues)
+	if value.has("exhaust"):
+		_validate_bool(value.exhaust, "%s.exhaust" % location, issues)
+	_validate_v3_effects(value.get("effects", []), "%s.effects" % location, issues)
+	if value.has("upgrade_effects"):
+		_validate_v3_effects(value.upgrade_effects, "%s.upgrade_effects" % location, issues)
+	if value.has("ability"):
+		_validate_v3_ability(value.ability, "%s.ability" % location, issues)
+	if value.has("upgrade"):
+		_validate_fields(
+			value.upgrade, ["cost", "effects", "requirements"], [], "%s.upgrade" % location, issues
+		)
+		if _is_dictionary(value.upgrade):
+			if value.upgrade.has("cost"):
+				_validate_int(value.upgrade.cost, "%s.upgrade.cost" % location, 0, issues)
+			if value.upgrade.has("effects"):
+				_validate_v3_effects(value.upgrade.effects, "%s.upgrade.effects" % location, issues)
+
+
+func _validate_v3_effects(value: Variant, location: String, issues: Array[String]) -> void:
+	if not _is_array(value):
+		issues.append("%s must be an array" % location)
+		return
+	for index in value.size():
+		var effect: Variant = value[index]
+		var effect_location := "%s[%d]" % [location, index]
+		if not _is_dictionary(effect):
+			issues.append("%s must be an object" % effect_location)
+			continue
+		var op := str(effect.get("op", ""))
+		if not V3_CARD_OPS.has(op):
+			issues.append("%s.op is not registered for v3 runtime: %s" % [effect_location, op])
+		if effect.has("condition"):
+			_validate_v3_condition(effect.condition, "%s.condition" % effect_location, issues)
+		if effect.has("bonus") and _is_dictionary(effect.bonus):
+			if effect.bonus.has("condition"):
+				_validate_v3_condition(
+					effect.bonus.condition, "%s.bonus.condition" % effect_location, issues
+				)
+
+
+func _validate_v3_condition(value: Variant, location: String, issues: Array[String]) -> void:
+	if not _is_dictionary(value):
+		issues.append("%s must be an object" % location)
+		return
+	if value.has("all") or value.has("any"):
+		var entries: Variant = value.get("all", value.get("any"))
+		if not _is_array(entries):
+			issues.append("%s.all/any must be an array" % location)
+			return
+		for index in entries.size():
+			_validate_v3_condition(entries[index], "%s[%d]" % [location, index], issues)
+		return
+	if not V3_EFFECT_CONDITIONS.has(str(value.get("kind", ""))):
+		issues.append("%s.kind is not registered for v3 runtime" % location)
+
+
+func _validate_v3_ability(value: Variant, location: String, issues: Array[String]) -> void:
+	if not _is_dictionary(value):
+		issues.append("%s must be an object" % location)
+		return
+	if not _is_array(value.get("triggers")):
+		issues.append("%s.triggers must be an array" % location)
+		return
+	if (
+		value.has("condition")
+		and _is_dictionary(value.condition)
+		and not value.condition.is_empty()
+	):
+		_validate_v3_condition(value.condition, "%s.condition" % location, issues)
+	for index in value.triggers.size():
+		var trigger: Variant = value.triggers[index]
+		var trigger_location := "%s.triggers[%d]" % [location, index]
+		if not _is_dictionary(trigger):
+			issues.append("%s must be an object" % trigger_location)
+			continue
+		if not V3_TRIGGERS.has(str(trigger.get("on", ""))):
+			issues.append("%s.on is not registered for v3 runtime" % trigger_location)
+		_validate_v3_effects(trigger.get("effects", []), "%s.effects" % trigger_location, issues)
+		if trigger.has("upgrade_effects"):
+			_validate_v3_effects(
+				trigger.upgrade_effects, "%s.upgrade_effects" % trigger_location, issues
+			)
 
 
 func _validate_fields(
@@ -1285,17 +1559,31 @@ func _validate_task(value: Dictionary, location: String, issues: Array[String]) 
 		_validate_bool(value.taunt, "%s.taunt" % location, issues)
 	if value.has("self_copy_every_round"):
 		_validate_bool(value.self_copy_every_round, "%s.self_copy_every_round" % location, issues)
-	for field in ["draw_reduction", "first_card_cost_bonus", "discard_on_first_card", "max_vitality_reduction"]:
+	for field in [
+		"draw_reduction", "first_card_cost_bonus", "discard_on_first_card", "max_vitality_reduction"
+	]:
 		if value.has(field):
 			_validate_int(value[field], "%s.%s" % [location, field], 1, issues)
 	if value.has("on_complete_effects"):
 		_validate_effects(
-			value.on_complete_effects,
-			"battle",
-			"%s.on_complete_effects" % location,
-			issues,
-			false
+			value.on_complete_effects, "battle", "%s.on_complete_effects" % location, issues, false
 		)
+		if _is_array(value.on_complete_effects):
+			for effect: Variant in value.on_complete_effects:
+				if not _is_dictionary(effect):
+					continue
+				var op := str(effect.get("op", ""))
+				if ["discard", "recall_from_discard", "retain_hand_card"].has(op):
+					issues.append(
+						"%s.on_complete_effects cannot use the choice op %s" % [location, op]
+					)
+				elif op == "remove_status" and str(effect.get("category", "")) == "negative":
+					issues.append(
+						(
+							"%s.on_complete_effects cannot use a negative remove_status choice"
+							% location
+						)
+					)
 	var phases: Variant = value.get("phases")
 	if not _is_array(phases) or phases.is_empty():
 		issues.append("%s kind/phases are invalid" % location)
@@ -1392,9 +1680,7 @@ func _validate_intent(value: Variant, location: String, issues: Array[String]) -
 	if value.has("self_destruct"):
 		_validate_bool(value.self_destruct, "%s.self_destruct" % location, issues)
 	if value.has("pressure_per_vitality"):
-		_validate_int(
-			value.pressure_per_vitality, "%s.pressure_per_vitality" % location, 1, issues
-		)
+		_validate_int(value.pressure_per_vitality, "%s.pressure_per_vitality" % location, 1, issues)
 		_validate_int(
 			value.get("pressure_vitality_step", 10),
 			"%s.pressure_vitality_step" % location,
@@ -1410,7 +1696,10 @@ func _validate_intent(value: Variant, location: String, issues: Array[String]) -
 		if value.has(field):
 			_validate_int(value[field], "%s.%s" % [location, field], 1, issues)
 	if value.has("pressure_per_card_type"):
-		if not _is_dictionary(value.pressure_per_card_type) or value.pressure_per_card_type.is_empty():
+		if (
+			not _is_dictionary(value.pressure_per_card_type)
+			or value.pressure_per_card_type.is_empty()
+		):
 			issues.append("%s.pressure_per_card_type must be a non-empty object" % location)
 		else:
 			for card_type in value.pressure_per_card_type:
@@ -1436,10 +1725,7 @@ func _validate_intent(value: Variant, location: String, issues: Array[String]) -
 				)
 				if _is_dictionary(spec):
 					var summoned_task: Variant = spec.get("task")
-					if (
-						typeof(summoned_task) != TYPE_STRING
-						or str(summoned_task).is_empty()
-					):
+					if typeof(summoned_task) != TYPE_STRING or str(summoned_task).is_empty():
 						issues.append("%s.summon_tasks[].task must be an id" % location)
 					_validate_int(
 						spec.get("count"), "%s.summon_tasks[].count" % location, 1, issues
@@ -1985,7 +2271,11 @@ func _validate_int_array(
 func _is_safe_id(value: String) -> bool:
 	if value in ["campus_mvp", "campus_v1"]:
 		return true
-	return not value.is_empty() and value.length() <= 100 and value.is_valid_identifier()
+	if value.is_empty() or value.length() > 100:
+		return false
+	if value.begins_with("-") or value.ends_with("-") or value.contains("--"):
+		return false
+	return value.replace("-", "_").replace("+", "_").is_valid_identifier()
 
 
 func _is_safe_token(value: String) -> bool:

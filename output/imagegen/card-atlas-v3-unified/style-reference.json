@@ -1,0 +1,11 @@
+{
+  "role": "style and P01/P04 identity reference only; not layout or subjects",
+  "inputs": {
+    "assets/art/g6-v1/cards/K01_v1.png": "fe4e85ed3c8501e033c70b07bcc959354bd9b2da5a453bf4d96e9f940b718b47",
+    "assets/art/g6-v1/cards/K02_v1.png": "e35712b75b4506e39c261b044ac9e110f6eac7d20544aad8a13dc28b9eb37804",
+    "assets/art/g6-v1/cards/K04_v1.png": "e4a1d76fc9ebd7c2856f88f2794157b4a175a6b205e42d3e58ca6cfceb8ba31c",
+    "assets/art/g6-v1/cards/K05_v1.png": "aeacc7eedc46fec973d0635e2b08ec15cc538d85cf91968c87ba986dc2a6e7f4",
+    "assets/art/g6-v1/portraits/P01_v1.png": "61871a29312b54da3af9ea7c0282a51d3983e3d87cd366c7e00de93a07265b52",
+    "assets/art/g6-v1/portraits/P04_v1.png": "ccbe5113088528778da048d204843d42e592f3a2edfd71335bfe09bdb1bb6b8f"
+  }
+}

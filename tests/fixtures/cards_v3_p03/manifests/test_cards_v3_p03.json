@@ -1,0 +1,94 @@
+{
+  "id": "test_cards_v3_p03",
+  "content_version": "test_cards_v3_p03.v1",
+  "ruleset_id": "campus_v1",
+  "enabled": {
+    "card": [
+      "R3-C-01",
+      "R3-C-02",
+      "R3-C-03",
+      "R3-C-04",
+      "R3-C-05",
+      "R3-C-06",
+      "R3-C-07",
+      "R3-C-08",
+      "R3-C-09",
+      "R3-C-10",
+      "R3-C-11",
+      "R3-C-12",
+      "R3-P03-01",
+      "R3-P03-02",
+      "R3-P03-03",
+      "R3-P03-04",
+      "R3-P03-05",
+      "R3-P03-06",
+      "R3-P03-07",
+      "R3-P03-08",
+      "R3-P03-09",
+      "R3-P03-10",
+      "R3-P03-11",
+      "R3-P03-12",
+      "R3-P03-13",
+      "R3-P03-14",
+      "R3-P03-15",
+      "R3-P03-16",
+      "R3-P03-17",
+      "R3-P03-18",
+      "R3-P03-19",
+      "R3-P03-20",
+      "R3-P03-21",
+      "R3-P03-22",
+      "R3-P03-23",
+      "R3-P03-24",
+      "R3-P03-25",
+      "R3-P03-26",
+      "R3-P03-27",
+      "R3-P03-28",
+      "R3-P03-29",
+      "R3-P03-30",
+      "R3-P03-31",
+      "R3-P03-32",
+      "R3-P03-33",
+      "R3-P03-34",
+      "R3-P03-35",
+      "R3-P03-36",
+      "R3-P03-37",
+      "R3-P03-38",
+      "R3-P03-39",
+      "R3-P03-40"
+    ],
+    "character": [
+      "P03"
+    ],
+    "relic": [
+      "R3_TEST_RELIC"
+    ],
+    "task": [
+      "R3_TEST_TASK_A",
+      "R3_TEST_TASK_B",
+      "R3_TEST_SHIELD"
+    ],
+    "encounter": [
+      "R3_TEST"
+    ],
+    "unit": [],
+    "scene": [
+      "R3-S01",
+      "R3-S01+"
+    ],
+    "event": [],
+    "status": [
+      "vulnerability",
+      "weakness",
+      "brittle",
+      "feebleness",
+      "erosion",
+      "induced",
+      "anxiety"
+    ],
+    "ruleset": [
+      "campus_v1"
+    ]
+  },
+  "overrides": []
+}

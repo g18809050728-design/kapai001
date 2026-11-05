@@ -101,6 +101,48 @@ func preview(state: BattleState, draft: ActionDraft) -> GameResult:
 	var face: Dictionary = face_result.data
 	result.effective_card = face.duplicate(true)
 	result.known_effects = _visible_effects(face)
+	if bool(face.get("v3", false)):
+		for requirement: Variant in face.get("requirements", []):
+			if not _v3_condition(state, requirement):
+				_add_preview_error(
+					result,
+					GameConstants.ERROR_INVALID_TARGET,
+					"error.play.requirement_invalid",
+					{"card_instance_id": card_id}
+				)
+		var per_turn := int(face.get("limits", {}).get("per_instance_per_turn", 0))
+		if per_turn > 0:
+			var limit_key := BattleState.counter_key(
+				GameConstants.COUNTER_SCOPE_INSTANCE_ROUND, card_id, &"v3_play"
+			)
+			if int(state.counters.get(limit_key, 0)) >= per_turn:
+				_add_preview_error(
+					result,
+					GameConstants.ERROR_LIMIT_REACHED,
+					"error.battle.v3_card_limit",
+					{"card_instance_id": card_id}
+				)
+		if state.character_id == "P02":
+			var preview_name := str(face.get("name_key", face.get("id", "")))
+			if _v3_paper(state).turn_names.has(preview_name):
+				var preview_origin := str(
+					state.card_by_id.get(card_id, {}).get("origin_card_id", "")
+				)
+				var preview_reuse := false
+				for entry: Variant in _v3_paper(state).chapters:
+					if (
+						typeof(entry) == TYPE_DICTIONARY
+						and str(entry.get("card_id", "")) == preview_origin
+					):
+						preview_reuse = true
+						break
+				if not preview_reuse:
+					_add_preview_error(
+						result,
+						GameConstants.ERROR_INVALID_TARGET,
+						"error.play.paper_name_used_turn",
+						{"name": preview_name}
+					)
 	result.costs = _preview_costs(state, card_id)
 	if result.costs.is_empty():
 		return _failure(
@@ -523,6 +565,26 @@ func _start_card_resolution(
 		return face_result
 	var face: Dictionary = face_result.data
 	var card: Dictionary = state.card_by_id[card_id]
+	if bool(face.get("v3", false)) and state.character_id == "P02":
+		var paper_turn_name := str(face.get("name_key", face.get("id", "")))
+		if _v3_paper(state).turn_names.has(paper_turn_name):
+			var reuse_origin := str(card.get("origin_card_id", ""))
+			var is_chapter_reuse := false
+			for entry: Variant in _v3_paper(state).chapters:
+				if (
+					typeof(entry) == TYPE_DICTIONARY
+					and str(entry.get("card_id", "")) == reuse_origin
+				):
+					is_chapter_reuse = true
+					break
+			if not is_chapter_reuse:
+				return GameResult.failure(
+					ApiError.new(
+						GameConstants.ERROR_INVALID_TARGET,
+						"error.play.paper_name_used_turn",
+						{"name": paper_turn_name}
+					)
+				)
 	var focus_before: int = int(state.player.get("focus", 0))
 	var vitality_before: int = int(state.player.get("vitality", 0))
 	state.player.focus = focus_before - int(quote.cost)
@@ -573,9 +635,7 @@ func _start_card_resolution(
 	)
 	state.counters[any_played_key] = int(state.counters.get(any_played_key, 0)) + 1
 	if int(state.counters[any_played_key]) == 1:
-		var discard_result := _random_discard(
-			state, _task_first_card_discard(state), rng, events
-		)
+		var discard_result := _random_discard(state, _task_first_card_discard(state), rng, events)
 		if not discard_result.ok:
 			return discard_result
 	var played_type := str(face.get("type", ""))
@@ -615,10 +675,53 @@ func _start_card_resolution(
 			):
 				target_ids.append(task_id)
 	var effects := _visible_effects(face)
+	var v3_enabled := bool(face.get("v3", false))
+	var v3_turn: Dictionary = _v3_turn(state) if v3_enabled else {}
+	var v3_battle: Dictionary = _v3_battle(state) if v3_enabled else {}
+	var v3_discount := _v3_cost_discount_applies(state, face) if v3_enabled else 0
+	var v3_paper_name := ""
+	var v3_paper_name_was_used := false
+	if v3_enabled and state.character_id == "P02":
+		var paper_snapshot := _v3_paper(state)
+		var face_definition := _catalog.get_definition("card", str(face.get("id", "")))
+		if face_definition.ok:
+			v3_paper_name = str(face_definition.data.get("name_key", face.get("id", "")))
+			v3_paper_name_was_used = paper_snapshot.used_names.has(v3_paper_name)
+	var induced_snapshot: Array = []
+	var target_induced: Dictionary = {}
+	if v3_enabled:
+		for task: Dictionary in state.tasks:
+			var task_id := str(task.get("task_id", ""))
+			var induced := _status_stacks(state, "induced", task_id)
+			if induced > 0:
+				induced_snapshot.append({"task_id": task_id, "stacks": induced})
+			if target_ids.has(task_id):
+				target_induced[task_id] = induced > 0
 	state.resolution = {
 		"card_instance_id": card_id,
 		"definition_id": str(face.get("id", "")),
 		"card_type": str(face.get("type", "")),
+		"v3": v3_enabled,
+		"v3_compound_candidates": [],
+		"v3_induced_snapshot": induced_snapshot,
+		"v3_target_induced_snapshot": target_induced,
+		"v3_link":
+		(
+			str(face.get("type", "")) == "work"
+			and str(v3_turn.get("previous_card_type", "")) == "strategy"
+		),
+		"v3_previous_card_type": str(v3_turn.get("previous_card_type", "")),
+		"v3_previous_card_instance_id": str(v3_turn.get("previous_card_instance_id", "")),
+		"v3_previous_card_definition_id": str(v3_turn.get("previous_card_definition_id", "")),
+		"v3_instance_was_played_before":
+		int(v3_battle.get("instance_plays", {}).get(card_id, 0)) > 0,
+		"v3_played_type_counts":
+		v3_turn.get("played_types", {}).duplicate(true) if v3_enabled else {},
+		"v3_link_work_count": int(v3_turn.get("link_work_count", 0)),
+		"v3_base_cost": int(face.get("cost", 0)),
+		"v3_cost_discount_applied": v3_discount,
+		"v3_paper_name_was_used": v3_paper_name_was_used,
+		"v3_paper_name": v3_paper_name,
 		"first_work_card":
 		(
 			str(face.get("type", "")) == "work"
@@ -656,6 +759,10 @@ func _start_card_resolution(
 			"vitality_cost": int(quote.vitality_cost),
 		}
 	)
+	if bool(face.get("v3", false)) and face.has("ability"):
+		var ability_result := _register_v3_ability(state, face, events)
+		if not ability_result.ok:
+			return ability_result
 	return GameResult.success(true)
 
 
@@ -816,6 +923,11 @@ func _end_turn(
 		if shield_def.ok and bool(shield_def.data.get("shield_persistent", false)):
 			continue
 		task.shield = 0
+	var erosion_window := _v3_erosion_window(state, rng, events)
+	if not erosion_window.ok:
+		return erosion_window
+	if state.phase == "finished":
+		return GameResult.success(null)
 	phase_result = _set_phase(state, events, "enemy_skill")
 	if not phase_result.ok:
 		return phase_result
@@ -866,7 +978,9 @@ func _end_turn(
 					var played_key := BattleState.counter_key(
 						GameConstants.COUNTER_SCOPE_BATTLE, "card_type:" + str(card_type), &"played"
 					)
-					pressure += int(per_card_type[card_type]) * int(state.counters.get(played_key, 0))
+					pressure += (
+						int(per_card_type[card_type]) * int(state.counters.get(played_key, 0))
+					)
 			if state.units.is_empty():
 				var no_unit_mult := int(intent.get("pressure_no_unit_mult", 100))
 				if no_unit_mult != 100:
@@ -875,11 +989,26 @@ func _end_turn(
 				var has_unit_mult := int(intent.get("pressure_has_unit_mult", 100))
 				if has_unit_mult != 100:
 					pressure = int(ceil(pressure * has_unit_mult / 100.0))
+			var feeble := _status_stacks(state, "feebleness", task_id)
+			if feeble > 0:
+				var flat := int(
+					ruleset_result.data.statuses.get("feebleness", {}).get("pressure_flat", 1)
+				)
+				pressure = maxi(0, pressure - feeble * flat)
+			if _status_stacks(state, "weakness", task_id) > 0:
+				var weakness_percent := int(
+					ruleset_result.data.statuses.get("weakness", {}).get("pressure_percent", 75)
+				)
+				pressure = int(floor(pressure * weakness_percent / 100.0))
 			var times := maxi(1, int(intent.get("pressure_times", 1)))
 			for segment_index in times:
 				if pressure > 0:
 					_apply_pressure(
-						state, pressure, bool(intent.get("pressure_all", false)), events, segment_index
+						state,
+						pressure,
+						bool(intent.get("pressure_all", false)),
+						events,
+						segment_index
 					)
 					if state.phase == "finished":
 						return GameResult.success(null)
@@ -889,6 +1018,7 @@ func _end_turn(
 					return GameResult.success(null)
 				continue
 		pressure_index += 1
+	_tick_pressure_window_statuses(state, events)
 	for pending: Dictionary in pending_transforms:
 		var transform_result := _transform_task(
 			state, str(pending.get("task_id", "")), pending.get("spec", {}), events
@@ -930,6 +1060,8 @@ func _end_turn(
 	for unit: Dictionary in state.units:
 		unit.relax = 0
 	for task: Dictionary in state.tasks:
+		if int(task.get("eligible_round", 1)) >= state.round_index:
+			continue
 		var definition := _catalog.get_definition("task", str(task.get("definition_id", "")))
 		if definition.ok:
 			var phase := _phase_definition(definition.data, str(task.get("phase_key", "")))
@@ -942,14 +1074,12 @@ func _end_turn(
 					cursor = cursor % intents.size()
 				task.intent_cursor = cursor
 				task.intent_snapshot = intents[cursor].duplicate(true)
-				task.shield = (
-					_scaled_shield(
-						state,
-						ruleset_result.data,
-						str(task.get("task_id", "")),
-						int(task.intent_snapshot.get("shield", 0))
-					)
-				)
+				task.shield = (_scaled_shield(
+					state,
+					ruleset_result.data,
+					str(task.get("task_id", "")),
+					int(task.intent_snapshot.get("shield", 0))
+				))
 	var self_copy_pending: Array[Dictionary] = []
 	for task: Dictionary in state.tasks.duplicate(true):
 		var self_copy_def := _catalog.get_definition("task", str(task.get("definition_id", "")))
@@ -961,7 +1091,7 @@ func _end_turn(
 				}
 			)
 	for pending: Dictionary in self_copy_pending:
-		var copy_result := _summon_tasks(state, pending.source_id, pending.spec, events)
+		var copy_result := _summon_tasks(state, pending.source_id, pending.spec, events, false)
 		if not copy_result.ok:
 			return copy_result
 	_add_event(events, "round_started", "", [], {"round_index": state.round_index})
@@ -1147,19 +1277,24 @@ func _execute_intent_skill(
 	return GameResult.success(null)
 
 
-func _scaled_shield(
-	state: BattleState, ruleset: Dictionary, task_id: String, amount: int
-) -> int:
+func _scaled_shield(state: BattleState, ruleset: Dictionary, task_id: String, amount: int) -> int:
 	var per_stack := int(
 		ruleset.get("statuses", {}).get("confusion", {}).get("shield_per_stack", 0)
 	)
-	if per_stack <= 0:
-		return amount
-	return amount + _status_stacks(state, "confusion", task_id) * per_stack
+	if per_stack > 0:
+		amount += _status_stacks(state, "confusion", task_id) * per_stack
+	if _status_stacks(state, "brittle", task_id) > 0:
+		var percent := int(ruleset.get("statuses", {}).get("brittle", {}).get("shield_percent", 50))
+		amount = int(floor(amount * percent / 100.0))
+	return amount
 
 
 func _summon_tasks(
-	state: BattleState, source_id: String, spec: Dictionary, events: Array[RuleEvent]
+	state: BattleState,
+	source_id: String,
+	spec: Dictionary,
+	events: Array[RuleEvent],
+	starts_next_round: bool = true,
 ) -> GameResult:
 	var definition_id := str(spec.get("task", ""))
 	var definition_result := _catalog.get_definition("task", definition_id)
@@ -1180,9 +1315,8 @@ func _summon_tasks(
 			"battle.task.intent_missing",
 			{"definition_id": definition_id}
 		)
-	var clamped := str(phase.get("intent_loop", "cycle")) == "clamp"
 	for _index in maxi(1, int(spec.get("count", 1))):
-		var cursor := 0 if clamped else intents.size() - 1
+		var cursor := 0
 		var intent: Dictionary = intents[cursor].duplicate(true)
 		var task_id := _new_instance_id(state, "t")
 		var summoned := {
@@ -1195,7 +1329,7 @@ func _summon_tasks(
 			"intent_cursor": cursor,
 			"intent_snapshot": intent,
 			"entered_order": state.next_creation_order,
-			"eligible_round": state.round_index,
+			"eligible_round": state.round_index + (1 if starts_next_round else 0),
 		}
 		_register_source(state, task_id, "task", definition_id)
 		state.tasks.append(summoned)
@@ -1243,7 +1377,7 @@ func _transform_task(
 	var previous_phase := str(task.get("phase_key", ""))
 	var work_max := int(phase.get("work_max", 1))
 	var work_remaining := clampi(int(task.get("work_remaining", work_max)), 1, work_max)
-	var cursor := 0 if str(phase.get("intent_loop", "cycle")) == "clamp" else intents.size() - 1
+	var cursor := 0
 	var intent: Dictionary = intents[cursor].duplicate(true)
 	_remove_holder_statuses(state, task_id)
 	task.definition_id = definition_id
@@ -1253,6 +1387,7 @@ func _transform_task(
 	task.intent_cursor = cursor
 	task.intent_snapshot = intent
 	task.shield = int(intent.get("shield", 0))
+	task.eligible_round = state.round_index + 1
 	if state.source_registry.has(task_id):
 		state.source_registry[task_id]["definition_id"] = definition_id
 	_add_event(
@@ -1271,9 +1406,7 @@ func _transform_task(
 	return GameResult.success(null)
 
 
-func _self_destruct_task(
-	state: BattleState, task_index: int, events: Array[RuleEvent]
-) -> void:
+func _self_destruct_task(state: BattleState, task_index: int, events: Array[RuleEvent]) -> void:
 	if task_index < 0 or task_index >= state.tasks.size():
 		return
 	var task: Dictionary = state.tasks[task_index]
@@ -1337,12 +1470,16 @@ func _run_player_prepare(
 		return phase_result
 	if state.round_index != previous_round:
 		_reset_round_counters(state)
+		if not state.v3.is_empty():
+			_reset_v3_turn(state)
 	state.player.relax = 0
 	var max_reduction := _task_max_vitality_reduction(state)
 	if max_reduction > 0:
 		var max_before := int(state.player.get("max_vitality", 0))
 		state.player.max_vitality = maxi(1, max_before - max_reduction)
-		state.player.vitality = mini(int(state.player.get("vitality", 0)), state.player.max_vitality)
+		state.player.vitality = mini(
+			int(state.player.get("vitality", 0)), state.player.max_vitality
+		)
 	var anxiety := _status_stacks(state, "anxiety", "player")
 	var focus_before := int(state.player.get("focus", 0))
 	var focus_amount := maxi(0, int(ruleset.battle.focus_per_round) - anxiety)
@@ -1360,6 +1497,11 @@ func _run_player_prepare(
 		},
 	)
 	_clear_expiring_statuses(state, "prepare", events)
+	var chapter_window := _v3_run_chapter_window(state, rng, events)
+	if not chapter_window.ok:
+		return chapter_window
+	if state.phase == "finished":
+		return GameResult.success(null)
 	var relic_result := _run_relic_hooks(state, "round_start", {}, rng, events)
 	if not relic_result.ok:
 		return relic_result
@@ -1372,14 +1514,23 @@ func _run_player_prepare(
 		var scene_result := _run_scene_prepare(state, rng, events)
 		if not scene_result.ok:
 			return scene_result
+	var prepare_trigger := _v3_run_ability_trigger(
+		state, "prepare", {"prepare_window": true}, rng, events
+	)
+	if not prepare_trigger.ok:
+		return prepare_trigger
+	if state.phase == "finished":
+		return GameResult.success(null)
 	var phase_to_draw := _set_phase(state, events, "draw")
 	if not phase_to_draw.ok:
 		return phase_to_draw
 	var draw_amount := maxi(
 		0,
-		int(ruleset.battle.draw_per_round)
-		- _status_stacks(state, "procrastination", "player")
-		- _task_draw_reduction(state)
+		(
+			int(ruleset.battle.draw_per_round)
+			- _status_stacks(state, "procrastination", "player")
+			- _task_draw_reduction(state)
+		)
 	)
 	_clear_expiring_statuses(state, "draw", events)
 	_draw_cards(state, draw_amount, rng, events)
@@ -1608,7 +1759,7 @@ func _apply_unit_support(
 func _clear_expiring_statuses(state: BattleState, timing: String, events: Array[RuleEvent]) -> void:
 	var ids: Array = (
 		{
-			"player_action_end": ["drowsiness"],
+			"player_action_end": ["drowsiness", "induced"],
 			"round_end": ["inspiration"],
 			"prepare": ["anxiety"],
 			"draw": ["procrastination"],
@@ -1778,9 +1929,749 @@ func _continue_resolution(
 	return GameResult.success(null)
 
 
+func _execute_v3_card_effect(
+	state: BattleState, effect: Dictionary, rng: RandomSource, events: Array[RuleEvent]
+) -> GameResult:
+	if effect.has("condition") and not _v3_condition(state, effect.condition):
+		return GameResult.success(null)
+	var op := str(effect.get("op", ""))
+	match op:
+		"complete":
+			var completion := {"op": "complete", "amount": int(effect.get("amount", 0))}
+			var per_link := int(effect.get("per_link_work", 0))
+			if per_link > 0 and typeof(state.resolution) == TYPE_DICTIONARY:
+				var link_count := mini(
+					int(effect.get("cap", 3)), int(state.resolution.get("v3_link_work_count", 0))
+				)
+				completion["amount"] = int(completion.amount) + per_link * link_count
+			var bonus: Variant = effect.get("bonus")
+			if (
+				typeof(bonus) == TYPE_DICTIONARY
+				and _v3_condition(state, bonus.get("condition", {}))
+			):
+				completion["amount"] = int(completion.amount) + int(bonus.get("amount", 0))
+			var per_partner := int(effect.get("per_partner", 0))
+			if per_partner > 0:
+				var partner_count := mini(int(effect.get("cap", 3)), state.units.size())
+				completion["amount"] = int(completion.amount) + per_partner * partner_count
+			var per_spent := int(effect.get("per_spent", 0))
+			if per_spent > 0 and typeof(state.resolution) == TYPE_DICTIONARY:
+				completion["amount"] = (
+					int(completion.amount)
+					+ per_spent * int(state.resolution.get("v3_last_synergy_spent", 0))
+				)
+			var per_other_chapter := int(effect.get("per_other_chapter", 0))
+			if per_other_chapter > 0 and typeof(state.resolution) == TYPE_DICTIONARY:
+				completion["amount"] = (
+					int(completion.amount)
+					+ (
+						per_other_chapter
+						* mini(
+							int(effect.get("cap", 2)),
+							int(state.resolution.get("v3_other_chapter_count", 0))
+						)
+					)
+				)
+			var per_kind := int(effect.get("per_debuff_kind", 0))
+			if per_kind > 0:
+				var kind_cap := int(effect.get("cap", 6))
+				if bool(effect.get("per_target", false)):
+					completion["per_debuff_kind"] = per_kind
+					completion["per_debuff_cap"] = kind_cap
+					completion["per_target"] = true
+				else:
+					var ids := _v3_effect_target_ids(state, effect)
+					if not ids.is_empty():
+						var kinds := mini(kind_cap, _v3_debuff_kinds(state, ids.front()).size())
+						completion["amount"] = int(completion.amount) + per_kind * kinds
+			return _apply_completion(state, completion, rng, events)
+		"relax":
+			var relax_amount := maxi(0, int(effect.get("amount", 0)))
+			var relax_bonus: Variant = effect.get("bonus")
+			if (
+				typeof(relax_bonus) == TYPE_DICTIONARY
+				and _v3_condition(state, relax_bonus.get("condition", {}))
+			):
+				relax_amount += int(relax_bonus.get("amount", 0))
+			var relax_per_spent := int(effect.get("per_spent", 0))
+			if relax_per_spent > 0 and typeof(state.resolution) == TYPE_DICTIONARY:
+				relax_amount += (
+					relax_per_spent * int(state.resolution.get("v3_last_synergy_spent", 0))
+				)
+			relax_amount += _v3_card_amplify(state)
+			state.player.relax = int(state.player.get("relax", 0)) + relax_amount
+			return GameResult.success(null)
+		"heal":
+			var maximum := int(state.player.get("max_vitality", 0))
+			var vitality_before := int(state.player.get("vitality", 0))
+			var heal_amount := maxi(0, int(effect.get("amount", 0))) + _v3_card_amplify(state)
+			state.player.vitality = mini(maximum, vitality_before + heal_amount)
+			if state.player.vitality != vitality_before:
+				_add_event(
+					events,
+					"vitality_changed",
+					str(state.resolution.get("card_instance_id", "")),
+					[str(state.player.get("entity_id", ""))],
+					{
+						"before": vitality_before,
+						"after": state.player.vitality,
+						"delta": state.player.vitality - vitality_before,
+						"reason": "v3_effect",
+					}
+				)
+			return GameResult.success(null)
+		"draw":
+			var draw_amount: Variant = effect.get("amount", 0)
+			if typeof(draw_amount) == TYPE_DICTIONARY:
+				draw_amount = int(state.resolution.get("v3_discarded_count", 0))
+			var draw_total := maxi(0, int(draw_amount)) + _v3_card_amplify(state)
+			_draw_cards(state, draw_total, rng, events)
+			return GameResult.success(null)
+		"discard":
+			return _start_card_choice(state, effect, "discard")
+		"retain":
+			return _start_card_choice(state, effect, "retain_hand_card")
+		"retrieve":
+			return _start_card_choice(state, effect, "recall_from_discard")
+		"exhaust_other":
+			return _start_card_choice(state, effect, "exhaust_other")
+		"remove_status":
+			return _start_card_choice(state, effect, "remove_status")
+		"work_bonus_next":
+			_v3_add_work_bonus(state, int(effect.get("amount", 0)))
+			return GameResult.success(null)
+		"cost_discount_next":
+			_v3_add_cost_discount(
+				state, int(effect.get("amount", 0)), int(effect.get("min_base_cost", 2))
+			)
+			return GameResult.success(null)
+		"gain_focus":
+			var ruleset := _loaded_ruleset()
+			if not ruleset.ok:
+				return ruleset
+			var focus_cap := int(ruleset.data.battle.focus_cap)
+			var focus_before := int(state.player.get("focus", 0))
+			var focus_amount := maxi(0, int(effect.get("amount", 0))) + _v3_card_amplify(state)
+			state.player.focus = mini(focus_cap, focus_before + focus_amount)
+			return GameResult.success(null)
+		"apply_status":
+			var stacks_value: Variant = effect.get("stacks", 1)
+			if (
+				typeof(stacks_value) == TYPE_DICTIONARY
+				and str(stacks_value.get("op", "")) == "source_stacks"
+			):
+				stacks_value = _v3_source_stacks(state, stacks_value)
+			return _v3_apply_status_batch(
+				state,
+				str(effect.get("status", "")),
+				int(stacks_value),
+				_v3_effect_target_ids(state, effect),
+				true,
+				true,
+				events
+			)
+		"trigger_erosion":
+			for target_id in _v3_effect_target_ids(state, effect):
+				var erosion_stacks := _status_stacks(state, "erosion", target_id)
+				if erosion_stacks <= 0:
+					continue
+				var deferred := _v3_status_complete_task(
+					state, target_id, erosion_stacks, rng, events
+				)
+				if not deferred.ok:
+					return deferred
+				if not bool(effect.get("decay", true)):
+					continue
+				var erosion_index := _status_index(state, "erosion", target_id)
+				if erosion_index >= 0:
+					var status: Dictionary = state.statuses[erosion_index]
+					var before := int(status.get("stacks", 0))
+					if before <= 1:
+						state.statuses.remove_at(erosion_index)
+					else:
+						status.stacks = before - 1
+			return GameResult.success(null)
+		"trigger_induced":
+			for target_id in _v3_effect_target_ids(state, effect):
+				var induced_stacks := _status_stacks(state, "induced", target_id)
+				if induced_stacks <= 0:
+					continue
+				var triggered := _v3_induced_trigger_target(
+					state, target_id, induced_stacks, rng, events
+				)
+				if not triggered.ok:
+					return triggered
+			return GameResult.success(null)
+		"status_complete":
+			for target_id in _v3_effect_target_ids(state, effect):
+				var completed := _v3_status_complete_task(
+					state, target_id, int(effect.get("amount", 0)), rng, events
+				)
+				if not completed.ok:
+					return completed
+				if state.phase == "finished":
+					break
+			return GameResult.success(null)
+		"extend_timed_debuffs":
+			for target_id in _v3_effect_target_ids(state, effect):
+				for status_id in ["vulnerability", "weakness", "brittle"]:
+					var status_index := _status_index(state, status_id, target_id)
+					if status_index < 0:
+						continue
+					var status: Dictionary = state.statuses[status_index]
+					var before := int(status.get("stacks", 0))
+					status.stacks = mini(3, before + int(effect.get("amount", 1)))
+					_add_event(
+						events,
+						"status_changed",
+						str(state.resolution.get("card_instance_id", "")),
+						[target_id],
+						{
+							"status_definition_id": status_id,
+							"before": before,
+							"after": status.stacks,
+							"amount": status.stacks - before,
+							"reason": "extend_timed_debuff",
+						}
+					)
+			return GameResult.success(null)
+		"arm_erosion_on_next_draws":
+			_v3_turn(state).erosion_draws = maxi(
+				int(_v3_turn(state).erosion_draws), int(effect.get("amount", 0))
+			)
+			return GameResult.success(null)
+		"modify_erosion_window":
+			return GameResult.success(null)
+		"remove_shield":
+			var shield_targets := _v3_effect_target_ids(state, effect)
+			var remaining := maxi(0, int(effect.get("amount", 0)))
+			for target_id in shield_targets:
+				var task_index := _task_index(state, target_id)
+				if task_index < 0:
+					continue
+				var task: Dictionary = state.tasks[task_index]
+				var before := int(task.get("shield", 0))
+				var removed := mini(before, remaining)
+				task.shield = before - removed
+				remaining -= removed
+				_add_event(
+					events,
+					"shield_changed",
+					str(state.resolution.get("card_instance_id", "")),
+					[target_id],
+					{"before": before, "after": task.shield, "reason": "v3_effect"}
+				)
+			return GameResult.success(null)
+		"paper_open":
+			_v3_open_paper(state, events)
+			return GameResult.success(null)
+		"paper_progress":
+			var progress_amount := maxi(0, int(effect.get("amount", 0)))
+			if not bool((state.resolution as Dictionary).get("v3_auto", false)):
+				progress_amount += _v3_consume_amplify(state)
+			var paper := _v3_paper(state)
+			paper.progress = mini(10, int(paper.progress) + progress_amount)
+			return GameResult.success(null)
+		"paper_citation":
+			var citation_amount := maxi(0, int(effect.get("amount", 0)))
+			if not bool((state.resolution as Dictionary).get("v3_auto", false)):
+				citation_amount += _v3_consume_amplify(state)
+			_v3_gain_citation(state, citation_amount, rng, events)
+			return GameResult.success(null)
+		"paper_modifier":
+			_v3_paper(state).modifier = (
+				int(_v3_paper(state).modifier) + int(effect.get("amount", 0))
+			)
+			return GameResult.success(null)
+		"paper_amplify":
+			var paper_state := _v3_paper(state)
+			paper_state.amplify = mini(
+				5, int(paper_state.amplify) + maxi(0, int(effect.get("amount", 0)))
+			)
+			return GameResult.success(null)
+		"paper_publish":
+			return _v3_paper_publish(state, state.resolution, rng, events)
+		"spend_citation":
+			var paper_spend := _v3_paper(state)
+			if int(paper_spend.citations) < int(effect.get("amount", 1)):
+				return _failure(
+					GameConstants.ERROR_INSUFFICIENT_RESOURCE,
+					"error.play.citation_insufficient",
+					{"required": int(effect.get("amount", 1))}
+				)
+			paper_spend.citations = int(paper_spend.citations) - int(effect.get("amount", 1))
+			return GameResult.success(null)
+		"change_topic":
+			var paper_change := _v3_paper(state)
+			if not paper_change.used_names.is_empty():
+				paper_change.used_names.pop_front()
+				paper_change.modifier = int(paper_change.modifier) + int(effect.get("modifier", -1))
+			return GameResult.success(null)
+		"chapter_deploy":
+			var deployed := _v3_chapter_deploy(
+				state, str(state.resolution.get("card_instance_id", "")), events
+			)
+			if not deployed.ok:
+				return deployed
+			if typeof(deployed.data) == TYPE_DICTIONARY:
+				return deployed
+			if (
+				deployed.data is bool
+				and deployed.data
+				and typeof(state.resolution) == TYPE_DICTIONARY
+			):
+				state.resolution["v3_chapter_deploy"] = true
+			return GameResult.success(null)
+		"chapter_run":
+			return _v3_chapter_run(state, int(effect.get("amount", 1)), rng, events)
+		"chapter_return":
+			var returned := _v3_chapter_return(state, int(effect.get("amount", 1)), events)
+			if effect.has("modifier_per_chapter"):
+				_v3_paper(state).modifier = (
+					int(_v3_paper(state).modifier) + returned * int(effect.modifier_per_chapter)
+				)
+			return GameResult.success(null)
+		"swap_chapter_slots":
+			_v3_swap_chapter_slots(state, events)
+			return GameResult.success(null)
+		"search_draw_for_type":
+			return _v3_search_draw_chapter(state, rng, events)
+		"copy_chapter_to_hand":
+			var paper_copy := _v3_paper(state)
+			if not paper_copy.chapters.is_empty():
+				var source_id := str(paper_copy.chapters[0].get("card_id", ""))
+				var source_card: Dictionary = state.card_by_id.get(source_id, {})
+				var copy_id := _new_instance_id(state, "c")
+				state.card_by_id[copy_id] = {
+					"card_id": copy_id,
+					"definition_id": str(source_card.get("definition_id", "")),
+					"origin_card_id": source_id,
+					"upgrade_level": int(source_card.get("upgrade_level", 0)),
+					"temporary_modifiers": {},
+				}
+				if state.zones.hand.size() < 10:
+					state.zones.hand.append(copy_id)
+				else:
+					state.zones.discard.append(copy_id)
+			return GameResult.success(null)
+		"generate_card":
+			var generated_id := str(effect.get("card", ""))
+			var generated_count := maxi(1, int(effect.get("amount", 1)))
+			for _index in generated_count:
+				var new_card_id := _new_instance_id(state, "c")
+				state.card_by_id[new_card_id] = {
+					"card_id": new_card_id,
+					"definition_id": generated_id,
+					"origin_card_id": "",
+					"upgrade_level": 0,
+					"temporary_modifiers": {},
+				}
+				if str(effect.get("zone", "hand")) == "hand" and state.zones.hand.size() < 10:
+					state.zones.hand.append(new_card_id)
+				else:
+					state.zones.discard.append(new_card_id)
+			return GameResult.success(null)
+		"shuffle_draw":
+			var shuffled_draw := rng.shuffle(GameConstants.RNG_STREAM_BATTLE, state.zones.draw)
+			if not shuffled_draw.ok:
+				return shuffled_draw
+			state.zones.draw = shuffled_draw.data
+			return GameResult.success(null)
+		"lose_vitality":
+			var vitality_loss := maxi(0, int(effect.get("amount", 0)))
+			var lost_before := int(state.player.get("vitality", 0))
+			state.player.vitality = maxi(0, lost_before - vitality_loss)
+			_add_event(
+				events,
+				"vitality_changed",
+				str(state.resolution.get("card_instance_id", "")),
+				[str(state.player.get("entity_id", ""))],
+				{
+					"before": lost_before,
+					"after": state.player.vitality,
+					"delta": state.player.vitality - lost_before,
+					"reason": "effect",
+				}
+			)
+			_check_battle_outcome(state, events)
+			return GameResult.success(null)
+		"publication_cost_discount":
+			state.v3["publication_discount"] = maxi(0, int(effect.get("amount", 1)))
+			return GameResult.success(null)
+		"establish_scene":
+			return _establish_scene(state, effect, rng, events)
+		"summon_partner":
+			return _v3_summon_partner(state, effect, rng, events)
+		"gain_synergy":
+			_v3_gain_synergy(state, int(effect.get("amount", 0)))
+			return GameResult.success(null)
+		"spend_synergy":
+			var optional := bool(effect.get("optional", false))
+			var spent := _v3_spend_synergy(state, int(effect.get("amount", 0)), optional)
+			if spent < 0:
+				return _failure(
+					GameConstants.ERROR_INSUFFICIENT_RESOURCE,
+					"error.play.synergy_insufficient",
+					{"required": int(effect.get("amount", 0))}
+				)
+			if spent == 0 and optional:
+				return GameResult.success(null)
+			if typeof(state.resolution) == TYPE_DICTIONARY:
+				state.resolution["v3_last_synergy_spent"] = spent
+			if effect.has("then"):
+				var then_result := _v3_execute_effects(state, effect.then, rng, events)
+				if not then_result.ok or typeof(then_result.data) == TYPE_DICTIONARY:
+					return then_result
+			if effect.has("if_spent"):
+				return _v3_execute_effects(state, effect.if_spent, rng, events)
+			return GameResult.success(null)
+		"spend_synergy_up_to":
+			var available := _v3_synergy(state)
+			var spend_up_to := mini(maxi(0, int(effect.get("amount", 0))), available)
+			_v3_spend_synergy(state, spend_up_to, false)
+			if typeof(state.resolution) == TYPE_DICTIONARY:
+				state.resolution["v3_last_synergy_spent"] = spend_up_to
+			if effect.has("then"):
+				var up_result := _v3_execute_effects(state, effect.then, rng, events)
+				if not up_result.ok or typeof(up_result.data) == TYPE_DICTIONARY:
+					return up_result
+			if effect.has("after"):
+				return _v3_execute_effects(state, effect.after, rng, events)
+			return GameResult.success(null)
+		"spend_all_synergy":
+			var all_spent := _v3_synergy(state)
+			_v3_spend_synergy(state, all_spent, false)
+			if typeof(state.resolution) == TYPE_DICTIONARY:
+				state.resolution["v3_last_synergy_spent"] = all_spent
+			if effect.has("then"):
+				return _v3_execute_effects(state, effect.then, rng, events)
+			return GameResult.success(null)
+		"partner_heal":
+			return _v3_partner_heal(state, effect, events)
+		"partner_retreat":
+			return _v3_partner_retreat(state, effect, events)
+		"partner_extra_action":
+			return _v3_partner_extra_action(state, effect, rng, events)
+		"add_work_bonus":
+			_v3_add_work_bonus(state, int(effect.get("amount", 0)))
+			return GameResult.success(null)
+		_:
+			return _failure(
+				GameConstants.ERROR_ENGINE_NOT_READY, "battle.v3.effect_not_ready", {"op": op}
+			)
+
+
+func _v3_effect_target_ids(state: BattleState, effect: Dictionary) -> Array[String]:
+	var result: Array[String] = []
+	if str(effect.get("target", "")) == "all_tasks":
+		for task: Dictionary in state.tasks:
+			result.append(str(task.get("task_id", "")))
+		return result
+	if str(effect.get("target", "")) == "earliest_task":
+		var earliest := _first_eligible_task(state)
+		if not earliest.is_empty():
+			result.append(earliest)
+		return result
+	if typeof(state.resolution) != TYPE_DICTIONARY:
+		return result
+	if str(effect.get("target", "")) == "other_task":
+		var selected: Array = state.resolution.get("target_ids", [])
+		for task: Dictionary in state.tasks:
+			var task_id := str(task.get("task_id", ""))
+			if not selected.has(task_id):
+				result.append(task_id)
+				break
+		return result
+	for target_id in state.resolution.get("target_ids", []):
+		result.append(str(target_id))
+	if result.is_empty():
+		var fallback := _first_eligible_task(state)
+		if not fallback.is_empty():
+			result.append(fallback)
+	return result
+
+
+func _v3_condition(state: BattleState, condition: Variant, context: Dictionary = {}) -> bool:
+	if typeof(condition) != TYPE_DICTIONARY:
+		return false
+	if condition.has("all"):
+		for child: Variant in condition.all:
+			if not _v3_condition(state, child, context):
+				return false
+		return true
+	if condition.has("any"):
+		for child: Variant in condition.any:
+			if _v3_condition(state, child, context):
+				return true
+		return false
+	var kind := str(condition.get("kind", ""))
+	match kind:
+		"ddl_lte":
+			return state.ddl <= int(condition.get("value", 0))
+		"link":
+			return (
+				typeof(state.resolution) == TYPE_DICTIONARY
+				and bool(state.resolution.get("v3_link", false))
+			)
+		"prev_card_type_is":
+			return (
+				typeof(state.resolution) == TYPE_DICTIONARY
+				and (
+					str(state.resolution.get("v3_previous_card_type", ""))
+					== str(condition.get("value", ""))
+				)
+			)
+		"played_type_count_turn":
+			var played_types: Dictionary = _v3_turn(state).played_types
+			if typeof(state.resolution) == TYPE_DICTIONARY:
+				var snapshot: Variant = state.resolution.get("v3_played_type_counts", null)
+				if typeof(snapshot) == TYPE_DICTIONARY:
+					played_types = snapshot
+			return (
+				int(played_types.get(str(condition.get("value", "")), 0))
+				>= int(condition.get("min", 1))
+			)
+		"no_strategy_played_turn":
+			return int(_v3_turn(state).played_types.get("strategy", 0)) == 0
+		"instance_plays_battle":
+			var before := bool(context.get("instance_was_played_before", false))
+			if typeof(state.resolution) == TYPE_DICTIONARY:
+				before = bool(state.resolution.get("v3_instance_was_played_before", before))
+			return (
+				before
+				or (
+					typeof(state.resolution) == TYPE_DICTIONARY
+					and (
+						int(
+							_v3_battle(state).instance_plays.get(
+								str(state.resolution.get("card_instance_id", "")), 0
+							)
+						)
+						>= int(condition.get("min", 1))
+					)
+				)
+			)
+		"instance_played_before":
+			if context.has("instance_was_played_before"):
+				return bool(context.instance_was_played_before)
+			return (
+				typeof(state.resolution) == TYPE_DICTIONARY
+				and bool(state.resolution.get("v3_instance_was_played_before", false))
+			)
+		"previous_strategy_plays_min":
+			if typeof(state.resolution) != TYPE_DICTIONARY:
+				return false
+			var previous_id := str(state.resolution.get("v3_previous_card_instance_id", ""))
+			return (
+				int(_v3_battle(state).instance_plays.get(previous_id, 0))
+				>= int(condition.get("value", 1))
+			)
+		"retrieved_strategy_this_turn":
+			return bool(_v3_turn(state).retrieved_strategy)
+		"synergy_min":
+			return _v3_synergy(state) >= int(condition.get("value", 0))
+		"synergy_is_zero":
+			return _v3_synergy(state) == 0
+		"partner_count_min":
+			return state.units.size() >= int(condition.get("value", 1))
+		"no_partner":
+			return state.units.is_empty()
+		"independent_exam":
+			return state.exam_flags.has("independent_answer")
+		"summoned_partner_turn":
+			return bool(_v3_turn(state).summoned_partner)
+		"healed_partner_turn":
+			return bool(_v3_turn(state).healed_partner)
+		"first_cooperation_resolved":
+			return bool(_v3_turn(state).first_cooperation)
+		"paper_open":
+			return bool(_v3_paper(state).open)
+		"paper_closed":
+			return not bool(_v3_paper(state).open)
+		"paper_progress_min":
+			return int(_v3_paper(state).progress) >= int(condition.get("value", 0))
+		"paper_name_unused":
+			if (
+				typeof(state.resolution) == TYPE_DICTIONARY
+				and state.resolution.has("v3_paper_name_was_used")
+			):
+				return not bool(state.resolution.v3_paper_name_was_used)
+			return false
+		"paper_name_used":
+			if (
+				typeof(state.resolution) == TYPE_DICTIONARY
+				and state.resolution.has("v3_paper_name_was_used")
+			):
+				return bool(state.resolution.v3_paper_name_was_used)
+			return false
+		"paper_name_turn_unused":
+			if typeof(state.resolution) == TYPE_DICTIONARY:
+				return not _v3_paper(state).turn_names.has(
+					str(state.resolution.get("v3_paper_name", ""))
+				)
+			return true
+		"paper_progress_gained":
+			return bool(context.get("paper_progress_gained", false))
+		"chapter_count_min":
+			return _v3_chapter_count(state) >= int(condition.get("value", 1))
+		"other_chapter_ran_window":
+			if typeof(state.resolution) == TYPE_DICTIONARY:
+				return int(state.resolution.get("v3_other_chapter_count", 0)) > 0
+			return false
+		"citation_min":
+			return int(_v3_paper(state).citations) >= int(condition.get("value", 1))
+		"paid_citation_focus_this_turn":
+			return bool(_v3_turn(state).paid_citation)
+		"fixed_exam_room":
+			return state.exam_flags.has("fixed_exam_room")
+		"base_cost_min":
+			var base_cost := int(context.get("base_cost", 0))
+			if typeof(state.resolution) == TYPE_DICTIONARY:
+				base_cost = int(state.resolution.get("v3_base_cost", base_cost))
+			return base_cost >= int(condition.get("value", 0))
+		"card_discarded_this_effect":
+			return (
+				typeof(state.resolution) == TYPE_DICTIONARY
+				and not state.resolution.get("discarded_in_resolution", []).is_empty()
+			)
+		"passive_retrieve_success":
+			return bool(context.get("passive_retrieve_success", false))
+		"link_work_resolved":
+			return bool(context.get("link_work", false))
+		"target_has_status":
+			var status_id := str(condition.get("status", ""))
+			for target_id in _v3_effect_target_ids(state, {}):
+				if _status_stacks(state, status_id, target_id) > 0:
+					return true
+			return false
+		"target_still_alive":
+			for target_id in _v3_effect_target_ids(state, {}):
+				if _task_index(state, target_id) >= 0:
+					return true
+			return false
+		"target_status_kinds":
+			for target_id in _v3_effect_target_ids(state, {}):
+				var kinds := _v3_debuff_kinds(state, target_id).size()
+				if condition.has("min") and kinds < int(condition.min):
+					continue
+				if condition.has("max") and kinds > int(condition.max):
+					continue
+				return true
+			return false
+		"target_has_any_timed_debuff":
+			for target_id in _v3_effect_target_ids(state, {}):
+				for status_id in ["vulnerability", "weakness", "brittle"]:
+					if _status_stacks(state, status_id, target_id) > 0:
+						return true
+			return false
+		"target_has_induced":
+			for target_id in _v3_effect_target_ids(state, {}):
+				if _status_stacks(state, "induced", target_id) > 0:
+					return true
+			return false
+		"target_had_induced_at_play_start":
+			if typeof(state.resolution) != TYPE_DICTIONARY:
+				return false
+			var snapshot: Dictionary = state.resolution.get("v3_target_induced_snapshot", {})
+			for target_id in _v3_effect_target_ids(state, {}):
+				if bool(snapshot.get(target_id, false)):
+					return true
+			return false
+		"any_task_has_induced":
+			for task: Dictionary in state.tasks:
+				if _status_stacks(state, "induced", str(task.get("task_id", ""))) > 0:
+					return true
+			return false
+		"any_task_debuff_kinds_min":
+			for task: Dictionary in state.tasks:
+				if (
+					_v3_debuff_kinds(state, str(task.get("task_id", ""))).size()
+					>= int(condition.get("value", 0))
+				):
+					return true
+			return false
+		"two_tasks":
+			return state.tasks.size() >= 2
+		"erosion_applied_events_min":
+			return int(_v3_turn(state).get("erosion_events", 0)) >= int(condition.get("value", 0))
+		"first_induced_trigger":
+			return bool(context.get("first_induced_trigger", false))
+		"compound_reaction_success":
+			return bool(context.get("compound_reaction_success", false))
+		"prepare_window":
+			return bool(context.get("prepare_window", false))
+		_:
+			return false
+
+
+func _consume_v3_first_work_bonus(state: BattleState) -> int:
+	if not state.v3.has("abilities"):
+		return 0
+	var total := 0
+	var abilities: Array = state.v3.abilities
+	for ability: Variant in abilities:
+		if typeof(ability) != TYPE_DICTIONARY:
+			continue
+		if str(ability.get("trigger", "")) != "first_work_card_resolving":
+			continue
+		if state.round_index < int(ability.get("activate_round", 0)):
+			continue
+		if int(ability.get("last_round", 0)) == state.round_index:
+			continue
+		for effect: Variant in ability.get("effects", []):
+			if typeof(effect) != TYPE_DICTIONARY or str(effect.get("op", "")) != "add_work_bonus":
+				continue
+			if effect.has("condition") and not _v3_condition(state, effect.condition):
+				continue
+			total += maxi(0, int(effect.get("amount", 0)))
+			ability.last_round = state.round_index
+	return total
+
+
+func _tick_pressure_window_statuses(state: BattleState, events: Array[RuleEvent]) -> void:
+	for index in range(state.statuses.size() - 1, -1, -1):
+		var status: Dictionary = state.statuses[index]
+		if not ["vulnerability", "weakness", "brittle"].has(str(status.get("status_id", ""))):
+			continue
+		var before := int(status.get("stacks", 0))
+		var after := before - 1
+		if after > 0:
+			status.stacks = after
+			_add_event(
+				events,
+				"status_changed",
+				"",
+				[str(status.get("target_id", ""))],
+				{
+					"status_definition_id": str(status.status_id),
+					"before": before,
+					"after": after,
+					"amount": -1,
+					"reason": "pressure_window",
+				}
+			)
+		else:
+			_add_event(
+				events,
+				"status_removed",
+				"",
+				[str(status.get("target_id", ""))],
+				{
+					"status_definition_id": str(status.status_id),
+					"before": before,
+					"after": 0,
+					"amount": before,
+					"reason": "pressure_window",
+				}
+			)
+			state.statuses.remove_at(index)
+
+
 func _execute_card_effect(
 	state: BattleState, effect: Dictionary, rng: RandomSource, events: Array[RuleEvent]
 ) -> GameResult:
+	if typeof(state.resolution) == TYPE_DICTIONARY and bool(state.resolution.get("v3", false)):
+		return _execute_v3_card_effect(state, effect, rng, events)
 	var op := str(effect.get("op", ""))
 	var amount := int(effect.get("amount", effect.get("stacks", 0)))
 	match op:
@@ -1887,11 +2778,17 @@ func _execute_card_effect(
 		"reduce_max_vitality":
 			var max_before: int = int(state.player.get("max_vitality", 0))
 			state.player.max_vitality = maxi(1, max_before - maxi(0, amount))
-			state.player.vitality = mini(int(state.player.get("vitality", 0)), state.player.max_vitality)
+			state.player.vitality = mini(
+				int(state.player.get("vitality", 0)), state.player.max_vitality
+			)
 			return GameResult.success(null)
 		"restore_max_vitality":
-			var max_base: int = int(state.player.get("max_vitality_base", state.player.get("max_vitality", 0)))
-			state.player.max_vitality = mini(max_base, int(state.player.get("max_vitality", 0)) + maxi(0, amount))
+			var max_base: int = int(
+				state.player.get("max_vitality_base", state.player.get("max_vitality", 0))
+			)
+			state.player.max_vitality = mini(
+				max_base, int(state.player.get("max_vitality", 0)) + maxi(0, amount)
+			)
 			return GameResult.success(null)
 		"reduce_focus":
 			var focus_before: int = int(state.player.get("focus", 0))
@@ -1915,7 +2812,10 @@ func _execute_card_effect(
 			return _summon_tasks(
 				state,
 				str(state.resolution.get("card_instance_id", "")),
-				{"task": str(effect.get("task", "")), "count": maxi(1, int(effect.get("count", 1)))},
+				{
+					"task": str(effect.get("task", "")),
+					"count": maxi(1, int(effect.get("count", 1)))
+				},
 				events
 			)
 		_:
@@ -2000,7 +2900,9 @@ func _task_has_taunt(state: BattleState, task_id: String) -> bool:
 	var task_index := _task_index(state, task_id)
 	if task_index < 0:
 		return false
-	var definition := _catalog.get_definition("task", str(state.tasks[task_index].get("definition_id", "")))
+	var definition := _catalog.get_definition(
+		"task", str(state.tasks[task_index].get("definition_id", ""))
+	)
 	return definition.ok and bool(definition.data.get("taunt", false))
 
 
@@ -2041,6 +2943,36 @@ func _apply_completion(
 		if not segment_bonus.ok:
 			return segment_bonus
 		requested += int(segment_bonus.data)
+		if bool(resolution.get("v3", false)) and applies_work_statuses:
+			var main_target_bonus := _v3_take_work_bonus(state)
+			if bool(resolution.get("first_work_card", false)):
+				main_target_bonus += _consume_v3_first_work_bonus(state)
+			resolution["v3_main_target_bonus"] = main_target_bonus
+		if bool(resolution.get("first_work_card", false)):
+			for relic_id in state.relics:
+				var relic_result := _catalog.get_definition("relic", relic_id)
+				if not relic_result.ok:
+					continue
+				var relic: Dictionary = relic_result.data
+				if not relic.has("modifiers") or not relic.modifiers.has("work_flat_bonus"):
+					continue
+				var limit: Dictionary = relic.get("limit", {})
+				var counter_key := BattleState.counter_key(
+					StringName(str(limit.get("per", "round"))),
+					"relic_modifier:%s:work_flat_bonus" % relic_id,
+					&"modifier"
+				)
+				if int(state.counters.get(counter_key, 0)) >= int(limit.get("times", 1)):
+					continue
+				state.counters[counter_key] = int(state.counters.get(counter_key, 0)) + 1
+				requested += int(relic.modifiers.work_flat_bonus)
+				_add_event(
+					events,
+					"relic_triggered",
+					relic_id,
+					[str(resolution.get("card_instance_id", ""))],
+					{"relic_id": relic_id, "at": "work_flat_bonus"}
+				)
 		if state.scene is Dictionary:
 			var scene_result := _catalog.get_definition(
 				"scene", str(state.scene.get("definition_id", ""))
@@ -2079,8 +3011,33 @@ func _apply_completion(
 		var task: Dictionary = state.tasks[task_index]
 		var before_shield: int = int(task.get("shield", 0))
 		var before_work: int = int(task.get("work_remaining", 0))
-		var shield_loss: int = mini(before_shield, requested)
-		var applied: int = requested - shield_loss
+		var requested_for_target := requested
+		if (
+			bool(resolution.get("v3", false))
+			and int(effect.get("per_debuff_kind", 0)) > 0
+			and bool(effect.get("per_target", false))
+		):
+			var kinds := mini(
+				int(effect.get("per_debuff_cap", 6)), _v3_debuff_kinds(state, str(task_id)).size()
+			)
+			requested_for_target += int(effect.per_debuff_kind) * kinds
+		if (
+			bool(resolution.get("v3", false))
+			and not targets.is_empty()
+			and str(task_id) == str(targets.front())
+		):
+			requested_for_target += int(resolution.get("v3_main_target_bonus", 0))
+		if (
+			bool(resolution.get("v3", false))
+			and ruleset.ok
+			and _status_stacks(state, "vulnerability", str(task_id)) > 0
+		):
+			var percent := int(
+				ruleset.data.statuses.get("vulnerability", {}).get("completion_percent", 125)
+			)
+			requested_for_target = int(floor(requested_for_target * percent / 100.0))
+		var shield_loss: int = mini(before_shield, requested_for_target)
+		var applied: int = requested_for_target - shield_loss
 		task.shield = before_shield - shield_loss
 		task.work_remaining = maxi(0, before_work - applied)
 		_add_event(
@@ -2089,7 +3046,7 @@ func _apply_completion(
 			str(resolution.get("card_instance_id", "")),
 			[str(task_id)],
 			{
-				"amount": requested,
+				"amount": requested_for_target,
 				"shield_before": before_shield,
 				"shield_after": task.shield,
 				"work_before": before_work,
@@ -2210,6 +3167,13 @@ func _run_on_complete_effects(
 		if not result.ok:
 			state.resolution = previous
 			return result
+		if typeof(result.data) == TYPE_DICTIONARY:
+			state.resolution = previous
+			return _failure(
+				GameConstants.ERROR_ENGINE_NOT_READY,
+				"battle.on_complete.choice_not_ready",
+				{"task_id": task_id, "op": str(effect.get("op", ""))},
+			)
 		if state.phase == "finished":
 			break
 	state.resolution = previous
@@ -2217,7 +3181,7 @@ func _run_on_complete_effects(
 
 
 func _advance_or_remove_task(
-	state: BattleState, task_index: int, events: Array[RuleEvent], rng: RandomSource
+	state: BattleState, task_index: int, events: Array[RuleEvent], rng: RandomSource = null
 ) -> GameResult:
 	var previous: Dictionary = state.tasks[task_index]
 	var definition_result := _catalog.get_definition("task", str(previous.get("definition_id", "")))
@@ -2265,8 +3229,10 @@ func _advance_or_remove_task(
 		)
 		return _run_relic_hooks(state, "stage_entered", {}, rng, events)
 	var on_complete: Array = definition_result.data.get("on_complete_effects", [])
-	if not on_complete.is_empty():
-		var completed := _run_on_complete_effects(state, str(previous.task_id), on_complete, rng, events)
+	if not on_complete.is_empty() and rng != null:
+		var completed := _run_on_complete_effects(
+			state, str(previous.task_id), on_complete, rng, events
+		)
 		if not completed.ok:
 			return completed
 	state.tasks.remove_at(task_index)
@@ -2340,8 +3306,16 @@ func _summon_unit(
 	unit["unit_id"] = unit_id
 	unit["definition_id"] = definition_id
 	unit["vitality"] = int(unit.get("vitality", 1)) + int(effect.get("vitality_bonus", 0))
-	unit["max_vitality"] = unit["vitality"]
+	if effect.has("vitality_override"):
+		unit["vitality"] = int(effect.vitality_override)
+	unit["max_vitality"] = (
+		int(effect.max_vitality_override)
+		if effect.has("max_vitality_override")
+		else int(unit["vitality"])
+	)
 	unit["cooperation"] = int(unit.get("cooperation", 0)) + int(effect.get("cooperation_bonus", 0))
+	if effect.has("cooperation_override"):
+		unit["cooperation"] = int(effect.cooperation_override)
 	unit["entered_order"] = state.next_creation_order
 	unit["actions_taken"] = 0
 	unit["target_id"] = ""
@@ -2474,7 +3448,48 @@ func _draw_cards(
 			[card_id],
 			{"definition_id": str(card.definition_id), "from_zone": "draw", "to_zone": "hand"}
 		)
+		if not state.v3.is_empty():
+			var turn := _v3_turn(state)
+			if int(turn.get("erosion_draws", 0)) > 0:
+				var chain_targets: Array[String] = []
+				for task: Dictionary in state.tasks:
+					chain_targets.append(str(task.get("task_id", "")))
+				var chain := _v3_apply_status_batch(
+					state, "erosion", 1, chain_targets, true, false, events
+				)
+				if not chain.ok:
+					return
+				turn.erosion_draws = int(turn.erosion_draws) - 1
+				var settled := _v3_settle_erosion_events(state, rng, events)
+				if not settled.ok or state.phase == "finished":
+					return
 		amount -= 1
+
+
+func _v3_retrieve_allowed(state: BattleState, card_id: String, effect: Dictionary) -> bool:
+	var card: Dictionary = state.card_by_id.get(card_id, {})
+	var definition := _catalog.get_definition("card", str(card.get("definition_id", "")))
+	if not definition.ok:
+		return false
+	if (
+		bool(effect.get("permanent_only", false))
+		and not bool(definition.data.get("permanent", true))
+	):
+		return false
+	var card_kind := str(effect.get("card_kind", ""))
+	if not card_kind.is_empty() and str(definition.data.get("type", "")) != card_kind:
+		return false
+	var required_id := str(effect.get("card_id", ""))
+	if not required_id.is_empty() and str(definition.data.get("id", "")) != required_id:
+		return false
+	if int(definition.data.get("cost", 0)) < int(effect.get("base_cost_min", 0)):
+		return false
+	var owner := str(effect.get("owner", ""))
+	if owner.is_empty():
+		owner = state.character_id
+	if not owner.is_empty() and str(definition.data.get("owner", "")) != owner:
+		return false
+	return true
 
 
 func _start_card_choice(state: BattleState, effect: Dictionary, op: String) -> GameResult:
@@ -2490,7 +3505,17 @@ func _start_card_choice(state: BattleState, effect: Dictionary, op: String) -> G
 		"recall_from_discard":
 			kind = "recall"
 			for card_id in state.zones.discard:
+				if (
+					bool(resolution.get("v3", false))
+					and not _v3_retrieve_allowed(state, str(card_id), effect)
+				):
+					continue
 				candidates.append(_card_candidate(state, str(card_id)))
+		"exhaust_other":
+			kind = "exhaust"
+			for card_id in state.zones.hand:
+				if str(card_id) != str(resolution.get("card_instance_id", "")):
+					candidates.append(_card_candidate(state, str(card_id)))
 		"retain_hand_card":
 			kind = "retain"
 			for card_id in state.zones.hand:
@@ -2518,6 +3543,12 @@ func _start_card_choice(state: BattleState, effect: Dictionary, op: String) -> G
 	var maximum := mini(int(effect.get("amount", 1)), candidates.size())
 	if op == "remove_status":
 		maximum = mini(1, candidates.size())
+	if op == "exhaust_other" and candidates.is_empty():
+		return _failure(
+			GameConstants.ERROR_INVALID_TARGET,
+			"error.play.no_exhaust_target",
+			{"required": int(effect.get("amount", 1))}
+		)
 	if op == "discard" and bool(effect.get("up_to", false)):
 		if candidates.is_empty():
 			return GameResult.success(null)
@@ -2615,6 +3646,22 @@ func _confirm_effect_choice(
 					state.zones.hand.append(card_id)
 				else:
 					state.zones.discard.append(card_id)
+		"exhaust":
+			for card_id in selected:
+				state.zones.hand.erase(card_id)
+				state.zones.exhaust.append(card_id)
+				_add_event(
+					events,
+					"card_exhausted",
+					str(choice.source_card_id),
+					[card_id],
+					{
+						"definition_id": str(state.card_by_id[card_id].definition_id),
+						"from_zone": "hand",
+						"to_zone": "exhaust",
+					}
+				)
+			resolution.choice_counts[kind] = selected.size()
 		"retain":
 			var retained: Array = resolution.get("retained_card_ids", [])
 			retained.append_array(selected)
@@ -2645,6 +3692,52 @@ func _confirm_effect_choice(
 							"reason": "effect",
 						}
 					)
+		"chapter_replace":
+			if selected.is_empty():
+				return _failure(
+					GameConstants.ERROR_INVALID_TARGET, "error.play.no_chapter_replace", {}
+				)
+			var removed_id := str(selected[0])
+			var paper_replace := _v3_paper(state)
+			var removed := false
+			for index in paper_replace.chapters.size():
+				var entry: Variant = paper_replace.chapters[index]
+				if typeof(entry) == TYPE_DICTIONARY and str(entry.get("card_id", "")) == removed_id:
+					paper_replace.chapters.remove_at(index)
+					removed = true
+					break
+			if not removed:
+				return _failure(
+					GameConstants.ERROR_INVALID_TARGET,
+					"error.play.no_chapter_replace",
+					{"selected_id": removed_id}
+				)
+			state.zones.discard.append(removed_id)
+			var current_id := str(choice.get("source_card_id", ""))
+			var current_card: Dictionary = state.card_by_id.get(current_id, {})
+			(
+				paper_replace
+				. chapters
+				. append(
+					{
+						"card_id": current_id,
+						"definition_id": str(current_card.get("definition_id", "")),
+						"deployed_round": state.round_index,
+					}
+				)
+			)
+			resolution.v3_chapter_deploy = true
+			resolution.choice_counts[kind] = 1
+			_add_event(
+				events,
+				"chapter_deployed",
+				current_id,
+				[current_id],
+				{
+					"definition_id": str(current_card.get("definition_id", "")),
+					"replaced": removed_id,
+				}
+			)
 	resolution.choice = null
 	state.phase = "player_action"
 	_add_event(
@@ -2883,7 +3976,10 @@ func _finalize_card_resolution(
 	var face := {"id": definition_id, "type": str(resolution.get("card_type", ""))}
 	state.zones.resolving.erase(card_id)
 	var destination := "exhaust" if bool(resolution.get("exhaust", false)) else "discard"
-	state.zones[destination].append(card_id)
+	if bool(resolution.get("v3_chapter_deploy", false)):
+		destination = "chapters"
+	else:
+		state.zones[destination].append(card_id)
 	for retained_id in resolution.get("retained_card_ids", []):
 		if state.zones.hand.has(retained_id) and not state.retained_card_ids.has(retained_id):
 			state.retained_card_ids.append(str(retained_id))
@@ -2894,6 +3990,23 @@ func _finalize_card_resolution(
 		[card_id],
 		{"definition_id": definition_id, "destination": destination}
 	)
+	if bool(resolution.get("v3", false)):
+		var compound := _v3_apply_compound_reaction(state, rng, events)
+		if not compound.ok:
+			return compound
+		var recorded := _v3_record_card_played(state, resolution, rng, events)
+		if not recorded.ok:
+			return recorded
+		var erosion_settled := _v3_settle_erosion_events(state, rng, events)
+		if not erosion_settled.ok:
+			return erosion_settled
+		var induced := _v3_induced_window(state, rng, events)
+		if not induced.ok:
+			return induced
+		if int(resolution.get("v3_cost_discount_applied", 0)) > 0:
+			state.v3["pending_cost_discount"] = {"amount": 0, "min_base_cost": 0}
+		if definition_id == "R3-T201":
+			state.v3["publication_discount"] = 0
 	state.resolution = null
 	if state.phase != "finished":
 		state.phase = "player_action"
@@ -2954,6 +4067,1361 @@ func _run_relic_hooks(
 	return GameResult.success(null)
 
 
+func _v3_turn(state: BattleState) -> Dictionary:
+	if not state.v3.has("turn") or typeof(state.v3.turn) != TYPE_DICTIONARY:
+		state.v3["turn"] = {
+			"previous_card_type": "",
+			"previous_card_definition_id": "",
+			"previous_card_instance_id": "",
+			"played_types": {},
+			"link_work_count": 0,
+			"retrieved_strategy": false,
+			"erosion_events": 0,
+			"compound_used": false,
+			"induced_triggers": {},
+			"induced_first": {},
+			"erosion_draws": 0,
+			"summoned_partner": false,
+			"healed_partner": false,
+			"first_cooperation": false,
+			"partner_extra": {},
+			"chapter_window_ran": [],
+			"chapter_extra_used": {},
+			"paid_citation": false,
+			"p04_passive_used": false,
+		}
+	return state.v3.turn
+
+
+func _v3_battle(state: BattleState) -> Dictionary:
+	if not state.v3.has("battle") or typeof(state.v3.battle) != TYPE_DICTIONARY:
+		state.v3["battle"] = {"instance_plays": {}}
+	if not state.v3.battle.has("instance_plays"):
+		state.v3.battle["instance_plays"] = {}
+	return state.v3.battle
+
+
+func _reset_v3_turn(state: BattleState) -> void:
+	state.v3["turn"] = {
+		"previous_card_type": "",
+		"previous_card_definition_id": "",
+		"previous_card_instance_id": "",
+		"played_types": {},
+		"link_work_count": 0,
+		"retrieved_strategy": false,
+		"erosion_events": 0,
+		"compound_used": false,
+		"induced_triggers": {},
+		"induced_first": {},
+		"erosion_draws": 0,
+		"summoned_partner": false,
+		"healed_partner": false,
+		"first_cooperation": false,
+		"partner_extra": {},
+		"chapter_window_ran": [],
+		"chapter_extra_used": {},
+		"paid_citation": false,
+		"p04_passive_used": false,
+	}
+	if state.v3.has("paper") and typeof(state.v3.paper) == TYPE_DICTIONARY:
+		state.v3.paper["turn_names"] = []
+	state.v3["pending_work_bonus"] = 0
+	state.v3["pending_cost_discount"] = {"amount": 0, "min_base_cost": 0}
+
+
+func _v3_add_work_bonus(state: BattleState, amount: int) -> void:
+	var current := int(state.v3.get("pending_work_bonus", 0))
+	state.v3["pending_work_bonus"] = mini(12, current + maxi(0, amount))
+
+
+func _v3_take_work_bonus(state: BattleState) -> int:
+	var amount := maxi(0, int(state.v3.get("pending_work_bonus", 0)))
+	state.v3["pending_work_bonus"] = 0
+	return amount
+
+
+func _v3_add_cost_discount(state: BattleState, amount: int, min_base_cost: int) -> void:
+	var pending: Variant = state.v3.get("pending_cost_discount", {})
+	var current := 0
+	var current_min := 0
+	if typeof(pending) == TYPE_DICTIONARY:
+		current = int(pending.get("amount", 0))
+		current_min = int(pending.get("min_base_cost", 0))
+	var merged_min := min_base_cost
+	if current > 0 and current_min > 0:
+		merged_min = maxi(current_min, min_base_cost)
+	state.v3["pending_cost_discount"] = {
+		"amount": mini(1, current + maxi(0, amount)),
+		"min_base_cost": merged_min,
+	}
+
+
+func _v3_cost_discount_applies(state: BattleState, face: Dictionary) -> int:
+	var pending: Variant = state.v3.get("pending_cost_discount", {})
+	if typeof(pending) != TYPE_DICTIONARY:
+		return 0
+	var amount := int(pending.get("amount", 0))
+	if amount <= 0 or str(face.get("type", "")) != "work":
+		return 0
+	if int(face.get("cost", 0)) < int(pending.get("min_base_cost", 0)):
+		return 0
+	return amount
+
+
+func _v3_record_card_played(
+	state: BattleState, resolution: Dictionary, rng: RandomSource, events: Array[RuleEvent]
+) -> GameResult:
+	if not bool(resolution.get("v3", false)):
+		return GameResult.success(null)
+	var card_id := str(resolution.get("card_instance_id", ""))
+	var card_type := str(resolution.get("card_type", ""))
+	var definition_id := str(resolution.get("definition_id", ""))
+	var turn := _v3_turn(state)
+	var battle := _v3_battle(state)
+	var plays: Dictionary = battle.instance_plays
+	plays[card_id] = int(plays.get(card_id, 0)) + 1
+	var definition := _catalog.get_definition("card", definition_id)
+	if definition.ok:
+		var per_turn := int(definition.data.get("limits", {}).get("per_instance_per_turn", 0))
+		if per_turn > 0:
+			var limit_key := BattleState.counter_key(
+				GameConstants.COUNTER_SCOPE_INSTANCE_ROUND, card_id, &"v3_play"
+			)
+			state.counters[limit_key] = int(state.counters.get(limit_key, 0)) + 1
+	var paper_recorded := _v3_paper_record(state, resolution, rng, events)
+	if not paper_recorded.ok:
+		return paper_recorded
+	if state.character_id == "P02":
+		var played_name := str(resolution.get("v3_paper_name", ""))
+		if not played_name.is_empty():
+			var paper_turn := _v3_paper(state)
+			if not paper_turn.turn_names.has(played_name):
+				paper_turn.turn_names.append(played_name)
+	var played_types: Dictionary = turn.played_types
+	played_types[card_type] = int(played_types.get(card_type, 0)) + 1
+	var link_work := card_type == "work" and bool(resolution.get("v3_link", false))
+	if link_work:
+		turn.link_work_count = int(turn.link_work_count) + 1
+	turn.previous_card_type = card_type
+	turn.previous_card_definition_id = definition_id
+	turn.previous_card_instance_id = card_id
+	if card_type == "cooperation" and not bool(turn.first_cooperation):
+		turn.first_cooperation = true
+		var coop_trigger := _v3_run_ability_trigger(
+			state, "first_cooperation_resolved", {"first_cooperation": true}, rng, events
+		)
+		if not coop_trigger.ok:
+			return coop_trigger
+	if (
+		state.character_id == "P01"
+		and card_type == "work"
+		and link_work
+		and not bool(turn.retrieved_strategy)
+	):
+		var retrieved := _v3_try_passive_retrieve(state, resolution, events)
+		if retrieved:
+			var passive_trigger := _v3_run_ability_trigger(
+				state, "passive_retrieve_success", {"passive_retrieve_success": true}, rng, events
+			)
+			if not passive_trigger.ok:
+				return passive_trigger
+	if link_work:
+		var link_trigger := _v3_run_ability_trigger(
+			state, "link_work_resolved", {"link_work": true}, rng, events
+		)
+		if not link_trigger.ok:
+			return link_trigger
+	if card_type == "work":
+		var work_trigger := _v3_run_ability_trigger(
+			state,
+			"work_resolved",
+			{"base_cost": int(resolution.get("v3_base_cost", 0)), "link_work": link_work},
+			rng,
+			events
+		)
+		if not work_trigger.ok:
+			return work_trigger
+	elif card_type == "strategy":
+		var strategy_trigger := _v3_run_ability_trigger(
+			state,
+			"strategy_resolved",
+			{
+				"instance_was_played_before":
+				bool(resolution.get("v3_instance_was_played_before", false))
+			},
+			rng,
+			events
+		)
+		if not strategy_trigger.ok:
+			return strategy_trigger
+	return GameResult.success(null)
+
+
+func _v3_try_passive_retrieve(
+	state: BattleState, resolution: Dictionary, events: Array[RuleEvent]
+) -> bool:
+	var turn := _v3_turn(state)
+	var previous_id := str(resolution.get("v3_previous_card_instance_id", ""))
+	var previous_definition := str(resolution.get("v3_previous_card_definition_id", ""))
+	if previous_id.is_empty() or previous_definition.is_empty():
+		return false
+	if not state.zones.discard.has(previous_id):
+		return false
+	var definition := _catalog.get_definition("card", previous_definition)
+	if not definition.ok:
+		return false
+	if str(definition.data.get("type", "")) != "strategy":
+		return false
+	if not bool(definition.data.get("permanent", true)):
+		return false
+	turn.retrieved_strategy = true
+	var ruleset := _loaded_ruleset()
+	if not ruleset.ok:
+		return false
+	if state.zones.hand.size() >= int(ruleset.data.battle.hand_limit):
+		return false
+	state.zones.discard.erase(previous_id)
+	state.zones.hand.append(previous_id)
+	_add_event(
+		events,
+		"card_retrieved",
+		str(resolution.get("card_instance_id", "")),
+		[previous_id],
+		{"definition_id": previous_definition, "reason": "P01_passive"}
+	)
+	return true
+
+
+func _v3_ability_limit(ability: Dictionary) -> int:
+	var limit := str(ability.get("limit", ""))
+	for effect: Variant in ability.get("effects", []):
+		if typeof(effect) == TYPE_DICTIONARY:
+			var effect_limit := str(effect.get("limit", ""))
+			if effect_limit == "twice_per_turn":
+				return 2
+			if not effect_limit.is_empty() and limit.is_empty():
+				limit = effect_limit
+	if limit == "twice_per_turn":
+		return 2
+	return 1
+
+
+func _v3_run_ability_trigger(
+	state: BattleState,
+	trigger: String,
+	context: Dictionary,
+	rng: RandomSource,
+	events: Array[RuleEvent],
+) -> GameResult:
+	if not state.v3.has("abilities"):
+		return GameResult.success(null)
+	for ability: Variant in state.v3.abilities:
+		if typeof(ability) != TYPE_DICTIONARY:
+			continue
+		if str(ability.get("trigger", "")) != trigger:
+			continue
+		if state.round_index < int(ability.get("activate_round", 0)):
+			continue
+		if (
+			typeof(ability.get("condition", {})) == TYPE_DICTIONARY
+			and not ability.get("condition", {}).is_empty()
+			and not _v3_condition(state, ability.condition, context)
+		):
+			continue
+		if int(ability.get("uses_round", 0)) != state.round_index:
+			ability.uses_round = state.round_index
+			ability.uses_this_round = 0
+		if int(ability.get("uses_this_round", 0)) >= _v3_ability_limit(ability):
+			continue
+		var applied := false
+		for effect: Variant in ability.get("effects", []):
+			if typeof(effect) != TYPE_DICTIONARY:
+				continue
+			if effect.has("condition") and not _v3_condition(state, effect.condition, context):
+				continue
+			var executed := _v3_execute_ability_effect(state, effect, context, rng, events)
+			if not executed.ok:
+				return executed
+			applied = true
+		if applied:
+			for effect: Variant in ability.get("extra_effects", []):
+				if typeof(effect) != TYPE_DICTIONARY:
+					continue
+				if effect.has("condition") and not _v3_condition(state, effect.condition, context):
+					continue
+				var extra := _v3_execute_ability_effect(state, effect, context, rng, events)
+				if not extra.ok:
+					return extra
+			ability.uses_this_round = int(ability.get("uses_this_round", 0)) + 1
+			_add_event(
+				events,
+				"v3_ability_triggered",
+				str(ability.get("ability_id", "")),
+				[],
+				{"definition_id": str(ability.get("definition_id", "")), "trigger": trigger}
+			)
+	return GameResult.success(null)
+
+
+func _v3_execute_ability_effect(
+	state: BattleState,
+	effect: Dictionary,
+	context: Dictionary,
+	rng: RandomSource,
+	events: Array[RuleEvent],
+) -> GameResult:
+	match str(effect.get("op", "")):
+		"relax":
+			state.player.relax = (
+				int(state.player.get("relax", 0)) + maxi(0, int(effect.get("amount", 0)))
+			)
+			return GameResult.success(null)
+		"draw":
+			_draw_cards(state, maxi(0, int(effect.get("amount", 0))), rng, events)
+			return GameResult.success(null)
+		"gain_focus":
+			var ruleset := _loaded_ruleset()
+			if not ruleset.ok:
+				return ruleset
+			state.player.focus = mini(
+				int(ruleset.data.battle.focus_cap),
+				int(state.player.get("focus", 0)) + maxi(0, int(effect.get("amount", 0)))
+			)
+			return GameResult.success(null)
+		"add_work_bonus":
+			_v3_add_work_bonus(state, int(effect.get("amount", 0)))
+			return GameResult.success(null)
+		"gain_synergy":
+			_v3_gain_synergy(state, int(effect.get("amount", 0)))
+			return GameResult.success(null)
+		"apply_status":
+			var targets := _v3_ability_targets(state, effect, context)
+			return _v3_apply_status_batch(
+				state,
+				str(effect.get("status", "")),
+				int(effect.get("stacks", 1)),
+				targets,
+				false,
+				false,
+				events
+			)
+		"status_complete":
+			for target_id in _v3_ability_targets(state, effect, context):
+				var completed := _v3_status_complete_task(
+					state, target_id, int(effect.get("amount", 0)), rng, events
+				)
+				if not completed.ok:
+					return completed
+			return GameResult.success(null)
+		"modify_erosion_window":
+			return GameResult.success(null)
+		_:
+			return _failure(
+				GameConstants.ERROR_ENGINE_NOT_READY,
+				"battle.v3.ability_effect_not_ready",
+				{"op": str(effect.get("op", ""))}
+			)
+
+
+func _v3_ability_targets(
+	state: BattleState, effect: Dictionary, context: Dictionary
+) -> Array[String]:
+	var result: Array[String] = []
+	var target := str(effect.get("target", ""))
+	if target == "all_tasks":
+		for task: Dictionary in state.tasks:
+			result.append(str(task.get("task_id", "")))
+		return result
+	if target == "earliest_task":
+		var earliest := _first_eligible_task(state)
+		if not earliest.is_empty():
+			result.append(earliest)
+		return result
+	var context_target := str(context.get("target_id", ""))
+	if not context_target.is_empty():
+		result.append(context_target)
+		return result
+	var fallback := _first_eligible_task(state)
+	if not fallback.is_empty():
+		result.append(fallback)
+	return result
+
+
+func _v3_execute_effects(
+	state: BattleState, effects: Array, rng: RandomSource, events: Array[RuleEvent]
+) -> GameResult:
+	for effect: Variant in effects:
+		if typeof(effect) != TYPE_DICTIONARY:
+			continue
+		var result := _execute_v3_card_effect(state, effect, rng, events)
+		if not result.ok:
+			return result
+		if typeof(result.data) == TYPE_DICTIONARY:
+			return result
+		if state.phase == "finished":
+			break
+	return GameResult.success(null)
+
+
+func _v3_card_amplify(state: BattleState) -> int:
+	if typeof(state.resolution) == TYPE_DICTIONARY and bool(state.resolution.get("v3_auto", false)):
+		return 0
+	return _v3_consume_amplify(state)
+
+
+func _v3_paper(state: BattleState) -> Dictionary:
+	if not state.v3.has("paper") or typeof(state.v3.paper) != TYPE_DICTIONARY:
+		state.v3["paper"] = {
+			"open": false,
+			"progress": 0,
+			"citations": 0,
+			"modifier": 0,
+			"amplify": 0,
+			"used_names": [],
+			"publication_id": "",
+			"chapters": [],
+			"turn_names": [],
+		}
+	return state.v3.paper
+
+
+func _v3_chapter_count(state: BattleState) -> int:
+	return _v3_paper(state).chapters.size()
+
+
+func _v3_gain_citation(
+	state: BattleState, amount: int, rng: RandomSource, events: Array[RuleEvent]
+) -> int:
+	var paper := _v3_paper(state)
+	var gained := 0
+	for _index in maxi(0, amount):
+		if int(paper.citations) >= 5:
+			break
+		var layer := int(paper.citations) + 1
+		var cost := maxi(0, layer - 2)
+		if int(state.player.get("focus", 0)) < cost:
+			_draw_cards(state, 1, rng, events)
+			break
+		state.player.focus = int(state.player.get("focus", 0)) - cost
+		if cost > 0:
+			_v3_turn(state).paid_citation = true
+		paper.citations = layer
+		gained += 1
+	return gained
+
+
+func _v3_consume_amplify(state: BattleState) -> int:
+	var paper := _v3_paper(state)
+	var amount := int(paper.get("amplify", 0))
+	paper.amplify = 0
+	return maxi(0, amount)
+
+
+func _v3_paper_record(
+	state: BattleState, resolution: Dictionary, rng: RandomSource, events: Array[RuleEvent]
+) -> GameResult:
+	if state.character_id != "P02" or not bool(_v3_paper(state).open):
+		return GameResult.success(null)
+	var definition_id := str(resolution.get("definition_id", ""))
+	var definition := _catalog.get_definition("card", definition_id)
+	if not definition.ok:
+		return GameResult.success(null)
+	if not bool(definition.data.get("flags", {}).get("paper_record", true)):
+		return GameResult.success(null)
+	var paper := _v3_paper(state)
+	var name_key := str(definition.data.get("name_key", definition_id))
+	var used: Array = paper.used_names
+	var was_used := used.has(name_key)
+	if not was_used:
+		used.append(name_key)
+		if int(paper.progress) < 10:
+			paper.progress = int(paper.progress) + 1
+			var trigger := _v3_run_ability_trigger(
+				state, "paper_progress_gained", {"paper_progress_gained": true}, rng, events
+			)
+			if not trigger.ok:
+				return trigger
+			if (
+				bool(definition.data.get("permanent", true))
+				and not bool(definition.data.get("flags", {}).get("unique", false))
+			):
+				var unused_trigger := _v3_run_ability_trigger(
+					state,
+					"first_unused_permanent_card_resolved",
+					{"first_unused_permanent_card_resolved": true},
+					rng,
+					events
+				)
+				if not unused_trigger.ok:
+					return unused_trigger
+	else:
+		_v3_gain_citation(state, 1, rng, events)
+	return GameResult.success(null)
+
+
+func _v3_open_paper(state: BattleState, events: Array[RuleEvent]) -> void:
+	var paper := _v3_paper(state)
+	paper.open = true
+	paper.progress = 0
+	paper.citations = 0
+	paper.modifier = 0
+	paper.amplify = 0
+	paper.used_names = []
+	var publication := ""
+	for card_id in state.card_by_id:
+		if str(state.card_by_id[card_id].get("definition_id", "")) == "R3-T201":
+			publication = str(card_id)
+			break
+	if publication.is_empty():
+		publication = _new_instance_id(state, "c")
+		state.card_by_id[publication] = {
+			"card_id": publication,
+			"definition_id": "R3-T201",
+			"origin_card_id": "",
+			"upgrade_level": 0,
+			"temporary_modifiers": {},
+		}
+	paper.publication_id = publication
+	if state.zones.hand.has(publication):
+		return
+	for zone in ["draw", "discard"]:
+		if state.zones[zone].has(publication):
+			state.zones[zone].erase(publication)
+			break
+	if state.zones.hand.size() < 10:
+		state.zones.hand.append(publication)
+	else:
+		state.zones.discard.append(publication)
+
+
+func _v3_paper_publish(
+	state: BattleState, resolution: Dictionary, rng: RandomSource, events: Array[RuleEvent]
+) -> GameResult:
+	var paper := _v3_paper(state)
+	var progress := int(paper.progress) * 7 + int(paper.citations) * 6 + int(paper.modifier)
+	var completion := clampi(progress, 0, 100)
+	var targets: Array = resolution.get("locked_target_ids", [])
+	if targets.is_empty():
+		targets = resolution.get("target_ids", [])
+	var main_bonus := 0
+	if bool(resolution.get("v3", false)) and bool(resolution.get("first_work_card", false)):
+		main_bonus += _consume_v3_first_work_bonus(state)
+	main_bonus += _v3_take_work_bonus(state)
+	var ruleset := _loaded_ruleset()
+	for index in targets.size():
+		var task_id := str(targets[index])
+		var amount := completion + 10 if index == 0 else int(floor(completion / 2.0))
+		if completion >= 100:
+			amount += 20
+		if index == 0:
+			amount += main_bonus
+		if (
+			bool(resolution.get("v3", false))
+			and ruleset.ok
+			and _status_stacks(state, "vulnerability", task_id) > 0
+		):
+			var percent := int(
+				ruleset.data.statuses.get("vulnerability", {}).get("completion_percent", 125)
+			)
+			amount = int(floor(amount * percent / 100.0))
+		var completed := _v3_status_complete_task(state, task_id, amount, rng, events)
+		if not completed.ok:
+			return completed
+		if state.phase == "finished":
+			break
+	paper.open = false
+	paper.progress = 0
+	paper.citations = 0
+	paper.modifier = 0
+	paper.amplify = 0
+	paper.used_names = []
+	for entry: Variant in paper.chapters:
+		if typeof(entry) == TYPE_DICTIONARY:
+			var chapter_id := str(entry.get("card_id", ""))
+			if state.card_by_id.has(chapter_id):
+				state.zones.discard.append(chapter_id)
+				_add_event(
+					events,
+					"chapter_returned",
+					str(resolution.get("card_instance_id", "")),
+					[chapter_id],
+					{"reason": "publication"}
+				)
+	paper.chapters = []
+	_add_event(events, "paper_published", "", [], {"completion": completion})
+	return GameResult.success(null)
+
+
+func _v3_chapter_deploy(
+	state: BattleState, card_id: String, events: Array[RuleEvent]
+) -> GameResult:
+	var paper := _v3_paper(state)
+	if not bool(paper.open):
+		return GameResult.success(null)
+	var card: Dictionary = state.card_by_id.get(card_id, {})
+	var definition_id := str(card.get("definition_id", ""))
+	var origin := str(card.get("origin_card_id", ""))
+	for entry: Variant in paper.chapters:
+		if typeof(entry) != TYPE_DICTIONARY:
+			continue
+		if str(entry.get("definition_id", "")) == definition_id:
+			return GameResult.success(null)
+		if not origin.is_empty() and str(entry.get("card_id", "")) == origin:
+			return GameResult.success(null)
+	if paper.chapters.size() >= 3:
+		var candidates: Array = []
+		for entry: Variant in paper.chapters:
+			if typeof(entry) == TYPE_DICTIONARY:
+				candidates.append(_card_candidate(state, str(entry.get("card_id", ""))))
+		var choice_id := _new_instance_id(state, "ch")
+		return (
+			GameResult
+			. success(
+				{
+					"choice_id": choice_id,
+					"kind": "chapter_replace",
+					"prompt_key": "choice.battle.chapter_replace",
+					"candidates": candidates,
+					"min_count": 1,
+					"max_count": 1,
+					"source_card_id": card_id,
+					"effect_amount": 1,
+				}
+			)
+		)
+	(
+		paper
+		. chapters
+		. append(
+			{
+				"card_id": card_id,
+				"definition_id": definition_id,
+				"deployed_round": state.round_index,
+			}
+		)
+	)
+	_add_event(events, "chapter_deployed", card_id, [card_id], {"definition_id": definition_id})
+	return GameResult.success(true)
+
+
+func _v3_run_chapter_entry(
+	state: BattleState, entry: Dictionary, extra: bool, rng: RandomSource, events: Array[RuleEvent]
+) -> GameResult:
+	var card_id := str(entry.get("card_id", ""))
+	var card: Dictionary = state.card_by_id.get(card_id, {})
+	var definition := _catalog.get_definition("card", str(card.get("definition_id", "")))
+	if not definition.ok:
+		return GameResult.success(null)
+	var chapter: Dictionary = definition.data.get("chapter", {})
+	var resident: Dictionary = chapter.get("resident", {})
+	if int(card.get("upgrade_level", 0)) > 0 and chapter.has("upgraded_resident"):
+		resident = chapter.get("upgraded_resident", resident)
+	var effects: Array = resident.get("effects", [])
+	if effects.is_empty():
+		return GameResult.success(null)
+	var turn := _v3_turn(state)
+	var previous: Variant = state.resolution
+	var ran: Array = turn.get("chapter_window_ran", [])
+	state.resolution = {
+		"card_instance_id": card_id,
+		"definition_id": str(card.get("definition_id", "")),
+		"card_type": "strategy",
+		"v3": true,
+		"v3_auto": not extra,
+		"v3_other_chapter_count": ran.size(),
+		"v3_compound_candidates": [],
+		"v3_induced_snapshot": [],
+		"v3_target_induced_snapshot": {},
+		"effects": effects,
+		"cursor": 0,
+		"target_ids": [],
+		"choice": null,
+		"choice_counts": {},
+		"discarded_in_resolution": [],
+		"all_tasks": false,
+		"locked_target_ids": [],
+	}
+	var result := _v3_execute_effects(state, effects, rng, events)
+	state.resolution = previous
+	if result.ok and state.phase != "finished":
+		ran.append(str(card.get("definition_id", "")))
+		turn["chapter_window_ran"] = ran
+		_add_event(
+			events,
+			"chapter_ran",
+			card_id,
+			[card_id],
+			{"definition_id": str(card.get("definition_id", "")), "extra": extra}
+		)
+	return result
+
+
+func _v3_run_chapter_window(
+	state: BattleState, rng: RandomSource, events: Array[RuleEvent]
+) -> GameResult:
+	var paper := _v3_paper(state)
+	if paper.chapters.is_empty():
+		return GameResult.success(null)
+	var turn := _v3_turn(state)
+	turn["chapter_window_ran"] = []
+	for entry: Variant in paper.chapters:
+		if typeof(entry) != TYPE_DICTIONARY:
+			continue
+		if int(entry.get("deployed_round", 0)) >= state.round_index:
+			continue
+		var ran := _v3_run_chapter_entry(state, entry, false, rng, events)
+		if not ran.ok:
+			return ran
+		if state.phase == "finished":
+			return GameResult.success(null)
+	var end_trigger := _v3_run_ability_trigger(
+		state, "chapter_window_end", {"chapter_count": paper.chapters.size()}, rng, events
+	)
+	if not end_trigger.ok:
+		return end_trigger
+	return GameResult.success(null)
+
+
+func _v3_chapter_run(
+	state: BattleState, amount: int, rng: RandomSource, events: Array[RuleEvent]
+) -> GameResult:
+	var paper := _v3_paper(state)
+	var turn := _v3_turn(state)
+	var used: Dictionary = turn.get("chapter_extra_used", {})
+	var count := 0
+	for entry: Variant in paper.chapters:
+		if count >= maxi(0, amount):
+			break
+		if typeof(entry) != TYPE_DICTIONARY:
+			continue
+		var card_id := str(entry.get("card_id", ""))
+		if bool(used.get(card_id, false)):
+			continue
+		var ran := _v3_run_chapter_entry(state, entry, true, rng, events)
+		if not ran.ok:
+			return ran
+		used[card_id] = true
+		count += 1
+		if state.phase == "finished":
+			break
+	turn["chapter_extra_used"] = used
+	return GameResult.success(null)
+
+
+func _v3_chapter_return(state: BattleState, amount: int, events: Array[RuleEvent]) -> int:
+	var paper := _v3_paper(state)
+	var removed := 0
+	for index in mini(maxi(0, amount), paper.chapters.size()):
+		var entry: Variant = paper.chapters.pop_front()
+		if typeof(entry) == TYPE_DICTIONARY:
+			state.zones.discard.append(str(entry.get("card_id", "")))
+			removed += 1
+	return removed
+
+
+func _v3_swap_chapter_slots(state: BattleState, events: Array[RuleEvent]) -> void:
+	var paper := _v3_paper(state)
+	if paper.chapters.size() < 2:
+		return
+	var first: Variant = paper.chapters[0]
+	paper.chapters[0] = paper.chapters[1]
+	paper.chapters[1] = first
+	_add_event(events, "chapter_slots_swapped", "", [], {"count": paper.chapters.size()})
+
+
+func _v3_search_draw_chapter(
+	state: BattleState, rng: RandomSource, events: Array[RuleEvent]
+) -> GameResult:
+	for card_id in state.zones.draw.duplicate():
+		var card: Dictionary = state.card_by_id.get(card_id, {})
+		var definition := _catalog.get_definition("card", str(card.get("definition_id", "")))
+		if definition.ok and definition.data.has("chapter"):
+			state.zones.draw.erase(card_id)
+			if state.zones.hand.size() < 10:
+				state.zones.hand.append(card_id)
+				_add_event(
+					events,
+					"card_drawn",
+					"",
+					[card_id],
+					{
+						"definition_id": str(card.get("definition_id", "")),
+						"from_zone": "draw",
+						"to_zone": "hand"
+					}
+				)
+			else:
+				state.zones.discard.append(card_id)
+			var shuffled := rng.shuffle(GameConstants.RNG_STREAM_BATTLE, state.zones.draw)
+			if shuffled.ok:
+				state.zones.draw = shuffled.data
+			return GameResult.success(null)
+	_draw_cards(state, 1, rng, events)
+	return GameResult.success(null)
+
+
+func _v3_synergy(state: BattleState) -> int:
+	return maxi(0, int(state.v3.get("synergy", 0)))
+
+
+func _v3_gain_synergy(state: BattleState, amount: int) -> void:
+	state.v3["synergy"] = mini(6, _v3_synergy(state) + maxi(0, amount))
+
+
+func _v3_spend_synergy(state: BattleState, amount: int, optional: bool = false) -> int:
+	var available := _v3_synergy(state)
+	var spend := maxi(0, amount)
+	if spend > available:
+		if optional:
+			return 0
+		return -1
+	state.v3["synergy"] = available - spend
+	return spend
+
+
+func _v3_partner_extra_action(
+	state: BattleState, effect: Dictionary, rng: RandomSource, events: Array[RuleEvent]
+) -> GameResult:
+	var turn := _v3_turn(state)
+	var used: Dictionary = turn.partner_extra
+	var targets: Array[String] = []
+	if str(effect.get("target", "one")) == "all_eligible":
+		for unit_id in _ordered_unit_ids(state):
+			targets.append(unit_id)
+	else:
+		if typeof(state.resolution) == TYPE_DICTIONARY:
+			for unit_id in state.resolution.get("target_ids", []):
+				targets.append(str(unit_id))
+		if targets.is_empty():
+			for unit_id in _ordered_unit_ids(state):
+				targets.append(unit_id)
+	var acted := false
+	for unit_id in targets:
+		if bool(used.get(unit_id, false)):
+			continue
+		if _unit_index(state, unit_id) < 0:
+			continue
+		var action := _v3_unit_action(state, unit_id, rng, events)
+		if not action.ok:
+			return action
+		used[unit_id] = true
+		acted = true
+		if state.phase == "finished":
+			return GameResult.success(null)
+		if str(effect.get("target", "one")) != "all_eligible":
+			break
+	if not acted:
+		return _failure(
+			GameConstants.ERROR_INVALID_TARGET, "error.play.no_partner_extra_action", {}
+		)
+	return GameResult.success(null)
+
+
+func _v3_unit_action(
+	state: BattleState, unit_id: String, rng: RandomSource, events: Array[RuleEvent]
+) -> GameResult:
+	var unit_index := _unit_index(state, unit_id)
+	if unit_index < 0:
+		return GameResult.success(null)
+	var unit: Dictionary = state.units[unit_index]
+	var support_result := _apply_unit_support(state, unit, events)
+	if not support_result.ok:
+		return support_result
+	if not bool(unit.get("support_replaces_cooperation", false)):
+		var task_id := str(unit.get("target_id", ""))
+		var task_index := _task_index(state, task_id)
+		if (
+			task_index < 0
+			or int(state.tasks[task_index].get("eligible_round", 1)) > state.round_index
+		):
+			task_id = _first_eligible_task(state)
+			task_index = _task_index(state, task_id)
+		if task_index >= 0:
+			var task: Dictionary = state.tasks[task_index]
+			var before := int(task.get("work_remaining", 0))
+			var shield_before := int(task.get("shield", 0))
+			var cooperation := int(unit.get("cooperation", 0))
+			var shield_loss := mini(shield_before, cooperation)
+			task.shield = shield_before - shield_loss
+			task.work_remaining = maxi(0, before - (cooperation - shield_loss))
+			_add_event(
+				events,
+				"completion_applied",
+				unit_id,
+				[task_id],
+				{
+					"amount": cooperation,
+					"shield_before": shield_before,
+					"shield_after": int(task.get("shield", 0)),
+					"work_before": before,
+					"work_after": int(task.work_remaining),
+					"segment_index": 0,
+				}
+			)
+			if int(task.work_remaining) == 0:
+				var advanced := _advance_or_remove_task(state, task_index, events, rng)
+				if not advanced.ok:
+					return advanced
+			_check_battle_outcome(state, events)
+			if state.phase == "finished":
+				return GameResult.success(null)
+	unit.actions_taken = int(unit.get("actions_taken", 0)) + 1
+	var ruleset := _loaded_ruleset()
+	if not ruleset.ok:
+		return ruleset
+	var vitality_before := int(unit.get("vitality", 0))
+	unit.vitality = maxi(
+		0, vitality_before - int(ruleset.data.battle.get("unit_action_vitality_cost", 1))
+	)
+	if unit.vitality == 0:
+		state.units.remove_at(unit_index)
+		_remove_holder_statuses(state, unit_id)
+		_add_event(
+			events,
+			"unit_departed",
+			unit_id,
+			[unit_id],
+			{"definition_id": str(unit.definition_id), "reason": "exhausted"}
+		)
+	_check_battle_outcome(state, events)
+	return GameResult.success(null)
+
+
+func _v3_summon_partner(
+	state: BattleState, effect: Dictionary, rng: RandomSource, events: Array[RuleEvent]
+) -> GameResult:
+	var summon_effect := {
+		"unit": str(effect.get("unit", "")),
+		"vitality_bonus": int(effect.get("vitality_bonus", 0)),
+		"cooperation_bonus": int(effect.get("cooperation_bonus", 0)),
+	}
+	if effect.has("vitality"):
+		summon_effect["vitality_override"] = int(effect.vitality)
+	if effect.has("max_vitality"):
+		summon_effect["max_vitality_override"] = int(effect.max_vitality)
+	if effect.has("cooperation"):
+		summon_effect["cooperation_override"] = int(effect.cooperation)
+	var summoned := _summon_unit(state, summon_effect, rng, events)
+	if summoned.ok:
+		_v3_turn(state).summoned_partner = true
+	return summoned
+
+
+func _v3_partner_heal(
+	state: BattleState, effect: Dictionary, events: Array[RuleEvent]
+) -> GameResult:
+	var targets: Array[String] = []
+	if str(effect.get("target", "one")) == "all":
+		for unit_id in _ordered_unit_ids(state):
+			targets.append(unit_id)
+	else:
+		if typeof(state.resolution) == TYPE_DICTIONARY:
+			for unit_id in state.resolution.get("target_ids", []):
+				targets.append(str(unit_id))
+		if targets.is_empty():
+			for unit_id in _ordered_unit_ids(state):
+				targets.append(unit_id)
+	var healed := false
+	for unit_id in targets:
+		var index := _unit_index(state, unit_id)
+		if index < 0:
+			continue
+		var unit: Dictionary = state.units[index]
+		var before := int(unit.get("vitality", 0))
+		var maximum := int(unit.get("max_vitality", before))
+		unit.vitality = mini(maximum, before + maxi(0, int(effect.get("amount", 0))))
+		if unit.vitality != before:
+			healed = true
+			_add_event(
+				events,
+				"unit_healed",
+				str(state.resolution.get("card_instance_id", "")),
+				[unit_id],
+				{"before": before, "after": unit.vitality}
+			)
+	if healed:
+		_v3_turn(state).healed_partner = true
+	return GameResult.success(null)
+
+
+func _v3_partner_retreat(
+	state: BattleState, effect: Dictionary, events: Array[RuleEvent]
+) -> GameResult:
+	var target := ""
+	if typeof(state.resolution) == TYPE_DICTIONARY:
+		var targets: Array = state.resolution.get("target_ids", [])
+		if not targets.is_empty():
+			target = str(targets.front())
+	if target.is_empty():
+		var ordered := _ordered_unit_ids(state)
+		if not ordered.is_empty():
+			target = ordered.front()
+	var index := _unit_index(state, target)
+	if index < 0:
+		return _failure(GameConstants.ERROR_INVALID_TARGET, "error.play.no_partner_to_retreat", {})
+	var unit: Dictionary = state.units[index]
+	state.units.remove_at(index)
+	_remove_holder_statuses(state, target)
+	_add_event(
+		events,
+		"unit_departed",
+		str(state.resolution.get("card_instance_id", "")),
+		[target],
+		{"definition_id": str(unit.get("definition_id", "")), "reason": "retreat"}
+	)
+	return GameResult.success(null)
+
+
+func _v3_debuff_kinds(state: BattleState, task_id: String) -> Array[String]:
+	var result: Array[String] = []
+	for status_id in ["erosion", "induced", "brittle", "feebleness", "weakness", "vulnerability"]:
+		if _status_stacks(state, status_id, task_id) > 0:
+			result.append(status_id)
+	return result
+
+
+func _v3_apply_status_batch(
+	state: BattleState,
+	status_id: String,
+	stacks: int,
+	target_ids: Array[String],
+	count_event: bool,
+	allow_compound: bool,
+	events: Array[RuleEvent],
+) -> GameResult:
+	var gained_any := false
+	for target_id in target_ids:
+		var before := _status_stacks(state, status_id, target_id)
+		var other_kinds := _v3_debuff_kinds(state, target_id)
+		other_kinds.erase(status_id)
+		var applied := _gain_status_on_target(
+			state,
+			{"status": status_id, "stacks": maxi(1, stacks), "target": "task"},
+			target_id,
+			events
+		)
+		if not applied.ok:
+			return applied
+		var after := _status_stacks(state, status_id, target_id)
+		if after <= before:
+			continue
+		gained_any = true
+		if allow_compound and before == 0 and not other_kinds.is_empty():
+			var task_index := _task_index(state, target_id)
+			if task_index >= 0 and typeof(state.resolution) == TYPE_DICTIONARY:
+				var candidates: Array = state.resolution.get("v3_compound_candidates", [])
+				(
+					candidates
+					. append(
+						{
+							"task_id": target_id,
+							"status_id": status_id,
+							"order": candidates.size(),
+							"entered_order": int(state.tasks[task_index].get("entered_order", 0)),
+						}
+					)
+				)
+				state.resolution.v3_compound_candidates = candidates
+	if count_event and status_id == "erosion" and gained_any:
+		var turn := _v3_turn(state)
+		turn.erosion_events = int(turn.erosion_events) + 1
+	return GameResult.success(null)
+
+
+func _v3_source_stacks(state: BattleState, spec: Dictionary) -> int:
+	if typeof(state.resolution) != TYPE_DICTIONARY:
+		return 0
+	var targets: Array = state.resolution.get("target_ids", [])
+	if targets.is_empty():
+		return 0
+	var stacks := _status_stacks(state, str(spec.get("status", "")), str(targets.front()))
+	stacks = mini(stacks, int(spec.get("cap", stacks)))
+	stacks += int(spec.get("bonus", 0))
+	return maxi(0, stacks)
+
+
+func _v3_apply_compound_reaction(
+	state: BattleState, rng: RandomSource, events: Array[RuleEvent]
+) -> GameResult:
+	if state.character_id != "P03":
+		return GameResult.success(null)
+	if typeof(state.resolution) != TYPE_DICTIONARY:
+		return GameResult.success(null)
+	var turn := _v3_turn(state)
+	if bool(turn.compound_used):
+		return GameResult.success(null)
+	var candidates: Array = state.resolution.get("v3_compound_candidates", [])
+	if candidates.is_empty():
+		return GameResult.success(null)
+	candidates.sort_custom(
+		func(a: Dictionary, b: Dictionary):
+			if int(a.entered_order) != int(b.entered_order):
+				return int(a.entered_order) < int(b.entered_order)
+			return int(a.order) < int(b.order)
+	)
+	var ruleset := _loaded_ruleset()
+	if not ruleset.ok:
+		return ruleset
+	for candidate: Dictionary in candidates:
+		var task_id := str(candidate.get("task_id", ""))
+		var status_id := str(candidate.get("status_id", ""))
+		if _task_index(state, task_id) < 0:
+			continue
+		var status_index := _status_index(state, status_id, task_id)
+		if status_index < 0:
+			continue
+		var status: Dictionary = state.statuses[status_index]
+		var before := int(status.get("stacks", 0))
+		var cap := int(ruleset.data.statuses.get(status_id, {}).get("cap", before + 1))
+		var after := mini(cap, before + 1)
+		if after <= before:
+			continue
+		status.stacks = after
+		turn.compound_used = true
+		_add_event(
+			events,
+			"v3_compound_reaction",
+			str(state.resolution.get("card_instance_id", "")),
+			[task_id],
+			{"status_id": status_id, "before": before, "after": after}
+		)
+		return _v3_run_ability_trigger(
+			state, "compound_reaction_success", {"compound_reaction_success": true}, rng, events
+		)
+	return GameResult.success(null)
+
+
+func _v3_settle_erosion_events(
+	state: BattleState, rng: RandomSource, events: Array[RuleEvent]
+) -> GameResult:
+	var turn := _v3_turn(state)
+	var count := int(turn.get("erosion_events", 0))
+	if count <= 0:
+		return GameResult.success(null)
+	return _v3_run_ability_trigger(
+		state, "erosion_applied_event", {"erosion_events": count}, rng, events
+	)
+
+
+func _v3_status_complete_task(
+	state: BattleState, task_id: String, amount: int, rng: RandomSource, events: Array[RuleEvent]
+) -> GameResult:
+	var task_index := _task_index(state, task_id)
+	if task_index < 0:
+		return GameResult.success(null)
+	var task: Dictionary = state.tasks[task_index]
+	var before_shield := int(task.get("shield", 0))
+	var before_work := int(task.get("work_remaining", 0))
+	var shield_loss := mini(before_shield, maxi(0, amount))
+	var applied := maxi(0, amount) - shield_loss
+	task.shield = before_shield - shield_loss
+	task.work_remaining = maxi(0, before_work - applied)
+	_add_event(
+		events,
+		"completion_applied",
+		"",
+		[task_id],
+		{
+			"amount": amount,
+			"shield_before": before_shield,
+			"shield_after": task.shield,
+			"work_before": before_work,
+			"work_after": task.work_remaining,
+			"segment_index": 0,
+		}
+	)
+	if int(task.work_remaining) == 0:
+		var advanced := _advance_or_remove_task(state, task_index, events, rng)
+		if not advanced.ok:
+			return advanced
+		_check_battle_outcome(state, events)
+	return GameResult.success(null)
+
+
+func _v3_induced_trigger_target(
+	state: BattleState, task_id: String, stacks: int, rng: RandomSource, events: Array[RuleEvent]
+) -> GameResult:
+	var turn := _v3_turn(state)
+	var triggers: Dictionary = turn.induced_triggers
+	var used := int(triggers.get(task_id, 0))
+	if used >= 4:
+		return GameResult.success(null)
+	triggers[task_id] = used + 1
+	var completed := _v3_status_complete_task(state, task_id, maxi(0, stacks), rng, events)
+	if not completed.ok:
+		return completed
+	if state.phase == "finished":
+		return GameResult.success(null)
+	var first: Dictionary = turn.induced_first
+	if not bool(first.get(task_id, false)):
+		first[task_id] = true
+		return _v3_run_ability_trigger(
+			state,
+			"induced_trigger",
+			{"first_induced_trigger": true, "target_id": task_id},
+			rng,
+			events
+		)
+	return GameResult.success(null)
+
+
+func _v3_induced_window(
+	state: BattleState, rng: RandomSource, events: Array[RuleEvent]
+) -> GameResult:
+	if typeof(state.resolution) != TYPE_DICTIONARY:
+		return GameResult.success(null)
+	var snapshot: Array = state.resolution.get("v3_induced_snapshot", [])
+	for entry: Variant in snapshot:
+		if typeof(entry) != TYPE_DICTIONARY:
+			continue
+		var task_id := str(entry.get("task_id", ""))
+		if _task_index(state, task_id) >= 0:
+			var triggered := _v3_induced_trigger_target(
+				state, task_id, int(entry.get("stacks", 0)), rng, events
+			)
+			if not triggered.ok:
+				return triggered
+		if state.phase == "finished":
+			return GameResult.success(null)
+	return GameResult.success(null)
+
+
+func _v3_erosion_window(
+	state: BattleState, rng: RandomSource, events: Array[RuleEvent]
+) -> GameResult:
+	var times := 1
+	if state.v3.has("abilities"):
+		for ability: Variant in state.v3.abilities:
+			if typeof(ability) != TYPE_DICTIONARY:
+				continue
+			if state.round_index < int(ability.get("activate_round", 0)):
+				continue
+			for effect: Variant in ability.get("effects", []):
+				if (
+					typeof(effect) == TYPE_DICTIONARY
+					and str(effect.get("op", "")) == "modify_erosion_window"
+				):
+					times = maxi(times, int(effect.get("times", 1)))
+	var snapshot: Array[String] = []
+	for task: Dictionary in state.tasks:
+		if _status_stacks(state, "erosion", str(task.get("task_id", ""))) > 0:
+			snapshot.append(str(task.get("task_id", "")))
+	for task_id in snapshot:
+		for _index in times:
+			var task_index := _task_index(state, task_id)
+			if task_index < 0:
+				break
+			var stacks := _status_stacks(state, "erosion", task_id)
+			if stacks <= 0:
+				break
+			var completed := _v3_status_complete_task(state, task_id, stacks, rng, events)
+			if not completed.ok:
+				return completed
+			if state.phase == "finished":
+				return GameResult.success(null)
+			task_index = _task_index(state, task_id)
+			if task_index < 0:
+				break
+			var status_index := _status_index(state, "erosion", task_id)
+			if status_index < 0:
+				break
+			var status: Dictionary = state.statuses[status_index]
+			var before := int(status.get("stacks", 0))
+			var after := before - 1
+			if after <= 0:
+				state.statuses.remove_at(status_index)
+				_add_event(
+					events,
+					"status_removed",
+					"",
+					[task_id],
+					{
+						"status_definition_id": "erosion",
+						"before": before,
+						"after": 0,
+						"amount": before,
+						"reason": "erosion_window",
+					}
+				)
+			else:
+				status.stacks = after
+				_add_event(
+					events,
+					"status_changed",
+					"",
+					[task_id],
+					{
+						"status_definition_id": "erosion",
+						"before": before,
+						"after": after,
+						"amount": -1,
+						"reason": "erosion_window",
+					}
+				)
+	return GameResult.success(null)
+
+
+func _register_v3_ability(
+	state: BattleState, face: Dictionary, events: Array[RuleEvent]
+) -> GameResult:
+	var ability: Dictionary = face.get("ability", {})
+	var triggers: Array = ability.get("triggers", [])
+	if triggers.is_empty():
+		return GameResult.success(null)
+	var definition_id := str(face.get("id", ""))
+	if not state.v3.has("abilities"):
+		state.v3["abilities"] = []
+	var abilities: Array = state.v3.abilities
+	if str(ability.get("stack", "unique_name")) == "unique_name":
+		for existing: Variant in abilities:
+			if (
+				typeof(existing) == TYPE_DICTIONARY
+				and str(existing.get("definition_id", "")) == definition_id
+			):
+				return GameResult.success(null)
+	var upgrade_level := int(face.get("upgrade_level", 0))
+	for index in triggers.size():
+		var trigger: Variant = triggers[index]
+		if typeof(trigger) != TYPE_DICTIONARY:
+			continue
+		var effects: Array = trigger.get("effects", [])
+		if upgrade_level > 0 and typeof(trigger.get("upgrade_effects")) == TYPE_ARRAY:
+			effects = trigger.upgrade_effects
+		var ability_id := _new_instance_id(state, "ab")
+		(
+			abilities
+			. append(
+				{
+					"ability_id": ability_id,
+					"definition_id": definition_id,
+					"name_key": str(face.get("name_key", definition_id)),
+					"trigger": str(trigger.get("on", "")),
+					"effects": effects.duplicate(true),
+					"activate_round":
+					(
+						state.round_index
+						+ (1 if str(ability.get("activate", "next_round")) == "next_round" else 0)
+					),
+					"limit": str(trigger.get("limit", "")),
+					"condition": ability.get("condition", {}).duplicate(true),
+					"last_round": 0,
+					"uses_round": 0,
+					"uses_this_round": 0,
+					"extra_effects": ability.get("extra_effects", []).duplicate(true),
+					"stack": str(ability.get("stack", "unique_name")),
+				}
+			)
+		)
+	_add_event(
+		events,
+		"v3_ability_registered",
+		str(state.resolution.get("card_instance_id", "")),
+		[],
+		{"definition_id": definition_id, "triggers": triggers.size()}
+	)
+	return GameResult.success(null)
+
+
 func _run_character_passive(
 	state: BattleState, face: Dictionary, rng: RandomSource, events: Array[RuleEvent]
 ) -> GameResult:
@@ -2963,6 +5431,26 @@ func _run_character_passive(
 	var passive: Dictionary = character_result.data.get("passive", {})
 	var trigger := str(passive.get("trigger", ""))
 	var card_type := str(face.get("type", ""))
+	if state.character_id in ["P01", "P02", "P03"]:
+		# These passives are implemented by their v3 engine rules already.
+		return GameResult.success(null)
+	if state.character_id == "P04":
+		if trigger != "cooperation_card_resolved" or card_type != "cooperation":
+			return GameResult.success(null)
+		var p04_turn := _v3_turn(state)
+		if bool(p04_turn.get("p04_passive_used", false)):
+			return GameResult.success(null)
+		p04_turn["p04_passive_used"] = true
+		_v3_gain_synergy(state, 1)
+		state.player.relax = int(state.player.get("relax", 0)) + 2
+		_add_event(
+			events,
+			"passive_triggered",
+			state.character_id,
+			[str(state.player.get("entity_id", ""))],
+			{"passive_id": str(passive.get("id", "")), "trigger": trigger, "synergy": 1, "relax": 2}
+		)
+		return GameResult.success(null)
 	if (
 		(trigger == "work_card_resolved" and card_type != "work")
 		or (trigger == "cooperation_card_resolved" and card_type != "cooperation")
@@ -3123,6 +5611,12 @@ func begin(input: Dictionary) -> GameResult:
 	if not shuffled.ok:
 		return shuffled
 	state.zones.draw = shuffled.data
+	if input.character_id == "P02":
+		for card_id in state.zones.draw:
+			if str(state.card_by_id[card_id].get("definition_id", "")) == "R3-P02-01":
+				state.zones.draw.erase(card_id)
+				state.zones.draw.push_front(card_id)
+				break
 	var events: Array[RuleEvent] = []
 	var prepare_result := _run_player_prepare(state, ruleset, 0, rng, events)
 	if not prepare_result.ok:
@@ -3416,7 +5910,9 @@ func _is_safe_id(value: String) -> bool:
 			(codepoint >= 65 and codepoint <= 90) or (codepoint >= 97 and codepoint <= 122)
 		)
 		var is_digit := codepoint >= 48 and codepoint <= 57
-		var is_separator := codepoint == 95 or codepoint == 124
+		var is_separator := (
+			codepoint == 95 or codepoint == 124 or codepoint == 45 or codepoint == 43
+		)
 		if not (is_letter or is_digit or is_separator):
 			return false
 	var first := value.unicode_at(0)

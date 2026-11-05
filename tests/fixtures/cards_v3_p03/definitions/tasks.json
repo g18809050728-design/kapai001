@@ -1,0 +1,59 @@
+[
+  {
+    "id": "R3_TEST_TASK_A",
+    "name_key": "task.R3_TEST_TASK_A.name",
+    "kind": "normal",
+    "phases": [
+      {
+        "phase_key": "main",
+        "work_max": 50,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "task.R3_TEST_TASK_A.intent.a"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "R3_TEST_TASK_B",
+    "name_key": "task.R3_TEST_TASK_B.name",
+    "kind": "normal",
+    "phases": [
+      {
+        "phase_key": "main",
+        "work_max": 50,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "task.R3_TEST_TASK_B.intent.a"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "R3_TEST_SHIELD",
+    "name_key": "task.R3_TEST_SHIELD.name",
+    "kind": "normal",
+    "phases": [
+      {
+        "phase_key": "main",
+        "work_max": 50,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "task.R3_TEST_SHIELD.intent.a",
+            "shield": 8
+          },
+          {
+            "index": 1,
+            "text_key": "task.R3_TEST_SHIELD.intent.b",
+            "shield": 8
+          }
+        ]
+      }
+    ]
+  }
+]

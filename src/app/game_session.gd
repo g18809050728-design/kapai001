@@ -2,7 +2,13 @@ class_name GameSession
 extends Node
 
 const BATTLE_ACTIONS := [&"play_card", &"end_turn", &"confirm_choice", &"set_ally_target"]
-const PRODUCTION_MANIFESTS := ["campus_mvp"]
+const NEW_RUN_MANIFEST := "campus_four_year"
+const PRODUCTION_MANIFESTS := ["campus_mvp", "campus_v3", "campus_four_year"]
+const MANIFEST_ROOTS := {
+	"campus_mvp": "res://data",
+	"campus_v3": "res://data/v3",
+	"campus_four_year": "res://data/four_year",
+}
 const EVENT_LOG_LIMIT := 1000
 
 var _catalog: ContentDB
@@ -12,6 +18,8 @@ var _state: SessionState
 var _store: SaveStore
 var _catalog_factory: Callable
 var _autosave: bool = true
+var _audio_settings := {"Master": 100, "Music": 70, "Ambience": 50, "SFX": 80, "UI": 70, "muted": false}
+var _presentation := {"text_scale": 100, "reduced_motion": false, "animation_speed": 1}
 var _settings_error: ApiError
 var _last_receipt: SaveReceipt
 var _profile_status: Dictionary = {}
@@ -25,6 +33,8 @@ func _init(store: SaveStore = null, catalog_factory: Callable = Callable()) -> v
 		var decoded := SnapshotCodec.decode_document(settings.data, "settings")
 		if decoded.ok and _valid_settings(decoded.data.payload):
 			_autosave = decoded.data.payload.autosave
+			_audio_settings = decoded.data.payload.get("audio", _audio_settings).duplicate(true)
+			_presentation = decoded.data.payload.get("presentation", _presentation).duplicate(true)
 		else:
 			_settings_error = (
 				decoded.error
@@ -51,7 +61,9 @@ func _load_catalog(manifest_id: String) -> GameResult:
 	if not _is_manifest_allowed(manifest_id):
 		return _failure(GameConstants.ERROR_VERSION_MISMATCH, "error.run.manifest")
 	var candidate: ContentDB = (
-		_catalog_factory.call() if _catalog_factory.is_valid() else ContentDB.new()
+		_catalog_factory.call()
+		if _catalog_factory.is_valid()
+		else ContentDB.new(str(MANIFEST_ROOTS.get(manifest_id, "res://data")))
 	)
 	var loaded := candidate.load(manifest_id)
 	return GameResult.success(candidate) if loaded.ok else loaded
@@ -347,6 +359,7 @@ func save_and_exit() -> GameResult:
 func get_profile() -> ProfileView:
 	var view := ProfileView.new()
 	view.autosave = _autosave
+	view.audio = _audio_settings.duplicate(true)
 	view.settings_error = _settings_error
 	var profile := _read_profile()
 	if not profile.ok:
@@ -371,11 +384,11 @@ func update_settings(settings: Variant) -> GameResult:
 	if not patch is Dictionary:
 		return _failure(GameConstants.ERROR_INVALID_ARGUMENT, "error.settings.invalid")
 	for key in patch:
-		if key != "autosave" or not patch[key] is bool:
+		if key not in ["autosave", "audio", "presentation"] or (key == "autosave" and not patch[key] is bool) or (key == "audio" and not _valid_audio_settings(patch[key])) or (key == "presentation" and not _valid_presentation(patch[key])):
 			return _failure(GameConstants.ERROR_INVALID_ARGUMENT, "error.settings.invalid")
 	if _settings_error != null:
 		return GameResult.failure(_settings_error)
-	var candidate := {"autosave": patch.get("autosave", _autosave)}
+	var candidate := {"autosave": patch.get("autosave", _autosave), "audio": patch.get("audio", _audio_settings).duplicate(true), "presentation": patch.get("presentation", _presentation).duplicate(true)}
 	var encoded := SnapshotCodec.encode_document("settings", candidate)
 	if not encoded.ok:
 		return encoded
@@ -383,12 +396,14 @@ func update_settings(settings: Variant) -> GameResult:
 	if not saved.ok:
 		return saved
 	_autosave = candidate.autosave
+	_audio_settings = candidate.audio.duplicate(true)
+	_presentation = candidate.presentation.duplicate(true)
 	return GameResult.success(get_profile())
 
 
 func inspect_saves() -> GameResult:
 	var view := SessionStorageView.new()
-	view.has_active_session = _state != null
+	view.has_active_session = _state != null and _state.terminal_summary == null
 	var formal := _store.inspect("current_run")
 	if formal.ok:
 		view.has_save = true
@@ -403,7 +418,9 @@ func inspect_saves() -> GameResult:
 					if catalog.ok
 					else catalog
 				)
-			view.can_continue = decoded.ok
+			view.can_continue = decoded.ok and decoded.data.terminal_summary == null
+			if decoded.ok:
+				view.save_meta["unfinished"] = decoded.data.terminal_summary == null
 			if not decoded.ok:
 				view.save_error = decoded.error
 		else:
@@ -438,32 +455,35 @@ func generate_run_seed() -> GameResult:
 
 
 func get_setup_options() -> GameResult:
-	var catalog := ContentDB.new()
-	var loaded := catalog.load("campus_mvp")
+	var options := SetupOptions.new()
+	var catalog := ContentDB.new(str(MANIFEST_ROOTS[NEW_RUN_MANIFEST]))
+	var loaded := catalog.load(NEW_RUN_MANIFEST)
 	if not loaded.ok:
 		return loaded
 	var info := catalog.get_info()
-	var options := SetupOptions.new()
+	var view_service := RunService.new(catalog)
+	var rules: Dictionary = catalog.get_definition("ruleset", str(info.enabled.ruleset[0])).data
+	options.manifests.append({
+		"id": info.id,
+		"content_version": info.content_version,
+		"content_hash": info.content_hash,
+	})
 	for id in info.enabled.character:
 		var definition: Dictionary = catalog.get_definition("character", id).data
-		(
-			options
-			. characters
-			. append(
-				{
-					"id": id,
-					"name_key": definition.name_key,
-					"starter_cards": definition.starter_cards,
-					"starter_relic_id": definition.starter_relic_id,
-					"locked": false,
-					"reason": null,
-				}
-			)
-		)
+		options.characters.append({
+			"id": id,
+			"name_key": definition.name_key,
+			"starter_cards": definition.starter_cards,
+			"starter_relic_id": definition.starter_relic_id,
+			"passive_id": str(definition.get("passive", {}).get("id", "")),
+			"locked": false,
+			"reason": null,
+		})
+		var starter_details: Array = []
+		for card_id in definition.starter_cards:
+			starter_details.append({"definition_id": card_id, "card_id": card_id, "detail": view_service._reward_candidate_view("card", str(card_id), rules)})
+		options.characters[-1].starter_details = starter_details
 	options.difficulties = [&"normal"]
-	options.manifests = [
-		{"id": info.id, "content_version": info.content_version, "content_hash": info.content_hash}
-	]
 	return GameResult.success(options)
 
 
@@ -580,7 +600,31 @@ func _set_profile_status(status: Dictionary) -> void:
 
 
 func _valid_settings(payload: Dictionary) -> bool:
-	return payload.size() == 1 and payload.get("autosave") is bool
+	for key in payload:
+		if key not in ["autosave", "audio", "presentation"]:
+			return false
+	return payload.get("autosave") is bool and (not payload.has("audio") or _valid_audio_settings(payload.audio)) and (not payload.has("presentation") or _valid_presentation(payload.presentation))
+
+
+func _valid_presentation(value: Variant) -> bool:
+	return value is Dictionary and value.size() == 3 and value.get("text_scale") is int and value.text_scale in [100, 125, 150] and value.get("reduced_motion") is bool and value.get("animation_speed") is int and value.animation_speed in [0, 1, 2, 4]
+
+
+func get_presentation_settings() -> Dictionary:
+	return _presentation.duplicate(true)
+
+
+func _valid_audio_settings(value: Variant) -> bool:
+	if not value is Dictionary or value.size() != 6 or not value.get("muted") is bool:
+		return false
+	for bus in ["Master", "Music", "Ambience", "SFX", "UI"]:
+		if not value.get(bus) is int or value[bus] < 0 or value[bus] > 100:
+			return false
+	return true
+
+
+func get_audio_settings() -> Dictionary:
+	return _audio_settings.duplicate(true)
 
 
 func _publish_run_step(working: SessionState, step: RunStep) -> void:
@@ -680,10 +724,14 @@ func _battle_view(battle: BattleState) -> Dictionary:
 	for id in battle.zones.get("hand", []):
 		hand.append(_card_view(battle, id))
 	var zones_public := {}
-	for zone in ["discard", "exhaust"]:
+	for zone in ["draw", "discard", "exhaust"]:
 		var cards: Array[Dictionary] = []
 		for id in battle.zones.get(zone, []):
 			cards.append(_card_view(battle, id))
+		if zone == "draw":
+			# Publish membership only. Never leak the actual extraction sequence.
+			cards.sort_custom(func(a, b):
+				return "%s|%s|%s" % [a.definition_id, a.get("upgrade_level", 0), a.card_id] < "%s|%s|%s" % [b.definition_id, b.get("upgrade_level", 0), b.card_id])
 		zones_public[zone] = cards
 	var counts := {}
 	for zone in battle.zones:
@@ -696,6 +744,8 @@ func _battle_view(battle: BattleState) -> Dictionary:
 		"round_index": battle.round_index,
 		"ddl": battle.ddl,
 		"player": battle.player.duplicate(true),
+		"v3": battle.v3.duplicate(true),
+		"character_info": _character_info(battle),
 		"hand": hand,
 		"units": battle.units.duplicate(true),
 		"tasks": battle.tasks.map(_task_view),
@@ -704,6 +754,23 @@ func _battle_view(battle: BattleState) -> Dictionary:
 		"zone_counts": counts,
 		"zones_public": zones_public,
 	}
+
+
+func _character_info(battle: BattleState) -> Dictionary:
+	var turn: Dictionary = battle.v3.get("turn", {})
+	var id := str(_state.run.character_id)
+	var result := {"character_id": id, "previous_type": str(turn.get("previous_card_type", "")), "abilities": battle.v3.get("abilities", []).size()}
+	match id:
+		"P01":
+			result.passive_available = not bool(turn.get("retrieved_strategy", false))
+		"P03":
+			result.passive_available = not bool(turn.get("compound_used", false))
+		"P04":
+			result.passive_available = not bool(turn.get("p04_passive_used", false))
+			result.synergy = int(battle.v3.get("synergy", 0))
+		"P02":
+			result.paper = battle.v3.get("paper", {}).duplicate(true)
+	return result
 
 
 func _task_view(task: Dictionary) -> Dictionary:

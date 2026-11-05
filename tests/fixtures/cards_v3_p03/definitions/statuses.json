@@ -1,0 +1,65 @@
+[
+  {
+    "id": "vulnerability",
+    "name_key": "status.vulnerability.name",
+    "target": "task",
+    "stack_policy": "capped",
+    "duration_policy": "pressure_window",
+    "dispel_policy": "explicit",
+    "numeric_rule_key": "vulnerability"
+  },
+  {
+    "id": "weakness",
+    "name_key": "status.weakness.name",
+    "target": "task",
+    "stack_policy": "capped",
+    "duration_policy": "pressure_window",
+    "dispel_policy": "explicit",
+    "numeric_rule_key": "weakness"
+  },
+  {
+    "id": "brittle",
+    "name_key": "status.brittle.name",
+    "target": "task",
+    "stack_policy": "capped",
+    "duration_policy": "pressure_window",
+    "dispel_policy": "explicit",
+    "numeric_rule_key": "brittle"
+  },
+  {
+    "id": "feebleness",
+    "name_key": "status.feebleness.name",
+    "target": "task",
+    "stack_policy": "capped",
+    "duration_policy": "battle",
+    "dispel_policy": "explicit",
+    "numeric_rule_key": "feebleness"
+  },
+  {
+    "id": "erosion",
+    "name_key": "status.erosion.name",
+    "target": "task",
+    "stack_policy": "capped",
+    "duration_policy": "battle",
+    "dispel_policy": "explicit",
+    "numeric_rule_key": "erosion"
+  },
+  {
+    "id": "induced",
+    "name_key": "status.induced.name",
+    "target": "task",
+    "stack_policy": "capped",
+    "duration_policy": "next_player_action_end",
+    "dispel_policy": "explicit",
+    "numeric_rule_key": "induced"
+  },
+  {
+    "id": "anxiety",
+    "name_key": "status.anxiety.name",
+    "target": "player",
+    "stack_policy": "capped",
+    "duration_policy": "next_prepare",
+    "dispel_policy": "negative",
+    "numeric_rule_key": "anxiety"
+  }
+]

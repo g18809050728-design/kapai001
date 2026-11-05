@@ -1,0 +1,1712 @@
+{
+  "version": 1,
+  "requirement_id": "FY-ART-002",
+  "manifest_id": "campus_four_year",
+  "manifest_file": "data/four_year/manifests/campus_four_year.json",
+  "manifest_sha256": "2d8744b71d00df58db56df904a3214d994aa37b200ae64334968b6ca7e43116c",
+  "reference_file": "output/imagegen/card-atlas-v3-unified/style-reference.png",
+  "reference_sha256": "6583041a7df5e62097a8f5e8b95388c405eaac06b3e584d88e1e49382425fe66",
+  "requested_size": [
+    1024,
+    1536
+  ],
+  "columns": 2,
+  "rows": 4,
+  "asset_counts": {
+    "character": 2,
+    "unit": 3,
+    "relic": 16,
+    "task": 50
+  },
+  "assets": [
+    {
+      "asset_id": "P02",
+      "kind": "character",
+      "category": "portraits",
+      "name": "许知微",
+      "brief": "One adult Chinese woman, shoulder-length dark hair tied in a low ponytail, thin oval glasses, navy cardigan with a small muted lavender accent, holding a research notebook with blank tabbed pages. Calm organized expression; distinct from the reference's high-bun woman. Waist-up single portrait, front three-quarter view.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/characters.json",
+      "output": "assets/art/four-year/portraits/P02-v1.png"
+    },
+    {
+      "asset_id": "P03",
+      "kind": "character",
+      "category": "portraits",
+      "name": "沈见章",
+      "brief": "One adult Chinese man with neat side-parted short dark hair, no glasses, sage-green jacket and a small muted plum accent, holding two blank index cards connected by a simple diagram. Thoughtful gently questioning expression; distinct from the reference's tousled-haired man. Waist-up single portrait, front three-quarter view. No poison, weapons or sinister costume.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/characters.json",
+      "output": "assets/art/four-year/portraits/P03-v1.png"
+    },
+    {
+      "asset_id": "R3-U01",
+      "kind": "unit",
+      "category": "portraits",
+      "name": "学习搭子",
+      "brief": "One friendly adult Chinese student with short softly wavy hair, pale blue hoodie, holding an open exercise notebook, relaxed study companion. Waist-up single portrait, no glasses, no readable marks.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/units.json",
+      "output": "assets/art/four-year/portraits/R3-U01-v1.png"
+    },
+    {
+      "asset_id": "R3-U02",
+      "kind": "unit",
+      "category": "portraits",
+      "name": "旁听同学",
+      "brief": "One attentive adult Chinese student with straight chin-length dark hair, mustard-yellow sweater, holding a closed book and simple pencil, quiet lecture-auditing classmate. Waist-up single portrait.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/units.json",
+      "output": "assets/art/four-year/portraits/R3-U02-v1.png"
+    },
+    {
+      "asset_id": "R3-U03",
+      "kind": "unit",
+      "category": "portraits",
+      "name": "项目队友",
+      "brief": "One dependable adult Chinese student with short cropped hair, rust-red overshirt over ivory T-shirt, holding a slim project folder with blank geometric tabs. Confident collaborative expression. Waist-up single portrait.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/units.json",
+      "output": "assets/art/four-year/portraits/R3-U03-v1.png"
+    },
+    {
+      "asset_id": "FY_Y1_1",
+      "kind": "relic",
+      "category": "relics",
+      "name": "校园导览册",
+      "brief": "A small folded campus guide booklet with a simple tree-lined campus map made of geometric paths, sage cover, no letters or numbers.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/relics.json",
+      "output": "assets/art/four-year/relics/FY_Y1_1-v1.png"
+    },
+    {
+      "asset_id": "FY_Y1_2",
+      "kind": "relic",
+      "category": "relics",
+      "name": "食堂饭卡",
+      "brief": "A warm yellow canteen meal card beside a small ceramic rice bowl and chopsticks, simple original card graphic without text or logo.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/relics.json",
+      "output": "assets/art/four-year/relics/FY_Y1_2-v1.png"
+    },
+    {
+      "asset_id": "FY_Y1_3",
+      "kind": "relic",
+      "category": "relics",
+      "name": "旧书签",
+      "brief": "One old cream paper bookmark, softened corners, a pressed leaf and muted green tassel, gently worn but carefully kept.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/relics.json",
+      "output": "assets/art/four-year/relics/FY_Y1_3-v1.png"
+    },
+    {
+      "asset_id": "FY_Y1_4",
+      "kind": "relic",
+      "category": "relics",
+      "name": "社团徽章",
+      "brief": "One round student-club enamel pin with an abstract sprout emblem, teal and warm yellow, no lettering or official crest.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/relics.json",
+      "output": "assets/art/four-year/relics/FY_Y1_4-v1.png"
+    },
+    {
+      "asset_id": "FY_Y2_1",
+      "kind": "relic",
+      "category": "relics",
+      "name": "实验室门卡",
+      "brief": "One plain sage laboratory access card with a minimal geometric chip and short blue lanyard, no lettering or portrait.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/relics.json",
+      "output": "assets/art/four-year/relics/FY_Y2_1-v1.png"
+    },
+    {
+      "asset_id": "FY_Y2_2",
+      "kind": "relic",
+      "category": "relics",
+      "name": "竞赛纪念章",
+      "brief": "One small bronze competition commemorative medal with abstract interlocking shapes, sage ribbon, no text or numerals.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/relics.json",
+      "output": "assets/art/four-year/relics/FY_Y2_2-v1.png"
+    },
+    {
+      "asset_id": "FY_Y2_3",
+      "kind": "relic",
+      "category": "relics",
+      "name": "工程笔记本",
+      "brief": "One sturdy engineering notebook with squared blank pages, short ruler and simple mechanical sketch made of circles and lines, muted navy cover.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/relics.json",
+      "output": "assets/art/four-year/relics/FY_Y2_3-v1.png"
+    },
+    {
+      "asset_id": "FY_Y2_4",
+      "kind": "relic",
+      "category": "relics",
+      "name": "专业书签",
+      "brief": "One slim deep-teal academic bookmark with a simple geometric cutout and lavender thread, neatly placed over a closed textbook.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/relics.json",
+      "output": "assets/art/four-year/relics/FY_Y2_4-v1.png"
+    },
+    {
+      "asset_id": "FY_Y3_1",
+      "kind": "relic",
+      "category": "relics",
+      "name": "实习工牌",
+      "brief": "One unbranded internship identity badge on a short rust-red lanyard, abstract portrait silhouette and blank color bars only.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/relics.json",
+      "output": "assets/art/four-year/relics/FY_Y3_1-v1.png"
+    },
+    {
+      "asset_id": "FY_Y3_2",
+      "kind": "relic",
+      "category": "relics",
+      "name": "推荐信封",
+      "brief": "One ivory recommendation envelope with a muted sage wax seal and a plain folded sheet peeking out, no writing.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/relics.json",
+      "output": "assets/art/four-year/relics/FY_Y3_2-v1.png"
+    },
+    {
+      "asset_id": "FY_Y3_3",
+      "kind": "relic",
+      "category": "relics",
+      "name": "科研笔记",
+      "brief": "One lavender-bound research notebook opened to blank diagrams and colored tabs, small pencil resting diagonally, no equations or writing.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/relics.json",
+      "output": "assets/art/four-year/relics/FY_Y3_3-v1.png"
+    },
+    {
+      "asset_id": "FY_Y3_4",
+      "kind": "relic",
+      "category": "relics",
+      "name": "通勤卡",
+      "brief": "One unbranded teal transit card and a small simple bus token, abstract route dots only, no letters or digits.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/relics.json",
+      "output": "assets/art/four-year/relics/FY_Y3_4-v1.png"
+    },
+    {
+      "asset_id": "FY_Y4_1",
+      "kind": "relic",
+      "category": "relics",
+      "name": "答辩纪念笔",
+      "brief": "One elegant deep-teal commemorative fountain pen with a small brass clip, beside its plain ivory presentation sleeve, no inscription.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/relics.json",
+      "output": "assets/art/four-year/relics/FY_Y4_1-v1.png"
+    },
+    {
+      "asset_id": "FY_Y4_2",
+      "kind": "relic",
+      "category": "relics",
+      "name": "毕业合影",
+      "brief": "One small landscape graduation group photograph showing several simplified adult students in gowns under leafy campus trees, ivory photo border, no caption; anonymous miniature faces.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/relics.json",
+      "output": "assets/art/four-year/relics/FY_Y4_2-v1.png"
+    },
+    {
+      "asset_id": "FY_Y4_3",
+      "kind": "relic",
+      "category": "relics",
+      "name": "远行车票",
+      "brief": "One pale cream train ticket with a small generic train silhouette and abstract perforations, rust-red travel tag, no letters or numbers.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/relics.json",
+      "output": "assets/art/four-year/relics/FY_Y4_3-v1.png"
+    },
+    {
+      "asset_id": "FY_Y4_4",
+      "kind": "relic",
+      "category": "relics",
+      "name": "学位纪念章",
+      "brief": "One modest gold-colored degree commemorative pin with an abstract open-book and laurel emblem, sage ribbon, no university logo or letters.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/relics.json",
+      "output": "assets/art/four-year/relics/FY_Y4_4-v1.png"
+    },
+    {
+      "asset_id": "E01",
+      "kind": "task",
+      "category": "tasks",
+      "name": "期中考试",
+      "brief": "A substantial midterm exam paper stack, closed textbook and a simple hourglass, composed as a serious but friendly academic challenge, blank diagrams only.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/E01-v1.png"
+    },
+    {
+      "asset_id": "E02",
+      "kind": "task",
+      "category": "tasks",
+      "name": "课程设计中期检查",
+      "brief": "A course-design review folder, small cardboard engineering prototype and a pencil, neatly arranged for a mid-project check, no labels.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/E02-v1.png"
+    },
+    {
+      "asset_id": "E03",
+      "kind": "task",
+      "category": "tasks",
+      "name": "小组项目冲刺",
+      "brief": "A group-project sprint desk with three blank sticky-note columns, a small timer and shared folder, energetic but uncluttered.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/E03-v1.png"
+    },
+    {
+      "asset_id": "E04_1",
+      "kind": "task",
+      "category": "tasks",
+      "name": "建模",
+      "brief": "A modeling assignment represented by a small wireframe geometric model on a blank graph sheet and drafting compass, no formulae.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/E04_1-v1.png"
+    },
+    {
+      "asset_id": "E04_2",
+      "kind": "task",
+      "category": "tasks",
+      "name": "编程",
+      "brief": "A programming assignment represented by one laptop with simple colored code-like blocks and a small flowchart sheet, no actual text.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/E04_2-v1.png"
+    },
+    {
+      "asset_id": "E04_3",
+      "kind": "task",
+      "category": "tasks",
+      "name": "论文",
+      "brief": "A research-paper assignment represented by a bound cream manuscript, lavender tabs and an open reference book, no writing.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/E04_3-v1.png"
+    },
+    {
+      "asset_id": "E05",
+      "kind": "task",
+      "category": "tasks",
+      "name": "保研夏令营",
+      "brief": "A graduate summer research camp review represented by a presentation folder, campus building silhouette and small research diagram cards, no badges or lettering.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/E05-v1.png"
+    },
+    {
+      "asset_id": "E06",
+      "kind": "task",
+      "category": "tasks",
+      "name": "实习群面",
+      "brief": "An internship group interview represented by three empty chairs around a small table, a shared case-study folder and blank name cards, no people needed.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/E06-v1.png"
+    },
+    {
+      "asset_id": "E07",
+      "kind": "task",
+      "category": "tasks",
+      "name": "补考",
+      "brief": "A resit examination represented by a fresh exam sheet placed over a worn closed workbook, eraser and small hourglass, hopeful restrained mood.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/E07-v1.png"
+    },
+    {
+      "asset_id": "Q0A_1",
+      "kind": "task",
+      "category": "tasks",
+      "name": "需求分析",
+      "brief": "Requirements analysis represented by blank sticky notes connected by three clean arrows, small magnifying glass, ordered desk arrangement.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/Q0A_1-v1.png"
+    },
+    {
+      "asset_id": "Q0A_2",
+      "kind": "task",
+      "category": "tasks",
+      "name": "文档编写",
+      "brief": "Documentation writing represented by a tidy open binder, blank page blocks and a capped pen, sage divider tabs.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/Q0A_2-v1.png"
+    },
+    {
+      "asset_id": "Q0A_3",
+      "kind": "task",
+      "category": "tasks",
+      "name": "代码开发",
+      "brief": "Code development represented by a laptop with abstract colored module blocks and small branching diagram cards, no real code.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/Q0A_3-v1.png"
+    },
+    {
+      "asset_id": "Q0A_3_1",
+      "kind": "task",
+      "category": "tasks",
+      "name": "测试运行",
+      "brief": "Software test execution represented by a laptop with simple green check shapes and one amber warning shape, small desk timer, no text.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/Q0A_3_1-v1.png"
+    },
+    {
+      "asset_id": "Q0B_1",
+      "kind": "task",
+      "category": "tasks",
+      "name": "答辩作业",
+      "brief": "A defense assignment represented by a thick project report and a simple poster board of diagrams waiting beside a chair, no text.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/Q0B_1-v1.png"
+    },
+    {
+      "asset_id": "Q0B_2",
+      "kind": "task",
+      "category": "tasks",
+      "name": "作业答辩",
+      "brief": "An oral assignment defense represented by a small lectern, three blank question cards and a simple desktop microphone, no people or writing.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/Q0B_2-v1.png"
+    },
+    {
+      "asset_id": "Q0C",
+      "kind": "task",
+      "category": "tasks",
+      "name": "英语四级",
+      "brief": "An English proficiency examination represented by listening headphones, an answer sheet of empty bubbles and a pencil, no letters or numbers.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/Q0C-v1.png"
+    },
+    {
+      "asset_id": "Q0D",
+      "kind": "task",
+      "category": "tasks",
+      "name": "英语六级",
+      "brief": "An advanced English proficiency examination represented by listening headphones, a thicker blank reading booklet and a small hourglass, a muted lavender accent.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/Q0D-v1.png"
+    },
+    {
+      "asset_id": "Q0E_1",
+      "kind": "task",
+      "category": "tasks",
+      "name": "大项目",
+      "brief": "A large academic project represented by a tall but tidy folder stack, cardboard prototype and one broad schedule diagram, no words.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/Q0E_1-v1.png"
+    },
+    {
+      "asset_id": "Q0E_2",
+      "kind": "task",
+      "category": "tasks",
+      "name": "额外需求1",
+      "brief": "An additional project requirement represented by one rust-red sticky-note attachment clipped to a sage project folder, simple new diagram block, no text.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/Q0E_2-v1.png"
+    },
+    {
+      "asset_id": "Q0E_3",
+      "kind": "task",
+      "category": "tasks",
+      "name": "额外需求2",
+      "brief": "A further project requirement represented by a mustard sticky-note attachment and two small new diagram sheets beside a project folder, distinct from the red attachment.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/Q0E_3-v1.png"
+    },
+    {
+      "asset_id": "N13",
+      "kind": "task",
+      "category": "tasks",
+      "name": "课后作业",
+      "brief": "An everyday homework pile with a pale blue exercise book, blunt pencil and three blank practice sheets, modest campus desk still life.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/N13-v1.png"
+    },
+    {
+      "asset_id": "N14",
+      "kind": "task",
+      "category": "tasks",
+      "name": "数学基础",
+      "brief": "Foundational mathematics represented by a graph notebook with simple triangles and curves, wooden ruler and drafting compass, no equations.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/N14-v1.png"
+    },
+    {
+      "asset_id": "N15",
+      "kind": "task",
+      "category": "tasks",
+      "name": "程序",
+      "brief": "A computer program represented by a small laptop, abstract branching blocks on its ivory screen and a tidy keyboard, no readable code.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/N15-v1.png"
+    },
+    {
+      "asset_id": "N16",
+      "kind": "task",
+      "category": "tasks",
+      "name": "预习",
+      "brief": "Class preparation represented by an open textbook, blank sticky tabs, highlighter and a small cup of tea, quiet pale desk.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/N16-v1.png"
+    },
+    {
+      "asset_id": "N17",
+      "kind": "task",
+      "category": "tasks",
+      "name": "文献阅读",
+      "brief": "Literature reading represented by two open reference books, page clips and a magnifying glass over blank paragraph blocks.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/N17-v1.png"
+    },
+    {
+      "asset_id": "N18",
+      "kind": "task",
+      "category": "tasks",
+      "name": "英语作文",
+      "brief": "An English writing assignment represented by a cream writing notebook, simple speech-shape paper cutout and blue pen, no alphabet.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/N18-v1.png"
+    },
+    {
+      "asset_id": "N19",
+      "kind": "task",
+      "category": "tasks",
+      "name": "项目",
+      "brief": "A course project represented by a compact cardboard model, project folder and two connected planning cards, no letters.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/N19-v1.png"
+    },
+    {
+      "asset_id": "N20",
+      "kind": "task",
+      "category": "tasks",
+      "name": "六级英语词汇",
+      "brief": "Advanced English vocabulary revision represented by a small ring of blank flashcards, colored divider tabs and a closed pocket dictionary.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/N20-v1.png"
+    },
+    {
+      "asset_id": "N21",
+      "kind": "task",
+      "category": "tasks",
+      "name": "考前复习",
+      "brief": "Pre-exam revision represented by a short stack of review booklets with colored tabs, a simple hourglass and a pencil, not frantic.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/N21-v1.png"
+    },
+    {
+      "asset_id": "N22",
+      "kind": "task",
+      "category": "tasks",
+      "name": "自我介绍",
+      "brief": "Self-introduction practice represented by a tabletop microphone, blank profile card and a small round mirror, warm uncluttered still life.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/N22-v1.png"
+    },
+    {
+      "asset_id": "N23",
+      "kind": "task",
+      "category": "tasks",
+      "name": "小组展示",
+      "brief": "A group presentation represented by a small projection screen showing three abstract chart shapes and a shared folder on a lectern, no text.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/N23-v1.png"
+    },
+    {
+      "asset_id": "N24",
+      "kind": "task",
+      "category": "tasks",
+      "name": "体育测试",
+      "brief": "A campus physical fitness test represented by running shoes, a whistle and a plain stopwatch without digits, sage track curve in the background.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/N24-v1.png"
+    },
+    {
+      "asset_id": "N25",
+      "kind": "task",
+      "category": "tasks",
+      "name": "导师约谈",
+      "brief": "An advisor meeting represented by two tea cups across a small table, open research notebook and a simple fountain pen, no people required.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/N25-v1.png"
+    },
+    {
+      "asset_id": "N26",
+      "kind": "task",
+      "category": "tasks",
+      "name": "讲座考勤",
+      "brief": "Lecture attendance represented by a folded lecture leaflet, plain ticket and several softly suggested auditorium seats, no lettering.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/N26-v1.png"
+    },
+    {
+      "asset_id": "N27",
+      "kind": "task",
+      "category": "tasks",
+      "name": "小组作业",
+      "brief": "A collaborative assignment represented by three hands arranging blank color-coded cards around a shared notebook, natural hands, simple close view.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/N27-v1.png"
+    },
+    {
+      "asset_id": "N28",
+      "kind": "task",
+      "category": "tasks",
+      "name": "早八",
+      "brief": "An early morning class represented by a sunrise window, a plain alarm clock with no digits and a half-open textbook, soft warm yellow light.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/N28-v1.png"
+    },
+    {
+      "asset_id": "N29",
+      "kind": "task",
+      "category": "tasks",
+      "name": "校园网发力",
+      "brief": "Unreliable campus networking represented by a small router, laptop with a broken dotted connection symbol and a loose cable, gentle humorous academic nuisance.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/N29-v1.png"
+    },
+    {
+      "asset_id": "N30",
+      "kind": "task",
+      "category": "tasks",
+      "name": "组会汇报",
+      "brief": "A research group update represented by an open laptop, small chart-only presentation board and neatly clipped progress sheets.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/N30-v1.png"
+    },
+    {
+      "asset_id": "N31",
+      "kind": "task",
+      "category": "tasks",
+      "name": "导师催进度",
+      "brief": "An advisor's progress reminder represented by a desk calendar with empty squares, a growing folder stack and a small plain notification bell, no chat text.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/N31-v1.png"
+    },
+    {
+      "asset_id": "N32",
+      "kind": "task",
+      "category": "tasks",
+      "name": "奖学金评定",
+      "brief": "Scholarship evaluation represented by a simple laurel token, a portfolio folder and three blank assessment sheets, no medals with writing.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/N32-v1.png"
+    },
+    {
+      "asset_id": "N33",
+      "kind": "task",
+      "category": "tasks",
+      "name": "论文查重",
+      "brief": "Academic similarity checking represented by two manuscript sheets under a magnifying glass, matching abstract lines linked by a small loop, no percentages.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/N33-v1.png"
+    },
+    {
+      "asset_id": "N34",
+      "kind": "task",
+      "category": "tasks",
+      "name": "图书馆占座",
+      "brief": "Library seat reservation represented by one empty wooden study chair, a closed book and a backpack beside the desk, quiet pale background.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/N34-v1.png"
+    },
+    {
+      "asset_id": "N35",
+      "kind": "task",
+      "category": "tasks",
+      "name": "实习面试",
+      "brief": "An internship interview represented by a blank resume folder, two chairs across a small table and a neutral office plant, no faces needed.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/N35-v1.png"
+    },
+    {
+      "asset_id": "N36",
+      "kind": "task",
+      "category": "tasks",
+      "name": "四六级报名",
+      "brief": "Language-test registration represented by a plain application form of empty boxes, pencil and unbranded student card, no letters or digits.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/N36-v1.png"
+    },
+    {
+      "asset_id": "N37",
+      "kind": "task",
+      "category": "tasks",
+      "name": "线上考试",
+      "brief": "An online examination represented by one laptop with a blank question-sheet layout, small webcam and simple unnumbered timer, no text.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/N37-v1.png"
+    },
+    {
+      "asset_id": "N38",
+      "kind": "task",
+      "category": "tasks",
+      "name": "小组互评",
+      "brief": "Peer evaluation represented by three blank evaluation cards with simple colored dots, several pencils and a shared project folder, no stars with numbers.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/N38-v1.png"
+    },
+    {
+      "asset_id": "FY_B1_TASK",
+      "kind": "task",
+      "category": "tasks",
+      "name": "大一学年综合考核",
+      "brief": "A first-year comprehensive assessment represented by an open mathematics workbook, small lab notebook and fresh green campus sprout, clear ceremonial arrangement with lots of ivory space.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/FY_B1_TASK-v1.png"
+    },
+    {
+      "asset_id": "FY_B2_TASK",
+      "kind": "task",
+      "category": "tasks",
+      "name": "大二学年综合评测",
+      "brief": "A second-year comprehensive assessment represented by an engineering prototype, structured course binder and bronze competition token, sage and muted blue, uncluttered.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/FY_B2_TASK-v1.png"
+    },
+    {
+      "asset_id": "FY_B3_TASK",
+      "kind": "task",
+      "category": "tasks",
+      "name": "大三学年综合评测",
+      "brief": "A third-year comprehensive review represented by a research portfolio, small chart board and an internship badge, calm mature academic milestone, no writing.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/FY_B3_TASK-v1.png"
+    },
+    {
+      "asset_id": "FY_B4_TASK",
+      "kind": "task",
+      "category": "tasks",
+      "name": "毕业答辩",
+      "brief": "A graduation defense represented by a completed thesis, small lectern and a graduation cap with sage tassel, restrained warm celebratory academic challenge, no text or official insignia.",
+      "requirement_id": "FY-ART-002",
+      "definition_file": "data/four_year/definitions/tasks.json",
+      "output": "assets/art/four-year/tasks/FY_B4_TASK-v1.png"
+    }
+  ],
+  "batches": [
+    {
+      "batch_id": "FY-ART-01",
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-01.txt",
+      "prompt_sha256": "b11720b9d6895d264549b407cbdfd9d83b775c6c6ddcca68e891195e29b80856",
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-01-v1.png",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "medium",
+      "n": 1,
+      "slots": [
+        {
+          "slot": 1,
+          "row": 1,
+          "column": 1,
+          "asset_id": "P02",
+          "crop": [
+            112,
+            0,
+            400,
+            360
+          ],
+          "crop_adjustment": "After first-atlas visual review: retain full hair by moving the fixed portrait crop up 12px; no resampling or API regeneration."
+        },
+        {
+          "slot": 2,
+          "row": 1,
+          "column": 2,
+          "asset_id": "P03",
+          "crop": [
+            624,
+            0,
+            912,
+            360
+          ],
+          "crop_adjustment": "After first-atlas visual review: retain full hair by moving the fixed portrait crop up 12px; no resampling or API regeneration."
+        },
+        {
+          "slot": 3,
+          "row": 2,
+          "column": 1,
+          "asset_id": "R3-U01",
+          "crop": [
+            112,
+            384,
+            400,
+            744
+          ],
+          "crop_adjustment": "After first-atlas visual review: retain full hair by moving the fixed portrait crop up 12px; no resampling or API regeneration."
+        },
+        {
+          "slot": 4,
+          "row": 2,
+          "column": 2,
+          "asset_id": "R3-U02",
+          "crop": [
+            624,
+            384,
+            912,
+            744
+          ],
+          "crop_adjustment": "After first-atlas visual review: retain full hair by moving the fixed portrait crop up 12px; no resampling or API regeneration."
+        },
+        {
+          "slot": 5,
+          "row": 3,
+          "column": 1,
+          "asset_id": "R3-U03",
+          "crop": [
+            112,
+            768,
+            400,
+            1128
+          ],
+          "crop_adjustment": "After first-atlas visual review: retain full hair by moving the fixed portrait crop up 12px; no resampling or API regeneration."
+        },
+        {
+          "slot": 6,
+          "row": 3,
+          "column": 2,
+          "asset_id": "FY_Y1_1",
+          "crop": [
+            528,
+            780,
+            1008,
+            1140
+          ]
+        },
+        {
+          "slot": 7,
+          "row": 4,
+          "column": 1,
+          "asset_id": "FY_Y1_2",
+          "crop": [
+            16,
+            1164,
+            496,
+            1524
+          ]
+        },
+        {
+          "slot": 8,
+          "row": 4,
+          "column": 2,
+          "asset_id": "FY_Y1_3",
+          "crop": [
+            528,
+            1164,
+            1008,
+            1524
+          ]
+        }
+      ]
+    },
+    {
+      "batch_id": "FY-ART-02",
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-02.txt",
+      "prompt_sha256": "f9e7c6878a670bbda3a3d42095f4c194ab9809d5d82cdcd50b50320ddd4af5eb",
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-02-v1.png",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "medium",
+      "n": 1,
+      "slots": [
+        {
+          "slot": 1,
+          "row": 1,
+          "column": 1,
+          "asset_id": "FY_Y1_4",
+          "crop": [
+            16,
+            12,
+            496,
+            372
+          ]
+        },
+        {
+          "slot": 2,
+          "row": 1,
+          "column": 2,
+          "asset_id": "FY_Y2_1",
+          "crop": [
+            528,
+            12,
+            1008,
+            372
+          ]
+        },
+        {
+          "slot": 3,
+          "row": 2,
+          "column": 1,
+          "asset_id": "FY_Y2_2",
+          "crop": [
+            16,
+            396,
+            496,
+            756
+          ]
+        },
+        {
+          "slot": 4,
+          "row": 2,
+          "column": 2,
+          "asset_id": "FY_Y2_3",
+          "crop": [
+            528,
+            396,
+            1008,
+            756
+          ]
+        },
+        {
+          "slot": 5,
+          "row": 3,
+          "column": 1,
+          "asset_id": "FY_Y2_4",
+          "crop": [
+            16,
+            780,
+            496,
+            1140
+          ]
+        },
+        {
+          "slot": 6,
+          "row": 3,
+          "column": 2,
+          "asset_id": "FY_Y3_1",
+          "crop": [
+            528,
+            780,
+            1008,
+            1140
+          ]
+        },
+        {
+          "slot": 7,
+          "row": 4,
+          "column": 1,
+          "asset_id": "FY_Y3_2",
+          "crop": [
+            16,
+            1164,
+            496,
+            1524
+          ]
+        },
+        {
+          "slot": 8,
+          "row": 4,
+          "column": 2,
+          "asset_id": "FY_Y3_3",
+          "crop": [
+            528,
+            1164,
+            1008,
+            1524
+          ]
+        }
+      ]
+    },
+    {
+      "batch_id": "FY-ART-03",
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-03.txt",
+      "prompt_sha256": "b7c2910522d7e9ba79cf9075092f592de04309f7e87c5b684a28513f05909b64",
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-03-v1.png",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "medium",
+      "n": 1,
+      "slots": [
+        {
+          "slot": 1,
+          "row": 1,
+          "column": 1,
+          "asset_id": "FY_Y3_4",
+          "crop": [
+            16,
+            12,
+            496,
+            372
+          ]
+        },
+        {
+          "slot": 2,
+          "row": 1,
+          "column": 2,
+          "asset_id": "FY_Y4_1",
+          "crop": [
+            528,
+            12,
+            1008,
+            372
+          ]
+        },
+        {
+          "slot": 3,
+          "row": 2,
+          "column": 1,
+          "asset_id": "FY_Y4_2",
+          "crop": [
+            16,
+            396,
+            496,
+            756
+          ]
+        },
+        {
+          "slot": 4,
+          "row": 2,
+          "column": 2,
+          "asset_id": "FY_Y4_3",
+          "crop": [
+            528,
+            396,
+            1008,
+            756
+          ]
+        },
+        {
+          "slot": 5,
+          "row": 3,
+          "column": 1,
+          "asset_id": "FY_Y4_4",
+          "crop": [
+            16,
+            780,
+            496,
+            1140
+          ]
+        },
+        {
+          "slot": 6,
+          "row": 3,
+          "column": 2,
+          "asset_id": "E01",
+          "crop": [
+            528,
+            780,
+            1008,
+            1140
+          ]
+        },
+        {
+          "slot": 7,
+          "row": 4,
+          "column": 1,
+          "asset_id": "E02",
+          "crop": [
+            16,
+            1164,
+            496,
+            1524
+          ]
+        },
+        {
+          "slot": 8,
+          "row": 4,
+          "column": 2,
+          "asset_id": "E03",
+          "crop": [
+            528,
+            1164,
+            1008,
+            1524
+          ]
+        }
+      ]
+    },
+    {
+      "batch_id": "FY-ART-04",
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-04.txt",
+      "prompt_sha256": "4213a8fad4b9141b81974c972cf9b47c10d988db9c53741bb7a4d07a2933679f",
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-04-v1.png",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "medium",
+      "n": 1,
+      "slots": [
+        {
+          "slot": 1,
+          "row": 1,
+          "column": 1,
+          "asset_id": "E04_1",
+          "crop": [
+            16,
+            12,
+            496,
+            372
+          ]
+        },
+        {
+          "slot": 2,
+          "row": 1,
+          "column": 2,
+          "asset_id": "E04_2",
+          "crop": [
+            528,
+            12,
+            1008,
+            372
+          ]
+        },
+        {
+          "slot": 3,
+          "row": 2,
+          "column": 1,
+          "asset_id": "E04_3",
+          "crop": [
+            16,
+            396,
+            496,
+            756
+          ]
+        },
+        {
+          "slot": 4,
+          "row": 2,
+          "column": 2,
+          "asset_id": "E05",
+          "crop": [
+            528,
+            396,
+            1008,
+            756
+          ]
+        },
+        {
+          "slot": 5,
+          "row": 3,
+          "column": 1,
+          "asset_id": "E06",
+          "crop": [
+            16,
+            780,
+            496,
+            1140
+          ]
+        },
+        {
+          "slot": 6,
+          "row": 3,
+          "column": 2,
+          "asset_id": "E07",
+          "crop": [
+            528,
+            780,
+            1008,
+            1140
+          ]
+        },
+        {
+          "slot": 7,
+          "row": 4,
+          "column": 1,
+          "asset_id": "Q0A_1",
+          "crop": [
+            16,
+            1164,
+            496,
+            1524
+          ]
+        },
+        {
+          "slot": 8,
+          "row": 4,
+          "column": 2,
+          "asset_id": "Q0A_2",
+          "crop": [
+            528,
+            1164,
+            1008,
+            1524
+          ]
+        }
+      ]
+    },
+    {
+      "batch_id": "FY-ART-05",
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-05.txt",
+      "prompt_sha256": "376203dfc1f43662460fb9564c2256476415764072a613baa486f842a6a046f1",
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-05-v1.png",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "medium",
+      "n": 1,
+      "slots": [
+        {
+          "slot": 1,
+          "row": 1,
+          "column": 1,
+          "asset_id": "Q0A_3",
+          "crop": [
+            16,
+            12,
+            496,
+            372
+          ]
+        },
+        {
+          "slot": 2,
+          "row": 1,
+          "column": 2,
+          "asset_id": "Q0A_3_1",
+          "crop": [
+            528,
+            12,
+            1008,
+            372
+          ]
+        },
+        {
+          "slot": 3,
+          "row": 2,
+          "column": 1,
+          "asset_id": "Q0B_1",
+          "crop": [
+            16,
+            396,
+            496,
+            756
+          ]
+        },
+        {
+          "slot": 4,
+          "row": 2,
+          "column": 2,
+          "asset_id": "Q0B_2",
+          "crop": [
+            528,
+            396,
+            1008,
+            756
+          ]
+        },
+        {
+          "slot": 5,
+          "row": 3,
+          "column": 1,
+          "asset_id": "Q0C",
+          "crop": [
+            16,
+            780,
+            496,
+            1140
+          ]
+        },
+        {
+          "slot": 6,
+          "row": 3,
+          "column": 2,
+          "asset_id": "Q0D",
+          "crop": [
+            528,
+            780,
+            1008,
+            1140
+          ]
+        },
+        {
+          "slot": 7,
+          "row": 4,
+          "column": 1,
+          "asset_id": "Q0E_1",
+          "crop": [
+            16,
+            1164,
+            496,
+            1524
+          ]
+        },
+        {
+          "slot": 8,
+          "row": 4,
+          "column": 2,
+          "asset_id": "Q0E_2",
+          "crop": [
+            528,
+            1164,
+            1008,
+            1524
+          ]
+        }
+      ]
+    },
+    {
+      "batch_id": "FY-ART-06",
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-06.txt",
+      "prompt_sha256": "f2ef36e06731c6238732b8e407d65261ec6036578e0cee6f5bc40a4868f4cdbe",
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-06-v1.png",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "medium",
+      "n": 1,
+      "slots": [
+        {
+          "slot": 1,
+          "row": 1,
+          "column": 1,
+          "asset_id": "Q0E_3",
+          "crop": [
+            16,
+            12,
+            496,
+            372
+          ]
+        },
+        {
+          "slot": 2,
+          "row": 1,
+          "column": 2,
+          "asset_id": "N13",
+          "crop": [
+            528,
+            12,
+            1008,
+            372
+          ]
+        },
+        {
+          "slot": 3,
+          "row": 2,
+          "column": 1,
+          "asset_id": "N14",
+          "crop": [
+            16,
+            396,
+            496,
+            756
+          ]
+        },
+        {
+          "slot": 4,
+          "row": 2,
+          "column": 2,
+          "asset_id": "N15",
+          "crop": [
+            528,
+            396,
+            1008,
+            756
+          ]
+        },
+        {
+          "slot": 5,
+          "row": 3,
+          "column": 1,
+          "asset_id": "N16",
+          "crop": [
+            16,
+            780,
+            496,
+            1140
+          ]
+        },
+        {
+          "slot": 6,
+          "row": 3,
+          "column": 2,
+          "asset_id": "N17",
+          "crop": [
+            528,
+            780,
+            1008,
+            1140
+          ]
+        },
+        {
+          "slot": 7,
+          "row": 4,
+          "column": 1,
+          "asset_id": "N18",
+          "crop": [
+            16,
+            1164,
+            496,
+            1524
+          ]
+        },
+        {
+          "slot": 8,
+          "row": 4,
+          "column": 2,
+          "asset_id": "N19",
+          "crop": [
+            528,
+            1164,
+            1008,
+            1524
+          ]
+        }
+      ]
+    },
+    {
+      "batch_id": "FY-ART-07",
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-07.txt",
+      "prompt_sha256": "ff6b7fd99b89449cb72f1eb91ab7178b286fc5ed9ccbb9a6144ab33148d61694",
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-07-v1.png",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "medium",
+      "n": 1,
+      "slots": [
+        {
+          "slot": 1,
+          "row": 1,
+          "column": 1,
+          "asset_id": "N20",
+          "crop": [
+            16,
+            12,
+            496,
+            372
+          ]
+        },
+        {
+          "slot": 2,
+          "row": 1,
+          "column": 2,
+          "asset_id": "N21",
+          "crop": [
+            528,
+            12,
+            1008,
+            372
+          ]
+        },
+        {
+          "slot": 3,
+          "row": 2,
+          "column": 1,
+          "asset_id": "N22",
+          "crop": [
+            16,
+            396,
+            496,
+            756
+          ]
+        },
+        {
+          "slot": 4,
+          "row": 2,
+          "column": 2,
+          "asset_id": "N23",
+          "crop": [
+            528,
+            396,
+            1008,
+            756
+          ]
+        },
+        {
+          "slot": 5,
+          "row": 3,
+          "column": 1,
+          "asset_id": "N24",
+          "crop": [
+            16,
+            780,
+            496,
+            1140
+          ]
+        },
+        {
+          "slot": 6,
+          "row": 3,
+          "column": 2,
+          "asset_id": "N25",
+          "crop": [
+            528,
+            780,
+            1008,
+            1140
+          ]
+        },
+        {
+          "slot": 7,
+          "row": 4,
+          "column": 1,
+          "asset_id": "N26",
+          "crop": [
+            16,
+            1164,
+            496,
+            1524
+          ]
+        },
+        {
+          "slot": 8,
+          "row": 4,
+          "column": 2,
+          "asset_id": "N27",
+          "crop": [
+            528,
+            1164,
+            1008,
+            1524
+          ]
+        }
+      ]
+    },
+    {
+      "batch_id": "FY-ART-08",
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-08.txt",
+      "prompt_sha256": "c0bc177ad1a89839a96134459d14eac0d4a71f5ce7fab84a2b27b25d8fe3dcc1",
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-08-v1.png",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "medium",
+      "n": 1,
+      "slots": [
+        {
+          "slot": 1,
+          "row": 1,
+          "column": 1,
+          "asset_id": "N28",
+          "crop": [
+            16,
+            12,
+            496,
+            372
+          ]
+        },
+        {
+          "slot": 2,
+          "row": 1,
+          "column": 2,
+          "asset_id": "N29",
+          "crop": [
+            528,
+            12,
+            1008,
+            372
+          ]
+        },
+        {
+          "slot": 3,
+          "row": 2,
+          "column": 1,
+          "asset_id": "N30",
+          "crop": [
+            16,
+            396,
+            496,
+            756
+          ]
+        },
+        {
+          "slot": 4,
+          "row": 2,
+          "column": 2,
+          "asset_id": "N31",
+          "crop": [
+            528,
+            396,
+            1008,
+            756
+          ]
+        },
+        {
+          "slot": 5,
+          "row": 3,
+          "column": 1,
+          "asset_id": "N32",
+          "crop": [
+            16,
+            780,
+            496,
+            1140
+          ]
+        },
+        {
+          "slot": 6,
+          "row": 3,
+          "column": 2,
+          "asset_id": "N33",
+          "crop": [
+            528,
+            780,
+            1008,
+            1140
+          ]
+        },
+        {
+          "slot": 7,
+          "row": 4,
+          "column": 1,
+          "asset_id": "N34",
+          "crop": [
+            16,
+            1164,
+            496,
+            1524
+          ]
+        },
+        {
+          "slot": 8,
+          "row": 4,
+          "column": 2,
+          "asset_id": "N35",
+          "crop": [
+            528,
+            1164,
+            1008,
+            1524
+          ]
+        }
+      ]
+    },
+    {
+      "batch_id": "FY-ART-09",
+      "prompt_file": "docs/art/missing-art-prompts/FY-ART-09.txt",
+      "prompt_sha256": "9e92a54ad078e6894b129423b190b6a457db72cf05544a83910b9e0891535ead",
+      "source_file": "output/imagegen/missing-art-four-year/FY-ART-09-v1.png",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "quality": "medium",
+      "n": 1,
+      "slots": [
+        {
+          "slot": 1,
+          "row": 1,
+          "column": 1,
+          "asset_id": "N36",
+          "crop": [
+            16,
+            12,
+            496,
+            372
+          ]
+        },
+        {
+          "slot": 2,
+          "row": 1,
+          "column": 2,
+          "asset_id": "N37",
+          "crop": [
+            528,
+            12,
+            1008,
+            372
+          ]
+        },
+        {
+          "slot": 3,
+          "row": 2,
+          "column": 1,
+          "asset_id": "N38",
+          "crop": [
+            16,
+            396,
+            496,
+            756
+          ]
+        },
+        {
+          "slot": 4,
+          "row": 2,
+          "column": 2,
+          "asset_id": "FY_B1_TASK",
+          "crop": [
+            528,
+            396,
+            1008,
+            756
+          ]
+        },
+        {
+          "slot": 5,
+          "row": 3,
+          "column": 1,
+          "asset_id": "FY_B2_TASK",
+          "crop": [
+            16,
+            780,
+            496,
+            1140
+          ]
+        },
+        {
+          "slot": 6,
+          "row": 3,
+          "column": 2,
+          "asset_id": "FY_B3_TASK",
+          "crop": [
+            528,
+            780,
+            1008,
+            1140
+          ]
+        },
+        {
+          "slot": 7,
+          "row": 4,
+          "column": 1,
+          "asset_id": "FY_B4_TASK",
+          "crop": [
+            16,
+            1164,
+            496,
+            1524
+          ]
+        },
+        {
+          "slot": 8,
+          "row": 4,
+          "column": 2,
+          "asset_id": null,
+          "crop": [
+            528,
+            1164,
+            1008,
+            1524
+          ]
+        }
+      ]
+    }
+  ]
+}

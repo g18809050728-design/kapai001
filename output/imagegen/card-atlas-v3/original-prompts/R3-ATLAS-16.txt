@@ -1,0 +1,16 @@
+Use case: illustration-story. Produce ONE production sprite atlas of EIGHT separate campus card illustrations.
+Canvas: exactly 1024 x 1536 pixels, portrait. Strict 2 columns x 4 rows, equal 512 x 384 cells. Read row-major from top left.
+The entire canvas is filled by these eight cells. No outer margin, gutters, border, title, labels or numbering. Separate scenes at the exact halfway vertical boundary and four equal horizontal bands. NEVER combine cells or change their size/order.
+Shared art direction: 大学校园题材策略卡牌插画，成年大学生的日常与抽象思考相结合，精细手绘线条，水粉与彩铅质感，薄纸纹理，电影感柔光，克制的超现实表达，主体清晰、动作一眼可辨，统一米白与深青基调，画面干净，有叙事细节，横向4:3独立插画。只画插画，不画卡框、文字或界面。
+Each cell is one horizontal 4:3 independent scene, NOT a card frame or a panel of a continuing comic. Clear single main action, natural adult hands, understated campus gouache and pencil illustration on warm ivory paper. Consistent fine dark teal lines and soft daylight across every cell.
+Composition within EACH cell: essential objects and gestures inside central 70%, expendable quiet background at edges. The crop removes 16px from left/right and 12px from top/bottom of EACH cell. No subject, light trail, limb or object may cross into another cell.
+No readable text, letters, numerals, equations, branding, campus logos, watermarks, labels, UI, speech bubbles, trading card frames, exaggerated anatomy, weapons or horror. Blank pages and simple geometric diagrams only. Slot IDs below are instructions, NEVER draw them.
+Row 1, column 1: 唐以宁系列：赤陶橙与湖蓝；双手协作、交接夹板、轮转弧线与汇合光带作为母题。成年女大学生，黑色高丸子头、米白开衫、鼠尾草绿内搭、红棕挂绳。优先手部与协作物件近景，伙伴避免面部特写。 主体场景：唐以宁的室友伸手扶住即将滑落的资料，另一只手继续工作。
+Row 1, column 2: 唐以宁系列：赤陶橙与湖蓝；双手协作、交接夹板、轮转弧线与汇合光带作为母题。成年女大学生，黑色高丸子头、米白开衫、鼠尾草绿内搭、红棕挂绳。优先手部与协作物件近景，伙伴避免面部特写。 主体场景：两位学生把图形任务卡分入左右托盘，各自职责清楚。
+Row 2, column 1: 唐以宁系列：赤陶橙与湖蓝；双手协作、交接夹板、轮转弧线与汇合光带作为母题。成年女大学生，黑色高丸子头、米白开衫、鼠尾草绿内搭、红棕挂绳。优先手部与协作物件近景，伙伴避免面部特写。 主体场景：同一张大作业被分成两份，各人的铅笔分别落在一题。
+Row 2, column 2: 唐以宁系列：赤陶橙与湖蓝；双手协作、交接夹板、轮转弧线与汇合光带作为母题。成年女大学生，黑色高丸子头、米白开衫、鼠尾草绿内搭、红棕挂绳。优先手部与协作物件近景，伙伴避免面部特写。 主体场景：伙伴抱来一摞有彩色书签的资料，唐以宁接过最上一本。
+Row 3, column 1: 唐以宁系列：赤陶橙与湖蓝；双手协作、交接夹板、轮转弧线与汇合光带作为母题。成年女大学生，黑色高丸子头、米白开衫、鼠尾草绿内搭、红棕挂绳。优先手部与协作物件近景，伙伴避免面部特写。 主体场景：两人的手指分别指向不同任务模块，中间留出清晰边界。
+Row 3, column 2: 唐以宁系列：赤陶橙与湖蓝；双手协作、交接夹板、轮转弧线与汇合光带作为母题。成年女大学生，黑色高丸子头、米白开衫、鼠尾草绿内搭、红棕挂绳。优先手部与协作物件近景，伙伴避免面部特写。 主体场景：唐以宁把两条进度线轻轻拨到相近位置，合作节奏对齐。
+Row 4, column 1: 唐以宁系列：赤陶橙与湖蓝；双手协作、交接夹板、轮转弧线与汇合光带作为母题。成年女大学生，黑色高丸子头、米白开衫、鼠尾草绿内搭、红棕挂绳。优先手部与协作物件近景，伙伴避免面部特写。 主体场景：三位学生展示已完成的纸模型，未完成区域仍保持暗色。
+Row 4, column 2: 唐以宁系列：赤陶橙与湖蓝；双手协作、交接夹板、轮转弧线与汇合光带作为母题。成年女大学生，黑色高丸子头、米白开衫、鼠尾草绿内搭、红棕挂绳。优先手部与协作物件近景，伙伴避免面部特写。 主体场景：唐以宁与固定造型的项目搭档并肩组装校园模型。
+Final count check: exactly 2 columns and 4 equal-height rows. Keep every requested scene in its assigned slot. No additional panels or outer margin.
