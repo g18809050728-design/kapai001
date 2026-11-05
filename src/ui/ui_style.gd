@@ -52,6 +52,9 @@ static func describe_effects(effects: Array) -> String:
 		if not effect is Dictionary:
 			continue
 		var op := str(effect.get("op", ""))
+		if op == "upgrade_card" and effect.get("all_eligible", false):
+			phrases.append("升级所有可升级工作牌")
+			continue
 		var amount := describe_amount(effect.get("amount", effect.get("stacks", "")))
 		var names := {
 			"complete": "完成量",

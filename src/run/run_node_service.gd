@@ -172,6 +172,7 @@ func event_view(state: RunState, node: RunNodeState) -> Dictionary:
 		return result
 	for option in definition_result.data.options:
 		var blocking: Array[Dictionary] = []
+		var eligible_card_ids: Array[String] = []
 		if not event.resolved_option_id.is_empty():
 			blocking.append({"code": "ALREADY_RESOLVED", "message_key": "run.event.resolved"})
 		elif (
@@ -182,17 +183,19 @@ func event_view(state: RunState, node: RunNodeState) -> Dictionary:
 				{"code": "INSUFFICIENT_RESOURCE", "message_key": "run.event.cannot_pay"}
 			)
 		for effect in option.effects:
-			if (
-				effect.op in ["upgrade_card", "remove_card"]
-				and _eligible_cards(state, effect).is_empty()
-			):
-				blocking.append({"code": "INVALID_TARGET", "message_key": "run.event.no_target"})
+			if effect.op in ["upgrade_card", "remove_card"]:
+				var eligible := _eligible_cards(state, effect)
+				if eligible.is_empty():
+					blocking.append({"code": "INVALID_TARGET", "message_key": "run.event.no_target"})
+				if effect.op == "upgrade_card" and effect.get("all_eligible", false):
+					eligible_card_ids.append_array(eligible)
 		options.append(
 			{
 				"option_id": option.option_id,
 				"label_key": option.label_key,
 				"cost": option.cost.duplicate(true),
 				"effects": option.effects.duplicate(true),
+				"eligible_card_ids": eligible_card_ids,
 				"candidates": event.frozen_candidates.get(option.option_id, {}).duplicate(true),
 				"enabled": blocking.is_empty(),
 				"blocking": blocking
@@ -292,6 +295,14 @@ func _apply_event_effect(
 				if not grant.ok:
 					return grant
 		"upgrade_card", "remove_card":
+			if effect.op == "upgrade_card" and effect.get("all_eligible", false):
+				var eligible_ids := _eligible_cards(state, effect)
+				if eligible_ids.is_empty():
+					return _error(GameConstants.ERROR_INVALID_TARGET, "run.event.no_target")
+				for id in eligible_ids:
+					var eligible_card := _card(state, id)
+					eligible_card.upgrade_level = int(eligible_card.get("upgrade_level", 0)) + 1
+				return GameResult.success(true)
 			if targets.is_empty():
 				return _error(GameConstants.ERROR_INVALID_TARGET, "run.event.selection_required")
 			var id := str(targets.pop_front())

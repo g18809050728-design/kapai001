@@ -199,7 +199,7 @@ const EVENT_OP_FIELDS := {
 	"gain_card":
 	["card_id", "rarity", "candidate_count", "card_pool", "selection_count", "fallback_money"],
 	"gain_relic": ["relic_id", "rarity", "count", "fallback_money"],
-	"upgrade_card": ["type_filter"],
+	"upgrade_card": ["type_filter", "all_eligible"],
 	"remove_card": ["tag_filter"],
 	"career": ["track", "amount"],
 }
@@ -1413,6 +1413,8 @@ func _validate_effect_semantics(
 				):
 					issues.append("%s.rarity is invalid" % location)
 			"upgrade_card":
+				if effect.has("all_eligible") and typeof(effect.all_eligible) != TYPE_BOOL:
+					issues.append("%s.all_eligible must be a boolean" % location)
 				if (
 					effect.has("type_filter")
 					and not ["work", "strategy", "ability", "cooperation", "scene"].has(

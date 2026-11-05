@@ -1066,6 +1066,8 @@ func _preview_details(
 				var effect: Dictionary = option.effects[index]
 				var ids: Array = []
 				if effect.op in ["upgrade_card", "remove_card"]:
+					if effect.op == "upgrade_card" and effect.get("all_eligible", false):
+						continue
 					ids = _node_service._eligible_cards(state, effect)
 				elif effect.op == "gain_card" and not effect.has("card_id"):
 					ids = event.frozen_candidates.get(option.option_id, {}).get(str(index), [])

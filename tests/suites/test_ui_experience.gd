@@ -8,11 +8,59 @@ func run() -> Array[String]:
 	_card_semantics()
 	await _reward_loop()
 	await _campaign_loop()
+	await _v04_event_loop()
 	await _status_and_settings()
 	await _submission_and_persistence()
 	await _large_text_and_focus()
 	print("FY_UX_CHECKS=", JSON.stringify({"failures": _failures, "scope": "AC-01 to AC-15 targeted UI integration; controlled checkpoints; no natural four-year playthrough"}))
 	return _failures
+
+
+func _v04_event_loop() -> void:
+	var path := "user://fy-v04-event-%d" % Time.get_ticks_usec()
+	var session := GameSession.new(SaveStore.new(path))
+	session.update_settings({"autosave": false})
+	_check(session.start_run(StartRunRequest.new("P01", &"normal", "campus_four_year", "42")).accepted, "V04 UI production run starts")
+	var state := session._state.run
+	var nodes: Array = state.nodes.filter(func(value): return value.kind == "event" and value.term == 1)
+	_check(not nodes.is_empty(), "V04 UI has an event node")
+	if nodes.is_empty():
+		return
+	var node: RunNodeState = nodes[0]
+	var first: RunNodeState = state.nodes.filter(func(value): return value.term == 1 and value.layer == 1)[0]
+	first.status = "completed"
+	first.context["encounter_id"] = "N13"
+	first.context["settled"] = true
+	state.settled_battle_ids.append(first.node_id)
+	state.node_path.append(first.node_id)
+	node.status = "active"
+	state.current_node_id = node.node_id
+	state.seen_event_ids.append("V04")
+	node.context["event"] = EventState.create({"event_instance_id": state.next_instance_id("event"), "node_id": node.node_id, "definition_id": "V04", "frozen_candidates": {"rest": {}, "upgrade_work": {}, "leave": {}}})
+	var shell := _helpers.attach_shell(session) as GameShell
+	shell.show_screen("")
+	var event_options: Array = session.get_view().run.event.options
+	var eligible: Array = event_options.filter(func(value): return value.option_id == "upgrade_work")[0].eligible_card_ids
+	var before := _helpers.fingerprint(session)
+	_check(shell.press("event:upgrade_work"), "V04 action can be previewed")
+	await _frames()
+	var text := _all_text(shell.page)
+	_check(text.contains("自动升级 %d 张工作牌" % eligible.size()) and text.contains("升级后："), "V04 UI lists every upgrade and comparison")
+	_check(shell.page.action_draft("event:confirm").payload.selection_ids.is_empty(), "V04 UI sends no card target")
+	_check(_helpers.fingerprint(session) == before, "V04 preview does not change state or RNG")
+	_check(shell.press("event:confirm"), "V04 confirms one command")
+	var upgraded: Dictionary = session.get_view().run
+	_check(upgraded.vitality == 66 and upgraded.cards.filter(func(value): return eligible.has(value.card_id) and value.upgrade_level == 1).size() == eligible.size(), "V04 upgrades all work instances for one cost")
+	var saved := session.save_current()
+	_check(saved.ok, "V04 result saves at stable boundary: " + str(saved.error.to_dictionary() if saved.error != null else null))
+	if saved.ok:
+		var restored := GameSession.new(SaveStore.new(path))
+		var continued := restored.continue_run()
+		_check(continued.ok, "V04 result resumes: " + str(continued.error.to_dictionary() if continued.error != null else null))
+		if continued.ok:
+			_check(restored.get_view().run.cards == upgraded.cards and restored.get_view().run.vitality == upgraded.vitality, "V04 save retains all upgrades")
+		restored.free()
+	shell.free()
 
 
 func _card_semantics() -> void:

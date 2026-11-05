@@ -1,0 +1,76 @@
+[
+	{
+		"label": "event-preview-1280x800",
+		"page": "Control",
+		"popups": [],
+		"save_error": 0,
+		"screen": "event",
+		"size": [
+			1280,
+			800
+		]
+	},
+	{
+		"label": "hit-1280x800",
+		"page": "Control",
+		"popups": [
+			"-6"
+		],
+		"save_error": 0,
+		"screen": "battle",
+		"size": [
+			1280,
+			800
+		]
+	},
+	{
+		"label": "lethal-1280x800",
+		"page": "Control",
+		"popups": [
+			"-1"
+		],
+		"save_error": 0,
+		"screen": "reward",
+		"size": [
+			1280,
+			800
+		]
+	},
+	{
+		"label": "event-preview-960x600",
+		"page": "Control",
+		"popups": [],
+		"save_error": 0,
+		"screen": "event",
+		"size": [
+			960,
+			600
+		]
+	},
+	{
+		"label": "hit-960x600",
+		"page": "Control",
+		"popups": [
+			"-6"
+		],
+		"save_error": 0,
+		"screen": "battle",
+		"size": [
+			960,
+			600
+		]
+	},
+	{
+		"label": "lethal-960x600",
+		"page": "Control",
+		"popups": [
+			"-1"
+		],
+		"save_error": 0,
+		"screen": "reward",
+		"size": [
+			960,
+			600
+		]
+	}
+]

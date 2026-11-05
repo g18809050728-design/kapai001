@@ -98,6 +98,17 @@ func consume_events(events: Array, run_id: String, revision: int) -> void:
 	_animator.play(presented, run_id, revision)
 
 
+func damage_target_anchors() -> Dictionary:
+	var anchors := {}
+	for task in _array(view.get("tasks")):
+		var id := str(task.get("task_id", ""))
+		var uid := "task:" + id
+		var target: Control = _target_frames.get(uid, _buttons.get(uid))
+		if is_instance_valid(target):
+			anchors[id] = target.get_global_rect().get_center()
+	return anchors
+
+
 func is_locked() -> bool:
 	return not _choice_dict(view.get("pending_choice")).is_empty()
 

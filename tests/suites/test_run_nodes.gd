@@ -143,7 +143,49 @@ func run() -> Array[String]:
 	)
 	_check(not invalid_train.ok, "training rejects non cooperation", failures)
 	_test_event_variants(service, failures)
+	_test_four_year_v04(failures)
 	return failures
+
+
+func _test_four_year_v04(failures: Array[String]) -> void:
+	var catalog := ContentDB.new("res://data/four_year")
+	_check(catalog.load("campus_four_year").ok, "four-year V04 content loads", failures)
+	var service := RunNodeService.new(catalog)
+	var state := RunState.new({
+		"run_id": "v04_all", "ruleset_id": "campus_v1", "vitality": 40,
+		"max_vitality": 72, "cards": [
+			{"card_id": "work_a", "definition_id": "R3-C-01", "upgrade_level": 0},
+			{"card_id": "work_b", "definition_id": "R3-C-01", "upgrade_level": 0},
+			{"card_id": "already", "definition_id": "R3-C-01", "upgrade_level": 1},
+			{"card_id": "strategy", "definition_id": "R3-C-02", "upgrade_level": 0}
+		]
+	})
+	state.nodes = RunMap.build(state.run_id, 1)
+	var node := state.nodes[1]
+	node.status = "active"
+	state.current_node_id = node.node_id
+	var event := EventState.create({"event_instance_id": "event_v04", "node_id": node.node_id, "definition_id": "V04"})
+	node.context.event = event
+	var option: Dictionary = service.event_view(state, node).options.filter(func(value): return value.option_id == "upgrade_work")[0]
+	_check(option.enabled and option.get("eligible_card_ids", []) == ["work_a", "work_b"], "V04 previews every eligible instance", failures)
+	var before := state.to_dictionary()
+	var rejected := service.choose_event(state, {"event_instance_id": event.event_instance_id, "option_id": "upgrade_work", "selection_ids": ["work_a"]})
+	_check(not rejected.ok and state.to_dictionary() == before, "V04 rejects a stray target without payment", failures)
+	var result := service.choose_event(state, {"event_instance_id": event.event_instance_id, "option_id": "upgrade_work", "selection_ids": []})
+	_check(result.ok, "V04 accepts automatic upgrade", failures)
+	if result.ok:
+		var cards: Array = result.data.cards
+		_check(result.data.vitality == 34 and cards[0].upgrade_level == 1 and cards[1].upgrade_level == 1 and cards[2].upgrade_level == 1 and cards[3].upgrade_level == 0, "V04 upgrades all and pays once", failures)
+		_check(not service.choose_event(result.data, {"event_instance_id": event.event_instance_id, "option_id": "upgrade_work", "selection_ids": []}).ok, "V04 cannot resolve twice", failures)
+	_check(state.to_dictionary() == before, "V04 leaves source state unchanged", failures)
+	for card in state.cards:
+		if card.definition_id == "R3-C-01":
+			card.upgrade_level = 1
+	option = service.event_view(state, node).options.filter(func(value): return value.option_id == "upgrade_work")[0]
+	_check(not option.enabled, "V04 disables automatic upgrade without eligible work cards", failures)
+	_check(not service.choose_event(state, {"event_instance_id": event.event_instance_id, "option_id": "upgrade_work", "selection_ids": []}).ok, "V04 rejects no eligible work cards at rule layer", failures)
+	state.vitality = 6
+	_check(not service.choose_event(state, {"event_instance_id": event.event_instance_id, "option_id": "upgrade_work", "selection_ids": []}).ok, "V04 rejects insufficient vitality", failures)
 
 
 func _test_event_variants(service: RunNodeService, failures: Array[String]) -> void:

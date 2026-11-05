@@ -1,6 +1,8 @@
 class_name GameShell
 extends Control
 
+const BattleDamagePopup = preload("res://src/ui/battle/battle_damage_popup_layer.gd")
+
 var session: GameSession
 var page: UiPage
 var audio: AudioManager
@@ -23,6 +25,8 @@ var _restart_confirmation := false
 var _advance_paused := false
 var _submitted_scope := ""
 var _business_notice := ""
+var _damage_layer: Control
+var _battle_transition_cover: TextureRect
 
 
 func _ready() -> void:
@@ -81,6 +85,11 @@ func _build_frame() -> void:
 	_notice_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_notice_label.add_theme_font_size_override("font_size", 15)
 	column.add_child(_notice_label)
+	_damage_layer = BattleDamagePopup.new()
+	_damage_layer.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_damage_layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_damage_layer.z_index = 500
+	add_child(_damage_layer)
 
 
 func show_screen(screen: String) -> void:
@@ -346,6 +355,7 @@ func submit_action(draft: Dictionary) -> void:
 		return
 	_submitted_scope = scope
 	_business_notice = _describe_action(draft)
+	var damage_anchors := (page as BattleScreen).damage_target_anchors() if page is BattleScreen else {}
 	var result := session.submit(
 		CommandContext.new(str(current.run_id), current.revision),
 		GameAction.new(StringName(type), payload)
@@ -360,6 +370,12 @@ func submit_action(draft: Dictionary) -> void:
 	if current.run is Dictionary and result.view.run is Dictionary and not _business_notice.is_empty():
 		_business_notice += " · 金钱 %+d · 精力 %+d" % [int(result.view.run.money) - int(current.run.money), int(result.view.run.vitality) - int(current.run.vitality)]
 	_action_notice(result)
+	var popup_count := 0
+	var preferences := session.get_presentation_settings()
+	if not damage_anchors.is_empty():
+		popup_count = _damage_layer.queue_events(result.events, damage_anchors, int(preferences.animation_speed) > 0 and not preferences.reduced_motion, maxf(1.0, float(preferences.animation_speed)))
+	if popup_count > 0 and page is BattleScreen and not result.view.battle is Dictionary:
+		_show_battle_transition_cover(popup_count, preferences)
 	refresh()
 	_present_card_gain(current, result.view)
 	var final_view := session.get_view()
@@ -377,6 +393,32 @@ func submit_action(draft: Dictionary) -> void:
 				audio.play_deadline(int(event.data.get("after", 0)))
 			else:
 				audio.play_event(str(event.type))
+
+
+func _show_battle_transition_cover(count: int, preferences: Dictionary) -> void:
+	if DisplayServer.get_name() == "headless":
+		return
+	var image := get_viewport().get_texture().get_image()
+	if image.is_empty():
+		return
+	_clear_battle_transition_cover()
+	_battle_transition_cover = TextureRect.new()
+	_battle_transition_cover.texture = ImageTexture.create_from_image(image)
+	_battle_transition_cover.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_battle_transition_cover.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_battle_transition_cover.stretch_mode = TextureRect.STRETCH_SCALE
+	_battle_transition_cover.mouse_filter = Control.MOUSE_FILTER_STOP
+	_battle_transition_cover.z_index = 400
+	add_child(_battle_transition_cover)
+	var speed := maxf(1.0, float(preferences.animation_speed))
+	var duration := ((count - 1) * BattleDamagePopup.BASE_DELAY + (BattleDamagePopup.BASE_DURATION if int(preferences.animation_speed) > 0 and not preferences.reduced_motion else 0.4)) / speed
+	get_tree().create_timer(duration + 0.05).timeout.connect(_clear_battle_transition_cover)
+
+
+func _clear_battle_transition_cover() -> void:
+	if is_instance_valid(_battle_transition_cover):
+		_battle_transition_cover.queue_free()
+	_battle_transition_cover = null
 
 
 func _has_previous_run() -> bool:

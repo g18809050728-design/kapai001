@@ -1,0 +1,16 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 3.3.0 - Build 31.0.101.4502 - Compatibility - Using Device: Intel - Intel(R) UHD Graphics
+
+V04_CAPTURE_ANCHOR=(1280, 800) { "run_f157df34e0f68585f978e000|y1l1s0|t14": (868.0, 325.0) } layer=[P: (0.0, 0.0), S: (1280.0, 800.0)]
+V04_CAPTURE_SELECTED_ANCHOR=(1280, 800) { "run_f157df34e0f68585f978e000|y1l1s0|t14": (868.0, 325.0) }
+V04_CAPTURE_POPUP=(1280, 800) [{ "text": "-6", "position": (788.0, 281.0) }]
+V04_CAPTURE_ANCHOR=(1280, 800) { "run_f009072b3ad653aaf5a2efea|y1l1s0|t14": (868.0, 325.0) } layer=[P: (0.0, 0.0), S: (1280.0, 800.0)]
+V04_CAPTURE_SELECTED_ANCHOR=(1280, 800) { "run_f009072b3ad653aaf5a2efea|y1l1s0|t14": (868.0, 325.0) }
+V04_CAPTURE_POPUP=(1280, 800) [{ "text": "-1", "position": (788.0, 281.0) }]
+V04_CAPTURE_ANCHOR=(960, 600) { "run_b2fbf58063b2e5d60aaa2f7b|y1l1s0|t14": (92.5, 350.0) } layer=[P: (0.0, 0.0), S: (960.0, 600.0)]
+V04_CAPTURE_SELECTED_ANCHOR=(960, 600) { "run_b2fbf58063b2e5d60aaa2f7b|y1l1s0|t14": (92.5, 350.0) }
+V04_CAPTURE_POPUP=(960, 600) [{ "text": "-6", "position": (12.5, 306.0) }]
+V04_CAPTURE_ANCHOR=(960, 600) { "run_11750204d018bc1203fedab2|y1l1s0|t14": (92.5, 350.0) } layer=[P: (0.0, 0.0), S: (960.0, 600.0)]
+V04_CAPTURE_SELECTED_ANCHOR=(960, 600) { "run_11750204d018bc1203fedab2|y1l1s0|t14": (92.5, 350.0) }
+V04_CAPTURE_POPUP=(960, 600) [{ "text": "-1", "position": (12.5, 306.0) }]
+V04_DAMAGE_CAPTURE=[{"label":"event-preview-1280x800","page":"Control","popups":[],"save_error":0,"screen":"event","size":[1280,800]},{"label":"hit-1280x800","page":"Control","popups":["-6"],"save_error":0,"screen":"battle","size":[1280,800]},{"label":"lethal-1280x800","page":"Control","popups":["-1"],"save_error":0,"screen":"reward","size":[1280,800]},{"label":"event-preview-960x600","page":"Control","popups":[],"save_error":0,"screen":"event","size":[960,600]},{"label":"hit-960x600","page":"Control","popups":["-6"],"save_error":0,"screen":"battle","size":[960,600]},{"label":"lethal-960x600","page":"Control","popups":["-1"],"save_error":0,"screen":"reward","size":[960,600]}]

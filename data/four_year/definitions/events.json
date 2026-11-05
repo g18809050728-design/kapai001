@@ -128,7 +128,8 @@
         "effects": [
           {
             "op": "upgrade_card",
-            "type_filter": "work"
+            "type_filter": "work",
+            "all_eligible": true
           }
         ]
       },

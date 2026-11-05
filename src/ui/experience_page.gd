@@ -474,15 +474,15 @@ func _render_event() -> void:
 	reset_page(UiStyle.label(str(event.get("definition_id", ""))), "先查看所有行动；预选后再选择所需目标")
 	_run_bar(header)
 	var selected := str(_choices.get("event:option", ""))
-	for option in _array(event.get("options")):
-		var panel := _choice_panel(body, selected == str(option.option_id))
-		add_text(panel, _event_option_name(str(option.option_id), str(option.get("label_key", ""))), 20)
-		add_text(panel, "消耗：" + _cost_text(_dict(option.get("cost"))) + "\n" + UiStyle.describe_effects(_array(option.get("effects"))), 16)
-		var pick := _local_button(panel, "event:option:leave" if option.option_id == "leave" else "event:" + str(option.option_id), "预选此项" if option.get("enabled", true) else "不可用", "event:option", str(option.option_id))
-		pick.disabled = not option.get("enabled", true)
-		if pick.disabled:
-			add_text(panel, "资源不足、没有合法目标或此事件已完成。", 15, UiStyle.RED)
 	if selected.is_empty():
+		for option in _array(event.get("options")):
+			var panel := _choice_panel(body, false)
+			add_text(panel, _event_option_name(str(option.option_id), str(option.get("label_key", ""))), 20)
+			add_text(panel, "消耗：" + _cost_text(_dict(option.get("cost"))) + "\n" + UiStyle.describe_effects(_array(option.get("effects"))), 16)
+			var pick := _local_button(panel, "event:option:leave" if option.option_id == "leave" else "event:" + str(option.option_id), "预选此项" if option.get("enabled", true) else "不可用", "event:option", str(option.option_id))
+			pick.disabled = not option.get("enabled", true)
+			if pick.disabled:
+				add_text(panel, "资源不足、没有合法目标或此事件已完成。", 15, UiStyle.RED)
 		_bottom("请选择一项行动。查看目标后仍可返回。")
 		return
 	for option in _array(event.get("options")):
@@ -495,8 +495,15 @@ func _render_event() -> void:
 			var op := str(effect.get("op", ""))
 			var key := "%s:%s" % [selected, index]
 			if op in ["upgrade_card", "remove_card"]:
-				var mode := "upgrade" if op == "upgrade_card" else "remove"
-				_target_or_comparison("event:" + selected, mode, key)
+				if op == "upgrade_card" and effect.get("all_eligible", false):
+					var eligible := _array(option.get("eligible_card_ids"))
+					add_text(body, "将自动升级 %d 张工作牌" % eligible.size(), 19)
+					for card in _array(view.get("cards")):
+						if eligible.has(str(card.get("card_id", ""))):
+							_card_comparison(body, card, true)
+				else:
+					var mode := "upgrade" if op == "upgrade_card" else "remove"
+					_target_or_comparison("event:" + selected, mode, key)
 			elif op in ["gain_card", "gain_relic"]:
 				var grid := _grid(body)
 				for candidate in _array(option.get("candidates", {}).get(str(index))):

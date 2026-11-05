@@ -80,10 +80,12 @@ func _reward_and_services(suffix: String) -> void:
 				if option.enabled and str(option.option_id) != "leave":
 					shell.press("event:" + str(option.option_id))
 					break
-			for option in options:
-				_check(shell.page.button_uids().has("event:option:leave" if option.option_id == "leave" else "event:" + str(option.option_id)), "event preselection retains every candidate")
+			_check(shell.page.button_uids().has("selection:cancel") and shell.page.button_uids().has("event:confirm"), "event preselection shows a reversible confirmation")
 			await _save("event-selected-" + suffix)
 			_check(_helpers.fingerprint(shell.session) == fingerprint, "event browsing is read-only")
+			shell.press("selection:cancel")
+			for option in options:
+				_check(shell.page.button_uids().has("event:option:leave" if option.option_id == "leave" else "event:" + str(option.option_id)), "event return restores every candidate")
 			shell.press("event:option:leave")
 			shell.press("event:confirm")
 		else:

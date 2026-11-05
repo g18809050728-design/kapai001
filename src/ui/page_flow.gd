@@ -861,7 +861,7 @@ func _event_action(event: Dictionary, option: Dictionary) -> Dictionary:
 	for index in range(effects.size()):
 		var effect: Dictionary = effects[index]
 		var op: String = str(effect.get("op", ""))
-		var needs_selection: bool = op in ["upgrade_card", "remove_card"]
+		var needs_selection: bool = op in ["upgrade_card", "remove_card"] and not effect.get("all_eligible", false)
 		if op == "gain_card" and not effect.has("card_id"):
 			needs_selection = _array(frozen.get(str(index))).size() > 1
 		if needs_selection:
