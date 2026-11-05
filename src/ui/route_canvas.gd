@@ -46,5 +46,12 @@ func _draw() -> void:
 				continue
 			var a: Vector2 = positions[source]
 			var b: Vector2 = positions[str(next_id)]
-			var active := source == current or reachable.has(str(next_id))
-			draw_line(a, b, UiStyle.GREEN if active else Color("b9c5b9"), 3 if active else 1.5, true)
+			var destination := str(next_id)
+			if source == current and reachable.has(destination):
+				draw_line(a, b, UiStyle.GOLD, 4.0, true)
+			elif destination == current and str(node.get("status", "")) == "completed":
+				draw_line(a, b, Color("96ab93"), 2.5, true)
+			elif str(node.get("status", "")) == "completed":
+				draw_line(a, b, Color("bdc9ba"), 1.5, true)
+			else:
+				draw_line(a, b, Color("e3e0d2"), 1.0, true)

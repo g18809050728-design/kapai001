@@ -39,6 +39,26 @@ func run() -> Array[String]:
 		"hover popup avoids covering the hovered card"
 	)
 	_check(card.tooltip_text == "", "card native tooltip is suppressed")
+	card.disabled = true
+	card.set_meta("disabled_reason", "专注不足：需要 2，当前 1")
+	var unavailable_point := _point(card, Vector2(85, 80))
+	_mouse_button(unavailable_point, true)
+	_mouse_button(unavailable_point, false)
+	await _frames()
+	_check(_battle().display_snapshot().panel.is_empty(), "clicking a disabled card does not open its introduction")
+	_check(_battle()._feedback_text.contains("专注不足"), "disabled card click shows the exact reason")
+	_check(_fingerprint() == original and _battle().selection_snapshot().card_id.is_empty(), "disabled click preserves state, RNG and selection")
+	var hand_index := 0
+	for index in _battle().view.hand.size():
+		if str(_battle().view.hand[index].card_id) == str(card.card_data.card_id):
+			hand_index = index
+			break
+	_key(KEY_1 + hand_index)
+	await _frames()
+	_check(_battle().display_snapshot().panel.is_empty(), "numeric activation of a disabled card does not open its introduction")
+	_check(_battle()._feedback_text.contains("专注不足") and _fingerprint() == original, "numeric activation shows the reason without changing state")
+	card.disabled = false
+	card.set_meta("disabled_reason", "")
 	var detail_before := _fingerprint()
 	_key(KEY_I)
 	await _frames()
@@ -183,6 +203,22 @@ func run() -> Array[String]:
 		"small-window stage remains inside viewport"
 	)
 	_check(Rect2(Vector2.ZERO, Vector2(960, 640)).encloses(_battle()._buttons["battle:end_turn"].get_global_rect()), "end turn remains fixed and visible")
+	var compact_id := str(_battle().view.hand[0].card_id) if not _battle().view.hand.is_empty() else ""
+	var compact_card: Button = _battle()._buttons.get("card:" + compact_id)
+	if compact_card != null:
+		compact_card.disabled = true
+		compact_card.set_meta("disabled_reason", "专注不足：需要 3，当前 0")
+		var compact_index := 0
+		for index in _battle().view.hand.size():
+			if str(_battle().view.hand[index].card_id) == compact_id:
+				compact_index = index
+				break
+		_key(KEY_1 + compact_index)
+		await _frames()
+		_check(_battle().display_snapshot().panel.is_empty(), "compact numeric activation does not inspect a disabled card")
+		_check(_battle()._feedback_text.contains("专注不足"), "compact numeric activation shows the disabled reason")
+		compact_card.disabled = false
+		compact_card.set_meta("disabled_reason", "")
 	_shell.get_tree().root.size = old_size
 	print(
 		"G7_POINTER_EVIDENCE=",

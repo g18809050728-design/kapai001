@@ -1,9 +1,16 @@
 class_name BattleScreen
 extends UiPage
 
+signal result_presentation_finished
+
 var preview_callback: Callable = Callable()
-var animation_enabled: bool = true
+var animation_enabled: bool = true:
+	set(value):
+		animation_enabled = value
+		if not value and _presentation != null:
+			_finish_event_presentation()
 var speed_scale: float = 1.0
+const EFFECT_SPEED := 4.0
 
 var _animator: BattleEventAnimator
 var _feedback_text: String = ""
@@ -44,20 +51,58 @@ var _hover_pinned := false
 var _compact_layout := false
 var _battle_layout_size := Vector2.ZERO
 var _battle_resize_pending := false
+var _previous_card_centers: Dictionary = {}
+var _previous_target_centers: Dictionary = {}
+var _effect_zone_centers: Dictionary = {}
+var _task_meters: Dictionary = {}
+var _presentation: BattlePresentation
+var _result_pending := false
+var _result_events_done := false
+
+
+func effect_speed() -> float:
+	return maxf(speed_scale, 0.05) * EFFECT_SPEED
 
 
 func _init() -> void:
 	_animator = BattleEventAnimator.new()
 	_animator.event_presented.connect(_on_event_presented)
+	_animator.queue_finished.connect(_on_event_queue_finished)
+	_presentation = BattlePresentation.new(self)
+
+
+func _exit_tree() -> void:
+	_presentation.finish()
+
+
+func _finish_event_presentation() -> void:
+	_presentation.finish()
+	if _result_pending:
+		_result_pending = false
+		result_presentation_finished.emit()
+
+
+func _on_event_queue_finished() -> void:
+	if _result_pending:
+		_result_events_done = true
+	else:
+		_finish_event_presentation()
 
 
 func _process(delta: float) -> void:
 	super._process(delta)
 	_animator.advance(delta)
+	if _result_pending:
+		if _result_events_done and not _presentation.is_animating():
+			_finish_event_presentation()
+		return
+	if not is_inside_tree():
+		return
 	_update_pointer(delta)
 
 
 func render(data: Dictionary) -> void:
+	_presentation.finish()
 	var next_view := data.duplicate(true)
 	var next_revision := int(next_view.get("revision", -1))
 	var next_choice := _choice_dict(next_view.get("pending_choice"))
@@ -66,6 +111,8 @@ func render(data: Dictionary) -> void:
 		_choice_selected_ids.clear()
 	_choice_id_seen = next_choice_id
 	if next_revision != _revision_seen and next_revision >= 0:
+		_remember_effect_origins()
+		_presentation.capture_hand(self)
 		_hover_pinned = false
 		_selected_card_id = ""
 		_selected_unit_id = ""
@@ -81,11 +128,12 @@ func render(data: Dictionary) -> void:
 	_submitted_revision = -2
 	view = next_view
 	_render_battle()
+	_presentation.release_unused.call_deferred()
 
 
 func consume_events(events: Array, run_id: String, revision: int) -> void:
 	_animator.animation_enabled = animation_enabled
-	_animator.speed_scale = speed_scale
+	_animator.speed_scale = effect_speed()
 	var snapshots: Dictionary = {}
 	for entry in _array(view.get("event_log")):
 		if str(entry.get("run_id", "")) == run_id and int(entry.get("revision", -1)) == revision:
@@ -95,7 +143,30 @@ func consume_events(events: Array, run_id: String, revision: int) -> void:
 		var event: Variant = events[ordinal]
 		var index: int = int(event.get("index", ordinal)) if event is Dictionary else event.index
 		presented.append(snapshots.get(index, event))
+	presented = _animator.unseen_events(presented, run_id, revision)
+	_presentation.prepare(presented)
 	_animator.play(presented, run_id, revision)
+
+
+func present_result(events: Array, event_log: Array, run_id: String, revision: int) -> void:
+	_finish_event_presentation()
+	_remember_effect_origins()
+	var departing: Array = []
+	for raw in events:
+		var event: Dictionary = _animator._event_dictionary(raw, 0)
+		if str(event.type) in ["card_played", "card_resolved", "card_discarded", "card_exhausted"]:
+			departing.append(_presentation.card_id(event))
+	_presentation.capture_hand(self, departing)
+	view.event_log = event_log.duplicate(true)
+	_result_pending = true
+	_result_events_done = false
+	close_card_preview()
+	if is_instance_valid(_hover_panel):
+		_hover_panel.visible = false
+	if is_instance_valid(_aim):
+		_aim.visible = false
+	_apply_lock_state()
+	consume_events(events, run_id, revision)
 
 
 func is_locked() -> bool:
@@ -147,6 +218,9 @@ func display_snapshot() -> Dictionary:
 		"feedback": _feedback_text,
 		"panel": _panel_text,
 		"seen_events": _animator.seen_snapshot(),
+		"active_visual_effects": _active_visual_effect_count(),
+		"queued_draws": _animator.pending_type_count("card_drawn"),
+		"pending_hand_cards": _presentation.pending_ids(),
 	}
 
 
@@ -157,6 +231,8 @@ func apply_gating(results: Dictionary) -> void:
 
 
 func action_draft(uid: String) -> Dictionary:
+	if _result_pending:
+		return {}
 	var draft := super.action_draft(uid)
 	if is_locked() and str(draft.get("type", "")) not in ["confirm_choice", "ui.new_run"]:
 		return {}
@@ -183,6 +259,7 @@ func _reset_stage() -> void:
 	_dragging = false
 	_hand_cards.clear()
 	_target_frames.clear()
+	_task_meters.clear()
 	_buttons.clear()
 	_drafts.clear()
 	_last_action.clear()
@@ -210,11 +287,15 @@ func _fit_stage() -> void:
 func _rebuild_for_size() -> void:
 	_battle_resize_pending = false
 	if is_inside_tree() and size != _battle_layout_size:
+		if _result_pending:
+			_finish_event_presentation()
+			return
+		_presentation.finish()
 		_render_battle()
 
 
 func _input(event: InputEvent) -> void:
-	if not is_visible_in_tree() or not is_instance_valid(_stage):
+	if _result_pending or not is_visible_in_tree() or not is_instance_valid(_stage):
 		return
 	if is_instance_valid(_card_preview) and event is InputEventKey and event.pressed and event.keycode == KEY_ESCAPE:
 		close_card_preview()
@@ -294,25 +375,34 @@ func _input(event: InputEvent) -> void:
 	):
 		var index := int(event.keycode) - int(KEY_1)
 		if _compact_layout and index < _array(view.get("hand")).size():
-			press("card:" + str(view.hand[index].card_id))
+			var compact_card: Button = _buttons.get("card:" + str(view.hand[index].card_id))
+			if compact_card != null and compact_card.disabled:
+				_show_disabled_card_feedback(compact_card)
+			else:
+				press("card:" + str(view.hand[index].card_id))
 			get_viewport().set_input_as_handled()
 			return
 		if index < _hand_cards.size():
 			var card := _hand_cards[index]
 			if card.disabled:
-				_feedback_text = str(card.get_meta("disabled_reason", "无法打出"))
-				_feedback_label.text = _feedback_text
-				_feedback_label.visible = true
+				_show_disabled_card_feedback(card)
 			else:
 				_on_card_pressed(str(card.card_data.get("card_id", "")))
 			get_viewport().set_input_as_handled()
 		return
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed:
+			if _compact_layout:
+				for entry in _array(view.get("hand")):
+					var compact_card: Button = _buttons.get("card:" + str(entry.get("card_id", "")))
+					if compact_card != null and compact_card.disabled and compact_card.is_visible_in_tree() and compact_card.get_global_rect().has_point(event.position) and compact_card.get_parent().get_parent().get_global_rect().has_point(event.position):
+						_show_disabled_card_feedback(compact_card)
+						get_viewport().set_input_as_handled()
+						return
 			var card := _card_at(event.position)
 			if card != null:
 				if card.disabled:
-					_open_detail_for_uid("card:" + str(card.card_data.get("card_id", "")))
+					_show_disabled_card_feedback(card)
 				else:
 					_pointer_card = card
 					_pointer_start = event.position
@@ -334,9 +424,11 @@ func _input(event: InputEvent) -> void:
 
 
 func _card_at(point: Vector2) -> BattleCard:
-	if is_instance_valid(_hovered_card) and _hovered_card.contains_global(point):
+	if is_instance_valid(_hovered_card) and not _presentation.is_pending(str(_hovered_card.card_data.get("card_id", ""))) and _hovered_card.contains_global(point):
 		return _hovered_card
 	for index in range(_hand_cards.size() - 1, -1, -1):
+		if _presentation.is_pending(str(_hand_cards[index].card_data.get("card_id", ""))):
+			continue
 		if _hand_cards[index].contains_home(point):
 			return _hand_cards[index]
 	return null
@@ -362,6 +454,8 @@ func _update_pointer(delta: float) -> void:
 		if not hover_uid.is_empty() and audio != null:
 			audio.play_ui("ui_hover")
 	for card in _hand_cards:
+		if card.get_meta("card_in_flight", false) or card.get_meta("draw_pending", false):
+			continue
 		var raised := card == _hovered_card or card.selected
 		var destination := card.home_position + (Vector2(0, -60) if raised else Vector2.ZERO)
 		card.position = card.position.lerp(destination, minf(1, delta * 18))
@@ -883,7 +977,7 @@ func _sync_card_visuals() -> void:
 		card.selected = str(card.card_data.get("card_id", "")) == _selected_card_id
 		card.queue_redraw()
 	for uid in _target_frames:
-		var frame: Panel = _target_frames[uid]
+		var frame: Control = _target_frames[uid]
 		var active: bool = (
 			not _buttons[uid].disabled
 			and (not _selected_card_id.is_empty() or not _selected_unit_id.is_empty())
@@ -898,7 +992,7 @@ func _sync_card_visuals() -> void:
 
 
 func _on_card_pressed(card_id: String) -> void:
-	if is_locked():
+	if is_locked() or _presentation.is_pending(card_id):
 		return
 	if audio != null:
 		audio.play_ui("ui_click")
@@ -1070,6 +1164,11 @@ func _error_text(value: Variant) -> String:
 
 
 func _apply_lock_state() -> void:
+	if _result_pending:
+		for uid in button_uids():
+			_buttons[uid].disabled = true
+			_buttons[uid].focus_mode = Control.FOCUS_NONE
+		return
 	if not is_locked():
 		if not _panel_text.is_empty():
 			for uid in button_uids():
@@ -1193,6 +1292,7 @@ func _set_enabled(uid: String, enabled: bool, reason: String) -> void:
 	if not _buttons.has(uid):
 		return
 	_buttons[uid].disabled = not enabled
+	_buttons[uid].set_meta("disabled_reason", "" if enabled else reason)
 	if _buttons[uid] is BattleCard:
 		var card: BattleCard = _buttons[uid]
 		card.set_meta("disabled_reason", "" if enabled else reason)
@@ -1207,6 +1307,10 @@ func _render_from_local() -> void:
 
 
 func _on_event_presented(event: Dictionary, text: String) -> void:
+	_present_event_visual(event)
+	if str(event.get("type", "")) == "card_drawn":
+		var queued := _animator.pending_type_count("card_drawn")
+		text += " · 正在抽牌 · 排队中：%d 张" % queued
 	if audio != null:
 		if str(event.get("type", "")) == "ddl_ticked":
 			audio.play_deadline(int(_dict(event.get("data")).get("after", 0)))
@@ -1216,6 +1320,157 @@ func _on_event_presented(event: Dictionary, text: String) -> void:
 	if is_instance_valid(_feedback_label):
 		_feedback_label.text = text
 		_feedback_label.visible = true
+
+
+func _show_disabled_card_feedback(card: Button) -> void:
+	_feedback_text = str(card.get_meta("disabled_reason", "无法打出"))
+	if _feedback_text.is_empty():
+		_feedback_text = "当前无法打出这张牌"
+	if is_instance_valid(_feedback_label):
+		_feedback_label.text = _feedback_text
+		_feedback_label.visible = true
+
+
+func _active_visual_effect_count() -> int:
+	if not is_instance_valid(_stage):
+		return 0
+	var count := 0
+	for child in _stage.get_children():
+		if child.has_meta("battle_event_effect") and not child.is_queued_for_deletion():
+			count += 1
+	return count
+
+
+func _clear_event_visuals() -> void:
+	if not is_instance_valid(_stage):
+		return
+	for child in _stage.get_children():
+		if child.has_meta("battle_event_effect"):
+			_stage.remove_child(child)
+			child.queue_free()
+
+
+func _present_event_visual(event: Dictionary) -> void:
+	if not animation_enabled or not is_instance_valid(_stage):
+		return
+	var kind := str(event.get("type", ""))
+	var data := _dict(event.get("data"))
+	match kind:
+		"card_played":
+			_presentation.show_played(event)
+		"card_drawn":
+			_presentation.draw(event)
+		"card_discarded":
+			_presentation.move_out(event, str(data.get("to_zone", "discard")))
+		"card_exhausted":
+			_presentation.move_out(event, "exhaust")
+		"card_resolved":
+			var destination := str(data.get("destination", "discard"))
+			if destination in ["discard", "exhaust"]:
+				_presentation.move_out(event, destination)
+		"completion_applied":
+			_show_completion_feedback(event, data)
+		"pressure_applied":
+			_show_pressure_feedback(event, data)
+
+
+func _show_completion_feedback(event: Dictionary, data: Dictionary) -> void:
+	var targets := _array(event.get("target_ids"))
+	if targets.is_empty():
+		return
+	var target_id := "task:" + str(targets[0])
+	var target: Control = _target_frames.get(target_id)
+	var center: Vector2 = _stage_center(target) if is_instance_valid(target) else _previous_target_centers.get(target_id, _stage.size * Vector2(0.72, 0.35))
+	var parts: Array[String] = []
+	var work_lost := maxi(0, int(data.get("work_before", 0)) - int(data.get("work_after", 0)))
+	var shield_lost := maxi(0, int(data.get("shield_before", 0)) - int(data.get("shield_after", 0)))
+	if work_lost > 0:
+		parts.append("完成量 −%d" % work_lost)
+	if shield_lost > 0:
+		parts.append("屏障 −%d" % shield_lost)
+	if parts.is_empty():
+		return
+	_presentation.animate_meter(str(targets[0]), data)
+	_float_event_text("  ·  ".join(parts), center, Color("ffe2a1"), 1.05)
+	if is_instance_valid(target):
+		var old_color: Color = target.modulate
+		var flash := target.create_tween()
+		_presentation._tweens.append(flash)
+		flash.tween_property(target, "modulate", Color("ffe2a1"), 0.16 / effect_speed())
+		flash.tween_property(target, "modulate", old_color, 0.74 / effect_speed())
+
+
+func _show_pressure_feedback(event: Dictionary, data: Dictionary) -> void:
+	var targets := _array(event.get("target_ids"))
+	var target_id := str(targets[0]) if not targets.is_empty() else ""
+	var control: Control = _target_frames.get("unit:" + target_id)
+	if control == null:
+		control = _buttons.get("battle:resources") if _compact_layout else null
+	var center := _stage_center(control) if is_instance_valid(control) else _stage.size * Vector2(0.12, 0.40)
+	var vitality_lost := maxi(0, int(data.get("vitality_before", 0)) - int(data.get("vitality_after", 0)))
+	var relaxed := maxi(0, int(data.get("relax_before", 0)) - int(data.get("relax_after", 0)))
+	var parts: Array[String] = []
+	if vitality_lost > 0:
+		parts.append("精力 −%d" % vitality_lost)
+	if relaxed > 0:
+		parts.append("放松抵消 %d" % relaxed)
+	if not parts.is_empty():
+		_float_event_text(" · ".join(parts), center, Color("ffb8a4"))
+
+
+func _float_event_text(text: String, center: Vector2, color: Color, seconds: float = 0.4) -> void:
+	var feedback := Label.new()
+	feedback.text = text
+	feedback.add_theme_font_size_override("font_size", 22)
+	feedback.add_theme_color_override("font_color", color)
+	feedback.add_theme_color_override("font_outline_color", Color("192f35"))
+	feedback.add_theme_constant_override("outline_size", 5)
+	feedback.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	feedback.size = Vector2(300, 38)
+	feedback.position = center - Vector2(feedback.size.x * 0.5, 36)
+	feedback.z_index = 181
+	feedback.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	feedback.set_meta("battle_event_effect", true)
+	_stage.add_child(feedback)
+	var tween := feedback.create_tween()
+	_presentation._tweens.append(tween)
+	tween.set_trans(Tween.TRANS_QUAD)
+	tween.set_ease(Tween.EASE_OUT)
+	var duration := seconds / effect_speed()
+	tween.tween_property(feedback, "position", feedback.position - Vector2(0, 26), duration)
+	tween.parallel().tween_property(feedback, "modulate:a", 0.0, duration * 0.35).set_delay(duration * 0.65)
+	tween.tween_callback(feedback.queue_free)
+
+
+func _hand_card_control(card_id: String) -> Control:
+	return _buttons.get("card:" + card_id)
+
+
+func _remember_effect_origins() -> void:
+	_previous_card_centers.clear()
+	_previous_target_centers.clear()
+	if not is_instance_valid(_stage):
+		return
+	for uid in _buttons:
+		if str(uid).begins_with("card:"):
+			_previous_card_centers[str(uid).trim_prefix("card:")] = _stage_center(_buttons[uid])
+	for uid in _target_frames:
+		_previous_target_centers[uid] = _stage_center(_target_frames[uid])
+	for zone in ["draw", "discard", "exhaust"]:
+		var control: Control = _buttons.get("battle:" + zone)
+		if is_instance_valid(control):
+			_effect_zone_centers[zone] = _stage_center(control)
+
+
+func _zone_center(zone: String, fallback: Vector2) -> Vector2:
+	var control: Variant = _buttons.get("battle:" + zone)
+	if control is Control and is_instance_valid(control):
+		return _stage_center(control)
+	return _effect_zone_centers.get(zone, fallback)
+
+
+func _stage_center(control: Control) -> Vector2:
+	return _stage.get_global_transform_with_canvas().affine_inverse() * (control.get_global_transform_with_canvas() * (control.size * 0.5))
 
 
 func _toggle_animation() -> void:
@@ -1230,7 +1485,7 @@ func _cycle_speed() -> void:
 	if is_locked():
 		return
 	speed_scale = 1.0 if speed_scale >= 2.0 else (2.0 if speed_scale >= 1.5 else 1.5)
-	_animator.speed_scale = speed_scale
+	_animator.speed_scale = effect_speed()
 	_render_from_local()
 
 

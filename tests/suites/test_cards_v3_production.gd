@@ -249,6 +249,7 @@ func run() -> Array[String]:
 							shell.refresh()
 							battle = shell.page as BattleScreen
 							break
+				battle._finish_event_presentation()
 				var first_card := ""
 				for uid in battle._buttons:
 					var value: Variant = battle._buttons[uid]

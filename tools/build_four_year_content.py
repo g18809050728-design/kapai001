@@ -1,6 +1,7 @@
 """Rebuild the isolated four-year package and its exact map specification."""
 from pathlib import Path
 import copy
+from itertools import combinations, product
 import json
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -25,7 +26,7 @@ RAW = [
 ]
 
 
-def maps():
+def maps(legacy=False):
     result = []
     for year, layers in enumerate(RAW, 1):
         nodes = []
@@ -50,17 +51,74 @@ def maps():
                 targets = [n for n in targets if n["subtype"] in ["LAB", "L"]]
             if year == 4 and layer == 6:
                 targets = [n for n in targets if n["subtype"] == ("ST" if sub == "ST" else "N")]
-            node["next"] = [n["key"] for n in targets]
+            node["_allowed_next"] = targets
+        if legacy:
+            for node in nodes:
+                node["next"] = [target["key"] for target in node["_allowed_next"]]
+        else:
+            for layer in range(1, len(layers)):
+                sources = [n for n in nodes if n["layer"] == layer]
+                destinations = [n for n in nodes if n["layer"] == layer + 1]
+                _assign_bounded_routes(sources, destinations)
+        for node in nodes:
+            node.pop("_allowed_next", None)
         assert len(nodes) == [20, 28, 36, 40][year - 1]
         reachable = {n["key"] for n in nodes if n["layer"] == 1}
         for node in nodes:
             if node["key"] in reachable:
                 reachable.update(node["next"])
+            assert legacy or len(node["next"]) <= 2, node["key"]
             assert node["next"] or node["subtype"] == "B", node["key"]
         assert reachable == {n["key"] for n in nodes}, f"Unreachable nodes in year {year}"
         result.append(dict(year=year, title=["适应与基础", "分流与专业", "冲刺与选择", "收束与毕业"][year - 1],
                            layers=len(layers), relic_layers=[3, 9] if year < 3 else [4, 11], nodes=nodes))
     return result
+
+
+def _assign_bounded_routes(sources, destinations):
+    """Choose nearby legal successors while giving every next-layer node an entry."""
+    if not destinations:
+        for source in sources:
+            source["next"] = []
+        return
+
+    candidates = []
+    for source_index, source in enumerate(sources):
+        allowed = source.get("_allowed_next", [])
+        options = []
+        for size in range(1, min(2, len(allowed)) + 1):
+            options.extend(combinations(allowed, size))
+        if not options:
+            raise ValueError(f"No legal next node for {source['key']}")
+        candidates.append(options)
+
+    best = None
+    best_score = float("inf")
+    for selection in product(*candidates):
+        covered = {target["key"] for branch in selection for target in branch}
+        if covered != {target["key"] for target in destinations}:
+            continue
+        score = 0.0
+        for source_index, branch in enumerate(selection):
+            source_position = (source_index + 0.5) / len(sources)
+            score += (2 - len(branch)) * 1.2
+            for target in branch:
+                target_index = destinations.index(target)
+                target_position = (target_index + 0.5) / len(destinations)
+                score += abs(source_position - target_position)
+        branches = [tuple(target["key"] for target in branch) for branch in selection]
+        for index, branch in enumerate(branches):
+            if branch in branches[:index]:
+                score += 3.0
+        if score < best_score:
+            best = selection
+            best_score = score
+
+    if best is None:
+        layer = sources[0]["layer"] if sources else 0
+        raise ValueError(f"No fully reachable route for layer {layer}")
+    for source, branch in zip(sources, best):
+        source["next"] = [target["key"] for target in branch]
 
 
 def main():
@@ -142,20 +200,35 @@ def main():
         write(dst / "definitions" / (name + ".json"), value)
     write(dst / "manifests/campus_four_year.json", manifest)
     schedule = maps()
+    legacy_next = {node["key"]: node["next"] for year in maps(legacy=True) for node in year["nodes"]}
     # Code constant is validated together with the run's full frozen topology.
     (ROOT / "src/run/campaign_map.gd").write_text(
-        'class_name CampaignMap\nextends RefCounted\n\nconst MAPS = ' + json.dumps(schedule, ensure_ascii=False, indent="\t") + '''
+        'class_name CampaignMap\nextends RefCounted\n\nconst LEGACY_NEXT = ' + json.dumps(legacy_next, ensure_ascii=False, indent="\t") + '\n\nconst MAPS = ' + json.dumps(schedule, ensure_ascii=False, indent="\t") + '''
 
-static func build(run_id: String) -> Array[RunNodeState]:
+static func build(run_id: String, legacy: bool = false) -> Array[RunNodeState]:
 	var result: Array[RunNodeState] = []
 	for map in MAPS:
 		for item in map.nodes:
 			var next_ids: Array[String] = []
-			for key in item.next:
+			for key in (LEGACY_NEXT[item.key] if legacy else item.next):
 				next_ids.append(run_id + "|" + key)
 			result.append(RunNodeState.create({"node_id": run_id + "|" + item.key,
 				"term": map.year, "layer": item.layer, "kind": item.kind, "next_ids": next_ids}))
 	return result
+
+static func matches_legacy(nodes: Array, run_id: String) -> bool:
+	if nodes.size() != LEGACY_NEXT.size():
+		return false
+	for node in nodes:
+		var key := str(node.node_id).get_slice("|", 1)
+		if not LEGACY_NEXT.has(key):
+			return false
+		var expected: Array[String] = []
+		for next_key in LEGACY_NEXT[key]:
+			expected.append(run_id + "|" + str(next_key))
+		if node.next_ids != expected:
+			return false
+	return true
 
 static func metadata(node_id: String) -> Dictionary:
 	var key := node_id.get_slice("|", 1)
@@ -168,7 +241,7 @@ static func metadata(node_id: String) -> Dictionary:
     doc = ROOT / "docs/四大地图复杂化设计方案.md"
     text = '''# 四大地图复杂化设计方案
 
-版本：v1.0｜日期：2026-11-04｜状态：四学年实现基线；试玩数值，未代表 G0/G8 验收。
+版本：v1.1｜日期：2026-11-05｜状态：当前位置分岔实现基线；试玩拓扑，未代表 G0/G8 验收。
 
 用户已明确：**不分学期，学年作为基础单位，只需要四张图**。本版完整替代八学期候选；旧稿已清理，追溯见[清理记录](执行记录核对与旧版清理_20261104.md)。实现授权与未豁免出口见[根计划 §0.6](../实施计划与验收基线.md)，工程与命令见[实现设计](plans/2026-11-04-four-year-design.md)。
 
@@ -189,7 +262,7 @@ static func metadata(node_id: String) -> Dictionary:
 
 N 普通战斗；E 事件；S 商店；EL 精英；K 竞赛（精英战斗）；R 休息；L 图书馆；LAB 实验室；C 社团；T 导师；I 实习/招聘；ST 剧情/毕设服务；B 学年 Boss。
 
-默认连接下一层全部节点；以下各表逐节点列出精确后继。实验室通常只通向竞赛/精英，普通作业通向休息，风险战斗通向导师；同层的社团/实习提供可达的服务支线。每图保留无精英通路、商店/事件/休息；每层最多三候选，所有候选节点均可达。没有隐藏节点，不用随机失败封路。服务在现有 rest codec 上运行，由节点元数据标识具体语义，画面显示真实服务名称。
+下表逐节点列出精确后继；每站最多两个，不连向同层或跳层节点。具体选择根据当前位置与地图横向位置分岔，而非每个当前位置都指向下一整层。实验室仅通向竞赛/精英等允许节点，图书馆、风险战斗和服务路线继续遵守既有类型限制。每图保留无精英通路、商店/事件/休息；每层最多三候选，124 个候选均从首层可达。没有隐藏节点，不用随机失败封路。服务在现有 rest codec 上运行，由节点元数据标识具体语义，画面显示真实服务名称。
 
 '''
     for m in schedule:
@@ -210,7 +283,7 @@ N 普通战斗；E 事件；S 商店；EL 精英；K 竞赛（精英战斗）；
 
 独立入口 campus_four_year 默认供四年模式使用；campus_v3 与 campus_mvp 保留历史切片。内部 term 字段仅为存档兼容，在四年模式表示学年 1–4，所有可见文案使用学年。
 
-节点图由 tools/build_four_year_content.py 与本文精确表共同生成，改图时重新生成并运行拓扑、整条路径、冻结奖励/读档、幂等及旧版回归。图片提示词不等于图片落盘；占位音效不等于正式音乐完成。具体完成状态、真实测试命令和剩余工作以本轮实现记录为准。
+节点图由 tools/build_four_year_content.py 与本文精确表共同生成，改图时重新生成并运行拓扑、整条路径、冻结奖励/读档、幂等及旧版回归。新开局采用本表分岔图；既有四年存档精确匹配完整旧图时保留冻结路线，混合或损坏拓扑仍拒绝。FY-UX-024 的代码、实际命令与两尺寸截图见[实施记录](战斗地图反馈实施记录_20261105.md)。图片提示词不等于图片落盘；占位音效不等于正式音乐完成。
 '''
     doc.write_text(text, encoding="utf-8")
 

@@ -23,6 +23,7 @@ var _restart_confirmation := false
 var _advance_paused := false
 var _submitted_scope := ""
 var _business_notice := ""
+var _waiting_for_battle := false
 
 
 func _ready() -> void:
@@ -89,7 +90,7 @@ func show_screen(screen: String) -> void:
 
 
 func refresh() -> void:
-	if not is_instance_valid(_host):
+	if _waiting_for_battle or not is_instance_valid(_host):
 		return
 	if _ui_screen.is_empty() and not _advance_paused and last_error == null:
 		_advance_completed_nodes()
@@ -221,6 +222,13 @@ func _set_battle_frame(battle: bool) -> void:
 	_notice_label.custom_minimum_size.y = 28 if battle else 32
 	if battle:
 		_frame_panel.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
+		# Apply the hidden header/footer and panel style before the hand is
+		# built; a deferred container sort would otherwise replace it mid-draw.
+		_frame_margin.notification(Container.NOTIFICATION_SORT_CHILDREN)
+		_frame_column.notification(Container.NOTIFICATION_SORT_CHILDREN)
+		_frame_panel.notification(Container.NOTIFICATION_SORT_CHILDREN)
+		if page != null:
+			page.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	else:
 		_frame_panel.remove_theme_stylebox_override("panel")
 
@@ -327,7 +335,7 @@ func press(uid: String) -> bool:
 
 
 func submit_action(draft: Dictionary) -> void:
-	if draft.is_empty():
+	if _waiting_for_battle or draft.is_empty():
 		return
 	var type := str(draft.get("type", ""))
 	var payload: Dictionary = draft.get("payload", {})
@@ -360,6 +368,11 @@ func submit_action(draft: Dictionary) -> void:
 	if current.run is Dictionary and result.view.run is Dictionary and not _business_notice.is_empty():
 		_business_notice += " · 金钱 %+d · 精力 %+d" % [int(result.view.run.money) - int(current.run.money), int(result.view.run.vitality) - int(current.run.vitality)]
 	_action_notice(result)
+	if page is BattleScreen and page.animation_enabled and not result.view.battle is Dictionary and not result.events.is_empty():
+		_waiting_for_battle = true
+		page.result_presentation_finished.connect(_finish_battle_transition, CONNECT_ONE_SHOT)
+		page.present_result(result.events, result.view.event_log, str(result.view.run_id), result.revision)
+		return
 	refresh()
 	_present_card_gain(current, result.view)
 	var final_view := session.get_view()
@@ -377,6 +390,11 @@ func submit_action(draft: Dictionary) -> void:
 				audio.play_deadline(int(event.data.get("after", 0)))
 			else:
 				audio.play_event(str(event.type))
+
+
+func _finish_battle_transition() -> void:
+	_waiting_for_battle = false
+	refresh()
 
 
 func _has_previous_run() -> bool:

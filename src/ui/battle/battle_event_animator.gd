@@ -44,16 +44,37 @@ func seen_snapshot() -> Array:
 	return _seen.keys()
 
 
+func unseen_events(events: Array, run_id: String, revision: int) -> Array:
+	var result: Array = []
+	for ordinal in events.size():
+		var event := _event_dictionary(events[ordinal], ordinal)
+		if not _seen.has("%s/%s/%s" % [run_id, revision, event.index]):
+			result.append(event)
+	return result
+
+
 func advance(delta: float) -> void:
-	if _queue.is_empty():
+	if _remaining <= 0.0 and _queue.is_empty():
 		return
 	_remaining -= delta * maxf(speed_scale, 0.05)
 	if _remaining <= 0.0:
-		_present_next()
+		if _queue.is_empty():
+			_remaining = 0.0
+			queue_finished.emit()
+		else:
+			_present_next()
 
 
 func pending_count() -> int:
 	return _queue.size()
+
+
+func pending_type_count(type: String) -> int:
+	var count := 0
+	for item in _queue:
+		if str(item.event.get("type", "")) == type:
+			count += 1
+	return count
 
 
 func _present_next() -> void:
@@ -61,9 +82,8 @@ func _present_next() -> void:
 		return
 	var item: Dictionary = _queue.pop_front()
 	_present(item.event)
-	_remaining = maxf(base_delay, 0.0)
-	if _queue.is_empty():
-		queue_finished.emit()
+	var kind := str(item.event.get("type", ""))
+	_remaining = maxf(base_delay, 0.56 if kind == "card_drawn" else (0.52 if kind in ["card_discarded", "card_resolved", "card_exhausted"] else (1.12 if kind == "completion_applied" else (0.42 if kind == "pressure_applied" else 0.0))))
 
 
 func _finish_immediately() -> void:

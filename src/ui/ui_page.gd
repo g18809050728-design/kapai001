@@ -174,6 +174,8 @@ func add_card(parent: Node, uid: String, id: String, detail: Dictionary, caption
 	_buttons[uid] = card
 	card.pressed.connect(callback)
 	card.inspect_requested.connect(func(value: UiOfferCard, immediate: bool):
+		if value.get_meta("draw_pending", false) or value.get_meta("card_in_flight", false):
+			return
 		if _preview_pinned or _restoring_preview_focus:
 			return
 		if not immediate and is_instance_valid(_card_preview) and _card_preview.get_global_rect().grow(8).has_point(get_global_mouse_position()):

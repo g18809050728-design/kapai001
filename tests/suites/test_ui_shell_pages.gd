@@ -227,7 +227,13 @@ func drive_semester(shell: GameShell, claim_first: bool = false) -> void:
 
 
 func finish_battle(shell: GameShell) -> bool:
+	# This helper tests rule routing synchronously. Animation sequencing has
+	# its own real-time suite; skip it before issuing the next fixture command.
+	if shell.page.has_method("_finish_event_presentation"):
+		shell.page.call("_finish_event_presentation")
 	for step in range(24):
+		if shell.page.has_method("_finish_event_presentation"):
+			shell.page.call("_finish_event_presentation")
 		var view := shell.session.get_view()
 		if view.screen != &"battle":
 			return true

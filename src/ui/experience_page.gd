@@ -8,6 +8,7 @@ var _local_focus := ""
 var _layout_size := Vector2.ZERO
 var _resize_pending := false
 var _map_focus_scope := ""
+var _settings_status: Label
 
 
 func _notification(what: int) -> void:
@@ -360,16 +361,26 @@ func _quote(offer: Dictionary, option: String, target: String = "", replacement:
 
 
 func _render_map() -> void:
-	reset_page("校园路线 · " + str(view.get("year_title", "")), "✓ 已完成　◆ 当前　○ 可进入　· 不可达 · 连接线对应真实路线")
+	var current_id := str(view.get("current_node_id", ""))
+	var current_title := "起点"
+	for node in _array(view.get("nodes")):
+		if str(node.get("node_id", "")) == current_id:
+			current_title = _map_node_title(node)
+			break
+	var reachable_preview := _array(view.get("reachable_node_ids"))
+	reset_page(
+		"校园路线 · " + str(view.get("year_title", "")),
+		"◆ 当前位置：" + current_title + "　·　" + str(reachable_preview.size()) + " 个相邻后继可选　·　○ 可进入　·　仅沿当前位置连线前进"
+	)
 	_run_bar(header)
 	var nodes := _array(view.get("nodes"))
 	var reachable := _array(view.get("reachable_node_ids"))
 	var selected := str(_choices.get("map:node", ""))
 	var canvas := UiRouteCanvas.new()
-	canvas.configure(nodes, reachable, str(view.get("current_node_id", "")))
+	canvas.configure(nodes, reachable, current_id)
 	canvas.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	body.add_child(canvas)
-	var description := "选择可达节点，查看预告后进入。"
+	var description := "选择当前位置直接相连的下一站，查看预告后进入。"
 	for node in nodes:
 		var id := str(node.node_id)
 		var current := id == str(view.get("current_node_id", ""))
@@ -394,13 +405,15 @@ func _render_map() -> void:
 		if id == selected:
 			description = caption + " · " + button.tooltip_text.replace("\n", " ")
 	canvas.arrange.call_deferred()
-	var scope := "%s|%s|%s|%s" % [view.get("run_id", ""), view.get("term", 0), view.get("current_node_id", ""), view.get("revision", -1)]
-	if scope != _map_focus_scope and not reachable.is_empty():
-		_focus_map_after_layout.call_deferred(weakref(canvas), str(reachable[0]), _render_generation, scope)
+	var scope := "%s|%s|%s|%s" % [view.get("run_id", ""), view.get("term", 0), current_id, view.get("revision", -1)]
+	if scope != _map_focus_scope:
+		var focus_id := str(reachable[0]) if not reachable.is_empty() else current_id
+		if not focus_id.is_empty():
+			_focus_map_after_layout.call_deferred(weakref(canvas), focus_id, _render_generation, scope)
 	var row := _bottom(description)
 	var enter := add_button(row, "map:enter", "进入此节点", _action("enter_node", {"node_id": selected}))
 	enter.disabled = not reachable.has(selected)
-	add_button(row, "map:current", "回到当前位置", {}, func(): _focus_map(canvas, str(view.get("current_node_id", "")) if not str(view.get("current_node_id", "")).is_empty() else str(reachable[0]) if not reachable.is_empty() else ""))
+	add_button(row, "map:current", "回到当前位置", {}, func(): _focus_map(canvas, current_id if not current_id.is_empty() else str(reachable[0]) if not reachable.is_empty() else ""))
 	add_button(row, "map:abandon", "放弃本局", {}, func(): _confirm_abandon = not _confirm_abandon; refresh_local())
 	if _confirm_abandon:
 		add_button(row, "map:abandon_confirm", "确认放弃本局", _action("abandon_run", {"confirmed": true}))
@@ -624,16 +637,73 @@ func _render_settings() -> void:
 	var panel := add_panel(body)
 	body.move_child(panel.get_parent(), 0)
 	add_text(panel, "文字与动态", 23)
-	var sizes := add_row(panel)
+	var applied := _dict(view.get("settings")).get("presentation", _presentation) as Dictionary
+	add_text(panel, "当前生效：" + _presentation_summary(applied), 16, UiStyle.MUTED)
+	var sizes := _setting_row(panel, "字号")
 	for value in [100, 125, 150]:
 		add_button(sizes, "settings:text:" + str(value), ("✓ " if _presentation.text_scale == value else "") + "%d%%" % value, {}, func(): _presentation.text_scale = value; refresh_local())
-	var motion := add_row(panel)
+	var motion := _setting_row(panel, "动态")
 	for value in [false, true]:
 		add_button(motion, "settings:motion:" + str(value), "减少动态" if value else "标准动态", {}, func(): _presentation.reduced_motion = value; refresh_local())
-	var speed := add_row(panel)
+	var speed := _setting_row(panel, "倍速")
 	for value in [0, 1, 2, 4]:
 		add_button(speed, "settings:speed:" + str(value), "动画关闭" if value == 0 else "动画 ×%d" % value, {}, func(): _presentation.animation_speed = value; refresh_local())
+	if bool(_presentation.reduced_motion):
+		add_text(panel, "已选减少动态：应用后动画关闭，倍速偏好仍保留。", 15, UiStyle.MUTED)
+	for value in [100, 125, 150]:
+		_mark_setting("settings:text:" + str(value), int(_presentation.text_scale) == value)
+	for value in [false, true]:
+		_mark_setting("settings:motion:" + str(value), bool(_presentation.reduced_motion) == value)
+		_mark_setting("settings:autosave:" + str(value), _autosave == value)
+		_mark_setting("settings:audio:" + str(value), bool(_audio_settings.get("muted", false)) == value)
+	for value in [0, 1, 2, 4]:
+		_mark_setting("settings:speed:" + str(value), int(_presentation.animation_speed) == value)
+	_settings_status = add_text(footer, "", 15)
+	footer.move_child(_settings_status, 0)
+	_update_settings_status()
+	for slider in body.find_children("Volume*", "HSlider", true, false):
+		slider.value_changed.connect(func(_value): _update_settings_status())
 	_drafts["settings:apply"] = func(): return _ui("save_settings", {"autosave": _autosave, "audio": _audio_settings.duplicate(true), "presentation": _presentation.duplicate(true)})
+
+
+func _setting_row(parent: Node, title: String) -> HBoxContainer:
+	var row := add_row(parent)
+	var label := add_text(row, title, 16)
+	label.custom_minimum_size.x = 48
+	label.size_flags_horizontal = Control.SIZE_FILL
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	return row
+
+
+func _mark_setting(uid: String, selected: bool) -> void:
+	if not _buttons.has(uid):
+		return
+	var button: Button = _buttons[uid]
+	button.text = button.text.trim_prefix("● ").trim_prefix("○ ").trim_prefix("✓ ")
+	button.toggle_mode = true
+	button.set_pressed_no_signal(selected)
+	button.set_meta("setting_selected", selected)
+	if selected:
+		button.text = "✓ " + button.text + " · 已选"
+		var style := UiStyle.box(Color("e6ecdf"))
+		style.border_color = UiStyle.GOLD
+		style.set_border_width_all(2)
+		for state in ["normal", "hover", "pressed", "hover_pressed"]:
+			button.add_theme_stylebox_override(state, style)
+
+
+func _presentation_summary(value: Dictionary) -> String:
+	var speed := int(value.get("animation_speed", 1))
+	var motion := bool(value.get("reduced_motion", false))
+	var animation := "动画关闭（减少动态）" if motion else ("动画关闭" if speed == 0 else "动画 ×%d" % speed)
+	return "字号 %d%% · %s · %s" % [int(value.get("text_scale", 100)), "减少动态" if motion else "标准动态", animation]
+
+
+func _update_settings_status() -> void:
+	var applied := _dict(view.get("settings"))
+	var changed := _autosave != bool(applied.get("autosave", true)) or _audio_settings != _dict(applied.get("audio")) or _presentation != _dict(applied.get("presentation"))
+	_settings_status.text = ("尚未应用：点击“应用设置”保存修改。" if changed else "已生效") + " · 已保存：自动保存%s · 声音%s" % ["开启" if bool(applied.get("autosave", true)) else "关闭", "静音" if bool(_dict(applied.get("audio")).get("muted", false)) else "开启"]
+	_settings_status.add_theme_color_override("font_color", UiStyle.RED if changed else UiStyle.MUTED)
 
 
 func _render_summary() -> void:

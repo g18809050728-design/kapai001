@@ -273,8 +273,8 @@ func _tasks() -> void:
 			)
 		var remaining := int(task.get("work_remaining", 0))
 		var maximum := maxi(1, int(task.get("work_max", 1)))
-		_bar(stage, Rect2(x, 447, width, 10), float(remaining) / maximum, Color("b77566"))
-		_text(
+		var fill := _bar(stage, Rect2(x, 447, width, 10), float(remaining) / maximum, Color("b77566"))
+		var work_label := _text(
 			stage,
 			Rect2(x - 4, 463, width + 8, 24),
 			"剩余 %s/%s  ·  屏障 %s" % [remaining, maximum, task.get("shield", 0)],
@@ -282,6 +282,7 @@ func _tasks() -> void:
 			LIGHT,
 			HORIZONTAL_ALIGNMENT_CENTER
 		)
+		page._task_meters[id] = {"fill": fill, "label": work_label, "width": width, "maximum": maximum}
 		var target := _button(Rect2(x, 207, width, 236), "task:" + id, "", {}, page._bind_task(id))
 		_transparent_target(target)
 		page._target_frames["task:" + id] = frame
@@ -701,10 +702,11 @@ func _rect(parent: Node, bounds: Rect2, color: Color) -> void:
 	parent.add_child(rect)
 
 
-func _bar(parent: Node, bounds: Rect2, fraction: float, color: Color) -> void:
+func _bar(parent: Node, bounds: Rect2, fraction: float, color: Color) -> Control:
 	_rect(parent, bounds, Color("1c3034"))
 	_rect(
 		parent,
 		Rect2(bounds.position, Vector2(bounds.size.x * clampf(fraction, 0, 1), bounds.size.y)),
 		color
 	)
+	return parent.get_child(parent.get_child_count() - 1) as Control

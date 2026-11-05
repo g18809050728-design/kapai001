@@ -209,7 +209,8 @@ func validate(relic_slots: int = 2147483647) -> Array[String]:
 	if max_term > 8 or nodes.is_empty():
 		issues.append("run map term count is invalid")
 		return issues
-	var expected := CampaignMap.build(run_id) if CampaignService.enabled(self) else RunMap.build(run_id, max_term)
+	var legacy_map := CampaignService.enabled(self) and CampaignMap.matches_legacy(nodes, run_id)
+	var expected := CampaignMap.build(run_id, legacy_map) if CampaignService.enabled(self) else RunMap.build(run_id, max_term)
 	if CampaignService.enabled(self):
 		CampaignService.validate(campaign, issues)
 		if not campaign.get("pending", {}).is_empty():
