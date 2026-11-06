@@ -83,9 +83,23 @@ func _hover_window() -> void:
 	page._hover_panel = panel
 	page._hover_title = _text(panel, Rect2(Vector2(16, 10) * factor, Vector2(328, 28) * factor), "", roundi(19 * factor), LIGHT)
 	page._hover_meta = _text(panel, Rect2(Vector2(16, 38) * factor, Vector2(328, 22) * factor), "", roundi(13 * factor), Color("e5c894"))
-	page._hover_body = _text(panel, Rect2(Vector2(16, 62) * factor, Vector2(328, 82) * factor), "", roundi(14 * factor), LIGHT)
+	page._hover_scroll = ScrollContainer.new()
+	page._hover_scroll.position = Vector2(16, 62) * factor
+	page._hover_scroll.size = Vector2(328, 82) * factor
+	page._hover_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	page._hover_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	page._hover_scroll.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	page._hover_scroll.mouse_force_pass_scroll_events = true
+	panel.add_child(page._hover_scroll)
+	page._hover_body = Label.new()
+	page._hover_body.add_theme_font_size_override("font_size", roundi(16 * factor))
+	page._hover_body.add_theme_color_override("font_color", LIGHT)
+	page._hover_body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	page._hover_body.max_lines_visible = 4
-	_text(panel, Rect2(Vector2(16, 146) * factor, Vector2(328, 16) * factor), "I 查看详情", roundi(12 * factor), Color("f1c989"), HORIZONTAL_ALIGNMENT_RIGHT)
+	page._hover_body.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	page._hover_body.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	page._hover_scroll.add_child(page._hover_body)
+	page._hover_hint = _text(panel, Rect2(Vector2(16, 146) * factor, Vector2(328, 16) * factor), "I 查看详情", roundi(12 * factor), Color("f1c989"), HORIZONTAL_ALIGNMENT_RIGHT)
 
 
 func _header() -> void:
@@ -273,8 +287,8 @@ func _tasks() -> void:
 			)
 		var remaining := int(task.get("work_remaining", 0))
 		var maximum := maxi(1, int(task.get("work_max", 1)))
-		_bar(stage, Rect2(x, 447, width, 10), float(remaining) / maximum, Color("b77566"))
-		_text(
+		var fill := _bar(stage, Rect2(x, 447, width, 10), float(remaining) / maximum, Color("b77566"))
+		var work_label := _text(
 			stage,
 			Rect2(x - 4, 463, width + 8, 24),
 			"剩余 %s/%s  ·  屏障 %s" % [remaining, maximum, task.get("shield", 0)],
@@ -282,6 +296,7 @@ func _tasks() -> void:
 			LIGHT,
 			HORIZONTAL_ALIGNMENT_CENTER
 		)
+		page._task_meters[id] = {"fill": fill, "label": work_label, "width": width, "maximum": maximum}
 		var target := _button(Rect2(x, 207, width, 236), "task:" + id, "", {}, page._bind_task(id))
 		_transparent_target(target)
 		page._target_frames["task:" + id] = frame
@@ -701,10 +716,11 @@ func _rect(parent: Node, bounds: Rect2, color: Color) -> void:
 	parent.add_child(rect)
 
 
-func _bar(parent: Node, bounds: Rect2, fraction: float, color: Color) -> void:
+func _bar(parent: Node, bounds: Rect2, fraction: float, color: Color) -> Control:
 	_rect(parent, bounds, Color("1c3034"))
 	_rect(
 		parent,
 		Rect2(bounds.position, Vector2(bounds.size.x * clampf(fraction, 0, 1), bounds.size.y)),
 		color
 	)
+	return parent.get_child(parent.get_child_count() - 1) as Control

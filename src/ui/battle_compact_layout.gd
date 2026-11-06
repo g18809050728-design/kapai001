@@ -4,7 +4,7 @@ extends RefCounted
 
 func build(page: BattleScreen) -> void:
 	page._reset_stage()
-	page.reset_page("第%d回合 · DDL 剩余%d次完整轮末" % [int(page.view.get("round_index", 0)), int(page.view.get("ddl", 0))], "点击手牌，再点击目标 · 横向查看手牌 · 悬停 / I 查看详情", true)
+	page.reset_page("第%d回合 · DDL 剩余%d次完整轮末" % [int(page.view.get("round_index", 0)), int(page.view.get("ddl", 0))], "点击手牌，再点击目标 · 停留查看介绍 · I 固定 / 取消", true)
 	page._stage = Control.new()
 	page._stage.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	page._stage.size = page.size
@@ -106,11 +106,20 @@ func _targets(page: BattleScreen, parent: Node) -> void:
 	for task in page.view.get("tasks", []):
 		var id := str(task.task_id)
 		var column := page.add_panel(grid)
+		page._target_frames["task:" + id] = column.get_parent()
 		column.get_parent().size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		page.add_text(column, UiStyle.label(str(task.definition_id)), 18)
 		if int(task.get("phase_count", 1)) > 1:
 			page.add_text(column, "第%s/%s阶段 · %s" % [task.get("phase_index", 1), task.get("phase_count", 1), UiStyle.label(str(task.get("phase_key", "")))], 14)
-		page.add_text(column, "剩余%s/%s · 屏障%s\n%s\n%s" % [task.work_remaining, task.work_max, task.shield, page._intent_text(task.get("intent_snapshot", {})), descriptions._task_status_text(id)], 14)
+		var meter := ProgressBar.new()
+		meter.max_value = maxi(1, int(task.work_max))
+		meter.value = task.work_remaining
+		meter.show_percentage = false
+		meter.custom_minimum_size = Vector2(0, 10)
+		column.add_child(meter)
+		var work_label := page.add_text(column, "剩余 %s/%s · 屏障 %s" % [task.work_remaining, task.work_max, task.shield], 14)
+		page._task_meters[id] = {"fill": meter, "label": work_label, "maximum": maxi(1, int(task.work_max))}
+		page.add_text(column, "%s\n%s" % [page._intent_text(task.get("intent_snapshot", {})), descriptions._task_status_text(id)], 14)
 		var actions := page.add_row(column)
 		page.add_button(actions, "task:" + id, "选择目标", {}, page._bind_task(id))
 		page.add_button(actions, "detail:task:" + id, "详情", {}, func(): page._open_detail_for_uid("task:" + id))

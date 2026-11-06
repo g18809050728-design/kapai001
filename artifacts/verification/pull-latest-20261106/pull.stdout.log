@@ -1,0 +1,18 @@
+Auto-merging docs/局流程契约.md
+CONFLICT (content): Merge conflict in docs/局流程契约.md
+Auto-merging docs/界面层契约.md
+CONFLICT (content): Merge conflict in docs/界面层契约.md
+Auto-merging src/ui/battle_screen.gd
+CONFLICT (content): Merge conflict in src/ui/battle_screen.gd
+Auto-merging src/ui/experience_page.gd
+Auto-merging src/ui/game_shell.gd
+CONFLICT (content): Merge conflict in src/ui/game_shell.gd
+Auto-merging src/ui/page_flow.gd
+Auto-merging tests/run_ui_tests.gd
+CONFLICT (content): Merge conflict in tests/run_ui_tests.gd
+Auto-merging tests/suites/test_ui_followup.gd
+Auto-merging 动作或者图片描述/需求台账.md
+CONFLICT (content): Merge conflict in 动作或者图片描述/需求台账.md
+Auto-merging 实施计划与验收基线.md
+CONFLICT (content): Merge conflict in 实施计划与验收基线.md
+Automatic merge failed; fix conflicts and then commit the result.

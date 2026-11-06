@@ -20,6 +20,14 @@ func run() -> Array[String]:
 		return _failures
 	_run = created.data.state
 	_rng = created.data.rng_states
+	var legacy := _run.copy_for_write()
+	legacy.nodes = CampaignMap.build(legacy.run_id, true)
+	_check(legacy.validate().is_empty(), "legacy frozen map remains valid without editing player saves")
+	var legacy_roundtrip := RunCodec.decode(legacy.to_dictionary(), _catalog)
+	_check(legacy_roundtrip.ok and legacy_roundtrip.data.to_dictionary() == legacy.to_dictionary(), "legacy map codec preserves its exact original topology")
+	var damaged_legacy := legacy.copy_for_write()
+	damaged_legacy.nodes[0].next_ids.clear()
+	_check(not damaged_legacy.validate().is_empty(), "mixed or damaged topology is rejected by both map baselines")
 	_check(_run.relics.is_empty(), "no legacy starter relic")
 	_check(_run.nodes.size() == 124, "124 frozen candidate nodes")
 	for year in range(1, 5):
@@ -32,10 +40,24 @@ func run() -> Array[String]:
 		var reached := {}
 		for node in _run.nodes:
 			if node.term != year: continue
+			_check(node.next_ids.size() <= 2, "year %d node offers at most two next stops" % year)
+			for next_id in node.next_ids:
+				var destination := _run.find_node(str(next_id))
+				_check(destination != null and destination.layer == node.layer + 1, "year %d route edge advances one layer" % year)
 			if node.layer == 1: reached[node.node_id] = true
 			if reached.has(node.node_id):
 				for next_id in node.next_ids: reached[next_id] = true
 		_check(reached.size() == count, "all candidate nodes are reachable in year %d" % year)
+		for layer in range(1, CampaignMap.MAPS[year - 1].layers):
+			var sources := _run.nodes.filter(func(node): return node.term == year and node.layer == layer)
+			var destinations := _run.nodes.filter(func(node): return node.term == year and node.layer == layer + 1)
+			if sources.size() > 1 and destinations.size() > 1:
+				var distinct_routes := {}
+				for source in sources:
+					var ids: Array = source.next_ids.duplicate()
+					ids.sort()
+					distinct_routes["|".join(ids)] = true
+				_check(distinct_routes.size() > 1, "year %d layer %d routes differ by current position" % [year, layer])
 	for i in 500:
 		if not _run.outcome.is_empty():
 			break

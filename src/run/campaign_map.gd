@@ -1,6 +1,515 @@
 class_name CampaignMap
 extends RefCounted
 
+const LEGACY_NEXT = {
+	"y1l1s0": [
+		"y1l2s0",
+		"y1l2s1"
+	],
+	"y1l2s0": [
+		"y1l3s0"
+	],
+	"y1l2s1": [
+		"y1l3s0"
+	],
+	"y1l3s0": [
+		"y1l4s0",
+		"y1l4s1"
+	],
+	"y1l4s0": [
+		"y1l5s0"
+	],
+	"y1l4s1": [
+		"y1l5s0"
+	],
+	"y1l5s0": [
+		"y1l6s0"
+	],
+	"y1l6s0": [
+		"y1l7s0",
+		"y1l7s1"
+	],
+	"y1l7s0": [
+		"y1l8s0",
+		"y1l8s1",
+		"y1l8s2"
+	],
+	"y1l7s1": [
+		"y1l8s0",
+		"y1l8s1",
+		"y1l8s2"
+	],
+	"y1l8s0": [
+		"y1l9s0",
+		"y1l9s1"
+	],
+	"y1l8s1": [
+		"y1l9s0",
+		"y1l9s1"
+	],
+	"y1l8s2": [
+		"y1l9s0",
+		"y1l9s1"
+	],
+	"y1l9s0": [
+		"y1l10s0",
+		"y1l10s1"
+	],
+	"y1l9s1": [
+		"y1l10s0",
+		"y1l10s1"
+	],
+	"y1l10s0": [
+		"y1l11s0",
+		"y1l11s1"
+	],
+	"y1l10s1": [
+		"y1l11s0",
+		"y1l11s1"
+	],
+	"y1l11s0": [
+		"y1l12s0"
+	],
+	"y1l11s1": [
+		"y1l12s0"
+	],
+	"y1l12s0": [],
+	"y2l1s0": [
+		"y2l2s0",
+		"y2l2s1",
+		"y2l2s2"
+	],
+	"y2l1s1": [
+		"y2l2s0",
+		"y2l2s1",
+		"y2l2s2"
+	],
+	"y2l2s0": [
+		"y2l3s0",
+		"y2l3s1"
+	],
+	"y2l2s1": [
+		"y2l3s0",
+		"y2l3s1"
+	],
+	"y2l2s2": [
+		"y2l3s0",
+		"y2l3s1"
+	],
+	"y2l3s0": [
+		"y2l4s0",
+		"y2l4s1",
+		"y2l4s2"
+	],
+	"y2l3s1": [
+		"y2l4s1",
+		"y2l4s2"
+	],
+	"y2l4s0": [
+		"y2l5s0",
+		"y2l5s2"
+	],
+	"y2l4s1": [
+		"y2l5s1",
+		"y2l5s2"
+	],
+	"y2l4s2": [
+		"y2l5s1",
+		"y2l5s2"
+	],
+	"y2l5s0": [
+		"y2l6s0"
+	],
+	"y2l5s1": [
+		"y2l6s0"
+	],
+	"y2l5s2": [
+		"y2l6s0"
+	],
+	"y2l6s0": [
+		"y2l7s0",
+		"y2l7s1"
+	],
+	"y2l7s0": [
+		"y2l8s0",
+		"y2l8s1",
+		"y2l8s2"
+	],
+	"y2l7s1": [
+		"y2l8s0",
+		"y2l8s1",
+		"y2l8s2"
+	],
+	"y2l8s0": [
+		"y2l9s0",
+		"y2l9s1",
+		"y2l9s2"
+	],
+	"y2l8s1": [
+		"y2l9s0",
+		"y2l9s1",
+		"y2l9s2"
+	],
+	"y2l8s2": [
+		"y2l9s0",
+		"y2l9s1",
+		"y2l9s2"
+	],
+	"y2l9s0": [
+		"y2l10s0",
+		"y2l10s1",
+		"y2l10s2"
+	],
+	"y2l9s1": [
+		"y2l10s1",
+		"y2l10s2"
+	],
+	"y2l9s2": [
+		"y2l10s0",
+		"y2l10s2"
+	],
+	"y2l10s0": [
+		"y2l11s0"
+	],
+	"y2l10s1": [
+		"y2l11s1"
+	],
+	"y2l10s2": [
+		"y2l11s1"
+	],
+	"y2l11s0": [
+		"y2l12s0"
+	],
+	"y2l11s1": [
+		"y2l12s0"
+	],
+	"y2l12s0": [],
+	"y3l1s0": [
+		"y3l2s0",
+		"y3l2s1",
+		"y3l2s2"
+	],
+	"y3l1s1": [
+		"y3l2s0",
+		"y3l2s1",
+		"y3l2s2"
+	],
+	"y3l2s0": [
+		"y3l3s0",
+		"y3l3s1",
+		"y3l3s2"
+	],
+	"y3l2s1": [
+		"y3l3s0",
+		"y3l3s1",
+		"y3l3s2"
+	],
+	"y3l2s2": [
+		"y3l3s0",
+		"y3l3s1",
+		"y3l3s2"
+	],
+	"y3l3s0": [
+		"y3l4s0",
+		"y3l4s1",
+		"y3l4s2"
+	],
+	"y3l3s1": [
+		"y3l4s1",
+		"y3l4s2"
+	],
+	"y3l3s2": [
+		"y3l4s0"
+	],
+	"y3l4s0": [
+		"y3l5s0",
+		"y3l5s2"
+	],
+	"y3l4s1": [
+		"y3l5s1",
+		"y3l5s2"
+	],
+	"y3l4s2": [
+		"y3l5s1",
+		"y3l5s2"
+	],
+	"y3l5s0": [
+		"y3l6s0",
+		"y3l6s1",
+		"y3l6s2"
+	],
+	"y3l5s1": [
+		"y3l6s0",
+		"y3l6s1",
+		"y3l6s2"
+	],
+	"y3l5s2": [
+		"y3l6s0",
+		"y3l6s1",
+		"y3l6s2"
+	],
+	"y3l6s0": [
+		"y3l7s0"
+	],
+	"y3l6s1": [
+		"y3l7s0"
+	],
+	"y3l6s2": [
+		"y3l7s0"
+	],
+	"y3l7s0": [
+		"y3l8s0",
+		"y3l8s1"
+	],
+	"y3l8s0": [
+		"y3l9s0",
+		"y3l9s1",
+		"y3l9s2"
+	],
+	"y3l8s1": [
+		"y3l9s0",
+		"y3l9s1",
+		"y3l9s2"
+	],
+	"y3l9s0": [
+		"y3l10s0",
+		"y3l10s1",
+		"y3l10s2"
+	],
+	"y3l9s1": [
+		"y3l10s0",
+		"y3l10s1",
+		"y3l10s2"
+	],
+	"y3l9s2": [
+		"y3l10s0",
+		"y3l10s1",
+		"y3l10s2"
+	],
+	"y3l10s0": [
+		"y3l11s0",
+		"y3l11s1",
+		"y3l11s2"
+	],
+	"y3l10s1": [
+		"y3l11s1",
+		"y3l11s2"
+	],
+	"y3l10s2": [
+		"y3l11s0"
+	],
+	"y3l11s0": [
+		"y3l12s0",
+		"y3l12s2"
+	],
+	"y3l11s1": [
+		"y3l12s1",
+		"y3l12s2"
+	],
+	"y3l11s2": [
+		"y3l12s1",
+		"y3l12s2"
+	],
+	"y3l12s0": [
+		"y3l13s0",
+		"y3l13s1",
+		"y3l13s2"
+	],
+	"y3l12s1": [
+		"y3l13s0",
+		"y3l13s1",
+		"y3l13s2"
+	],
+	"y3l12s2": [
+		"y3l13s0",
+		"y3l13s1",
+		"y3l13s2"
+	],
+	"y3l13s0": [
+		"y3l14s0"
+	],
+	"y3l13s1": [
+		"y3l14s0"
+	],
+	"y3l13s2": [
+		"y3l14s0"
+	],
+	"y3l14s0": [],
+	"y4l1s0": [
+		"y4l2s0",
+		"y4l2s1",
+		"y4l2s2"
+	],
+	"y4l1s1": [
+		"y4l2s0",
+		"y4l2s1",
+		"y4l2s2"
+	],
+	"y4l1s2": [
+		"y4l2s0",
+		"y4l2s1",
+		"y4l2s2"
+	],
+	"y4l2s0": [
+		"y4l3s1",
+		"y4l3s2"
+	],
+	"y4l2s1": [
+		"y4l3s0",
+		"y4l3s1",
+		"y4l3s2"
+	],
+	"y4l2s2": [
+		"y4l3s0",
+		"y4l3s1",
+		"y4l3s2"
+	],
+	"y4l3s0": [
+		"y4l4s0",
+		"y4l4s1",
+		"y4l4s2"
+	],
+	"y4l3s1": [
+		"y4l4s1",
+		"y4l4s2"
+	],
+	"y4l3s2": [
+		"y4l4s0",
+		"y4l4s2"
+	],
+	"y4l4s0": [
+		"y4l5s1",
+		"y4l5s2"
+	],
+	"y4l4s1": [
+		"y4l5s0",
+		"y4l5s1"
+	],
+	"y4l4s2": [
+		"y4l5s0",
+		"y4l5s1"
+	],
+	"y4l5s0": [
+		"y4l6s0",
+		"y4l6s1",
+		"y4l6s2"
+	],
+	"y4l5s1": [
+		"y4l6s0",
+		"y4l6s1",
+		"y4l6s2"
+	],
+	"y4l5s2": [
+		"y4l6s0",
+		"y4l6s1",
+		"y4l6s2"
+	],
+	"y4l6s0": [
+		"y4l7s0",
+		"y4l7s2"
+	],
+	"y4l6s1": [
+		"y4l7s1"
+	],
+	"y4l6s2": [
+		"y4l7s1"
+	],
+	"y4l7s0": [
+		"y4l8s0",
+		"y4l8s1",
+		"y4l8s2"
+	],
+	"y4l7s1": [
+		"y4l8s0",
+		"y4l8s1",
+		"y4l8s2"
+	],
+	"y4l7s2": [
+		"y4l8s0",
+		"y4l8s1",
+		"y4l8s2"
+	],
+	"y4l8s0": [
+		"y4l9s0",
+		"y4l9s1",
+		"y4l9s2"
+	],
+	"y4l8s1": [
+		"y4l9s0",
+		"y4l9s1",
+		"y4l9s2"
+	],
+	"y4l8s2": [
+		"y4l9s0",
+		"y4l9s1",
+		"y4l9s2"
+	],
+	"y4l9s0": [
+		"y4l10s0",
+		"y4l10s1",
+		"y4l10s2"
+	],
+	"y4l9s1": [
+		"y4l10s0",
+		"y4l10s1",
+		"y4l10s2"
+	],
+	"y4l9s2": [
+		"y4l10s0",
+		"y4l10s1",
+		"y4l10s2"
+	],
+	"y4l10s0": [
+		"y4l11s0",
+		"y4l11s1",
+		"y4l11s2"
+	],
+	"y4l10s1": [
+		"y4l11s0",
+		"y4l11s2"
+	],
+	"y4l10s2": [
+		"y4l11s0"
+	],
+	"y4l11s0": [
+		"y4l12s1",
+		"y4l12s2"
+	],
+	"y4l11s1": [
+		"y4l12s0",
+		"y4l12s1"
+	],
+	"y4l11s2": [
+		"y4l12s0",
+		"y4l12s1"
+	],
+	"y4l12s0": [
+		"y4l13s0",
+		"y4l13s1",
+		"y4l13s2"
+	],
+	"y4l12s1": [
+		"y4l13s0",
+		"y4l13s1",
+		"y4l13s2"
+	],
+	"y4l12s2": [
+		"y4l13s0",
+		"y4l13s1",
+		"y4l13s2"
+	],
+	"y4l13s0": [
+		"y4l14s0"
+	],
+	"y4l13s1": [
+		"y4l14s0"
+	],
+	"y4l13s2": [
+		"y4l14s0"
+	],
+	"y4l14s0": []
+}
+
 const MAPS = [
 	{
 		"year": 1,
@@ -111,8 +620,7 @@ const MAPS = [
 				"kind": "normal",
 				"next": [
 					"y1l8s0",
-					"y1l8s1",
-					"y1l8s2"
+					"y1l8s1"
 				]
 			},
 			{
@@ -123,7 +631,6 @@ const MAPS = [
 				"title": "英语小作文B",
 				"kind": "normal",
 				"next": [
-					"y1l8s0",
 					"y1l8s1",
 					"y1l8s2"
 				]
@@ -136,8 +643,7 @@ const MAPS = [
 				"title": "室友夜谈",
 				"kind": "event",
 				"next": [
-					"y1l9s0",
-					"y1l9s1"
+					"y1l9s0"
 				]
 			},
 			{
@@ -160,7 +666,6 @@ const MAPS = [
 				"title": "社团活动",
 				"kind": "rest",
 				"next": [
-					"y1l9s0",
 					"y1l9s1"
 				]
 			},
@@ -172,8 +677,7 @@ const MAPS = [
 				"title": "校园商店",
 				"kind": "shop",
 				"next": [
-					"y1l10s0",
-					"y1l10s1"
+					"y1l10s0"
 				]
 			},
 			{
@@ -196,8 +700,7 @@ const MAPS = [
 				"title": "实验预习",
 				"kind": "normal",
 				"next": [
-					"y1l11s0",
-					"y1l11s1"
+					"y1l11s0"
 				]
 			},
 			{
@@ -263,8 +766,7 @@ const MAPS = [
 				"kind": "normal",
 				"next": [
 					"y2l2s0",
-					"y2l2s1",
-					"y2l2s2"
+					"y2l2s1"
 				]
 			},
 			{
@@ -275,7 +777,6 @@ const MAPS = [
 				"title": "英语文献",
 				"kind": "normal",
 				"next": [
-					"y2l2s0",
 					"y2l2s1",
 					"y2l2s2"
 				]
@@ -288,8 +789,7 @@ const MAPS = [
 				"title": "专业分流宣讲",
 				"kind": "event",
 				"next": [
-					"y2l3s0",
-					"y2l3s1"
+					"y2l3s0"
 				]
 			},
 			{
@@ -312,7 +812,6 @@ const MAPS = [
 				"title": "社团换届",
 				"kind": "rest",
 				"next": [
-					"y2l3s0",
 					"y2l3s1"
 				]
 			},
@@ -325,8 +824,7 @@ const MAPS = [
 				"kind": "shop",
 				"next": [
 					"y2l4s0",
-					"y2l4s1",
-					"y2l4s2"
+					"y2l4s1"
 				]
 			},
 			{
@@ -361,8 +859,7 @@ const MAPS = [
 				"title": "学科竞赛",
 				"kind": "elite",
 				"next": [
-					"y2l5s1",
-					"y2l5s2"
+					"y2l5s1"
 				]
 			},
 			{
@@ -431,8 +928,7 @@ const MAPS = [
 				"kind": "normal",
 				"next": [
 					"y2l8s0",
-					"y2l8s1",
-					"y2l8s2"
+					"y2l8s1"
 				]
 			},
 			{
@@ -443,7 +939,6 @@ const MAPS = [
 				"title": "课程设计",
 				"kind": "normal",
 				"next": [
-					"y2l8s0",
 					"y2l8s1",
 					"y2l8s2"
 				]
@@ -457,8 +952,7 @@ const MAPS = [
 				"kind": "event",
 				"next": [
 					"y2l9s0",
-					"y2l9s1",
-					"y2l9s2"
+					"y2l9s1"
 				]
 			},
 			{
@@ -470,7 +964,6 @@ const MAPS = [
 				"kind": "normal",
 				"next": [
 					"y2l9s0",
-					"y2l9s1",
 					"y2l9s2"
 				]
 			},
@@ -482,7 +975,6 @@ const MAPS = [
 				"title": "社团活动",
 				"kind": "rest",
 				"next": [
-					"y2l9s0",
 					"y2l9s1",
 					"y2l9s2"
 				]
@@ -496,8 +988,7 @@ const MAPS = [
 				"kind": "shop",
 				"next": [
 					"y2l10s0",
-					"y2l10s1",
-					"y2l10s2"
+					"y2l10s1"
 				]
 			},
 			{
@@ -608,8 +1099,7 @@ const MAPS = [
 				"kind": "normal",
 				"next": [
 					"y3l2s0",
-					"y3l2s1",
-					"y3l2s2"
+					"y3l2s1"
 				]
 			},
 			{
@@ -620,7 +1110,6 @@ const MAPS = [
 				"title": "文献阅读",
 				"kind": "normal",
 				"next": [
-					"y3l2s0",
 					"y3l2s1",
 					"y3l2s2"
 				]
@@ -634,8 +1123,7 @@ const MAPS = [
 				"kind": "event",
 				"next": [
 					"y3l3s0",
-					"y3l3s1",
-					"y3l3s2"
+					"y3l3s1"
 				]
 			},
 			{
@@ -647,7 +1135,6 @@ const MAPS = [
 				"kind": "normal",
 				"next": [
 					"y3l3s0",
-					"y3l3s1",
 					"y3l3s2"
 				]
 			},
@@ -659,7 +1146,6 @@ const MAPS = [
 				"title": "实习投递",
 				"kind": "rest",
 				"next": [
-					"y3l3s0",
 					"y3l3s1",
 					"y3l3s2"
 				]
@@ -673,8 +1159,7 @@ const MAPS = [
 				"kind": "shop",
 				"next": [
 					"y3l4s0",
-					"y3l4s1",
-					"y3l4s2"
+					"y3l4s1"
 				]
 			},
 			{
@@ -720,8 +1205,7 @@ const MAPS = [
 				"title": "学科竞赛",
 				"kind": "elite",
 				"next": [
-					"y3l5s1",
-					"y3l5s2"
+					"y3l5s1"
 				]
 			},
 			{
@@ -745,8 +1229,7 @@ const MAPS = [
 				"kind": "rest",
 				"next": [
 					"y3l6s0",
-					"y3l6s1",
-					"y3l6s2"
+					"y3l6s1"
 				]
 			},
 			{
@@ -758,7 +1241,6 @@ const MAPS = [
 				"kind": "rest",
 				"next": [
 					"y3l6s0",
-					"y3l6s1",
 					"y3l6s2"
 				]
 			},
@@ -770,7 +1252,6 @@ const MAPS = [
 				"title": "招聘会",
 				"kind": "rest",
 				"next": [
-					"y3l6s0",
 					"y3l6s1",
 					"y3l6s2"
 				]
@@ -829,8 +1310,7 @@ const MAPS = [
 				"kind": "normal",
 				"next": [
 					"y3l9s0",
-					"y3l9s1",
-					"y3l9s2"
+					"y3l9s1"
 				]
 			},
 			{
@@ -841,7 +1321,6 @@ const MAPS = [
 				"title": "文献阅读",
 				"kind": "normal",
 				"next": [
-					"y3l9s0",
 					"y3l9s1",
 					"y3l9s2"
 				]
@@ -855,8 +1334,7 @@ const MAPS = [
 				"kind": "event",
 				"next": [
 					"y3l10s0",
-					"y3l10s1",
-					"y3l10s2"
+					"y3l10s1"
 				]
 			},
 			{
@@ -868,7 +1346,6 @@ const MAPS = [
 				"kind": "normal",
 				"next": [
 					"y3l10s0",
-					"y3l10s1",
 					"y3l10s2"
 				]
 			},
@@ -880,7 +1357,6 @@ const MAPS = [
 				"title": "实习面试",
 				"kind": "rest",
 				"next": [
-					"y3l10s0",
 					"y3l10s1",
 					"y3l10s2"
 				]
@@ -894,8 +1370,7 @@ const MAPS = [
 				"kind": "shop",
 				"next": [
 					"y3l11s0",
-					"y3l11s1",
-					"y3l11s2"
+					"y3l11s1"
 				]
 			},
 			{
@@ -941,8 +1416,7 @@ const MAPS = [
 				"title": "学科竞赛",
 				"kind": "elite",
 				"next": [
-					"y3l12s1",
-					"y3l12s2"
+					"y3l12s1"
 				]
 			},
 			{
@@ -966,8 +1440,7 @@ const MAPS = [
 				"kind": "rest",
 				"next": [
 					"y3l13s0",
-					"y3l13s1",
-					"y3l13s2"
+					"y3l13s1"
 				]
 			},
 			{
@@ -979,7 +1452,6 @@ const MAPS = [
 				"kind": "rest",
 				"next": [
 					"y3l13s0",
-					"y3l13s1",
 					"y3l13s2"
 				]
 			},
@@ -991,7 +1463,6 @@ const MAPS = [
 				"title": "招聘会",
 				"kind": "rest",
 				"next": [
-					"y3l13s0",
 					"y3l13s1",
 					"y3l13s2"
 				]
@@ -1058,8 +1529,7 @@ const MAPS = [
 				"kind": "normal",
 				"next": [
 					"y4l2s0",
-					"y4l2s1",
-					"y4l2s2"
+					"y4l2s1"
 				]
 			},
 			{
@@ -1071,7 +1541,6 @@ const MAPS = [
 				"kind": "normal",
 				"next": [
 					"y4l2s0",
-					"y4l2s1",
 					"y4l2s2"
 				]
 			},
@@ -1083,7 +1552,6 @@ const MAPS = [
 				"title": "课程作业",
 				"kind": "normal",
 				"next": [
-					"y4l2s0",
 					"y4l2s1",
 					"y4l2s2"
 				]
@@ -1109,8 +1577,7 @@ const MAPS = [
 				"kind": "normal",
 				"next": [
 					"y4l3s0",
-					"y4l3s1",
-					"y4l3s2"
+					"y4l3s1"
 				]
 			},
 			{
@@ -1122,7 +1589,6 @@ const MAPS = [
 				"kind": "event",
 				"next": [
 					"y4l3s0",
-					"y4l3s1",
 					"y4l3s2"
 				]
 			},
@@ -1135,8 +1601,7 @@ const MAPS = [
 				"kind": "shop",
 				"next": [
 					"y4l4s0",
-					"y4l4s1",
-					"y4l4s2"
+					"y4l4s1"
 				]
 			},
 			{
@@ -1195,7 +1660,6 @@ const MAPS = [
 				"title": "小组项目冲刺",
 				"kind": "elite",
 				"next": [
-					"y4l5s0",
 					"y4l5s1"
 				]
 			},
@@ -1208,8 +1672,7 @@ const MAPS = [
 				"kind": "rest",
 				"next": [
 					"y4l6s0",
-					"y4l6s1",
-					"y4l6s2"
+					"y4l6s1"
 				]
 			},
 			{
@@ -1221,7 +1684,6 @@ const MAPS = [
 				"kind": "rest",
 				"next": [
 					"y4l6s0",
-					"y4l6s1",
 					"y4l6s2"
 				]
 			},
@@ -1233,7 +1695,6 @@ const MAPS = [
 				"title": "休息",
 				"kind": "rest",
 				"next": [
-					"y4l6s0",
 					"y4l6s1",
 					"y4l6s2"
 				]
@@ -1281,8 +1742,7 @@ const MAPS = [
 				"kind": "rest",
 				"next": [
 					"y4l8s0",
-					"y4l8s1",
-					"y4l8s2"
+					"y4l8s1"
 				]
 			},
 			{
@@ -1294,7 +1754,6 @@ const MAPS = [
 				"kind": "normal",
 				"next": [
 					"y4l8s0",
-					"y4l8s1",
 					"y4l8s2"
 				]
 			},
@@ -1306,7 +1765,6 @@ const MAPS = [
 				"title": "毕业规划",
 				"kind": "rest",
 				"next": [
-					"y4l8s0",
 					"y4l8s1",
 					"y4l8s2"
 				]
@@ -1320,8 +1778,7 @@ const MAPS = [
 				"kind": "normal",
 				"next": [
 					"y4l9s0",
-					"y4l9s1",
-					"y4l9s2"
+					"y4l9s1"
 				]
 			},
 			{
@@ -1333,7 +1790,6 @@ const MAPS = [
 				"kind": "normal",
 				"next": [
 					"y4l9s0",
-					"y4l9s1",
 					"y4l9s2"
 				]
 			},
@@ -1345,7 +1801,6 @@ const MAPS = [
 				"title": "考研真题",
 				"kind": "normal",
 				"next": [
-					"y4l9s0",
 					"y4l9s1",
 					"y4l9s2"
 				]
@@ -1359,8 +1814,7 @@ const MAPS = [
 				"kind": "event",
 				"next": [
 					"y4l10s0",
-					"y4l10s1",
-					"y4l10s2"
+					"y4l10s1"
 				]
 			},
 			{
@@ -1372,7 +1826,6 @@ const MAPS = [
 				"kind": "normal",
 				"next": [
 					"y4l10s0",
-					"y4l10s1",
 					"y4l10s2"
 				]
 			},
@@ -1384,7 +1837,6 @@ const MAPS = [
 				"title": "延期咨询",
 				"kind": "rest",
 				"next": [
-					"y4l10s0",
 					"y4l10s1",
 					"y4l10s2"
 				]
@@ -1398,8 +1850,7 @@ const MAPS = [
 				"kind": "shop",
 				"next": [
 					"y4l11s0",
-					"y4l11s1",
-					"y4l11s2"
+					"y4l11s1"
 				]
 			},
 			{
@@ -1457,7 +1908,6 @@ const MAPS = [
 				"title": "补考",
 				"kind": "elite",
 				"next": [
-					"y4l12s0",
 					"y4l12s1"
 				]
 			},
@@ -1470,8 +1920,7 @@ const MAPS = [
 				"kind": "rest",
 				"next": [
 					"y4l13s0",
-					"y4l13s1",
-					"y4l13s2"
+					"y4l13s1"
 				]
 			},
 			{
@@ -1483,7 +1932,6 @@ const MAPS = [
 				"kind": "rest",
 				"next": [
 					"y4l13s0",
-					"y4l13s1",
 					"y4l13s2"
 				]
 			},
@@ -1495,7 +1943,6 @@ const MAPS = [
 				"title": "休息",
 				"kind": "rest",
 				"next": [
-					"y4l13s0",
 					"y4l13s1",
 					"y4l13s2"
 				]
@@ -1546,16 +1993,30 @@ const MAPS = [
 	}
 ]
 
-static func build(run_id: String) -> Array[RunNodeState]:
+static func build(run_id: String, legacy: bool = false) -> Array[RunNodeState]:
 	var result: Array[RunNodeState] = []
 	for map in MAPS:
 		for item in map.nodes:
 			var next_ids: Array[String] = []
-			for key in item.next:
+			for key in (LEGACY_NEXT[item.key] if legacy else item.next):
 				next_ids.append(run_id + "|" + key)
 			result.append(RunNodeState.create({"node_id": run_id + "|" + item.key,
 				"term": map.year, "layer": item.layer, "kind": item.kind, "next_ids": next_ids}))
 	return result
+
+static func matches_legacy(nodes: Array, run_id: String) -> bool:
+	if nodes.size() != LEGACY_NEXT.size():
+		return false
+	for node in nodes:
+		var key := str(node.node_id).get_slice("|", 1)
+		if not LEGACY_NEXT.has(key):
+			return false
+		var expected: Array[String] = []
+		for next_key in LEGACY_NEXT[key]:
+			expected.append(run_id + "|" + str(next_key))
+		if node.next_ids != expected:
+			return false
+	return true
 
 static func metadata(node_id: String) -> Dictionary:
 	var key := node_id.get_slice("|", 1)

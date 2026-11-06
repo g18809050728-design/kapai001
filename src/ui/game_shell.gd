@@ -26,7 +26,7 @@ var _advance_paused := false
 var _submitted_scope := ""
 var _business_notice := ""
 var _damage_layer: Control
-var _battle_transition_cover: TextureRect
+var _waiting_for_battle := false
 
 
 func _ready() -> void:
@@ -98,7 +98,7 @@ func show_screen(screen: String) -> void:
 
 
 func refresh() -> void:
-	if not is_instance_valid(_host):
+	if _waiting_for_battle or not is_instance_valid(_host):
 		return
 	if _ui_screen.is_empty() and not _advance_paused and last_error == null:
 		_advance_completed_nodes()
@@ -230,6 +230,13 @@ func _set_battle_frame(battle: bool) -> void:
 	_notice_label.custom_minimum_size.y = 28 if battle else 32
 	if battle:
 		_frame_panel.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
+		# Apply the hidden header/footer and panel style before the hand is
+		# built; a deferred container sort would otherwise replace it mid-draw.
+		_frame_margin.notification(Container.NOTIFICATION_SORT_CHILDREN)
+		_frame_column.notification(Container.NOTIFICATION_SORT_CHILDREN)
+		_frame_panel.notification(Container.NOTIFICATION_SORT_CHILDREN)
+		if page != null:
+			page.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	else:
 		_frame_panel.remove_theme_stylebox_override("panel")
 
@@ -336,7 +343,7 @@ func press(uid: String) -> bool:
 
 
 func submit_action(draft: Dictionary) -> void:
-	if draft.is_empty():
+	if _waiting_for_battle or draft.is_empty():
 		return
 	var type := str(draft.get("type", ""))
 	var payload: Dictionary = draft.get("payload", {})
@@ -372,10 +379,14 @@ func submit_action(draft: Dictionary) -> void:
 	_action_notice(result)
 	var popup_count := 0
 	var preferences := session.get_presentation_settings()
-	if not damage_anchors.is_empty():
+	if not damage_anchors.is_empty() and result.view.battle is Dictionary:
 		popup_count = _damage_layer.queue_events(result.events, damage_anchors, int(preferences.animation_speed) > 0 and not preferences.reduced_motion, maxf(1.0, float(preferences.animation_speed)))
-	if popup_count > 0 and page is BattleScreen and not result.view.battle is Dictionary:
-		_show_battle_transition_cover(popup_count, preferences)
+	if page is BattleScreen and page.animation_enabled and not result.view.battle is Dictionary and not result.events.is_empty():
+		page.use_shell_damage_popups = false
+		_waiting_for_battle = true
+		page.result_presentation_finished.connect(_finish_battle_transition, CONNECT_ONE_SHOT)
+		page.present_result(result.events, result.view.event_log, str(result.view.run_id), result.revision)
+		return
 	refresh()
 	_present_card_gain(current, result.view)
 	var final_view := session.get_view()
@@ -386,6 +397,7 @@ func submit_action(draft: Dictionary) -> void:
 		and result.view.run_id == final_view.run_id
 		and result.view.battle.battle_id == final_view.battle.battle_id
 	):
+		page.use_shell_damage_popups = popup_count > 0
 		page.consume_events(result.events, str(result.view.run_id), result.revision)
 	elif audio != null:
 		for event in result.events:
@@ -395,30 +407,9 @@ func submit_action(draft: Dictionary) -> void:
 				audio.play_event(str(event.type))
 
 
-func _show_battle_transition_cover(count: int, preferences: Dictionary) -> void:
-	if DisplayServer.get_name() == "headless":
-		return
-	var image := get_viewport().get_texture().get_image()
-	if image.is_empty():
-		return
-	_clear_battle_transition_cover()
-	_battle_transition_cover = TextureRect.new()
-	_battle_transition_cover.texture = ImageTexture.create_from_image(image)
-	_battle_transition_cover.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	_battle_transition_cover.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	_battle_transition_cover.stretch_mode = TextureRect.STRETCH_SCALE
-	_battle_transition_cover.mouse_filter = Control.MOUSE_FILTER_STOP
-	_battle_transition_cover.z_index = 400
-	add_child(_battle_transition_cover)
-	var speed := maxf(1.0, float(preferences.animation_speed))
-	var duration := ((count - 1) * BattleDamagePopup.BASE_DELAY + (BattleDamagePopup.BASE_DURATION if int(preferences.animation_speed) > 0 and not preferences.reduced_motion else 0.4)) / speed
-	get_tree().create_timer(duration + 0.05).timeout.connect(_clear_battle_transition_cover)
-
-
-func _clear_battle_transition_cover() -> void:
-	if is_instance_valid(_battle_transition_cover):
-		_battle_transition_cover.queue_free()
-	_battle_transition_cover = null
+func _finish_battle_transition() -> void:
+	_waiting_for_battle = false
+	refresh()
 
 
 func _has_previous_run() -> bool:

@@ -56,6 +56,49 @@ func run() -> Array[String]:
 		_fingerprint(animated) == _fingerprint(instant),
 		"animation on/off produces identical complete rule state and RNG"
 	)
+	var animated_battle := animated.page as BattleScreen
+	var instant_battle := instant.page as BattleScreen
+	animated_battle._finish_event_presentation()
+	if animated_battle.view.hand.size() > 1:
+		var moved: Dictionary = animated_battle.view.hand[1]
+		animated_battle._on_event_presented({"type": "card_discarded", "source_id": str(animated_battle.view.hand[0].card_id), "target_ids": [str(moved.card_id)], "data": {"definition_id": str(moved.definition_id)}}, "弃牌选择")
+		var ghosts := animated_battle._stage.get_children().filter(func(child): return child is BattleCard and child.has_meta("battle_event_effect"))
+		_check(not ghosts.is_empty() and ghosts[0].card_data.definition_id == moved.definition_id, "discard-choice animation follows the moved card instead of the causing card")
+	if not animated_battle.view.hand.is_empty() and not animated_battle.view.tasks.is_empty():
+		var drawn_card: Dictionary = animated_battle.view.hand[0]
+		animated_battle._on_event_presented(
+			{
+				"type": "card_drawn",
+				"source_id": "",
+				"target_ids": [str(drawn_card.card_id)],
+				"data": {"definition_id": str(drawn_card.definition_id), "from_zone": "draw", "to_zone": "hand"}
+			},
+			"抽到卡牌"
+		)
+		var task_id := str(animated_battle.view.tasks[0].task_id)
+		animated_battle._on_event_presented(
+			{
+				"type": "completion_applied",
+				"source_id": str(drawn_card.card_id),
+				"target_ids": [task_id],
+				"data": {"work_before": 9, "work_after": 5, "shield_before": 2, "shield_after": 0}
+			},
+			"完成量结算"
+		)
+		_check(animated_battle.display_snapshot().active_visual_effects >= 2, "draw and work events create visible card and impact feedback")
+		_check(_fingerprint(animated) == _fingerprint(instant), "visible battle effects preserve complete rule state and RNG")
+		instant_battle._on_event_presented(
+			{
+				"type": "card_drawn",
+				"source_id": "",
+				"target_ids": [],
+				"data": {"definition_id": str(drawn_card.definition_id), "from_zone": "draw", "to_zone": "hand"}
+			},
+			"抽到卡牌"
+		)
+		_check(instant_battle.display_snapshot().active_visual_effects == 0, "reduced motion skips transient event animation")
+		await animated.get_tree().create_timer(1.15).timeout
+		_check(animated_battle.display_snapshot().active_visual_effects == 0, "transient battle effects clean up after presentation")
 	print(
 		"G7_UI_ANIMATION_AB=",
 		SnapshotCodec.canonical_json(
@@ -89,6 +132,7 @@ func _check_restart_pending() -> void:
 		"enter independent battle for pending restart"
 	)
 	var card_id := _card_id(shell, "K03")
+	(shell.page as BattleScreen)._finish_event_presentation()
 	_check(
 		not card_id.is_empty() and shell.press("card:" + card_id),
 		"open genuine choice before restart"

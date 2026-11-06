@@ -78,6 +78,25 @@ func _real_battle_hit() -> void:
 		_check(popups.size() == 1 and popups[0].text == "-%d" % (before - after), "real battle popup matches committed work loss")
 		if popups.size() == 1:
 			_check(Vector2(popups[0].position).distance_to(anchor) < 110, "real battle popup stays near its task")
+		var page := shell.page as BattleScreen
+		page.set_process(false)
+		_check(page.animation_enabled, "real shell hit exercises animated feedback")
+		for step in 50:
+			if str(page._animator.last_event.get("type", "")) == "completion_applied":
+				break
+			page._animator.advance(10.0)
+		_check(str(page._animator.last_event.get("type", "")) == "completion_applied", "real shell hit presents completion event")
+		var meter_label: Label = page._task_meters[task_id].label
+		_check(is_equal_approx(float(meter_label.get_meta("displayed_work")), float(before)), "shell popup preserves meter animation starting value")
+		for child in page._stage.get_children():
+			if child is Label and child.has_meta("battle_event_effect"):
+				_check(not child.text.contains("完成量"), "shell popup does not duplicate work loss text")
+		for tween in page._presentation._tweens.duplicate():
+			if tween.is_valid():
+				tween.custom_step(0.075)
+		var displayed := float(meter_label.get_meta("displayed_work"))
+		_check(displayed < before and displayed > after, "shell popup preserves intermediate meter animation")
+		page._finish_event_presentation()
 	shell.free()
 
 

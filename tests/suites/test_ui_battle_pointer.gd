@@ -24,6 +24,8 @@ func run() -> Array[String]:
 	var source := _point(card, Vector2(85, 80))
 	_mouse_move(source)
 	await _frames()
+	_check(not _battle()._hover_panel.visible, "brief card hover does not open an introduction")
+	await _shell.get_tree().create_timer(.75).timeout
 	_check(_battle()._hovered_card == card, "mouse hover raises the physical card")
 	_check(_fingerprint() == original, "hover preserves state and RNG")
 	_check(
@@ -34,38 +36,40 @@ func run() -> Array[String]:
 		),
 		"hover popup is visible with title and body"
 	)
-	_check(
-		not _battle()._hover_panel.get_global_rect().intersects(card.get_global_rect()),
-		"hover popup avoids covering the hovered card"
-	)
+	_check(not _battle()._hover_panel.get_global_rect().intersects(card.get_global_rect()), "side explanation avoids covering its source card")
+	_check(_battle()._hover_panel.mouse_filter == Control.MOUSE_FILTER_IGNORE and _battle()._hover_scroll.mouse_filter == Control.MOUSE_FILTER_IGNORE, "unfixed introduction does not capture pointer or scrolling")
 	_check(card.tooltip_text == "", "card native tooltip is suppressed")
+	card.disabled = true
+	card.set_meta("disabled_reason", "专注不足：需要 2，当前 1")
+	var unavailable_point := _point(card, Vector2(85, 80))
+	_mouse_button(unavailable_point, true)
+	_mouse_button(unavailable_point, false)
+	await _frames()
+	_check(_battle().display_snapshot().panel.is_empty(), "clicking a disabled card does not open its introduction")
+	_check(_battle()._feedback_text.contains("专注不足"), "disabled card click shows the exact reason")
+	_check(_fingerprint() == original and _battle().selection_snapshot().card_id.is_empty(), "disabled click preserves state, RNG and selection")
+	var hand_index := 0
+	for index in _battle().view.hand.size():
+		if str(_battle().view.hand[index].card_id) == str(card.card_data.card_id):
+			hand_index = index
+			break
+	_key(KEY_1 + hand_index)
+	await _frames()
+	_check(_battle().display_snapshot().panel.is_empty(), "numeric activation of a disabled card does not open its introduction")
+	_check(_battle()._feedback_text.contains("专注不足") and _fingerprint() == original, "numeric activation shows the reason without changing state")
+	card.disabled = false
+	card.set_meta("disabled_reason", "")
 	var detail_before := _fingerprint()
 	_key(KEY_I)
 	await _frames()
-	var detail_panel: String = _battle().display_snapshot().panel
+	var detail_panel: String = _battle()._hover_body.text
 	_check(detail_panel.contains("专注"), "I opens card detail with cost text")
-	_check(not _battle()._detail_terms.is_empty(), "card detail exposes glossary terms")
-	var term_key := str(_battle()._detail_terms[0])
-	var term_chip: Button = _battle()._buttons.get("term:" + term_key)
-	var close_button: Button = _battle()._buttons.get("battle:close_panel")
-	_check(
-		(
-			term_chip != null
-			and close_button != null
-			and not term_chip.get_global_rect().intersects(close_button.get_global_rect())
-		),
-		"term chips do not overlap the close button"
-	)
-	_shell.press("term:" + term_key)
-	await _frames()
-	_check(
-		_battle().display_snapshot().panel.contains("来源："),
-		"term chip appends the glossary explanation"
-	)
+	_check(not _battle()._pinned_card_detail.is_empty() and detail_panel.contains("名词解释"), "fixed card explanation includes its glossary")
+	_check(_battle().display_snapshot().panel.is_empty(), "fixed card explanation stays beside the card")
 	_check(_fingerprint() == detail_before, "card detail preserves state and RNG")
 	_key(KEY_ESCAPE)
 	await _frames()
-	_check(_battle().display_snapshot().panel == "", "Esc closes card detail")
+	_check(_battle()._pinned_card_detail.is_empty() and not _battle()._hover_panel.visible, "Esc closes fixed card detail")
 	# Drag out, then drop back in the hand: no command is submitted.
 	_mouse_button(source, true)
 	_mouse_move(_stage_point(Vector2(650, 300)), true)
@@ -183,6 +187,22 @@ func run() -> Array[String]:
 		"small-window stage remains inside viewport"
 	)
 	_check(Rect2(Vector2.ZERO, Vector2(960, 640)).encloses(_battle()._buttons["battle:end_turn"].get_global_rect()), "end turn remains fixed and visible")
+	var compact_id := str(_battle().view.hand[0].card_id) if not _battle().view.hand.is_empty() else ""
+	var compact_card: Button = _battle()._buttons.get("card:" + compact_id)
+	if compact_card != null:
+		compact_card.disabled = true
+		compact_card.set_meta("disabled_reason", "专注不足：需要 3，当前 0")
+		var compact_index := 0
+		for index in _battle().view.hand.size():
+			if str(_battle().view.hand[index].card_id) == compact_id:
+				compact_index = index
+				break
+		_key(KEY_1 + compact_index)
+		await _frames()
+		_check(_battle().display_snapshot().panel.is_empty(), "compact numeric activation does not inspect a disabled card")
+		_check(_battle()._feedback_text.contains("专注不足"), "compact numeric activation shows the disabled reason")
+		compact_card.disabled = false
+		compact_card.set_meta("disabled_reason", "")
 	_shell.get_tree().root.size = old_size
 	print(
 		"G7_POINTER_EVIDENCE=",

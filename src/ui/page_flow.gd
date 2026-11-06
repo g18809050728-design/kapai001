@@ -803,7 +803,7 @@ func _render_settings() -> void:
 	)
 	var audio_panel: VBoxContainer = add_panel(body)
 	add_text(audio_panel, "音效", 23)
-	add_text(audio_panel, "音量与静音在点击“应用设置”后保存。音乐与环境声尚未配置正式资源。", 17)
+	add_text(audio_panel, "音量与声音开关可即时试听，点击“应用设置”后保存。音乐与环境声尚未配置正式资源。", 17)
 	for bus in ["Master", "Music", "Ambience", "SFX", "UI"]:
 		var volume_row := add_row(audio_panel)
 		var volume_label := add_text(volume_row, str({"Master": "总音量", "Music": "音乐", "Ambience": "环境", "SFX": "效果", "UI": "界面"}[bus]) + " %d%%" % int(_audio_settings.get(bus, 100)), 18)

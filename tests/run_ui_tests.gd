@@ -16,10 +16,12 @@ func _run() -> void:
 		"test_ui_battle_pointer",
 		"test_ui_battle_polish",
 		"test_ui_battle_layout",
+		"test_ui_battle_card_inspection",
 		"test_ui_four_year",
 		"test_ui_experience",
 		"test_ui_followup",
-		"test_ui_damage_popup"
+		"test_ui_damage_popup",
+		"test_ui_battle_map_feedback"
 	]:
 		var script: Script = load("res://tests/suites/%s.gd" % path)
 		if script == null or not script.can_instantiate():

@@ -3,6 +3,9 @@ extends RefCounted
 var _failures: Array[String] = []
 var _helpers = preload("res://tests/suites/test_ui_shell_pages.gd").new()
 var _shell: GameShell
+var capture_enabled := false
+var _captures: Array = []
+const OUT := "res://artifacts/verification/card-hover-20261106/visual"
 
 
 func run() -> Array[String]:
@@ -74,16 +77,30 @@ func run() -> Array[String]:
 			_check(not bounds.intersects(_battle()._hint_label.get_global_rect()), "%d-card fan and shadow avoid hint" % amount)
 			for kind in ["draw", "discard", "exhaust", "end_turn"]:
 				_check(not bounds.intersects(_battle()._buttons["battle:" + kind].get_global_rect()), "%d-card fan avoids %s" % [amount, kind])
-		for index in amount:
+		# Move directly between neighbours, including back across the raised card.
+		var indices := range(amount)
+		var backwards := range(amount)
+		backwards.reverse()
+		indices.append_array(backwards)
+		for index in indices:
 			var card: BattleCard = _battle()._hand_cards[index]
-			var home_point: Vector2 = card.get_parent().get_global_transform_with_canvas() * (card.home_position + Vector2(25 if index < amount - 1 else 100, 80))
+			var home_transform := Transform2D(card.home_rotation, card.home_position + card.pivot_offset)
+			var home_point: Vector2 = card.get_parent().get_global_transform_with_canvas() * (home_transform * (Vector2(25 if index < amount - 1 else 100, 80) - card.pivot_offset))
 			_mouse_move(home_point)
 			await tree.create_timer(0.3).timeout
 			_check(_battle()._hovered_card == card, "hover reaches card %d/%d" % [index + 1, amount])
+			_check(str(_battle()._hover_target.get("uid", "")) == "card:" + str(card.card_data.card_id), "continuous pointer switches the inspected card %d/%d" % [index + 1, amount])
+			if indices.find(index) == indices.rfind(index) or index != amount - 1:
+				_check(not _battle()._hover_panel.visible, "quick switching does not open card introductions %d/%d" % [index + 1, amount])
 			_check(not _card_bounds(card, true).intersects(_battle()._hint_label.get_global_rect()), "raised card avoids action hint")
 			_check(not _card_bounds(card).intersects(_battle()._buttons["battle:end_turn"].get_global_rect()), "raised card avoids end turn")
-			_mouse_move(Vector2(20, 150))
-			await tree.create_timer(0.2).timeout
+			if index in [0, amount / 2, amount - 1]:
+				await _save("hand-%d-card-%d" % [amount, index + 1])
+		_battle()._hover_panel.size = _battle()._stage.size
+		_battle()._place_hover_panel()
+		_check(not _battle()._hover_panel.visible, "crowded summary hides when no position can avoid the hand")
+		_mouse_move(Vector2(20, 150))
+		await tree.create_timer(0.2).timeout
 	_check(_helpers.fingerprint(_shell.session) == original, "geometry fixtures leave session untouched")
 	for phases in [1, 2]:
 		var display := base.duplicate(true)
@@ -158,3 +175,14 @@ func _frames() -> void:
 func _check(condition: bool, message: String) -> void:
 	if not condition:
 		_failures.append(message)
+
+
+func _save(label: String) -> void:
+	if not capture_enabled:
+		return
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(OUT))
+	await RenderingServer.frame_post_draw
+	var viewport := (Engine.get_main_loop() as SceneTree).root
+	var result := viewport.get_texture().get_image().save_png(OUT.path_join(label + ".png"))
+	_check(result == OK, "screenshot saved: " + label)
+	_captures.append({"name": label, "width": viewport.size.x, "height": viewport.size.y, "save_error": result})
