@@ -6,6 +6,7 @@ signal local_selection_changed(selection: Dictionary)
 
 var view: Dictionary = {}
 var audio: AudioManager
+var automatic_card_details := true
 var body: VBoxContainer
 var _buttons: Dictionary = {}
 var _drafts: Dictionary = {}
@@ -168,6 +169,8 @@ func add_text(
 
 func add_card(parent: Node, uid: String, id: String, detail: Dictionary, caption: String, picked: bool, callback: Callable, relic: bool = false) -> UiOfferCard:
 	var card := UiOfferCard.new()
+	if not automatic_card_details:
+		card.inspection_hint = "停留查看 · I 固定 / 取消"
 	card.configure(id, detail, caption, picked, relic, size.y < 580 or bool(get_meta("compact_cards", false)))
 	card.set_meta("uid", uid)
 	parent.add_child(card)
@@ -175,6 +178,9 @@ func add_card(parent: Node, uid: String, id: String, detail: Dictionary, caption
 	card.pressed.connect(callback)
 	card.inspect_requested.connect(func(value: UiOfferCard, immediate: bool):
 		if value.get_meta("draw_pending", false) or value.get_meta("card_in_flight", false):
+			return
+		if not automatic_card_details:
+			_preview_card = value
 			return
 		if _preview_pinned or _restoring_preview_focus:
 			return
@@ -187,7 +193,7 @@ func add_card(parent: Node, uid: String, id: String, detail: Dictionary, caption
 		_preview_card = value
 		_preview_delay = 0.0 if immediate else 0.25
 		_preview_leave_delay = 0.0
-		if immediate:
+		if immediate and automatic_card_details:
 			_show_card_preview(false))
 	return card
 
@@ -208,11 +214,13 @@ func _process(delta: float) -> void:
 	_preview_leave_delay = 0.0
 	if _preview_delay > 0:
 		_preview_delay -= delta
-	if _preview_delay <= 0 and not is_instance_valid(_card_preview):
+	if automatic_card_details and _preview_delay <= 0 and not is_instance_valid(_card_preview):
 		_show_card_preview(false)
 
 
 func _show_card_preview(pinned: bool) -> void:
+	if not pinned and not automatic_card_details:
+		return
 	if not is_instance_valid(_preview_card):
 		return
 	if is_instance_valid(_card_preview):
@@ -248,8 +256,10 @@ func _show_card_preview(pinned: bool) -> void:
 	text_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	scroller.add_child(text_column)
 	var detail := _preview_card.detail
-	add_text(text_column, UiContentText.describe_relic(detail) if detail.has("campaign") or detail.has("hooks") else UiContentText.describe_card(detail), 16)
-	add_text(text_column, UiContentText.keyword_help(detail), 14, UiStyle.MUTED)
+	add_text(text_column, _card_preview_text(detail), 16)
+	var keyword_help := _card_preview_keyword_help(detail)
+	if not keyword_help.is_empty():
+		add_text(text_column, keyword_help, 14, UiStyle.MUTED)
 	var controls := add_row(column)
 	var pin := add_button(controls, "card:pin", "关闭 · Esc" if pinned else "固定 · I", {}, close_card_preview if pinned else func(): _show_card_preview(true))
 	if pinned:
@@ -261,6 +271,16 @@ func _show_card_preview(pinned: bool) -> void:
 		pin.grab_focus()
 	_place_card_preview(weakref(_card_preview), 0)
 	_place_card_preview.call_deferred(weakref(_card_preview))
+
+
+func _card_preview_text(detail: Dictionary) -> String:
+	if detail.has("campaign") or detail.has("hooks"):
+		return UiContentText.describe_relic(detail)
+	return UiContentText.describe_card(detail)
+
+
+func _card_preview_keyword_help(detail: Dictionary) -> String:
+	return UiContentText.keyword_help(detail)
 
 
 func _place_card_preview(panel_ref: WeakRef, frames_left: int = 3) -> void:

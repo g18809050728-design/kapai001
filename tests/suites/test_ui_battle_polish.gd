@@ -32,7 +32,7 @@ func run() -> Array[String]:
 	_check(_shell.press("battle:deck"), "full deck is reachable during battle")
 	var panel: String = _battle().display_snapshot().panel
 	_check(
-		panel.contains("本局牌组") and panel.contains("完成量 6") and panel.contains("专注 1"),
+		panel.contains("本局牌组") and panel.contains("6点完成量") and panel.contains("专注 1"),
 		"full deck includes actual card cost and effect"
 	)
 	_check(
@@ -69,15 +69,15 @@ func run() -> Array[String]:
 	var inspect_before := _fingerprint()
 	_key(KEY_I)
 	await _frames()
-	var inspect_panel: String = _battle().display_snapshot().panel
+	var inspect_panel: String = _battle()._hover_body.text
 	_check(
-		inspect_panel.contains("专注") and not _battle()._detail_terms.is_empty(),
+		inspect_panel.contains("专注") and inspect_panel.contains("名词解释") and not _battle()._pinned_card_detail.is_empty(),
 		"keyboard I opens the selected card detail and glossary terms"
 	)
 	_check(_fingerprint() == inspect_before, "keyboard detail preserves state and RNG")
 	_key(KEY_ESCAPE)
 	await _frames()
-	_check(_battle().display_snapshot().panel == "", "Esc closes keyboard-opened detail")
+	_check(_battle()._pinned_card_detail.is_empty() and not _battle()._hover_panel.visible, "Esc closes keyboard-opened detail")
 	_key(KEY_ESCAPE)
 	await _frames()
 	_check(
@@ -95,7 +95,7 @@ func run() -> Array[String]:
 	_check(_shell.press("battle:discard"), "discard is reachable after real play")
 	panel = _battle().display_snapshot().panel
 	_check(
-		panel.contains("弃牌堆 · 1 张") and panel.contains("专注 1") and panel.contains("完成量 5"),
+		panel.contains("弃牌堆 · 1 张") and panel.contains("专注 1") and panel.contains("5点完成量"),
 		"discard displays public card cost and full effect"
 	)
 	_check(_fingerprint() == before, "discard inspection preserves complete state and RNG")
@@ -107,7 +107,7 @@ func run() -> Array[String]:
 	_check(_shell.press("battle:exhaust"), "exhaust viewer is reachable")
 	panel = _battle().display_snapshot().panel
 	_check(
-		panel.contains("消耗堆 · 1 张") and panel.contains("专注 1") and panel.contains("完成量 5"),
+		panel.contains("消耗堆 · 1 张") and panel.contains("专注 1") and panel.contains("5点完成量"),
 		"exhaust displays public card cost and full effect"
 	)
 	_check(_fingerprint() == before, "exhaust inspection preserves complete state and RNG")

@@ -24,6 +24,8 @@ func run() -> Array[String]:
 	var source := _point(card, Vector2(85, 80))
 	_mouse_move(source)
 	await _frames()
+	_check(not _battle()._hover_panel.visible, "brief card hover does not open an introduction")
+	await _shell.get_tree().create_timer(.75).timeout
 	_check(_battle()._hovered_card == card, "mouse hover raises the physical card")
 	_check(_fingerprint() == original, "hover preserves state and RNG")
 	_check(
@@ -34,10 +36,8 @@ func run() -> Array[String]:
 		),
 		"hover popup is visible with title and body"
 	)
-	_check(
-		not _battle()._hover_panel.get_global_rect().intersects(card.get_global_rect()),
-		"hover popup avoids covering the hovered card"
-	)
+	_check(not _battle()._hover_panel.get_global_rect().intersects(card.get_global_rect()), "side explanation avoids covering its source card")
+	_check(_battle()._hover_panel.mouse_filter == Control.MOUSE_FILTER_IGNORE and _battle()._hover_scroll.mouse_filter == Control.MOUSE_FILTER_IGNORE, "unfixed introduction does not capture pointer or scrolling")
 	_check(card.tooltip_text == "", "card native tooltip is suppressed")
 	card.disabled = true
 	card.set_meta("disabled_reason", "专注不足：需要 2，当前 1")
@@ -62,30 +62,14 @@ func run() -> Array[String]:
 	var detail_before := _fingerprint()
 	_key(KEY_I)
 	await _frames()
-	var detail_panel: String = _battle().display_snapshot().panel
+	var detail_panel: String = _battle()._hover_body.text
 	_check(detail_panel.contains("专注"), "I opens card detail with cost text")
-	_check(not _battle()._detail_terms.is_empty(), "card detail exposes glossary terms")
-	var term_key := str(_battle()._detail_terms[0])
-	var term_chip: Button = _battle()._buttons.get("term:" + term_key)
-	var close_button: Button = _battle()._buttons.get("battle:close_panel")
-	_check(
-		(
-			term_chip != null
-			and close_button != null
-			and not term_chip.get_global_rect().intersects(close_button.get_global_rect())
-		),
-		"term chips do not overlap the close button"
-	)
-	_shell.press("term:" + term_key)
-	await _frames()
-	_check(
-		_battle().display_snapshot().panel.contains("来源："),
-		"term chip appends the glossary explanation"
-	)
+	_check(not _battle()._pinned_card_detail.is_empty() and detail_panel.contains("名词解释"), "fixed card explanation includes its glossary")
+	_check(_battle().display_snapshot().panel.is_empty(), "fixed card explanation stays beside the card")
 	_check(_fingerprint() == detail_before, "card detail preserves state and RNG")
 	_key(KEY_ESCAPE)
 	await _frames()
-	_check(_battle().display_snapshot().panel == "", "Esc closes card detail")
+	_check(_battle()._pinned_card_detail.is_empty() and not _battle()._hover_panel.visible, "Esc closes fixed card detail")
 	# Drag out, then drop back in the hand: no command is submitted.
 	_mouse_button(source, true)
 	_mouse_move(_stage_point(Vector2(650, 300)), true)

@@ -83,9 +83,23 @@ func _hover_window() -> void:
 	page._hover_panel = panel
 	page._hover_title = _text(panel, Rect2(Vector2(16, 10) * factor, Vector2(328, 28) * factor), "", roundi(19 * factor), LIGHT)
 	page._hover_meta = _text(panel, Rect2(Vector2(16, 38) * factor, Vector2(328, 22) * factor), "", roundi(13 * factor), Color("e5c894"))
-	page._hover_body = _text(panel, Rect2(Vector2(16, 62) * factor, Vector2(328, 82) * factor), "", roundi(14 * factor), LIGHT)
+	page._hover_scroll = ScrollContainer.new()
+	page._hover_scroll.position = Vector2(16, 62) * factor
+	page._hover_scroll.size = Vector2(328, 82) * factor
+	page._hover_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	page._hover_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	page._hover_scroll.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	page._hover_scroll.mouse_force_pass_scroll_events = true
+	panel.add_child(page._hover_scroll)
+	page._hover_body = Label.new()
+	page._hover_body.add_theme_font_size_override("font_size", roundi(16 * factor))
+	page._hover_body.add_theme_color_override("font_color", LIGHT)
+	page._hover_body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	page._hover_body.max_lines_visible = 4
-	_text(panel, Rect2(Vector2(16, 146) * factor, Vector2(328, 16) * factor), "I 查看详情", roundi(12 * factor), Color("f1c989"), HORIZONTAL_ALIGNMENT_RIGHT)
+	page._hover_body.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	page._hover_body.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	page._hover_scroll.add_child(page._hover_body)
+	page._hover_hint = _text(panel, Rect2(Vector2(16, 146) * factor, Vector2(328, 16) * factor), "I 查看详情", roundi(12 * factor), Color("f1c989"), HORIZONTAL_ALIGNMENT_RIGHT)
 
 
 func _header() -> void:

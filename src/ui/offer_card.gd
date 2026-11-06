@@ -6,6 +6,7 @@ signal inspect_requested(card: UiOfferCard, immediate: bool)
 var definition_id := ""
 var detail: Dictionary = {}
 var selected := false
+var inspection_hint := "悬停 / 聚焦看说明 · 点击预选"
 var _face: PanelContainer
 var _base_height := 0.0
 
@@ -69,7 +70,7 @@ func configure(id: String, data: Dictionary, caption: String, picked: bool, reli
 		placeholder.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		placeholder.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	_label(column, caption, 18, UiStyle.INK)
-	_label(column, "悬停 / 聚焦看说明 · 点击预选", 12, UiStyle.MUTED)
+	_label(column, inspection_hint, 12, UiStyle.MUTED)
 	# The face is a visual child, so Button does not inherit its wrapped minimum.
 	# Wait for the real width before fitting; a zero-width column overestimates it.
 	resized.connect(_queue_content_fit)

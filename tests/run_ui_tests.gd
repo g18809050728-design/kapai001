@@ -16,6 +16,7 @@ func _run() -> void:
 		"test_ui_battle_pointer",
 		"test_ui_battle_polish",
 		"test_ui_battle_layout",
+		"test_ui_battle_card_inspection",
 		"test_ui_four_year",
 		"test_ui_experience",
 		"test_ui_followup",

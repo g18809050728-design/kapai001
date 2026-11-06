@@ -4,7 +4,7 @@ extends RefCounted
 
 func build(page: BattleScreen) -> void:
 	page._reset_stage()
-	page.reset_page("第%d回合 · DDL 剩余%d次完整轮末" % [int(page.view.get("round_index", 0)), int(page.view.get("ddl", 0))], "点击手牌，再点击目标 · 横向查看手牌 · 悬停 / I 查看详情", true)
+	page.reset_page("第%d回合 · DDL 剩余%d次完整轮末" % [int(page.view.get("round_index", 0)), int(page.view.get("ddl", 0))], "点击手牌，再点击目标 · 停留查看介绍 · I 固定 / 取消", true)
 	page._stage = Control.new()
 	page._stage.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	page._stage.size = page.size
