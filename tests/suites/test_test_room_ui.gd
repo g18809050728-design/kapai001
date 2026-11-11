@@ -26,15 +26,26 @@ func run() -> Array[String]:
 	_check(shell.page is BattleScreen, "test battle uses the battle screen")
 	_check(shell._test_hud != null, "battle HUD exists")
 	_check(shell.page.button_uids().has("battle:end_turn"), "battle controls are available")
-	shell.submit_action(
-		{"type": "test.patch", "payload": {"ops": [{"op": "set_player_field", "field": "focus", "value": 4}]}}
-	)
+	var hud: TestHud = shell._test_hud
+	_check(hud.press("test:open_editor"), "editor opens from the HUD")
+	var panel: TestEditorPanel = hud.editor
+	_check(panel.is_open(), "editor panel is open")
+	_check(bool(session.get_test_view().test.editing), "service enters editing mode")
+	_check(panel.press("test:editor:tab:resources"), "editor switches to the resources tab")
+	var focus_before := int(session.get_test_view().battle.player.focus)
+	_check(panel.press("test:editor:field:player.focus:plus"), "editor creates a draft change")
+	_check(panel.draft_count() == 1, "draft holds exactly one change")
+	_check(panel.press("test:editor:apply"), "apply submits the draft")
 	var view := session.get_test_view()
-	_check(int(view.battle.player.focus) == 4, "HUD-style patch applies")
+	_check(int(view.battle.player.focus) == focus_before + 1, "draft change applies")
 	_check(int(view.test.revision) == 1, "patch increments revision")
+	_check(panel.draft_count() == 0, "draft clears after apply")
+	_check(panel.press("test:editor:close"), "editor closes from its own button")
+	_check(not panel.is_open(), "editor panel is closed")
+	_check(not bool(session.get_test_view().test.editing), "service leaves editing mode")
 	shell.submit_action({"type": "test.undo", "payload": {}})
 	view = session.get_test_view()
-	_check(int(view.battle.player.focus) != 4, "undo reverts the patch")
+	_check(int(view.battle.player.focus) == focus_before, "undo reverts the applied change")
 	_check(int(view.test.branch_id) == 1, "undo branches the context")
 	var context := {
 		"test_id": str(view.test.test_id),

@@ -96,9 +96,11 @@ const OP_KEYS := {
 	"upsert_definition": ["op", "kind", "id", "definition"],
 	"remove_definition": ["op", "kind", "id"],
 	"set_definition_field": ["op", "kind", "id", "path", "value"],
+	"set_v3_field": ["op", "path", "value"],
 	"set_outcome": ["op", "result"],
 	"clear_outcome": ["op"],
 	"run_rule_op": ["op", "rule", "args"],
+	"clear_scene": ["op"],
 }
 
 var state: TestRoomState
@@ -230,6 +232,8 @@ func view() -> Dictionary:
 		battle_view["draw_order"] = state.battle.zones.get("draw", []).duplicate()
 		battle_view["source_count"] = state.battle.source_registry.size()
 		battle_view["relics"] = state.battle.relics.duplicate()
+		battle_view["counters"] = state.battle.counters.duplicate(true)
+		battle_view["exam_flags"] = state.battle.exam_flags.duplicate()
 	var checkpoints: Array[Dictionary] = []
 	for checkpoint in state.checkpoints:
 		checkpoints.append(
@@ -320,7 +324,38 @@ func options() -> Dictionary:
 	var statuses: Array[Dictionary] = []
 	for id in info.enabled.get("status", []):
 		var definition := _definition(loaded, "status", str(id))
-		statuses.append({"id": str(id), "name_key": str(definition.get("name_key", id))})
+		statuses.append(
+			{
+				"id": str(id),
+				"name_key": str(definition.get("name_key", id)),
+				"target": str(definition.get("target", "")),
+			}
+		)
+	var tasks: Array[Dictionary] = []
+	for id in info.enabled.get("task", []):
+		var definition := _definition(loaded, "task", str(id))
+		var phases: Array = definition.get("phases", [])
+		var work_max := int((phases[0] as Dictionary).get("work_max", 0)) if not phases.is_empty() else 0
+		tasks.append(
+			{
+				"id": str(id),
+				"name_key": str(definition.get("name_key", id)),
+				"kind": str(definition.get("kind", "")),
+				"work_max": work_max,
+			}
+		)
+	var units: Array[Dictionary] = []
+	for id in info.enabled.get("unit", []):
+		var definition := _definition(loaded, "unit", str(id))
+		units.append(
+			{
+				"id": str(id),
+				"name_key": str(definition.get("name_key", id)),
+				"vitality": int(definition.get("vitality", 0)),
+				"cooperation": int(definition.get("cooperation", 0)),
+			}
+		)
+	var ruleset := _definition(loaded, "ruleset", info.ruleset_id)
 	var relics: Array[Dictionary] = []
 	for id in info.enabled.get("relic", []):
 		var definition := _definition(loaded, "relic", str(id))
@@ -342,8 +377,11 @@ func options() -> Dictionary:
 		"characters": characters,
 		"encounters": encounters,
 		"cards": cards,
+		"tasks": tasks,
+		"units": units,
 		"relics": relics,
 		"statuses": statuses,
+		"ruleset": ruleset,
 		"switches": switches,
 		"limits": LIMITS.duplicate(true),
 	}
@@ -477,7 +515,7 @@ func apply_patch(context: Variant, patch_value: Variant) -> ActionResult:
 	else:
 		working.branch_id = state.branch_id
 		working.revision = state.revision + 1
-	working.editing = false
+	working.editing = state.editing
 	working.dirty = true
 	working.interventions = state.interventions + patch.ops.size()
 	var before_hash := state.state_hash()
@@ -603,7 +641,7 @@ func restore_checkpoint(context: Variant, checkpoint_id: String) -> ActionResult
 	restored.redo_stack.assign(state.redo_stack.duplicate(true))
 	restored.branch_id = state.branch_id + 1
 	restored.revision = 0
-	restored.editing = false
+	restored.editing = state.editing
 	restored.dirty = true
 	var before_hash := state.state_hash()
 	state = restored
@@ -633,7 +671,7 @@ func step_history(context: Variant, direction: String) -> ActionResult:
 		restored.redo_stack.assign(state.redo_stack.duplicate(true))
 		restored.branch_id = state.branch_id + 1
 		restored.revision = 0
-		restored.editing = false
+		restored.editing = state.editing
 		restored.dirty = true
 		state = restored
 		return _accepted_result([], true)
@@ -653,7 +691,7 @@ func step_history(context: Variant, direction: String) -> ActionResult:
 		restored.redo_stack.assign(state.redo_stack.duplicate(true))
 		restored.branch_id = state.branch_id + 1
 		restored.revision = 0
-		restored.editing = false
+		restored.editing = state.editing
 		restored.dirty = true
 		state = restored
 		return _accepted_result([], true)
@@ -1011,12 +1049,16 @@ func _apply_op(working: TestRoomState, op: Dictionary, summary: Array[Dictionary
 			return _op_remove_definition(working, op, summary)
 		"set_definition_field":
 			return _op_set_definition_field(working, op, summary)
+		"set_v3_field":
+			return _op_set_v3_field(working, op, summary)
 		"set_outcome":
 			return _op_set_outcome(working, op)
 		"clear_outcome":
 			return _op_set_outcome(working, op)
 		"run_rule_op":
 			return _op_run_rule_op(working, op, summary)
+		"clear_scene":
+			return _op_clear_scene(working, summary)
 	return _invalid_patch("test.patch.unknown_op", {"op": name})
 
 
@@ -1741,6 +1783,52 @@ func _op_set_definition_field(working: TestRoomState, op: Dictionary, summary: A
 	return null
 
 
+func _op_set_v3_field(working: TestRoomState, op: Dictionary, summary: Array[Dictionary]) -> ApiError:
+	var path := str(op.get("path", ""))
+	var value: Variant = op.get("value")
+	if not (path in [
+		"paper.open",
+		"paper.progress",
+		"paper.citations",
+		"paper.modifier",
+		"paper.amplify",
+		"synergy",
+	]):
+		return _invalid_patch("test.patch.v3_path", {"path": path})
+	if typeof(working.battle.v3) != TYPE_DICTIONARY:
+		working.battle.v3 = {}
+	if path == "synergy":
+		if typeof(value) != TYPE_INT or int(value) < 0 or int(value) > 999:
+			return _invalid_patch("test.patch.range", {"path": path})
+		working.battle.v3["synergy"] = int(value)
+	else:
+		var paper: Variant = working.battle.v3.get("paper")
+		if typeof(paper) != TYPE_DICTIONARY:
+			paper = {
+				"open": false,
+				"progress": 0,
+				"citations": 0,
+				"modifier": 0,
+				"amplify": 0,
+				"used_names": [],
+				"publication_id": "",
+				"chapters": [],
+				"turn_names": [],
+			}
+			working.battle.v3["paper"] = paper
+		var field := path.get_slice(".", 1)
+		if field == "open":
+			if typeof(value) != TYPE_BOOL:
+				return _invalid_patch("test.patch.type", {"path": path})
+			paper["open"] = bool(value)
+		else:
+			if typeof(value) != TYPE_INT or int(value) < 0 or int(value) > 999:
+				return _invalid_patch("test.patch.range", {"path": path})
+			paper[field] = int(value)
+	summary.append({"op": "set_v3_field", "path": path})
+	return null
+
+
 func _op_set_outcome(working: TestRoomState, op: Dictionary) -> ApiError:
 	var value := str(op.get("result", op.get("outcome", "")))
 	if value.is_empty() or value == "clear":
@@ -1824,6 +1912,14 @@ func _switch_required(key: String) -> ApiError:
 		"test.switch.required",
 		{"switch": key, "reason": "当前状态违反正式玩法限制；先启用对应测试开关。"}
 	)
+
+
+func _op_clear_scene(working: TestRoomState, summary: Array[Dictionary]) -> ApiError:
+	if working.battle.scene is Dictionary:
+		working.battle.source_registry.erase(str(working.battle.scene.get("scene_id", "")))
+	working.battle.scene = null
+	summary.append({"op": "clear_scene"})
+	return null
 
 
 func _validate_structure(working: TestRoomState) -> Array[String]:
@@ -2156,6 +2252,11 @@ func _stamp() -> String:
 	var date := Time.get_date_string_from_system().replace("-", "")
 	var time := Time.get_time_string_from_system().replace(":", "")
 	return "%s-%s-%04d" % [date, time, Time.get_ticks_usec() % 10000]
+
+
+
+
+
 
 
 

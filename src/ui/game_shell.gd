@@ -602,9 +602,14 @@ func _handle_test_command(command: String, payload: Dictionary) -> void:
 			notice = "实验开始；可随时打开编辑器。"
 			refresh()
 		"test.patch":
-			var applied := session.apply_test_patch(
-				_test_context(), {"ops": payload.get("ops", [])}
-			)
+			var patch := {
+				"schema_version": 1,
+				"resolution_policy": str(payload.get("policy", "rollback")),
+				"ops": payload.get("ops", []),
+			}
+			var applied := session.apply_test_patch(_test_context(), patch)
+			if _test_hud != null:
+				_test_hud.editor_result(applied.accepted)
 			if not applied.accepted:
 				_report_error(applied.error)
 				refresh()
