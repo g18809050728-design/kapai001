@@ -66,7 +66,8 @@ func _initialize() -> void:
 		"test_cards_v3_r3",
 		"test_cards_v3_production",
 		"test_four_year",
-		"test_four_year_passives"
+		"test_four_year_passives",
+		"test_test_room_core"
 	]:
 		var run_script: Script = load("res://tests/suites/%s.gd" % path)
 		if run_script != null and run_script.can_instantiate():
@@ -82,3 +83,4 @@ func _initialize() -> void:
 	for failure: String in failures:
 		push_error(failure)
 	quit(1)
+

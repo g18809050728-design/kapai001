@@ -68,6 +68,7 @@ func _render_menu() -> void:
 		resume.tooltip_text = str(view.get("save_error", ""))
 		if resume.tooltip_text.is_empty():
 			resume.tooltip_text = "还没有可以继续的冒险。"
+	add_button(row, "menu:test", "测试房间", _ui("test_room"))
 	add_button(row, "menu:settings", "设置与存档", _ui("settings"))
 	if bool(view.get("has_active_session", false)):
 		add_text(body, "当前冒险已保留，可以随时继续。", 16)

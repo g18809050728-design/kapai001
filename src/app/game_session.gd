@@ -719,15 +719,20 @@ func _choice(value: Variant) -> ChoiceRequest:
 	)
 
 
-func _battle_view(battle: BattleState) -> Dictionary:
+func _battle_view(
+	battle: BattleState,
+	catalog_override: ContentDB = null,
+	engine_override: BattleEngine = null,
+	character_id: String = ""
+) -> Dictionary:
 	var hand: Array[Dictionary] = []
 	for id in battle.zones.get("hand", []):
-		hand.append(_card_view(battle, id))
+		hand.append(_card_view(battle, id, engine_override))
 	var zones_public := {}
 	for zone in ["draw", "discard", "exhaust"]:
 		var cards: Array[Dictionary] = []
 		for id in battle.zones.get(zone, []):
-			cards.append(_card_view(battle, id))
+			cards.append(_card_view(battle, id, engine_override))
 		if zone == "draw":
 			# Publish membership only. Never leak the actual extraction sequence.
 			cards.sort_custom(func(a, b):
@@ -745,10 +750,10 @@ func _battle_view(battle: BattleState) -> Dictionary:
 		"ddl": battle.ddl,
 		"player": battle.player.duplicate(true),
 		"v3": battle.v3.duplicate(true),
-		"character_info": _character_info(battle),
+		"character_info": _character_info(battle, character_id),
 		"hand": hand,
 		"units": battle.units.duplicate(true),
-		"tasks": battle.tasks.map(_task_view),
+		"tasks": battle.tasks.map(func(task): return _task_view(task, catalog_override)),
 		"statuses": battle.statuses.duplicate(true),
 		"scene": battle.scene.duplicate(true) if battle.scene is Dictionary else null,
 		"zone_counts": counts,
@@ -756,9 +761,18 @@ func _battle_view(battle: BattleState) -> Dictionary:
 	}
 
 
-func _character_info(battle: BattleState) -> Dictionary:
+func _test_battle_view(battle: BattleState) -> Dictionary:
+	var service := test_service()
+	return _battle_view(battle, service.catalog, service.engine, battle.character_id)
+
+
+func _character_info(battle: BattleState, character_id: String = "") -> Dictionary:
 	var turn: Dictionary = battle.v3.get("turn", {})
-	var id := str(_state.run.character_id)
+	var id := character_id
+	if id.is_empty() and _state != null:
+		id = str(_state.run.character_id)
+	if id.is_empty():
+		id = battle.character_id
 	var result := {"character_id": id, "previous_type": str(turn.get("previous_card_type", "")), "abilities": battle.v3.get("abilities", []).size()}
 	match id:
 		"P01":
@@ -773,9 +787,12 @@ func _character_info(battle: BattleState) -> Dictionary:
 	return result
 
 
-func _task_view(task: Dictionary) -> Dictionary:
+func _task_view(task: Dictionary, catalog_override: ContentDB = null) -> Dictionary:
 	var view := task.duplicate(true)
-	var definition := _catalog.get_definition("task", str(task.get("definition_id", "")))
+	var source := catalog_override if catalog_override != null else _catalog
+	if source == null:
+		return view
+	var definition := source.get_definition("task", str(task.get("definition_id", "")))
 	if not definition.ok:
 		return view
 	var phases: Array = definition.data.get("phases", [])
@@ -787,12 +804,15 @@ func _task_view(task: Dictionary) -> Dictionary:
 	return view
 
 
-func _card_view(battle: BattleState, card_id: String) -> Dictionary:
+func _card_view(battle: BattleState, card_id: String, engine_override: BattleEngine = null) -> Dictionary:
 	var card: Dictionary = battle.card_by_id[card_id].duplicate(true)
-	var face := _battle_engine.resolve_face(battle, card_id)
+	var engine_ref := engine_override if engine_override != null else _battle_engine
+	if engine_ref == null:
+		return card
+	var face := engine_ref.resolve_face(battle, card_id)
 	card["effective_card"] = face.data if face.ok else null
 	card["face"] = face.data.duplicate(true) if face.ok else {}
-	var quote := _battle_engine.calculate_cost(battle, card_id)
+	var quote := engine_ref.calculate_cost(battle, card_id)
 	card["effective_cost"] = quote.data.cost if quote.ok else 0
 	card["effective_vitality_cost"] = quote.data.vitality_cost if quote.ok else 0
 	return card
@@ -804,3 +824,155 @@ func _reject(code: StringName, key: String) -> ActionResult:
 
 func _failure(code: StringName, key: String) -> GameResult:
 	return GameResult.failure(ApiError.new(code, key))
+
+
+## Test room (isolated battle sandbox). These entries never touch formal saves.
+
+var _test_service: TestRoomService
+
+
+func test_service() -> TestRoomService:
+	if _test_service == null:
+		_test_service = TestRoomService.new(TestStore.new(), Callable(self, "_test_battle_view"))
+	return _test_service
+
+
+func has_test_room() -> bool:
+	return _test_service != null and _test_service.active()
+
+
+func get_test_room_options() -> GameResult:
+	return GameResult.success(test_service().options())
+
+
+func get_test_view() -> Dictionary:
+	if _test_service == null or not _test_service.active():
+		return {"screen": "closed"}
+	return _test_service.view()
+
+
+func start_test_room(config: Variant) -> ActionResult:
+	var started := test_service().start(config)
+	if not started.ok:
+		return ActionResult.rejected(started.error, get_view())
+	return _test_accepted()
+
+
+func begin_test_edit(context: Variant) -> ActionResult:
+	return test_service().begin_edit(context)
+
+
+func cancel_test_edit(context: Variant) -> ActionResult:
+	return test_service().cancel_edit(context)
+
+
+func preview_test_patch(context: Variant, patch: Variant) -> GameResult:
+	return test_service().preview_patch(context, patch)
+
+
+func apply_test_patch(context: Variant, patch: Variant) -> ActionResult:
+	return test_service().apply_patch(context, patch)
+
+
+func set_test_switch(context: Variant, key: String, value: bool) -> ActionResult:
+	var patch := _test_patch(context, [{"op": "set_switch", "key": key, "value": value}])
+	return test_service().apply_patch(context, patch)
+
+
+func submit_test_action(context: Variant, draft: Variant) -> ActionResult:
+	return test_service().submit_action(context, draft)
+
+
+func preview_test_action(context: Variant, draft: Variant) -> GameResult:
+	return test_service().preview_action(context, draft)
+
+
+func restore_test_checkpoint(context: Variant, checkpoint_id: String) -> ActionResult:
+	return test_service().restore_checkpoint(context, checkpoint_id)
+
+
+func step_test_history(context: Variant, direction: String) -> ActionResult:
+	return test_service().step_history(context, direction)
+
+
+func set_test_outcome(context: Variant, value: String) -> ActionResult:
+	return test_service().set_outcome(context, value)
+
+
+func restart_test_battle(
+	context: Variant, origin: String, seed_mode: String, seed: String = ""
+) -> ActionResult:
+	return test_service().restart(context, origin, seed_mode, seed)
+
+
+func finish_test_step(context: Variant) -> ActionResult:
+	return test_service().submit_action(context, {"type": "end_turn", "payload": {}})
+
+
+func pause_test_room(value: bool) -> bool:
+	return test_service().pause(value)
+
+
+func save_test_preset(name: String) -> GameResult:
+	return test_service().save_preset(name)
+
+
+func save_test_snapshot(name: String) -> GameResult:
+	return test_service().save_snapshot(name)
+
+
+func save_test_record(name: String) -> GameResult:
+	return test_service().save_record(name)
+
+
+func list_test_files(kind: String) -> Array[Dictionary]:
+	return test_service().list_files(kind)
+
+
+func load_test_preset(preset_id: String) -> ActionResult:
+	return test_service().load_preset(preset_id)
+
+
+func load_test_snapshot(snapshot_id: String) -> ActionResult:
+	return test_service().load_snapshot(snapshot_id)
+
+
+func load_test_record(record_id: String) -> ActionResult:
+	return test_service().load_record(record_id)
+
+
+func close_test_room(action: String = "discard") -> ActionResult:
+	if _test_service == null or not _test_service.active():
+		return ActionResult.rejected(
+			ApiError.new(GameConstants.ERROR_TEST_ROOM_NOT_ACTIVE, "test.room.inactive"), get_view()
+		)
+	_test_service.close()
+	var result := ActionResult.new(get_view())
+	result.accepted = true
+	return result
+
+
+func _test_patch(context: Variant, ops: Array) -> Dictionary:
+	var patch := {
+		"schema_version": 1,
+		"resolution_policy": "rollback",
+		"ops": ops,
+	}
+	if typeof(context) == TYPE_DICTIONARY:
+		patch["test_id"] = str(context.get("test_id", ""))
+		patch["branch_id"] = int(context.get("branch_id", 0))
+		patch["expected_revision"] = int(context.get("expected_revision", 0))
+	return patch
+
+
+func _test_accepted() -> ActionResult:
+	var test_view := get_test_view()
+	var session_view := SessionView.new()
+	var test_state: Dictionary = test_view.get("test", {})
+	session_view.revision = int(test_state.get("revision", 0))
+	session_view.screen = GameConstants.SCREEN_BATTLE
+	session_view.battle = test_view.get("battle", {})
+	var result := ActionResult.new(session_view)
+	result.accepted = true
+	result.stable = test_view.get("pending_choice") == null
+	return result

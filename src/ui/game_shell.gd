@@ -11,6 +11,7 @@ var notice: String = "准备好开始你的四年冒险了吗？"
 var _ui_screen := "menu"
 var _back_screen := "menu"
 var _page_key := ""
+var _test_hud: TestHud
 var _host: Control
 var _background: TextureRect
 var _notice_label: Label
@@ -100,6 +101,13 @@ func show_screen(screen: String) -> void:
 func refresh() -> void:
 	if _waiting_for_battle or not is_instance_valid(_host):
 		return
+	if session.has_test_room():
+		_refresh_test_room()
+		return
+	if _ui_screen == "test_room":
+		_refresh_test_home()
+		return
+	_clear_test_hud()
 	if _ui_screen.is_empty() and not _advance_paused and last_error == null:
 		_advance_completed_nodes()
 	var current := session.get_view()
@@ -273,9 +281,15 @@ func _profile_view() -> Dictionary:
 	}
 
 
+func preview_test_action(draft: Dictionary) -> ActionPreview:
+	return _test_preview(draft)
+
+
 func _preview(draft: Dictionary) -> ActionPreview:
 	if draft.is_empty():
 		return null
+	if session.has_test_room():
+		return _test_preview(draft)
 	var result := session.preview_action(
 		ActionDraft.new(StringName(str(draft.get("type", ""))), draft.get("payload", {}))
 	)
@@ -348,6 +362,12 @@ func submit_action(draft: Dictionary) -> void:
 	var type := str(draft.get("type", ""))
 	var payload: Dictionary = draft.get("payload", {})
 	last_error = null
+	if session.has_test_room() and not type.begins_with("test.") and not type.begins_with("ui."):
+		_submit_test_battle_action(draft)
+		return
+	if type.begins_with("test."):
+		_handle_test_command(type, payload)
+		return
 	if type.begins_with("ui."):
 		_navigate(type, payload)
 		return
@@ -412,6 +432,296 @@ func _finish_battle_transition() -> void:
 	refresh()
 
 
+func _refresh_test_home() -> void:
+	_clear_test_hud()
+	var options := session.get_test_room_options()
+	var data: Dictionary = {}
+	if options.ok:
+		data = {
+			"options": options.data,
+			"files": {
+				"presets": session.list_test_files("preset"),
+				"snapshots": session.list_test_files("snapshot"),
+				"records": session.list_test_files("record"),
+			},
+		}
+	else:
+		_report_error(options.error)
+	if page == null or not (page is TestRoomPage) or _page_key != "test_home":
+		_replace_page("test_home", TestRoomPage.new())
+	page.render(data)
+	_set_battle_frame(false)
+	_status_label.text = "测试房间  /  实时实验沙盒"
+	_notice_label.text = notice
+	_notice_label.add_theme_color_override(
+		"font_color", UiStyle.RED if last_error != null else UiStyle.INK
+	)
+	_background.texture = UiStyle.texture("BG_home")
+
+
+func _refresh_test_room() -> void:
+	var test_view := session.get_test_view()
+	var screen := str(test_view.get("screen", ""))
+	if screen == "test_room_result":
+		_clear_test_hud()
+		if page == null or not (page is TestRoomPage) or _page_key != "test_result":
+			var result_page := TestRoomPage.new()
+			result_page.screen = "test_room_result"
+			_replace_page("test_result", result_page)
+		page.render({"view": test_view})
+		_set_battle_frame(false)
+		_status_label.text = "测试房间  /  实验结束"
+		_notice_label.text = "结果为实验结果，不写入正式存档；可继续编辑或重试。"
+		_notice_label.add_theme_color_override("font_color", UiStyle.GOLD)
+		_background.texture = UiStyle.texture("BG_success")
+		return
+	var battle_data := _test_battle_data(test_view)
+	if page == null or not (page is BattleScreen) or _page_key != "test_battle":
+		_replace_page("test_battle", BattleScreen.new())
+		page.preview_callback = Callable(self, "_test_preview")
+	page.render(battle_data)
+	_set_battle_frame(true)
+	_ensure_test_hud()
+	_test_hud.render(test_view)
+	var test_state: Dictionary = test_view.get("test", {})
+	var locked := bool(test_state.get("paused", false)) or bool(test_state.get("editing", false))
+	page.mouse_filter = Control.MOUSE_FILTER_IGNORE if locked else Control.MOUSE_FILTER_STOP
+	page.set_process_input(not locked)
+	_status_label.text = "测试房间  /  实验  /  %s" % str(test_view.get("config", {}).get("character_id", ""))
+	_notice_label.text = notice
+	_notice_label.add_theme_color_override(
+		"font_color", UiStyle.RED if last_error != null else UiStyle.INK
+	)
+	_background.texture = UiStyle.texture("BG_classroom")
+	_regate()
+
+
+func _test_battle_data(test_view: Dictionary) -> Dictionary:
+	var battle: Dictionary = test_view.get("battle", {})
+	var data := battle.duplicate(true)
+	var config: Dictionary = test_view.get("config", {})
+	var test_state: Dictionary = test_view.get("test", {})
+	data["pending_choice"] = test_view.get("pending_choice")
+	data["event_log"] = []
+	data["run_id"] = str(test_state.get("test_id", ""))
+	data["revision"] = int(test_state.get("revision", 0))
+	data["can_save"] = false
+	data["notice"] = notice
+	data["character_id"] = str(config.get("character_id", "P01"))
+	data["max_vitality"] = int((battle.get("player", {}) as Dictionary).get("max_vitality", 1))
+	data["money"] = 0
+	data["cards"] = config.get("cards", [])
+	var relics: Array[Dictionary] = []
+	for relic_id in battle.get("relics", []):
+		relics.append({"definition_id": str(relic_id), "relic_id": str(relic_id), "detail": {}})
+	data["relics"] = relics
+	data["year_label"] = "测试实验"
+	return data
+
+
+func _replace_page(key: String, next_page: UiPage) -> void:
+	_clear_test_hud()
+	if page != null:
+		_host.remove_child(page)
+		page.queue_free()
+	page = next_page
+	page.audio = audio
+	_host.add_child(page)
+	page.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	page.action_requested.connect(submit_action)
+	page.local_selection_changed.connect(func(_selection: Dictionary): _regate())
+	_page_key = key
+
+
+func _ensure_test_hud() -> void:
+	if _test_hud != null and is_instance_valid(_test_hud):
+		_host.move_child(_test_hud, -1)
+		return
+	_test_hud = TestHud.new()
+	_test_hud.setup(session)
+	_host.add_child(_test_hud)
+	_test_hud.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_test_hud.test_command.connect(_handle_test_command)
+	_host.move_child(_test_hud, -1)
+
+
+func _clear_test_hud() -> void:
+	if _test_hud == null:
+		return
+	if is_instance_valid(_test_hud):
+		_test_hud.queue_free()
+	_test_hud = null
+
+
+func _test_context() -> Dictionary:
+	var test_view := session.get_test_view()
+	var test_state: Dictionary = test_view.get("test", {})
+	return {
+		"test_id": str(test_state.get("test_id", "")),
+		"branch_id": int(test_state.get("branch_id", 0)),
+		"expected_revision": int(test_state.get("revision", 0)),
+	}
+
+
+func _submit_test_battle_action(draft: Dictionary) -> void:
+	var result := session.submit_test_action(_test_context(), draft)
+	if not result.accepted:
+		_report_error(result.error)
+		refresh()
+		return
+	notice = "已提交测试命令"
+	refresh()
+
+
+func _test_preview(draft: Dictionary) -> ActionPreview:
+	if not session.has_test_room() or draft.is_empty():
+		return null
+	var type := str(draft.get("type", ""))
+	if type not in ["play_card", "end_turn", "confirm_choice", "set_ally_target"]:
+		var local := ActionPreview.new()
+		local.can_submit = true
+		return local
+	var result := session.preview_test_action(_test_context(), draft)
+	if result.ok:
+		return result.data
+	var preview := ActionPreview.new()
+	preview.blocking_errors.append(result.error)
+	return preview
+
+
+func _handle_test_command(command: String, payload: Dictionary) -> void:
+	last_error = null
+	match command:
+		"test.start":
+			var started := session.start_test_room(payload.get("config", {}))
+			if not started.accepted:
+				_report_error(started.error)
+				refresh()
+				return
+			_ui_screen = ""
+			notice = "实验开始；可随时打开编辑器。"
+			refresh()
+		"test.patch":
+			var applied := session.apply_test_patch(
+				_test_context(), {"ops": payload.get("ops", [])}
+			)
+			if not applied.accepted:
+				_report_error(applied.error)
+				refresh()
+				return
+			notice = "已应用修改"
+			refresh()
+		"test.begin_edit":
+			session.begin_test_edit(_test_context())
+			refresh()
+		"test.cancel_edit":
+			session.cancel_test_edit(_test_context())
+			refresh()
+		"test.undo", "test.redo":
+			var direction := "undo" if command == "test.undo" else "redo"
+			var stepped := session.step_test_history(_test_context(), direction)
+			if not stepped.accepted:
+				_report_error(stepped.error)
+			else:
+				notice = "已撤销" if direction == "undo" else "已重做"
+			refresh()
+		"test.pause":
+			var test_view := session.get_test_view()
+			var paused := bool(test_view.get("test", {}).get("paused", false))
+			session.pause_test_room(not paused)
+			notice = "已继续" if paused else "已暂停"
+			refresh()
+		"test.end_turn":
+			_submit_test_battle_action({"type": "end_turn", "payload": {}})
+		"test.restore_checkpoint":
+			var restored := session.restore_test_checkpoint(
+				_test_context(), str(payload.get("checkpoint_id", ""))
+			)
+			if not restored.accepted:
+				_report_error(restored.error)
+			else:
+				notice = "已恢复检查点并建立新分支"
+			refresh()
+		"test.continue":
+			var continued := session.set_test_outcome(_test_context(), "clear")
+			if not continued.accepted:
+				_report_error(continued.error)
+			else:
+				notice = "已清除实验结论，可继续编辑"
+			refresh()
+		"test.retry_same":
+			_restart_test("initial", "same")
+		"test.retry_current":
+			_restart_test("current", "same")
+		"test.save_snapshot":
+			_save_test_file("snapshot")
+		"test.save_preset":
+			_save_test_file("preset")
+		"test.save_record":
+			_save_test_file("record")
+		"test.save_and_exit":
+			if _save_test_file("snapshot"):
+				_close_test_room()
+		"test.close":
+			_close_test_room()
+		"test.load_preset", "test.load_snapshot", "test.load_record":
+			var id := str(payload.get("id", ""))
+			var loaded: ActionResult
+			match command:
+				"test.load_preset":
+					loaded = session.load_test_preset(id)
+				"test.load_snapshot":
+					loaded = session.load_test_snapshot(id)
+				_:
+					loaded = session.load_test_record(id)
+			if not loaded.accepted:
+				_report_error(loaded.error)
+				refresh()
+				return
+			_ui_screen = ""
+			notice = "已载入测试文件"
+			refresh()
+		_:
+			notice = "未知测试命令：" + command
+			refresh()
+
+
+func _restart_test(origin: String, seed_mode: String) -> void:
+	var restarted := session.restart_test_battle(_test_context(), origin, seed_mode)
+	if not restarted.accepted:
+		_report_error(restarted.error)
+	else:
+		notice = "已开始新尝试"
+	refresh()
+
+
+func _save_test_file(kind: String) -> bool:
+	var result: GameResult
+	match kind:
+		"preset":
+			result = session.save_test_preset("测试预设")
+		"record":
+			result = session.save_test_record("测试记录")
+		_:
+			result = session.save_test_snapshot("测试快照")
+	if not result.ok:
+		_report_error(result.error)
+		refresh()
+		return false
+	notice = "已保存到 " + str(result.data.get("path", "测试目录"))
+	refresh()
+	return true
+
+
+func _close_test_room() -> void:
+	var closed := session.close_test_room()
+	if not closed.accepted:
+		_report_error(closed.error)
+	_ui_screen = "menu"
+	notice = "已退出测试房间；正式进度未改变。"
+	refresh()
+
+
 func _has_previous_run() -> bool:
 	var current := session.get_view()
 	if current.run_id != null:
@@ -461,7 +771,16 @@ func _action_notice(result: ActionResult) -> void:
 
 
 func _navigate(type: String, payload: Dictionary) -> void:
+	if session.has_test_room() and type == "ui.menu":
+		_close_test_room()
+		return
 	match type:
+		"ui.test_room":
+			_ui_screen = "test_room"
+			_restart_confirmation = false
+			notice = "测试房间使用独立上下文，不会改动正式存档。"
+			refresh()
+			return
 		"ui.menu":
 			_ui_screen = "menu"
 			_restart_confirmation = false
@@ -676,3 +995,4 @@ func _report_error(error: ApiError) -> void:
 	notice = UiStyle.error_text(error)
 	if audio != null:
 		audio.play_ui("error")
+

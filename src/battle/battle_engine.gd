@@ -5917,3 +5917,54 @@ func _is_safe_id(value: String) -> bool:
 			return false
 	var first := value.unicode_at(0)
 	return (first >= 65 and first <= 90) or (first >= 97 and first <= 122) or first == 95
+
+func test_apply_rule_op(
+	state: BattleState, rule: String, args: Dictionary, rng_state: Dictionary
+) -> GameResult:
+	# Test-room hook: executes one real rule operation through existing handlers.
+	if _catalog == null or _catalog.get_info() == null:
+		return _failure(
+			GameConstants.ERROR_ENGINE_NOT_READY, "battle.catalog.not_ready", {"operation": "test_rule_op"}
+		)
+	if rule == "end_turn":
+		return apply(state, ActionDraft.new(&"end_turn", {}), rng_state)
+	var rng := RandomSource.new("test_rule_op")
+	var restored := rng.restore_state(rng_state)
+	if not restored.ok:
+		return restored
+	var events: Array[RuleEvent] = []
+	match rule:
+		"draw":
+			var count := maxi(1, mini(50, int(args.get("count", 1))))
+			_draw_cards(state, count, rng, events)
+		"gain_status":
+			var status_id := str(args.get("status_id", ""))
+			var target_id := str(args.get("target_id", ""))
+			var stacks := maxi(1, mini(999, int(args.get("stacks", 1))))
+			var gained := _gain_status_on_target(
+				state,
+				{"status": status_id, "stacks": stacks, "target": str(args.get("target", "player"))},
+				target_id,
+				events
+			)
+			if not gained.ok:
+				return gained
+		"pressure":
+			var amount := maxi(0, mini(999, int(args.get("amount", 0))))
+			_apply_pressure_to_player(state, amount, events, 0)
+		_:
+			return _failure(
+				GameConstants.ERROR_TEST_UNSUPPORTED,
+				"test.rule_op.not_available",
+				{"rule": rule}
+			)
+	return GameResult.success(
+		BattleStep.new(
+			state,
+			events,
+			null,
+			state.outcome,
+			state.outcome == null,
+			rng.export_state().to_dictionary()
+		)
+	)
