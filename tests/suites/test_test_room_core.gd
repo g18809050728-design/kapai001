@@ -145,6 +145,75 @@ func run() -> Array[String]:
 		_has_status(view.battle.statuses, "work_boost", str(view.battle.player.entity_id)),
 		"real status rule op added the status"
 	)
+	var ddl_before := int(view.battle.ddl)
+	var freeze_set := session.apply_test_patch(
+		_context(session),
+		{"ops": [{"op": "set_switch", "key": "freeze_ddl", "value": true}]}
+	)
+	_check(freeze_set.accepted, "freeze_ddl switch applies: " + _error_text(freeze_set.error))
+	var frozen_turn := session.submit_test_action(
+		_context(session), {"type": "end_turn", "payload": {}}
+	)
+	_check(frozen_turn.accepted, "frozen turn ends: " + _error_text(frozen_turn.error))
+	view = session.get_test_view()
+	_check(int(view.battle.ddl) == ddl_before, "freeze_ddl keeps DDL unchanged")
+	for relic_id in ["FY_Y1_1", "FY_Y1_2", "FY_Y1_3"]:
+		var added_relic := session.apply_test_patch(
+			_context(session), {"ops": [{"op": "add_relic", "relic_id": relic_id}]}
+		)
+		_check(added_relic.accepted, "relic adds: " + _error_text(added_relic.error))
+	var fourth_relic := session.apply_test_patch(
+		_context(session), {"ops": [{"op": "add_relic", "relic_id": "FY_Y1_4"}]}
+	)
+	_check(not fourth_relic.accepted, "fourth relic is blocked while slots are enforced")
+	var relic_switch := session.apply_test_patch(
+		_context(session),
+		{"ops": [{"op": "set_switch", "key": "ignore_relic_slots", "value": true}]}
+	)
+	_check(relic_switch.accepted, "relic-slot switch applies: " + _error_text(relic_switch.error))
+	fourth_relic = session.apply_test_patch(
+		_context(session), {"ops": [{"op": "add_relic", "relic_id": "FY_Y1_4"}]}
+	)
+	_check(fourth_relic.accepted, "fourth relic applies after the switch: " + _error_text(fourth_relic.error))
+	var focus_set := session.apply_test_patch(
+		_context(session), {"ops": [{"op": "set_player_field", "field": "focus", "value": 5}]}
+	)
+	_check(focus_set.accepted, "focus prepares for the pending-choice case")
+	var add_choice_card := session.apply_test_patch(
+		_context(session),
+		{
+			"ops": [
+				{"op": "add_card", "definition_id": "R3-P01-16", "zone": "hand", "count": 1},
+				{"op": "add_card", "definition_id": "R3-P01-01", "zone": "discard", "count": 1},
+			]
+		}
+	)
+	_check(add_choice_card.accepted, "choice fixture cards apply: " + _error_text(add_choice_card.error))
+	view = session.get_test_view()
+	var choice_card_id := ""
+	for card in view.battle.hand:
+		if str(card.get("definition_id", "")) == "R3-P01-16":
+			choice_card_id = str(card.get("card_id", ""))
+	var played := session.submit_test_action(
+		_context(session), {"type": "play_card", "payload": {"card_instance_id": choice_card_id}}
+	)
+	_check(played.accepted, "choice card plays: " + _error_text(played.error))
+	view = session.get_test_view()
+	_check(view.pending_choice is Dictionary, "playing the retrieve card creates a pending choice")
+	if view.pending_choice is Dictionary:
+		var pending_context := _context(session)
+		var rolled := session.apply_test_patch(
+			pending_context,
+			{
+				"resolution_policy": "rollback",
+				"ops": [{"op": "adjust_player_field", "field": "focus", "delta": 1}],
+			}
+		)
+		_check(rolled.accepted, "rollback edit applies during a pending choice: " + _error_text(rolled.error))
+		view = session.get_test_view()
+		_check(view.pending_choice == null, "rollback edit clears the pending choice")
+		_check(int(view.test.branch_id) == int(pending_context.branch_id) + 1, "rollback edit branches")
+		_check(int(view.test.revision) == 0, "rollback edit starts revision zero")
 	var preset := session.save_test_preset("core-preset")
 	_check(preset.ok, "preset saves: " + _error_text(preset.error))
 	var preset_id := str(preset.data.id) if preset.ok else ""
@@ -202,6 +271,7 @@ func _check(condition: bool, message: String) -> void:
 	if not condition:
 		_failures.append(message)
 		push_error(message)
+
 
 
 
