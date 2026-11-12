@@ -143,10 +143,26 @@ func press(uid: String) -> bool:
 	var control: Control = _buttons[uid]
 	if control is BaseButton and (control as BaseButton).disabled:
 		return false
+	if control is CheckBox:
+		var check := control as CheckBox
+		check.button_pressed = not check.button_pressed
+		return true
 	if control.has_signal("pressed"):
 		control.emit_signal("pressed")
 		return true
 	return false
+
+
+func set_search(query: String) -> bool:
+	if not is_instance_valid(_search_input):
+		return false
+	_search_input.text = query
+	_search_input.text_changed.emit(query)
+	return true
+
+
+func status_text() -> String:
+	return _status_text
 
 
 func handle_result(accepted: bool) -> void:
@@ -829,6 +845,16 @@ func _ruleset_row(caption: String, path: String, actual: int, minimum: int, maxi
 	)
 
 
+func _clear_results(box: Node) -> void:
+	for uid in _buttons.keys():
+		var control: Variant = _buttons[uid]
+		if is_instance_valid(control) and box.is_ancestor_of(control):
+			_buttons.erase(uid)
+	for child in box.get_children():
+		box.remove_child(child)
+		child.queue_free()
+
+
 func _search_card_list(parent: VBoxContainer, caption: String) -> void:
 	_label(parent, caption, 15)
 	var input := LineEdit.new()
@@ -843,9 +869,7 @@ func _search_card_list(parent: VBoxContainer, caption: String) -> void:
 
 
 func _fill_card_results(box: VBoxContainer, query: String) -> void:
-	for child in box.get_children():
-		box.remove_child(child)
-		child.queue_free()
+	_clear_results(box)
 	var cards: Array = _options.get("cards", [])
 	var shown := 0
 	for card in cards:
@@ -884,9 +908,7 @@ func _search_task_list(parent: VBoxContainer, caption: String) -> void:
 
 
 func _fill_task_results(box: VBoxContainer, query: String) -> void:
-	for child in box.get_children():
-		box.remove_child(child)
-		child.queue_free()
+	_clear_results(box)
 	var shown := 0
 	for task in _options.get("tasks", []):
 		if not _matches(task, query):
@@ -917,9 +939,7 @@ func _search_encounter_list(parent: VBoxContainer, caption: String) -> void:
 
 
 func _fill_encounter_results(box: VBoxContainer, query: String) -> void:
-	for child in box.get_children():
-		box.remove_child(child)
-		child.queue_free()
+	_clear_results(box)
 	var shown := 0
 	for encounter in _options.get("encounters", []):
 		if not _matches(encounter, query):
@@ -952,9 +972,7 @@ func _search_unit_list(parent: VBoxContainer, caption: String) -> void:
 
 
 func _fill_unit_results(box: VBoxContainer, query: String) -> void:
-	for child in box.get_children():
-		box.remove_child(child)
-		child.queue_free()
+	_clear_results(box)
 	var shown := 0
 	for unit in _options.get("units", []):
 		if not _matches(unit, query):
@@ -985,9 +1003,7 @@ func _search_relic_list(parent: VBoxContainer, caption: String) -> void:
 
 
 func _fill_relic_results(box: VBoxContainer, query: String) -> void:
-	for child in box.get_children():
-		box.remove_child(child)
-		child.queue_free()
+	_clear_results(box)
 	var shown := 0
 	for relic in _options.get("relics", []):
 		if not _matches(relic, query):
@@ -1018,9 +1034,7 @@ func _search_status_list(parent: VBoxContainer) -> void:
 
 
 func _fill_status_results(box: VBoxContainer, query: String) -> void:
-	for child in box.get_children():
-		box.remove_child(child)
-		child.queue_free()
+	_clear_results(box)
 	var shown := 0
 	for status in _options.get("statuses", []):
 		if not _matches(status, query):
@@ -1094,9 +1108,7 @@ func _search_override_cards(parent: VBoxContainer) -> void:
 
 
 func _fill_override_results(box: VBoxContainer, query: String) -> void:
-	for child in box.get_children():
-		box.remove_child(child)
-		child.queue_free()
+	_clear_results(box)
 	var shown := 0
 	for card in _options.get("cards", []):
 		if not _matches(card, query):

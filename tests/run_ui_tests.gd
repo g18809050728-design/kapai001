@@ -22,7 +22,8 @@ func _run() -> void:
 		"test_ui_followup",
 		"test_ui_damage_popup",
 		"test_ui_battle_map_feedback",
-		"test_test_room_ui"
+		"test_test_room_ui",
+		"test_test_room_e2e"
 	]:
 		var script: Script = load("res://tests/suites/%s.gd" % path)
 		if script == null or not script.can_instantiate():
