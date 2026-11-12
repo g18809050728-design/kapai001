@@ -37,6 +37,9 @@ var _confirm_discard := false
 var _applying := false
 var _override_card := ""
 var _override_field := "cost"
+var _task_detail := ""
+var _custom_section: Control
+var _custom_editor: Control
 var _seq := 0
 var _buttons: Dictionary = {}
 
@@ -173,6 +176,11 @@ func handle_result(accepted: bool) -> void:
 	if accepted:
 		_draft.clear()
 		_status_text = "已应用修改"
+		_options = {}
+		if session != null:
+			var options := session.get_test_room_options()
+			if options.ok:
+				_options = options.data
 	else:
 		_status_text = "应用失败，草稿保留"
 	_render_all()
@@ -305,7 +313,7 @@ func _build_character() -> void:
 
 func _build_cards() -> void:
 	var zone_row := _row(_content)
-	for zone in ["hand", "draw", "discard", "exhaust"]:
+	for zone in ["hand", "draw", "discard", "exhaust", "chapter"]:
 		var counts: Dictionary = _battle().get("zone_counts", {})
 		var caption := "%s %s" % [_zone_name(zone), counts.get(zone, 0)]
 		var button := _button(
@@ -316,7 +324,7 @@ func _build_cards() -> void:
 	var cards := _zone_cards(_zone)
 	_label(_content, "%s · %d 张" % [_zone_name(_zone), cards.size()], 13, TestUiTokens.INK_SOFT)
 	if cards.is_empty():
-		_empty("该牌区为空；可在下方搜索并入一张卡牌。")
+		_empty("该牌区为空；可在下方按 ID 或搜索加入一张卡牌。")
 	for entry in cards:
 		var row := _row(_content)
 		var name := UiStyle.label(str(entry.get("definition_id", "")))
@@ -328,9 +336,13 @@ func _build_cards() -> void:
 			_button(row, "test:editor:card:%s:move" % card_id, "移手", func():
 				_set_draft("card.%s.move" % card_id, {"op": "move_instance", "instance_id": card_id, "zone": "hand"})
 			)
-		_button(row, "test:editor:card:%s:dup" % card_id, "复制", func():
-			_set_draft("card.%s.dup" % card_id, {"op": "duplicate_instance", "instance_id": card_id, "zone": _zone, "count": 1})
-		)
+		if _zone != "chapter":
+			_button(row, "test:editor:card:%s:chapter" % card_id, "入章", func():
+				_set_draft("card.%s.chapter" % card_id, {"op": "move_instance", "instance_id": card_id, "zone": "chapter"})
+			)
+			_button(row, "test:editor:card:%s:dup" % card_id, "复制", func():
+				_set_draft("card.%s.dup" % card_id, {"op": "duplicate_instance", "instance_id": card_id, "zone": _zone, "count": 1})
+			)
 		_button(row, "test:editor:card:%s:up" % card_id, "升/降", func():
 			var level := 0 if int(entry.get("upgrade_level", 0)) > 0 else 1
 			_set_draft("card.%s.up" % card_id, {"op": "set_card_field", "scope": "instance", "target": card_id, "field": "upgrade_level", "value": level})
@@ -338,7 +350,27 @@ func _build_cards() -> void:
 		_button(row, "test:editor:card:%s:rm" % card_id, "移除", func():
 			_set_draft("card.%s.rm" % card_id, {"op": "remove_instance", "instance_id": card_id})
 		)
-	_search_card_list(_content, "加入卡牌")
+	var raw_row := _row(_content)
+	_label(raw_row, "按定义 ID", 13, TestUiTokens.INK_SOFT)
+	var raw_input := LineEdit.new()
+	raw_input.name = "RawCardId"
+	raw_input.placeholder_text = "任意卡牌 ID，如 R3-P02-18"
+	raw_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	raw_input.add_theme_font_size_override("font_size", TestUiTokens.font(13))
+	raw_row.add_child(raw_input)
+	var raw_actions := _row(_content)
+	_label(raw_actions, "加入", 13, TestUiTokens.INK_SOFT)
+	_spacer(raw_actions)
+	_button(raw_actions, "test:editor:rawcard:hand", "手牌", func():
+		_add_card_by_id(raw_input.text, "hand")
+	)
+	_button(raw_actions, "test:editor:rawcard:discard", "弃牌", func():
+		_add_card_by_id(raw_input.text, "discard")
+	)
+	_button(raw_actions, "test:editor:rawcard:chapter", "章节", func():
+		_add_card_by_id(raw_input.text, "chapter")
+	)
+	_search_card_list(_content, "搜索任意卡牌")
 	var actions := _row(_content)
 	_button(actions, "test:editor:cards:shuffle", "洗抽牌堆", func():
 		_set_draft("cards.shuffle", {"op": "shuffle_zone", "zone": "draw"})
@@ -416,8 +448,169 @@ func _build_enemies() -> void:
 		_button(row, "test:editor:task:%s:rm" % task_id, "移除", func():
 			_set_draft("task.%s.rm" % task_id, {"op": "remove_task", "task_id": task_id})
 		)
-	_search_task_list(_content, "加入任务")
+		_button(row, "test:editor:task:%s:detail" % task_id, "详情", func():
+			_task_detail = task_id
+			_render_all()
+		)
+	var detail_task := _find_task(_task_detail)
+	if not detail_task.is_empty():
+		_build_task_detail(detail_task)
+	var raw_task_row := _row(_content)
+	_label(raw_task_row, "按任务 ID 加入", 13, TestUiTokens.INK_SOFT)
+	var raw_task_input := LineEdit.new()
+	raw_task_input.placeholder_text = "任意任务 ID"
+	raw_task_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	raw_task_row.add_child(raw_task_input)
+	_button(raw_task_row, "test:editor:rawtask", "加入", func():
+		var id := raw_task_input.text.strip_edges()
+		if not id.is_empty():
+			_set_draft("addtask.raw.%d" % _seq, {"op": "add_task", "definition_id": id})
+			_seq += 1
+	)
+	_search_task_list(_content, "搜索任意任务")
 	_search_encounter_list(_content, "替换遭遇")
+
+
+func _build_task_detail(task: Dictionary) -> void:
+	var task_id := str(task.get("task_id", ""))
+	_section("任务详情 · %s" % UiStyle.label(str(task.get("definition_id", ""))))
+	var close_detail := _button(_content, "test:editor:task:%s:close" % task_id, "关闭详情", func():
+		_task_detail = ""
+		_render_all()
+	, "ghost")
+	close_detail.size_flags_horizontal = Control.SIZE_SHRINK_END
+	var definition := _find_option("tasks", str(task.get("definition_id", "")))
+	var phases: Array = definition.get("phases", [])
+	if not phases.is_empty():
+		var phase_row := _row(_content)
+		_row_label(phase_row, "阶段")
+		var phase_select := OptionButton.new()
+		_style_option(phase_select)
+		var current_phase := str(task.get("phase_key", ""))
+		for index in phases.size():
+			var phase_key := str((phases[index] as Dictionary).get("phase_key", ""))
+			phase_select.add_item(phase_key, index)
+			if phase_key == current_phase:
+				phase_select.selected = index
+		phase_select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		phase_row.add_child(phase_select)
+		_button(phase_row, "test:editor:task:%s:phase:set" % task_id, "切换阶段", func():
+			_set_draft(
+				"task.%s.phase" % task_id,
+				{
+					"op": "set_task_phase",
+					"task_id": task_id,
+					"phase_key": str(phase_select.get_item_text(phase_select.selected)),
+				}
+			)
+		)
+	var work_row := _row(_content)
+	_row_label(work_row, "完成量")
+	var work_input := LineEdit.new()
+	work_input.text = str(int(task.get("work_remaining", 0)))
+	work_input.custom_minimum_size = Vector2(80, TestUiTokens.height(32))
+	work_input.add_theme_font_size_override("font_size", TestUiTokens.font(13))
+	work_input.add_theme_stylebox_override("normal", TestUiTokens.field_style())
+	work_row.add_child(work_input)
+	_button(work_row, "test:editor:task:%s:work:set" % task_id, "设为", func():
+		var raw := work_input.text.strip_edges()
+		if not raw.is_valid_int():
+			_status_text = "错误：完成量需为整数"
+			_render_all()
+			return
+		_set_draft(
+			"task.%s.work_exact" % task_id,
+			{
+				"op": "set_task_field",
+				"task_id": task_id,
+				"field": "work_remaining",
+				"value": clampi(int(raw), 0, int(task.get("work_max", 99999))),
+			}
+		)
+	)
+	var max_row := _row(_content)
+	_row_label(max_row, "完成上限")
+	var max_input := LineEdit.new()
+	max_input.text = str(int(task.get("work_max", 1)))
+	max_input.custom_minimum_size = Vector2(80, TestUiTokens.height(32))
+	max_input.add_theme_font_size_override("font_size", TestUiTokens.font(13))
+	max_input.add_theme_stylebox_override("normal", TestUiTokens.field_style())
+	max_row.add_child(max_input)
+	_button(max_row, "test:editor:task:%s:workmax:set" % task_id, "设为", func():
+		var raw := max_input.text.strip_edges()
+		if not raw.is_valid_int() or int(raw) < 1:
+			_status_text = "错误：完成上限需为正整数"
+			_render_all()
+			return
+		_set_draft(
+			"task.%s.workmax" % task_id,
+			{"op": "set_task_field", "task_id": task_id, "field": "work_max", "value": int(raw)}
+		)
+	)
+	var shield_row := _row(_content)
+	_row_label(shield_row, "屏障")
+	var shield_input := LineEdit.new()
+	shield_input.text = str(int(task.get("shield", 0)))
+	shield_input.custom_minimum_size = Vector2(80, TestUiTokens.height(32))
+	shield_input.add_theme_font_size_override("font_size", TestUiTokens.font(13))
+	shield_input.add_theme_stylebox_override("normal", TestUiTokens.field_style())
+	shield_row.add_child(shield_input)
+	_button(shield_row, "test:editor:task:%s:shield:set" % task_id, "设为", func():
+		var raw := shield_input.text.strip_edges()
+		if not raw.is_valid_int() or int(raw) < 0:
+			_status_text = "错误：屏障需为非负整数"
+			_render_all()
+			return
+		_set_draft(
+			"task.%s.shield" % task_id,
+			{"op": "set_task_field", "task_id": task_id, "field": "shield", "value": int(raw)}
+		)
+	)
+	_label(_content, "下一条意图（JSON，可任意组合已注册字段）", 13, TestUiTokens.INK_SOFT)
+	var intent_edit := TextEdit.new()
+	intent_edit.name = "IntentJson"
+	intent_edit.custom_minimum_size = Vector2(0, TestUiTokens.height(110))
+	intent_edit.text = JSON.stringify(task.get("intent_snapshot", {}), "  ")
+	intent_edit.add_theme_font_size_override("font_size", TestUiTokens.font(12))
+	intent_edit.add_theme_color_override("font_color", TestUiTokens.INK)
+	intent_edit.add_theme_color_override("caret_color", TestUiTokens.INK)
+	intent_edit.add_theme_color_override("selection_color", TestUiTokens.TINT)
+	intent_edit.add_theme_stylebox_override("normal", TestUiTokens.field_style())
+	var intent_row := _row(_content)
+	_button(intent_row, "test:editor:task:%s:intent:set" % task_id, "设为下一条意图", func():
+		var parsed: Variant = JSON.parse_string(intent_edit.text)
+		if typeof(parsed) != TYPE_DICTIONARY:
+			_status_text = "错误：意图必须是 JSON 对象"
+			_render_all()
+			return
+		_set_draft(
+			"task.%s.intent" % task_id,
+			{"op": "set_task_intent", "task_id": task_id, "intent": parsed}
+		)
+	, "primary")
+	_button(intent_row, "test:editor:task:%s:intent:clear" % task_id, "清空", func():
+		_set_draft(
+			"task.%s.intent" % task_id,
+			{"op": "set_task_intent", "task_id": task_id, "intent": {}}
+		)
+	, "ghost")
+	_content.add_child(intent_edit)
+
+
+func _find_task(task_id: String) -> Dictionary:
+	if task_id.is_empty():
+		return {}
+	for task in _battle().get("tasks", []):
+		if str(task.get("task_id", "")) == task_id:
+			return task
+	return {}
+
+
+func _find_option(kind: String, id: String) -> Dictionary:
+	for entry in _options.get(kind, []):
+		if typeof(entry) == TYPE_DICTIONARY and str(entry.get("id", "")) == id:
+			return entry
+	return {}
 
 
 func _build_allies() -> void:
@@ -442,6 +635,18 @@ func _build_allies() -> void:
 			_set_draft("unit.%s.rm" % unit_id, {"op": "remove_unit", "unit_id": unit_id})
 		)
 	_search_unit_list(_content, "加入伙伴")
+	var raw_unit_row := _row(_content)
+	_label(raw_unit_row, "按单位 ID 加入", 13, TestUiTokens.INK_SOFT)
+	var raw_unit_input := LineEdit.new()
+	raw_unit_input.placeholder_text = "任意单位/伙伴 ID"
+	raw_unit_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	raw_unit_row.add_child(raw_unit_input)
+	_button(raw_unit_row, "test:editor:rawunit", "加入", func():
+		var id := raw_unit_input.text.strip_edges()
+		if not id.is_empty():
+			_set_draft("addunit.raw.%d" % _seq, {"op": "add_unit", "definition_id": id})
+			_seq += 1
+	)
 	_section("饰品")
 	if _battle().get("relics", []).is_empty():
 		_empty("当前没有饰品。")
@@ -452,6 +657,18 @@ func _build_allies() -> void:
 			_set_draft("relic.%s.rm" % str(relic_id), {"op": "remove_relic", "relic_id": str(relic_id)})
 		)
 	_search_relic_list(_content, "加入饰品")
+	var raw_relic_row := _row(_content)
+	_label(raw_relic_row, "按饰品 ID 加入", 13, TestUiTokens.INK_SOFT)
+	var raw_relic_input := LineEdit.new()
+	raw_relic_input.placeholder_text = "任意饰品 ID"
+	raw_relic_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	raw_relic_row.add_child(raw_relic_input)
+	_button(raw_relic_row, "test:editor:rawrelic", "加入", func():
+		var id := raw_relic_input.text.strip_edges()
+		if not id.is_empty():
+			_set_draft("addrelic.raw.%d" % _seq, {"op": "add_relic", "relic_id": id})
+			_seq += 1
+	)
 	var scene: Variant = _battle().get("scene")
 	if typeof(scene) == TYPE_DICTIONARY:
 		var row := _row(_content)
@@ -459,12 +676,25 @@ func _build_allies() -> void:
 		_button(row, "test:editor:scene:clear", "清除", func():
 			_set_draft("scene.clear", {"op": "clear_scene"})
 		)
+	var scene_row := _row(_content)
+	_label(scene_row, "按场景 ID 加入", 13, TestUiTokens.INK_SOFT)
+	var scene_input := LineEdit.new()
+	scene_input.placeholder_text = "任意场景 ID，如 L01"
+	scene_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scene_row.add_child(scene_input)
+	_button(scene_row, "test:editor:scene:add", "加入", func():
+		var id := scene_input.text.strip_edges()
+		if not id.is_empty():
+			_set_draft("scene.add.%d" % _seq, {"op": "add_scene", "scene_id": id})
+			_seq += 1
+	)
 
 
 func _build_statuses() -> void:
 	_label(_content, "目标", 15)
 	var target_row := _row(_content)
 	var selector := OptionButton.new()
+	_style_option(selector)
 	var target_ids: Array[String] = []
 	selector.add_item("主角", 0)
 	target_ids.append(str(_player().get("entity_id", "")))
@@ -483,6 +713,26 @@ func _build_statuses() -> void:
 	target_row.add_child(selector)
 	_label(_content, "给该目标添加状态", 15)
 	_search_status_list(_content)
+	var raw_status_row := _row(_content)
+	_label(raw_status_row, "按状态 ID 添加", 13, TestUiTokens.INK_SOFT)
+	var raw_status_input := LineEdit.new()
+	raw_status_input.placeholder_text = "任意状态 ID"
+	raw_status_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	raw_status_row.add_child(raw_status_input)
+	_button(raw_status_row, "test:editor:rawstatus", "添加", func():
+		var id := raw_status_input.text.strip_edges()
+		if not id.is_empty():
+			_set_draft(
+				"addstatus.raw.%d" % _seq,
+				{
+					"op": "add_status",
+					"status_id": id,
+					"target_id": _status_target,
+					"stacks": 1,
+				}
+			)
+			_seq += 1
+	)
 	_section("当前状态")
 	if _battle().get("statuses", []).is_empty():
 		_empty("当前没有状态。")
@@ -507,37 +757,100 @@ func _build_statuses() -> void:
 
 func _build_time() -> void:
 	var battle := _battle()
+	_section("时间")
 	_label(_content, "回合 %s · DDL %s · 阶段 %s" % [
 		battle.get("round_index", 0), battle.get("ddl", 0), battle.get("phase", "")
-	], 15)
+	], 14, TestUiTokens.INK_SOFT)
 	var round_row := _row(_content)
-	_label(round_row, "回合", 14)
+	_row_label(round_row, "回合")
 	_button(round_row, "test:editor:round:minus", "-1", func():
 		_set_draft("round", {"op": "set_round", "round_index": maxi(1, int(battle.get("round_index", 1)) - 1)})
 	)
+	var round_input := LineEdit.new()
+	round_input.name = "RoundInput"
+	round_input.text = str(_draft_value("round", int(battle.get("round_index", 1))))
+	round_input.custom_minimum_size = Vector2(72, TestUiTokens.height(32))
+	round_input.add_theme_font_size_override("font_size", TestUiTokens.font(13))
+	round_input.add_theme_stylebox_override("normal", TestUiTokens.field_style())
+	round_row.add_child(round_input)
 	_button(round_row, "test:editor:round:plus", "+1", func():
 		_set_draft("round", {"op": "set_round", "round_index": int(battle.get("round_index", 1)) + 1})
 	)
+	_button(round_row, "test:editor:time:round:set", "设为", func():
+		var raw := round_input.text.strip_edges()
+		if not raw.is_valid_int():
+			_status_text = "错误：回合需为整数"
+			_render_all()
+			return
+		_set_draft("round", {"op": "set_round", "round_index": clampi(int(raw), 1, 999)})
+	)
 	var ddl_row := _row(_content)
-	_label(ddl_row, "DDL", 14)
+	_row_label(ddl_row, "DDL")
 	_button(ddl_row, "test:editor:time:ddl_minus", "-1", func():
 		_set_draft("time.ddl", {"op": "set_ddl", "ddl": maxi(0, int(battle.get("ddl", 0)) - 1)})
 	)
+	var ddl_input := LineEdit.new()
+	ddl_input.name = "DdlInput"
+	ddl_input.text = str(_draft_value("time.ddl", int(battle.get("ddl", 0))))
+	ddl_input.custom_minimum_size = Vector2(72, TestUiTokens.height(32))
+	ddl_input.add_theme_font_size_override("font_size", TestUiTokens.font(13))
+	ddl_input.add_theme_stylebox_override("normal", TestUiTokens.field_style())
+	ddl_row.add_child(ddl_input)
 	_button(ddl_row, "test:editor:time:ddl_plus", "+1", func():
 		_set_draft("time.ddl", {"op": "set_ddl", "ddl": mini(99, int(battle.get("ddl", 0)) + 1)})
+	)
+	_button(ddl_row, "test:editor:time:ddl:set", "设为", func():
+		var raw := ddl_input.text.strip_edges()
+		if not raw.is_valid_int():
+			_status_text = "错误：DDL 需为整数"
+			_render_all()
+			return
+		_set_draft("time.ddl", {"op": "set_ddl", "ddl": clampi(int(raw), 0, 99)})
+	)
+	var phase_row := _row(_content)
+	_row_label(phase_row, "阶段")
+	var phase_select := OptionButton.new()
+	_style_option(phase_select)
+	var phases := [
+		["player_prepare", "准备"],
+		["player_action", "玩家行动"],
+		["enemy_turn", "敌方行动"],
+	]
+	var current_phase := str(battle.get("phase", "player_action"))
+	for index in phases.size():
+		phase_select.add_item(phases[index][1], index)
+		if phases[index][0] == current_phase:
+			phase_select.selected = index
+	phase_select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	phase_row.add_child(phase_select)
+	_button(phase_row, "test:editor:time:phase:set", "切换", func():
+		_set_draft(
+			"time.phase",
+			{
+				"op": "set_phase",
+				"phase": phases[phase_select.selected][0],
+			}
+		)
 	)
 	_button(_content, "test:editor:time:end_turn", "结束回合（真实规则）", func():
 		command.emit("test.end_turn", {})
 	)
+	_section("随机")
 	var seed_row := _row(_content)
 	var seed_input := LineEdit.new()
-	seed_input.placeholder_text = "新 seed"
+	seed_input.placeholder_text = "任意 seed"
 	seed_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	seed_input.add_theme_font_size_override("font_size", TestUiTokens.font(13))
 	seed_row.add_child(seed_input)
 	_button(seed_row, "test:editor:time:seed_all", "重置四流", func():
 		var value := seed_input.text.strip_edges()
 		if not value.is_empty():
 			_set_draft("time.seed", {"op": "reset_rng", "mode": "all", "seed": value})
+	)
+	_button(seed_row, "test:editor:time:seed_battle", "只重置战斗流", func():
+		var value := seed_input.text.strip_edges()
+		if not value.is_empty():
+			_set_draft("time.seed_battle", {"op": "reset_rng", "mode": "battle", "seed": value})
 	)
 	_section("计次")
 	for key in battle.get("counters", {}):
@@ -549,6 +862,22 @@ func _build_time() -> void:
 
 
 func _build_rules() -> void:
+	_section("自由调用")
+	_label(
+		_content,
+		"自由模式默认开启：槽位、唯一、空牌组/空敌人、精力归零等限制不拦实验。可一键切换。",
+		12,
+		TestUiTokens.INK_SOFT
+	)
+	var free_row := _row(_content)
+	_button(free_row, "test:editor:free:enable", "全部解除限制", func(): _set_all_relaxations(true), "primary")
+	_button(free_row, "test:editor:free:disable", "恢复默认限制", func(): _set_all_relaxations(false), "ghost")
+	_button(free_row, "test:editor:free:jump", "自定义定义", func():
+		if is_instance_valid(_custom_editor):
+			_scroll.ensure_control_visible(_custom_editor)
+		elif is_instance_valid(_custom_section):
+			_scroll.ensure_control_visible(_custom_section)
+	, "ghost")
 	_section("规则开关（草稿）")
 	for entry in _options.get("switches", []):
 		var key := str(entry.get("key", ""))
@@ -572,6 +901,84 @@ func _build_rules() -> void:
 	_ruleset_row("饰品槽位", "run.relic_slots", int(_nested(ruleset, "run.relic_slots", 3)), 0, 64)
 	_section("定义覆盖")
 	_search_override_cards(_content)
+	_section("自定义定义（JSON）")
+	_custom_section = _content.get_child(_content.get_child_count() - 1)
+	_label(
+		_content,
+		"可直接创建新卡牌/任务/饰品/状态/单位/遭遇；ID 必须以 TEST. 开头，创建后可按 ID 调用。",
+		12,
+		TestUiTokens.INK_SOFT
+	)
+	var def_kind_row := _row(_content)
+	_row_label(def_kind_row, "类型")
+	var def_kind := OptionButton.new()
+	_style_option(def_kind)
+	var def_kinds := ["card", "task", "relic", "status", "unit", "encounter", "scene"]
+	for index in def_kinds.size():
+		def_kind.add_item(def_kinds[index], index)
+	def_kind.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	def_kind_row.add_child(def_kind)
+	var def_id_row := _row(_content)
+	_row_label(def_id_row, "ID")
+	var def_id := LineEdit.new()
+	def_id.name = "DefinitionId"
+	def_id.placeholder_text = "TEST.card.demo"
+	def_id.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	def_id.add_theme_font_size_override("font_size", TestUiTokens.font(13))
+	def_id_row.add_child(def_id)
+	var def_edit := TextEdit.new()
+	def_edit.name = "DefinitionJson"
+	def_edit.custom_minimum_size = Vector2(0, TestUiTokens.height(220))
+	def_edit.placeholder_text = "在此粘贴定义 JSON…"
+	def_edit.add_theme_font_size_override("font_size", TestUiTokens.font(12))
+	def_edit.add_theme_stylebox_override("normal", TestUiTokens.field_style())
+	var def_row := _row(_content)
+	_button(def_row, "test:editor:definition:upsert", "创建 / 覆盖定义", func():
+		var kind: String = str(def_kinds[def_kind.selected])
+		var id := def_id.text.strip_edges()
+		if id.is_empty() or not id.begins_with("TEST."):
+			_status_text = "错误：定义 ID 必须以 TEST. 开头"
+			_render_all()
+			return
+		var parsed: Variant = JSON.parse_string(def_edit.text)
+		if typeof(parsed) != TYPE_DICTIONARY:
+			_status_text = "错误：定义必须是 JSON 对象"
+			_render_all()
+			return
+		(parsed as Dictionary)["id"] = id
+		_set_draft(
+			"definition.%s.%s" % [kind, id],
+			{"op": "upsert_definition", "kind": kind, "id": id, "definition": parsed}
+		)
+	, "primary")
+	_button(def_row, "test:editor:definition:remove", "删除定义", func():
+		var kind: String = str(def_kinds[def_kind.selected])
+		var id := def_id.text.strip_edges()
+		if id.begins_with("TEST."):
+			_set_draft(
+				"definition.%s.%s.remove" % [kind, id],
+				{"op": "remove_definition", "kind": kind, "id": id}
+			)
+	, "danger")
+	_content.add_child(def_edit)
+	_custom_editor = def_edit
+	_label(
+		_content,
+		"任务示例：{\"name_key\":\"木桩\",\"phases\":[{\"phase_key\":\"main\",\"work_max\":50,\"intents\":[{\"pressure\":1}]}]}",
+		12,
+		TestUiTokens.INK_SOFT
+	)
+
+
+func _set_all_relaxations(value: bool) -> void:
+	var keep_limited := ["freeze_outcome", "freeze_ddl", "freeze_enemy", "manual_rule_steps"]
+	for entry in _options.get("switches", []):
+		var key := str(entry.get("key", ""))
+		if keep_limited.has(key):
+			continue
+		_draft["switch." + key] = {"op": "set_switch", "key": key, "value": value}
+	_status_text = "已加入自由模式草稿" if value else "已加入恢复限制草稿"
+	_render_all()
 
 
 func _build_history() -> void:
@@ -770,7 +1177,11 @@ func _draft_value(key: String, actual: Variant) -> Variant:
 	if _draft.has(key):
 		var op: Dictionary = _draft[key]
 		match str(op.get("op", "")):
-			"set_player_field", "set_task_field", "set_unit_field", "set_status_field", "set_v3_field", "set_ddl", "set_round", "set_rule_field", "set_counter":
+			"set_ddl":
+				return op.get("ddl", actual)
+			"set_round":
+				return op.get("round_index", actual)
+			"set_player_field", "set_task_field", "set_unit_field", "set_status_field", "set_v3_field", "set_rule_field", "set_counter":
 				return op.get("value", actual)
 			"adjust_player_field":
 				return int(actual) + int(op.get("delta", 0))
@@ -888,9 +1299,9 @@ func _fill_card_results(box: VBoxContainer, query: String) -> void:
 		_seq += 1
 		_button(row, "test:editor:adddiscard:%s:%d" % [card_id, _seq], "弃牌", func(): _add_card_to(card_id, "discard"))
 		_seq += 1
+		_button(row, "test:editor:addchapter:%s:%d" % [card_id, _seq], "章节", func(): _add_card_to(card_id, "chapter"))
+		_seq += 1
 		shown += 1
-		if shown >= 24:
-			break
 	if shown == 0:
 		_label(box, "没有匹配卡牌", 13, TestUiTokens.INK_SOFT)
 
@@ -922,8 +1333,6 @@ func _fill_task_results(box: VBoxContainer, query: String) -> void:
 		)
 		_seq += 1
 		shown += 1
-		if shown >= 16:
-			break
 
 
 func _search_encounter_list(parent: VBoxContainer, caption: String) -> void:
@@ -955,8 +1364,6 @@ func _fill_encounter_results(box: VBoxContainer, query: String) -> void:
 		)
 		_seq += 1
 		shown += 1
-		if shown >= 12:
-			break
 
 
 func _search_unit_list(parent: VBoxContainer, caption: String) -> void:
@@ -986,8 +1393,6 @@ func _fill_unit_results(box: VBoxContainer, query: String) -> void:
 		)
 		_seq += 1
 		shown += 1
-		if shown >= 12:
-			break
 
 
 func _search_relic_list(parent: VBoxContainer, caption: String) -> void:
@@ -1017,8 +1422,6 @@ func _fill_relic_results(box: VBoxContainer, query: String) -> void:
 		)
 		_seq += 1
 		shown += 1
-		if shown >= 16:
-			break
 
 
 func _search_status_list(parent: VBoxContainer) -> void:
@@ -1056,8 +1459,6 @@ func _fill_status_results(box: VBoxContainer, query: String) -> void:
 		)
 		_seq += 1
 		shown += 1
-		if shown >= 16:
-			break
 
 
 func _search_override_cards(parent: VBoxContainer) -> void:
@@ -1076,6 +1477,7 @@ func _search_override_cards(parent: VBoxContainer) -> void:
 		parent.add_child(field_row)
 		_label(field_row, "对 %s 覆盖" % UiStyle.label(_override_card), 14)
 		var selector := OptionButton.new()
+		_style_option(selector)
 		for field in ["cost", "type", "target"]:
 			selector.add_item(field, selector.item_count)
 			if field == _override_field:
@@ -1122,8 +1524,19 @@ func _fill_override_results(box: VBoxContainer, query: String) -> void:
 			_render_all()
 		)
 		shown += 1
-		if shown >= 10:
-			break
+
+
+func _add_card_by_id(definition_id: String, zone: String) -> void:
+	var id := definition_id.strip_edges()
+	if id.is_empty():
+		_status_text = "错误：请输入卡牌 ID"
+		_render_all()
+		return
+	_set_draft(
+		"addcard.raw.%s.%s.%d" % [id, zone, _seq],
+		{"op": "add_card", "definition_id": id, "zone": zone, "count": 1}
+	)
+	_seq += 1
 
 
 func _add_card_to(card_id: String, zone: String) -> void:
@@ -1137,6 +1550,10 @@ func _add_card_to(card_id: String, zone: String) -> void:
 func _zone_cards(zone: String) -> Array:
 	var result: Array = []
 	var battle := _battle()
+	if zone == "chapter":
+		for card in battle.get("chapter_cards", []):
+			result.append(card)
+		return result
 	if zone == "hand":
 		for card in battle.get("hand", []):
 			result.append(card)
@@ -1155,7 +1572,16 @@ func _zone_cards(zone: String) -> Array:
 
 
 func _zone_name(zone: String) -> String:
-	return str({"hand": "手牌", "draw": "抽牌堆", "discard": "弃牌堆", "exhaust": "消耗堆"}.get(zone, zone))
+	return str(
+		{
+			"hand": "手牌",
+			"draw": "抽牌堆",
+			"discard": "弃牌堆",
+			"exhaust": "消耗堆",
+			"chapter": "章节区",
+		}
+		.get(zone, zone)
+	)
 
 
 func _holder_exists(target_id: String) -> bool:
@@ -1224,6 +1650,15 @@ func _style_button(button: Button, kind: String) -> void:
 	for key in ["font_color", "font_hover_color", "font_pressed_color", "font_focus_color"]:
 		button.add_theme_color_override(key, color)
 	button.add_theme_color_override("font_disabled_color", Color(TestUiTokens.INK_SOFT, 0.45))
+
+
+func _style_option(select: OptionButton) -> void:
+	select.add_theme_font_size_override("font_size", TestUiTokens.font(13))
+	for key in ["font_color", "font_hover_color", "font_pressed_color", "font_focus_color"]:
+		select.add_theme_color_override(key, TestUiTokens.INK)
+	for state in ["normal", "hover", "pressed", "disabled"]:
+		select.add_theme_stylebox_override(state, TestUiTokens.field_style())
+	select.add_theme_stylebox_override("focus", TestUiTokens.focus_style())
 
 
 func _label(parent: Node, text: String, size: int = 14, color: Color = TestUiTokens.INK) -> Label:
@@ -1335,6 +1770,8 @@ func _input(event: InputEvent) -> void:
 	elif key.ctrl_pressed and key.keycode == KEY_Z and not typing:
 		command.emit("test.redo" if key.shift_pressed else "test.undo", {})
 		accept_event()
+
+
 
 
 

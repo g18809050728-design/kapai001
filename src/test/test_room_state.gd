@@ -62,7 +62,9 @@ static func from_core(snapshot: Dictionary) -> TestRoomState:
 	state.pending_choice = choice_from_dictionary(snapshot.get("pending_choice"))
 	var rng_value: Variant = snapshot.get("rng", {})
 	if typeof(rng_value) == TYPE_DICTIONARY:
-		state.rng = rng_value.duplicate(true)
+		state.rng = (rng_value as Dictionary).duplicate(true)
+		if state.rng.has("algorithm_version"):
+			state.rng["algorithm_version"] = int(state.rng.algorithm_version)
 	var switches_value: Variant = snapshot.get("switches", {})
 	if typeof(switches_value) == TYPE_DICTIONARY:
 		state.switches = switches_value.duplicate(true)

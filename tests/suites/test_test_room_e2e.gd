@@ -85,13 +85,106 @@ func run() -> Array[String]:
 	_check(panel.press("test:editor:tab:rules"), "rules tab")
 	await _frame()
 	var switch_uid := "test:editor:switch:allow_empty_tasks"
+	var switch_before := bool(session.get_test_view().switches.get("allow_empty_tasks", false))
 	_check(panel.button_uids().has(switch_uid), "switch exists")
 	_check(panel.press(switch_uid), "toggle switch")
 	await _frame()
 	_check(panel.draft_count() == 1, "switch draft queued")
 	_check(panel.press("test:editor:apply"), "apply switch")
 	await _frame()
-	_check(bool(session.get_test_view().switches.get("allow_empty_tasks", false)), "switch applied")
+	_check(
+		bool(session.get_test_view().switches.get("allow_empty_tasks", false)) != switch_before,
+		"switch applied"
+	)
+
+	# Free mode and custom definitions from the real rules UI.
+	_check(panel.press("test:editor:free:enable"), "free mode button")
+	_check(panel.draft_count() > 0, "free mode queues switches")
+	_check(panel.press("test:editor:apply"), "apply free mode")
+	await _frame()
+	_check(
+		bool(session.get_test_view().switches.get("ignore_relic_slots", false)),
+		"free mode enables relic slots"
+	)
+	var def_id := panel.find_child("DefinitionId", true, false) as LineEdit
+	var def_json := panel.find_child("DefinitionJson", true, false) as TextEdit
+	_check(def_id != null and def_json != null, "definition editor exists")
+	if def_id != null and def_json != null:
+		def_id.text = "TEST.card.ui"
+		def_json.text = '{"id":"TEST.card.ui","name_key":"UI 自由卡","type":"work","cost":0,"target":"task","effects":[{"op":"complete","amount":3}],"permanent":true}'
+		_check(panel.press("test:editor:definition:upsert"), "queue custom definition")
+		_check(panel.press("test:editor:apply"), "apply custom definition")
+		await _frame()
+	_check(panel.press("test:editor:tab:cards"), "cards tab for custom card")
+	await _frame()
+	var raw_card := panel.find_child("RawCardId", true, false) as LineEdit
+	_check(raw_card != null, "raw card input exists")
+	if raw_card != null:
+		raw_card.text = "TEST.card.ui"
+		_check(panel.press("test:editor:rawcard:hand"), "queue raw custom card")
+		_check(panel.press("test:editor:apply"), "apply raw custom card")
+		await _frame()
+	var custom_in_hand := false
+	for card in session.get_test_view().battle.hand:
+		if str(card.get("definition_id", "")) == "TEST.card.ui":
+			custom_in_hand = true
+	_check(custom_in_hand, "custom card is callable by ID")
+
+	# Exact time inputs.
+	_check(panel.press("test:editor:tab:time"), "time tab")
+	await _frame()
+	var round_input := panel.find_child("RoundInput", true, false) as LineEdit
+	var ddl_input := panel.find_child("DdlInput", true, false) as LineEdit
+	_check(round_input != null and ddl_input != null, "exact time inputs exist")
+	if round_input != null and ddl_input != null:
+		round_input.text = "12"
+		_check(panel.press("test:editor:time:round:set"), "queue exact round")
+		var ddl_after := panel.find_child("DdlInput", true, false) as LineEdit
+		_check(ddl_after != null, "DDL input survives rerender")
+		if ddl_after != null:
+			ddl_after.text = "2"
+			_check(panel.press("test:editor:time:ddl:set"), "queue exact DDL")
+		_check(panel.press("test:editor:apply"), "apply exact time")
+		await _frame()
+	var time_view := session.get_test_view()
+	_check(int(time_view.battle.round_index) == 12, "exact round applied")
+	_check(int(time_view.battle.ddl) == 2, "exact DDL applied")
+
+	# Monster intent editing through the task detail panel.
+	_check(panel.press("test:editor:tab:enemies"), "enemies tab for intent")
+	await _frame()
+	var task_list: Array = session.get_test_view().battle.tasks
+	_check(not task_list.is_empty(), "task exists for intent edit")
+	if not task_list.is_empty():
+		var task_id := str(task_list[0].task_id)
+		_check(panel.press("test:editor:task:%s:detail" % task_id), "open task detail")
+		var intent_json := panel.find_child("IntentJson", true, false) as TextEdit
+		_check(intent_json != null, "intent editor exists")
+		if intent_json != null:
+			intent_json.text = '{"pressure":8,"shield":3}'
+			_check(panel.press("test:editor:task:%s:intent:set" % task_id), "queue intent")
+			_check(panel.press("test:editor:apply"), "apply intent")
+			await _frame()
+	var intent_ok := false
+	for task in session.get_test_view().battle.tasks:
+		if int((task.get("intent_snapshot", {}) as Dictionary).get("pressure", 0)) == 8:
+			intent_ok = true
+	_check(intent_ok, "monster intent is arbitrary")
+
+	# Chapter zone can hold any card.
+	_check(panel.press("test:editor:tab:cards"), "cards tab for chapter")
+	await _frame()
+	var chapter_input := panel.find_child("RawCardId", true, false) as LineEdit
+	_check(chapter_input != null, "chapter raw input exists")
+	if chapter_input != null:
+		chapter_input.text = "R3-P02-18"
+		_check(panel.press("test:editor:rawcard:chapter"), "queue chapter card")
+		_check(panel.press("test:editor:apply"), "apply chapter card")
+		await _frame()
+	_check(
+		(session.get_test_view().battle.get("chapter_cards", []) as Array).size() == 1,
+		"chapter card is callable"
+	)
 
 	# History: save snapshot from the editor button.
 	_check(panel.press("test:editor:tab:history"), "history tab")
@@ -223,6 +316,7 @@ func _check(condition: bool, message: String) -> void:
 	if not condition:
 		_failures.append(message)
 		push_error(message)
+
 
 
 

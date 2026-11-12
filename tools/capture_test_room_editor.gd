@@ -63,6 +63,22 @@ func _capture() -> void:
 		await _save("editor-cards" + suffix)
 		shell._test_hud.editor.press("test:editor:tab:enemies")
 		await _save("editor-enemies" + suffix)
+		shell._test_hud.editor.press("test:editor:tab:time")
+		await _save("editor-time" + suffix)
+		shell._test_hud.editor.press("test:editor:tab:enemies")
+		await _frames(2)
+		var tasks: Array = session.get_test_view().battle.tasks
+		if not tasks.is_empty():
+			shell._test_hud.editor.press("test:editor:task:%s:detail" % str(tasks[0].task_id))
+			await _save("editor-task-detail" + suffix)
+		shell._test_hud.editor.press("test:editor:tab:rules")
+		await _save("editor-rules" + suffix)
+		shell._test_hud.editor.press("test:editor:free:jump")
+		await _save("editor-custom-definition" + suffix)
+		shell._test_hud.editor.press("test:editor:tab:cards")
+		await _frames(2)
+		shell._test_hud.editor.press("test:editor:zone:chapter")
+		await _save("editor-cards-chapter" + suffix)
 		shell._test_hud.editor.press("test:editor:close")
 		await _frames(2)
 	session.update_settings(

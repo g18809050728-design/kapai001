@@ -29,18 +29,19 @@ const PATCH_KEYS := [
 	"ops",
 ]
 const LIMITS := {
-	"zone": 300,
-	"cards": 500,
-	"tasks": 40,
-	"units": 32,
-	"statuses": 500,
-	"relics": 64,
+	"zone": 500,
+	"cards": 1000,
+	"tasks": 100,
+	"units": 64,
+	"statuses": 1000,
+	"relics": 128,
+	"chapters": 24,
 	"value": 9999,
 	"ddl": 99,
 	"round": 999,
 	"ops": 100,
-	"definitions": 200,
-	"overrides": 1000,
+	"definitions": 500,
+	"overrides": 2000,
 }
 const SWITCHES := {
 	"allow_zero_vitality": "允许主角精力为 0 并继续实验",
@@ -58,6 +59,18 @@ const SWITCHES := {
 	"manual_rule_steps": "敌方/回合结算只在手动单步时推进",
 	"keep_hand": "回合结束不强制弃手牌",
 }
+const FREE_SWITCHES := [
+	"allow_zero_vitality",
+	"allow_empty_tasks",
+	"infinite_focus",
+	"no_cost",
+	"ignore_limits",
+	"ignore_relic_unique",
+	"ignore_relic_slots",
+	"ignore_unit_slots",
+	"ignore_chapter_slots",
+	"keep_hand",
+]
 const OP_KEYS := {
 	"set_switch": ["op", "key", "value"],
 	"set_player_field": ["op", "field", "value"],
@@ -80,6 +93,8 @@ const OP_KEYS := {
 	"add_task": ["op", "definition_id", "position"],
 	"remove_task": ["op", "task_id"],
 	"set_task_field": ["op", "task_id", "field", "value"],
+	"set_task_intent": ["op", "task_id", "intent", "intent_cursor"],
+	"set_task_phase": ["op", "task_id", "phase_key"],
 	"add_unit": ["op", "definition_id", "position"],
 	"remove_unit": ["op", "unit_id"],
 	"set_unit_field": ["op", "unit_id", "field", "value"],
@@ -101,6 +116,7 @@ const OP_KEYS := {
 	"clear_outcome": ["op"],
 	"run_rule_op": ["op", "rule", "args"],
 	"clear_scene": ["op"],
+	"add_scene": ["op", "scene_id"],
 }
 
 var state: TestRoomState
@@ -215,7 +231,7 @@ func start(config_value: Variant) -> GameResult:
 	base_catalog = loaded
 	catalog = wrapped
 	engine = local_engine
-	state = new_state
+	_adopt_state(new_state)
 	notice = ""
 	return GameResult.success(state.core_snapshot())
 
@@ -234,6 +250,24 @@ func view() -> Dictionary:
 		battle_view["relics"] = state.battle.relics.duplicate()
 		battle_view["counters"] = state.battle.counters.duplicate(true)
 		battle_view["exam_flags"] = state.battle.exam_flags.duplicate()
+		var chapter_cards: Array[Dictionary] = []
+		if typeof(state.battle.v3) == TYPE_DICTIONARY and typeof(state.battle.v3.get("paper")) == TYPE_DICTIONARY:
+			for entry in state.battle.v3.paper.get("chapters", []):
+				if typeof(entry) != TYPE_DICTIONARY:
+					continue
+				var card_id := str(entry.get("card_id", ""))
+				var card: Dictionary = state.battle.card_by_id.get(card_id, {})
+				chapter_cards.append(
+					{
+						"card_id": card_id,
+						"definition_id": str(card.get("definition_id", entry.get("definition_id", ""))),
+						"upgrade_level": int(card.get("upgrade_level", 0)),
+					}
+				)
+		battle_view["chapter_cards"] = chapter_cards
+		var counts: Dictionary = battle_view.get("zone_counts", {}).duplicate(true)
+		counts["chapter"] = chapter_cards.size()
+		battle_view["zone_counts"] = counts
 	var checkpoints: Array[Dictionary] = []
 	for checkpoint in state.checkpoints:
 		checkpoints.append(
@@ -336,12 +370,22 @@ func options() -> Dictionary:
 		var definition := _definition(loaded, "task", str(id))
 		var phases: Array = definition.get("phases", [])
 		var work_max := int((phases[0] as Dictionary).get("work_max", 0)) if not phases.is_empty() else 0
+		var phase_list: Array[Dictionary] = []
+		for phase in phases:
+			phase_list.append(
+				{
+					"phase_key": str(phase.get("phase_key", "")),
+					"work_max": int(phase.get("work_max", 0)),
+					"intent_count": (phase.get("intents", []) as Array).size(),
+				}
+			)
 		tasks.append(
 			{
 				"id": str(id),
 				"name_key": str(definition.get("name_key", id)),
 				"kind": str(definition.get("kind", "")),
 				"work_max": work_max,
+				"phases": phase_list,
 			}
 		)
 	var units: Array[Dictionary] = []
@@ -368,7 +412,96 @@ func options() -> Dictionary:
 		)
 	var switches: Array[Dictionary] = []
 	for key in SWITCHES:
-		switches.append({"key": key, "description": SWITCHES[key], "default": false})
+		switches.append(
+			{"key": key, "description": SWITCHES[key], "default": FREE_SWITCHES.has(key)}
+		)
+	var scenes: Array[Dictionary] = []
+	for id in info.enabled.get("scene", []):
+		var definition := _definition(loaded, "scene", str(id))
+		scenes.append({"id": str(id), "name_key": str(definition.get("name_key", id))})
+	if state != null and state.overlay != null:
+		for id in state.overlay.definitions.get("card", {}):
+			if not _has_option(cards, str(id)):
+				var definition: Dictionary = state.overlay.definitions.card[id]
+				cards.append(
+					{
+						"id": str(id),
+						"name_key": str(definition.get("name_key", id)),
+						"type": str(definition.get("type", "")),
+						"cost": int(definition.get("cost", 0)),
+						"rarity": str(definition.get("rarity", "")),
+						"owner": str(definition.get("owner", "")),
+					}
+				)
+		for id in state.overlay.definitions.get("task", {}):
+			if not _has_option(tasks, str(id)):
+				var definition: Dictionary = state.overlay.definitions.task[id]
+				var phases: Array = definition.get("phases", [])
+				var phase_list: Array[Dictionary] = []
+				for phase in phases:
+					phase_list.append(
+						{
+							"phase_key": str(phase.get("phase_key", "")),
+							"work_max": int(phase.get("work_max", 0)),
+							"intent_count": (phase.get("intents", []) as Array).size(),
+						}
+					)
+				tasks.append(
+					{
+						"id": str(id),
+						"name_key": str(definition.get("name_key", id)),
+						"kind": str(definition.get("kind", "")),
+						"work_max": int((phases[0] as Dictionary).get("work_max", 0)) if not phases.is_empty() else 0,
+						"phases": phase_list,
+					}
+				)
+		for id in state.overlay.definitions.get("unit", {}):
+			if not _has_option(units, str(id)):
+				var definition: Dictionary = state.overlay.definitions.unit[id]
+				units.append(
+					{
+						"id": str(id),
+						"name_key": str(definition.get("name_key", id)),
+						"vitality": int(definition.get("vitality", 0)),
+						"cooperation": int(definition.get("cooperation", 0)),
+					}
+				)
+		for id in state.overlay.definitions.get("relic", {}):
+			if not _has_option(relics, str(id)):
+				var definition: Dictionary = state.overlay.definitions.relic[id]
+				relics.append(
+					{
+						"id": str(id),
+						"name_key": str(definition.get("name_key", id)),
+						"rarity": str(definition.get("rarity", "")),
+					}
+				)
+		for id in state.overlay.definitions.get("status", {}):
+			if not _has_option(statuses, str(id)):
+				var definition: Dictionary = state.overlay.definitions.status[id]
+				statuses.append(
+					{
+						"id": str(id),
+						"name_key": str(definition.get("name_key", id)),
+						"target": str(definition.get("target", "")),
+					}
+				)
+		for id in state.overlay.definitions.get("encounter", {}):
+			if not _has_option(encounters, str(id)):
+				var definition: Dictionary = state.overlay.definitions.encounter[id]
+				encounters.append(
+					{
+						"id": str(id),
+						"name_key": str(definition.get("name_key", id)),
+						"kind": str(definition.get("kind", "")),
+						"base_ddl": int(definition.get("base_ddl", 0)),
+						"members": definition.get("members", []).duplicate(),
+					}
+				)
+		for id in state.overlay.definitions.get("scene", {}):
+			if not _has_option(scenes, str(id)):
+				var definition: Dictionary = state.overlay.definitions.scene[id]
+				scenes.append({"id": str(id), "name_key": str(definition.get("name_key", id))})
 	return {
 		"manifest_id": info.id,
 		"content_version": info.content_version,
@@ -381,10 +514,18 @@ func options() -> Dictionary:
 		"units": units,
 		"relics": relics,
 		"statuses": statuses,
+		"scenes": scenes,
 		"ruleset": ruleset,
 		"switches": switches,
 		"limits": LIMITS.duplicate(true),
 	}
+
+
+func _has_option(entries: Array, id: String) -> bool:
+	for entry in entries:
+		if typeof(entry) == TYPE_DICTIONARY and str(entry.get("id", "")) == id:
+			return true
+	return false
 
 
 func begin_edit(context: Variant) -> ActionResult:
@@ -519,7 +660,9 @@ func apply_patch(context: Variant, patch_value: Variant) -> ActionResult:
 	working.dirty = true
 	working.interventions = state.interventions + patch.ops.size()
 	var before_hash := state.state_hash()
-	state = working
+	_adopt_state(working)
+	if catalog is TestContent:
+		(catalog as TestContent).overlay = state.overlay
 	state.make_checkpoint("编辑 %d 项" % patch.ops.size(), "edit")
 	state.append_journal("edit", {"ops": patch.ops.size(), "policy": policy}, before_hash, state.state_hash())
 	notice = "已应用 %d 项" % patch.ops.size()
@@ -605,7 +748,7 @@ func submit_action(context: Variant, draft_value: Variant) -> ActionResult:
 			"editable": true,
 		}
 	var before_hash := state.state_hash()
-	state = working
+	_adopt_state(working)
 	state.make_checkpoint("命令 %s" % String(action_type), "command")
 	state.append_journal(
 		"command",
@@ -644,7 +787,7 @@ func restore_checkpoint(context: Variant, checkpoint_id: String) -> ActionResult
 	restored.editing = state.editing
 	restored.dirty = true
 	var before_hash := state.state_hash()
-	state = restored
+	_adopt_state(restored)
 	state.append_journal(
 		"restore", {"checkpoint_id": checkpoint_id}, before_hash, state.state_hash()
 	)
@@ -673,7 +816,7 @@ func step_history(context: Variant, direction: String) -> ActionResult:
 		restored.revision = 0
 		restored.editing = state.editing
 		restored.dirty = true
-		state = restored
+		_adopt_state(restored)
 		return _accepted_result([], true)
 	if direction == "redo":
 		if state.redo_stack.is_empty():
@@ -693,7 +836,7 @@ func step_history(context: Variant, direction: String) -> ActionResult:
 		restored.revision = 0
 		restored.editing = state.editing
 		restored.dirty = true
-		state = restored
+		_adopt_state(restored)
 		return _accepted_result([], true)
 	return _reject(ApiError.new(GameConstants.ERROR_INVALID_ARGUMENT, "test.history.direction"))
 
@@ -745,7 +888,7 @@ func restart(context: Variant, origin: String, seed_mode: String, seed: String =
 		var rng := RandomSource.new(seed)
 		working.rng = rng.export_state().to_dictionary()
 		working.seed = seed
-	state = working
+	_adopt_state(working)
 	return _accepted_result([], true)
 
 
@@ -874,7 +1017,7 @@ func load_snapshot(snapshot_id: String) -> ActionResult:
 	base_catalog = loaded_catalog
 	catalog = TestContent.new(loaded_catalog, restored.overlay)
 	engine = BattleEngine.new(catalog)
-	state = restored
+	_adopt_state(restored)
 	return _accepted_result([], true)
 
 
@@ -913,8 +1056,14 @@ func load_record(record_id: String) -> ActionResult:
 	base_catalog = loaded_catalog
 	catalog = TestContent.new(loaded_catalog, restored.overlay)
 	engine = BattleEngine.new(catalog)
-	state = restored
+	_adopt_state(restored)
 	return _accepted_result([], true)
+
+
+func _adopt_state(value: TestRoomState) -> void:
+	state = value
+	if catalog is TestContent:
+		(catalog as TestContent).overlay = state.overlay
 
 
 func _check_context(context: Variant) -> ApiError:
@@ -1017,6 +1166,10 @@ func _apply_op(working: TestRoomState, op: Dictionary, summary: Array[Dictionary
 			return _op_remove_task(working, op, summary)
 		"set_task_field":
 			return _op_set_task_field(working, op, summary)
+		"set_task_intent":
+			return _op_set_task_intent(working, op, summary)
+		"set_task_phase":
+			return _op_set_task_phase(working, op, summary)
 		"add_unit":
 			return _op_add_unit(working, op, summary)
 		"remove_unit":
@@ -1059,6 +1212,8 @@ func _apply_op(working: TestRoomState, op: Dictionary, summary: Array[Dictionary
 			return _op_run_rule_op(working, op, summary)
 		"clear_scene":
 			return _op_clear_scene(working, summary)
+		"add_scene":
+			return _op_add_scene(working, op, summary)
 	return _invalid_patch("test.patch.unknown_op", {"op": name})
 
 
@@ -1108,6 +1263,8 @@ func _op_adjust_player_field(working: TestRoomState, op: Dictionary) -> ApiError
 func _op_add_card(working: TestRoomState, op: Dictionary, summary: Array[Dictionary]) -> ApiError:
 	var definition_id := str(op.get("definition_id", ""))
 	var zone := str(op.get("zone", "hand"))
+	if zone == "chapter":
+		return _add_chapter_cards(working, definition_id, op, summary)
 	if not ZONES.has(zone):
 		return ApiError.new(
 			GameConstants.ERROR_TEST_UNSUPPORTED, "test.patch.zone_unsupported", {"zone": zone}
@@ -1142,6 +1299,75 @@ func _op_add_card(working: TestRoomState, op: Dictionary, summary: Array[Diction
 	working.battle.zones[zone] = zone_cards
 	summary.append({"op": "add_card", "definition_id": definition_id, "zone": zone, "count": count})
 	return null
+
+
+func _add_chapter_cards(
+	working: TestRoomState, definition_id: String, op: Dictionary, summary: Array[Dictionary]
+) -> ApiError:
+	if _definition(catalog, "card", definition_id) == null:
+		return _invalid_patch("test.patch.definition_missing", {"definition_id": definition_id})
+	var count := int(op.get("count", 1))
+	if count < 1 or count > 50:
+		return _invalid_patch("test.patch.count", {"count": count})
+	var paper := _paper(working)
+	var chapters: Array = paper.get("chapters", [])
+	if chapters.size() + count > LIMITS.chapters:
+		return _limit("chapters")
+	if working.battle.card_by_id.size() + count > LIMITS.cards:
+		return _limit("cards")
+	paper["open"] = true
+	for _index in count:
+		var instance_id := _new_instance_id(working, "c")
+		working.battle.card_by_id[instance_id] = {
+			"card_id": instance_id,
+			"definition_id": definition_id,
+			"origin_card_id": "",
+			"upgrade_level": 0,
+			"temporary_modifiers": {},
+		}
+		_register_source(working, instance_id, "card", definition_id)
+		chapters.append(
+			{
+				"card_id": instance_id,
+				"definition_id": definition_id,
+				"deployed_round": working.battle.round_index,
+			}
+		)
+	paper["chapters"] = chapters
+	working.battle.v3["paper"] = paper
+	summary.append({"op": "add_card", "definition_id": definition_id, "zone": "chapter", "count": count})
+	return null
+
+
+func _paper(working: TestRoomState) -> Dictionary:
+	if typeof(working.battle.v3) != TYPE_DICTIONARY:
+		working.battle.v3 = {}
+	if typeof(working.battle.v3.get("paper")) != TYPE_DICTIONARY:
+		working.battle.v3["paper"] = {
+			"open": true,
+			"progress": 0,
+			"citations": 0,
+			"modifier": 0,
+			"amplify": 0,
+			"used_names": [],
+			"publication_id": "",
+			"chapters": [],
+			"turn_names": [],
+		}
+	return working.battle.v3.paper
+
+
+func _chapter_index(working: TestRoomState, instance_id: String) -> int:
+	if (
+		typeof(working.battle.v3) != TYPE_DICTIONARY
+		or typeof(working.battle.v3.get("paper")) != TYPE_DICTIONARY
+	):
+		return -1
+	var chapters: Array = working.battle.v3.paper.get("chapters", [])
+	for index in chapters.size():
+		if str((chapters[index] as Dictionary).get("card_id", "")) == instance_id:
+			return index
+	return -1
 
 
 func _op_remove_instance(working: TestRoomState, op: Dictionary, summary: Array[Dictionary]) -> ApiError:
@@ -1192,7 +1418,7 @@ func _op_move_instance(working: TestRoomState, op: Dictionary, summary: Array[Di
 	var zone := str(op.get("zone", ""))
 	if not working.battle.card_by_id.has(instance_id):
 		return _invalid_patch("test.patch.instance_missing", {"instance_id": instance_id})
-	if not ZONES.has(zone):
+	if not ZONES.has(zone) and zone != "chapter":
 		return ApiError.new(
 			GameConstants.ERROR_TEST_UNSUPPORTED, "test.patch.zone_unsupported", {"zone": zone}
 		)
@@ -1201,8 +1427,32 @@ func _op_move_instance(working: TestRoomState, op: Dictionary, summary: Array[Di
 		return null
 	if source_zone.is_empty():
 		return _invalid_patch("test.patch.instance_unzoned", {"instance_id": instance_id})
+	if source_zone == "chapter":
+		var chapters: Array = _paper(working).get("chapters", [])
+		var chapter_index := _chapter_index(working, instance_id)
+		if chapter_index >= 0:
+			chapters.remove_at(chapter_index)
+			working.battle.v3.paper["chapters"] = chapters
+		if zone == "chapter":
+			return null
+		var target_cards: Array = working.battle.zones.get(zone, [])
+		if target_cards.size() >= LIMITS.zone:
+			return _limit("zone")
+		var position := int(op.get("position", -1))
+		if position >= 0 and position <= target_cards.size():
+			target_cards.insert(position, instance_id)
+		else:
+			target_cards.append(instance_id)
+		working.battle.zones[zone] = target_cards
+		working.battle.retained_card_ids.erase(instance_id)
+		summary.append({"op": "move_instance", "instance_id": instance_id, "to": zone})
+		return null
 	var source_cards: Array = working.battle.zones.get(source_zone, [])
 	source_cards.erase(instance_id)
+	working.battle.zones[source_zone] = source_cards
+	working.battle.retained_card_ids.erase(instance_id)
+	if zone == "chapter":
+		return _append_chapter(working, instance_id, summary)
 	var target_cards: Array = working.battle.zones.get(zone, [])
 	if target_cards.size() >= LIMITS.zone:
 		return _limit("zone")
@@ -1211,10 +1461,27 @@ func _op_move_instance(working: TestRoomState, op: Dictionary, summary: Array[Di
 		target_cards.insert(position, instance_id)
 	else:
 		target_cards.append(instance_id)
-	working.battle.zones[source_zone] = source_cards
 	working.battle.zones[zone] = target_cards
-	working.battle.retained_card_ids.erase(instance_id)
 	summary.append({"op": "move_instance", "instance_id": instance_id, "to": zone})
+	return null
+
+
+func _append_chapter(working: TestRoomState, instance_id: String, summary: Array[Dictionary]) -> ApiError:
+	var paper := _paper(working)
+	var chapters: Array = paper.get("chapters", [])
+	if chapters.size() >= LIMITS.chapters:
+		return _limit("chapters")
+	var card: Dictionary = working.battle.card_by_id.get(instance_id, {})
+	paper["open"] = true
+	chapters.append(
+		{
+			"card_id": instance_id,
+			"definition_id": str(card.get("definition_id", "")),
+			"deployed_round": working.battle.round_index,
+		}
+	)
+	paper["chapters"] = chapters
+	summary.append({"op": "move_instance", "instance_id": instance_id, "to": "chapter"})
 	return null
 
 
@@ -1266,6 +1533,13 @@ func _op_shuffle_zone(working: TestRoomState, op: Dictionary, summary: Array[Dic
 
 func _op_clear_zone(working: TestRoomState, op: Dictionary, summary: Array[Dictionary]) -> ApiError:
 	var zone := str(op.get("zone", ""))
+	if zone == "chapter":
+		var chapters: Array = _paper(working).get("chapters", []).duplicate()
+		for entry in chapters:
+			_remove_card(working, str((entry as Dictionary).get("card_id", "")))
+		working.battle.v3.paper["chapters"] = []
+		summary.append({"op": "clear_zone", "zone": "chapter"})
+		return null
 	if not ZONES.has(zone):
 		return _invalid_patch("test.patch.zone", {"zone": zone})
 	for id in working.battle.zones.get(zone, []).duplicate():
@@ -1527,6 +1801,45 @@ func _op_set_task_field(working: TestRoomState, op: Dictionary, summary: Array[D
 	return null
 
 
+func _op_set_task_intent(working: TestRoomState, op: Dictionary, summary: Array[Dictionary]) -> ApiError:
+	var task_id := str(op.get("task_id", ""))
+	var intent: Variant = op.get("intent")
+	if typeof(intent) != TYPE_DICTIONARY:
+		return _invalid_patch("test.patch.type", {"field": "intent"})
+	for task in working.battle.tasks:
+		if str(task.get("task_id", "")) == task_id:
+			task["intent_snapshot"] = (intent as Dictionary).duplicate(true)
+			if op.has("intent_cursor") and typeof(op.intent_cursor) == TYPE_INT:
+				task["intent_cursor"] = maxi(0, int(op.intent_cursor))
+			summary.append({"op": "set_task_intent", "task_id": task_id})
+			return null
+	return _invalid_patch("test.patch.task_missing", {"task_id": task_id})
+
+
+func _op_set_task_phase(working: TestRoomState, op: Dictionary, summary: Array[Dictionary]) -> ApiError:
+	var task_id := str(op.get("task_id", ""))
+	var phase_key := str(op.get("phase_key", ""))
+	for task in working.battle.tasks:
+		if str(task.get("task_id", "")) != task_id:
+			continue
+		var definition := _definition(catalog, "task", str(task.get("definition_id", "")))
+		var phases: Array = definition.get("phases", [])
+		for phase in phases:
+			if str(phase.get("phase_key", "")) != phase_key:
+				continue
+			var intents: Array = phase.get("intents", [])
+			task["phase_key"] = phase_key
+			task["work_max"] = int(phase.get("work_max", 1))
+			task["work_remaining"] = int(phase.get("work_max", 1))
+			task["shield"] = int((intents[0] as Dictionary).get("shield", 0)) if not intents.is_empty() else 0
+			task["intent_cursor"] = 0
+			task["intent_snapshot"] = (intents[0] as Dictionary).duplicate(true) if not intents.is_empty() else {}
+			summary.append({"op": "set_task_phase", "task_id": task_id, "phase_key": phase_key})
+			return null
+		return _invalid_patch("test.patch.phase_missing", {"task_id": task_id, "phase_key": phase_key})
+	return _invalid_patch("test.patch.task_missing", {"task_id": task_id})
+
+
 func _op_add_unit(working: TestRoomState, op: Dictionary, summary: Array[Dictionary]) -> ApiError:
 	var definition_id := str(op.get("definition_id", ""))
 	var definition := _definition(catalog, "unit", definition_id)
@@ -1636,9 +1949,7 @@ func _op_set_round(working: TestRoomState, op: Dictionary) -> ApiError:
 		return _invalid_patch("test.patch.range", {"field": "round_index"})
 	for task in working.battle.tasks:
 		if int(task.get("eligible_round", 1)) > int(value):
-			return _invalid_patch(
-				"test.patch.range", {"field": "round_index", "task_id": str(task.get("task_id", ""))}
-			)
+			task["eligible_round"] = int(value)
 	working.battle.round_index = int(value)
 	return null
 
@@ -1914,6 +2225,22 @@ func _switch_required(key: String) -> ApiError:
 	)
 
 
+func _op_add_scene(working: TestRoomState, op: Dictionary, summary: Array[Dictionary]) -> ApiError:
+	var definition_id := str(op.get("scene_id", ""))
+	if _definition(catalog, "scene", definition_id).is_empty():
+		return _invalid_patch("test.patch.definition_missing", {"definition_id": definition_id})
+	var scene_id := _new_instance_id(working, "s")
+	working.battle.scene = {
+		"scene_id": scene_id,
+		"definition_id": definition_id,
+		"established_round": working.battle.round_index,
+		"pending_random_result": null,
+	}
+	_register_source(working, scene_id, "scene", definition_id)
+	summary.append({"op": "add_scene", "scene_id": definition_id})
+	return null
+
+
 func _op_clear_scene(working: TestRoomState, summary: Array[Dictionary]) -> ApiError:
 	if working.battle.scene is Dictionary:
 		working.battle.source_registry.erase(str(working.battle.scene.get("scene_id", "")))
@@ -1950,6 +2277,18 @@ func _validate_structure(working: TestRoomState) -> Array[String]:
 			zoned[key] = true
 			if not battle.card_by_id.has(key):
 				issues.append("zone references a missing card: " + key)
+	if typeof(battle.v3) == TYPE_DICTIONARY and typeof(battle.v3.get("paper")) == TYPE_DICTIONARY:
+		for entry in battle.v3.paper.get("chapters", []):
+			if typeof(entry) != TYPE_DICTIONARY:
+				issues.append("chapter entry is invalid")
+				continue
+			var key := str(entry.get("card_id", ""))
+			if zoned.has(key):
+				issues.append("chapter card is also in a zone: " + key)
+				continue
+			zoned[key] = true
+			if not battle.card_by_id.has(key):
+				issues.append("chapter references a missing card: " + key)
 	for id in battle.card_by_id:
 		var card: Dictionary = battle.card_by_id[id]
 		if str(card.get("card_id", "")) != str(id):
@@ -2095,7 +2434,7 @@ func _default_encounter(catalog_db: ContentDB) -> String:
 func _default_switches(raw: Variant) -> Dictionary:
 	var switches := {}
 	for key in SWITCHES:
-		switches[key] = false
+		switches[key] = FREE_SWITCHES.has(key)
 	if typeof(raw) == TYPE_DICTIONARY:
 		for key in raw:
 			if SWITCHES.has(str(key)) and typeof(raw[key]) == TYPE_BOOL:
@@ -2149,6 +2488,8 @@ func _zone_of(working: TestRoomState, instance_id: String) -> String:
 	for zone in ZONES:
 		if working.battle.zones.get(zone, []).has(instance_id):
 			return zone
+	if _chapter_index(working, instance_id) >= 0:
+		return "chapter"
 	return ""
 
 
@@ -2157,6 +2498,11 @@ func _remove_card(working: TestRoomState, instance_id: String) -> void:
 		var cards: Array = working.battle.zones.get(zone, [])
 		cards.erase(instance_id)
 		working.battle.zones[zone] = cards
+	var chapter_index := _chapter_index(working, instance_id)
+	if chapter_index >= 0:
+		var chapters: Array = working.battle.v3.paper.get("chapters", [])
+		chapters.remove_at(chapter_index)
+		working.battle.v3.paper["chapters"] = chapters
 	working.battle.card_by_id.erase(instance_id)
 	working.battle.source_registry.erase(instance_id)
 	working.battle.retained_card_ids.erase(instance_id)
@@ -2252,6 +2598,7 @@ func _stamp() -> String:
 	var date := Time.get_date_string_from_system().replace("-", "")
 	var time := Time.get_time_string_from_system().replace(":", "")
 	return "%s-%s-%04d" % [date, time, Time.get_ticks_usec() % 10000]
+
 
 
 
