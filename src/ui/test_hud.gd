@@ -128,20 +128,22 @@ func _build_bar() -> void:
 	_bar.mouse_filter = Control.MOUSE_FILTER_STOP
 	_bar.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
 	_bar.offset_top = 4
-	_bar.offset_bottom = BAR_HEIGHT
+	_bar.offset_bottom = TestUiTokens.height(BAR_HEIGHT)
 	add_child(_bar)
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 8)
 	_bar.add_child(row)
 	_identity = Label.new()
 	_identity.text = "测试房间"
-	_identity.add_theme_font_size_override("font_size", 14)
+	_identity.add_theme_font_size_override("font_size", TestUiTokens.font(14))
+	_identity.clip_text = true
+	_identity.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	_identity.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.add_child(_identity)
 	_state_label = Label.new()
 	_state_label.text = "运行中"
-	_state_label.add_theme_font_size_override("font_size", 14)
-	_state_label.add_theme_color_override("font_color", UiStyle.GOLD)
+	_state_label.add_theme_font_size_override("font_size", TestUiTokens.font(14))
+	_state_label.add_theme_color_override("font_color", TestUiTokens.ACCENT_TEXT)
 	row.add_child(_state_label)
 	_pause_button = _button(row, "test:pause", "暂停", func(): test_command.emit("test.pause", {}))
 	_button(row, "test:open_editor", "编辑器", func(): _toggle_editor())
@@ -154,8 +156,8 @@ func _build_bar() -> void:
 func _button(parent: Node, uid: String, text: String, callback: Callable) -> Button:
 	var button := Button.new()
 	button.text = text
-	button.custom_minimum_size = Vector2(0, 32)
-	button.add_theme_font_size_override("font_size", 14)
+	button.custom_minimum_size = Vector2(0, TestUiTokens.height(32))
+	button.add_theme_font_size_override("font_size", TestUiTokens.font(14))
 	button.pressed.connect(callback)
 	parent.add_child(button)
 	_buttons[uid] = button

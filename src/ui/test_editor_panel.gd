@@ -32,6 +32,8 @@ var _status_text := ""
 var _draft: Dictionary = {}
 var _draft_revision := -1
 var _show_policy := false
+var _confirm_close := false
+var _confirm_discard := false
 var _applying := false
 var _override_card := ""
 var _override_field := "cost"
@@ -51,15 +53,15 @@ func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_panel = PanelContainer.new()
 	_panel.mouse_filter = Control.MOUSE_FILTER_STOP
-	_panel.add_theme_stylebox_override("panel", UiStyle.box(Color("fffbf1")))
+	_panel.add_theme_stylebox_override("panel", TestUiTokens.panel_style())
 	add_child(_panel)
 	var margin := MarginContainer.new()
 	for side in ["left", "right", "top", "bottom"]:
-		margin.add_theme_constant_override("margin_" + side, 10)
+		margin.add_theme_constant_override("margin_" + side, TestUiTokens.SPACE_SM)
 	_panel.add_child(margin)
 	var column := VBoxContainer.new()
 	column.name = "EditorRoot"
-	column.add_theme_constant_override("separation", 8)
+	column.add_theme_constant_override("separation", TestUiTokens.SPACE_MD)
 	margin.add_child(column)
 	_column = column
 	_panel.visible = false
@@ -72,18 +74,18 @@ func _notification(what: int) -> void:
 
 
 func _update_layout() -> void:
-	var compact := size.x < 1100 or size.y < 700
+	var compact := size.x < 1100 or size.y < 700 or UiStyle.text_scale > 1.0
 	if compact:
 		_panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		_panel.offset_left = 8
 		_panel.offset_right = -8
-		_panel.offset_top = 54
+		_panel.offset_top = TestUiTokens.height(50)
 		_panel.offset_bottom = -8
 	else:
 		_panel.set_anchors_and_offsets_preset(Control.PRESET_RIGHT_WIDE)
-		_panel.offset_left = -DRAWER_WIDTH
+		_panel.offset_left = -TestUiTokens.PANEL_WIDTH
 		_panel.offset_right = -8
-		_panel.offset_top = 54
+		_panel.offset_top = TestUiTokens.height(50)
 		_panel.offset_bottom = -8
 
 
@@ -97,6 +99,12 @@ func is_open() -> bool:
 
 func draft_count() -> int:
 	return _draft.size()
+
+
+func clear_feedback() -> void:
+	_status_text = ""
+	if _open:
+		_render_all()
 
 
 func open() -> void:
@@ -144,6 +152,8 @@ func press(uid: String) -> bool:
 func handle_result(accepted: bool) -> void:
 	_applying = false
 	_show_policy = false
+	_confirm_close = false
+	_confirm_discard = false
 	if accepted:
 		_draft.clear()
 		_status_text = "已应用修改"
@@ -177,41 +187,55 @@ func _restore_scroll(value: int) -> void:
 
 func _build_header(parent: VBoxContainer) -> void:
 	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 8)
+	row.add_theme_constant_override("separation", TestUiTokens.SPACE_SM)
 	parent.add_child(row)
+	var identity := VBoxContainer.new()
+	identity.add_theme_constant_override("separation", 2)
+	identity.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.add_child(identity)
+	var eyebrow := Label.new()
+	eyebrow.text = "TEST ROOM / EDITOR"
+	eyebrow.add_theme_font_size_override("font_size", TestUiTokens.font(10))
+	eyebrow.add_theme_color_override("font_color", TestUiTokens.ACCENT_TEXT)
+	identity.add_child(eyebrow)
 	var title := Label.new()
 	title.text = "测试编辑器"
-	title.add_theme_font_size_override("font_size", 22)
-	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	row.add_child(title)
+	title.add_theme_font_size_override("font_size", TestUiTokens.font(22))
+	title.add_theme_color_override("font_color", TestUiTokens.INK)
+	identity.add_child(title)
+	var chips := HBoxContainer.new()
+	chips.add_theme_constant_override("separation", TestUiTokens.SPACE_XS)
+	row.add_child(chips)
 	var test_state := _test()
-	var meta := Label.new()
-	meta.text = "分支 %s · rev %s" % [test_state.get("branch_id", 0), test_state.get("revision", 0)]
-	meta.add_theme_font_size_override("font_size", 13)
-	meta.add_theme_color_override("font_color", UiStyle.MUTED)
-	row.add_child(meta)
-	_button(row, "test:editor:close", "关闭", func(): close_requested.emit())
+	_chip(chips, "分支 %s" % test_state.get("branch_id", 0))
+	_chip(chips, "REV %s" % test_state.get("revision", 0))
+	if not _draft.is_empty():
+		_chip(chips, "草稿 %d" % _draft.size(), true)
+	var close := _button(row, "test:editor:close", "关闭", func(): _request_close(), "ghost")
+	close.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 
 
 func _build_tabs(parent: VBoxContainer) -> void:
 	var grid := GridContainer.new()
 	grid.columns = 5
-	grid.add_theme_constant_override("h_separation", 4)
-	grid.add_theme_constant_override("v_separation", 4)
+	grid.add_theme_constant_override("h_separation", TestUiTokens.SPACE_XS)
+	grid.add_theme_constant_override("v_separation", TestUiTokens.SPACE_XS)
 	parent.add_child(grid)
 	for entry in TABS:
 		var tab_id: String = entry[0]
+		var active := tab_id == _tab
 		var button := _button(
 			grid,
 			"test:editor:tab:" + tab_id,
 			entry[1],
-			func(): _tab = tab_id; _render_all()
+			func(): _tab = tab_id; _render_all(),
+			"tab_active" if active else "tab"
 		)
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		button.custom_minimum_size = Vector2(84, 32)
-		if tab_id == _tab:
-			button.add_theme_color_override("font_color", UiStyle.GOLD)
-			button.add_theme_stylebox_override("normal", UiStyle.box(Color("f3e7c9")))
+		button.custom_minimum_size = Vector2(84, TestUiTokens.height(32))
+		button.add_theme_color_override(
+			"font_color", TestUiTokens.INK if active else TestUiTokens.INK_SOFT
+		)
 
 
 func _build_content(parent: VBoxContainer) -> void:
@@ -269,13 +293,14 @@ func _build_cards() -> void:
 		var counts: Dictionary = _battle().get("zone_counts", {})
 		var caption := "%s %s" % [_zone_name(zone), counts.get(zone, 0)]
 		var button := _button(
-			zone_row, "test:editor:zone:" + zone, caption, func(): _zone = zone; _render_all()
+			zone_row, "test:editor:zone:" + zone, caption, func(): _zone = zone; _render_all(),
+			"tab_active" if zone == _zone else "tab"
 		)
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		if zone == _zone:
-			button.add_theme_color_override("font_color", UiStyle.GOLD)
 	var cards := _zone_cards(_zone)
-	_label(_content, "%s · %d 张" % [_zone_name(_zone), cards.size()], 15, UiStyle.MUTED)
+	_label(_content, "%s · %d 张" % [_zone_name(_zone), cards.size()], 13, TestUiTokens.INK_SOFT)
+	if cards.is_empty():
+		_empty("该牌区为空；可在下方搜索并入一张卡牌。")
 	for entry in cards:
 		var row := _row(_content)
 		var name := UiStyle.label(str(entry.get("definition_id", "")))
@@ -312,20 +337,22 @@ func _build_cards() -> void:
 
 func _build_resources() -> void:
 	var player := _player()
-	_label(_content, "战斗资源", 17)
+	_section("战斗资源")
 	_player_row("精力", "player.vitality", int(player.get("vitality", 0)), 1, 0, 9999, "vitality")
 	_player_row("精力上限", "player.max_vitality", int(player.get("max_vitality", 0)), 1, 1, 9999, "max_vitality")
 	_player_row("专注", "player.focus", int(player.get("focus", 0)), 1, 0, 999, "focus")
 	_player_row("放松", "player.relax", int(player.get("relax", 0)), 1, 0, 999, "relax")
 	var character_id := str(_config().get("character_id", ""))
 	if character_id == "P02":
-		_label(_content, "论文区", 17)
+		_section("论文区")
 		var paper: Dictionary = _battle().get("v3", {}).get("paper", {})
 		var open_check := CheckBox.new()
 		open_check.text = "已开题"
 		open_check.button_pressed = bool(paper.get("open", false))
-		open_check.add_theme_font_size_override("font_size", 14)
+		open_check.add_theme_font_size_override("font_size", TestUiTokens.font(14))
 		open_check.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+		open_check.flat = true
+		open_check.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 		open_check.toggled.connect(func(value: bool):
 			_set_draft("v3.paper.open", {"op": "set_v3_field", "path": "paper.open", "value": value})
 		)
@@ -335,7 +362,7 @@ func _build_resources() -> void:
 		_v3_row("修正", "paper.modifier", int(paper.get("modifier", 0)), 0, 999)
 		_v3_row("放大", "paper.amplify", int(paper.get("amplify", 0)), 0, 999)
 	if character_id == "P04":
-		_label(_content, "协同", 17)
+		_section("协同")
 		_v3_row("协同", "synergy", int(_battle().get("v3", {}).get("synergy", 0)), 0, 999)
 	_hint("数值会进入草稿，应用后一次发布；精力为 0 需要先打开对应开关。")
 
@@ -353,6 +380,8 @@ func _build_enemies() -> void:
 	_button(ddl_row, "test:editor:ddl:plus", "+1", func():
 		_set_draft("ddl", {"op": "set_ddl", "ddl": mini(99, int(battle.get("ddl", 0)) + 1)})
 	)
+	if battle.get("tasks", []).is_empty():
+		_empty("没有敌方任务；可在下方加入任务或替换遭遇。")
 	for task in battle.get("tasks", []):
 		var row := _row(_content)
 		var task_id := str(task.get("task_id", ""))
@@ -376,7 +405,9 @@ func _build_enemies() -> void:
 
 
 func _build_allies() -> void:
-	_label(_content, "伙伴/单位", 17)
+	_section("伙伴/单位")
+	if _battle().get("units", []).is_empty():
+		_empty("当前没有伙伴/单位。")
 	for unit in _battle().get("units", []):
 		var row := _row(_content)
 		var unit_id := str(unit.get("unit_id", ""))
@@ -395,7 +426,9 @@ func _build_allies() -> void:
 			_set_draft("unit.%s.rm" % unit_id, {"op": "remove_unit", "unit_id": unit_id})
 		)
 	_search_unit_list(_content, "加入伙伴")
-	_label(_content, "饰品", 17)
+	_section("饰品")
+	if _battle().get("relics", []).is_empty():
+		_empty("当前没有饰品。")
 	for relic_id in _battle().get("relics", []):
 		var row := _row(_content)
 		_label(row, UiStyle.label(str(relic_id)), 14)
@@ -434,7 +467,9 @@ func _build_statuses() -> void:
 	target_row.add_child(selector)
 	_label(_content, "给该目标添加状态", 15)
 	_search_status_list(_content)
-	_label(_content, "当前状态", 17)
+	_section("当前状态")
+	if _battle().get("statuses", []).is_empty():
+		_empty("当前没有状态。")
 	for status in _battle().get("statuses", []):
 		var row := _row(_content)
 		var instance_id := str(status.get("instance_id", ""))
@@ -488,7 +523,7 @@ func _build_time() -> void:
 		if not value.is_empty():
 			_set_draft("time.seed", {"op": "reset_rng", "mode": "all", "seed": value})
 	)
-	_label(_content, "计次", 17)
+	_section("计次")
 	for key in battle.get("counters", {}):
 		var row := _row(_content)
 		_label(row, "%s = %s" % [key, battle.counters[key]], 14)
@@ -498,31 +533,35 @@ func _build_time() -> void:
 
 
 func _build_rules() -> void:
-	_label(_content, "规则开关（草稿）", 17)
+	_section("规则开关（草稿）")
 	for entry in _options.get("switches", []):
 		var key := str(entry.get("key", ""))
 		var check := CheckBox.new()
 		check.text = str(entry.get("description", key))
 		check.button_pressed = bool(_view.get("switches", {}).get(key, false))
-		check.add_theme_font_size_override("font_size", 14)
+		check.add_theme_font_size_override("font_size", TestUiTokens.font(14))
 		check.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+		check.flat = true
+		check.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 		check.toggled.connect(func(value: bool):
 			_set_draft("switch." + key, {"op": "set_switch", "key": key, "value": value})
 		)
 		_buttons["test:editor:switch:" + key] = check
 		_content.add_child(check)
-	_label(_content, "规则数值", 17)
+	_section("规则数值")
 	var ruleset: Dictionary = _options.get("ruleset", {})
 	_ruleset_row("手牌上限", "battle.hand_limit", int(_nested(ruleset, "battle.hand_limit", 10)), 0, 99)
 	_ruleset_row("专注上限", "battle.focus_cap", int(_nested(ruleset, "battle.focus_cap", 10)), 0, 99)
 	_ruleset_row("单位槽位", "battle.unit_slots", int(_nested(ruleset, "battle.unit_slots", 3)), 0, 32)
 	_ruleset_row("饰品槽位", "run.relic_slots", int(_nested(ruleset, "run.relic_slots", 3)), 0, 64)
-	_label(_content, "定义覆盖", 17)
+	_section("定义覆盖")
 	_search_override_cards(_content)
 
 
 func _build_history() -> void:
-	_label(_content, "检查点", 17)
+	_section("检查点")
+	if _view.get("checkpoints", []).is_empty():
+		_empty("还没有检查点。")
 	for checkpoint in _view.get("checkpoints", []):
 		var row := _row(_content)
 		_label(row, "%s · rev %s · 回合 %s" % [
@@ -541,48 +580,121 @@ func _build_history() -> void:
 	_button(save_row, "test:editor:save_record", "保存记录", func(): command.emit("test.save_record", {}))
 	_label(_content, "日志 %s 条 · 分支 %s" % [
 		_view.get("journal_size", 0), _test().get("branch_id", 0)
-	], 14, UiStyle.MUTED)
+	], 14, TestUiTokens.INK_SOFT)
 
 
 func _build_footer(parent: VBoxContainer) -> void:
-	var line := HBoxContainer.new()
-	line.add_theme_constant_override("separation", 8)
-	parent.add_child(line)
-	_draft_label = Label.new()
-	_draft_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_draft_label.add_theme_font_size_override("font_size", 14)
-	line.add_child(_draft_label)
-	var preview := _button(line, "test:editor:preview", "预览", func(): _preview_draft())
-	preview.custom_minimum_size = Vector2(64, 34)
-	var apply := _button(line, "test:editor:apply", "应用", func(): _begin_apply())
-	apply.custom_minimum_size = Vector2(64, 34)
-	var discard := _button(line, "test:editor:discard", "丢弃草稿", func():
-		_draft.clear()
-		_status_text = "已丢弃草稿"
-		_render_all()
-	)
-	discard.custom_minimum_size = Vector2(88, 34)
+	var rule := ColorRect.new()
+	rule.color = TestUiTokens.LINE
+	rule.custom_minimum_size = Vector2(0, 1)
+	parent.add_child(rule)
+	if not _status_text.is_empty():
+		var danger := _status_text.begins_with("错误") or _status_text.begins_with("应用失败")
+		var banner := PanelContainer.new()
+		banner.add_theme_stylebox_override("panel", TestUiTokens.banner_style(danger))
+		parent.add_child(banner)
+		var label := Label.new()
+		label.text = _status_text
+		label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		label.add_theme_font_size_override("font_size", TestUiTokens.font(12))
+		label.add_theme_color_override(
+			"font_color", TestUiTokens.DANGER if danger else TestUiTokens.INK_SOFT
+		)
+		banner.add_child(label)
 	if _show_policy:
+		var policy := PanelContainer.new()
+		policy.add_theme_stylebox_override("panel", TestUiTokens.banner_style(false))
+		parent.add_child(policy)
+		var policy_box := VBoxContainer.new()
+		policy_box.add_theme_constant_override("separation", TestUiTokens.SPACE_XS)
+		policy.add_child(policy_box)
+		_label(policy_box, "当前有未完成选择：应用修改前需要决定如何处理待选。", 12, TestUiTokens.INK)
 		var policy_row := HBoxContainer.new()
-		parent.add_child(policy_row)
-		_label(policy_row, "待选：", 14)
-		_button(policy_row, "test:editor:apply:rollback", "回到命令前并应用", func(): _send_apply("rollback"))
-		_button(policy_row, "test:editor:apply:truncate", "保留并截断", func(): _send_apply("truncate"))
+		policy_row.add_theme_constant_override("separation", TestUiTokens.SPACE_XS)
+		policy_box.add_child(policy_row)
+		_button(policy_row, "test:editor:apply:rollback", "回到命令前并应用", func(): _send_apply("rollback"), "primary")
+		_button(policy_row, "test:editor:apply:truncate", "保留并截断", func(): _send_apply("truncate"), "danger")
 		_button(policy_row, "test:editor:apply:cancel", "取消", func():
 			_show_policy = false
 			_render_all()
-		)
-	var status := Label.new()
-	status.text = _status_text
-	status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	status.add_theme_font_size_override("font_size", 13)
-	status.add_theme_color_override(
-		"font_color", UiStyle.RED if _status_text.begins_with("错误") else UiStyle.MUTED
-	)
-	parent.add_child(status)
-	_draft_label.text = "待应用 %d 项 · 基于 rev %s" % [
-		_draft.size(), _test().get("revision", 0)
-	]
+		, "ghost")
+	if _confirm_close:
+		var close_panel := PanelContainer.new()
+		close_panel.add_theme_stylebox_override("panel", TestUiTokens.banner_style(true))
+		parent.add_child(close_panel)
+		var close_box := VBoxContainer.new()
+		close_panel.add_child(close_box)
+		_label(close_box, "有 %d 项未应用修改，关闭编辑器将丢弃草稿。" % _draft.size(), 12, TestUiTokens.DANGER)
+		var close_row := HBoxContainer.new()
+		close_box.add_child(close_row)
+		_button(close_row, "test:editor:close:discard", "丢弃草稿并关闭", func():
+			_draft.clear()
+			_confirm_close = false
+			close_requested.emit()
+		, "danger")
+		_button(close_row, "test:editor:close:cancel", "继续编辑", func():
+			_confirm_close = false
+			_render_all()
+		, "ghost")
+	if _confirm_discard:
+		var discard_panel := PanelContainer.new()
+		discard_panel.add_theme_stylebox_override("panel", TestUiTokens.banner_style(true))
+		parent.add_child(discard_panel)
+		var discard_box := VBoxContainer.new()
+		discard_panel.add_child(discard_box)
+		_label(discard_box, "确认丢弃 %d 项草稿？" % _draft.size(), 12, TestUiTokens.DANGER)
+		var discard_row := HBoxContainer.new()
+		discard_box.add_child(discard_row)
+		_button(discard_row, "test:editor:discard:confirm", "确认丢弃", func():
+			_draft.clear()
+			_confirm_discard = false
+			_status_text = "已丢弃草稿"
+			_render_all()
+		, "danger")
+		_button(discard_row, "test:editor:discard:cancel", "取消", func():
+			_confirm_discard = false
+			_render_all()
+		, "ghost")
+	var line := HBoxContainer.new()
+	line.add_theme_constant_override("separation", TestUiTokens.SPACE_SM)
+	parent.add_child(line)
+	var summary := VBoxContainer.new()
+	summary.add_theme_constant_override("separation", 0)
+	summary.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	line.add_child(summary)
+	_draft_label = Label.new()
+	_draft_label.text = "待应用 %d 项" % _draft.size()
+	_draft_label.add_theme_font_size_override("font_size", TestUiTokens.font(15))
+	_draft_label.add_theme_color_override("font_color", TestUiTokens.INK)
+	summary.add_child(_draft_label)
+	var meta := Label.new()
+	meta.text = "基于 rev %s · 草稿只在本次编辑器内生效" % _test().get("revision", 0)
+	meta.add_theme_font_size_override("font_size", TestUiTokens.font(11))
+	meta.add_theme_color_override("font_color", TestUiTokens.INK_SOFT)
+	summary.add_child(meta)
+	var preview := _button(line, "test:editor:preview", "预览", func(): _preview_draft(), "secondary")
+	preview.disabled = _draft.is_empty()
+	var apply := _button(line, "test:editor:apply", "应用", func(): _begin_apply(), "primary")
+	apply.disabled = _draft.is_empty()
+	var discard := _button(line, "test:editor:discard", "丢弃草稿", func(): _request_discard(), "ghost")
+	discard.disabled = _draft.is_empty()
+	for button in [preview, apply, discard]:
+		button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+
+
+func _request_close() -> void:
+	if _draft.is_empty():
+		close_requested.emit()
+		return
+	_confirm_close = true
+	_render_all()
+
+
+func _request_discard() -> void:
+	if _draft.is_empty():
+		return
+	_confirm_discard = true
+	_render_all()
 
 
 func _begin_apply() -> void:
@@ -599,6 +711,8 @@ func _begin_apply() -> void:
 
 func _send_apply(policy: String) -> void:
 	_show_policy = false
+	_confirm_close = false
+	_confirm_discard = false
 	_applying = true
 	_status_text = "应用中…"
 	var ops: Array = []
@@ -629,10 +743,10 @@ func _preview_draft() -> void:
 	_render_all()
 
 
-func _set_draft(key: String, op: Dictionary) -> void:
+func _set_draft(key: String, op: Dictionary, message: String = "已加入草稿") -> void:
 	_draft[key] = op
 	_draft_revision = int(_test().get("revision", 0))
-	_status_text = "已加入草稿"
+	_status_text = message
 	_render_all()
 
 
@@ -650,6 +764,7 @@ func _draft_value(key: String, actual: Variant) -> Variant:
 func _player_row(caption: String, key: String, actual: int, step: int, minimum: int, maximum: int, field: String) -> void:
 	var row := _row(_content)
 	_row_label(row, "%s %s" % [caption, _draft_value(key, actual)])
+	_spacer(row)
 	_button(row, "test:editor:field:%s:minus" % key, "-%d" % step, func():
 		var value := int(_draft_value(key, actual))
 		_set_draft(key, {"op": "set_player_field", "field": field, "value": maxi(minimum, value - step)})
@@ -660,12 +775,27 @@ func _player_row(caption: String, key: String, actual: int, step: int, minimum: 
 	)
 	var input := LineEdit.new()
 	input.text = str(_draft_value(key, actual))
-	input.custom_minimum_size = Vector2(56, 30)
+	input.custom_minimum_size = Vector2(64, TestUiTokens.height(32))
+	input.add_theme_font_size_override("font_size", TestUiTokens.font(14))
+	input.add_theme_stylebox_override("normal", TestUiTokens.field_style())
+	input.add_theme_stylebox_override("focus", TestUiTokens.focus_style())
 	row.add_child(input)
 	_button(row, "test:editor:field:%s:set" % key, "设为", func():
-		if input.text.strip_edges().is_valid_int():
-			var value := int(input.text.strip_edges())
-			_set_draft(key, {"op": "set_player_field", "field": field, "value": clampi(value, minimum, maximum)})
+		var raw := input.text.strip_edges()
+		if not raw.is_valid_int():
+			_status_text = "错误：请输入整数"
+			_render_all()
+			return
+		var requested := int(raw)
+		var value := clampi(requested, minimum, maximum)
+		var message := "已加入草稿"
+		if value != requested:
+			message = "已限制到 %d–%d" % [minimum, maximum]
+		_set_draft(
+			key,
+			{"op": "set_player_field", "field": field, "value": value},
+			message
+		)
 	)
 
 
@@ -673,6 +803,7 @@ func _v3_row(caption: String, path: String, actual: int, minimum: int, maximum: 
 	var key := "v3." + path
 	var row := _row(_content)
 	_row_label(row, "%s %s" % [caption, _draft_value(key, actual)])
+	_spacer(row)
 	_button(row, "test:editor:field:%s:minus" % key, "-1", func():
 		var value := int(_draft_value(key, actual))
 		_set_draft(key, {"op": "set_v3_field", "path": path, "value": maxi(minimum, value - 1)})
@@ -687,6 +818,7 @@ func _ruleset_row(caption: String, path: String, actual: int, minimum: int, maxi
 	var key := "rule." + path
 	var row := _row(_content)
 	_row_label(row, "%s %s" % [caption, _draft_value(key, actual)])
+	_spacer(row)
 	_button(row, "test:editor:field:%s:minus" % key, "-1", func():
 		var value := int(_draft_value(key, actual))
 		_set_draft(key, {"op": "set_rule_field", "path": path, "value": maxi(minimum, value - 1)})
@@ -736,7 +868,7 @@ func _fill_card_results(box: VBoxContainer, query: String) -> void:
 		if shown >= 24:
 			break
 	if shown == 0:
-		_label(box, "没有匹配卡牌", 13, UiStyle.MUTED)
+		_label(box, "没有匹配卡牌", 13, TestUiTokens.INK_SOFT)
 
 
 func _search_task_list(parent: VBoxContainer, caption: String) -> void:
@@ -940,7 +1072,10 @@ func _search_override_cards(parent: VBoxContainer) -> void:
 		)
 		field_row.add_child(selector)
 		var value_input := LineEdit.new()
-		value_input.custom_minimum_size = Vector2(90, 30)
+		value_input.custom_minimum_size = Vector2(90, TestUiTokens.height(32))
+		value_input.add_theme_font_size_override("font_size", TestUiTokens.font(14))
+		value_input.add_theme_stylebox_override("normal", TestUiTokens.field_style())
+		value_input.add_theme_stylebox_override("focus", TestUiTokens.focus_style())
 		field_row.add_child(value_input)
 		_button(field_row, "test:editor:override:add", "加入草稿", func():
 			var raw := value_input.text.strip_edges()
@@ -1044,31 +1179,82 @@ func _nested(source: Dictionary, path: String, fallback: Variant) -> Variant:
 	return current
 
 
-func _button(parent: Node, uid: String, text: String, callback: Callable) -> Button:
+func _button(
+	parent: Node, uid: String, text: String, callback: Callable, kind: String = "secondary"
+) -> Button:
 	var button := Button.new()
 	button.text = text
-	button.custom_minimum_size = Vector2(0, 32)
-	button.add_theme_font_size_override("font_size", 13)
+	button.custom_minimum_size = Vector2(0, TestUiTokens.height(34))
+	button.add_theme_font_size_override("font_size", TestUiTokens.font(13))
+	button.focus_mode = Control.FOCUS_ALL
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	button.pressed.connect(callback)
+	_style_button(button, kind)
 	parent.add_child(button)
 	_buttons[uid] = button
 	return button
 
 
-func _label(parent: Node, text: String, size: int = 14, color: Color = UiStyle.INK) -> Label:
+func _style_button(button: Button, kind: String) -> void:
+	for state in ["normal", "hover", "pressed", "disabled"]:
+		button.add_theme_stylebox_override(state, TestUiTokens.button_style(kind, state))
+	button.add_theme_stylebox_override("focus", TestUiTokens.focus_style())
+	var color := TestUiTokens.INK
+	match kind:
+		"primary":
+			color = TestUiTokens.ON_INK
+		"danger":
+			color = TestUiTokens.DANGER
+		"ghost", "tab":
+			color = TestUiTokens.INK_SOFT
+		"tab_active":
+			color = TestUiTokens.INK
+	for key in ["font_color", "font_hover_color", "font_pressed_color", "font_focus_color"]:
+		button.add_theme_color_override(key, color)
+	button.add_theme_color_override("font_disabled_color", Color(TestUiTokens.INK_SOFT, 0.45))
+
+
+func _label(parent: Node, text: String, size: int = 14, color: Color = TestUiTokens.INK) -> Label:
 	var label := Label.new()
 	label.text = text
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	label.add_theme_font_size_override("font_size", size)
+	label.add_theme_font_size_override("font_size", TestUiTokens.font(size))
 	label.add_theme_color_override("font_color", color)
 	parent.add_child(label)
 	return label
 
 
+func _chip(parent: Node, text: String, accent: bool = false) -> void:
+	var chip := PanelContainer.new()
+	chip.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	chip.add_theme_stylebox_override("panel", TestUiTokens.chip_style(accent))
+	parent.add_child(chip)
+	var label := Label.new()
+	label.text = text
+	label.add_theme_font_size_override("font_size", TestUiTokens.font(11))
+	label.add_theme_color_override("font_color", TestUiTokens.ACCENT_TEXT if accent else TestUiTokens.INK_SOFT)
+	chip.add_child(label)
+
+
+func _section(title: String) -> void:
+	var box := VBoxContainer.new()
+	box.add_theme_constant_override("separation", TestUiTokens.SPACE_XS)
+	_content.add_child(box)
+	var label := Label.new()
+	label.text = title
+	label.add_theme_font_size_override("font_size", TestUiTokens.font(16))
+	label.add_theme_color_override("font_color", TestUiTokens.INK)
+	box.add_child(label)
+	var rule := ColorRect.new()
+	rule.color = TestUiTokens.LINE
+	rule.custom_minimum_size = Vector2(0, 1)
+	box.add_child(rule)
+
+
 func _row(parent: Node) -> HBoxContainer:
 	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 4)
+	row.add_theme_constant_override("separation", TestUiTokens.SPACE_XS)
 	parent.add_child(row)
 	return row
 
@@ -1076,12 +1262,22 @@ func _row(parent: Node) -> HBoxContainer:
 func _row_label(parent: Node, text: String, size: int = 14) -> Label:
 	var label := _label(parent, text, size)
 	label.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
-	label.custom_minimum_size.x = 110
+	label.custom_minimum_size.x = TestUiTokens.LABEL_WIDTH
 	return label
 
 
+func _spacer(row: HBoxContainer) -> void:
+	var spacer := Control.new()
+	spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.add_child(spacer)
+
+
 func _hint(text: String) -> void:
-	_label(_content, text, 13, UiStyle.MUTED)
+	_label(_content, text, 12, TestUiTokens.INK_SOFT)
+
+
+func _empty(text: String) -> void:
+	_label(_content, text, 13, TestUiTokens.INK_SOFT)
 
 
 func _battle() -> Dictionary:
@@ -1118,7 +1314,7 @@ func _input(event: InputEvent) -> void:
 	var focus := get_viewport().gui_get_focus_owner()
 	var typing := focus is LineEdit or focus is TextEdit
 	if key.keycode == KEY_ESCAPE:
-		close_requested.emit()
+		_request_close()
 		accept_event()
 	elif key.keycode == KEY_SLASH and not typing:
 		if is_instance_valid(_search_input):
@@ -1127,4 +1323,7 @@ func _input(event: InputEvent) -> void:
 	elif key.ctrl_pressed and key.keycode == KEY_Z and not typing:
 		command.emit("test.redo" if key.shift_pressed else "test.undo", {})
 		accept_event()
+
+
+
 
