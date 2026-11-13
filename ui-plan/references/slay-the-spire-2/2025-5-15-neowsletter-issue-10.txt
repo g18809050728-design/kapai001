@@ -1,0 +1,104 @@
+The Neowsletter - May 2025
+May 14, 2025
+Slay the Spire
+Slay the Spire 2
+Good day!
+It’s the fifth month of the year and Slay the Spire 2 isn’t out yet. We’re quite picky about the game’s quality, despite it coming to Early Access. I want other game developers to fear releasing low quality games into Early Access after we do. That’s how good I want it! Is that a toxic attitude? Well, too bad.
+Speaking of low quality games…
+Blue Prince
+is NOT one of them! While I do wish for a few quality of life features, there’s many mysteries to solve, room drafting to be done, and a heartfelt history to uncover. It has been a great time as I’ve been digging (with my shovel) into the game’s depths the last few weeks. No, I was not paid by
+Raw Fury
+.
+Working working…
+So April has been a
+WORK MONTH
+.
+Lots of effort was put into making screens not look like placeholders (like this Treasure Room above), ensuring our systems are flexible and easy to debug, optimizing performance, and incorporating content and balance changes. A lot of work’s getting done!
+Speaking of patching, I thought it would be funny to keep all the playtest patch notes. Once the game is finally out there, it’ll provide some insight into the development process, how we prioritize our work, what kind of issues were notoriously difficult to solve, and more learnings that even we aren’t aware of.
+Character Evolutions
+Hey folks, Anthony here. Time to spill some secrets about StS2!
+For returning characters, we aren’t just bringing them back as they were in StS1–we’re giving them proper makeovers for their return to the Spire. Our approach: remove a bunch of old cards, add even more new ones, and look for clever tweaks and changes to a few classics.
+One line of text makes a world of difference on a card like Blade Dance!
+The Silent gets to play with a shiny new mechanic in StS2:
+Sly
+.
+Sly cards are automatically played for free when they are discarded, opening up whole new ways to take advantage of discard shenanigans. The Silent has access to a bunch of new Sly cards in StS2, but if that isn’t enough Slyness for you, you can always take matters into your own hands…
+Looking forward to seeing all the ways you manage to break this card. Or die trying. >:D
+Spire Spotting
+And now it’s your local Spirelife guide, Demi, here to update you on our latest findings about last month’s mysterious creature:
+But before that, let’s test out some of your brilliant hypotheses…
+The award for most inventive guess goes to Kangaroodoo, who imagined the creature’s jittery movements as an engine!
+While it was hard to pick a most accurate submission this time around, we think moffster eked out the competition!
+Take a look at a small selection of the other many submissions we got this time around:
+Credit in order from left to right: balls, Jokester, Wild_Samich, ssorgatem, AxolotlBoop, chairmanbuu, AuxilRB, Hubert, mothtransman, Діана, JellyfishLightning, Alialun
+And now for the unveiling…
+Ta-da!! As many of you eagle-eyed Slayers noticed, this creature has already been spotted elsewhere in the past. Still, it was fun seeing different artists’ renditions of the same subject as well as people getting extra creative with it! As recompense, here’s a little extra info: we’re currently referring to this enemy as Chomper, as his moveset relies on, well, chomping! What could the effect of such chomps be, I wonder?
+Also, many of you have noticed that it looks similar to another beloved character in the Spire universe, and the reason for that is
+LOUD ERROR NOISE
+. Hope that clears things up!
+Wait, does anyone else hear that…?
+It’s yet another shadowy (and wiggly) creature!! Remember, submit your guesses as to what this monster could be via
+[email protected]
+or in our
+Discord’s
+fanart channel!
+Q&A with C&A
+It’s time again to answer questions. No time for unnecessary words. Onwards!
+TabbyCat asks:
+How long is a turn in slay the spire for the characters? Is it consistent with the amount of cards played, or is it uniform at ~5 seconds. If I play 50 shivs in a turn as the Silent, are her hands moving at the speed of sound?
+Casey:
+The Silent’s kind of like a seven in terms of speed. The Ironclad maybe a four. But the Champ is like a two and the Time Eater is using that stupid clock. It’s all too complicated to explain really.
+Kwayan asks:
+Hello MegaCrit Games! I hope your are doing well, and I have a question. I’d like to know if you’re going to add multiple death animation to the game, because in StS1, theres only one. So for exemple: if you die because of Snecko, you die with a paralized animation. Thx! Oh and btw, use Kwayan as my name in the question thing. (If i’m chosen)
+Casey:
+Hello Kwayan! That’s a cool idea but we currently don’t have multiple death animations. Maybe if we reach a point where the core content and animations are done we can work on some fun extras. There ARE extras planned and they are so very extra.
+Maro from Korea asks:
+Q1. Are there beta arts for StS2 cards? Q2. Do you any thoughts on making StS’s art book in the future? Q3. Are Neow, The Maw and Jaw Worm related? Q.?? Will it be early-accessed in December..?
+Casey:
+Yes. Yes. No. No. For those thinking of asking a question to hone in on the release month, I see you. Anyways, December kinda sucks for releasing games, there’s holidays and all that- everyone gets too busy.
+Indikativ asks:
+I was wondering if there will be any further lore in Slay the Spire 2.
+Casey:
+Yes
+Pixelz asks:
+Do you plan on adding content from/inspired by some of the popular mods? I’ve been in love with some of them, especially Downfall’s Hermit character and a good few of the reliquary’s relics.
+Casey:
+Making content is one of the parts of making video games. I’m not sure why we would ever add content from a mod. It also seems disingenuous creatively? Maybe I’m misunderstanding something here.
+Adam from France asks:
+Are you going to launch a collector’s edition for Slay the Spire 2 ? Maybe with some figurine or chibi, I will buy it for sure if you do.
+Casey:
+Maybe for the full release, definitely not for Early Access.
+Tim asks:
+Hello! What is the Merchant saying? My partner is convinced they sometimes say “f*** off” and now I cannot unhear it.
+*
+Casey:
+Mlyahh…
+the denizens of the Spire don’t speak English so they aren’t telling you to f
+off. The dialog and story beats and such are translated to various languages so YOU, the player, can understand this foreign tongue. The merchant has 12 voice lines in the game and include a greeting, jovial laughter, a thank you in advance for buying wares, and of course the secret mercantile frequency technique version 4.
+Nguyen from Vietnam asks:
+Can Infinite deck in the sequel be easy to make?
+Anthony:
+No
+Merch Madness
+It’s Demi again, with a reminder that you can now get the full collection of every main Slay the Spire character in figure form AND grab a Silent and Snecko plush while you’re at it! Shop everything YouTooz x Slay the Spire
+here
+!
+Connections Section
+And without any flowery further ado, the monthly
+Slay the Spire Connections
+is here!
+Community Roundup
+First of all, thank you to Maple for our gorgeous cover image this month, and shoutout to the very close runner-up featured below, 九十九一三!
+If your submission wasn’t featured, reminder that cover image submissions must be submitted to us via
+[email protected]
+or in our
+Discord’s
+fanart channel, have dimensions of 800x450px, feature no text, and leave room for a title! Next month’s theme:
+Neow and a dreamy, rainbow sky!
+Now for our regularly scheduled community highlights…
+This extremely cool, low-poly, animated Defect by PsiSlinger!
+A fanmade Slay the Spire trailer reimagined in Limbus Company’s style by Rusli!
+This helpful Spire Field Guide series by
+pianoblook
+! (We made a note to highlight this one a while back but only recently remembered, oops. It now appears to be on hiatus but we think it’s a great idea ^-^)
+And that’s a wrap on the May Neowsletter, see you soon in June!

@@ -1,0 +1,19 @@
+Generate a brand-new illustration entirely from the following text description. A single landscape 1536x1024 polished videogame battle-screen concept for a Chinese campus-themed roguelike card game. Original standalone composition.
+
+Art style: theatrical hand-painted 2D game art, rich gouache, dark expressive ink contours, tactile parchment and notebooks, deep chalkboard teal, cream, brass and burnt orange. Strong atmospheric depth and clear foreground silhouettes. Modern Chinese university classroom at golden hour: tall sunlit windows on the left, blackboard and desks behind the action, open wooden floor in the middle. Detailed but subdued background, crisp readable interface.
+
+Battle stage occupies the upper two thirds. Left: a full-body Chinese male university student, short dark hair, teal casual jacket, cream shirt, dark trousers, sneakers, notebook in one hand, pen in the other, in an energetic forward writing pose. Feet on the floor, cast shadow, loose paper moving around his jacket. Right: two expressive living coursework creatures. The larger one is an animated stack of assignment papers and books with binder-clip arms and a face made of red correction marks. The smaller one is a folded exam-paper imp with a paper ribbon tail. Their bodies and limbs are freely visible within the classroom. These characters are figures in a shared stage, without portrait frames or card borders.
+
+Action: a sweeping, controlled gold-and-teal ink stroke travels from the student's pen to the big assignment creature. Paper fragments and an orange correction-stamp burst show its reaction. Floating small text "完成 6" at impact. The localized effect leaves all gameplay labels readable.
+
+Slim dark top HUD with exact Chinese labels: left "大一 · 教学楼", center "第 3 回合", a clock-shaped deadline tab "DDL 5", right "生活费 60", a map icon and gear icon. Above the large creature an orange intent icon with "压力 6"; above the small creature "压力 3". Below large creature a work bar "剩余工作 24/36", below small creature "剩余工作 14/18". Under the student a green meter "精力 58/72" and a blue paper-shield icon "放松 5".
+
+Lower third: FOUR large portrait playing cards in a shallow fan. Tactile thick cream paper, ink-stroked teal frames, soft cast shadows, short readable Chinese text, a separate clear cost badge and stamped type icon. Pen nib for 工作, folded note for 策略. Each card has a distinct painted illustration and readable text.
+First card slightly lifted with amber selection outline: cost "1", name "写作业", type "工作", effect "完成 6", illustration of a hand writing decisively across an assignment.
+Second: cost "1", name "伸个懒腰", type "策略", effect "获得 5 放松", illustration of a student stretching.
+Third: cost "1", name "整理书包", type "策略", effects "抽 2 张牌" and "然后弃 1 张牌", illustration of notebooks being sorted into a satchel.
+Fourth: cost "1", name "小步实践", type "工作", effects "完成 6" and "连携：额外 +3", illustration of connected sticky-note steps and a bold final pen mark.
+
+Bottom left: a face-down deck clearly displays an original designed card back, deep teal fabric-paper texture, simple brass border, emblem combining a fountain-pen nib, open notebook and small clock; label "抽牌堆 8". Beside it a round brass-and-paper focus dial "2/3" and label "专注". Bottom right: compact discard stack "弃牌堆 3" and an ochre "结束回合" button with an hourglass icon. One tiny orange ink-ring glint near the button suggests click feedback.
+
+Professional Simplified Chinese interface typography, legible large short labels, no placeholder microtext. Strong visual separation between painting, status information and cards. Cohesive tactile hand-painted atmosphere, characters acting in the scene, mechanism-specific card illustrations. One integrated full-screen game mockup, no collage, no annotations, no watermark, no external logos, no medieval armor, no portrait-card characters, no generic flat web dashboard.

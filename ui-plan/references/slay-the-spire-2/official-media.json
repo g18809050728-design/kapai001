@@ -1,0 +1,79 @@
+[
+  {
+    "file": "map_qol.jpg",
+    "url": "https://www.megacrit.com/images/map_qol.jpg",
+    "bytes": 82125,
+    "sha256": "19c87f1f202b48efb41568bbf874cda2e447f3074a517b63997c84ec3e364ac2",
+    "retrieved_utc": "2026-11-13T08:47:40.958105+00:00"
+  },
+  {
+    "file": "topbar_qol.jpg",
+    "url": "https://www.megacrit.com/images/topbar_qol.jpg",
+    "bytes": 51535,
+    "sha256": "66f96bdf2ebadabc8bbf1d8d837539737b4989a98e03f263c792bbe6797f7cd8",
+    "retrieved_utc": "2026-11-13T08:47:39.619650+00:00"
+  },
+  {
+    "file": "mainmenu_qol.jpg",
+    "url": "https://www.megacrit.com/images/mainmenu_qol.jpg",
+    "bytes": 107219,
+    "sha256": "ad53ae9b08f4576c333d5f12f229aabf51b9c02fc82074d8bb35e367c65f9ddc",
+    "retrieved_utc": "2026-11-13T08:47:39.087329+00:00"
+  },
+  {
+    "file": "silent_anim.gif",
+    "url": "https://www.megacrit.com/images/silent_anim.gif",
+    "bytes": 4374381,
+    "sha256": "27bf1c450dd93a44b4bd3956369e89e32fb373a7ef3ece1f76ab546d4c571e35",
+    "retrieved_utc": "2026-11-13T08:48:04.600150+00:00"
+  },
+  {
+    "file": "ento_attack3.gif",
+    "url": "https://www.megacrit.com/images/ento_attack3.gif",
+    "bytes": 3195853,
+    "sha256": "2e465855db29dfc16f7f206ce5cc93dc906c93b5078055e3569584ed7fc2779f",
+    "retrieved_utc": "2026-11-13T08:47:52.553579+00:00"
+  },
+  {
+    "file": "final_aeonglass.gif",
+    "url": "https://www.megacrit.com/images/final_aeonglass.gif",
+    "bytes": 1514426,
+    "sha256": "730dc3cf8960650f242c222b4fcaa2854450f32d1c04e0eb7ee105ae649a466a",
+    "retrieved_utc": "2026-11-13T08:47:51.404832+00:00"
+  },
+  {
+    "file": "shiny_rare_qol.gif",
+    "url": "https://www.megacrit.com/images/shiny_rare_qol.gif",
+    "bytes": 3002273,
+    "sha256": "0e157a3ac5dc8485dcc731ec016fe3107066f85638144dad43661072e48df37a",
+    "retrieved_utc": "2026-11-13T08:48:05.236861+00:00"
+  },
+  {
+    "file": "treasure_open.gif",
+    "url": "https://www.megacrit.com/images/treasure_open.gif",
+    "bytes": 2477495,
+    "sha256": "46cd9a436bdea0084db5c31b0797c8223f20d5f972130f2250b4b603c268cac3",
+    "retrieved_utc": "2026-11-13T08:48:07.092879+00:00"
+  },
+  {
+    "file": "event_3.gif",
+    "url": "https://www.megacrit.com/images/event_3.gif",
+    "bytes": 2761568,
+    "sha256": "d34767805f8a148e23ab9dbb0881f2ab0917127c7bf632dc056fcbbcc1b41ab3",
+    "retrieved_utc": "2026-11-13T08:48:06.305696+00:00"
+  },
+  {
+    "file": "event1.gif",
+    "url": "https://www.megacrit.com/images/event1.gif",
+    "bytes": 2708471,
+    "sha256": "852c5d70e5155047519209152272f35b21bfc99ef3784200506c42e49366d48f",
+    "retrieved_utc": "2026-11-13T08:48:18.193114+00:00"
+  },
+  {
+    "file": "event2.jpg",
+    "url": "https://www.megacrit.com/images/event2.jpg",
+    "bytes": 104106,
+    "sha256": "a937225cca1b50983db63b63a05ce3c8102db4168fae336a7f9c681fff2845c5",
+    "retrieved_utc": "2026-11-13T08:47:55.711864+00:00"
+  }
+]

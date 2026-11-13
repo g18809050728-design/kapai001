@@ -1,0 +1,22 @@
+﻿{
+    "project_date":  "2026-11-13",
+    "requested_at":  "2026-11-13T08:12:52.7218133+00:00",
+    "model":  "gpt-image-2.5-sunburst",
+    "api_mode":  "configured local-imagegen / bundled CLI / images.generate",
+    "base_url":  "https://api-slb.jiji.cc/v1",
+    "size_requested":  "1536x1024",
+    "quality":  "low",
+    "n":  1,
+    "prompt_file":  "battle-concept-v1.final.prompt.txt",
+    "prompt_sha256":  "6081513559702FB50367F749F0A539548BC94507DF16E25A67162E0BEFE35C49",
+    "output_file":  "battle-concept-v1.png",
+    "purpose":  "concept illustration only",
+    "reference_images_sent":  [
+
+                              ],
+    "stage_exception":  "root baseline 0.19.1",
+    "attempt":  2,
+    "prior_attempt":  "HTTP 400 reference image requested by upstream despite text-only prompt; no image saved; prompt simplified",
+    "elapsed_seconds":  55.33,
+    "exit_code":  0
+}

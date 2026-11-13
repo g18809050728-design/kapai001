@@ -1,0 +1,416 @@
+{
+  "battle_finished": [
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 3413
+    }
+  ],
+  "card_absorbed": [
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 1623
+    }
+  ],
+  "card_discarded": [
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 906
+    },
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 2847
+    },
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 3630
+    }
+  ],
+  "card_drawn": [
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 1451
+    },
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 3444
+    },
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 4842
+    },
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 5832
+    }
+  ],
+  "card_exhausted": [
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 3653
+    }
+  ],
+  "card_played": [
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 751
+    }
+  ],
+  "card_resolved": [
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 3986
+    }
+  ],
+  "card_retrieved": [
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 4285
+    }
+  ],
+  "chapter_deployed": [
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 3731
+    },
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 4703
+    }
+  ],
+  "chapter_ran": [
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 4749
+    }
+  ],
+  "chapter_returned": [
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 4643
+    }
+  ],
+  "chapter_slots_swapped": [
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 4829
+    }
+  ],
+  "choice_confirmed": [
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 3743
+    }
+  ],
+  "choice_requested": [
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 1916
+    }
+  ],
+  "completion_applied": [
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 841
+    },
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 3043
+    },
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 4947
+    },
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 5219
+    }
+  ],
+  "coop_target_set": [
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 1691
+    }
+  ],
+  "ddl_adjusted": [
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 1261
+    }
+  ],
+  "ddl_ticked": [
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 1054
+    }
+  ],
+  "enemy_skill": [
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 1270
+    }
+  ],
+  "focus_changed": [
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 593
+    },
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 1167
+    },
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 1183
+    },
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 1487
+    },
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 1642
+    },
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 2692
+    },
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 2796
+    }
+  ],
+  "paper_published": [
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 4651
+    }
+  ],
+  "passive_triggered": [
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 5446
+    },
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 5478
+    }
+  ],
+  "phase_changed": [
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 5854
+    }
+  ],
+  "pressure_applied": [
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 1824
+    },
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 1858
+    }
+  ],
+  "relax_changed": [
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 2765
+    }
+  ],
+  "relic_triggered": [
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 655
+    },
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 2969
+    },
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 3089
+    },
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 3111
+    },
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 3879
+    },
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 4050
+    }
+  ],
+  "round_started": [
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 1097
+    }
+  ],
+  "scene_established": [
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 3378
+    }
+  ],
+  "scene_replaced": [
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 3361
+    }
+  ],
+  "shield_changed": [
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 2157
+    }
+  ],
+  "status_changed": [
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 2124
+    },
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 2640
+    },
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 5348
+    }
+  ],
+  "status_gained": [
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 3832
+    }
+  ],
+  "status_removed": [
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 1772
+    },
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 2654
+    },
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 2990
+    },
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 3682
+    },
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 3916
+    },
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 5333
+    }
+  ],
+  "task_advanced": [
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 3219
+    }
+  ],
+  "task_completed": [
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 3239
+    }
+  ],
+  "task_self_destructed": [
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 1416
+    }
+  ],
+  "task_summoned": [
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 1336
+    }
+  ],
+  "task_transformed": [
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 1393
+    }
+  ],
+  "unit_departed": [
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 885
+    },
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 1810
+    },
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 1839
+    },
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 3297
+    },
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 4979
+    },
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 5065
+    }
+  ],
+  "unit_healed": [
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 5035
+    }
+  ],
+  "unit_summoned": [
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 3324
+    }
+  ],
+  "vitality_changed": [
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 606
+    },
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 1717
+    },
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 2010
+    },
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 2284
+    },
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 2710
+    },
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 2726
+    }
+  ],
+  "work_restored": [
+    {
+      "file": "src/battle/battle_engine.gd",
+      "line": 1213
+    }
+  ]
+}

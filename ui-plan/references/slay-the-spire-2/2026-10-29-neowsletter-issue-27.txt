@@ -1,0 +1,157 @@
+The Neowsletter - October 2026
+October 29, 2026
+Slay the Spire
+Slay the Spire 2
+Happy Neowlloween, Slayers!
+Much like last month, this Neowsletter is coming in a little later than usual. But this time it’s because we wanted to wait until we were able to offer some more solid info on when you can expect to see the next update.
+Since August (aside from our 1 week studio break), we’ve been busy working on some big pieces of content that we’ve alluded to in past Neowsletters. All of these features were included in our Early Access roadmap at launch, but it wasn’t until the past couple of months that we’ve had the time to concentrate all of our focus on creating them. As you can imagine, these are big things that require a lot of design, UX work, art, animation, balancing, etc before they’re even ready for the experimental beta branch. They can’t be pumped out in a short amount of time nor can they be efficiently worked on in tandem with regular balance updates and bug fixes.
+While we mentioned in the August Neowsletter that our next update would take a bit longer, we weren’t sure exactly when that would be… until now!
+The next big beta patch is currently planned to release on November 12th
+, which is just a couple of weeks away by the time you’re reading this. Of course, this new experimental content will be beta-exclusive at first as we work out the kinks, but the default/main branch will be brought up-to-date with all of the content, balance, and fixes that are live on the current and relatively stable beta branch version (v0.111.0). By this time next month, beta players will already have delved deep into the new stuff and will be sharing their opinions on why
+REDACTED
+should be buffed,
+REDACTED
+should be nerfed, and so on.
+The new content will have more of an impact the less we say about it, so we’re going to keep those arrows in our quiver for now.
+By the way… some of the team is heading to Shanghai for
+WePlay 2026
+!! There will be a
+Slay the Spire 2
+booth with demos, exclusive merch, and interactive elements thanks to our friends at CiGA, as well as a Q&A and fan signing event with Casey! If you’re in town from November 21-22, we hope to see you there!
+In the meantime, let’s answer some of the community’s questions that have been building up over the last while…
+Q&A with C&A
+Natalie asks:
+Loving Slay the Spire 2 so far, thank you so much for all the work you’ve put into it! Would it be possible for you to add modifiers to the custom run mode to force a specific Ancient to spawn at the start of Acts 2 + 3? Or a modifier that lets us pick which version of each act appears, like getting to choose between Overgrowth + Underdocks for Act 1? No worries if this isn’t possible due to coding reasons/it messing with the RNG, or if you just don’t want to add something like this.
+Casey:
+We’ll likely have to do a pass on Custom Runs near the v1.0 launch. While I want to add all the features and ways to explore the nooks and crannies of the game, controller support and minimum text size requirements make it difficult for us. This likely means that Desktop players + mods will get the most flexibility.
+Oliwier asks:
+Hello megacrit team!! I’ve been wondering, is the yellow thing on the inklet a happy mouth or a single sad eye?
+Casey:
+It’s a single sad eye :(
+HJain asks:
+I was wondering whether the team is currently thinking about long-term difficulty/replayability systems for co-op. Is something similar to Ascension planned or being considered for multiplayer? And are there plans for additional regions or alternative Acts that could make late-game runs more varied?
+Casey:
+We’ve found the reception to co-op really positive so we definitely want to add more longevity to it with many players letting us know that they exclusively play multiplayer too! As for additional Acts, that’s certainly in the pipes (within the Spire).
+goodsoup asks:
+I have been loving STS2, especially multiplayer. I was wondering if we could get a system for trading gold. I understand why you may not want that for relics/potions, but i would love to be able to give someone else my remaining 23 gold esp. if we are about to fight a boss.
+Casey:
+If players can pool their resources to a single player it’s sometimes too easy to have one player snowball, which is a growth for characters throughout a run. The ability to get a relic that’s more suited for you in Treasure Rooms is already quite advantageous…
+Jeremy asks:
+I like how your team has been willing to retune, rework, and modify content from the open access period to really match the vision of what you’re going for. With that being said, is there anything that you feel like “dang we really nailed that the first time around”? Anything from content/difficulty/art direction/etc. Thanks!
+Casey:
+Bash is the perfect card
+Nicolas asks:
+how many feedbacks did you get since the beginning of EA? are you using a tool to cluster similar feedbacks or is this manageable by hand?
+Casey:
+The feedback all goes into a tool that we use though. We do a handful of both! The quantity of a specific type of feedback can tell us how frequently the issue occurs while we sometimes look for feedback on a specific card, encounter, etc :)
+NeonWyvern asks:
+What is the best way we as players can word our in-game feedback (our F2s)? It must be hard to parse through all that player data, so how can we make our F2s easier for you to work with?
+Casey:
+It’s not that hard to work with, please keep using the in-game feedback tool. The in-game tool gives us the most data, lets us sort issues by category, helps us not open a ton of emails or hunt down Steam discussions. It’s the best way by far!
+Kale asks:
+Would you ever be open to the idea of an official story adaptation of Slay the Spire (1 & 2)? Like the games being adapted into a graphic novel or even an animated series with a more cohesive story integrating all the lore and worldbuilding of the Spire and Preon?
+Casey:
+Yeah I’m open
+Jeffreyjelly asks:
+Have you ever thought about collaborating with other games to create new characters at all? (This does sound like a balancing nightmare to add a bunch of cards though)
+Anthony:
+no
+Aarfdark asks:
+I’ve been loving STS 2 so far and I can’t wait for what’s in store for us next! In the August Neowsletter, you said that y’all were working on experimental game modes. Could you tell us anything along the lines of how many you’re planning on making and whether they’re going to be focused around single player or multiplayer?
+Casey:
+The new game modes will work for both singleplayer and multiplayer but aside from that, you’ll have to wait… until November 12th!
+Peeled Tomato asks:
+I’ve been loving Slay The Spire 1 and 2. My question is: Just like in StS 1 we were able to see the Beta Artstyle of cards, will we see them in StS 2 in Cards as well as in the Timeline? (I love the place holder Art in the Timeline that’s why!)
+Anthony:
+yes
+Casey:
+Did you just… say yes?
+Spire Spotting
+Last month we shared our discovery of a mysterious creature that our team of researchers had yet to uncover from a mysterious shadow. Today, with the help of all of your hypotheses, we will endeavor to discover its true form!
+First, a look at the still-shadowed being…
+And now for some hypothesis highlights.
+The award for most memey goes to
+inging
+for their tiny Doormaker resurrection!
+The award for most seasonally festive goes to
+Sophia
+!
+The award for most like an actual field notebook illustration goes to
+Straight D Student
+!
+The award for most hunger-inducing goes to
+Fleic
+! I wonder if the real thing would be tasty, too…
+The award for most Defect-ive goes to
+Ooby
+! Throwback to the days of Spire Spotting when people still did not know if the Defect would be making a return to the Spire or what form it would take.
+And, lastly, the award for most accurate goes to
+Yendorami
+! Minus the eye, you were pretty spot on!
+We received many,
+many
+submissions and we wish we could feature them all, but here is a small selection of others!
+Credit from left to right: gamingpower9, TheSos, GrayKitten, Mailboy002, Frost, BananaDream, Huntress, Linkerawesomer, Cloutsky, Teh Quiper, tyo, SleeplessS, DextrasDeluge, Blizzkit, Aliza, Soheil.
+Now with all of your hard work, we’re finally able to unshroud this strange creature…
+AHA! I knew it would be cute!! One couldn’t possibly fight such a thing, surely… It seems as though this aquatic creature got lost in this shadowy realm. Perhaps we should return it to the Underdocks? We won’t name it, of course, lest we get attached!
+Thank you once again to everyone who helped in our research of this squishy guy–I mean formidable creature! Perhaps our paths will cross again if we require your assistance in the future.
+Merch Madness
+We’ve had quite a few merch announcements this month and we’re rounding them all up here! We’re not in the business of making t-shirts or figures, so rest assured that these collabs have taken up zero dev time. While merch does help support our team, the main reason we do it is to make the merch-lovers in our community happy! And to suffocate our community manager with an ever-growing plushie collection.
+Makeship’s Menace Event has brought some spooky, Spire-y plushies along! For a limited time, you can get a real-life, plush Mini Regent (complete with throne and minions) AND a Squeeze-able Necrobinder and matching Osty!
+Since this Neowsletter came out a bit later and since this may be the
+only chance
+to get an official plushie of these guys for a long time, we’ve extended the
+pre-order campaign
+by 1 week past Halloween,
+until November 7th!
+The latest
+Fangamer drop
+is here! Now you can don this long-sleeved tee featuring resplendent art of the Regent or a charming Neow pin (finally)! Also, you can now rest your keyboard, mouse, and other accoutrement on this fittingly rest site-themed deskmat!!
+The
+Slay the Spire collection
+at The Yetee got some starry and skeletal additions! Show off your love for the Spire’s latest slayers with these beautiful brand new prints and tees of the Regent and the Necrobinder!
+The first ever Slay the Spire x GoodSmile collab is booting up with a Nendoroid Light figure of The Defect! Go
+wishlist
+this cute little version of everyone’s favorite robot friend to get notified when it drops!!
+Mapsterpieces
+Alright, we finally gave in and renamed this section to Mapsterpieces! If last month’s theme was “large,” this month’s theme has turned out to be “cute.” ^-^
+A variety of adorable Defects by
+Maddokun
+!
+Plush Defect and Plush Silent hanging out by
+MS32
+!
+A little Hollow Silent by
+Coffee
+!
+Connections Section
+While away the time until the next patch with this (maybe) terrifyingly tricky
+Slay the Spire Connections puzzle
+!
+Mega Crit-or-Treat!
+BOO!!! Mega Crit-or-Treat has returned from the grave!! As many of you may know, our
+Discord
+hosts an annual event where community members can share their spooky Spire creations in exchange for a special limited-time role (this year’s is Impish Inklet). This can include fanart, costumes, carvings, anything–as long as it’s in the
+spirit
+of the season! You still have a few days left if you’d like to participate, so get in on it while you can!
+Community Corner
+Thank you to
+櫻 ヨル
+for this month’s amazing, spooky cover image! As usual, our community is so talented it’s SCARY, so shoutout to these incredible pieces by our runner ups: DotNetIzzy, Tooza, Marr0w, pennypunkos, Ayla, pictoprojects, Joniperita, and 阿星.
+Next month’s theme is: Neow’s Bounty! Imagine denizens of the Spire reaping the season’s harvest, indulging in a feast, or just enjoying the last remnants of autumn. If you’d like to submit your art for consideration, reminder that it must be submitted to us via
+[email protected]
+or in our
+Discord’s
+fanart channel, have dimensions of 800x450px, feature no text, and leave room for a title! Please make your submission by
+Sunday, November 15th.
+On with the monthly community highlights!
+A cute illustration celebrating the Defect’s upcoming figure by
+pp
+!
+These amazing Minion cosplays courtesy of
+glorblargh
+(with a bonus back view)!
+This iconic animation of the minions enjoying pop music by
+Rixian
+!
+That’s all for this month, folks. By the time the next Neowsletter hits your inbox you’ll already be enjoying a brand new patch (and we’re not talking pumpkins)!

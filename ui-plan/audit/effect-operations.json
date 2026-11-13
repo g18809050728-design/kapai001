@@ -1,0 +1,2888 @@
+{
+  "add_work_bonus": [
+    {
+      "id": "R3-C-06",
+      "path": ".ability.triggers[0].effects[0]"
+    },
+    {
+      "id": "R3-C-06",
+      "path": ".ability.triggers[0].upgrade_effects[0]"
+    }
+  ],
+  "apply_status": [
+    {
+      "id": "R3-C-09",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-C-09",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-C-10",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-C-10",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P01-32",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P01-32",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P01-33",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P01-33",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P02-34",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P02-34",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P02-35",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P02-35",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P03-01",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P03-01",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P03-02",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P03-02",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P03-03",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P03-03",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P03-04",
+      "path": ".ability.triggers[0].effects[0]"
+    },
+    {
+      "id": "R3-P03-04",
+      "path": ".ability.triggers[0].upgrade_effects[0]"
+    },
+    {
+      "id": "R3-P03-05",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P03-05",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P03-06",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P03-06",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P03-08",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P03-08",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P03-08",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P03-08",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P03-09",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P03-09",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P03-11",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P03-11",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P03-15",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P03-15",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P03-17",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P03-17",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P03-17",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P03-17",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P03-21",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P03-21",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P03-21",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P03-21",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P03-22",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P03-22",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P03-23",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P03-23",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P03-24",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P03-24",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P03-26",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P03-26",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P03-26",
+      "path": ".effects[2]"
+    },
+    {
+      "id": "R3-P03-26",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P03-26",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P03-26",
+      "path": ".upgrade.effects[2]"
+    },
+    {
+      "id": "R3-P03-27",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P03-27",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P03-33",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P03-33",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P04-31",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P04-31",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P04-35",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P04-35",
+      "path": ".upgrade.effects[0]"
+    }
+  ],
+  "arm_erosion_on_next_draws": [
+    {
+      "id": "R3-P03-16",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P03-16",
+      "path": ".upgrade.effects[0]"
+    }
+  ],
+  "change_topic": [
+    {
+      "id": "R3-P02-21",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P02-21",
+      "path": ".upgrade.effects[0]"
+    }
+  ],
+  "chapter_deploy": [
+    {
+      "id": "R3-P02-11",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P02-11",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P02-12",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P02-12",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P02-13",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P02-13",
+      "path": ".upgrade.effects[2]"
+    },
+    {
+      "id": "R3-P02-14",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P02-14",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P02-15",
+      "path": ".effects[2]"
+    },
+    {
+      "id": "R3-P02-15",
+      "path": ".upgrade.effects[2]"
+    },
+    {
+      "id": "R3-P02-16",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P02-16",
+      "path": ".upgrade.effects[1]"
+    }
+  ],
+  "chapter_return": [
+    {
+      "id": "R3-P02-30",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P02-30",
+      "path": ".upgrade.effects[0]"
+    }
+  ],
+  "chapter_run": [
+    {
+      "id": "R3-P02-20",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P02-20",
+      "path": ".upgrade.effects[0]"
+    }
+  ],
+  "complete": [
+    {
+      "id": "R3-C-01",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-C-01",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-C-07",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-C-07",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-C-09",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-C-09",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-C-11",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-C-11",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-C-12",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-C-12",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P01-02",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P01-02",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P01-03",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P01-03",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P01-05",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P01-05",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P01-06",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P01-06",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P01-08",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P01-08",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P01-09",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P01-09",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P01-14",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P01-14",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P01-19",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P01-19",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P01-23",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P01-23",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P01-27",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P01-27",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P01-30",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P01-30",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P01-32",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P01-32",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P01-34",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P01-34",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P01-37",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P01-37",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P01-37",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P01-37",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P01-40",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P01-40",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P02-13",
+      "path": ".chapter.resident.effects[0]"
+    },
+    {
+      "id": "R3-P02-13",
+      "path": ".chapter.upgraded_resident.effects[0]"
+    },
+    {
+      "id": "R3-P02-16",
+      "path": ".chapter.resident.effects[0]"
+    },
+    {
+      "id": "R3-P02-16",
+      "path": ".chapter.upgraded_resident.effects[0]"
+    },
+    {
+      "id": "R3-P02-35",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P02-35",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P03-01",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P03-01",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P03-12",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P03-12",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P03-14",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P03-14",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P03-18",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P03-18",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P03-22",
+      "path": ".effects[2]"
+    },
+    {
+      "id": "R3-P03-22",
+      "path": ".upgrade.effects[2]"
+    },
+    {
+      "id": "R3-P03-25",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P03-25",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P03-29",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P03-29",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P03-35",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P03-35",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P03-36",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P03-36",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P04-01",
+      "path": ".exam.effects[0]"
+    },
+    {
+      "id": "R3-P04-01",
+      "path": ".exam.upgrade_effects[0]"
+    },
+    {
+      "id": "R3-P04-03",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P04-03",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P04-05",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P04-05",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P04-06",
+      "path": ".exam.effects[0].then[0]"
+    },
+    {
+      "id": "R3-P04-06",
+      "path": ".exam.upgrade_effects[0].then[0]"
+    },
+    {
+      "id": "R3-P04-08",
+      "path": ".exam.effects[0]"
+    },
+    {
+      "id": "R3-P04-08",
+      "path": ".exam.upgrade_effects[0]"
+    },
+    {
+      "id": "R3-P04-09",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P04-09",
+      "path": ".effects[1].if_spent[0]"
+    },
+    {
+      "id": "R3-P04-09",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P04-09",
+      "path": ".upgrade.effects[1].if_spent[0]"
+    },
+    {
+      "id": "R3-P04-10",
+      "path": ".exam.effects[0]"
+    },
+    {
+      "id": "R3-P04-10",
+      "path": ".exam.upgrade_effects[0]"
+    },
+    {
+      "id": "R3-P04-13",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P04-13",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P04-19",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P04-19",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P04-23",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P04-23",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P04-24",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P04-24",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P04-27",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P04-27",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P04-28",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P04-28",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P04-30",
+      "path": ".effects[0].then[0]"
+    },
+    {
+      "id": "R3-P04-30",
+      "path": ".upgrade.effects[0].then[0]"
+    },
+    {
+      "id": "R3-P04-32",
+      "path": ".effects[0].then[0]"
+    },
+    {
+      "id": "R3-P04-32",
+      "path": ".effects[0].if_spent[0]"
+    },
+    {
+      "id": "R3-P04-32",
+      "path": ".upgrade.effects[0].then[0]"
+    },
+    {
+      "id": "R3-P04-32",
+      "path": ".upgrade.effects[0].if_spent[0]"
+    },
+    {
+      "id": "R3-P04-35",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P04-35",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P04-40",
+      "path": ".effects[0].then[0]"
+    },
+    {
+      "id": "R3-P04-40",
+      "path": ".upgrade.effects[0].then[0]"
+    }
+  ],
+  "copy_chapter_to_hand": [
+    {
+      "id": "R3-P02-27",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P02-27",
+      "path": ".upgrade.effects[0]"
+    }
+  ],
+  "cost_discount_next": [
+    {
+      "id": "R3-P01-25",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P01-25",
+      "path": ".upgrade.effects[0]"
+    }
+  ],
+  "discard": [
+    {
+      "id": "R3-C-03",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-C-03",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P01-01",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P01-01",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P01-24",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P01-24",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P01-35",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P01-35",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P02-02",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P02-02",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P02-15",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P02-15",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P02-29",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P02-29",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P03-13",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P03-13",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P03-39",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P03-39",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P04-04",
+      "path": ".exam.effects[1]"
+    },
+    {
+      "id": "R3-P04-04",
+      "path": ".exam.upgrade_effects[1]"
+    },
+    {
+      "id": "R3-P04-33",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P04-33",
+      "path": ".upgrade.effects[1]"
+    }
+  ],
+  "draw": [
+    {
+      "id": "R3-C-03",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-C-03",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-C-08",
+      "path": ".exam.effects[0]"
+    },
+    {
+      "id": "R3-C-08",
+      "path": ".exam.upgrade_effects[0]"
+    },
+    {
+      "id": "R3-P01-01",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P01-01",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P01-06",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P01-06",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P01-07",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P01-07",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P01-12",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P01-12",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P01-14",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P01-14",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P01-18",
+      "path": ".ability.triggers[0].effects[0]"
+    },
+    {
+      "id": "R3-P01-18",
+      "path": ".ability.triggers[0].upgrade_effects[0]"
+    },
+    {
+      "id": "R3-P01-20",
+      "path": ".ability.triggers[0].effects[1]"
+    },
+    {
+      "id": "R3-P01-20",
+      "path": ".ability.triggers[0].upgrade_effects[1]"
+    },
+    {
+      "id": "R3-P01-22",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P01-22",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P01-24",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P01-24",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P01-26",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P01-26",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P01-31",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P01-31",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P01-35",
+      "path": ".effects[2]"
+    },
+    {
+      "id": "R3-P01-35",
+      "path": ".upgrade.effects[2]"
+    },
+    {
+      "id": "R3-P01-36",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P01-36",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P01-38",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P01-38",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P02-02",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P02-02",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P02-03",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P02-03",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P02-04",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P02-04",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P02-08",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P02-08",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P02-10",
+      "path": ".ability.triggers[0].effects[0]"
+    },
+    {
+      "id": "R3-P02-10",
+      "path": ".ability.triggers[0].upgrade_effects[0]"
+    },
+    {
+      "id": "R3-P02-11",
+      "path": ".chapter.resident.effects[0]"
+    },
+    {
+      "id": "R3-P02-11",
+      "path": ".chapter.upgraded_resident.effects[0]"
+    },
+    {
+      "id": "R3-P02-13",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P02-13",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P02-14",
+      "path": ".chapter.resident.effects[1]"
+    },
+    {
+      "id": "R3-P02-14",
+      "path": ".chapter.upgraded_resident.effects[1]"
+    },
+    {
+      "id": "R3-P02-15",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P02-15",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P02-21",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P02-21",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P02-22",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P02-22",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P02-24",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P02-24",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P02-25",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P02-25",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P02-26",
+      "path": ".effects[2]"
+    },
+    {
+      "id": "R3-P02-26",
+      "path": ".upgrade.effects[2]"
+    },
+    {
+      "id": "R3-P02-29",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P02-29",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P02-31",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P02-31",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P02-33",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P02-33",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P02-36",
+      "path": ".exam.effects[0]"
+    },
+    {
+      "id": "R3-P02-36",
+      "path": ".exam.upgrade_effects[0]"
+    },
+    {
+      "id": "R3-P02-37",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P02-37",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P03-03",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P03-03",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P03-11",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P03-11",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P03-13",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P03-13",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P03-14",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P03-14",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P03-23",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P03-23",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P03-31",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P03-31",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P03-36",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P03-36",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P03-38",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P03-38",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P03-39",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P03-39",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P03-40",
+      "path": ".ability.triggers[0].effects[0]"
+    },
+    {
+      "id": "R3-P03-40",
+      "path": ".ability.triggers[0].upgrade_effects[0]"
+    },
+    {
+      "id": "R3-P04-04",
+      "path": ".exam.effects[0]"
+    },
+    {
+      "id": "R3-P04-04",
+      "path": ".exam.upgrade_effects[0]"
+    },
+    {
+      "id": "R3-P04-07",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P04-07",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P04-11",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P04-11",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P04-11",
+      "path": ".exam.effects[0]"
+    },
+    {
+      "id": "R3-P04-11",
+      "path": ".exam.upgrade_effects[0]"
+    },
+    {
+      "id": "R3-P04-14",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P04-14",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P04-15",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P04-15",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P04-15",
+      "path": ".exam.effects[0]"
+    },
+    {
+      "id": "R3-P04-15",
+      "path": ".exam.upgrade_effects[0]"
+    },
+    {
+      "id": "R3-P04-16",
+      "path": ".effects[2]"
+    },
+    {
+      "id": "R3-P04-16",
+      "path": ".upgrade.effects[2]"
+    },
+    {
+      "id": "R3-P04-16",
+      "path": ".exam.effects[1]"
+    },
+    {
+      "id": "R3-P04-16",
+      "path": ".exam.upgrade_effects[1]"
+    },
+    {
+      "id": "R3-P04-17",
+      "path": ".ability.triggers[0].effects[0]"
+    },
+    {
+      "id": "R3-P04-17",
+      "path": ".ability.triggers[0].upgrade_effects[0]"
+    },
+    {
+      "id": "R3-P04-24",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P04-24",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P04-26",
+      "path": ".exam.effects[0]"
+    },
+    {
+      "id": "R3-P04-26",
+      "path": ".exam.upgrade_effects[0]"
+    },
+    {
+      "id": "R3-P04-29",
+      "path": ".effects[0].then[0]"
+    },
+    {
+      "id": "R3-P04-29",
+      "path": ".upgrade.effects[0].then[0]"
+    },
+    {
+      "id": "R3-P04-31",
+      "path": ".effects[2]"
+    },
+    {
+      "id": "R3-P04-31",
+      "path": ".upgrade.effects[2]"
+    },
+    {
+      "id": "R3-P04-33",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P04-33",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-T202",
+      "path": ".effects[0]"
+    }
+  ],
+  "establish_scene": [
+    {
+      "id": "R3-C-08",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-C-08",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P02-36",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P02-36",
+      "path": ".upgrade.effects[0]"
+    }
+  ],
+  "exhaust_other": [
+    {
+      "id": "R3-P01-38",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P01-38",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P03-38",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P03-38",
+      "path": ".upgrade.effects[0]"
+    }
+  ],
+  "extend_timed_debuffs": [
+    {
+      "id": "R3-P03-28",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P03-28",
+      "path": ".upgrade.effects[0]"
+    }
+  ],
+  "gain_focus": [
+    {
+      "id": "R3-P02-38",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P02-38",
+      "path": ".upgrade.effects[0]"
+    }
+  ],
+  "gain_synergy": [
+    {
+      "id": "R3-P04-02",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P04-02",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P04-08",
+      "path": ".exam.effects[1]"
+    },
+    {
+      "id": "R3-P04-08",
+      "path": ".exam.upgrade_effects[1]"
+    },
+    {
+      "id": "R3-P04-12",
+      "path": ".exam.effects[1]"
+    },
+    {
+      "id": "R3-P04-12",
+      "path": ".exam.upgrade_effects[1]"
+    },
+    {
+      "id": "R3-P04-15",
+      "path": ".effects[2]"
+    },
+    {
+      "id": "R3-P04-15",
+      "path": ".upgrade.effects[2]"
+    },
+    {
+      "id": "R3-P04-20",
+      "path": ".ability.triggers[0].effects[0]"
+    },
+    {
+      "id": "R3-P04-20",
+      "path": ".ability.triggers[0].upgrade_effects[0]"
+    },
+    {
+      "id": "R3-P04-21",
+      "path": ".exam.effects[1]"
+    },
+    {
+      "id": "R3-P04-21",
+      "path": ".exam.upgrade_effects[1]"
+    },
+    {
+      "id": "R3-P04-22",
+      "path": ".ability.triggers[0].effects[0]"
+    },
+    {
+      "id": "R3-P04-22",
+      "path": ".ability.triggers[0].upgrade_effects[0]"
+    },
+    {
+      "id": "R3-P04-23",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P04-23",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P04-26",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P04-26",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P04-26",
+      "path": ".exam.effects[1]"
+    },
+    {
+      "id": "R3-P04-26",
+      "path": ".exam.upgrade_effects[1]"
+    },
+    {
+      "id": "R3-P04-31",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P04-31",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P04-33",
+      "path": ".effects[2]"
+    },
+    {
+      "id": "R3-P04-33",
+      "path": ".upgrade.effects[2]"
+    },
+    {
+      "id": "R3-P04-39",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P04-39",
+      "path": ".upgrade.effects[1]"
+    }
+  ],
+  "generate_card": [
+    {
+      "id": "R3-P02-04",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P02-04",
+      "path": ".upgrade.effects[0]"
+    }
+  ],
+  "heal": [
+    {
+      "id": "R3-C-05",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-C-05",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P04-38",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P04-38",
+      "path": ".upgrade.effects[0]"
+    }
+  ],
+  "lose_vitality": [
+    {
+      "id": "R3-P02-37",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P02-37",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P02-38",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P02-38",
+      "path": ".upgrade.effects[1]"
+    }
+  ],
+  "modify_erosion_window": [
+    {
+      "id": "R3-P03-10",
+      "path": ".ability.triggers[0].effects[0]"
+    },
+    {
+      "id": "R3-P03-10",
+      "path": ".ability.triggers[0].upgrade_effects[0]"
+    }
+  ],
+  "paper_amplify": [
+    {
+      "id": "R3-P02-15",
+      "path": ".chapter.resident.effects[0]"
+    },
+    {
+      "id": "R3-P02-15",
+      "path": ".chapter.upgraded_resident.effects[0]"
+    },
+    {
+      "id": "R3-P02-22",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P02-22",
+      "path": ".upgrade.effects[1]"
+    }
+  ],
+  "paper_citation": [
+    {
+      "id": "R3-P02-06",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P02-06",
+      "path": ".upgrade.effects[0]"
+    }
+  ],
+  "paper_modifier": [
+    {
+      "id": "R3-P02-08",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P02-08",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P02-09",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P02-09",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P02-26",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P02-26",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P02-29",
+      "path": ".effects[2]"
+    },
+    {
+      "id": "R3-P02-29",
+      "path": ".upgrade.effects[2]"
+    }
+  ],
+  "paper_open": [
+    {
+      "id": "R3-P02-01",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P02-01",
+      "path": ".upgrade.effects[0]"
+    }
+  ],
+  "paper_progress": [
+    {
+      "id": "R3-P02-07",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P02-07",
+      "path": ".upgrade.effects[0]"
+    }
+  ],
+  "paper_publish": [
+    {
+      "id": "R3-T201",
+      "path": ".effects[0]"
+    }
+  ],
+  "partner_extra_action": [
+    {
+      "id": "R3-P04-06",
+      "path": ".effects[0].then[0]"
+    },
+    {
+      "id": "R3-P04-06",
+      "path": ".upgrade.effects[0].then[0]"
+    },
+    {
+      "id": "R3-P04-10",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P04-10",
+      "path": ".upgrade.effects[1]"
+    }
+  ],
+  "partner_heal": [
+    {
+      "id": "R3-P04-12",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P04-12",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P04-16",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P04-16",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P04-18",
+      "path": ".effects[0].then[0]"
+    },
+    {
+      "id": "R3-P04-18",
+      "path": ".upgrade.effects[0].then[0]"
+    }
+  ],
+  "partner_retreat": [
+    {
+      "id": "R3-P04-15",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P04-15",
+      "path": ".upgrade.effects[0]"
+    }
+  ],
+  "publication_cost_discount": [
+    {
+      "id": "R3-P02-28",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P02-28",
+      "path": ".upgrade.effects[0]"
+    }
+  ],
+  "relax": [
+    {
+      "id": "R3-C-02",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-C-02",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-C-04",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-C-04",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-C-05",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-C-05",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-C-08",
+      "path": ".exam.effects[1]"
+    },
+    {
+      "id": "R3-C-08",
+      "path": ".exam.upgrade_effects[1]"
+    },
+    {
+      "id": "R3-C-10",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-C-10",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P01-04",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P01-04",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P01-05",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P01-05",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P01-07",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P01-07",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P01-10",
+      "path": ".ability.triggers[0].effects[0]"
+    },
+    {
+      "id": "R3-P01-10",
+      "path": ".ability.triggers[0].upgrade_effects[0]"
+    },
+    {
+      "id": "R3-P01-11",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P01-11",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P01-12",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P01-12",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P01-13",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P01-13",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P01-15",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P01-15",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P01-17",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P01-17",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P01-18",
+      "path": ".ability.triggers[0].upgrade_effects[1]"
+    },
+    {
+      "id": "R3-P01-20",
+      "path": ".ability.triggers[0].effects[0]"
+    },
+    {
+      "id": "R3-P01-20",
+      "path": ".ability.triggers[0].upgrade_effects[0]"
+    },
+    {
+      "id": "R3-P01-21",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P01-21",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P01-25",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P01-26",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P01-26",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P01-28",
+      "path": ".ability.triggers[0].effects[0]"
+    },
+    {
+      "id": "R3-P01-28",
+      "path": ".ability.triggers[0].upgrade_effects[0]"
+    },
+    {
+      "id": "R3-P01-31",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P01-31",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P01-32",
+      "path": ".effects[2]"
+    },
+    {
+      "id": "R3-P01-32",
+      "path": ".upgrade.effects[2]"
+    },
+    {
+      "id": "R3-P01-33",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P01-33",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P01-34",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P01-34",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P01-35",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P01-35",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P02-01",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P02-03",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P02-03",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P02-05",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P02-05",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P02-06",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P02-06",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P02-07",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P02-07",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P02-09",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P02-09",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P02-10",
+      "path": ".ability.triggers[0].effects[1]"
+    },
+    {
+      "id": "R3-P02-10",
+      "path": ".ability.triggers[0].upgrade_effects[1]"
+    },
+    {
+      "id": "R3-P02-11",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P02-11",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P02-11",
+      "path": ".chapter.upgraded_resident.effects[1]"
+    },
+    {
+      "id": "R3-P02-12",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P02-12",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P02-12",
+      "path": ".chapter.resident.effects[0]"
+    },
+    {
+      "id": "R3-P02-12",
+      "path": ".chapter.upgraded_resident.effects[0]"
+    },
+    {
+      "id": "R3-P02-13",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P02-14",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P02-14",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P02-14",
+      "path": ".chapter.resident.effects[0]"
+    },
+    {
+      "id": "R3-P02-14",
+      "path": ".chapter.upgraded_resident.effects[0]"
+    },
+    {
+      "id": "R3-P02-16",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P02-16",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P02-17",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P02-17",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P02-18",
+      "path": ".upgrade.effects[2]"
+    },
+    {
+      "id": "R3-P02-19",
+      "path": ".ability.triggers[0].effects[0]"
+    },
+    {
+      "id": "R3-P02-19",
+      "path": ".ability.triggers[0].upgrade_effects[0]"
+    },
+    {
+      "id": "R3-P02-23",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P02-24",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P02-24",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P02-25",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P02-25",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P02-27",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P02-28",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P02-28",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P02-31",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P02-31",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P02-32",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P02-32",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P02-34",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P02-34",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P02-36",
+      "path": ".exam.effects[1]"
+    },
+    {
+      "id": "R3-P02-36",
+      "path": ".exam.upgrade_effects[1]"
+    },
+    {
+      "id": "R3-P02-40",
+      "path": ".ability.triggers[0].effects[0]"
+    },
+    {
+      "id": "R3-P02-40",
+      "path": ".ability.triggers[0].upgrade_effects[0]"
+    },
+    {
+      "id": "R3-P03-02",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P03-02",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P03-07",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P03-13",
+      "path": ".upgrade.effects[2]"
+    },
+    {
+      "id": "R3-P03-15",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P03-15",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P03-24",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P03-24",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P03-27",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P03-27",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P03-28",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P03-30",
+      "path": ".ability.triggers[0].effects[0]"
+    },
+    {
+      "id": "R3-P03-30",
+      "path": ".ability.triggers[0].upgrade_effects[0]"
+    },
+    {
+      "id": "R3-P03-31",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P03-31",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P03-32",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P03-32",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P03-37",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P03-37",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P03-39",
+      "path": ".effects[2]"
+    },
+    {
+      "id": "R3-P03-39",
+      "path": ".upgrade.effects[2]"
+    },
+    {
+      "id": "R3-P03-40",
+      "path": ".ability.triggers[0].effects[1]"
+    },
+    {
+      "id": "R3-P03-40",
+      "path": ".ability.triggers[0].upgrade_effects[1]"
+    },
+    {
+      "id": "R3-P04-01",
+      "path": ".exam.effects[1]"
+    },
+    {
+      "id": "R3-P04-01",
+      "path": ".exam.upgrade_effects[1]"
+    },
+    {
+      "id": "R3-P04-02",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P04-02",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P04-04",
+      "path": ".exam.effects[2]"
+    },
+    {
+      "id": "R3-P04-04",
+      "path": ".exam.upgrade_effects[2]"
+    },
+    {
+      "id": "R3-P04-05",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P04-05",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P04-06",
+      "path": ".upgrade.effects[0].then[1]"
+    },
+    {
+      "id": "R3-P04-06",
+      "path": ".exam.effects[0].then[1]"
+    },
+    {
+      "id": "R3-P04-06",
+      "path": ".exam.upgrade_effects[0].then[1]"
+    },
+    {
+      "id": "R3-P04-07",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P04-07",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P04-10",
+      "path": ".exam.effects[1]"
+    },
+    {
+      "id": "R3-P04-10",
+      "path": ".exam.upgrade_effects[1]"
+    },
+    {
+      "id": "R3-P04-11",
+      "path": ".exam.effects[1]"
+    },
+    {
+      "id": "R3-P04-11",
+      "path": ".exam.upgrade_effects[1]"
+    },
+    {
+      "id": "R3-P04-12",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P04-12",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P04-12",
+      "path": ".exam.effects[0]"
+    },
+    {
+      "id": "R3-P04-12",
+      "path": ".exam.upgrade_effects[0]"
+    },
+    {
+      "id": "R3-P04-14",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P04-14",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P04-15",
+      "path": ".exam.effects[1]"
+    },
+    {
+      "id": "R3-P04-15",
+      "path": ".exam.upgrade_effects[1]"
+    },
+    {
+      "id": "R3-P04-16",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P04-16",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P04-16",
+      "path": ".exam.effects[0]"
+    },
+    {
+      "id": "R3-P04-16",
+      "path": ".exam.upgrade_effects[0]"
+    },
+    {
+      "id": "R3-P04-17",
+      "path": ".ability.triggers[0].upgrade_effects[1]"
+    },
+    {
+      "id": "R3-P04-18",
+      "path": ".effects[0].then[1]"
+    },
+    {
+      "id": "R3-P04-18",
+      "path": ".upgrade.effects[0].then[1]"
+    },
+    {
+      "id": "R3-P04-18",
+      "path": ".exam.effects[0].then[0]"
+    },
+    {
+      "id": "R3-P04-18",
+      "path": ".exam.upgrade_effects[0].then[0]"
+    },
+    {
+      "id": "R3-P04-19",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P04-19",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P04-20",
+      "path": ".ability.triggers[0].effects[1]"
+    },
+    {
+      "id": "R3-P04-20",
+      "path": ".ability.triggers[0].upgrade_effects[1]"
+    },
+    {
+      "id": "R3-P04-21",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P04-21",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P04-21",
+      "path": ".exam.effects[0]"
+    },
+    {
+      "id": "R3-P04-21",
+      "path": ".exam.upgrade_effects[0]"
+    },
+    {
+      "id": "R3-P04-22",
+      "path": ".ability.triggers[0].upgrade_effects[1]"
+    },
+    {
+      "id": "R3-P04-25",
+      "path": ".effects[0].then[0]"
+    },
+    {
+      "id": "R3-P04-25",
+      "path": ".upgrade.effects[0].then[0]"
+    },
+    {
+      "id": "R3-P04-29",
+      "path": ".effects[0].then[1]"
+    },
+    {
+      "id": "R3-P04-29",
+      "path": ".upgrade.effects[0].then[1]"
+    },
+    {
+      "id": "R3-P04-32",
+      "path": ".effects[0].then[1]"
+    },
+    {
+      "id": "R3-P04-32",
+      "path": ".upgrade.effects[0].then[1]"
+    },
+    {
+      "id": "R3-P04-34",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P04-34",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P04-37",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P04-37",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P04-38",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P04-38",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P04-39",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P04-39",
+      "path": ".upgrade.effects[0]"
+    }
+  ],
+  "remove_shield": [
+    {
+      "id": "R3-C-11",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-C-11",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P03-22",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P03-22",
+      "path": ".upgrade.effects[1]"
+    }
+  ],
+  "remove_status": [
+    {
+      "id": "R3-P01-13",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P01-13",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P01-39",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P01-39",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P02-33",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P02-33",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P03-33",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P03-33",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P04-25",
+      "path": ".effects[0].after[0]"
+    },
+    {
+      "id": "R3-P04-25",
+      "path": ".upgrade.effects[0].after[0]"
+    },
+    {
+      "id": "R3-P04-37",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P04-37",
+      "path": ".upgrade.effects[0]"
+    }
+  ],
+  "retain": [
+    {
+      "id": "R3-P01-15",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P01-15",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P01-36",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P01-36",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P02-05",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P02-05",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P03-37",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P03-37",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P04-34",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P04-34",
+      "path": ".upgrade.effects[1]"
+    }
+  ],
+  "retrieve": [
+    {
+      "id": "R3-P01-16",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P01-16",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P01-29",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P01-29",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P02-23",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P02-23",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P02-39",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P02-39",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P03-34",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P03-34",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P04-36",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P04-36",
+      "path": ".upgrade.effects[0]"
+    }
+  ],
+  "search_draw_for_type": [
+    {
+      "id": "R3-P02-18",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P02-18",
+      "path": ".upgrade.effects[0]"
+    }
+  ],
+  "shuffle_draw": [
+    {
+      "id": "R3-P02-18",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P02-18",
+      "path": ".upgrade.effects[1]"
+    }
+  ],
+  "source_stacks": [
+    {
+      "id": "R3-P03-05",
+      "path": ".effects[0].stacks"
+    },
+    {
+      "id": "R3-P03-05",
+      "path": ".upgrade.effects[0].stacks"
+    },
+    {
+      "id": "R3-P03-09",
+      "path": ".effects[0].stacks"
+    },
+    {
+      "id": "R3-P03-09",
+      "path": ".upgrade.effects[0].stacks"
+    }
+  ],
+  "spend_all_synergy": [
+    {
+      "id": "R3-P04-30",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P04-30",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P04-40",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P04-40",
+      "path": ".upgrade.effects[0]"
+    }
+  ],
+  "spend_citation": [
+    {
+      "id": "R3-P02-26",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P02-26",
+      "path": ".upgrade.effects[0]"
+    }
+  ],
+  "spend_synergy": [
+    {
+      "id": "R3-P04-06",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P04-06",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P04-06",
+      "path": ".exam.effects[0]"
+    },
+    {
+      "id": "R3-P04-06",
+      "path": ".exam.upgrade_effects[0]"
+    },
+    {
+      "id": "R3-P04-09",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P04-09",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P04-18",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P04-18",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P04-18",
+      "path": ".exam.effects[0]"
+    },
+    {
+      "id": "R3-P04-18",
+      "path": ".exam.upgrade_effects[0]"
+    },
+    {
+      "id": "R3-P04-29",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P04-29",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P04-32",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P04-32",
+      "path": ".upgrade.effects[0]"
+    }
+  ],
+  "spend_synergy_up_to": [
+    {
+      "id": "R3-P04-25",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P04-25",
+      "path": ".upgrade.effects[0]"
+    }
+  ],
+  "status_complete": [
+    {
+      "id": "R3-P03-19",
+      "path": ".ability.triggers[0].effects[0]"
+    },
+    {
+      "id": "R3-P03-19",
+      "path": ".ability.triggers[0].upgrade_effects[0]"
+    },
+    {
+      "id": "R3-P03-20",
+      "path": ".ability.triggers[0].effects[0]"
+    },
+    {
+      "id": "R3-P03-20",
+      "path": ".ability.triggers[0].upgrade_effects[0]"
+    },
+    {
+      "id": "R3-P03-30",
+      "path": ".ability.extra_effects[0]"
+    }
+  ],
+  "summon_partner": [
+    {
+      "id": "R3-P04-01",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P04-01",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P04-04",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P04-04",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P04-08",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P04-08",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P04-10",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P04-10",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P04-11",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P04-11",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P04-21",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P04-21",
+      "path": ".upgrade.effects[0]"
+    },
+    {
+      "id": "R3-P04-26",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P04-26",
+      "path": ".upgrade.effects[0]"
+    }
+  ],
+  "swap_chapter_slots": [
+    {
+      "id": "R3-P02-17",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P02-17",
+      "path": ".upgrade.effects[0]"
+    }
+  ],
+  "trigger_erosion": [
+    {
+      "id": "R3-P03-07",
+      "path": ".effects[0]"
+    },
+    {
+      "id": "R3-P03-07",
+      "path": ".upgrade.effects[0]"
+    }
+  ],
+  "trigger_induced": [
+    {
+      "id": "R3-P03-18",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P03-18",
+      "path": ".upgrade.effects[1]"
+    }
+  ],
+  "work_bonus_next": [
+    {
+      "id": "R3-P01-21",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P01-21",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P01-22",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P01-22",
+      "path": ".upgrade.effects[1]"
+    },
+    {
+      "id": "R3-P01-24",
+      "path": ".effects[2]"
+    },
+    {
+      "id": "R3-P01-24",
+      "path": ".upgrade.effects[2]"
+    },
+    {
+      "id": "R3-P01-39",
+      "path": ".effects[1]"
+    },
+    {
+      "id": "R3-P01-39",
+      "path": ".upgrade.effects[1]"
+    }
+  ]
+}

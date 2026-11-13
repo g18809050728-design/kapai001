@@ -1,0 +1,38 @@
+[
+  {
+    "movie": {
+      "id": 257289785,
+      "name": "Slay the Spire 2 - Early Access Trailer",
+      "thumbnail": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/257289785/62628f64e43881b4262ff931831322cc7e691881/movie_600x337.jpg?t=1771531786",
+      "dash_av1": "https://video.akamai.steamstatic.com/store_trailers/2868840/1627257579/a83072d3f9fb135618cc17b8390a50a19656a00d/1771464864/dash_av1.mpd?t=1771531786",
+      "dash_h264": "https://video.akamai.steamstatic.com/store_trailers/2868840/1627257579/a83072d3f9fb135618cc17b8390a50a19656a00d/1771464864/dash_h264.mpd?t=1771531786",
+      "hls_h264": "https://video.akamai.steamstatic.com/store_trailers/2868840/1627257579/a83072d3f9fb135618cc17b8390a50a19656a00d/1771464864/hls_264_master.m3u8?t=1771531786",
+      "highlight": true
+    },
+    "file": "trailer-0-720p.mp4",
+    "sha256": "22efa521fb144453ddd5937e310ec5a37c266053e00fbd9f91e34e10476b141e",
+    "duration_seconds": 142.3,
+    "fps": 59.94005994005994,
+    "frame_count": 8532.0,
+    "retrieved_utc": "2026-11-13T08:46:27.149951+00:00",
+    "note": "Official edited trailer. Video only; cuts cannot measure gameplay timings."
+  },
+  {
+    "movie": {
+      "id": 257081846,
+      "name": "Slay the Spire 2 - Gameplay Trailer",
+      "thumbnail": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/257081846/81696be551162236d10516ebc9c1d21cf75e611d/movie_600x337.jpg?t=1770241819",
+      "dash_av1": "https://video.akamai.steamstatic.com/store_trailers/2868840/640808763/5e2d60a7b2b5b59366ac22b2450aa134ee2b822a/1770238477/dash_av1.mpd?t=1770241819",
+      "dash_h264": "https://video.akamai.steamstatic.com/store_trailers/2868840/640808763/5e2d60a7b2b5b59366ac22b2450aa134ee2b822a/1770238477/dash_h264.mpd?t=1770241819",
+      "hls_h264": "https://video.akamai.steamstatic.com/store_trailers/2868840/640808763/5e2d60a7b2b5b59366ac22b2450aa134ee2b822a/1770238477/hls_264_master.m3u8?t=1770241819",
+      "highlight": true
+    },
+    "file": "trailer-1-720p.mp4",
+    "sha256": "8092481711c17b912baab115687d8c0d87208f38a2732ccf373479f4e02dc109",
+    "duration_seconds": 71.8,
+    "fps": 60.0,
+    "frame_count": 4313.0,
+    "retrieved_utc": "2026-11-13T08:46:35.881845+00:00",
+    "note": "Official edited trailer. Video only; cuts cannot measure gameplay timings."
+  }
+]

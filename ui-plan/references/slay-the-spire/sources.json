@@ -1,0 +1,58 @@
+{
+  "retrieved_on": "2026-11-13",
+  "game": "Slay the Spire",
+  "developers": [
+    "Mega Crit"
+  ],
+  "steam_app_id": 646570,
+  "store_url": "https://store.steampowered.com/app/646570/Slay_the_Spire/",
+  "api_url": "https://store.steampowered.com/api/appdetails?appids=646570&l=schinese",
+  "reference_use": "Study of interface hierarchy and presentation only. These files are not production game assets; do not redistribute or embed in the project build.",
+  "api_response_sha256": "d8971bf1c84f02fb76e7a9cf1626ee61e0820a9d891ae4a56b53a87e8c9d2a42",
+  "contact_sheet": "official-steam-screenshots-contact-sheet.jpg",
+  "contact_sheet_sha256": "322231de6ec6835e0482c97fed97f271ca76df634b07a52018d5e1cdff1c026b",
+  "screenshots": [
+    {
+      "id": 0,
+      "local_file": "official-steam-screenshot-0.jpg",
+      "source_url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/646570/ss_c171816f7ecd35b5b46d2fa27532f4c5b8ca3cc5.1920x1080.jpg?t=1774015376",
+      "thumbnail_url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/646570/ss_c171816f7ecd35b5b46d2fa27532f4c5b8ca3cc5.600x338.jpg?t=1774015376",
+      "sha256": "e5785292e967eabbdb9a1b1bee1e426c9cb0e806f328868584e6da0e61a7d323"
+    },
+    {
+      "id": 1,
+      "local_file": "official-steam-screenshot-1.jpg",
+      "source_url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/646570/ss_01aa3e7759e457bfbf2422f31c325d7b3ba8a6eb.1920x1080.jpg?t=1774015376",
+      "thumbnail_url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/646570/ss_01aa3e7759e457bfbf2422f31c325d7b3ba8a6eb.600x338.jpg?t=1774015376",
+      "sha256": "a4518016477cb25611e019f3792c7e3d582d8561c39f9c248fe6fb8208a061ce"
+    },
+    {
+      "id": 2,
+      "local_file": "official-steam-screenshot-2.jpg",
+      "source_url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/646570/ss_b757436d08ba08292796bfed9c60e7cc99d5f2c3.1920x1080.jpg?t=1774015376",
+      "thumbnail_url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/646570/ss_b757436d08ba08292796bfed9c60e7cc99d5f2c3.600x338.jpg?t=1774015376",
+      "sha256": "55f01c6764e20128d8b31b99287b4e39d4f07e73a2ca341a03a706121195cb7d"
+    },
+    {
+      "id": 3,
+      "local_file": "official-steam-screenshot-3.jpg",
+      "source_url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/646570/ss_1299d7fe55771cf564848c5046fbef7936178440.1920x1080.jpg?t=1774015376",
+      "thumbnail_url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/646570/ss_1299d7fe55771cf564848c5046fbef7936178440.600x338.jpg?t=1774015376",
+      "sha256": "f78eccf63ecc447f54aa814c6179352a7b3082824607ebe0aa32091b7a7cbb1b"
+    },
+    {
+      "id": 4,
+      "local_file": "official-steam-screenshot-4.jpg",
+      "source_url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/646570/ss_8af73365121b1b1e2d8004fca2cbffb9b9f6d7a5.1920x1080.jpg?t=1774015376",
+      "thumbnail_url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/646570/ss_8af73365121b1b1e2d8004fca2cbffb9b9f6d7a5.600x338.jpg?t=1774015376",
+      "sha256": "8f50ca07f17e374a22529f48fb1dbee4781c7e91b496b935be47bcdd09cedc4b"
+    },
+    {
+      "id": 5,
+      "local_file": "official-steam-screenshot-5.jpg",
+      "source_url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/646570/ss_5b2b32f09da5a5bed99d5c5168b50fd681a4690c.1920x1080.jpg?t=1774015376",
+      "thumbnail_url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/646570/ss_5b2b32f09da5a5bed99d5c5168b50fd681a4690c.600x338.jpg?t=1774015376",
+      "sha256": "748cceb521f18f54ef4b64eca10d1c30e8b2d8065f61edf5287d826f0afbba6c"
+    }
+  ]
+}

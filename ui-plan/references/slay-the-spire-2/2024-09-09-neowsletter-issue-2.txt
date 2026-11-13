@@ -1,0 +1,80 @@
+The Neowsletter - September 2024
+September 9, 2024
+Slay the Spire
+Slay the Spire 2
+New month, new Neowsletter!
+As all of us at Mega Crit are hard at work on
+Slay the Spire 2
+, we figured we’d start shifting these posts towards news about the game.
+Starting this issue, we’re also posting on Steam! If you’re reading this on Steam, know that on our new and
+updated website
+you can sign up to receive these monthly Neowsletters straight into your email inbox (if that’s your preference).
+Okay, on with it!
+Slay the Spire 2 Dev Update
+Most of the team is hard at work making the game better while I slack off and write this announcement. Speaking of announcements, we’re working on something called a “Gameplay Trailer”. Hopefully, we’ll be able to show it off this year, but if not— I apologize! Trailer-making is not really our forte but we’ve enlisted some help to make sure that everyone gets to see a lot of exciting gameplay soon enough.
+In the development department, we’ve been running private playtests for about 4 months now and the game has been ported to Godot and stabilized. Currently, our core focus is on adding more content so the game is packed full of interesting enemies, choices, and the silliest of situations.
+In parallel, we’ve been improving performance and increasing compatibility on a wide range of devices (at least for our desktop release). We have high confidence that we’ll be entering Early Access with a PC, MacOS, and Steam Deck(tm) compatible build. Yes, Linux is also likely. We see you! There are currently no plans for
+Slay the Spire 2
+to run on VR/XR/AR or any other R-ending piece of hardware on Early Access launch. I’m sure nobody is surprised by this news but that’s okay.
+Why a Sequel?
+This is a question we get often and I’m happy to answer! Why are you working on a sequel? Why not expand
+Slay the Spire
+instead? Let’s get into it!
+For those not in the know, the first
+Slay the Spire
+was developed over 2.5 years before we hit Early Access. Myself (Casey Yano) and Anthony were programming, designing, and arting (this is the official term for making art in video games). We enlisted the help from a handful of contractors to polish up the rough edges and hide some of our shortcomings. This was done by various illustrators, animators, trailer editors, and of course our composer, Clark Aboud who’s been with us the whole way and now
+Slay the Spire 2
+!
+It’s difficult to fully explain how quickly and chaotically we scrapped together
+Slay the Spire
+. There’s no guarantee that any indie game with no reputation will sell more than 10,000 copies. Spending time writing clean, editable, and maintainable code for such a project seemed foolish. Commented code was sparse, issues were hastily patched, systems were cut or completely redone often. This happens in games with exploratory game mechanics. Big shocker!
+On top of this, only about half of my time was spent programming the game, with the rest spent in technical art, QA (my former job!), UX design, and writing things like this. Strangely, writing blogs comes the most naturally to me. It’s not beautiful prose but I enjoy the process.
+With this in mind, I’ll fire off some quick bullet points to the “Why a Sequel?” question:
+Undoing many of my sins in the codebase
+Cleaner and more expandable architecture
+Improving the game’s performance so we can add more stuff
+Migrated to a higher compatibility game engine
+Forming and growing a team to avoid working 60+ hours for 5 years straight
+Giving the game a visual refresh (Art and UI)
+Experimenting with various mechanics we always wanted to
+New Stuff
+This last point,
+New Stuff
+is really important. Games aren’t a list of game mechanics and features. The design of content, pacing, balance, story beats, unique characters, and various things come together to make a one of a kind experience! Otherwise, there would be no reason to play any sequel ever. I think we all know this intrinsically, yet a lot of players can’t seem to accept this. I think skepticism is healthy, but I abhor the cynicism. It’s too much. Get a hold of yourselves, cynics.
+The visual refresh is also really important! We’re still filling out the backgrounds and haven’t incorporated ambient effects but… I would feel remiss not including
+something
+…
+(Teaser of a silly fellow with an orby lookin’ head.)
+Do note that I’m trying to compress 4 hours of ranting into a handful of paragraphs. For your burning non-spoiler inducing questions, you’re always free to ask us questions at our
+Official Discord Server
+where we have an #ask-the-devs channel!
+In case you missed it, answers to common questions can be found at our
+FAQ
+.
+Board Game Updates
+If you haven’t yet nabbed a copy of Slay the Spire: The Board Game, another round of pre-orders are
+open now
+will ship in October!
+Contention Games will also be at
+BGG.CON
+from November 13-17 where they’ll be running demos and selling Collector’s Editions–while supplies last!!
+(A glimpse of the Slay-tastic action at Contention Games’ booth from last weekend at PAX West.)
+The Office
+Did you know? Mega Crit is currently around ~10 people and while the majority of us work remotely, half the team is in Seattle, WA.
+After 3 years in our current office, we’re moving… 1 mile away.
+We’ll be closer to a donut shop, so productivity should improve by 0%.
+Activity Corner
+We noticed that some of our community members have been making custom
+Slay the Spire
+Connections puzzles and our Community Manager, Demi (that’s me writing this section, hi), was inspired to make an
+official unofficial StS Connections puzzle
+, too! Maybe this will become a regular thing??
+Fan Art Roundup
+And last but not least, here are some of the past month’s fan art highlights:
+A serenely vigilant Watcher by
+@ElesDecroisa
+An incredible and slightly ominous pixel animation of The Silent by
+@DankShamwow
+Even MORE pixel animation, this time featuring rare footage of Neow’s body off-screen by
+@ktwfc
+That concludes the September 2024 issue of The Neowsletter. Tune in next month for more StS2 behind-the-scenes looks and community updates!

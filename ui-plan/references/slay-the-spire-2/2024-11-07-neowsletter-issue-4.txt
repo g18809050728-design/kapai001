@@ -1,0 +1,56 @@
+The Neowsletter - November 2024
+November 7, 2024
+Slay the Spire
+Slay the Spire 2
+It’s the November Neowsletter!
+Unsurprisingly, work continues on
+Slay the Spire 2
+. Though we’re not quite ready to reveal gameplay footage yet, let’s have a sneak peek at some quality of life and UI changes that come with StS2. Do keep in mind that the Early Access release is still a bit off (it’s not going to be released January 1, 2025). Any screenshots and the contents within are a work in progress.
+Shinier Shinies
+Okay, so it sounds obvious, but rare things should be shiny! Working in a fancier game engine allows us to make effects easier so that’s been fun. VFX work is behind as it’s lower priority and rarely introduces bugs (we tend to work on scarier/buggier things first) but I felt inspired ✨.
+I warned you about work in progress; these two new cards have already been reworked…
+Map Changes
+One day, I tried playing
+Slay the Spire
+on my phone and it was hard to click on the little icons on the map. Differentiating some of the room types was also quite hard on these tiny screens. As I don’t play video games on the phone, I wasn’t aware of this… until now (or about 4 years ago, to be exact). So we slapped some color on there and bumped up the size of the icons.
+There’s a
+Colored Map mod
+for
+Slay the Spire 1
+. Somebody showed me that you can also draw on maps and I said, “That’s a fun idea. Let’s steal it.” That’s right modders, that’s what you get for not filing Game Mechanic Patents (that is a joke, don’t actually do that).
+Top Bar Changes
+Sure, this is in the screenshots of the game but there are some small changes here. The height of the bar has gone from 64px -> 80px. That’s a 25% increase in hitbox size for things in the top bar, making it easier to select potions, open the map, etc. We also made it less wordy. Goodbye names, people were censoring their names in screenshots anyways. We like privacy too! There will be more things in this top area but for now, keeping it nice and roomy feels good. Oh oops, let’s censor these relics for now…
+The icon next to the stair icon indicates what type of room you’re in
+Run Info Panel
+A nice little pop-up to let you know what run you’ll be continuing! Neato.
+Enemy Preview Time
+This month we show off a cute little gummy bear looking creature. How adorable :D. We hope everyone will love this cutie. Definitely not an enemy that will upset you in the future.
+Translators Update
+We’re starting to onboard some translators but it’s been a bit slow as it’s the season of sickness. Apologies for the lack of response to many of you. The amount of responses to the localization sign up form has been quite a lot more than expected. This has been great, but a lot of work. I’m trying my best! As some non-English speakers will notice–this Neowsletter is translated on Steam! Wahoo!! How do you translate “Wahoo”?
+Also, we’re also getting some translations of our previous Neowsletter up as well :D. If that’s been helpful do let us know, even if we can’t read your comments (lol).
+So Much Merch
+Ok, now Demi’s section begins! First things first, we’ve got some big merch drops to tell you all about!
+This plushie of The Champ may be tiny, but he is also MIGHTY!! He’s also VERY limited edition; there’s less than a week left on the campaign, so be sure to grab your own from Makeship
+here
+before November 12!
+Also, The Yetee recently released a bunch of stickers, including sticker sheets of EVERY relic in the game and some very boss-looking boss stickers! And (as their namesake would imply) the drop also includes a t-shirt, featuring Neow and the Corrupt Heart in a metal concert tee style! Get your hands on these and lots of other items from our Yetee collection
+here
+.
+StS Connections
+Another Neowletter, another
+Slay the Spire Connections puzzle
+! Last month’s was on the easier side, so let’s see if we can up the difficulty rating a little with this one…
+Community Roundup
+If you tuned in last month, you’d know that we just held our annual Mega Crit-or-Treat event! We got LOTS of spooky submissions via
+Discord
+and
+Twitter
+, and while we couldn’t possibly show them all, here are just some of the highlights of what our community created last month!
+Another resplendent rendition of The Ironclad in his fiery, spooky Demon Form by
+@JoQuerol
+A very cute illustration of a Halloween costume party at the Spire by
+@chizifsd
+A super detailed Ironclad cosplay, featuring a belt of homebrewed potions and glowing eyes by TheGuyFromThatThing
+That’s it for this Neowsletter, tune in next month for more details on this year’s Mega Critmas event and, as always, more behind-the-scenes looks at
+Slay the Spire 2
+’s development!

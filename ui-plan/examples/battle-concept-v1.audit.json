@@ -1,0 +1,37 @@
+{
+  "status": "passed",
+  "total": 1,
+  "failed": 0,
+  "duplicates": 0,
+  "expected_size": [
+    1536,
+    1024
+  ],
+  "require_alpha": false,
+  "visual_review": "not_performed_by_script",
+  "contact_sheets": [],
+  "images": [
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\ui-plan\\examples\\battle-concept-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 2870325,
+      "sha256": "0630155a7b59f64e634a68613c6e133600102459b349a1403e66246f39b7ccfb",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    }
+  ]
+}
