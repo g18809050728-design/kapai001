@@ -1,0 +1,16 @@
+{
+  "reviewer": "Codex model visual inspection; not human art acceptance",
+  "screenshots": {
+    "seed42-y1-first-fork-1280x800-text100-selected.png": "428aad03e50ae93bb00d453fd7d95e247ae6b1a6914033f0c09042de38a0127a",
+    "seed7-y1-first-fork-960x600-text150-selected.png": "9e8398842ed5fd09e623e113c780446f8290fc056930bffbd0f58d0ebe64c7a4",
+    "seed7-y3-middle-1280x800-text125-selected.png": "572dfce2b92cd105cdcecee6ad63a520e0d70670519339484da2d16e2293402b",
+    "seed42-y4-annual-960x600-text150-overview.png": "339bd69ae39e94275a2159b171dd2e4471c3d3cd5fb90fdd65ac409019ddf498"
+  },
+  "observations": [
+    "three initial exits and downstream sustained branches visible",
+    "small window150percent retains two full node rows and scrollable forecast",
+    "labels remain clear of curved routes; current/available/completed/unreachable distinguishable",
+    "year4overview fits small window at150percent"
+  ],
+  "captured_sources_match_current": true
+}

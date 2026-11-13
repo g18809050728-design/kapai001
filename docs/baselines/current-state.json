@@ -1,17 +1,18 @@
 {
   "schema_version": 1,
   "record_kind": "observed_implementation_snapshot",
-  "project_date": "2026-11-04",
+  "project_date": "2026-11-13",
   "scope_confirmed_by_user": true,
   "g0_whole_version_accepted": false,
   "g8_whole_version_accepted": false,
   "manifest": {
     "path": "data/four_year/manifests/campus_four_year.json",
-    "sha256": "2d8744b71d00df58db56df904a3214d994aa37b200ae64334968b6ca7e43116c",
+    "sha256": "86f304bbb08064ab3067c39ea70c725b8e8130b31a212b0880c7d6f4f9a0fef4",
     "id": "campus_four_year",
-    "content_version": "campus_four_year.v1"
+    "content_version": "campus_four_year.v1",
+    "content_hash": "53beb845aca6a5a97e7934252b3fa42fd24c3be8262031ba23073abe1edfce8c"
   },
-  "enabled_definition_count": 338,
+  "enabled_definition_count": 346,
   "definitions": {
     "character": {
       "path": "data/four_year/definitions/characters.json",
@@ -233,8 +234,8 @@
     },
     "task": {
       "path": "data/four_year/definitions/tasks.json",
-      "sha256": "6156fe83b594238f0f8bf5fdd73556d219babb91888a6d88d312dec580671cc6",
-      "enabled_count": 56,
+      "sha256": "bbebf90d1c35812b28057aedfc75ef7a19092cbb47f588ce5eccf388c4f2578c",
+      "enabled_count": 60,
       "enabled_ids": [
         "N01",
         "N02",
@@ -291,14 +292,18 @@
         "FY_B1_TASK",
         "FY_B2_TASK",
         "FY_B3_TASK",
-        "FY_B4_TASK"
+        "FY_B4_TASK",
+        "FY_ROUTE_job_TASK",
+        "FY_ROUTE_exam_TASK",
+        "FY_ROUTE_research_TASK",
+        "FY_ROUTE_abroad_TASK"
       ],
-      "definition_count_in_file": 56
+      "definition_count_in_file": 60
     },
     "encounter": {
       "path": "data/four_year/definitions/encounters.json",
-      "sha256": "72c51776b4779d8478ffed8348c3f6a9d209a9d4263fd8617c93470acddd808a",
-      "enabled_count": 53,
+      "sha256": "2bdd9fdea44e5d33a13f3a4557a84168187540dcea7b5d0da01fbb33b67be33f",
+      "enabled_count": 57,
       "enabled_ids": [
         "N01",
         "N02",
@@ -352,9 +357,13 @@
         "FY_FINAL_exam",
         "FY_FINAL_research",
         "FY_FINAL_abroad",
-        "FY_FINAL_deferred"
+        "FY_FINAL_deferred",
+        "FY_ROUTE_job",
+        "FY_ROUTE_exam",
+        "FY_ROUTE_research",
+        "FY_ROUTE_abroad"
       ],
-      "definition_count_in_file": 53
+      "definition_count_in_file": 57
     },
     "unit": {
       "path": "data/four_year/definitions/units.json",
@@ -388,7 +397,7 @@
     },
     "event": {
       "path": "data/four_year/definitions/events.json",
-      "sha256": "88cc1e064bf9a70475ff9fb954800ead5ac8827a228fd2b0b56fdb04290f3fec",
+      "sha256": "26ffeacf86ea9ad5842fc8989a47336ad5986ee28677d772ed10053c8e69cd3d",
       "enabled_count": 4,
       "enabled_ids": [
         "V01",
@@ -433,46 +442,117 @@
     }
   },
   "source_sha256": {
-    "实施计划与验收基线.md": "2012f60f3cfedf624154cdd2a204126fe834dd7095fe689e18dc19ad4986297f",
+    "实施计划与验收基线.md": "913a5f0b38076e93d101572a3d2e601863d3825ddf3d24697e648e1794e989d5",
     "docs/交大四年_DDL战争_项目计划书.md": "99399d45aeed21aa0e0271f86e7acde8d32cd4b6cc98a4f1c9bc454cbbbe151f",
     "docs/交大四年_DDL战争_游戏规则书.md": "dafc479581296142f5277e42a2fe270394312fee1576e5ce25c942e22629d81e",
     "docs/交大四年_DDL战争_统一设计文档.md": "34faeed5b5b6885e0e1c96404517acbf2fb8a6a89c6624859af6682c8fe50f60",
     "docs/交大四年_DDL战争_完整设计思路.md": "93eda7189385de1afa82680140363448c77a0ab6eaf7f88d3345b0e2bb58d667",
     "docs/角色与专属卡池重设计_v3.md": "2815cad7e00404a734bc2ce5e42940fd76f6dc5d97f75c118c5eea4f8b01e76a",
     "docs/校园卡牌设计表_v3.md": "63e7c7dd2d7efb6ddc108d7318eea12ac948b7c5864cae88f1335b036da30870",
-    "docs/卡牌实现契约_v3.md": "bf1c9a9fd7a58b57dc425b112727f686d0e3c1b33b0f9afa730ffd58d8ae3d2f",
-    "docs/四大地图复杂化设计方案.md": "39b577a9b18dc275786182731f3f058b89eb9b0def5c7906ce9f3a1665875d8f",
+    "docs/卡牌实现契约_v3.md": "04455c2a77bf9aeaaed7fdac9fa714e68937c96a583d4e5a8650e2b78b91400c",
+    "docs/四大地图复杂化设计方案.md": "f4a834574ba3360f76ca187284baf328ffaa893866a05a7c9b3d528dc7391166",
     "docs/饰品奖励与学期结束大奖励设计_v0.md": "b7344f885264370df71355817172923f2d158d64ef246f311b094fb0e07cf4e8",
-    "docs/G0需求追踪.md": "84def3b9fb4e5f4476fb070df382c143d9338a7e5a9cd462a324c34d73a44b2b",
-    "docs/阶段执行状态总览.md": "6b889bb620868505f52f25425f9dd00bf8b9742a3d56bd9b26f1dd4b19731bd9"
+    "docs/G0需求追踪.md": "79016b23c7d126c1e7d0d3ef0f6493d3ae8a498a0504bf188f2a8291e0679cdc",
+    "docs/阶段执行状态总览.md": "24c8c229fb8d6c306c9ff46bd63f6c190beb53a28a34a32d770a04db008ebeea",
+    "docs/plans/2026-11-13-adaptive-annual-maps.md": "aae6ab421c07439914e47515b2a6ab43bff7b788d56572568211c11d29c9a5e0",
+    "docs/逐年随机地图实施记录_20261113.md": "453b30190e320b901c99a84c115d6bcf32ea4d82bb7229ac2045f6ffe67648eb",
+    "动作或者图片描述/逐年随机地图需求_20261113.md": "1fa35b673ea977b9051c9b4ba89a9ff4c958d54c72313697d73eafb1ed1d8ac9",
+    "README.md": "4f1c01305a8217cb3cbbd258aed50ea6e7600f80ece4e3e78279e958fb29a4b2",
+    "docs/G0基线执行记录.md": "7cf85ca7885360746093c080e2446df923124d83f7e8101689fcbe5a55ca0133",
+    "docs/G1工程骨架执行记录.md": "08ed142588d961b40c9197ad02b0711b3da8ed4e9e742b391f3cd51e5bb4b7b8",
+    "docs/G2内容与基础状态执行记录.md": "5e14ac887c5d9d138ed706c91bf66b645db386c47ec70d8b3bb929b8424e4310",
+    "docs/G3战斗规则执行记录.md": "1be6d03b78faa2feb8efc9120ff73554227fdf39fd7ec3a7253db41e12e030d9",
+    "docs/G4局流程执行记录.md": "616d44ee64bf4e1c9be6cf7efe04db0a0ca14cd5a15927a4d62b2a11939e3a85",
+    "docs/G5存档恢复执行记录.md": "e4ff17d1d061a929016ae8c44d6d223ed56913eb7ac64825865dd53ab274b42d",
+    "docs/G7界面执行记录.md": "2dd4677e918e5e59d9da60c21c0898031ac4247c0fbb69001a23c159f7ac3618",
+    "docs/G8整局体验验收记录.md": "c5a2461574f11aa4ab28adda3cc876281a58bc937e96ab17a3e729a35e374a61",
+    "docs/plans/2026-11-13-map-density-polish.md": "eefbbb9ec6eeded414f1a57f7da391497a7e55471ba211babc3f9f2ee9323cdf",
+    "docs/内容层契约.md": "ab46612e70ef713056d86c274fe934832673b71c7b46cf6155d74a92611d89df",
+    "docs/地图密度与外观改进记录_20261113.md": "c682f467eda21bbfb1bcb6212b0232ef63f5e25062976b116f4c8a2ffdace24d",
+    "docs/局流程契约.md": "4f1cf9e9baabebf116114be3211fc6af1134395fb3c43c8ab7ffb370d6af7a6f",
+    "docs/数据库与实体关系设计.md": "8cd576e05270992f29fec793fc327807edb2c8a93529527bad4d0c9c1436fe2e",
+    "docs/界面层契约.md": "bf3749b6ae889b82a46ce837531e0fd2182c411ef4555de3041454f97b0e59e2",
+    "src/content/content_db.gd": "69ca1d4c5e3be8acae87fd342d2ae89c7d07f1796ec3cdd0a1172ad9e31a9a11",
+    "src/run/annual_map_generator.gd": "013d534d8bf0c63294927a420f307cae380f4cf4ebfa810d21d85febbbdc439e",
+    "src/run/annual_map_generator_v1.gd": "a8a17db4d35d987c7c2811c000dbb4ed8c6c28fc040fe17a18d561fc7cc7a6c0",
+    "src/run/campaign_progression.gd": "6f10d49f6925eeb2dc0b43990213bfdb81a1413c4e2bdfd6a0e50b5b76fcaabe",
+    "src/run/campaign_service.gd": "7506b78cd9c8ff739e6030b2d7bea38463977988190585e14b3735fd251860dd",
+    "src/run/route_forecast.gd": "6f72c876803623d80c9a01f77e11047a99dad193622e20f172105101cb159079",
+    "src/run/run_service.gd": "ceea8d92d541502642f7d5c671149f37b86decedb0ca8328d80c4034bb3ca7fd",
+    "src/run/run_state.gd": "abc05864dfbec797fa226d9392826aa5d761bb5a50a37ec5063584dfa055ca54",
+    "src/storage/snapshot_codec.gd": "08daafd674fa55609477f34ea3469917c4ea952b02dfac262f8aea858bd3d02a",
+    "src/ui/experience_page.gd": "8fa552b376327969bb6fdf7c17d3d6988aaab3e891ff88845202f27c0a629f33",
+    "src/ui/map_node_stamp.gd": "0d5449144bd7994fca5379be674b313027cb3fcf7540b8c9e62cd1b8394d6def",
+    "src/ui/page_flow.gd": "567cdf70bb241a0607720d0faa0510f58a9e049b216734a4e0958f798f29fb30",
+    "src/ui/route_canvas.gd": "37ddcff34acbe599fc0d701143079e40a672b60ebe2cd14b502d63a6c581fe11",
+    "tests/run_adaptive_map_tests.gd": "2c59d2c9b15b64cf3a9538e6a4eda0eb65c7179d00a5f0a5e471cc83a320b009",
+    "tests/run_annual_map_generator_density_tests.gd": "7eae02af2d95c2360f414d757a166aa32e0861d27d3234290c9f11066691da7d",
+    "tests/run_annual_map_generator_tests.gd": "d1a9db8b4b929ec487a7eef210f902dee8f43b701cb9bba0fd892cbaab9d6493",
+    "tests/run_tests.gd": "66a93bbdb3e68cdee552bc74326008e12d183410a8ec57d7d0e42bfe865618b3",
+    "tests/run_ui_adaptive_map_tests.gd": "536670549c36743f71eed35f097664ab31e649fa5462dca50f393ff9ec7cf7da",
+    "tests/run_ui_tests.gd": "581c498e9deaa7a10ffa49321460446de00e18768c3dbe4061a905196906e837",
+    "tests/suites/test_adaptive_maps.gd": "d6809b06424a32b9a033a8002725bf515e15cd939ceca242e130912959948f88",
+    "tests/suites/test_annual_map_generator.gd": "e7540c904b6b590a2164dcfda63dc1cfbf60e0e304657b7212c478d738971453",
+    "tests/suites/test_annual_map_generator_density.gd": "6126695126ca0bc3a5b060c104658e8c2403a9246fd8b7884f1a60f9085b1772",
+    "tests/suites/test_four_year.gd": "fc02cf5541bbc2c8dce5446f5c2d527c638b374b51bbf158ba3eafb7ce9dc521",
+    "tests/suites/test_ui_adaptive_maps.gd": "5acb967eff4d86dfb21ee0bc0441516830a7656cecb9ba6909b0d36c029dd3f5",
+    "tests/suites/test_ui_experience.gd": "db00bf8173fadf7e24f0d8388c9b4bceb4137bc1fce65291815c9352cffe4fae",
+    "tests/suites/test_ui_followup.gd": "59aac2b727f2332bbc2cb9be11dfa4f394d39b6807f10129e08f6bf2a33f2b62",
+    "tools/add_annual_destinations.py": "40cf8db519ecabeac6f4f462801c26ddd7a715c47697eed008b845904d565c63",
+    "tools/build_four_year_content.py": "21f6990b593e9252466a6125ed081baf357ac41c14a1c70c2099ef4ada26912c",
+    "tools/capture_adaptive_maps.gd": "538dc7cadf5957b4724db210121d37147565a6b0fbc921df23b0b5acfa367532",
+    "tools/capture_map_content_baseline.gd": "1ba6fb3f35b49cba07d2bfb4c7c029f464b4c9c7da4372005be9c7e0b3b3f5ba",
+    "tools/verify_adaptive_maps.py": "182ac0a2686a4429e00e01f9707e3f8a02226160896618293b5d10de046886b4",
+    "动作或者图片描述/需求台账.md": "ecb1141614add17b1e9fb5fdc58145af6e1795e2b7c9c2ce1cd3b1bffc068661"
   },
   "annual_maps": {
     "unit": "academic_year",
     "count": 4,
-    "nodes": [
-      20,
-      28,
-      36,
-      40
-    ],
+    "campaign_version": 2,
+    "map_version": 2,
+    "generation": "one_year_at_a_time_after_rewards_and_required_decisions",
+    "initial_generated_years": 1,
+    "nodes": "seed_dependent",
     "layers": [
       12,
       12,
       14,
       14
     ],
-    "total_nodes": 124,
     "route_layers": 52,
     "relic_slots": 3,
     "relic_rewards": 8,
-    "annual_grand_rewards": 4
+    "annual_grand_rewards": 4,
+    "minimum_branch_independent_nodes": 3,
+    "minimum_shops_per_route": 1,
+    "minimum_recovery_per_route": 2,
+    "minimum_year4_thesis_opportunities": 2,
+    "supported_map_versions": [
+      1,
+      2
+    ],
+    "initial_exits": 3,
+    "middle_layer_width": [
+      3,
+      5
+    ],
+    "minimum_dense_middle_layer_fraction": 0.5,
+    "legacy_algorithm": "annual_map_generator_v1.gd; original seed domain and frozen maps preserved"
   },
   "evidence": {
     "current_runtime_review": "artifacts/verification/docs-refresh-20261104/runtime-review.json",
     "current_import": "artifacts/verification/four-year-20261104/card-art-import/summary.json",
     "current_regression": "artifacts/verification/four-year-20261104/card-art-usage-regression/summary.json",
     "card_art_render": "artifacts/verification/four-year-20261104/card-art-usage-render-final/summary.json",
-    "card_art_checks": "artifacts/verification/card-art-20261104/usage/installation-check.json"
+    "card_art_checks": "artifacts/verification/card-art-20261104/usage/installation-check.json",
+    "adaptive_rules": "artifacts/verification/adaptive-maps-20261113/final-rules/summary.json",
+    "adaptive_ui": "artifacts/verification/adaptive-maps-20261113/final-ui-clean/summary.json",
+    "adaptive_import": "artifacts/verification/adaptive-maps-20261113/final-import-clean/summary.json",
+    "adaptive_visual": "artifacts/verification/adaptive-maps-20261113/final-visual/summary.json",
+    "density-import": "artifacts/verification/adaptive-maps-20261113/density-import/summary.json",
+    "density-rules": "artifacts/verification/adaptive-maps-20261113/density-rules/summary.json",
+    "density-ui-final": "artifacts/verification/adaptive-maps-20261113/density-ui-final/summary.json",
+    "density-visual": "artifacts/verification/adaptive-maps-20261113/density-visual/summary.json"
   },
   "outstanding": [
     "Production/rule/compatibility baseline reconciliation",
@@ -498,9 +578,30 @@
     "manifest": "docs/art/card-art-assets-v3.json",
     "manifest_sha256": "14cd905868a16fec983a7b2ce800ab4a81d39c27918cd6182fb9c271d39222e9",
     "texture_index": "src/ui/ui_labels.json",
-    "texture_index_sha256": "1c0420485ae7af1c027710196f3c347d1fb265500125f92808e643af56053a2e",
+    "texture_index_sha256": "0f9a30b7a3a03cd4ab22179c60e59b5e0147c757c747a59a552d12f0fa8ca6cd",
     "ai_visual_review": "completed_for_prototype",
     "human_acceptance": "pending",
     "license_review": "pending"
+  },
+  "legacy_annual_maps": {
+    "unit": "academic_year",
+    "count": 4,
+    "nodes": [
+      20,
+      28,
+      36,
+      40
+    ],
+    "layers": [
+      12,
+      12,
+      14,
+      14
+    ],
+    "total_nodes": 124,
+    "route_layers": 52,
+    "relic_slots": 3,
+    "relic_rewards": 8,
+    "annual_grand_rewards": 4
   }
 }

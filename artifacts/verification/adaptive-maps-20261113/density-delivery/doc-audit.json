@@ -1,0 +1,435 @@
+{
+  "utc": "2026-11-13T09:35:42.003528+00:00",
+  "issues": [],
+  "exit_code": 0,
+  "scope": "FY-MAP-007 incremental acceptance; historical missing links remain outside this audit",
+  "legacy_source_equal_except_class_name": true,
+  "legacy_before_sha256": "f38204cae49b355d36b57604cbd7a2c4b14d48276d49c96b3ebd9b5965d2fdd3",
+  "legacy_source_sha256": "a8a17db4d35d987c7c2811c000dbb4ed8c6c28fc040fe17a18d561fc7cc7a6c0",
+  "proofs": {
+    "density-import": [
+      {
+        "name": "version",
+        "command": [
+          "D:\\chrome\\godot\\Godot_v4.7.2-stable_win64_console.exe",
+          "--version"
+        ],
+        "isolated_appdata": "D:\\34399\\Desktop\\2026\\软件测试实训\\kapai\\kapai001\\artifacts\\verification\\adaptive-maps-20261113\\density-import\\user_data\\version",
+        "exit_code": 0,
+        "engine_errors": 0,
+        "seconds": 0.089
+      },
+      {
+        "name": "import",
+        "command": [
+          "D:\\chrome\\godot\\Godot_v4.7.2-stable_win64_console.exe",
+          "--headless",
+          "--editor",
+          "--path",
+          "D:\\34399\\Desktop\\2026\\软件测试实训\\kapai\\kapai001",
+          "--quit"
+        ],
+        "isolated_appdata": "D:\\34399\\Desktop\\2026\\软件测试实训\\kapai\\kapai001\\artifacts\\verification\\adaptive-maps-20261113\\density-import\\user_data\\import",
+        "exit_code": 0,
+        "engine_errors": 0,
+        "seconds": 10.308
+      }
+    ],
+    "density-rules": [
+      {
+        "name": "version",
+        "command": [
+          "D:\\chrome\\godot\\Godot_v4.7.2-stable_win64_console.exe",
+          "--version"
+        ],
+        "isolated_appdata": "D:\\34399\\Desktop\\2026\\软件测试实训\\kapai\\kapai001\\artifacts\\verification\\adaptive-maps-20261113\\density-rules\\user_data\\version",
+        "exit_code": 0,
+        "engine_errors": 0,
+        "seconds": 0.082
+      },
+      {
+        "name": "run_tests",
+        "command": [
+          "D:\\chrome\\godot\\Godot_v4.7.2-stable_win64_console.exe",
+          "--headless",
+          "--path",
+          "D:\\34399\\Desktop\\2026\\软件测试实训\\kapai\\kapai001",
+          "--script",
+          "res://tests/run_tests.gd"
+        ],
+        "isolated_appdata": "D:\\34399\\Desktop\\2026\\软件测试实训\\kapai\\kapai001\\artifacts\\verification\\adaptive-maps-20261113\\density-rules\\user_data\\run_tests",
+        "exit_code": 0,
+        "engine_errors": 0,
+        "seconds": 51.977
+      }
+    ],
+    "density-ui-final": [
+      {
+        "name": "version",
+        "command": [
+          "D:\\chrome\\godot\\Godot_v4.7.2-stable_win64_console.exe",
+          "--version"
+        ],
+        "isolated_appdata": "D:\\34399\\Desktop\\2026\\软件测试实训\\kapai\\kapai001\\artifacts\\verification\\adaptive-maps-20261113\\density-ui-final\\user_data\\version",
+        "exit_code": 0,
+        "engine_errors": 0,
+        "seconds": 0.106
+      },
+      {
+        "name": "run_ui_tests",
+        "command": [
+          "D:\\chrome\\godot\\Godot_v4.7.2-stable_win64_console.exe",
+          "--headless",
+          "--path",
+          "D:\\34399\\Desktop\\2026\\软件测试实训\\kapai\\kapai001",
+          "--script",
+          "res://tests/run_ui_tests.gd"
+        ],
+        "isolated_appdata": "D:\\34399\\Desktop\\2026\\软件测试实训\\kapai\\kapai001\\artifacts\\verification\\adaptive-maps-20261113\\density-ui-final\\user_data\\run_ui_tests",
+        "exit_code": 0,
+        "engine_errors": 0,
+        "seconds": 140.117
+      }
+    ],
+    "density-visual": [
+      {
+        "name": "version",
+        "command": [
+          "D:\\chrome\\godot\\Godot_v4.7.2-stable_win64_console.exe",
+          "--version"
+        ],
+        "isolated_appdata": "D:\\34399\\Desktop\\2026\\软件测试实训\\kapai\\kapai001\\artifacts\\verification\\adaptive-maps-20261113\\density-visual\\user_data\\version",
+        "exit_code": 0,
+        "engine_errors": 0,
+        "seconds": 0.072
+      },
+      {
+        "name": "capture_adaptive_maps",
+        "command": [
+          "D:\\chrome\\godot\\Godot_v4.7.2-stable_win64_console.exe",
+          "--rendering-method",
+          "gl_compatibility",
+          "--position",
+          "-16000,-16000",
+          "--path",
+          "D:\\34399\\Desktop\\2026\\软件测试实训\\kapai\\kapai001",
+          "--script",
+          "res://tools/capture_adaptive_maps.gd",
+          "--",
+          "--output=res://artifacts/verification/adaptive-maps-20261113/density-visual-png"
+        ],
+        "isolated_appdata": "D:\\34399\\Desktop\\2026\\软件测试实训\\kapai\\kapai001\\artifacts\\verification\\adaptive-maps-20261113\\density-visual\\user_data\\capture_adaptive_maps",
+        "exit_code": 0,
+        "engine_errors": 0,
+        "seconds": 68.318
+      }
+    ]
+  },
+  "new_links": [
+    {
+      "document": "README.md",
+      "target": "docs/plans/2026-11-13-adaptive-annual-maps.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/逐年随机地图实施记录_20261113.md"
+    },
+    {
+      "document": "README.md",
+      "target": "动作或者图片描述/逐年随机地图需求_20261113.md"
+    },
+    {
+      "document": "docs/G0基线执行记录.md",
+      "target": "plans/2026-11-13-adaptive-annual-maps.md"
+    },
+    {
+      "document": "docs/G0基线执行记录.md",
+      "target": "逐年随机地图实施记录_20261113.md"
+    },
+    {
+      "document": "docs/G0需求追踪.md",
+      "target": "../动作或者图片描述/逐年随机地图需求_20261113.md"
+    },
+    {
+      "document": "docs/G0需求追踪.md",
+      "target": "地图密度与外观改进记录_20261113.md"
+    },
+    {
+      "document": "docs/G0需求追踪.md",
+      "target": "逐年随机地图实施记录_20261113.md"
+    },
+    {
+      "document": "docs/G1工程骨架执行记录.md",
+      "target": "逐年随机地图实施记录_20261113.md"
+    },
+    {
+      "document": "docs/G2内容与基础状态执行记录.md",
+      "target": "逐年随机地图实施记录_20261113.md"
+    },
+    {
+      "document": "docs/G3战斗规则执行记录.md",
+      "target": "逐年随机地图实施记录_20261113.md"
+    },
+    {
+      "document": "docs/G4局流程执行记录.md",
+      "target": "地图密度与外观改进记录_20261113.md"
+    },
+    {
+      "document": "docs/G4局流程执行记录.md",
+      "target": "逐年随机地图实施记录_20261113.md"
+    },
+    {
+      "document": "docs/G5存档恢复执行记录.md",
+      "target": "地图密度与外观改进记录_20261113.md"
+    },
+    {
+      "document": "docs/G5存档恢复执行记录.md",
+      "target": "逐年随机地图实施记录_20261113.md"
+    },
+    {
+      "document": "docs/G7界面执行记录.md",
+      "target": "地图密度与外观改进记录_20261113.md"
+    },
+    {
+      "document": "docs/G7界面执行记录.md",
+      "target": "逐年随机地图实施记录_20261113.md"
+    },
+    {
+      "document": "docs/G8整局体验验收记录.md",
+      "target": "逐年随机地图实施记录_20261113.md"
+    },
+    {
+      "document": "docs/plans/2026-11-13-adaptive-annual-maps.md",
+      "target": "../逐年随机地图实施记录_20261113.md"
+    },
+    {
+      "document": "docs/plans/2026-11-13-adaptive-annual-maps.md",
+      "target": "2026-11-13-map-density-polish.md"
+    },
+    {
+      "document": "docs/plans/2026-11-13-map-density-polish.md",
+      "target": "../地图密度与外观改进记录_20261113.md"
+    },
+    {
+      "document": "docs/内容层契约.md",
+      "target": "plans/2026-11-13-adaptive-annual-maps.md"
+    },
+    {
+      "document": "docs/内容层契约.md",
+      "target": "数据库与实体关系设计.md"
+    },
+    {
+      "document": "docs/四大地图复杂化设计方案.md",
+      "target": "plans/2026-11-13-adaptive-annual-maps.md"
+    },
+    {
+      "document": "docs/四大地图复杂化设计方案.md",
+      "target": "plans/2026-11-13-map-density-polish.md"
+    },
+    {
+      "document": "docs/四大地图复杂化设计方案.md",
+      "target": "内容层契约.md"
+    },
+    {
+      "document": "docs/地图密度与外观改进记录_20261113.md",
+      "target": "../artifacts/verification/adaptive-maps-20261113/density-delivery/doc-audit.json"
+    },
+    {
+      "document": "docs/地图密度与外观改进记录_20261113.md",
+      "target": "../artifacts/verification/adaptive-maps-20261113/density-import/summary.json"
+    },
+    {
+      "document": "docs/地图密度与外观改进记录_20261113.md",
+      "target": "../artifacts/verification/adaptive-maps-20261113/density-progression-green/summary.json"
+    },
+    {
+      "document": "docs/地图密度与外观改进记录_20261113.md",
+      "target": "../artifacts/verification/adaptive-maps-20261113/density-rules/summary.json"
+    },
+    {
+      "document": "docs/地图密度与外观改进记录_20261113.md",
+      "target": "../artifacts/verification/adaptive-maps-20261113/density-ui-final/summary.json"
+    },
+    {
+      "document": "docs/地图密度与外观改进记录_20261113.md",
+      "target": "../artifacts/verification/adaptive-maps-20261113/density-visual-png/capture.json"
+    },
+    {
+      "document": "docs/地图密度与外观改进记录_20261113.md",
+      "target": "../artifacts/verification/adaptive-maps-20261113/density-visual-png/seed42-y1-first-fork-1280x800-text100-selected.png"
+    },
+    {
+      "document": "docs/地图密度与外观改进记录_20261113.md",
+      "target": "../artifacts/verification/adaptive-maps-20261113/density-visual/summary.json"
+    },
+    {
+      "document": "docs/地图密度与外观改进记录_20261113.md",
+      "target": "../动作或者图片描述/逐年随机地图需求_20261113.md"
+    },
+    {
+      "document": "docs/地图密度与外观改进记录_20261113.md",
+      "target": "../实施计划与验收基线.md"
+    },
+    {
+      "document": "docs/地图密度与外观改进记录_20261113.md",
+      "target": "baselines/current-state.json"
+    },
+    {
+      "document": "docs/地图密度与外观改进记录_20261113.md",
+      "target": "plans/2026-11-13-map-density-polish.md"
+    },
+    {
+      "document": "docs/地图密度与外观改进记录_20261113.md",
+      "target": "逐年随机地图实施记录_20261113.md"
+    },
+    {
+      "document": "docs/局流程契约.md",
+      "target": "plans/2026-11-13-adaptive-annual-maps.md"
+    },
+    {
+      "document": "docs/局流程契约.md",
+      "target": "plans/2026-11-13-map-density-polish.md"
+    },
+    {
+      "document": "docs/数据库与实体关系设计.md",
+      "target": "plans/2026-11-13-adaptive-annual-maps.md"
+    },
+    {
+      "document": "docs/数据库与实体关系设计.md",
+      "target": "plans/2026-11-13-map-density-polish.md"
+    },
+    {
+      "document": "docs/界面层契约.md",
+      "target": "../动作或者图片描述/逐年随机地图需求_20261113.md"
+    },
+    {
+      "document": "docs/界面层契约.md",
+      "target": "plans/2026-11-13-adaptive-annual-maps.md"
+    },
+    {
+      "document": "docs/界面层契约.md",
+      "target": "plans/2026-11-13-map-density-polish.md"
+    },
+    {
+      "document": "docs/逐年随机地图实施记录_20261113.md",
+      "target": "../artifacts/verification/adaptive-maps-20261113/"
+    },
+    {
+      "document": "docs/逐年随机地图实施记录_20261113.md",
+      "target": "../artifacts/verification/adaptive-maps-20261113/delivery/doc-audit.json"
+    },
+    {
+      "document": "docs/逐年随机地图实施记录_20261113.md",
+      "target": "../artifacts/verification/adaptive-maps-20261113/destinations-integrated/summary.json"
+    },
+    {
+      "document": "docs/逐年随机地图实施记录_20261113.md",
+      "target": "../artifacts/verification/adaptive-maps-20261113/final-import-clean/summary.json"
+    },
+    {
+      "document": "docs/逐年随机地图实施记录_20261113.md",
+      "target": "../artifacts/verification/adaptive-maps-20261113/final-rules/summary.json"
+    },
+    {
+      "document": "docs/逐年随机地图实施记录_20261113.md",
+      "target": "../artifacts/verification/adaptive-maps-20261113/final-ui-clean/summary.json"
+    },
+    {
+      "document": "docs/逐年随机地图实施记录_20261113.md",
+      "target": "../artifacts/verification/adaptive-maps-20261113/final-visual/summary.json"
+    },
+    {
+      "document": "docs/逐年随机地图实施记录_20261113.md",
+      "target": "../artifacts/verification/adaptive-maps-20261113/rules-regression/summary.json"
+    },
+    {
+      "document": "docs/逐年随机地图实施记录_20261113.md",
+      "target": "../artifacts/verification/adaptive-maps-20261113/visual/capture.json"
+    },
+    {
+      "document": "docs/逐年随机地图实施记录_20261113.md",
+      "target": "../动作或者图片描述/逐年随机地图需求_20261113.md"
+    },
+    {
+      "document": "docs/逐年随机地图实施记录_20261113.md",
+      "target": "../实施计划与验收基线.md"
+    },
+    {
+      "document": "docs/逐年随机地图实施记录_20261113.md",
+      "target": "baselines/current-state.json"
+    },
+    {
+      "document": "docs/逐年随机地图实施记录_20261113.md",
+      "target": "plans/2026-11-13-adaptive-annual-maps.md"
+    },
+    {
+      "document": "docs/逐年随机地图实施记录_20261113.md",
+      "target": "地图密度与外观改进记录_20261113.md"
+    },
+    {
+      "document": "docs/逐年随机地图实施记录_20261113.md",
+      "target": "数据库与实体关系设计.md"
+    },
+    {
+      "document": "docs/阶段执行状态总览.md",
+      "target": "地图密度与外观改进记录_20261113.md"
+    },
+    {
+      "document": "docs/阶段执行状态总览.md",
+      "target": "逐年随机地图实施记录_20261113.md"
+    },
+    {
+      "document": "动作或者图片描述/逐年随机地图需求_20261113.md",
+      "target": "../docs/plans/2026-11-13-adaptive-annual-maps.md"
+    },
+    {
+      "document": "动作或者图片描述/逐年随机地图需求_20261113.md",
+      "target": "../docs/plans/2026-11-13-map-density-polish.md"
+    },
+    {
+      "document": "动作或者图片描述/逐年随机地图需求_20261113.md",
+      "target": "../docs/局流程契约.md"
+    },
+    {
+      "document": "动作或者图片描述/逐年随机地图需求_20261113.md",
+      "target": "../docs/数据库与实体关系设计.md"
+    },
+    {
+      "document": "动作或者图片描述/逐年随机地图需求_20261113.md",
+      "target": "../docs/界面层契约.md"
+    },
+    {
+      "document": "动作或者图片描述/需求台账.md",
+      "target": "../docs/plans/2026-11-13-map-density-polish.md"
+    },
+    {
+      "document": "动作或者图片描述/需求台账.md",
+      "target": "../docs/地图密度与外观改进记录_20261113.md"
+    },
+    {
+      "document": "动作或者图片描述/需求台账.md",
+      "target": "../docs/逐年随机地图实施记录_20261113.md"
+    },
+    {
+      "document": "动作或者图片描述/需求台账.md",
+      "target": "逐年随机地图需求_20261113.md"
+    },
+    {
+      "document": "实施计划与验收基线.md",
+      "target": "docs/plans/2026-11-13-adaptive-annual-maps.md"
+    },
+    {
+      "document": "实施计划与验收基线.md",
+      "target": "docs/plans/2026-11-13-map-density-polish.md"
+    },
+    {
+      "document": "实施计划与验收基线.md",
+      "target": "docs/地图密度与外观改进记录_20261113.md"
+    },
+    {
+      "document": "实施计划与验收基线.md",
+      "target": "docs/逐年随机地图实施记录_20261113.md"
+    }
+  ],
+  "observed_snapshot_sha256": "2506c1f9ba64356de305b4f2af3dc8fb37244e84b155448a4e2cc6ba19f36e0c"
+}

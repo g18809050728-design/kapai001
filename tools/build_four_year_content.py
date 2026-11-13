@@ -3,6 +3,7 @@ from pathlib import Path
 import copy
 from itertools import combinations, product
 import json
+from add_annual_destinations import extend as extend_annual_destinations
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -169,6 +170,7 @@ def main():
         d["base_ddl"] = int(base["base_ddl"]) + (3 if name == "deferred" else 0)
         definitions["encounters"].append(d)
         manifest["enabled"]["encounter"].append(d["id"])
+    extend_annual_destinations(definitions, manifest)
     relics = []
     themes = [
         [("校园导览册", "event_money", 5), ("食堂饭卡", "rest_heal", 3), ("旧书签", "service_discount", 5), ("社团徽章", "service_money", 5)],
@@ -183,6 +185,9 @@ def main():
     definitions["relics"] = relics
     labels_path = ROOT / "src/ui/ui_labels.json"
     labels = json.loads(labels_path.read_text(encoding="utf-8-sig"))
+    for destination in ["job", "exam", "research", "abroad"]:
+        for suffix in ["", "_TASK"]:
+            labels.setdefault("aliases", {})["FY_ROUTE_" + destination + suffix] = "FY_B4_TASK"
     labels["labels"].update({r["id"]: r["name_key"] for r in relics})
     labels["labels"].update({d["id"]: d["name_key"] for d in definitions["encounters"] if d["id"].startswith("FY_")})
     labels["labels"].update({d["id"]: d["name_key"] for d in definitions["tasks"] if d["id"].startswith("FY_")})
@@ -285,6 +290,13 @@ N 普通战斗；E 事件；S 商店；EL 精英；K 竞赛（精英战斗）；
 
 节点图由 tools/build_four_year_content.py 与本文精确表共同生成，改图时重新生成并运行拓扑、整条路径、冻结奖励/读档、幂等及旧版回归。新开局采用本表分岔图；既有四年存档精确匹配完整旧图时保留冻结路线，混合或损坏拓扑仍拒绝。FY-UX-024 的代码、实际命令与两尺寸截图见[实施记录](战斗地图反馈实施记录_20261105.md)。图片提示词不等于图片落盘；占位音效不等于正式音乐完成。
 '''
+    annual_override = """## 2026-11-13 新局覆盖规则：逐学年随机地图
+
+新版新局使用 campaign.version=2，由 AnnualMapGenerator / CampaignProgression 逐年生成，以下固定节点精确表仅作为 version=1 旧档基线。新版仍为12/12/14/14层、52站、8次饰品和4次大奖励；候选数量随种子变化，前一年经历有限影响后一年机会，大二/大四分别在方向/去向确认后生成并冻结。新版大三/大四饰品层为3、10；旧图保持4、11。四去向新增 FY_ROUTE_* 独立挑战时序，共同完成量、DDL、循环压力/护盾预算不变；旧 FY_FINAL_* 定义保留。实施和验收以[逐年计划](plans/2026-11-13-adaptive-annual-maps.md)及[素材交接](../动作或者图片描述/逐年随机地图需求_20261113.md)为准。
+
+"""
+    heading_end = text.index("\n") + 1
+    text = text[:heading_end] + "\n" + annual_override + text[heading_end:]
     doc.write_text(text, encoding="utf-8")
 
 

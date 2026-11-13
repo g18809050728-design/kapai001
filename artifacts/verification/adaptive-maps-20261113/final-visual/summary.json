@@ -1,0 +1,31 @@
+[
+  {
+    "name": "version",
+    "command": [
+      "D:\\chrome\\godot\\Godot_v4.7.2-stable_win64_console.exe",
+      "--version"
+    ],
+    "isolated_appdata": "D:\\34399\\Desktop\\2026\\软件测试实训\\kapai\\kapai001\\artifacts\\verification\\adaptive-maps-20261113\\final-visual\\user_data\\version",
+    "exit_code": 0,
+    "engine_errors": 0,
+    "seconds": 0.078
+  },
+  {
+    "name": "capture_adaptive_maps",
+    "command": [
+      "D:\\chrome\\godot\\Godot_v4.7.2-stable_win64_console.exe",
+      "--rendering-method",
+      "gl_compatibility",
+      "--position",
+      "-16000,-16000",
+      "--path",
+      "D:\\34399\\Desktop\\2026\\软件测试实训\\kapai\\kapai001",
+      "--script",
+      "res://tools/capture_adaptive_maps.gd"
+    ],
+    "isolated_appdata": "D:\\34399\\Desktop\\2026\\软件测试实训\\kapai\\kapai001\\artifacts\\verification\\adaptive-maps-20261113\\final-visual\\user_data\\capture_adaptive_maps",
+    "exit_code": 0,
+    "engine_errors": 0,
+    "seconds": 50.849
+  }
+]

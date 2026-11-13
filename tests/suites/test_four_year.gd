@@ -20,6 +20,10 @@ func run() -> Array[String]:
 		return _failures
 	_run = created.data.state
 	_rng = created.data.rng_states
+	# This suite retains both version-one frozen baselines; version-two annual
+	# generation and transitions are covered by test_adaptive_maps.gd.
+	_run.campaign = CampaignService.initial()
+	_run.nodes = CampaignMap.build(_run.run_id)
 	var legacy := _run.copy_for_write()
 	legacy.nodes = CampaignMap.build(legacy.run_id, true)
 	_check(legacy.validate().is_empty(), "legacy frozen map remains valid without editing player saves")
@@ -176,6 +180,8 @@ func _accept(result: GameResult) -> bool:
 func _test_reward_edges() -> void:
 	var created := _service.create(StartRunRequest.new("P01", &"normal", "campus_four_year", "7"))
 	var run: RunState = created.data.state
+	run.campaign = CampaignService.initial()
+	run.nodes = CampaignMap.build(run.run_id)
 	var rewards := CampaignService.new(_catalog)
 	var node: RunNodeState = run.nodes[0]
 	node.status = "active"

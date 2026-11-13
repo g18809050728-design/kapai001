@@ -66,6 +66,8 @@ func _initialize() -> void:
 		"test_cards_v3_r3",
 		"test_cards_v3_production",
 		"test_four_year",
+		"test_annual_map_generator",
+		"test_adaptive_maps",
 		"test_four_year_passives",
 		"test_test_room_core"
 	]:

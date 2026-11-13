@@ -1,0 +1,10 @@
+SCRIPT ERROR: Invalid access to property or key 'bg_color' on a base object of type 'StyleBoxEmpty'.
+   at: _battle_and_map (res://tests/suites/test_ui_followup.gd:340)
+   GDScript backtrace (most recent call first):
+       [0] _battle_and_map (res://tests/suites/test_ui_followup.gd:340)
+       [1] _frames (res://tests/suites/test_ui_followup.gd:556)
+SCRIPT ERROR: Invalid access to property or key 'bg_color' on a base object of type 'StyleBoxEmpty'.
+   at: _battle_and_map (res://tests/suites/test_ui_followup.gd:340)
+   GDScript backtrace (most recent call first):
+       [0] _battle_and_map (res://tests/suites/test_ui_followup.gd:340)
+       [1] _frames (res://tests/suites/test_ui_followup.gd:556)

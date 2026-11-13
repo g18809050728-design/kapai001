@@ -1,0 +1,28 @@
+[
+  {
+    "name": "version",
+    "command": [
+      "D:\\chrome\\godot\\Godot_v4.7.2-stable_win64_console.exe",
+      "--version"
+    ],
+    "isolated_appdata": "D:\\34399\\Desktop\\2026\\软件测试实训\\kapai\\kapai001\\artifacts\\verification\\adaptive-maps-20261113\\red-progression\\user_data\\version",
+    "exit_code": 0,
+    "engine_errors": 0,
+    "seconds": 2.03
+  },
+  {
+    "name": "run_adaptive_map_tests",
+    "command": [
+      "D:\\chrome\\godot\\Godot_v4.7.2-stable_win64_console.exe",
+      "--headless",
+      "--path",
+      "D:\\34399\\Desktop\\2026\\软件测试实训\\kapai\\kapai001",
+      "--script",
+      "res://tests/run_adaptive_map_tests.gd"
+    ],
+    "isolated_appdata": "D:\\34399\\Desktop\\2026\\软件测试实训\\kapai\\kapai001\\artifacts\\verification\\adaptive-maps-20261113\\red-progression\\user_data\\run_adaptive_map_tests",
+    "exit_code": 1,
+    "engine_errors": 3,
+    "seconds": 1.83
+  }
+]

@@ -201,9 +201,16 @@ static func decode_session(snapshot: Variant, catalog: ContentDB) -> GameResult:
 	if catalog == null or catalog.get_info() == null:
 		return _error(GameConstants.ERROR_CONTENT_INVALID, ["loaded catalog is required"])
 	var info := catalog.get_info()
+	var legacy_campaign: Variant = snapshot.payload.get("run", {})
+	var legacy_hash: bool = (
+		legacy_campaign is Dictionary
+		and legacy_campaign.get("campaign", {}) is Dictionary
+		and legacy_campaign.get("campaign", {}).get("version") == 1
+		and catalog.accepts_legacy_four_year_hash(str(snapshot.content_hash))
+	)
 	if (
 		snapshot.content_version != info.content_version
-		or snapshot.content_hash != info.content_hash
+		or (snapshot.content_hash != info.content_hash and not legacy_hash)
 		or snapshot.manifest_id != info.id
 	):
 		return _error(

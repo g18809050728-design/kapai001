@@ -1,0 +1,359 @@
+ M README.md
+ M artifacts/verification/g7-20261015-233135-081449/visual/reward-details.png.import
+ M artifacts/verification/g7-polish-visual-20261015/battle-deck.png.import
+ M artifacts/verification/g7-polish-visual-20261015/deck.png.import
+ M artifacts/verification/g7-polish-visual-20261015/map.png.import
+ M artifacts/verification/g7-polish-visual-20261015/rest.png.import
+ M artifacts/verification/g7-polish-visual-20261015/shop.png.import
+ M artifacts/verification/g7-polish-visual-20261016-000350-415331/battle-deck.png.import
+ M artifacts/verification/g7-polish-visual-20261016-000350-415331/deck.png.import
+ M artifacts/verification/g7-polish-visual-20261016-000350-415331/map.png.import
+ M artifacts/verification/g7-polish-visual-20261016-000350-415331/rest.png.import
+ M artifacts/verification/g7-polish-visual-20261016-000350-415331/shop.png.import
+ M artifacts/verification/g7-polish-visual-20261016-000440-352657/battle-deck.png.import
+ M artifacts/verification/g7-polish-visual-20261016-000440-352657/deck.png.import
+ M artifacts/verification/g7-polish-visual-20261016-000440-352657/map.png.import
+ M artifacts/verification/g7-polish-visual-20261016-000440-352657/rest.png.import
+ M artifacts/verification/g7-polish-visual-20261016-000440-352657/shop.png.import
+ M assets/art/four-year/items/campus-meal.png.import
+ M assets/art/four-year/portraits/P02-v1.png.import
+ M assets/art/four-year/portraits/P03-v1.png.import
+ M assets/art/four-year/portraits/R3-U01-v1.png.import
+ M assets/art/four-year/portraits/R3-U02-v1.png.import
+ M assets/art/four-year/portraits/R3-U03-v1.png.import
+ M assets/art/four-year/relics/FY_Y1_1-v1.png.import
+ M assets/art/four-year/relics/FY_Y1_2-v1.png.import
+ M assets/art/four-year/relics/FY_Y1_3-v1.png.import
+ M assets/art/four-year/relics/FY_Y1_4-v1.png.import
+ M assets/art/four-year/relics/FY_Y2_1-v1.png.import
+ M assets/art/four-year/relics/FY_Y2_2-v1.png.import
+ M assets/art/four-year/relics/FY_Y2_3-v1.png.import
+ M assets/art/four-year/relics/FY_Y2_4-v1.png.import
+ M assets/art/four-year/relics/FY_Y3_1-v1.png.import
+ M assets/art/four-year/relics/FY_Y3_2-v1.png.import
+ M assets/art/four-year/relics/FY_Y3_3-v1.png.import
+ M assets/art/four-year/relics/FY_Y3_4-v1.png.import
+ M assets/art/four-year/relics/FY_Y4_1-v1.png.import
+ M assets/art/four-year/relics/FY_Y4_2-v1.png.import
+ M assets/art/four-year/relics/FY_Y4_3-v1.png.import
+ M assets/art/four-year/relics/FY_Y4_4-v1.png.import
+ M assets/art/four-year/tasks/E01-v1.png.import
+ M assets/art/four-year/tasks/E02-v1.png.import
+ M assets/art/four-year/tasks/E03-v1.png.import
+ M assets/art/four-year/tasks/E04_1-v1.png.import
+ M assets/art/four-year/tasks/E04_2-v1.png.import
+ M assets/art/four-year/tasks/E04_3-v1.png.import
+ M assets/art/four-year/tasks/E05-v1.png.import
+ M assets/art/four-year/tasks/E06-v1.png.import
+ M assets/art/four-year/tasks/E07-v1.png.import
+ M assets/art/four-year/tasks/FY_B1_TASK-v1.png.import
+ M assets/art/four-year/tasks/FY_B2_TASK-v1.png.import
+ M assets/art/four-year/tasks/FY_B3_TASK-v1.png.import
+ M assets/art/four-year/tasks/FY_B4_TASK-v1.png.import
+ M assets/art/four-year/tasks/N13-v1.png.import
+ M assets/art/four-year/tasks/N14-v1.png.import
+ M assets/art/four-year/tasks/N15-v1.png.import
+ M assets/art/four-year/tasks/N16-v1.png.import
+ M assets/art/four-year/tasks/N17-v1.png.import
+ M assets/art/four-year/tasks/N18-v1.png.import
+ M assets/art/four-year/tasks/N19-v1.png.import
+ M assets/art/four-year/tasks/N20-v1.png.import
+ M assets/art/four-year/tasks/N21-v1.png.import
+ M assets/art/four-year/tasks/N22-v1.png.import
+ M assets/art/four-year/tasks/N23-v1.png.import
+ M assets/art/four-year/tasks/N24-v1.png.import
+ M assets/art/four-year/tasks/N25-v1.png.import
+ M assets/art/four-year/tasks/N26-v1.png.import
+ M assets/art/four-year/tasks/N27-v1.png.import
+ M assets/art/four-year/tasks/N28-v1.png.import
+ M assets/art/four-year/tasks/N29-v1.png.import
+ M assets/art/four-year/tasks/N30-v1.png.import
+ M assets/art/four-year/tasks/N31-v1.png.import
+ M assets/art/four-year/tasks/N32-v1.png.import
+ M assets/art/four-year/tasks/N33-v1.png.import
+ M assets/art/four-year/tasks/N34-v1.png.import
+ M assets/art/four-year/tasks/N35-v1.png.import
+ M assets/art/four-year/tasks/N36-v1.png.import
+ M assets/art/four-year/tasks/N37-v1.png.import
+ M assets/art/four-year/tasks/N38-v1.png.import
+ M assets/art/four-year/tasks/Q0A_1-v1.png.import
+ M assets/art/four-year/tasks/Q0A_2-v1.png.import
+ M assets/art/four-year/tasks/Q0A_3-v1.png.import
+ M assets/art/four-year/tasks/Q0A_3_1-v1.png.import
+ M assets/art/four-year/tasks/Q0B_1-v1.png.import
+ M assets/art/four-year/tasks/Q0B_2-v1.png.import
+ M assets/art/four-year/tasks/Q0C-v1.png.import
+ M assets/art/four-year/tasks/Q0D-v1.png.import
+ M assets/art/four-year/tasks/Q0E_1-v1.png.import
+ M assets/art/four-year/tasks/Q0E_2-v1.png.import
+ M assets/art/four-year/tasks/Q0E_3-v1.png.import
+ M assets/audio/sfx/card_discard.wav.import
+ M assets/audio/sfx/card_draw.wav.import
+ M assets/audio/sfx/card_exhaust.wav.import
+ M assets/audio/sfx/card_play.wav.import
+ M assets/audio/sfx/chapter.wav.import
+ M assets/audio/sfx/choice.wav.import
+ M assets/audio/sfx/ddl.wav.import
+ M assets/audio/sfx/defeat.wav.import
+ M assets/audio/sfx/detail_open.wav.import
+ M assets/audio/sfx/error.wav.import
+ M assets/audio/sfx/paper.wav.import
+ M assets/audio/sfx/status.wav.import
+ M assets/audio/sfx/task_done.wav.import
+ M assets/audio/sfx/task_hit.wav.import
+ M assets/audio/sfx/ui_back.wav.import
+ M assets/audio/sfx/ui_click.wav.import
+ M assets/audio/sfx/ui_hover.wav.import
+ M assets/audio/sfx/victory.wav.import
+ M assets/cards/v3/R3-C-01.png.import
+ M assets/cards/v3/R3-C-02.png.import
+ M assets/cards/v3/R3-C-03.png.import
+ M assets/cards/v3/R3-C-04.png.import
+ M assets/cards/v3/R3-C-05.png.import
+ M assets/cards/v3/R3-C-06.png.import
+ M assets/cards/v3/R3-C-07.png.import
+ M assets/cards/v3/R3-C-08.png.import
+ M assets/cards/v3/R3-C-09.png.import
+ M assets/cards/v3/R3-C-10.png.import
+ M assets/cards/v3/R3-C-11.png.import
+ M assets/cards/v3/R3-C-12.png.import
+ M assets/cards/v3/R3-P01-01.png.import
+ M assets/cards/v3/R3-P01-02.png.import
+ M assets/cards/v3/R3-P01-03.png.import
+ M assets/cards/v3/R3-P01-04.png.import
+ M assets/cards/v3/R3-P01-05.png.import
+ M assets/cards/v3/R3-P01-06.png.import
+ M assets/cards/v3/R3-P01-07.png.import
+ M assets/cards/v3/R3-P01-08.png.import
+ M assets/cards/v3/R3-P01-09.png.import
+ M assets/cards/v3/R3-P01-10.png.import
+ M assets/cards/v3/R3-P01-11.png.import
+ M assets/cards/v3/R3-P01-12.png.import
+ M assets/cards/v3/R3-P01-13.png.import
+ M assets/cards/v3/R3-P01-14.png.import
+ M assets/cards/v3/R3-P01-15.png.import
+ M assets/cards/v3/R3-P01-16.png.import
+ M assets/cards/v3/R3-P01-17.png.import
+ M assets/cards/v3/R3-P01-18.png.import
+ M assets/cards/v3/R3-P01-19.png.import
+ M assets/cards/v3/R3-P01-20.png.import
+ M assets/cards/v3/R3-P01-21.png.import
+ M assets/cards/v3/R3-P01-22.png.import
+ M assets/cards/v3/R3-P01-23.png.import
+ M assets/cards/v3/R3-P01-24.png.import
+ M assets/cards/v3/R3-P01-25.png.import
+ M assets/cards/v3/R3-P01-26.png.import
+ M assets/cards/v3/R3-P01-27.png.import
+ M assets/cards/v3/R3-P01-28.png.import
+ M assets/cards/v3/R3-P01-29.png.import
+ M assets/cards/v3/R3-P01-30.png.import
+ M assets/cards/v3/R3-P01-31.png.import
+ M assets/cards/v3/R3-P01-32.png.import
+ M assets/cards/v3/R3-P01-33.png.import
+ M assets/cards/v3/R3-P01-34.png.import
+ M assets/cards/v3/R3-P01-35.png.import
+ M assets/cards/v3/R3-P01-36.png.import
+ M assets/cards/v3/R3-P01-37.png.import
+ M assets/cards/v3/R3-P01-38.png.import
+ M assets/cards/v3/R3-P01-39.png.import
+ M assets/cards/v3/R3-P01-40.png.import
+ M assets/cards/v3/R3-P02-01.png.import
+ M assets/cards/v3/R3-P02-02.png.import
+ M assets/cards/v3/R3-P02-03.png.import
+ M assets/cards/v3/R3-P02-04.png.import
+ M assets/cards/v3/R3-P02-05.png.import
+ M assets/cards/v3/R3-P02-06.png.import
+ M assets/cards/v3/R3-P02-07.png.import
+ M assets/cards/v3/R3-P02-08.png.import
+ M assets/cards/v3/R3-P02-09.png.import
+ M assets/cards/v3/R3-P02-10.png.import
+ M assets/cards/v3/R3-P02-11.png.import
+ M assets/cards/v3/R3-P02-12.png.import
+ M assets/cards/v3/R3-P02-13.png.import
+ M assets/cards/v3/R3-P02-14.png.import
+ M assets/cards/v3/R3-P02-15.png.import
+ M assets/cards/v3/R3-P02-16.png.import
+ M assets/cards/v3/R3-P02-17.png.import
+ M assets/cards/v3/R3-P02-18.png.import
+ M assets/cards/v3/R3-P02-19.png.import
+ M assets/cards/v3/R3-P02-20.png.import
+ M assets/cards/v3/R3-P02-21.png.import
+ M assets/cards/v3/R3-P02-22.png.import
+ M assets/cards/v3/R3-P02-23.png.import
+ M assets/cards/v3/R3-P02-24.png.import
+ M assets/cards/v3/R3-P02-25.png.import
+ M assets/cards/v3/R3-P02-26.png.import
+ M assets/cards/v3/R3-P02-27.png.import
+ M assets/cards/v3/R3-P02-28.png.import
+ M assets/cards/v3/R3-P02-29.png.import
+ M assets/cards/v3/R3-P02-30.png.import
+ M assets/cards/v3/R3-P02-31.png.import
+ M assets/cards/v3/R3-P02-32.png.import
+ M assets/cards/v3/R3-P02-33.png.import
+ M assets/cards/v3/R3-P02-34.png.import
+ M assets/cards/v3/R3-P02-35.png.import
+ M assets/cards/v3/R3-P02-36.png.import
+ M assets/cards/v3/R3-P02-37.png.import
+ M assets/cards/v3/R3-P02-38.png.import
+ M assets/cards/v3/R3-P02-39.png.import
+ M assets/cards/v3/R3-P02-40.png.import
+ M assets/cards/v3/R3-P03-01.png.import
+ M assets/cards/v3/R3-P03-02.png.import
+ M assets/cards/v3/R3-P03-03.png.import
+ M assets/cards/v3/R3-P03-04.png.import
+ M assets/cards/v3/R3-P03-05.png.import
+ M assets/cards/v3/R3-P03-06.png.import
+ M assets/cards/v3/R3-P03-07.png.import
+ M assets/cards/v3/R3-P03-08.png.import
+ M assets/cards/v3/R3-P03-09.png.import
+ M assets/cards/v3/R3-P03-10.png.import
+ M assets/cards/v3/R3-P03-11.png.import
+ M assets/cards/v3/R3-P03-12.png.import
+ M assets/cards/v3/R3-P03-13.png.import
+ M assets/cards/v3/R3-P03-14.png.import
+ M assets/cards/v3/R3-P03-15.png.import
+ M assets/cards/v3/R3-P03-16.png.import
+ M assets/cards/v3/R3-P03-17.png.import
+ M assets/cards/v3/R3-P03-18.png.import
+ M assets/cards/v3/R3-P03-19.png.import
+ M assets/cards/v3/R3-P03-20.png.import
+ M assets/cards/v3/R3-P03-21.png.import
+ M assets/cards/v3/R3-P03-22.png.import
+ M assets/cards/v3/R3-P03-23.png.import
+ M assets/cards/v3/R3-P03-24.png.import
+ M assets/cards/v3/R3-P03-25.png.import
+ M assets/cards/v3/R3-P03-26.png.import
+ M assets/cards/v3/R3-P03-27.png.import
+ M assets/cards/v3/R3-P03-28.png.import
+ M assets/cards/v3/R3-P03-29.png.import
+ M assets/cards/v3/R3-P03-30.png.import
+ M assets/cards/v3/R3-P03-31.png.import
+ M assets/cards/v3/R3-P03-32.png.import
+ M assets/cards/v3/R3-P03-33.png.import
+ M assets/cards/v3/R3-P03-34.png.import
+ M assets/cards/v3/R3-P03-35.png.import
+ M assets/cards/v3/R3-P03-36.png.import
+ M assets/cards/v3/R3-P03-37.png.import
+ M assets/cards/v3/R3-P03-38.png.import
+ M assets/cards/v3/R3-P03-39.png.import
+ M assets/cards/v3/R3-P03-40.png.import
+ M assets/cards/v3/R3-P04-01.png.import
+ M assets/cards/v3/R3-P04-02.png.import
+ M assets/cards/v3/R3-P04-03.png.import
+ M assets/cards/v3/R3-P04-04.png.import
+ M assets/cards/v3/R3-P04-05.png.import
+ M assets/cards/v3/R3-P04-06.png.import
+ M assets/cards/v3/R3-P04-07.png.import
+ M assets/cards/v3/R3-P04-08.png.import
+ M assets/cards/v3/R3-P04-09.png.import
+ M assets/cards/v3/R3-P04-10.png.import
+ M assets/cards/v3/R3-P04-11.png.import
+ M assets/cards/v3/R3-P04-12.png.import
+ M assets/cards/v3/R3-P04-13.png.import
+ M assets/cards/v3/R3-P04-14.png.import
+ M assets/cards/v3/R3-P04-15.png.import
+ M assets/cards/v3/R3-P04-16.png.import
+ M assets/cards/v3/R3-P04-17.png.import
+ M assets/cards/v3/R3-P04-18.png.import
+ M assets/cards/v3/R3-P04-19.png.import
+ M assets/cards/v3/R3-P04-20.png.import
+ M assets/cards/v3/R3-P04-21.png.import
+ M assets/cards/v3/R3-P04-22.png.import
+ M assets/cards/v3/R3-P04-23.png.import
+ M assets/cards/v3/R3-P04-24.png.import
+ M assets/cards/v3/R3-P04-25.png.import
+ M assets/cards/v3/R3-P04-26.png.import
+ M assets/cards/v3/R3-P04-27.png.import
+ M assets/cards/v3/R3-P04-28.png.import
+ M assets/cards/v3/R3-P04-29.png.import
+ M assets/cards/v3/R3-P04-30.png.import
+ M assets/cards/v3/R3-P04-31.png.import
+ M assets/cards/v3/R3-P04-32.png.import
+ M assets/cards/v3/R3-P04-33.png.import
+ M assets/cards/v3/R3-P04-34.png.import
+ M assets/cards/v3/R3-P04-35.png.import
+ M assets/cards/v3/R3-P04-36.png.import
+ M assets/cards/v3/R3-P04-37.png.import
+ M assets/cards/v3/R3-P04-38.png.import
+ M assets/cards/v3/R3-P04-39.png.import
+ M assets/cards/v3/R3-P04-40.png.import
+ M assets/cards/v3/R3-T201.png.import
+ M assets/cards/v3/R3-T202.png.import
+ M data/four_year/definitions/encounters.json
+ M data/four_year/definitions/tasks.json
+ M data/four_year/manifests/campus_four_year.json
+ M docs/G0基线执行记录.md
+ M docs/G0需求追踪.md
+ M docs/G1工程骨架执行记录.md
+ M docs/G2内容与基础状态执行记录.md
+ M docs/G3战斗规则执行记录.md
+ M docs/G4局流程执行记录.md
+ M docs/G5存档恢复执行记录.md
+ M docs/G7界面执行记录.md
+ M docs/G8整局体验验收记录.md
+ M docs/baselines/current-state.json
+ M docs/内容层契约.md
+ M docs/四大地图复杂化设计方案.md
+ M docs/局流程契约.md
+ M docs/数据库与实体关系设计.md
+ M docs/界面层契约.md
+ M docs/阶段执行状态总览.md
+ M "image copy 2.png.import"
+ M "image copy 3.png.import"
+ M "image copy.png.import"
+ M image.png.import
+ M project.godot
+ M src/content/content_db.gd
+ M src/run/campaign_service.gd
+ M src/run/run_service.gd
+ M src/run/run_state.gd
+ M src/storage/snapshot_codec.gd
+ M src/ui/experience_page.gd
+ M src/ui/page_flow.gd
+ M src/ui/route_canvas.gd
+ M src/ui/ui_labels.json
+ M tests/run_tests.gd
+ M tests/run_ui_tests.gd
+ M tests/suites/test_four_year.gd
+ M tests/suites/test_ui_experience.gd
+ M tests/suites/test_ui_followup.gd
+ M tools/build_four_year_content.py
+ M 动作或者图片描述/需求台账.md
+ M 实施计划与验收基线.md
+?? docs/plans/2026-11-13-adaptive-annual-maps.md
+?? docs/plans/2026-11-13-map-density-polish.md
+?? docs/地图密度与外观改进记录_20261113.md
+?? docs/逐年随机地图实施记录_20261113.md
+?? src/run/annual_map_generator.gd
+?? src/run/annual_map_generator.gd.uid
+?? src/run/annual_map_generator_v1.gd
+?? src/run/annual_map_generator_v1.gd.uid
+?? src/run/campaign_progression.gd
+?? src/run/campaign_progression.gd.uid
+?? src/run/route_forecast.gd
+?? src/run/route_forecast.gd.uid
+?? src/ui/map_node_stamp.gd
+?? src/ui/map_node_stamp.gd.uid
+?? tests/run_adaptive_map_tests.gd
+?? tests/run_adaptive_map_tests.gd.uid
+?? tests/run_annual_map_generator_density_tests.gd
+?? tests/run_annual_map_generator_density_tests.gd.uid
+?? tests/run_annual_map_generator_tests.gd
+?? tests/run_annual_map_generator_tests.gd.uid
+?? tests/run_ui_adaptive_map_tests.gd
+?? tests/run_ui_adaptive_map_tests.gd.uid
+?? tests/suites/test_adaptive_maps.gd
+?? tests/suites/test_adaptive_maps.gd.uid
+?? tests/suites/test_annual_map_generator.gd
+?? tests/suites/test_annual_map_generator.gd.uid
+?? tests/suites/test_annual_map_generator_density.gd
+?? tests/suites/test_annual_map_generator_density.gd.uid
+?? tests/suites/test_ui_adaptive_maps.gd
+?? tests/suites/test_ui_adaptive_maps.gd.uid
+?? tools/add_annual_destinations.py
+?? tools/capture_adaptive_maps.gd
+?? tools/capture_adaptive_maps.gd.uid
+?? tools/capture_map_content_baseline.gd
+?? tools/capture_map_content_baseline.gd.uid
+?? tools/verify_adaptive_maps.py
+?? 动作或者图片描述/逐年随机地图需求_20261113.md

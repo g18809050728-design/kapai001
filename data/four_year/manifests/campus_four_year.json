@@ -259,7 +259,11 @@
       "FY_B1_TASK",
       "FY_B2_TASK",
       "FY_B3_TASK",
-      "FY_B4_TASK"
+      "FY_B4_TASK",
+      "FY_ROUTE_job_TASK",
+      "FY_ROUTE_exam_TASK",
+      "FY_ROUTE_research_TASK",
+      "FY_ROUTE_abroad_TASK"
     ],
     "encounter": [
       "N01",
@@ -314,7 +318,11 @@
       "FY_FINAL_exam",
       "FY_FINAL_research",
       "FY_FINAL_abroad",
-      "FY_FINAL_deferred"
+      "FY_FINAL_deferred",
+      "FY_ROUTE_job",
+      "FY_ROUTE_exam",
+      "FY_ROUTE_research",
+      "FY_ROUTE_abroad"
     ],
     "unit": [
       "F01",

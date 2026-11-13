@@ -93,8 +93,9 @@ func create(request: Variant, profile: Variant = {}) -> GameResult:
 	for definition_id in starter:
 		_transaction_resolver.add_card(run, str(definition_id), "starter")
 	if CampaignService.enabled(run):
-		run.campaign = CampaignService.initial()
-		run.nodes = CampaignMap.build(run.run_id)
+		var initialized := CampaignProgression.initialize(run, seed)
+		if not initialized.ok:
+			return initialized
 	else:
 		_transaction_resolver.add_relic(run, str(character.starter_relic_id), "", 0)
 		run.nodes = RunMap.build(run.run_id, int(rules.run.term_count))
@@ -402,6 +403,11 @@ func _enter_node(
 		var definition: Dictionary = _catalog.get_definition("encounter", id).data
 		if definition.kind == node.kind:
 			pool.append(id)
+	if CampaignProgression.enabled(work) and node.kind == "elite":
+		# Annual node roles select existing challenges explicitly, including year
+		# four, which has no historical term-filtered elite pool.
+		var subtype: String = CampaignProgression.metadata(work, node.node_id).subtype
+		pool.assign(["E02" if subtype == "K" else ["Q01", "E01", "E03", "E05"][work.term - 1]])
 	if pool.is_empty():
 		return _error(
 			GameConstants.ERROR_CONTENT_INVALID,
@@ -410,8 +416,8 @@ func _enter_node(
 		)
 	var chosen := rng.draw_int("map", 0, pool.size() - 1)
 	var encounter_id: String = pool[int(chosen.data)]
-	if CampaignService.enabled(work) and node.kind == "elite":
-		var title: String = CampaignMap.metadata(node.node_id).title
+	if CampaignService.enabled(work) and not CampaignProgression.enabled(work) and node.kind == "elite":
+		var title: String = CampaignProgression.metadata(work, node.node_id).title
 		var fixed: String = {"随堂小测": "Q01", "期中考试": "E01", "课程设计中期检查": "E02", "小组项目冲刺": "E03", "实习群面": "E06", "保研夏令营": "E05", "补考": "E07", "学科竞赛": "E02"}.get(title, "")
 		if not fixed.is_empty():
 			encounter_id = fixed
@@ -419,6 +425,8 @@ func _enter_node(
 		encounter_id = "FY_B%d" % work.term
 		if work.term == 4:
 			encounter_id = "FY_FINAL_" + ("deferred" if int(work.campaign.thesis) < 2 else str(work.campaign.destination))
+			if CampaignProgression.enabled(work) and int(work.campaign.thesis) >= 2:
+				encounter_id = "FY_ROUTE_" + str(work.campaign.destination)
 	if fallback:
 		_event(
 			events,
@@ -650,9 +658,12 @@ func make_view(state: RunState) -> Dictionary:
 	view.term_count = int(rules.run.term_count)
 	view.nodes_per_term = 8
 	if CampaignService.enabled(state):
-		view.nodes_per_term = int(CampaignMap.MAPS[state.term - 1].nodes.size())
-		view.year_layers = int(CampaignMap.MAPS[state.term - 1].layers)
-		view.year_title = str(CampaignMap.MAPS[state.term - 1].title)
+		var year_map := CampaignProgression.year_info(state, state.term)
+		view.nodes_per_term = year_map.get("nodes", []).size()
+		view.year_layers = int(year_map.get("layers", [12, 12, 14, 14][state.term - 1]))
+		view.year_title = str(year_map.get("title", ["适应与基础", "分流与专业", "冲刺与选择", "收束与毕业"][state.term - 1]))
+		view.relic_layers = year_map.get("relic_layers", [3, 9] if state.term < 3 else [4, 11])
+		view.map_influence = CampaignProgression.influence(state)
 	view.relic_slots = int(rules.run.relic_slots)
 	view.deck_size = state.cards.size()
 	view.reachable_node_ids = state.reachable_node_ids()
@@ -775,13 +786,13 @@ func make_view(state: RunState) -> Dictionary:
 		view.campaign_offer.details = {}
 		for id in view.campaign_offer.candidates:
 			view.campaign_offer.details[id] = _reward_candidate_view("relic" if view.campaign_offer.kind == "relic" else "card", id, rules)
-		var meta := CampaignMap.metadata(str(view.campaign_offer.source_node_id))
+		var meta := CampaignProgression.metadata(state, str(view.campaign_offer.source_node_id))
 		view.campaign_offer.node_meta = meta
 		view.campaign_offer.service_cost = CampaignService.new(_catalog).service_cost(state, str(meta.get("subtype", "")))
 		view.campaign_offer.previews = _campaign_previews(state)
 	if CampaignService.enabled(state):
 		for item in view.nodes:
-			item.merge(CampaignMap.metadata(str(item.node_id)), false)
+			item.merge(CampaignProgression.metadata(state, str(item.node_id)), false)
 			item.preview_random = item.kind in ["normal", "elite"] and str(item.encounter_id).is_empty()
 	return view
 
@@ -821,6 +832,9 @@ func _campaign_previews(state: RunState) -> Dictionary:
 			entry.error_key = str(checked.error.message_key)
 		if kind == "destination":
 			entry.consequence = "毕设不足2时进入延期答辩；达到2后按所选去向进入终局挑战。当前毕设 %d/5。" % int(state.campaign.thesis)
+			if CampaignProgression.enabled(state):
+				var focus: String = {"job": "实习与求职机会；终面先面对较强催促，随后整理材料。", "exam": "文献与复习机会；复试持续追问，中途需要补充材料。", "research": "实验室与导师机会；答辩先审阅材料，再连续追问。", "abroad": "社群与申请机会；面试穿插材料复核与陈述。"}.get(request[0], "")
+				entry.consequence = focus + "毕设不足2仍进入延期答辩；四条去向保留相同总完成量与DDL预算。"
 		elif kind == "direction":
 			entry.consequence = "大二第7层起的服务中，可支付30金钱更换一次方向。"
 		result["%s|%s|%s" % request] = entry

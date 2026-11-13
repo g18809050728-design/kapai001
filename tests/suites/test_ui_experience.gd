@@ -22,6 +22,10 @@ func _v04_event_loop() -> void:
 	session.update_settings({"autosave": false})
 	_check(session.start_run(StartRunRequest.new("P01", &"normal", "campus_four_year", "42")).accepted, "V04 UI production run starts")
 	var state := session._state.run
+	# Historical V04 UI fixture places the event directly after the starter.
+	# Annual-map progression and saved paths have their own integration suite.
+	state.campaign = CampaignService.initial()
+	state.nodes = CampaignMap.build(state.run_id)
 	var nodes: Array = state.nodes.filter(func(value): return value.kind == "event" and value.term == 1)
 	_check(not nodes.is_empty(), "V04 UI has an event node")
 	if nodes.is_empty():

@@ -584,7 +584,15 @@
     "FY_B1_TASK": "大一学年综合考核",
     "FY_B2_TASK": "大二学年综合评测",
     "FY_B3_TASK": "大三学年综合评测",
-    "FY_B4_TASK": "毕业答辩"
+    "FY_B4_TASK": "毕业答辩",
+    "FY_ROUTE_job": "秋招终面",
+    "FY_ROUTE_exam": "考研复试",
+    "FY_ROUTE_research": "保研答辩",
+    "FY_ROUTE_abroad": "留学面试",
+    "FY_ROUTE_job_TASK": "秋招终面",
+    "FY_ROUTE_exam_TASK": "考研复试",
+    "FY_ROUTE_research_TASK": "保研答辩",
+    "FY_ROUTE_abroad_TASK": "留学面试"
   },
   "aliases": {
     "P01": "P01",
@@ -651,7 +659,15 @@
     "FY_FINAL_exam": "FY_B4_TASK",
     "FY_FINAL_research": "FY_B4_TASK",
     "FY_FINAL_abroad": "FY_B4_TASK",
-    "FY_FINAL_deferred": "FY_B4_TASK"
+    "FY_FINAL_deferred": "FY_B4_TASK",
+    "FY_ROUTE_job": "FY_B4_TASK",
+    "FY_ROUTE_exam": "FY_B4_TASK",
+    "FY_ROUTE_research": "FY_B4_TASK",
+    "FY_ROUTE_abroad": "FY_B4_TASK",
+    "FY_ROUTE_job_TASK": "FY_B4_TASK",
+    "FY_ROUTE_exam_TASK": "FY_B4_TASK",
+    "FY_ROUTE_research_TASK": "FY_B4_TASK",
+    "FY_ROUTE_abroad_TASK": "FY_B4_TASK"
   },
   "textures": {
     "P01": "res://assets/art/g6-v1/portraits/P01_v1.png",

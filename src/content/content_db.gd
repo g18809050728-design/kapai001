@@ -449,6 +449,8 @@ var _allow_test_manifests: bool
 var _definitions: Dictionary = {}
 var _enabled: Dictionary = {}
 var _info: ContentInfo
+var _legacy_four_year_hash := ""
+const LEGACY_FOUR_YEAR_HASH := "0936881b5f4eedc6cb63fb51676b1dfaa46000966d04a34aa2382f6ae7d9bbd2"
 
 
 func _init(data_root: String = "res://data", allow_test_manifests: bool = false) -> void:
@@ -523,11 +525,29 @@ func load(manifest_id: String) -> GameResult:
 		{"manifest": hash_manifest, "definitions": _enabled_definitions(indexes)}
 	)
 	var digest := _sha256(canonical)
+	_legacy_four_year_hash = ""
+	if manifest_id == "campus_four_year" and manifest.content_version == "campus_four_year.v1":
+		# Compatibility is proved from all historical enabled definitions and the
+		# exact historical manifest. Removing only these eight additions must
+		# reproduce the recorded pre-change digest; unknown changes remain fatal.
+		var old_manifest: Dictionary = hash_manifest.duplicate(true)
+		var old_indexes: Dictionary = indexes.duplicate(true)
+		for destination in ["job", "exam", "research", "abroad"]:
+			for kind in ["encounter", "task"]:
+				var id: String = "FY_ROUTE_" + destination + ("_TASK" if kind == "task" else "")
+				old_manifest.enabled[kind].erase(id)
+				old_indexes[kind].erase(id)
+		if _sha256(_canonical_json({"manifest": old_manifest, "definitions": _enabled_definitions(old_indexes)})) == LEGACY_FOUR_YEAR_HASH:
+			_legacy_four_year_hash = LEGACY_FOUR_YEAR_HASH
 	var info := ContentInfo.new(manifest_id, manifest.content_version, digest, ruleset_id, enabled)
 	_definitions = indexes
 	_enabled = enabled.duplicate(true)
 	_info = info
 	return GameResult.success(info.copy())
+
+
+func accepts_legacy_four_year_hash(digest: String) -> bool:
+	return not _legacy_four_year_hash.is_empty() and digest == _legacy_four_year_hash
 
 
 func get_definition(kind: String, id: String) -> GameResult:

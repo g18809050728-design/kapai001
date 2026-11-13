@@ -1,0 +1,2 @@
+WARNING: Detected another project.godot at res://artifacts/verification/pull-latest-20261106/before-abort/files. The folder will be ignored.
+   at: _should_skip_directory (editor/file_system/editor_file_system.cpp:3497)

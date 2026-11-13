@@ -795,5 +795,69 @@
       "independent_answer",
       "fixed_exam_room"
     ]
+  },
+  {
+    "id": "FY_ROUTE_job",
+    "name_key": "秋招终面",
+    "kind": "boss",
+    "members": [
+      "FY_ROUTE_job_TASK"
+    ],
+    "base_ddl": 10,
+    "terms": [
+      4
+    ],
+    "exam_flags": [
+      "independent_answer",
+      "fixed_exam_room"
+    ]
+  },
+  {
+    "id": "FY_ROUTE_exam",
+    "name_key": "考研复试",
+    "kind": "boss",
+    "members": [
+      "FY_ROUTE_exam_TASK"
+    ],
+    "base_ddl": 10,
+    "terms": [
+      4
+    ],
+    "exam_flags": [
+      "independent_answer",
+      "fixed_exam_room"
+    ]
+  },
+  {
+    "id": "FY_ROUTE_research",
+    "name_key": "保研答辩",
+    "kind": "boss",
+    "members": [
+      "FY_ROUTE_research_TASK"
+    ],
+    "base_ddl": 10,
+    "terms": [
+      4
+    ],
+    "exam_flags": [
+      "independent_answer",
+      "fixed_exam_room"
+    ]
+  },
+  {
+    "id": "FY_ROUTE_abroad",
+    "name_key": "留学面试",
+    "kind": "boss",
+    "members": [
+      "FY_ROUTE_abroad_TASK"
+    ],
+    "base_ddl": 10,
+    "terms": [
+      4
+    ],
+    "exam_flags": [
+      "independent_answer",
+      "fixed_exam_room"
+    ]
   }
 ]

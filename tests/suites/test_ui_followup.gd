@@ -209,8 +209,11 @@ func _reward_and_services(suffix: String) -> void:
 
 func _production_shop(suffix: String) -> void:
 	var session := _production_session()
-	# Controlled checkpoint before the actual production shop, using real topology.
+	# This historical UI fixture targets the fixed map's layer-three shop.
+	# Annual-map navigation is covered by test_ui_adaptive_maps.
 	var run := session._state.run
+	run.campaign = CampaignService.initial()
+	run.nodes = CampaignMap.build(run.run_id)
 	var shop_id := ""
 	for node in run.nodes:
 		if node.term == 1 and node.layer <= 2 and node.node_id.ends_with("s0"):
@@ -334,7 +337,8 @@ func _battle_and_map(suffix: String) -> void:
 	var next: Button = page._buttons["node:" + str(middle[0].node_id)]
 	_check(absf(next.get_global_rect().get_center().y - page._scroll.get_global_rect().get_center().y) <= 2, "next reachable layer centers after scroll restoration")
 	var current: Button = page._buttons["node:" + str(geometry.current_node_id)]
-	_check(current.get_meta("current_node", false) and current.get_theme_stylebox("normal").bg_color.get_luminance() < .4, "current map node has dark background")
+	_check(current.get_meta("current_node", false) and current.get("map_status") == "当前" and current.tooltip_text.contains("当前"), "current map stamp identifies the actual position in state and description")
+	_check(next.get("map_status") == "可入" and not next.get_meta("current_node", false), "next reachable stamp remains distinct from the current position")
 	await _save("map-middle-" + suffix)
 	page._scroll.scroll_vertical += 50
 	var scroll := page._scroll.scroll_vertical

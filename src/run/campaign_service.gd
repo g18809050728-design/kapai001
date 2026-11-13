@@ -23,10 +23,14 @@ static func initial() -> Dictionary:
 
 static func validate(data: Dictionary, issues: Array[String]) -> void:
 	var start := issues.size()
-	RunCodec.shape(data, FIELDS, "run.campaign", issues)
+	var initial_issues := start
+	var fields := FIELDS.duplicate()
+	if data.get("version") == 2:
+		fields.merge(CampaignProgression.MAP_FIELDS)
+	RunCodec.shape(data, fields, "run.campaign", issues)
 	if issues.size() != start:
 		return
-	if data.version != 1 or data.exploration < 0 or data.exploration > 6 or data.resume < 0 or data.resume > 6 or data.thesis < 0 or data.thesis > 5:
+	if data.version not in [1, 2] or data.exploration < 0 or data.exploration > 6 or data.resume < 0 or data.resume > 6 or data.thesis < 0 or data.thesis > 5:
 		issues.append("campaign version/counter invalid")
 	if data.direction not in [""] + DIRECTIONS or data.destination not in [""] + DESTINATIONS:
 		issues.append("campaign direction/destination invalid")
@@ -51,6 +55,8 @@ static func validate(data: Dictionary, issues: Array[String]) -> void:
 				issues.append("campaign pending offer was already resolved")
 			if data.pending.kind not in ["relic", "grand"] and not data.pending.candidates.is_empty():
 				issues.append("campaign service cannot contain reward candidates")
+	if data.version == 2 and issues.size() == initial_issues:
+		CampaignProgression.validate_campaign(data, issues)
 
 func bonus(run: RunState, effect: String) -> int:
 	var amount := 0
@@ -70,7 +76,7 @@ func service_cost(run: RunState, subtype: String) -> int:
 	return maxi(0, cost - bonus(run, "service_discount"))
 
 func enter(run: RunState, node: RunNodeState) -> void:
-	var meta := CampaignMap.metadata(node.node_id)
+	var meta := CampaignProgression.metadata(run, node.node_id)
 	var subtype: String = meta.subtype
 	if run.term == 1 and not run.campaign.visited_types.has(subtype):
 		run.campaign.visited_types.append(subtype)
@@ -79,12 +85,13 @@ func enter(run: RunState, node: RunNodeState) -> void:
 		_set_pending(run, "service", node.node_id + "|service", node.node_id, [])
 
 func completed(run: RunState, node: RunNodeState, rng: RandomSource) -> GameResult:
-	var meta := CampaignMap.metadata(node.node_id)
+	var meta := CampaignProgression.metadata(run, node.node_id)
 	var subtype: String = meta.subtype
 	var used := true
 	if node.kind == "rest" and subtype != "R":
 		used = run.campaign.history.any(func(record): return record.offer_id == node.node_id + "|service" and record.option_id in ["upgrade", "remove", "heal", "money", "progress"])
-	if used and run.term == 3 and (subtype in ["I", "K", "T"] or meta.title in ["科研组会", "导师项目"]):
+	var resume_node: bool = subtype in ["I", "K", "T", "LAB"] if CampaignProgression.enabled(run) else (subtype in ["I", "K", "T"] or meta.title in ["科研组会", "导师项目"])
+	if used and run.term == 3 and resume_node:
 		run.campaign.resume = mini(6, int(run.campaign.resume) + 1)
 	if used and run.term == 4 and subtype in ["LAB", "ST", "T"]:
 		run.campaign.thesis = mini(5, int(run.campaign.thesis) + 1)
@@ -94,7 +101,7 @@ func completed(run: RunState, node: RunNodeState, rng: RandomSource) -> GameResu
 		run.money += bonus(run, "event_money")
 		if run.term == 1 and int(run.campaign.exploration) >= 4:
 			_set_pending(run, "familiar", node.node_id + "|familiar", node.node_id, [])
-	var map: Dictionary = CampaignMap.MAPS[run.term - 1]
+	var map: Dictionary = CampaignProgression.year_info(run, run.term)
 	if map.relic_layers.has(node.layer):
 		var key := "%s|y%d|relic%d" % [run.run_id, run.term, map.relic_layers.find(node.layer)]
 		if not run.campaign.triggered.has(key):
@@ -147,6 +154,8 @@ func choose(run: RunState, payload: Dictionary) -> GameResult:
 			return _error("run.campaign.kind.invalid")
 	if not checked.ok:
 		return checked
+	if pending.kind == "grand":
+		CampaignProgression.complete_year(run)
 	run.campaign.history.append({"offer_id": pending.offer_id, "option_id": option, "candidate_id": candidate})
 	run.campaign.pending = {}
 	if pending.kind == "service":
@@ -161,6 +170,9 @@ func choose(run: RunState, payload: Dictionary) -> GameResult:
 			if int(run.campaign.resume) >= 6:
 				run.money += 30
 			_set_pending(run, "destination", run.run_id + "|destination", run.current_node_id, [])
+	var generated := CampaignProgression.ensure_year(run)
+	if not generated.ok:
+		return generated
 	return GameResult.success({"graduated": pending.kind == "grand" and run.term == 4 and run.find_node(run.current_node_id).term == 4})
 
 func _relic(run: RunState, pending: Dictionary, option: String, candidate: String, replace_id: String) -> GameResult:
@@ -229,7 +241,7 @@ func _change_card(run: RunState, option: String, id: String) -> GameResult:
 	return _error("run.campaign.card.invalid")
 
 func _service(run: RunState, pending: Dictionary, option: String, candidate: String) -> GameResult:
-	var meta := CampaignMap.metadata(pending.source_node_id)
+	var meta := CampaignProgression.metadata(run, pending.source_node_id)
 	var subtype: String = meta.subtype
 	if option == "skip":
 		return GameResult.success(true)

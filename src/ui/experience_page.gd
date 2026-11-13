@@ -1,6 +1,9 @@
 class_name UiExperiencePage
 extends UiFlowPage
 
+const MapForecast = preload("res://src/run/route_forecast.gd")
+const RouteCanvas = preload("res://src/ui/route_canvas.gd")
+
 var _presentation: Dictionary = {}
 var _advanced := false
 var _diagnostics := false
@@ -8,6 +11,9 @@ var _local_focus := ""
 var _layout_size := Vector2.ZERO
 var _resize_pending := false
 var _map_focus_scope := ""
+var _map_overview := false
+var _map_run_scope := ""
+var _map_detail_scroll := 0
 var _settings_status: Label
 
 
@@ -219,7 +225,11 @@ func _render_campaign() -> void:
 				panel.get_parent().add_theme_stylebox_override("panel", style)
 			var content := add_row(panel)
 			var artwork := str({"theory": "R3-P02-03", "engineering": "R3-P01-27", "competition": "R3-P03-19", "practice": "R3-P04-10", "job": "R3-P04-30", "exam": "BG_study", "research": "R3-P02-01", "abroad": "BG_campus"}.get(id, "BG_campus"))
+			var resource_slot := "map.destination." + str(id)
+			if UiStyle.texture(resource_slot) != null:
+				artwork = resource_slot
 			var art := add_art(content, artwork, Vector2(84, 52) if compact_choices else Vector2(138, 112))
+			art.set_meta("resource_slot", resource_slot)
 			art.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 			var words := VBoxContainer.new()
 			words.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -362,61 +372,152 @@ func _quote(offer: Dictionary, option: String, target: String = "", replacement:
 
 func _render_map() -> void:
 	var current_id := str(view.get("current_node_id", ""))
+	var nodes: Array = _array(view.get("nodes")).filter(func(node): return int(node.get("term", view.get("term", 1))) == int(view.get("term", 1)))
+	var node_ids: Array = nodes.map(func(node): return str(node.node_id))
+	var reachable: Array = _array(view.get("reachable_node_ids")).filter(func(id): return node_ids.has(str(id)))
+	var run_scope := "%s|%s" % [view.get("run_id", ""), view.get("term", 1)]
+	if run_scope != _map_run_scope:
+		_map_overview = false
+		_map_detail_scroll = 0
+		_choices.erase("map:node")
+		_map_run_scope = run_scope
 	var current_title := "起点"
-	for node in _array(view.get("nodes")):
+	for node in nodes:
 		if str(node.get("node_id", "")) == current_id:
 			current_title = _map_node_title(node)
 			break
-	var reachable_preview := _array(view.get("reachable_node_ids"))
-	reset_page(
-		"校园路线 · " + str(view.get("year_title", "")),
-		"◆ 当前位置：" + current_title + "　·　" + str(reachable_preview.size()) + " 个相邻后继可选　·　○ 可进入　·　仅沿当前位置连线前进"
-	)
+	var compact_map := size.x < 1100 and UiStyle.text_scale >= 1.25
+	reset_page("校园路线 · " + str(view.get("year_title", "")), "", compact_map)
+	var map_title: Label = header.get_child(0)
+	if compact_map:
+		map_title.add_theme_font_size_override("font_size", roundi(21 * UiStyle.text_scale))
+	map_title.tooltip_text = str(view.get("map_influence", ""))
 	_run_bar(header)
-	var nodes := _array(view.get("nodes"))
-	var reachable := _array(view.get("reachable_node_ids"))
+	if not compact_map and not str(view.get("map_influence", "")).is_empty():
+		add_text(header, str(view.get("map_influence", "")), 14, UiStyle.MUTED)
 	var selected := str(_choices.get("map:node", ""))
-	var canvas := UiRouteCanvas.new()
-	canvas.configure(nodes, reachable, current_id)
+	var forecast := MapForecast.describe(nodes, selected)
+	if not _map_overview:
+		var legend := add_text(body, "◆ 当前　→ 可入　✓ 已过　○ 后续　× 不可达　· 金环选中 / 青线后3层", 12 if compact_map else 14, UiStyle.MUTED)
+		legend.tooltip_text = "当前：%s · %d 个相邻后继可入\n%s" % [current_title, reachable.size(), view.get("map_influence", "")]
+	if nodes.is_empty():
+		add_text(body, "本学年地图尚未生成。确认方向或毕业去向后再查看；未来学年不会提前展示。", 18)
+	if _map_overview and not nodes.is_empty():
+		add_text(body, "本学年全图 · 当前：%s · 金环可入/选中 · 绿线后3层" % current_title, 14)
+		var overview := RouteCanvas.new()
+		overview.name = "MapOverview"
+		overview.overview = true
+		overview.configure(nodes, reachable, current_id, selected)
+		overview.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		overview.node_inspected.connect(func(id): _choose("map:node", id))
+		body.add_child(overview)
+		overview.arrange.call_deferred()
+		_fit_map_overview.call_deferred(weakref(overview), _render_generation)
+	var canvas := RouteCanvas.new()
+	canvas.name = "RouteMap"
+	canvas.configure(nodes, reachable, current_id, selected)
 	canvas.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	body.add_child(canvas)
-	var description := "选择当前位置直接相连的下一站，查看预告后进入。"
+	var forward: Array = []
+	for root_id in ([current_id] if node_ids.has(current_id) else reachable):
+		for id in MapForecast.describe(nodes, str(root_id), nodes.size()).node_ids:
+			if not forward.has(id):
+				forward.append(id)
+	var description := "选择任意节点查看路线；只有相邻可入节点能够进入。"
 	for node in nodes:
 		var id := str(node.node_id)
-		var current := id == str(view.get("current_node_id", ""))
-		var status := "◆" if current else ("✓" if node.status == "completed" else ("○" if reachable.has(id) else "·"))
-		var caption := _map_node_title(node)
-		if bool(node.get("preview_random", false)):
-			caption = "精英战斗 · 随机遭遇" if node.kind == "elite" else "普通战斗 · 随机校园任务"
-		var button := _local_button(canvas, "node:" + id, "%s %s\n第%s层" % [status, caption, node.layer], "map:node", id)
+		var current := id == current_id
+		var status := "当前" if current else ("已过" if node.get("status", "") == "completed" else ("可入" if reachable.has(id) else ("后续" if forward.has(id) else "不可达")))
+		var button := add_button(canvas, "node:" + id, "", {}, func(): _choose("map:node", id))
+		button.set_script(RouteCanvas.NodeStamp)
 		button.set_meta("node_id", id)
 		button.size_flags_horizontal = 0
-		button.custom_minimum_size = Vector2(176, 64)
-		button.size = Vector2(176, 64)
-		for state in ["normal", "hover", "pressed", "focus"]:
-			var style := UiStyle.box(Color("334f53") if current else (Color("e4eddf") if reachable.has(id) else Color("efeee4")))
-			style.border_color = UiStyle.GOLD if id == selected or state == "focus" else (UiStyle.GREEN if reachable.has(id) else Color("b8c3b5"))
-			style.set_border_width_all(3 if id == selected or current else 1)
-			button.add_theme_stylebox_override(state, style)
-		for color in ["font_color", "font_hover_color", "font_pressed_color", "font_focus_color"]:
-			button.add_theme_color_override(color, UiStyle.PAPER if current else UiStyle.INK)
+		button.autowrap_mode = TextServer.AUTOWRAP_OFF
+		button.add_theme_font_size_override("font_size", roundi(14 * UiStyle.text_scale))
+		var subtype := str(node.get("subtype", ""))
+		if subtype.is_empty():
+			subtype = str({"normal": "N", "elite": "EL", "boss": "B", "shop": "S", "rest": "R", "event": "E"}.get(str(node.get("kind", "")), "E"))
+		button.call("configure", subtype, _map_short_name(node), status, forecast.node_ids.has(id), canvas.node_textures.get(id))
+		button.toggle_mode = true
+		button.set_pressed_no_signal(id == selected)
 		button.set_meta("current_node", current)
-		button.tooltip_text = _node_hint(str(node.kind)) + "\n" + _campaign_node_hint(node)
+		button.tooltip_text = "第%s层 · %s · %s\n%s\n%s" % [node.layer, _map_node_title(node), status, _node_hint(str(node.kind)), _campaign_node_hint(node)]
 		if id == selected:
-			description = caption + " · " + button.tooltip_text.replace("\n", " ")
+			description = "已选：%s · %s · 第%s层" % [_map_node_title(node), status, node.layer]
+			if str(node.get("kind", "")) == "elite":
+				description += " · 高风险"
 	canvas.arrange.call_deferred()
+	if not _map_overview and node_ids.has(selected) and _local_focus == "node:" + selected:
+		_ensure_map_selection_visible.call_deferred(selected, _render_generation)
 	var scope := "%s|%s|%s|%s" % [view.get("run_id", ""), view.get("term", 0), current_id, view.get("revision", -1)]
 	if scope != _map_focus_scope:
 		var focus_id := str(reachable[0]) if not reachable.is_empty() else current_id
 		if not focus_id.is_empty():
 			_focus_map_after_layout.call_deferred(weakref(canvas), focus_id, _render_generation, scope)
+	if node_ids.has(selected):
+		var preview_scroll := ScrollContainer.new()
+		preview_scroll.name = "RouteForecast"
+		preview_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+		preview_scroll.custom_minimum_size.y = 44 * UiStyle.text_scale if compact_map else 72 * UiStyle.text_scale
+		footer.add_child(preview_scroll)
+		var words := VBoxContainer.new()
+		words.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		preview_scroll.add_child(words)
+		add_text(words, str(forecast.text), 14)
 	var row := _bottom(description)
 	var enter := add_button(row, "map:enter", "进入此节点", _action("enter_node", {"node_id": selected}))
-	enter.disabled = not reachable.has(selected)
-	add_button(row, "map:current", "回到当前位置", {}, func(): _focus_map(canvas, current_id if not current_id.is_empty() else str(reachable[0]) if not reachable.is_empty() else ""))
+	enter.disabled = not node_ids.has(selected) or not reachable.has(selected)
+	if enter.disabled:
+		enter.tooltip_text = "请先选择当前位置直接相连的真实可入节点。"
+	add_button(row, "map:current", "定位当前" if compact_map else "回到当前位置", {}, func(): _focus_map(canvas, current_id if not current_id.is_empty() else str(reachable[0]) if not reachable.is_empty() else ""))
+	add_button(row, "map:overview", "收起全图" if _map_overview else "全图概览", {}, _toggle_map_overview)
 	add_button(row, "map:abandon", "放弃本局", {}, func(): _confirm_abandon = not _confirm_abandon; refresh_local())
 	if _confirm_abandon:
-		add_button(row, "map:abandon_confirm", "确认放弃本局", _action("abandon_run", {"confirmed": true}))
+		add_button(add_row(footer), "map:abandon_confirm", "确认放弃本局", _action("abandon_run", {"confirmed": true}))
+
+
+func _map_short_name(node: Dictionary) -> String:
+	var subtype := str(node.get("subtype", ""))
+	return str({"N": "战斗", "EL": "精英", "K": "竞赛", "B": "首领", "S": "商店", "R": "休息", "E": "事件", "L": "图书", "LAB": "实验", "T": "导师", "C": "社团", "I": "实习", "ST": "毕设"}.get(subtype, {"normal": "战斗", "elite": "精英", "boss": "首领", "shop": "商店", "rest": "休息", "event": "事件"}.get(str(node.get("kind", "")), "节点")))
+
+
+func _toggle_map_overview() -> void:
+	if not _map_overview:
+		_map_detail_scroll = _scroll.scroll_vertical
+	_map_overview = not _map_overview
+	refresh_local()
+	_scroll_position.y = 0 if _map_overview else _map_detail_scroll
+	_scroll.scroll_vertical = _scroll_position.y
+
+
+func _fit_map_overview(canvas_ref: WeakRef, generation: int, frames_left: int = 4) -> void:
+	var canvas := canvas_ref.get_ref() as UiRouteCanvas
+	if not is_inside_tree() or not is_instance_valid(canvas) or generation != _render_generation:
+		return
+	if frames_left > 0 or _scroll_restore_pending:
+		get_tree().create_timer(0).timeout.connect(_fit_map_overview.bind(canvas_ref, generation, maxi(0, frames_left - 1)), CONNECT_ONE_SHOT)
+		return
+	canvas.overview_height = maxf(56, _scroll.get_global_rect().end.y - canvas.global_position.y - 12)
+	canvas.custom_minimum_size.y = canvas.overview_height
+
+
+func _ensure_map_selection_visible(id: String, generation: int, frames_left: int = 4) -> void:
+	if not is_inside_tree() or generation != _render_generation:
+		return
+	if frames_left > 0 or _scroll_restore_pending:
+		get_tree().create_timer(0).timeout.connect(_ensure_map_selection_visible.bind(id, generation, maxi(0, frames_left - 1)), CONNECT_ONE_SHOT)
+		return
+	if _buttons.has("node:" + id) and is_instance_valid(_buttons["node:" + id]) and _buttons["node:" + id].has_focus():
+		var button: Control = _buttons["node:" + id]
+		_scroll.ensure_control_visible(button)
+		# Scroll offsets are integers while scaled button geometry can end on .5.
+		var viewport_rect := _scroll.get_global_rect()
+		var button_rect := button.get_global_rect()
+		if button_rect.end.y > viewport_rect.end.y:
+			_scroll.scroll_vertical += ceili(button_rect.end.y - viewport_rect.end.y)
+		elif button_rect.position.y < viewport_rect.position.y:
+			_scroll.scroll_vertical -= ceili(viewport_rect.position.y - button_rect.position.y)
+		_scroll_position.y = _scroll.scroll_vertical
 
 
 func _focus_map(canvas: UiRouteCanvas, id: String) -> void:

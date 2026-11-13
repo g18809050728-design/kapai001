@@ -1966,5 +1966,303 @@
         ]
       }
     ]
+  },
+  {
+    "id": "FY_ROUTE_job_TASK",
+    "name_key": "秋招终面",
+    "kind": "boss",
+    "phases": [
+      {
+        "phase_key": "limits",
+        "name_key": "简历复核",
+        "work_max": 35,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "催促12",
+            "pressure": 12
+          },
+          {
+            "index": 1,
+            "text_key": "材料复核8",
+            "shield": 8
+          },
+          {
+            "index": 2,
+            "text_key": "催促10",
+            "pressure": 10
+          }
+        ]
+      },
+      {
+        "phase_key": "integrals",
+        "name_key": "现场案例",
+        "work_max": 40,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "催促12",
+            "pressure": 12
+          },
+          {
+            "index": 1,
+            "text_key": "材料复核8",
+            "shield": 8
+          },
+          {
+            "index": 2,
+            "text_key": "催促10",
+            "pressure": 10
+          }
+        ]
+      },
+      {
+        "phase_key": "proofs",
+        "name_key": "综合面谈",
+        "work_max": 40,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "催促12",
+            "pressure": 12
+          },
+          {
+            "index": 1,
+            "text_key": "材料复核8",
+            "shield": 8
+          },
+          {
+            "index": 2,
+            "text_key": "催促10",
+            "pressure": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "FY_ROUTE_exam_TASK",
+    "name_key": "考研复试",
+    "kind": "boss",
+    "phases": [
+      {
+        "phase_key": "limits",
+        "name_key": "专业笔试",
+        "work_max": 35,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "催促6",
+            "pressure": 6
+          },
+          {
+            "index": 1,
+            "text_key": "催促8、材料复核8",
+            "pressure": 8,
+            "shield": 8
+          },
+          {
+            "index": 2,
+            "text_key": "催促8",
+            "pressure": 8
+          }
+        ]
+      },
+      {
+        "phase_key": "integrals",
+        "name_key": "专业问答",
+        "work_max": 40,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "催促6",
+            "pressure": 6
+          },
+          {
+            "index": 1,
+            "text_key": "催促8、材料复核8",
+            "pressure": 8,
+            "shield": 8
+          },
+          {
+            "index": 2,
+            "text_key": "催促8",
+            "pressure": 8
+          }
+        ]
+      },
+      {
+        "phase_key": "proofs",
+        "name_key": "综合复试",
+        "work_max": 40,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "催促6",
+            "pressure": 6
+          },
+          {
+            "index": 1,
+            "text_key": "催促8、材料复核8",
+            "pressure": 8,
+            "shield": 8
+          },
+          {
+            "index": 2,
+            "text_key": "催促8",
+            "pressure": 8
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "FY_ROUTE_research_TASK",
+    "name_key": "保研答辩",
+    "kind": "boss",
+    "phases": [
+      {
+        "phase_key": "limits",
+        "name_key": "成果审阅",
+        "work_max": 35,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "材料复核8",
+            "shield": 8
+          },
+          {
+            "index": 1,
+            "text_key": "催促10",
+            "pressure": 10
+          },
+          {
+            "index": 2,
+            "text_key": "催促12",
+            "pressure": 12
+          }
+        ]
+      },
+      {
+        "phase_key": "integrals",
+        "name_key": "研究陈述",
+        "work_max": 40,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "材料复核8",
+            "shield": 8
+          },
+          {
+            "index": 1,
+            "text_key": "催促10",
+            "pressure": 10
+          },
+          {
+            "index": 2,
+            "text_key": "催促12",
+            "pressure": 12
+          }
+        ]
+      },
+      {
+        "phase_key": "proofs",
+        "name_key": "学术追问",
+        "work_max": 40,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "材料复核8",
+            "shield": 8
+          },
+          {
+            "index": 1,
+            "text_key": "催促10",
+            "pressure": 10
+          },
+          {
+            "index": 2,
+            "text_key": "催促12",
+            "pressure": 12
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "FY_ROUTE_abroad_TASK",
+    "name_key": "留学面试",
+    "kind": "boss",
+    "phases": [
+      {
+        "phase_key": "limits",
+        "name_key": "申请材料",
+        "work_max": 35,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "催促11、材料复核4",
+            "pressure": 11,
+            "shield": 4
+          },
+          {
+            "index": 1,
+            "text_key": "催促11",
+            "pressure": 11
+          },
+          {
+            "index": 2,
+            "text_key": "材料复核4",
+            "shield": 4
+          }
+        ]
+      },
+      {
+        "phase_key": "integrals",
+        "name_key": "动机陈述",
+        "work_max": 40,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "催促11、材料复核4",
+            "pressure": 11,
+            "shield": 4
+          },
+          {
+            "index": 1,
+            "text_key": "催促11",
+            "pressure": 11
+          },
+          {
+            "index": 2,
+            "text_key": "材料复核4",
+            "shield": 4
+          }
+        ]
+      },
+      {
+        "phase_key": "proofs",
+        "name_key": "跨文化面谈",
+        "work_max": 40,
+        "intents": [
+          {
+            "index": 0,
+            "text_key": "催促11、材料复核4",
+            "pressure": 11,
+            "shield": 4
+          },
+          {
+            "index": 1,
+            "text_key": "催促11",
+            "pressure": 11
+          },
+          {
+            "index": 2,
+            "text_key": "材料复核4",
+            "shield": 4
+          }
+        ]
+      }
+    ]
   }
 ]

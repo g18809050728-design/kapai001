@@ -198,7 +198,7 @@ func _render_map() -> void:
 	reset_page("校园路线", "沿着箭头选择下一站，完成本学年的挑战。" if view.has("campaign") else "沿着箭头选择下一站，准备迎接期末。")
 	_run_bar(body)
 	if view.has("campaign"):
-		add_text(body, "大%s · %s｜本图 %s 层，完成第 %s 层后领取饰品" % [["一", "二", "三", "四"][int(view.term)-1], view.get("year_title", ""), view.get("year_layers", 0), "、".join(CampaignMap.MAPS[int(view.term)-1].relic_layers.map(func(value): return str(value)))], 20)
+		add_text(body, "大%s · %s｜本图 %s 层，完成第 %s 层后领取饰品" % [["一", "二", "三", "四"][int(view.term)-1], view.get("year_title", ""), view.get("year_layers", 0), "、".join(view.get("relic_layers", []).map(func(value): return str(value)))], 20)
 		var c: Dictionary = view.campaign
 		add_text(body, "探索 %s/6　方向 %s　履历 %s/6　毕设 %s/5　去向 %s" % [c.exploration, _campaign_label(c.direction), c.resume, c.thesis, _campaign_label(c.destination)], 18)
 		add_text(body, "每图末层为学年 Boss；领奖后进入下一学年。实验室与竞赛路线请留意后继和费用。", 17)
