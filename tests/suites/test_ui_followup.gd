@@ -538,7 +538,19 @@ func _skip_rewards(shell: GameShell) -> void:
 
 func _click_card(shell: GameShell, uid: String) -> void:
 	var card: Button = shell.page._buttons[uid]
-	var point := card.get_global_rect().get_center()
+	# High text scales can make a face taller than the viewport. Click only
+	# its visible portion, never a fixed footer that covers the offscreen center.
+	var ancestor := card.get_parent()
+	while ancestor != null and not ancestor is ScrollContainer:
+		ancestor = ancestor.get_parent()
+	var scroll := ancestor as ScrollContainer
+	if scroll != null:
+		scroll.ensure_control_visible(card)
+	await _frames(3)
+	var visible_rect := card.get_global_rect()
+	if scroll != null:
+		visible_rect = visible_rect.intersection(scroll.get_global_rect())
+	var point := visible_rect.get_center()
 	var move := InputEventMouseMotion.new()
 	move.position = point
 	Input.parse_input_event(move)

@@ -84,6 +84,10 @@ func _present_next() -> void:
 	_present(item.event)
 	var kind := str(item.event.get("type", ""))
 	_remaining = maxf(base_delay, 0.56 if kind == "card_drawn" else (0.52 if kind in ["card_discarded", "card_resolved", "card_exhausted"] else (1.12 if kind == "completion_applied" else (0.42 if kind == "pressure_applied" else 0.0))))
+	# Supporting resource/status feedback runs in parallel with the main beat.
+	while not _queue.is_empty() and str(_queue[0].event.get("type", "")) in ["relax_changed", "focus_changed", "synergy_changed", "paper_changed", "status_gained", "status_changed", "status_removed"]:
+		var supporting: Dictionary = _queue.pop_front()
+		_present(supporting.event)
 
 
 func _finish_immediately() -> void:

@@ -7,7 +7,7 @@ const Forecast = preload("res://src/run/route_forecast.gd")
 const NodeStamp = preload("res://src/ui/map_node_stamp.gd")
 const NODE_WIDTH := 76.0
 const COLUMN_GAP := 16.0
-const ROW_HEIGHT := 84.0
+const ROW_HEIGHT := 98.0
 const ROUTE_SPAN := 6 * (NODE_WIDTH + COLUMN_GAP)
 
 var nodes: Array = []
@@ -37,7 +37,7 @@ func configure(entries: Array, available: Array, current_id: String, selected_id
 	var last_layer := 1
 	for node in nodes:
 		last_layer = maxi(last_layer, int(node.get("layer", 1)))
-	custom_minimum_size = Vector2(ROUTE_SPAN + NODE_WIDTH, (last_layer - 1) * row_height() + 100)
+	custom_minimum_size = Vector2(0, (last_layer - 1) * row_height() + 100)
 	if overview:
 		custom_minimum_size = Vector2(0, overview_height)
 	if not resized.is_connected(arrange):
@@ -78,7 +78,7 @@ func arrange() -> void:
 		for index in entries.size():
 			var node: Dictionary = entries[index]
 			var column := clampf(float(node.column), 0, 6) if node.has("column") else (index + 1) * 6.0 / (entries.size() + 1)
-			positions[str(node.node_id)] = Vector2(padding + column * width / 6.0, (14 if overview else 52) + (int(layer) - 1) * row_step)
+			positions[str(node.node_id)] = Vector2(padding + column * width / 6.0, (14 if overview else 52) + (last_layer - int(layer)) * row_step)
 	for child in get_children():
 		var id := str(child.get_meta("node_id", ""))
 		if child is Control and positions.has(id):
@@ -120,8 +120,8 @@ func _arrange_edges() -> void:
 				curve.add_point(start, Vector2.ZERO, bend)
 				curve.add_point(end, -bend)
 			else:
-				var source_button: Button = buttons[source]
-				var target_button: Button = buttons[destination]
+				var source_button: Button = buttons[destination]
+				var target_button: Button = buttons[source]
 				start = source_button.position + source_button.stamp_center()
 				end = target_button.position + target_button.stamp_center()
 				var side := signf(end.x - start.x)
@@ -129,19 +129,23 @@ func _arrange_edges() -> void:
 					side = -1 if next_ids.size() > 1 and index == 0 else 1
 				# Exit beside the stamp, pass outside its label, then turn in the
 				# gap between rows. Separate ports keep a fork's arrows distinct.
-				var port := start + Vector2(side * 22, 3)
+				var arrivals: Array = incoming[destination]
+				var port_angle := (0.0 if side > 0 else PI) + (arrivals.find(source) - (arrivals.size() - 1) * .5) * .30
+				var port := start + Vector2.from_angle(port_angle) * 23
 				var label: Rect2 = source_button.label_rect()
 				var corridor := start.x + side * maxf(25, label.size.x * .5 + 9)
 				var band := source_button.get_rect().end.y + 6 + index * 3
 				var turn := Vector2(corridor, band)
-				var arrivals: Array = incoming[destination]
-				var angle := -PI / 2 + (arrivals.find(source) - (arrivals.size() - 1) * .5) * .45
+				var angle := -PI / 2 + (index - (next_ids.size() - 1) * .5) * .45
 				var tip := end + Vector2.from_angle(angle) * 23
 				curve.add_point(port, Vector2.ZERO, Vector2(corridor - port.x, 0))
 				curve.add_point(turn, Vector2(0, -14), Vector2(0, 6))
 				curve.add_point(tip, Vector2(0, band - tip.y))
 			curve.bake_interval = 2
-			edge_paths[source + ">" + destination] = curve.get_baked_points()
+			var points := curve.get_baked_points()
+			if not overview and buttons.has(source) and buttons.has(destination):
+				points.reverse()
+			edge_paths[source + ">" + destination] = points
 
 
 func _link_keyboard_neighbors() -> void:
@@ -179,8 +183,23 @@ func _link_keyboard_neighbors() -> void:
 
 
 func _draw() -> void:
+	# The drawing is a projection of frozen nodes; no visual randomness enters a run.
+	var paper := UiStyle.surface(Color("f6efdf"),Color("bba787"),3)
+	paper.shadow_size = 0
+	draw_style_box(paper,Rect2(Vector2.ZERO,size))
+	if not overview:
+		draw_rect(Rect2(0,0,18,size.y),UiStyle.FOREST)
+		draw_line(Vector2(29,0),Vector2(29,size.y),Color(UiStyle.RED,.28),1,true)
+		for y in range(21,int(size.y),42):
+			draw_arc(Vector2(10,y),5,-PI*.65,PI*.65,12,Color(UiStyle.BRASS,.8),1.6,true)
+		for y in range(24,int(size.y),28):
+			draw_line(Vector2(34,y),Vector2(size.x-12,y),Color(UiStyle.INK,.055),.8,true)
+	var visited := {}
+	for node in nodes:
+		if node.get("status", "") == "completed" or str(node.node_id) == current:
+			visited[str(node.node_id)] = true
 	if background_texture != null:
-		draw_texture_rect(background_texture, Rect2(Vector2.ZERO, size), false, Color(1, 1, 1, .08))
+		draw_texture_rect(background_texture, Rect2(Vector2.ZERO, size), false, Color(1, 1, 1, .06))
 	for node in nodes:
 		var source := str(node.node_id)
 		if not positions.has(source):
@@ -189,18 +208,27 @@ func _draw() -> void:
 			if not positions.has(str(next_id)):
 				continue
 			var destination := str(next_id)
-			var color := Color("aebdb5")
+			var color := Color("9daca1")
 			var width := 1.5
+			var walked: bool = visited.has(source) and visited.has(destination)
+			if walked:
+				color = UiStyle.INK
+				width = 2.5
 			if forecast_node_ids.has(source) and forecast_node_ids.has(destination):
 				color = UiStyle.GREEN.darkened(.22)
 				width = 3.5
 			if source == current and reachable.has(destination):
-				color = UiStyle.GOLD.darkened(.16)
+				color = UiStyle.GREEN.darkened(.28)
 				width = 4
 			var points: PackedVector2Array = edge_paths.get(source + ">" + destination, PackedVector2Array())
 			if points.size() < 2:
 				continue
-			draw_polyline(points, color, width if not overview else minf(width, 1.5), true)
+			if overview or walked or source == current or forecast_node_ids.has(source):
+				draw_polyline(points, color, width if not overview else minf(width, 1.5), true)
+			else:
+				for point_index in range(0, points.size() - 1, 5):
+					var end := mini(point_index + 2, points.size() - 1)
+					draw_polyline(points.slice(point_index,end+1),Color(color,.8),width,true)
 			if not overview:
 				var tip := points[points.size() - 1]
 				var direction := (tip - points[maxi(0, points.size() - 5)]).normalized()

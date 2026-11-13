@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://cdeux3uj2qnt4"
+
+[deps]
+
+files=["res://ui-plan/audit/cards-174.name.translation", "res://ui-plan/audit/cards-174.owner.translation", "res://ui-plan/audit/cards-174.type.translation", "res://ui-plan/audit/cards-174.cost.translation", "res://ui-plan/audit/cards-174.target.translation", "res://ui-plan/audit/cards-174.upgradable.translation", "res://ui-plan/audit/cards-174.exam.translation", "res://ui-plan/audit/cards-174.ability.translation", "res://ui-plan/audit/cards-174.chapter.translation", "res://ui-plan/audit/cards-174.operations.translation", "res://ui-plan/audit/cards-174.art.translation", "res://ui-plan/audit/cards-174.icon.translation"]
+
+source_file="res://ui-plan/audit/cards-174.csv"
+dest_files=["res://ui-plan/audit/cards-174.name.translation", "res://ui-plan/audit/cards-174.owner.translation", "res://ui-plan/audit/cards-174.type.translation", "res://ui-plan/audit/cards-174.cost.translation", "res://ui-plan/audit/cards-174.target.translation", "res://ui-plan/audit/cards-174.upgradable.translation", "res://ui-plan/audit/cards-174.exam.translation", "res://ui-plan/audit/cards-174.ability.translation", "res://ui-plan/audit/cards-174.chapter.translation", "res://ui-plan/audit/cards-174.operations.translation", "res://ui-plan/audit/cards-174.art.translation", "res://ui-plan/audit/cards-174.icon.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

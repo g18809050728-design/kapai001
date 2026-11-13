@@ -1,0 +1,105 @@
+{
+  "version": 1,
+  "date": "2026-11-13",
+  "paid_generation_requests": 0,
+  "assets": [
+    {
+      "content_id": "P01",
+      "requirement": "UIR-003/011/013",
+      "source": "res://assets/art/g6-v1/portraits/P01_v1.png",
+      "source_sha256": "61871a29312b54da3af9ea7c0282a51d3983e3d87cd366c7e00de93a07265b52",
+      "file": "assets/art/presentation-v2/actors/P01.png",
+      "size": [
+        512,
+        640
+      ],
+      "sha256": "d02b4ca81522aab10f61811192c29ee6c4324ba7eb4fd52c9fb9287ce3ca325a",
+      "method": "edge-connected pale background flood fill; lower silhouette row fill protects white garments/papers; 0.35px alpha feather; original retained",
+      "status": "prototype_cutout; not final layered character animation"
+    },
+    {
+      "content_id": "P04",
+      "requirement": "UIR-003/011/013",
+      "source": "res://assets/art/g6-v1/portraits/P04_v1.png",
+      "source_sha256": "ccbe5113088528778da048d204843d42e592f3a2edfd71335bfe09bdb1bb6b8f",
+      "file": "assets/art/presentation-v2/actors/P04.png",
+      "size": [
+        512,
+        640
+      ],
+      "sha256": "42e4352727a6d64ba9f2a9da2eb246ff45f54e6c9d4a8cd15ed6c663d3b4db8d",
+      "method": "edge-connected pale background flood fill; lower silhouette row fill protects white garments/papers; 0.35px alpha feather; original retained",
+      "status": "prototype_cutout; not final layered character animation"
+    },
+    {
+      "content_id": "P02",
+      "requirement": "UIR-003/011/013",
+      "source": "res://assets/art/four-year/portraits/P02-v1.png",
+      "source_sha256": "f17a6c3f3aa17475e390596f8a174612781b13371f8b8fd0c8a39c67cb1271b7",
+      "file": "assets/art/presentation-v2/actors/P02.png",
+      "size": [
+        288,
+        360
+      ],
+      "sha256": "3fcfabc9abdf6a9904d0b0d759a2bd55db8c6b3023ebc547db7a09e14e082e7d",
+      "method": "edge-connected pale background flood fill; lower silhouette row fill protects white garments/papers; 0.35px alpha feather; original retained",
+      "status": "prototype_cutout; not final layered character animation"
+    },
+    {
+      "content_id": "P03",
+      "requirement": "UIR-003/011/013",
+      "source": "res://assets/art/four-year/portraits/P03-v1.png",
+      "source_sha256": "3c0a1b3a858b63136b411038c606dec6c55b2fe15dc35c437a3ae7bcde2d943e",
+      "file": "assets/art/presentation-v2/actors/P03.png",
+      "size": [
+        288,
+        360
+      ],
+      "sha256": "23847b616566092660099e3538f9bf0132831ed9084cf9c101391a8a2b55a3c9",
+      "method": "edge-connected pale background flood fill; lower silhouette row fill protects white garments/papers; 0.35px alpha feather; original retained",
+      "status": "prototype_cutout; not final layered character animation"
+    },
+    {
+      "content_id": "R3-U01",
+      "requirement": "UIR-003/011/013",
+      "source": "res://assets/art/four-year/portraits/R3-U01-v1.png",
+      "source_sha256": "107e7b7bd165c0452f502ac4e24a9ab43e5a331558e200d898a4e6e8af0e2dab",
+      "file": "assets/art/presentation-v2/actors/R3-U01.png",
+      "size": [
+        288,
+        360
+      ],
+      "sha256": "173859240955d738fd9deaa3fc2e928b811d17e3aca814e6f1cb5735b043393a",
+      "method": "edge-connected pale background flood fill; lower silhouette row fill protects white garments/papers; 0.35px alpha feather; original retained",
+      "status": "prototype_cutout; not final layered character animation"
+    },
+    {
+      "content_id": "R3-U02",
+      "requirement": "UIR-003/011/013",
+      "source": "res://assets/art/four-year/portraits/R3-U02-v1.png",
+      "source_sha256": "6172dca8e92af882e1e6f320a1cf9fcdebcc7029103733596c53cb018cc6ba2b",
+      "file": "assets/art/presentation-v2/actors/R3-U02.png",
+      "size": [
+        288,
+        360
+      ],
+      "sha256": "847a9de3604c6ab2c3ef3732ee32fa13994aa3f9247ea04f0b95d963236e249f",
+      "method": "edge-connected pale background flood fill; lower silhouette row fill protects white garments/papers; 0.35px alpha feather; original retained",
+      "status": "prototype_cutout; not final layered character animation"
+    },
+    {
+      "content_id": "R3-U03",
+      "requirement": "UIR-003/011/013",
+      "source": "res://assets/art/four-year/portraits/R3-U03-v1.png",
+      "source_sha256": "d91e64f1cbc77a68e2ba11eda4cf96fb7dfdc841cedca8f70852331c86d3b392",
+      "file": "assets/art/presentation-v2/actors/R3-U03.png",
+      "size": [
+        288,
+        360
+      ],
+      "sha256": "339e26b124c726572d62f7323e58c3f45a2dfe75ec45db046741e9c828474fd2",
+      "method": "edge-connected pale background flood fill; lower silhouette row fill protects white garments/papers; 0.35px alpha feather; original retained",
+      "status": "prototype_cutout; not final layered character animation"
+    }
+  ]
+}

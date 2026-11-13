@@ -19,7 +19,7 @@ func build(screen: BattleScreen) -> void:
 	background.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 	background.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	stage.add_child(background)
-	_rect(stage, Rect2(0, 0, 1280, 800), Color(0.04, 0.1, 0.13, 0.36))
+	_rect(stage, Rect2(0, 0, 1280, 800), Color(0.04, 0.1, 0.13, 0.20))
 	var gradient := Gradient.new()
 	gradient.colors = PackedColorArray([Color(0.03, 0.08, 0.1, 0.0), Color(0.03, 0.08, 0.1, 0.96)])
 	var texture := GradientTexture2D.new()
@@ -146,29 +146,22 @@ func _header() -> void:
 
 func _player() -> void:
 	var player := page._dict(page.view.get("player"))
-	var portrait := _panel(stage, Rect2(48, 183, 186, 239), Color("ebe5d5"), Color("cfb57c"))
-	_art(portrait, str(page.view.get("character_id", "P01")), Rect2(6, 6, 174, 194))
-	_text(
-		portrait,
-		Rect2(6, 202, 174, 28),
-		UiStyle.label(str(page.view.get("character_id", "P01"))).split("·")[0],
-		20,
-		UiStyle.INK,
-		HORIZONTAL_ALIGNMENT_CENTER
-	)
+	var player_id := str(player.get("entity_id", ""))
+	_actor(Rect2(40, 158, 224, 276), player_id, str(page.view.get("character_id", "P01")), "player")
+	_panel(stage,Rect2(38,416,224,76),Color(UiStyle.NIGHT,.86),Color(UiStyle.BRASS,.35))
+	_text(stage, Rect2(52, 422, 196, 27), UiStyle.label(str(page.view.get("character_id", "P01"))).split("·")[0], 20, LIGHT, HORIZONTAL_ALIGNMENT_CENTER)
 	var hp := int(player.get("vitality", 0))
 	var max_hp := int(page.view.get("max_vitality", maxi(1, hp)))
-	_bar(stage, Rect2(48, 435, 186, 11), float(hp) / maxi(1, max_hp), Color("ba7469"))
+	_bar(stage, Rect2(52, 454, 196, 6), float(hp) / maxi(1, max_hp), Color("ba7469"))
 	_text(
 		stage,
-		Rect2(48, 450, 230, 26),
+		Rect2(52, 466, 202, 23),
 		"精力 %s / %s  ·  放松 %s" % [hp, max_hp, player.get("relax", 0)],
-		16,
+		14,
 		LIGHT
 	)
-	_text(stage, Rect2(48, 117, 330, 28), "我的行动", 23, LIGHT)
+	_text(stage, Rect2(48, 119, 210, 24), "本回合 · 做出选择", 15, Color("f0d4a0"))
 	var statuses := page._array(page.view.get("statuses"))
-	var player_id := str(player.get("entity_id", ""))
 	var player_statuses: Array = []
 	for value in statuses:
 		if str(page._dict(value).get("target_id", "")) == player_id:
@@ -227,10 +220,10 @@ func _v3_summary() -> void:
 	var scene := page._dict(page.view.get("scene"))
 	if not scene.is_empty():
 		lines[0] += "　场景：" + UiStyle.label(str(scene.get("definition_id", "")))
-	var panel := _panel(stage, Rect2(255, 74, 1000, 58), Color(0.05, 0.12, 0.15, 0.96), Color("6b8c85"))
+	var panel := _panel(stage, Rect2(286, 78, 968, 48), Color(UiStyle.NIGHT,.90), Color(UiStyle.BRASS,.3))
 	panel.name = "V3Summary"
-	_text(panel, Rect2(12, 4, 976, 50), "\n".join(lines), 17, LIGHT)
-	var info_hit := _button(Rect2(255, 74, 1000, 58), "battle:resources", "", {}, func(): page._open_detail_for_uid("battle:resources"))
+	_text(panel, Rect2(12, 4, 944, 40), "\n".join(lines), 14, LIGHT)
+	var info_hit := _button(Rect2(286, 78, 968, 48), "battle:resources", "", {}, func(): page._open_detail_for_uid("battle:resources"))
 	_transparent_target(info_hit)
 
 
@@ -246,45 +239,24 @@ func _tasks() -> void:
 		var x := start + index * (width + 16)
 		var intent := page._intent_text(page._dict(task.get("intent_snapshot")))
 		var badge := _panel(
-			stage, Rect2(x, 136, width, 56), Color(0.09, 0.16, 0.18, 0.9), Color("b98968")
+			stage, Rect2(x, 146, width, 50), Color(UiStyle.NIGHT,.92), Color("a8875b")
 		)
 		_text(
 			badge,
-			Rect2(8, 4, width - 16, 48),
+			Rect2(8, 4, width - 16, 42),
 			"下回合意图\n" + intent,
-			15,
+			14,
 			Color("f3d2a1"),
 			HORIZONTAL_ALIGNMENT_CENTER
 		)
-		var frame := _panel(stage, Rect2(x, 207, width, 236), Color("eee7d7"), Color("d0b785"))
+		var frame := _actor(Rect2(x, 260, width, 182), id, str(task.get("definition_id", "")), "task", int(task.get("phase_index", 1)))
+		var task_title := _text(stage, Rect2(x, 205, width, 28), UiStyle.label(str(task.get("definition_id", ""))), 21, LIGHT, HORIZONTAL_ALIGNMENT_CENTER)
+		task_title.name = "TaskTitle_" + id.validate_node_name()
 		var phase_count := int(task.get("phase_count", 1))
-		var has_phases := phase_count > 1
-		_art(
-			frame,
-			str(task.get("definition_id", "")),
-			Rect2(7, 7, width - 14, 142 if has_phases else 162)
-		)
-		_text(
-			frame,
-			Rect2(8, 155 if has_phases else 177, width - 16, 30 if has_phases else 48),
-			UiStyle.label(str(task.get("definition_id", ""))),
-			20,
-			UiStyle.INK,
-			HORIZONTAL_ALIGNMENT_CENTER
-		)
-		var phase_text := UiStyle.label(str(task.get("phase_key", "")))
-		if has_phases:
+		if phase_count > 1:
 			var phase_index := int(task.get("phase_index", 1))
-			phase_text = "第 %s / %s 阶段 · %s" % [phase_index, phase_count, phase_text]
-			phase_text += "\n最终阶段，完成即可获胜" if phase_index == phase_count else "\n完成后进入下一阶段"
-			_text(
-				frame,
-				Rect2(8, 187, width - 16, 42),
-				phase_text,
-				13,
-				UiStyle.INK,
-				HORIZONTAL_ALIGNMENT_CENTER
-			)
+			_text(stage, Rect2(x, 233, width, 18), "第 %s / %s 阶段" % [phase_index, phase_count], 12, SOFT, HORIZONTAL_ALIGNMENT_CENTER)
+			_text(stage, Rect2(x, 251, width, 18), "最终阶段" if phase_index == phase_count else "完成后进入下一阶段", 12, SOFT, HORIZONTAL_ALIGNMENT_CENTER)
 		var remaining := int(task.get("work_remaining", 0))
 		var maximum := maxi(1, int(task.get("work_max", 1)))
 		var fill := _bar(stage, Rect2(x, 447, width, 10), float(remaining) / maximum, Color("b77566"))
@@ -302,7 +274,7 @@ func _tasks() -> void:
 		page._target_frames["task:" + id] = frame
 		var status_text := _task_status_text(id)
 		if not status_text.is_empty():
-			var statuses := _text(stage, Rect2(x + 7, 312, width - 14, 44), status_text, 13, Color("ffe0aa"), HORIZONTAL_ALIGNMENT_CENTER)
+			var statuses := _text(stage, Rect2(x + 7, 385, width - 14, 44), status_text, 13, Color("ffe0aa"), HORIZONTAL_ALIGNMENT_CENTER)
 			statuses.name = "TaskStatus_" + id.validate_node_name()
 			var status_style := UiStyle.box(Color("233d43"))
 			status_style.set_content_margin_all(3)
@@ -336,38 +308,27 @@ func _units() -> void:
 			SOFT,
 			HORIZONTAL_ALIGNMENT_CENTER
 		)
-	var height := minf(132, 300.0 / maxi(1, units.size()) - 8)
+	var height := minf(136, 290.0 / maxi(1, units.size()) - 8)
 	for index in units.size():
 		var unit := page._dict(units[index])
 		var id := str(unit.get("unit_id", ""))
-		var bounds := Rect2(270, 170 + index * (height + 8), 192, height)
-		var frame := _panel(stage, bounds, Color("e7e6d8"), Color("8fa793"))
-		_art(frame, str(unit.get("definition_id", "")), Rect2(5, 5, 65, height - 10))
-		_text(
-			frame,
-			Rect2(77, 7, 108, 30),
-			UiStyle.label(str(unit.get("definition_id", ""))).split("：")[0],
-			16,
-			UiStyle.INK
-		)
-		_text(
-			frame,
-			Rect2(77, 39, 108, height - 42),
-			(
-				"精力 %s · 协作 %s\n放松 %s · 护卫 %s"
-				% [
-					unit.get("vitality", 0),
-					unit.get("cooperation", 0),
-					unit.get("relax", 0),
-					unit.get("guard", 0)
-				]
-			),
-			13,
-			UiStyle.MUTED
-		)
+		var bounds := Rect2(268, 160 + index * (height + 12), 205, height)
+		var frame := _actor(Rect2(bounds.position, Vector2(94, height)), id, str(unit.get("definition_id", "")), "unit")
+		_text(stage, Rect2(bounds.position+Vector2(94, 8), Vector2(111, 34)), UiStyle.label(str(unit.get("definition_id", ""))).split("：")[0], 16, LIGHT)
+		_text(stage, Rect2(bounds.position+Vector2(94, 43), Vector2(111, height-45)), "精力 %s\n协作 %s\n放松 %s · 护卫 %s" % [unit.get("vitality",0), unit.get("cooperation",0), unit.get("relax",0), unit.get("guard",0)], 13, SOFT)
 		var target := _button(bounds, "unit:" + id, "", {}, page._bind_unit(id))
 		_transparent_target(target)
 		page._target_frames["unit:" + id] = frame
+
+
+func _actor(bounds: Rect2, id: String, definition: String, kind: String, phase: int = 1) -> BattleActorView:
+	var actor := BattleActorView.new()
+	actor.configure(definition, kind, phase)
+	actor.position = bounds.position
+	actor.size = bounds.size
+	stage.add_child(actor)
+	page._actors[id] = actor
+	return actor
 
 
 func _hand() -> void:

@@ -22,10 +22,9 @@ func configure(control_kind: String, value: int = 0) -> void:
 
 func _draw() -> void:
 	var active := (is_hovered() or has_focus()) and not disabled
-	var ink := UiStyle.INK if not disabled else UiStyle.MUTED
-	var paper := UiStyle.box(Color("ece7d6") if disabled else UiStyle.PAPER)
-	paper.border_color = UiStyle.GOLD if active else UiStyle.GREEN
-	paper.set_border_width_all(2)
+	var ink := UiStyle.CREAM if not disabled else Color("9baca3")
+	var paper := UiStyle.surface(Color(UiStyle.NIGHT,.95) if kind == "focus" or disabled else UiStyle.FOREST,UiStyle.GOLD if active else UiStyle.BRASS)
+	paper.border_width_bottom = 3
 	paper.shadow_color = Color(0.02, 0.06, 0.07, 0.24)
 	paper.shadow_size = 4
 	paper.shadow_offset = Vector2(0, 3)
@@ -33,12 +32,12 @@ func _draw() -> void:
 	var font := get_theme_font("font")
 	if kind == "focus":
 		var center := Vector2(size.x * 0.5, size.y * 0.34)
-		draw_circle(center, 22, Color("e0e7da"))
-		draw_arc(center, 22, 0, TAU, 48, UiStyle.GREEN, 1.5, true)
+		draw_circle(center, 22,Color(UiStyle.BRASS,.08))
+		draw_arc(center, 22, 0, TAU, 48, UiStyle.BRASS, 1.5, true)
 		draw_string(font, center + Vector2(-22, 9), str(amount), HORIZONTAL_ALIGNMENT_CENTER, 44, 27, ink)
 		draw_string(font, Vector2(0, size.y - 18), "可用专注", HORIZONTAL_ALIGNMENT_CENTER, size.x, roundi(14 * UiStyle.text_scale), ink)
 	else:
 		var center := Vector2(size.x - 24, size.y * 0.5)
-		draw_arc(center, 10, -.8, 4.7, 32, UiStyle.GREEN, 1.7, true)
-		draw_polyline(PackedVector2Array([center + Vector2(3, -14), center + Vector2(8, -7), center + Vector2(1, -5)]), UiStyle.GREEN, 1.7, true)
+		draw_arc(center, 10, -.8, 4.7, 32, UiStyle.BRASS, 1.7, true)
+		draw_polyline(PackedVector2Array([center + Vector2(3, -14), center + Vector2(8, -7), center + Vector2(1, -5)]), UiStyle.BRASS, 1.7, true)
 		draw_string(font, Vector2(10, size.y * 0.5 + 6), "结束回合", HORIZONTAL_ALIGNMENT_CENTER, size.x - 46, roundi(16 * UiStyle.text_scale), ink)

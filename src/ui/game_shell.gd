@@ -56,7 +56,7 @@ func _build_frame() -> void:
 	_background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_background.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	_background.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
-	_background.modulate.a = 0.18
+	_background.modulate.a = 0.8
 	_background.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_background)
 	var margin := MarginContainer.new()
@@ -82,9 +82,10 @@ func _build_frame() -> void:
 	_host.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	panel.add_child(_host)
 	_notice_label = Label.new()
-	_notice_label.custom_minimum_size.y = 32
+	_notice_label.custom_minimum_size.y = 22
 	_notice_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_notice_label.add_theme_font_size_override("font_size", 15)
+	_notice_label.add_theme_font_size_override("font_size", 12)
+	_notice_label.add_theme_stylebox_override("normal",UiStyle.box(UiStyle.NIGHT))
 	column.add_child(_notice_label)
 	_damage_layer = BattleDamagePopup.new()
 	_damage_layer.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -222,7 +223,7 @@ func refresh() -> void:
 		)
 	_notice_label.text = notice
 	_notice_label.add_theme_color_override(
-		"font_color", UiStyle.RED if last_error != null else UiStyle.INK
+		"font_color", UiStyle.RED.lightened(.3) if last_error != null else Color("c5cbbd")
 	)
 	if screen == "battle" and last_error != null:
 		_notice_label.visible = true
@@ -231,11 +232,11 @@ func refresh() -> void:
 
 func _set_battle_frame(battle: bool) -> void:
 	for side in ["left", "right", "top", "bottom"]:
-		_frame_margin.add_theme_constant_override("margin_" + side, 0 if battle else 10)
-	_frame_column.add_theme_constant_override("separation", 0 if battle else 10)
-	_status_label.visible = not battle
+		_frame_margin.add_theme_constant_override("margin_" + side, 0)
+	_frame_column.add_theme_constant_override("separation", 0)
+	_status_label.visible = false
 	_notice_label.visible = not battle
-	_notice_label.custom_minimum_size.y = 28 if battle else 32
+	_notice_label.custom_minimum_size.y = 28 if battle else 22
 	if battle:
 		_frame_panel.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
 		# Apply the hidden header/footer and panel style before the hand is
@@ -246,7 +247,7 @@ func _set_battle_frame(battle: bool) -> void:
 		if page != null:
 			page.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	else:
-		_frame_panel.remove_theme_stylebox_override("panel")
+		_frame_panel.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
 
 
 func _storage_view() -> Dictionary:

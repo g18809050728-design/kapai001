@@ -114,10 +114,8 @@ func run() -> Array[String]:
 		await _frames()
 		var status: Label = _battle()._stage.get_node("TaskStatus_" + str(task.task_id).validate_node_name())
 		_check(status.text.contains("虚弱") and status.text.contains("乏力"), "both task status names remain visible")
-		var title: Label
-		for child in _battle()._target_frames["task:" + str(task.task_id)].get_children():
-			if child is Label and child.text == UiStyle.label(str(task.definition_id)):
-				title = child
+		# HUD is independent of the animated entity and its stable hit region.
+		var title := _battle()._stage.get_node("TaskTitle_" + str(task.task_id).validate_node_name()) as Label
 		_check(title != null and not status.get_global_rect().intersects(title.get_global_rect()), "status strip avoids task title with %d phases" % phases)
 		for card in _battle()._hand_cards:
 			_check(not _card_bounds(card, true).intersects(_battle()._buttons["statuses:player"].get_global_rect()), "player statuses avoid hand")

@@ -113,13 +113,13 @@ func event_sfx(event_type: String) -> String:
 			return "task_done"
 		"ddl_ticked", "deadline_expired":
 			return "ddl"
-		"paper_progress_gained", "paper_cited", "paper_published":
+		"paper_changed", "paper_progress_gained", "paper_cited", "paper_published":
 			return "paper"
 		"chapter_deployed", "chapter_ran", "chapter_returned", "chapter_slots_swapped":
 			return "chapter"
 		"choice_requested":
 			return "choice"
-		"unit_entered", "unit_summoned", "unit_replaced", "unit_left", "ally_target_changed":
+		"unit_entered", "unit_summoned", "unit_replaced", "unit_left", "unit_departed", "coop_target_set", "ally_target_changed":
 			return "chapter"
 		"reward_claimed", "year_reward_created", "campaign_reward_claimed", "item_purchased", "card_upgraded":
 			return "task_done"

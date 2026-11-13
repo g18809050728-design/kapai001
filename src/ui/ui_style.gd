@@ -7,10 +7,80 @@ const MUTED := Color("637871")
 const GREEN := Color("78978e")
 const GOLD := Color("dda957")
 const RED := Color("bd6b64")
+const NIGHT := Color("172c30")
+const BRASS := Color("c9a86b")
+const CREAM := Color("fbf5e8")
+const FOREST := Color("355b53")
 const LABELS = preload("res://src/ui/ui_labels.json")
 static var _textures: Dictionary = {}
 static var text_scale := 1.0
 static var reduced_motion := false
+static var _title_font: SystemFont
+static var _gradients: Dictionary = {}
+
+
+static func gradient(first: Color, last: Color, horizontal: bool = false) -> GradientTexture2D:
+	var key := "%s|%s|%s" % [first.to_html(), last.to_html(), horizontal]
+	if not _gradients.has(key):
+		var ramp := Gradient.new()
+		ramp.colors = PackedColorArray([first, last])
+		var texture := GradientTexture2D.new()
+		texture.gradient = ramp
+		texture.fill_from = Vector2.ZERO
+		texture.fill_to = Vector2.RIGHT if horizontal else Vector2.DOWN
+		_gradients[key] = texture
+	return _gradients[key]
+
+
+static func title_font() -> Font:
+	if _title_font == null:
+		_title_font = SystemFont.new()
+		_title_font.font_names = PackedStringArray(["STZhongsong", "SimSun", "Noto Serif CJK SC", "serif"])
+	return _title_font
+
+
+static func surface(color: Color = CREAM, border: Color = Color("c3b79c"), radius: int = 4) -> StyleBoxFlat:
+	var style := box(color)
+	style.set_corner_radius_all(radius)
+	style.border_color = border
+	style.set_border_width_all(1)
+	style.shadow_color = Color(.025,.05,.05,.22)
+	style.shadow_size = 8
+	style.shadow_offset = Vector2(0,4)
+	return style
+
+
+static func button_skin(button: Button, role: String = "secondary", dark: bool = false) -> void:
+	var primary := role == "primary"
+	var quiet := role == "quiet"
+	for state in ["normal", "hover", "pressed", "disabled", "focus"]:
+		var color := FOREST if primary else (Color(NIGHT,.72) if dark else Color("f1ead9"))
+		if quiet:
+			color = Color(1,1,1,.025) if dark else Color(NIGHT,.035)
+		if state == "hover":
+			color = color.lightened(.12) if primary or dark else Color("fff6de")
+		if state == "pressed":
+			color = color.darkened(.17)
+		if state == "disabled":
+			color = Color(NIGHT,.26) if dark else Color("dcd9cf")
+		var style := surface(color, BRASS if primary or state == "hover" else (Color("658079") if dark else Color("c7beaa")), 3)
+		style.content_margin_left = 14
+		style.content_margin_right = 14
+		style.content_margin_top = 7
+		style.content_margin_bottom = 7
+		style.shadow_size = 3 if primary else 0
+		style.shadow_offset = Vector2(0,2)
+		if quiet:
+			style.set_border_width_all(0)
+		if state == "focus":
+			style.bg_color = Color.TRANSPARENT
+			style.border_color = BRASS
+			style.set_border_width_all(2)
+		button.add_theme_stylebox_override(state,style)
+	var ink := CREAM if primary or dark else INK
+	for state in ["font_color","font_hover_color","font_pressed_color","font_focus_color"]:
+		button.add_theme_color_override(state,ink)
+	button.add_theme_color_override("font_disabled_color",Color("86918b") if dark else Color("929387"))
 
 
 static func label(id: String) -> String:
@@ -373,15 +443,18 @@ static func make_theme() -> Theme:
 	theme.set_color("font_focus_color", "Button", INK)
 	theme.set_color("font_disabled_color", "Button", Color("84918b"))
 	for state in ["normal", "hover", "pressed", "disabled", "focus"]:
-		var style := box(Color("e3e9df") if state == "normal" else Color("cbdacf"))
+		var style := surface(Color("f1ead9") if state == "normal" else Color("fff6de"),Color("c7beaa"),3)
+		style.shadow_size = 0
+		style.content_margin_top = 7
+		style.content_margin_bottom = 7
 		if state == "disabled":
-			style.bg_color = Color("e8e5db")
+			style.bg_color = Color("dcd9cf")
 		if state == "focus":
 			style.bg_color = Color.TRANSPARENT
 			style.border_color = GOLD
 			style.set_border_width_all(2)
 		theme.set_stylebox(state, "Button", style)
-	theme.set_stylebox("panel", "PanelContainer", box(Color("fffbf1")))
+	theme.set_stylebox("panel", "PanelContainer", surface(CREAM))
 	theme.set_stylebox("normal", "LineEdit", box(Color("ffffff")))
 	theme.set_color("font_color", "LineEdit", INK)
 	return theme
@@ -390,7 +463,7 @@ static func make_theme() -> Theme:
 static func box(color: Color) -> StyleBoxFlat:
 	var style := StyleBoxFlat.new()
 	style.bg_color = color
-	style.set_corner_radius_all(10)
+	style.set_corner_radius_all(4)
 	style.content_margin_left = 16
 	style.content_margin_right = 16
 	style.content_margin_top = 12

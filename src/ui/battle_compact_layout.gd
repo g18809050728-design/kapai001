@@ -9,6 +9,20 @@ func build(page: BattleScreen) -> void:
 	page._stage.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	page._stage.size = page.size
 	page.add_child(page._stage)
+	var backdrop := TextureRect.new()
+	backdrop.texture = UiStyle.texture("BG_classroom")
+	backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	backdrop.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	backdrop.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	page.add_child(backdrop)
+	page.move_child(backdrop,0)
+	var shade := ColorRect.new()
+	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	shade.color = Color(UiStyle.NIGHT,.60)
+	shade.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	page.add_child(shade)
+	page.move_child(shade,1)
 	page._hover_panel = null
 	page._aim = null
 	var descriptions := BattleLayout.new()
@@ -30,8 +44,8 @@ func build(page: BattleScreen) -> void:
 	resource_text += " · " + passive_name + ("可用" if info.get("passive_available", true) else "已使用")
 	page.add_button(page.header, "battle:resources", resource_text, {}, func(): page._open_detail_for_uid("battle:resources"))
 	var tools := page.add_row(page.header)
-	page._add_pile_button(tools, "deck", page._show_deck, false)
-	page._add_pile_button(tools, "log", page._show_log, false)
+	page._add_pile_button(tools, "deck", page._show_deck, true)
+	page._add_pile_button(tools, "log", page._show_log, true)
 	page.add_button(tools, "battle:rules", "规则", {}, page._show_rules)
 	page.add_button(tools, "battle:animation", "动画" + ("开" if page.animation_enabled else "关"), {}, page._toggle_animation)
 	page.add_button(tools, "battle:speed", "×%s" % page.speed_scale, {}, page._cycle_speed)
@@ -90,27 +104,61 @@ func build(page: BattleScreen) -> void:
 		page.add_end_turn(actions)
 		page.add_button(actions, "battle:cancel", "取消预选", {}, page._cancel_selection)
 		for entry in [["draw", "抽牌堆", page._show_draw], ["discard", "弃牌堆", page._show_discard], ["exhaust", "消耗堆", page._show_exhaust]]:
-			page._add_pile_button(actions, entry[0], entry[2], false)
+			page._add_pile_button(actions, entry[0], entry[2], true)
 	page._feedback_label = page.add_text(page.footer, page._feedback_text, 14)
 	page._feedback_label.visible = not page._feedback_text.is_empty()
+	for region in [page.header,page.footer]:
+		var backing := UiStyle.surface(Color(UiStyle.NIGHT,.96),Color(UiStyle.BRASS,.35),0)
+		backing.shadow_size = 0
+		region.draw.connect(func(): region.draw_style_box(backing,Rect2(Vector2(-14,-4),region.size+Vector2(28,8))))
+	for label in page.find_children("*","Label",true,false):
+		var ancestor: Node = label.get_parent()
+		var paper := false
+		while ancestor != null and ancestor != page:
+			if ancestor is PanelContainer:
+				paper = true
+				break
+			ancestor = ancestor.get_parent()
+		if not paper:
+			label.add_theme_color_override("font_color",UiStyle.CREAM)
+			label.add_theme_color_override("font_shadow_color",Color(0,0,0,.5))
+			label.add_theme_constant_override("shadow_offset_y",1)
+	for button in page._buttons.values():
+		if button is UiOfferCard or button is BattlePileButton or button is BattleActionButton:
+			continue
+		var uid := str(button.get_meta("uid",""))
+		UiStyle.button_skin(button,"primary" if uid == "battle:end_turn" else "secondary",true)
+		if page.header.is_ancestor_of(button) and uid != "battle:resources":
+			button.custom_minimum_size.x = 54
+			button.add_theme_font_size_override("font_size",roundi(13*UiStyle.text_scale))
 	page._apply_preview_gating()
 	page._apply_lock_state()
 	page._layout_regions.call_deferred()
 
 
 func _targets(page: BattleScreen, parent: Node) -> void:
-	var grid := VBoxContainer.new()
-	parent.add_child(grid)
+	var player_actor := BattleActorView.new()
+	player_actor.configure(str(page.view.get("character_id", "P01")), "player")
+	player_actor.custom_minimum_size = Vector2(92, 116)
+	parent.add_child(player_actor)
+	page._actors[str(page.view.get("player", {}).get("entity_id", ""))] = player_actor
 	var descriptions := BattleLayout.new()
 	descriptions.page = page
 	for task in page.view.get("tasks", []):
 		var id := str(task.task_id)
-		var column := page.add_panel(grid)
-		page._target_frames["task:" + id] = column.get_parent()
-		column.get_parent().size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		var row := page.add_row(parent)
+		var actor := BattleActorView.new()
+		actor.configure(str(task.definition_id), "task", int(task.get("phase_index", 1)))
+		actor.custom_minimum_size = Vector2(96, 140)
+		row.add_child(actor)
+		page._actors[id] = actor
+		page._target_frames["task:"+id] = actor
+		var column := VBoxContainer.new()
+		column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		row.add_child(column)
 		page.add_text(column, UiStyle.label(str(task.definition_id)), 18)
 		if int(task.get("phase_count", 1)) > 1:
-			page.add_text(column, "第%s/%s阶段 · %s" % [task.get("phase_index", 1), task.get("phase_count", 1), UiStyle.label(str(task.get("phase_key", "")))], 14)
+			page.add_text(column, "第 %s / %s 阶段 · %s" % [task.get("phase_index", 1), task.get("phase_count", 1), "最终阶段" if int(task.get("phase_index", 1)) == int(task.phase_count) else "完成后进入下一阶段"], 14)
 		var meter := ProgressBar.new()
 		meter.max_value = maxi(1, int(task.work_max))
 		meter.value = task.work_remaining
@@ -119,16 +167,25 @@ func _targets(page: BattleScreen, parent: Node) -> void:
 		column.add_child(meter)
 		var work_label := page.add_text(column, "剩余 %s/%s · 屏障 %s" % [task.work_remaining, task.work_max, task.shield], 14)
 		page._task_meters[id] = {"fill": meter, "label": work_label, "maximum": maxi(1, int(task.work_max))}
-		page.add_text(column, "%s\n%s" % [page._intent_text(task.get("intent_snapshot", {})), descriptions._task_status_text(id)], 14)
-		var actions := page.add_row(column)
-		page.add_button(actions, "task:" + id, "选择目标", {}, page._bind_task(id))
-		page.add_button(actions, "detail:task:" + id, "详情", {}, func(): page._open_detail_for_uid("task:" + id))
+		page.add_text(column, page._intent_text(task.get("intent_snapshot", {})), 14)
+		var status := descriptions._task_status_text(id)
+		if not status.is_empty():
+			page.add_text(column, status, 14)
+		page.add_button(column, "task:" + id, "选择目标", {}, page._bind_task(id))
+		page.add_button(column, "detail:task:" + id, "详情", {}, func(): page._open_detail_for_uid("task:" + id))
 	var statuses := page._status_text(page.view.get("statuses", []).filter(func(status): return str(status.get("target_id", "")) == str(page.view.get("player", {}).get("entity_id", ""))))
 	if not statuses.is_empty():
 		page.add_button(parent, "statuses:player", statuses, {}, func(): page._open_detail_for_uid("statuses:player"))
 	for unit in page.view.get("units", []):
 		var id := str(unit.unit_id)
-		page.add_button(parent, "unit:" + id, "%s · 精力%s · 协作%s · 放松%s" % [UiStyle.label(str(unit.definition_id)), unit.vitality, unit.cooperation, unit.relax], {}, page._bind_unit(id))
+		var row := page.add_row(parent)
+		var actor := BattleActorView.new()
+		actor.configure(str(unit.definition_id), "unit")
+		actor.custom_minimum_size = Vector2(82, 110)
+		row.add_child(actor)
+		page._actors[id] = actor
+		page._target_frames["unit:"+id] = actor
+		page.add_button(row, "unit:" + id, "%s · 精力%s · 协作%s · 放松%s" % [UiStyle.label(str(unit.definition_id)), unit.vitality, unit.cooperation, unit.relax], {}, page._bind_unit(id))
 
 
 func _hand(page: BattleScreen, parent: Node) -> void:

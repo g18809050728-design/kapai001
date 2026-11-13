@@ -1008,7 +1008,8 @@ func _end_turn(
 						pressure,
 						bool(intent.get("pressure_all", false)),
 						events,
-						segment_index
+						segment_index,
+						task_id
 					)
 					if state.phase == "finished":
 						return GameResult.success(null)
@@ -1058,7 +1059,9 @@ func _end_turn(
 	var previous_round := state.round_index
 	state.round_index += 1
 	for unit: Dictionary in state.units:
+		var relax_before := int(unit.get("relax", 0))
 		unit.relax = 0
+		_resource_event(state, events, "relax", relax_before, 0, "round_reset", str(unit.get("unit_id", "")), str(unit.get("unit_id", "")))
 	for task: Dictionary in state.tasks:
 		if int(task.get("eligible_round", 1)) >= state.round_index:
 			continue
@@ -1472,7 +1475,9 @@ func _run_player_prepare(
 		_reset_round_counters(state)
 		if not state.v3.is_empty():
 			_reset_v3_turn(state)
+	var relax_before := int(state.player.get("relax", 0))
 	state.player.relax = 0
+	_resource_event(state, events, "relax", relax_before, 0, "player_prepare", str(state.player.get("entity_id", "")))
 	var max_reduction := _task_max_vitality_reduction(state)
 	if max_reduction > 0:
 		var max_before := int(state.player.get("max_vitality", 0))
@@ -1506,7 +1511,9 @@ func _run_player_prepare(
 	if not relic_result.ok:
 		return relic_result
 	for unit: Dictionary in state.units:
+		var unit_relax_before := int(unit.get("relax", 0))
 		unit.relax = 0
+		_resource_event(state, events, "relax", unit_relax_before, 0, "player_prepare", str(unit.unit_id), str(unit.unit_id))
 	if (
 		state.scene is Dictionary
 		and int(state.scene.get("established_round", previous_round)) < state.round_index
@@ -1701,6 +1708,8 @@ func _set_ally_target(
 func _apply_unit_support(
 	state: BattleState, unit: Dictionary, events: Array[RuleEvent]
 ) -> GameResult:
+	var player_relax_before := int(state.player.get("relax", 0))
+	var unit_relax_before := int(unit.get("relax", 0))
 	var support: Dictionary = unit.get("support", {"kind": "none"})
 	var kind := str(support.get("kind", "none"))
 	var amount := int(support.get("amount", 0))
@@ -1753,6 +1762,8 @@ func _apply_unit_support(
 				"battle.unit.support_not_ready",
 				{"kind": kind}
 			)
+	_resource_event(state, events, "relax", player_relax_before, int(state.player.get("relax", 0)), "partner_support", str(unit.unit_id))
+	_resource_event(state, events, "relax", unit_relax_before, int(unit.get("relax", 0)), "partner_support", str(unit.unit_id), str(unit.unit_id))
 	return GameResult.success(null)
 
 
@@ -1793,10 +1804,10 @@ func _phase_definition(task_definition: Dictionary, phase_key: String) -> Dictio
 
 
 func _apply_pressure(
-	state: BattleState, amount: int, all_targets: bool, events: Array[RuleEvent], segment_index: int
+	state: BattleState, amount: int, all_targets: bool, events: Array[RuleEvent], segment_index: int, source: String = ""
 ) -> void:
 	if all_targets:
-		_apply_pressure_to_player(state, amount, events, segment_index)
+		_apply_pressure_to_player(state, amount, events, segment_index, source)
 		for unit: Dictionary in state.units.duplicate(true):
 			var index := _unit_index(state, str(unit.unit_id))
 			if index >= 0:
@@ -1824,7 +1835,7 @@ func _apply_pressure(
 		_add_event(
 			events,
 			"pressure_applied",
-			"",
+			source,
 			[target],
 			{
 				"amount": amount,
@@ -1844,21 +1855,22 @@ func _apply_pressure(
 				{"definition_id": "", "reason": "exhausted"}
 			)
 	else:
-		_apply_pressure_to_player(state, amount, events, segment_index)
+		_apply_pressure_to_player(state, amount, events, segment_index, source)
 
 
 func _apply_pressure_to_player(
-	state: BattleState, amount: int, events: Array[RuleEvent], segment_index: int
+	state: BattleState, amount: int, events: Array[RuleEvent], segment_index: int, source: String = ""
 ) -> void:
 	var relax_before := int(state.player.get("relax", 0))
 	var absorbed := mini(relax_before, amount)
 	state.player.relax = relax_before - absorbed
+	_resource_event(state, events, "relax", relax_before, state.player.relax, "pressure_absorbed", source)
 	var vitality_before := int(state.player.get("vitality", 0))
 	state.player.vitality = maxi(0, vitality_before - (amount - absorbed))
 	_add_event(
 		events,
 		"pressure_applied",
-		"",
+		source,
 		[str(state.player.get("entity_id", ""))],
 		{
 			"amount": amount,
@@ -1998,13 +2010,15 @@ func _execute_v3_card_effect(
 				relax_amount += (
 					relax_per_spent * int(state.resolution.get("v3_last_synergy_spent", 0))
 				)
-			relax_amount += _v3_card_amplify(state)
-			state.player.relax = int(state.player.get("relax", 0)) + relax_amount
+			relax_amount += _v3_card_amplify(state, events)
+			var relax_before := int(state.player.get("relax", 0))
+			state.player.relax = relax_before + relax_amount
+			_resource_event(state, events, "relax", relax_before, state.player.relax, "card_effect")
 			return GameResult.success(null)
 		"heal":
 			var maximum := int(state.player.get("max_vitality", 0))
 			var vitality_before := int(state.player.get("vitality", 0))
-			var heal_amount := maxi(0, int(effect.get("amount", 0))) + _v3_card_amplify(state)
+			var heal_amount := maxi(0, int(effect.get("amount", 0))) + _v3_card_amplify(state, events)
 			state.player.vitality = mini(maximum, vitality_before + heal_amount)
 			if state.player.vitality != vitality_before:
 				_add_event(
@@ -2024,7 +2038,7 @@ func _execute_v3_card_effect(
 			var draw_amount: Variant = effect.get("amount", 0)
 			if typeof(draw_amount) == TYPE_DICTIONARY:
 				draw_amount = int(state.resolution.get("v3_discarded_count", 0))
-			var draw_total := maxi(0, int(draw_amount)) + _v3_card_amplify(state)
+			var draw_total := maxi(0, int(draw_amount)) + _v3_card_amplify(state, events)
 			_draw_cards(state, draw_total, rng, events)
 			return GameResult.success(null)
 		"discard":
@@ -2051,8 +2065,9 @@ func _execute_v3_card_effect(
 				return ruleset
 			var focus_cap := int(ruleset.data.battle.focus_cap)
 			var focus_before := int(state.player.get("focus", 0))
-			var focus_amount := maxi(0, int(effect.get("amount", 0))) + _v3_card_amplify(state)
+			var focus_amount := maxi(0, int(effect.get("amount", 0))) + _v3_card_amplify(state, events)
 			state.player.focus = mini(focus_cap, focus_before + focus_amount)
+			_resource_event(state, events, "focus", focus_before, state.player.focus, "card_effect")
 			return GameResult.success(null)
 		"apply_status":
 			var stacks_value: Variant = effect.get("stacks", 1)
@@ -2168,26 +2183,30 @@ func _execute_v3_card_effect(
 		"paper_progress":
 			var progress_amount := maxi(0, int(effect.get("amount", 0)))
 			if not bool((state.resolution as Dictionary).get("v3_auto", false)):
-				progress_amount += _v3_consume_amplify(state)
+				progress_amount += _v3_consume_amplify(state, events)
 			var paper := _v3_paper(state)
-			paper.progress = mini(10, int(paper.progress) + progress_amount)
+			var before := int(paper.progress)
+			paper.progress = mini(10, before + progress_amount)
+			_resource_event(state, events, "progress", before, paper.progress, "paper_effect")
 			return GameResult.success(null)
 		"paper_citation":
 			var citation_amount := maxi(0, int(effect.get("amount", 0)))
 			if not bool((state.resolution as Dictionary).get("v3_auto", false)):
-				citation_amount += _v3_consume_amplify(state)
+				citation_amount += _v3_consume_amplify(state, events)
 			_v3_gain_citation(state, citation_amount, rng, events)
 			return GameResult.success(null)
 		"paper_modifier":
-			_v3_paper(state).modifier = (
-				int(_v3_paper(state).modifier) + int(effect.get("amount", 0))
-			)
+			var before := int(_v3_paper(state).modifier)
+			_v3_paper(state).modifier = before + int(effect.get("amount", 0))
+			_resource_event(state, events, "modifier", before, _v3_paper(state).modifier, "paper_effect")
 			return GameResult.success(null)
 		"paper_amplify":
 			var paper_state := _v3_paper(state)
+			var before := int(paper_state.amplify)
 			paper_state.amplify = mini(
 				5, int(paper_state.amplify) + maxi(0, int(effect.get("amount", 0)))
 			)
+			_resource_event(state, events, "amplify", before, paper_state.amplify, "paper_effect")
 			return GameResult.success(null)
 		"paper_publish":
 			return _v3_paper_publish(state, state.resolution, rng, events)
@@ -2199,13 +2218,17 @@ func _execute_v3_card_effect(
 					"error.play.citation_insufficient",
 					{"required": int(effect.get("amount", 1))}
 				)
-			paper_spend.citations = int(paper_spend.citations) - int(effect.get("amount", 1))
+			var before := int(paper_spend.citations)
+			paper_spend.citations = before - int(effect.get("amount", 1))
+			_resource_event(state, events, "citations", before, paper_spend.citations, "citation_payment")
 			return GameResult.success(null)
 		"change_topic":
 			var paper_change := _v3_paper(state)
 			if not paper_change.used_names.is_empty():
 				paper_change.used_names.pop_front()
-				paper_change.modifier = int(paper_change.modifier) + int(effect.get("modifier", -1))
+				var before := int(paper_change.modifier)
+				paper_change.modifier = before + int(effect.get("modifier", -1))
+				_resource_event(state, events, "modifier", before, paper_change.modifier, "change_topic")
 			return GameResult.success(null)
 		"chapter_deploy":
 			var deployed := _v3_chapter_deploy(
@@ -2227,9 +2250,11 @@ func _execute_v3_card_effect(
 		"chapter_return":
 			var returned := _v3_chapter_return(state, int(effect.get("amount", 1)), events)
 			if effect.has("modifier_per_chapter"):
+				var before := int(_v3_paper(state).modifier)
 				_v3_paper(state).modifier = (
 					int(_v3_paper(state).modifier) + returned * int(effect.modifier_per_chapter)
 				)
+				_resource_event(state, events, "modifier", before, _v3_paper(state).modifier, "chapter_return")
 			return GameResult.success(null)
 		"swap_chapter_slots":
 			_v3_swap_chapter_slots(state, events)
@@ -2303,11 +2328,11 @@ func _execute_v3_card_effect(
 		"summon_partner":
 			return _v3_summon_partner(state, effect, rng, events)
 		"gain_synergy":
-			_v3_gain_synergy(state, int(effect.get("amount", 0)))
+			_v3_gain_synergy(state, int(effect.get("amount", 0)), events)
 			return GameResult.success(null)
 		"spend_synergy":
 			var optional := bool(effect.get("optional", false))
-			var spent := _v3_spend_synergy(state, int(effect.get("amount", 0)), optional)
+			var spent := _v3_spend_synergy(state, int(effect.get("amount", 0)), optional, events)
 			if spent < 0:
 				return _failure(
 					GameConstants.ERROR_INSUFFICIENT_RESOURCE,
@@ -2328,7 +2353,7 @@ func _execute_v3_card_effect(
 		"spend_synergy_up_to":
 			var available := _v3_synergy(state)
 			var spend_up_to := mini(maxi(0, int(effect.get("amount", 0))), available)
-			_v3_spend_synergy(state, spend_up_to, false)
+			_v3_spend_synergy(state, spend_up_to, false, events)
 			if typeof(state.resolution) == TYPE_DICTIONARY:
 				state.resolution["v3_last_synergy_spent"] = spend_up_to
 			if effect.has("then"):
@@ -2340,7 +2365,7 @@ func _execute_v3_card_effect(
 			return GameResult.success(null)
 		"spend_all_synergy":
 			var all_spent := _v3_synergy(state)
-			_v3_spend_synergy(state, all_spent, false)
+			_v3_spend_synergy(state, all_spent, false, events)
 			if typeof(state.resolution) == TYPE_DICTIONARY:
 				state.resolution["v3_last_synergy_spent"] = all_spent
 			if effect.has("then"):
@@ -2680,6 +2705,7 @@ func _execute_card_effect(
 		"relax":
 			var before: int = int(state.player.get("relax", 0))
 			state.player.relax = before + maxi(0, amount)
+			_resource_event(state, events, "relax", before, state.player.relax, "effect")
 			return GameResult.success(null)
 		"gain_focus":
 			var ruleset := _loaded_ruleset()
@@ -4339,7 +4365,7 @@ func _v3_run_ability_trigger(
 				continue
 			if effect.has("condition") and not _v3_condition(state, effect.condition, context):
 				continue
-			var executed := _v3_execute_ability_effect(state, effect, context, rng, events)
+			var executed := _v3_execute_ability_effect(state, effect, context, rng, events, str(ability.get("ability_id", "")))
 			if not executed.ok:
 				return executed
 			applied = true
@@ -4349,7 +4375,7 @@ func _v3_run_ability_trigger(
 					continue
 				if effect.has("condition") and not _v3_condition(state, effect.condition, context):
 					continue
-				var extra := _v3_execute_ability_effect(state, effect, context, rng, events)
+				var extra := _v3_execute_ability_effect(state, effect, context, rng, events, str(ability.get("ability_id", "")))
 				if not extra.ok:
 					return extra
 			ability.uses_this_round = int(ability.get("uses_this_round", 0)) + 1
@@ -4369,12 +4395,13 @@ func _v3_execute_ability_effect(
 	context: Dictionary,
 	rng: RandomSource,
 	events: Array[RuleEvent],
+	source: String = "",
 ) -> GameResult:
 	match str(effect.get("op", "")):
 		"relax":
-			state.player.relax = (
-				int(state.player.get("relax", 0)) + maxi(0, int(effect.get("amount", 0)))
-			)
+			var before := int(state.player.get("relax", 0))
+			state.player.relax = before + maxi(0, int(effect.get("amount", 0)))
+			_resource_event(state, events, "relax", before, state.player.relax, "ability", source)
 			return GameResult.success(null)
 		"draw":
 			_draw_cards(state, maxi(0, int(effect.get("amount", 0))), rng, events)
@@ -4383,16 +4410,15 @@ func _v3_execute_ability_effect(
 			var ruleset := _loaded_ruleset()
 			if not ruleset.ok:
 				return ruleset
-			state.player.focus = mini(
-				int(ruleset.data.battle.focus_cap),
-				int(state.player.get("focus", 0)) + maxi(0, int(effect.get("amount", 0)))
-			)
+			var before := int(state.player.get("focus", 0))
+			state.player.focus = mini(int(ruleset.data.battle.focus_cap), before + maxi(0, int(effect.get("amount", 0))))
+			_resource_event(state, events, "focus", before, state.player.focus, "ability", source)
 			return GameResult.success(null)
 		"add_work_bonus":
 			_v3_add_work_bonus(state, int(effect.get("amount", 0)))
 			return GameResult.success(null)
 		"gain_synergy":
-			_v3_gain_synergy(state, int(effect.get("amount", 0)))
+			_v3_gain_synergy(state, int(effect.get("amount", 0)), events, source)
 			return GameResult.success(null)
 		"apply_status":
 			var targets := _v3_ability_targets(state, effect, context)
@@ -4463,10 +4489,10 @@ func _v3_execute_effects(
 	return GameResult.success(null)
 
 
-func _v3_card_amplify(state: BattleState) -> int:
+func _v3_card_amplify(state: BattleState, events: Array[RuleEvent]) -> int:
 	if typeof(state.resolution) == TYPE_DICTIONARY and bool(state.resolution.get("v3_auto", false)):
 		return 0
-	return _v3_consume_amplify(state)
+	return _v3_consume_amplify(state, events)
 
 
 func _v3_paper(state: BattleState) -> Dictionary:
@@ -4502,18 +4528,22 @@ func _v3_gain_citation(
 		if int(state.player.get("focus", 0)) < cost:
 			_draw_cards(state, 1, rng, events)
 			break
-		state.player.focus = int(state.player.get("focus", 0)) - cost
+		var focus_before := int(state.player.get("focus", 0))
+		state.player.focus = focus_before - cost
+		_resource_event(state, events, "focus", focus_before, state.player.focus, "citation_payment")
 		if cost > 0:
 			_v3_turn(state).paid_citation = true
 		paper.citations = layer
+		_resource_event(state, events, "citations", layer - 1, layer, "citation_gained")
 		gained += 1
 	return gained
 
 
-func _v3_consume_amplify(state: BattleState) -> int:
+func _v3_consume_amplify(state: BattleState, events: Array[RuleEvent]) -> int:
 	var paper := _v3_paper(state)
 	var amount := int(paper.get("amplify", 0))
 	paper.amplify = 0
+	_resource_event(state, events, "amplify", amount, 0, "amplify_consumed")
 	return maxi(0, amount)
 
 
@@ -4536,6 +4566,7 @@ func _v3_paper_record(
 		used.append(name_key)
 		if int(paper.progress) < 10:
 			paper.progress = int(paper.progress) + 1
+			_resource_event(state, events, "progress", int(paper.progress) - 1, paper.progress, "paper_record")
 			var trigger := _v3_run_ability_trigger(
 				state, "paper_progress_gained", {"paper_progress_gained": true}, rng, events
 			)
@@ -4561,12 +4592,14 @@ func _v3_paper_record(
 
 func _v3_open_paper(state: BattleState, events: Array[RuleEvent]) -> void:
 	var paper := _v3_paper(state)
+	var previous := paper.duplicate(true)
 	paper.open = true
 	paper.progress = 0
 	paper.citations = 0
 	paper.modifier = 0
 	paper.amplify = 0
 	paper.used_names = []
+	_paper_reset_events(state, events, previous, paper, "paper_open")
 	var publication := ""
 	for card_id in state.card_by_id:
 		if str(state.card_by_id[card_id].get("definition_id", "")) == "R3-T201":
@@ -4629,12 +4662,14 @@ func _v3_paper_publish(
 			return completed
 		if state.phase == "finished":
 			break
+	var previous := paper.duplicate(true)
 	paper.open = false
 	paper.progress = 0
 	paper.citations = 0
 	paper.modifier = 0
 	paper.amplify = 0
 	paper.used_names = []
+	_paper_reset_events(state, events, previous, paper, "paper_publish")
 	for entry: Variant in paper.chapters:
 		if typeof(entry) == TYPE_DICTIONARY:
 			var chapter_id := str(entry.get("card_id", ""))
@@ -4864,11 +4899,13 @@ func _v3_synergy(state: BattleState) -> int:
 	return maxi(0, int(state.v3.get("synergy", 0)))
 
 
-func _v3_gain_synergy(state: BattleState, amount: int) -> void:
-	state.v3["synergy"] = mini(6, _v3_synergy(state) + maxi(0, amount))
+func _v3_gain_synergy(state: BattleState, amount: int, events: Array[RuleEvent], source: String = "") -> void:
+	var before := _v3_synergy(state)
+	state.v3["synergy"] = mini(6, before + maxi(0, amount))
+	_resource_event(state, events, "synergy", before, _v3_synergy(state), "gain_synergy", source)
 
 
-func _v3_spend_synergy(state: BattleState, amount: int, optional: bool = false) -> int:
+func _v3_spend_synergy(state: BattleState, amount: int, optional: bool, events: Array[RuleEvent]) -> int:
 	var available := _v3_synergy(state)
 	var spend := maxi(0, amount)
 	if spend > available:
@@ -4876,6 +4913,7 @@ func _v3_spend_synergy(state: BattleState, amount: int, optional: bool = false) 
 			return 0
 		return -1
 	state.v3["synergy"] = available - spend
+	_resource_event(state, events, "synergy", available, available - spend, "synergy_payment")
 	return spend
 
 
@@ -5441,8 +5479,10 @@ func _run_character_passive(
 		if bool(p04_turn.get("p04_passive_used", false)):
 			return GameResult.success(null)
 		p04_turn["p04_passive_used"] = true
-		_v3_gain_synergy(state, 1)
-		state.player.relax = int(state.player.get("relax", 0)) + 2
+		_v3_gain_synergy(state, 1, events, state.character_id)
+		var relax_before := int(state.player.get("relax", 0))
+		state.player.relax = relax_before + 2
+		_resource_event(state, events, "relax", relax_before, state.player.relax, "character_passive", state.character_id)
 		_add_event(
 			events,
 			"passive_triggered",
@@ -5853,6 +5893,22 @@ func _set_phase(state: BattleState, events: Array[RuleEvent], next_phase: String
 	state.phase = next_phase
 	_add_event(events, "phase_changed", "", [], {"before": previous, "after": next_phase})
 	return GameResult.success(null)
+
+
+func _resource_event(state: BattleState, events: Array[RuleEvent], resource: String, before: int, after: int, reason: String, source: String = "", target: String = "") -> void:
+	if before == after:
+		return
+	if source.is_empty() and state.resolution is Dictionary:
+		source = str(state.resolution.get("card_instance_id", ""))
+	if target.is_empty():
+		target = str(state.player.get("entity_id", ""))
+	var kind := resource + "_changed" if resource in ["relax", "focus", "synergy"] else "paper_changed"
+	_add_event(events, kind, source, [target], {"resource": resource, "before": before, "after": after, "delta": after - before, "reason": reason})
+
+
+func _paper_reset_events(state: BattleState, events: Array[RuleEvent], before: Dictionary, after: Dictionary, reason: String) -> void:
+	for resource in ["open", "progress", "citations", "modifier", "amplify"]:
+		_resource_event(state, events, resource, int(before.get(resource, 0)), int(after.get(resource, 0)), reason)
 
 
 func _add_event(

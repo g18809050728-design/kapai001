@@ -46,10 +46,10 @@ func _draw() -> void:
 	var center := stamp_center()
 	var current := map_status == "当前"
 	var available := map_status == "可入"
-	var ink := UiStyle.PAPER if current else UiStyle.INK
-	var border := UiStyle.INK if current else (UiStyle.GREEN.darkened(.2) if available or forecast else UiStyle.MUTED)
-	var fill := UiStyle.INK if current else UiStyle.PAPER.lerp(UiStyle.GREEN, .16 if available or forecast or is_hovered() else .04)
-	draw_circle(center + Vector2(0, 2), 20, Color(UiStyle.INK, .08), true, -1, true)
+	var ink := UiStyle.CREAM if current or available else UiStyle.INK
+	var border := UiStyle.BRASS.darkened(.1) if available else (UiStyle.INK if current else UiStyle.MUTED)
+	var fill := UiStyle.INK if current else (UiStyle.FOREST if available else UiStyle.CREAM.lerp(UiStyle.GREEN,.14 if forecast or is_hovered() else .02))
+	draw_circle(center + Vector2(0, 3), 20, Color(UiStyle.INK, .16), true, -1, true)
 	draw_circle(center, 19, fill, true, -1, true)
 	if map_status == "不可达":
 		for segment in 10:
@@ -92,8 +92,7 @@ func _draw_type(center: Vector2, color: Color) -> void:
 	# Each type has its own silhouette, independent of font symbol coverage.
 	match subtype:
 		"N", "EL":
-			_stroke(center, [Vector2(-8, 8), Vector2(7, -8), Vector2(9, -9), Vector2(8, -6), Vector2(-7, 9)], color)
-			_stroke(center, [Vector2(-8, -8), Vector2(8, 8)], color)
+			EffectGlyph.paint(self, "work", center, 11, color)
 			if subtype == "EL":
 				_stroke(center, [Vector2(-10, -10), Vector2(-7, -14), Vector2(-3, -10), Vector2(1, -14), Vector2(4, -10)], color)
 		"B":
@@ -103,9 +102,8 @@ func _draw_type(center: Vector2, color: Color) -> void:
 			draw_rect(Rect2(center + Vector2(-8, -3), Vector2(16, 13)), color, false, 2)
 			draw_arc(center + Vector2(0, -3), 5, PI, TAU, 16, color, 2, true)
 		"R":
-			_stroke(center, [Vector2(-9, -5), Vector2(-8, 6), Vector2(-5, 9), Vector2(4, 9), Vector2(7, 6), Vector2(8, -5), Vector2(-9, -5)], color)
-			draw_arc(center + Vector2(8, 0), 4, -PI / 2, PI / 2, 14, color, 2, true)
-			draw_line(center + Vector2(-3, -12), center + Vector2(-3, -8), color, 1.5, true)
+			_stroke(center, [Vector2(-11,-5),Vector2(9,-7),Vector2(12,6),Vector2(-9,8),Vector2(-11,-5)],color)
+			draw_arc(center+Vector2(5,-10),4,.3,4.6,16,color,1.5,true)
 		"L":
 			_stroke(center, [Vector2(0, -6), Vector2(-9, -9), Vector2(-9, 7), Vector2(0, 10), Vector2(9, 7), Vector2(9, -9), Vector2(0, -6), Vector2(0, 10)], color)
 		"LAB":

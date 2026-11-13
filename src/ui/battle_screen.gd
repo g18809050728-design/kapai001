@@ -32,6 +32,8 @@ var _submitted_revision: int = -2
 var _stage: Control
 var _hand_cards: Array[BattleCard] = []
 var _target_frames: Dictionary = {}
+var _actors: Dictionary = {}
+var _stage_effects: BattleStageEffects
 var _aim: BattleAim
 var _hover_panel: Control
 var _hover_title: Label
@@ -77,6 +79,7 @@ func _init() -> void:
 	_animator.event_presented.connect(_on_event_presented)
 	_animator.queue_finished.connect(_on_event_queue_finished)
 	_presentation = BattlePresentation.new(self)
+	_stage_effects = BattleStageEffects.new(self)
 
 
 func _exit_tree() -> void:
@@ -84,6 +87,7 @@ func _exit_tree() -> void:
 
 
 func _finish_event_presentation() -> void:
+	_result_events_done = false
 	_presentation.finish()
 	if _result_pending:
 		_result_pending = false
@@ -91,14 +95,16 @@ func _finish_event_presentation() -> void:
 
 
 func _on_event_queue_finished() -> void:
-	if _result_pending:
-		_result_events_done = true
-	else:
+	_result_events_done = true
+	if not _presentation.is_animating():
 		_finish_event_presentation()
 
 
 func _process(delta: float) -> void:
 	_animator.advance(delta)
+	if _result_events_done and not _presentation.is_animating():
+		_result_events_done = false
+		_finish_event_presentation()
 	if _result_pending:
 		if _result_events_done and not _presentation.is_animating():
 			_finish_event_presentation()
@@ -139,6 +145,7 @@ func render(data: Dictionary) -> void:
 
 
 func consume_events(events: Array, run_id: String, revision: int) -> void:
+	_result_events_done = false
 	_animator.animation_enabled = animation_enabled
 	_animator.speed_scale = effect_speed()
 	var snapshots: Dictionary = {}
@@ -277,6 +284,7 @@ func _reset_stage() -> void:
 	_dragging = false
 	_hand_cards.clear()
 	_target_frames.clear()
+	_actors.clear()
 	_task_meters.clear()
 	_buttons.clear()
 	_drafts.clear()
@@ -298,8 +306,9 @@ func _fit_stage() -> void:
 	if size != _battle_layout_size and not _battle_resize_pending:
 		_battle_resize_pending = true
 		_rebuild_for_size.call_deferred()
-	_stage.scale = Vector2.ONE
-	_stage.position = Vector2.ZERO if _compact_layout else (size - Vector2(1280, 800)) * 0.5
+	var factor := 1.0 if _compact_layout else minf(size.x/1280.0,size.y/800.0)
+	_stage.scale = Vector2.ONE*factor
+	_stage.position = Vector2.ZERO if _compact_layout else (size-Vector2(1280,800)*factor)*.5
 
 
 func _rebuild_for_size() -> void:
@@ -532,6 +541,10 @@ func _update_hover_window() -> void:
 	var factor := UiStyle.text_scale if _compact_layout else 1.0
 	var width := minf((380.0 if card_detail else 360.0) * minf(factor, 1.2), _stage.size.x - 24)
 	var height := minf(440.0 * factor, _stage.size.y - 100) if card_detail else 168.0 * factor
+	if _compact_layout and not card_detail and is_instance_valid(header):
+		# Large text still needs a summary above the protected hand/action zones.
+		# Full content remains in I details, with the existing scrolling behavior.
+		height = minf(height,maxf(150,header.size.y-24))
 	_hover_panel.size = Vector2(width, height)
 	_hover_panel.z_index = 350 if card_detail else 120
 	_hover_panel.mouse_filter = Control.MOUSE_FILTER_STOP if pinned else Control.MOUSE_FILTER_IGNORE
@@ -1174,6 +1187,9 @@ func _sync_card_visuals() -> void:
 			not _buttons[uid].disabled
 			and (not _selected_card_id.is_empty() or not _selected_unit_id.is_empty())
 		)
+		if frame is BattleActorView:
+			frame.set_targeted(active)
+			continue
 		var style := UiStyle.box(Color("eee7d7"))
 		style.border_color = Color("f3d38a") if active else Color("b5ab8b")
 		style.set_border_width_all(4 if active else 2)
@@ -1534,6 +1550,9 @@ func _active_visual_effect_count() -> int:
 
 
 func _clear_event_visuals() -> void:
+	for actor in _actors.values():
+		if is_instance_valid(actor):
+			actor.reset_pose()
 	if not is_instance_valid(_stage):
 		return
 	for child in _stage.get_children():
@@ -1547,6 +1566,7 @@ func _present_event_visual(event: Dictionary) -> void:
 		return
 	var kind := str(event.get("type", ""))
 	var data := _dict(event.get("data"))
+	_stage_effects.present(event)
 	match kind:
 		"card_played":
 			_presentation.show_played(event)
@@ -1640,6 +1660,7 @@ func _hand_card_control(card_id: String) -> Control:
 
 
 func _remember_effect_origins() -> void:
+	_stage_effects.remember()
 	_previous_card_centers.clear()
 	_previous_target_centers.clear()
 	if not is_instance_valid(_stage):

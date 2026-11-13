@@ -9,6 +9,7 @@ func _run() -> void:
 	var failures: Array[String] = []
 	for path in [
 		"test_run_content_views",
+		"test_ui_card_categories",
 		"test_ui_shell_pages",
 		"test_ui_save_seed",
 		"test_ui_flow_feedback",
@@ -19,6 +20,7 @@ func _run() -> void:
 		"test_ui_battle_card_inspection",
 		"test_ui_four_year",
 		"test_ui_adaptive_maps",
+		"test_ui_map_activation",
 		"test_ui_experience",
 		"test_ui_followup",
 		"test_ui_damage_popup",

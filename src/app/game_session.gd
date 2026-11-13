@@ -741,6 +741,17 @@ func _battle_view(
 	var counts := {}
 	for zone in battle.zones:
 		counts[zone] = battle.zones[zone].size()
+	var effect_sources := {battle.character_id: str(battle.player.get("entity_id", ""))}
+	for ability in battle.v3.get("abilities", []):
+		if ability is Dictionary:
+			effect_sources[str(ability.get("ability_id", ""))] = str(battle.player.get("entity_id", ""))
+	for id in battle.source_registry:
+		var source: Dictionary = battle.source_registry[id]
+		match str(source.get("kind", "")):
+			"card", "character":
+				effect_sources[id] = str(battle.player.get("entity_id", ""))
+			"task", "unit":
+				effect_sources[id] = str(id)
 	return {
 		"battle_id": battle.battle_id,
 		"node_id": battle.node_id,
@@ -758,6 +769,7 @@ func _battle_view(
 		"scene": battle.scene.duplicate(true) if battle.scene is Dictionary else null,
 		"zone_counts": counts,
 		"zones_public": zones_public,
+		"effect_sources": effect_sources,
 	}
 
 

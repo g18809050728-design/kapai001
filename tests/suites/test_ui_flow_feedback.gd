@@ -152,6 +152,9 @@ func _shop_scroll() -> void:
 
 
 func _collection_and_upgrades() -> void:
+	var viewport := (Engine.get_main_loop() as SceneTree).root
+	var previous_size := viewport.size
+	viewport.size = Vector2i(1280, 800)
 	var shell: GameShell = _helpers.start_fixture_shell(
 		"user://g7-collections-%s" % Time.get_ticks_usec()
 	)
@@ -160,7 +163,7 @@ func _collection_and_upgrades() -> void:
 	var first_id: String = shell.session.get_view().run.reachable_node_ids[0]
 	var page := shell.page as UiFlowPage
 	var button: Button = page._buttons["node:" + first_id]
-	_check(button.get_global_rect().end.y < 600, "next station is visible in first screen")
+	_check(page._scroll.get_global_rect().encloses(button.get_global_rect()), "next station is fully visible in the first map viewport (node %s, scroll %s)" % [button.get_global_rect(), page._scroll.get_global_rect()])
 	var scroll: ScrollContainer = page.get_child(0)
 	scroll.scroll_vertical = 160
 	var offset := scroll.scroll_vertical
@@ -206,6 +209,7 @@ func _collection_and_upgrades() -> void:
 		"winning summary explains current semester boundary"
 	)
 	shell.free()
+	viewport.size = previous_size
 
 
 func _frames() -> void:

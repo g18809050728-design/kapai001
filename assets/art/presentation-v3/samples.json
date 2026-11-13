@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "date": "2026-11-13",
+  "paid_generation_requests": 0,
+  "sample_only": true,
+  "assets": [
+    {
+      "id": "N01",
+      "requirement": "UIR-012/027",
+      "source": "res://assets/art/g6-v1/tasks/N01_v1.png",
+      "source_sha256": "22145130d5c58ba49e649ad498f9ddb0d534a28acdd51cd2939bca3ebd37ed46",
+      "file": "assets/art/presentation-v3/tasks/N01.png",
+      "size": [
+        640,
+        557
+      ],
+      "sha256": "f2dd3b9d190aecc6c8e78fa39e7b9f9f53835d25942478fc8d6ecd275fb6d596",
+      "method": "640px maximum; ink/chroma mask; remove tiny/top-strip atlas noise; convex opaque paper envelope; 2px dilation; 0.65px alpha feather; trim transparent bounds",
+      "limitations": "Prototype envelope retains paper between objects; no reconstructed off-frame art or final animation layers"
+    },
+    {
+      "id": "N13",
+      "requirement": "UIR-012/027",
+      "source": "res://assets/art/four-year/tasks/N13-v1.png",
+      "source_sha256": "3cd0a71a6f31c9ed9bbffaff485f7d44b0d6ffa0115425f67c2c0ee14f3152b7",
+      "file": "assets/art/presentation-v3/tasks/N13.png",
+      "size": [
+        480,
+        317
+      ],
+      "sha256": "ef1e42bbb3d9811b7507c9ed283f97c664c53608f39c25dec86d21c4ed515b90",
+      "method": "640px maximum; ink/chroma mask; remove tiny/top-strip atlas noise; convex opaque paper envelope; 2px dilation; 0.65px alpha feather; trim transparent bounds",
+      "limitations": "Prototype envelope retains paper between objects; no reconstructed off-frame art or final animation layers"
+    },
+    {
+      "id": "FY_B1_TASK",
+      "requirement": "UIR-012/027",
+      "source": "res://assets/art/four-year/tasks/FY_B1_TASK-v1.png",
+      "source_sha256": "8f684acc5d5ba1959780ed84e035b7e3b43265af84914f879b5d3121da47a760",
+      "file": "assets/art/presentation-v3/tasks/FY_B1_TASK.png",
+      "size": [
+        436,
+        321
+      ],
+      "sha256": "0ff324a50f8843311318770e4c96d1ed0f4500e119974bae945938d244ae5220",
+      "method": "640px maximum; ink/chroma mask; remove tiny/top-strip atlas noise; convex opaque paper envelope; 2px dilation; 0.65px alpha feather; trim transparent bounds",
+      "limitations": "Prototype envelope retains paper between objects; no reconstructed off-frame art or final animation layers"
+    }
+  ],
+  "visual_review": "pending; audit and view the contact sheets before runtime use"
+}
