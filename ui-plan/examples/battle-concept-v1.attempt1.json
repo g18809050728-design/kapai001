@@ -1,0 +1,21 @@
+﻿{
+    "project_date":  "2026-11-13",
+    "requested_at":  "2026-11-13T08:10:03.1250342+00:00",
+    "model":  "gpt-image-2.5-sunburst",
+    "api_mode":  "configured local-imagegen / bundled CLI / images.generate",
+    "base_url":  "https://api-slb.jiji.cc/v1",
+    "size_requested":  "1536x1024",
+    "quality":  "low",
+    "n":  1,
+    "prompt_file":  "battle-concept-v1.prompt.txt",
+    "prompt_sha256":  "E2109236E08891D6614F3AAF6663867F78070A1D9B62120ED94F1DAAA68548EB",
+    "output_file":  "battle-concept-v1.png",
+    "purpose":  "concept illustration only",
+    "reference_images_sent":  [
+
+                              ],
+    "stage_exception":  "root baseline 0.19.1",
+    "preflight_note":  "CLI rejected documented max-attempts flag before API request; removed after reading help; preflight log retained",
+    "elapsed_seconds":  38.93,
+    "exit_code":  1
+}

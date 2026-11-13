@@ -1,0 +1,94 @@
+The Neowsletter - June 2026
+June 19, 2026
+Slay the Spire
+Slay the Spire 2
+Hey Slayers, it’s time for the June Neowsletter! In this issue we’re covering a couple of big roadmap items we’ve checked off our list as of yesterday’s main branch patch and answering some of your recent questions. Let’s dive in…
+Dev Update
+The first feature we want to highlight is
+the Bestiary
+.
+The Bestiary is a new section that organizes info related to enemies you’ve encountered throughout your journeys in the Spire. For faithful readers of the Neowsletter pre-launch, you could even see it as an evolution of our Spire Spotting segment (though these discoveries are achieved through regular gameplay rather than your artistic hypotheses, of course.)
+You can find the Bestiary right here in the Compendium, featuring enemies’ moves and animations, for now. Other things like stats, flavor text, and various QOL changes will be added in the future.
+Those of you who have been playing on the beta branch have already seen the Bestiary, but this next change is new for all players…
+Ed here, one of the engineers at Mega Crit, here to talk a bit about StS2’s
+Steam Workshop support
+.
+As we mentioned in the most recent patch notes, we built STS2 with modding in mind, and the game has had an integrated mod loader from day 1. However, Steam Workshop support–which makes it much easier to share, discover, and download mods–has been sitting in our roadmap for a few months now. We know you’ve been waiting a while for it, but it’s been awesome seeing the outpouring of creativity from the community in the meantime all the same!
+We purposefully haven’t been advertising mod support, as we knew it still needed some work. The only way to install mods up until now was to download them from somewhere and place them in your mods directory.
+However, as of the last patch, we’ve deemed mod support mature enough to enable the Workshop! This is now the official way to browse and install mods, right in the Steam client. We can’t wait to see what else you all create going forward!
+If you’re already a modder, upload your mods using the tool
+here
+.
+If you’re interested in getting started with modding, see the
+community documentation
+.
+And if you’re interested in
+playing
+some mods, check out the
+Steam Workshop
+!
+If you have feedback on the modding framework, post in the #sts2-modding channel in the
+Discord
+, or submit it via F2/the settings in-game.
+Q&A with C&A
+Coop asks:
+Hello! I know Casey and/or Anthony are fans of the Worm web serial, and have several references to it across both games (love Doormaker as a reference) and I was thinking about how I’m surprised that there are no references in the bug-themed area (act 2 Hive), then realized that there is one boss Kaiser Crab. Is this an intentional reference or just a coincidence?
+Casey:
+Doormaker isn’t a Worm reference, I was playing too much Deadlock. Kaiser Crab is named this way because I’m tired of things being emperor X and king Y. We have all these wacky words for kings, sultans, etc and it’s always the bland western one. The world feels small when we use the most accessible titles.
+Jar of Gibbons asks:
+Heyo, so I think the Ancients are a fantastic addition and tons of fun. Shout-out to community manager Demi Montes who nobody has realized is credited as the one who voices one of my favorite Ancients aesthetically and mechanically, Nonupeipe! Main question: How do you guys pronounce it? And if you each have your own opinions, how does Demi? I say “no-nu-PEY-uh-pee” /noʊ.nuˈpɛɪ.ə.pi/, like Calliope from Greek mythology, because she emanates divine splendor and mythology… but what about you guys?
+Casey:
+I tend to say it as four syllables: no nu pay peh or sometimes in the original: no no peh peh. As her name is an easter egg reference to the NOPE placeholder icon we use for content. When two of these icons line up next to each other (for instance, the relics in the top bar), it reads NONOPEPE.
+Demi:
+Nonupeipe noises
+Combak asks:
+In multiplayer lobbies with the same character, it can be a bit difficult to remember who drew what, so will there ever be an option for players to choose their own colors for map drawing, regardless of character, or have copies of the same character use darker/lighter shades from each other?
+Casey:
+Not sure for drawing, but we are messing with a bit of color change stuff for multiplayer.
+Josie Jams asks:
+Is the ceremonial beast a valheim reference?
+Casey:
+Nope, the original was based on the Forest Spirit from Princess Mononoke. The initial concept drawing was a bit solemn and grotesque. Marlowe updated the creature to be more regal and spirity! But I can see a resemblance, I’m a big fan of Valheim actually! I believe it was the first boss design for Slay the Spire 2 (designed in 2021).
+Merch Madness
+The first
+Slay the Spire 2
+drop from Artovision is here! Showcase your love for StS2 right on your wall with this gorgeous shadowbox of the game’s key art (which lends itself really well to the 3D effect!) Order yours now
+here
+!
+Map Masterpieces
+And now it’s time to check out what new creations players have been making while waiting for their teammates to hurry up and pick a route already…
+This illustration of the Regent and the Merchant by
+ちゃと
+!
+This illustration of the Defect by
+Zaply
+!
+And another drawing of the Defect with a slightly different vibe by
+Shmangos
+!
+Connections Section
+If the heat out there is getting to you, cool off with some good old fashioned
+Slay the Spire 2 Connections
+!
+Community Corner
+Thank you to
+moon raccoon
+for this month’s lovely cover art! Next month’s theme is:
+Slay the Summer 2
+! Whether it’s Neow enjoying a day at the beach (unlike most whales), the Spire’s climbers taking a dip, or whatever beach episode activities you can think of, we’d love to see your submissions! If you’d like to submit your art for consideration, reminder that it must be submitted to us via
+[email protected]
+or in our
+Discord’s
+fanart channel, have dimensions of 800x450px, feature no text, and leave room for a title! Please make your submission by
+Friday, July 10th!
+Now for some monthly highlights:
+This very cool art of the Test Subject from an 11 y/o fan,
+Elias
+!
+This incredibly accurate Regent cosplay by
+Radio
+!
+This lovely art of all of the Spire’s (current) climbers by
+Timo
+!
+Thus concludes the June Neowsletter; see you all again next month!

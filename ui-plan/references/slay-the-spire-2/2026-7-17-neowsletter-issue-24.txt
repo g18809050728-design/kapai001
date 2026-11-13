@@ -1,0 +1,75 @@
+The Neowsletter - July 2026
+July 17, 2026
+Slay the Spire
+Slay the Spire 2
+The July Neowsletter is here, Slayers! Last month we bid farewell to the Doormaker, but you know what they say: when one door closes… a giant floating hourglass creature appears! In this issue we’re taking a look behind the scenes at the process of bringing the Doormaker’s replacement, Aeonglass, to life!
+Aeonglass Animated
+Mega Crit’s animator Chris here with a quick dive into the animation process for our latest boss:
+Aeonglass
+. Most of you know that this critter replaces the Doormaker. What you probably don’t know is that, as that character’s design evolved away from door-making, we explored other concepts, including a multi-faceted pillar of death that could rotate its sections to reveal different capabilities–sort of a Swiss Army rock. I even did an animation test to see if I could fake the 3D rotation using 2D software.
+But alas, all versions of the Doormaker eventually fell prey to the march of time and it became clear that Aeonglass was here to stay.
+The art was finalized (see Option B above) and I was clear to animate. But before I got too carried away, I did some tests to make sure I could simulate 3D rotating metal rings in 2D space. The result wasn’t much to look at, but as a proof of concept it worked well enough for us to move ahead.
+So how does a giant hourglass thingy with rotating rings cast spells, fight, and generally do stuff? Only one way to find out: doodling. Take the image included here. It shows that one of my first ideas for an attack involved locking the rings in a fixed position resembling a big atom. While I liked the idea of the rings forming a recognizable shape while emitting a blast, I later realized that aligning the rings horizontally like a disk would create a more distinctive silhouette. Not only that, but the curve of the disk suggests a horizontal sweeping motion. With a little bit of VFX, we could launch some sort of slice attack. Our giant hunk of metal and glass was developing an attitude!
+Attitude secured, it was time to animate. This part of the process takes a while and I won’t get into the details, but Aeonglass did require a few special techniques. For instance, when our Art Director Marlowe handed me the artwork, she requested that the stuff in the hourglass move more like lava lamp goo than the traditional sand. There are a few ways to approach goo animation, but I opted to use a shader. In fact, I made this goo using the same smoke shader used to make the body of the Living Smog. Since my animation software doesn’t support shaders, all I see while I’m working is a striped placeholder image where the goo will be.
+When the animation is played back in-engine, the placeholder is replaced by an endless stream of time globs slipping away into eternity.
+Another unusual technique was setting up the rings to play on a separate timeline from the rest of the character. This means that the character can go from standing still to getting knocked back to debuffing you with “Wither,” all without interrupting the smooth rotation of the rings. Keeping the rotation separate is also easier for me because tweaking it can be done by editing one animation instead of three.
+Speaking of time globs, I don’t want to use up too many of yours! Let’s see what else is going on in this Neowsletter…
+Merch Madness
+Ho ho!
+Looks like the Merchant heard about the merchandising ventures of some other Spire inhabitants and had to get in on the action! Thanks to the latest
+Makeship x Slay the Spire drop
+, you can buy a plush keychain of the Merchant’s faithful Courier, gleaming pins of his wares, and even a plushie of the Merchant and his rug! His real rug might not be for sale… but no one ever said anything about a mini, plush replica of it!
+These limited edition products are available only to the speediest of patrons, so pre-order yours before
+this collection
+disappears on August 1st at 5AM PST!
+You helped bring their concepts to life and now they’re finally here–the
+Youtooz figures of the Necrobinder and Regent
+are
+available now
+! The newest additions to the Spire’s roster of climbers have taken smaller, vinyl-based forms in order to grace your shelves and watch over your future runs. The collection is complete… for now.
+Lastly, we’ve got a cool collab to highlight: turns out the Ironclad was enjoying StS2’s co-op mode so much he decided to join another multiplayer game?! You can play as a floppier, less-limbed version of everyone’s favorite warrior in
+Heave Ho 2
+(which literally just came out)!
+Connections Section
+The last Slay the Spire Connections was a little tricky… hopefully
+this one
+is more chill ^-^
+Map Masterpieces
+Time for our usual showcase of the community’s cool in-game map art!
+The Defect admiring its array of orbs by
+DogOnPluto
+!
+The Regent (playing a different type of ball than most of the world is talking about right now) by
+thugzmcdubbz
+!
+The Ironclad literally carrying the Regent by
+rattraps
+!
+The Defect asking for his favorite treats by
+Lumin
+!
+Community Corner
+Thank you to
+pp
+for this month’s super cool cover image (check out Neow’s custom shades)! Special shoutout to our runner up
+valarts
+who actually 3D-modeled their submission! This one makes me wonder… is the Defect waterproof?
+Next month’s theme is:
+Slay the Summer - Festival Edition
+! You could include water lanterns, food stalls, fireworks, whatever you like–just make it August-y! If you’d like to submit your art for consideration, reminder that it must be submitted to us via
+[email protected]
+or in our
+Discord’s
+fanart channel, have dimensions of 800x450px, feature no text, and leave room for a title! Please make your submission by
+Friday, August 7th!
+On with the rest of the community highlights!
+An animated version of the Ironclad’s Evil Eye card by
+Qumerredem
+!
+Awesome cosplay by
+FishStickMystic
+of the Silent partaking of her own poison!
+A desk setup that SLAYS by
+Chestnut
+featuring his very own gorgeous fanart!
+That’s all for this month’s issue, see you in the next one!

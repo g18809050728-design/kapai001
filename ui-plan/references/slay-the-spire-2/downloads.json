@@ -1,0 +1,72 @@
+[
+  {
+    "file": "screenshot-0.jpg",
+    "url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2868840/1a373a95229aab0cfd97f553ecbe86092364bb9c/ss_1a373a95229aab0cfd97f553ecbe86092364bb9c.1920x1080.jpg?t=1787169309",
+    "sha256": "b689b4b5b9512acb9800004f5680c345b8eb7376ae82ec9e738586166f2cf20a",
+    "bytes": 415432,
+    "retrieved_utc": "2026-11-13T08:44:29.873168+00:00"
+  },
+  {
+    "file": "screenshot-1.jpg",
+    "url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2868840/f3af7cb9693b9c4b6a7555227db3fef943db3992/ss_f3af7cb9693b9c4b6a7555227db3fef943db3992.1920x1080.jpg?t=1787169309",
+    "sha256": "78ceae724906612fd1f75a095a78ba0f069995f53259eafd383329f1ad3b168e",
+    "bytes": 384367,
+    "retrieved_utc": "2026-11-13T08:44:29.983118+00:00"
+  },
+  {
+    "file": "screenshot-2.jpg",
+    "url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2868840/c3db69efd984ef012ae85c5b426663720152f0a4/ss_c3db69efd984ef012ae85c5b426663720152f0a4.1920x1080.jpg?t=1787169309",
+    "sha256": "3b552bd5a60c64d0270d6098ae34b5a1240a251677ea803bbee6c02b345ef389",
+    "bytes": 493041,
+    "retrieved_utc": "2026-11-13T08:44:30.393941+00:00"
+  },
+  {
+    "file": "screenshot-3.jpg",
+    "url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2868840/0fdb2940c0d367a40b2be6433daf12e3634089cf/ss_0fdb2940c0d367a40b2be6433daf12e3634089cf.1920x1080.jpg?t=1787169309",
+    "sha256": "2ebd664e81147bfdc8bca1b1b2ac35b85ac1491c740bab9b00d3499646ff026b",
+    "bytes": 372837,
+    "retrieved_utc": "2026-11-13T08:44:30.192508+00:00"
+  },
+  {
+    "file": "screenshot-4.jpg",
+    "url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2868840/18e8bda7bc4cdb37b90e0e2ce546967cbec87076/ss_18e8bda7bc4cdb37b90e0e2ce546967cbec87076.1920x1080.jpg?t=1787169309",
+    "sha256": "8a91570685c2cbd220fb1593dd22cd6a6fb958fbf8d23cdd06a2b26234897157",
+    "bytes": 389346,
+    "retrieved_utc": "2026-11-13T08:44:30.111316+00:00"
+  },
+  {
+    "file": "screenshot-5.jpg",
+    "url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2868840/0aa6bff0eff26e37ccfdb07ad6cab52f8ab1ed4b/ss_0aa6bff0eff26e37ccfdb07ad6cab52f8ab1ed4b.1920x1080.jpg?t=1787169309",
+    "sha256": "67f906ecf38f00fd3b54a249ac4b37fde27f1ea9e34db4296cf916788036f54b",
+    "bytes": 320064,
+    "retrieved_utc": "2026-11-13T08:44:30.016037+00:00"
+  },
+  {
+    "file": "trailer-0.mpd",
+    "url": "https://video.akamai.steamstatic.com/store_trailers/2868840/1627257579/a83072d3f9fb135618cc17b8390a50a19656a00d/1771464864/dash_h264.mpd?t=1771531786",
+    "sha256": "fe9cb2acc851c1bcb5d4254f1edfb9fab72f23175416735e977a9e18bad40e3e",
+    "bytes": 3282,
+    "retrieved_utc": "2026-11-13T08:44:30.736044+00:00"
+  },
+  {
+    "file": "trailer-1.mpd",
+    "url": "https://video.akamai.steamstatic.com/store_trailers/2868840/640808763/5e2d60a7b2b5b59366ac22b2450aa134ee2b822a/1770238477/dash_h264.mpd?t=1770241819",
+    "sha256": "74a3d9f4f4c909b38573298b3ff328066671a8dffc5a8ba426b6a6aed88378fb",
+    "bytes": 3276,
+    "retrieved_utc": "2026-11-13T08:44:30.556244+00:00"
+  },
+  {
+    "file": "news.html",
+    "url": "https://www.megacrit.com/news/",
+    "sha256": "fef26e6f12e0d776cc84153ce6f547bc75b4124f4369883a684f89219722cbab",
+    "bytes": 83565,
+    "retrieved_utc": "2026-11-13T08:44:33.611744+00:00"
+  },
+  {
+    "file": "sitemap.xml",
+    "url": "https://www.megacrit.com/sitemap.xml",
+    "sha256": "6fd923f2360938f5c98c71ab0a034ad90e7c534fe6e97bdcc84450a04595b469",
+    "bytes": 7431,
+    "retrieved_utc": "2026-11-13T08:44:32.452854+00:00"
+  }
+]

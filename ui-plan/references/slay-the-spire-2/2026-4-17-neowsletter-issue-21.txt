@@ -1,0 +1,155 @@
+The Neowsletter - April 2026
+April 17, 2026
+Slay the Spire
+Slay the Spire 2
+Hi everyone! Casey here.
+Slay the Spire 2 has been out for about a month and the majority of our work has been fixing up major issues, improving our feedback systems, polishing up visuals, and reworking/balancing content so that all of the cards and items feel interesting and viable!
+To those who reported feedback, thank you! Do note that the in-game feedback tool gives us more data than emails and meme posts (as funny as the latter may be).
+The road to version 1.0 is long but we’re hoping to get back on track to some bigger chunks of content as we enter the warmer months. Our Early Access disclaimer is rather vague, so I felt that something a bit more official and recent would be nice to read.
+Roadmap
+Features and Systems:
+Steam Workshop support
+Support for more languages
+The Bestiary, a way to view and learn about the enemies in the game
+Experimental game modes
+Ongoing Tasks:
+Fixings bugs
+Compatibility and performance improvements
+Game balance and tweaks
+Quality of life features
+Audio polish (more silly voices)
+Visual polish (less silly placeholder art)
+Content (No spoilers, it’s for your own good!)
+Alternate Act 2
+New Character
+Alternate Act 3
+More cards, events, relics, and potions
+Further off in the Future
+Ports to other consoles/platforms/mobile/etc
+Steam Achievements & Tradings Cards
+“True Victory” + Everything that comes with it
+You might see this and think, but where are the dates! Why can’t you promise dates??
+My response is: It’s not what works for us.
+Mega Crit is a small team where each member understands their responsibilities, knows everyone else, and I try my best to ensure that we work at a healthy pace.
+We evaluate our tasks each week and work on what feels most impactful. It’s not the most organized method, but this allows spontaneous experimentation like the dialogues you have with the Ancients or the existence of a Room Full of Cheese. We won’t massively expand the size of the studio to finish the game faster. Exacting deadlines produce sloppy uninspired work and I don’t want Sloppy Spire 2, I want Slay the Spire 2.
+While we don’t have firm timelines, beta patches release at a much more frequent cadence than main branch patches. If you haven’t heard, the beta branch is an optional version of the game intended for testing experimental changes that are tweaked until we feel they are stable enough for the main branch. If you’re eager to try out and provide feedback on content before it’s officially live, check out the instructions for switching branches outlined
+here
+.
+Spire Stats
+Demi popping in with a little insight into some
+Slay the Spire 2
+statistics! We’re a little over a month post-launch and you’ve all already embarked on about
+145 million runs
+!! This time we’re gonna take a slightly deeper look into those numbers–specifically the most common decisions Slayers make when presented with a few interesting event dilemmas!
+When finding the
+Lantern Key
+in the Hive, 56% of players return it to its apparently rightful owner, a Mysterious Knight, and are rewarded for their magnanimity (or cowardice) with gold. 44%, however, fight the stranger to keep it for themselves.
+Of those who emerged victorious with the Lantern Key and made it to Glory, upon encountering
+War Historian, Repy
+, 88% choose to free him from his cage in exchange for a valuable tome. Just 12% choose to abandon Repy in favor of the chest full of random relics and potions. Cold-blooded…
+In the
+Room Full of Cheese
+, 63% of players immediately gorge themselves on the cheese surrounding them, learning some new moves in the process. 37% are too overwhelmed by the sheer amount of cheese to partake, but are mysteriously rewarded for their pickiness with The Chosen Cheese. It’s fairly hard to resist the cheesy temptations, it seems.
+And lastly, when stumbling upon the
+Byrdonis Nest
+in Overgrowth, 51% of players choose to take the egg in order to hatch it into their own loyal little Byrdpip… and 49% feel too hungry, apparently, and eat the egg for some extra max HP. That’s almost an exact 50/50 split! Though we can’t imagine Byrdonis is too happy about either option.
+That’s all for now, but next time we’ll take a peek behind the curtain at some different kinds of metrics!
+Q&A with C&A
+KevsterZ asks:
+I notice that all basically of the Neowsletters and STS2 come out on Thursdays. Does this day have a special meaning to you guys and the team?
+Casey:
+If we push newsletters or builds earlier during the week, we’d be gauging the reaction of players throughout the week; this isn’t productive for us. If there are problems, typos, etc we can fix them on Friday.
+Bryggel asks:
+Is it possible to have matchmaking or ingame chat for multiplayer?
+Casey:
+Matchmaking is a bit up in the air at this time. I think any video game where you can be paired up with strangers brings a whole host of headaches that a smaller team wouldn’t want to deal with… but maybe we’re being too stringent. Perhaps something to evaluate later. We could probably bring in some kind of in-game chat. I don’t think we’ll do voice. Unless something horrible happens to Discord.
+Booyah asks:
+Will there be a endless mode added?
+Casey:
+Probably not, the deckbuilding gets less exciting the longer a run goes on… I think games like Balatro do a better job due to infinite strategies being possible less often. The scaling of their game’s mechanics feels more natural- whereas it’s not really the case for us.
+Still, you never know how inspiration strikes. Maybe a modder will think of a way to make it work!
+D asks:
+will you also make official tabletop simulator expansion so that those that don’t have friends IRL could play the board game online with others?
+Demi:
+Firstly, Contention Games is the one who handles most things related to the board game, as they develop, produce, and distribute it! Secondly, the public playtesting of the board game’s Downfall expansion has just recently begun, actually, and you can find it on Tabletop Simulator
+here
+! For those who don’t already know, the base board game can be found on Tabletop Simulator
+here
+. If you’d like to provide feedback on the Downfall expansion and find teammates, check out the
+Contention Games Discord server
+!
+Origo asks:
+Will this (beta patch) make it to the normal branch soon or not ?
+Casey:
+Probably when we feel that the first set of balance patches feel stable in the beta branch. We were discussing pulling in a handful of fixes into main branch before then. So that might happen soon, maybe before this Neowsletter is even published!
+And lastly we have some questions from Yumin, a member of a game dev club in South Korea called LEVEL 0 which is organizing a game jam right now.
+Yumin asks:
+On Non-negotiables: While developing Slay the Spire, what was the one thing you were never willing to compromise on to ensure the “fun” of the game?
+Casey:
+There must be whimsy.
+Yumin asks:
+On Persistence: As students, we often find our willpower weakening when development stretches on for a long time. How did you maintain the team’s morale and spirit throughout the long development and Early Access period?
+Casey:
+It’s really important to get a feel of the general spirit of the team. If it feels like people are only talking about tasks instead of the work or project as a whole, then maybe consider a break! This kind of mentality isn’t exactly for a gamejam.
+It’s easier to stay motivated in person. Although our team is mostly remote (only 3 of us utilize the office), we meet up a few times each year. For a game jam, maybe it’ll be fun to take a slightly longer lunch for some fried chicken or something. I love fried chicken. Also, I’m taking a short trip to Berlin in May. Don’t tell anyone.
+Yumin asks:
+A Word for Us: Could you please share a short message of encouragement for the students preparing for ‘Daegyeong Jam’?
+Casey:
+Remember to have fun! Don’t just eat protein bars and instant ramen!
+Merch Madness
+Looking to complete (or start!) your
+Slay the Spire
+figure collection? You can
+help bring these
+YouTooz Necrobinder and Regent figure concepts
+to life
+! Anyone who pledges their support for each concept will get a slight discount on the products once they launch, so if you want little versions of everyone’s favorite lich and alien watching over your future runs then don’t delay!
+Connections Section
+Another round of
+Slay the Spire 2 Connections
+is here!
+For those who are new to Connections puzzles, the objective is to make 4 groups of 4 things that have something in common. It could be a similarity in name, function, aesthetic, or even something more abstract. If there are 3 things or 5 things that have something in common, you may be picking up the wrong scent. The difficulty of the categories is roughly organized by color: yellow is meant to be easiest, then green, then blue, then purple–though difficulty is subjective!
+Map Masterpieces
+Last month we asked for submissions of any in-game map drawings you make, and we’ve received way more than we could ever include in a Neowsletter! Here are just a handful of highlights; if you’d like to be featured next month then post it in our Discord or email
+[email protected]
+!
+This drawing of The Silent’s classic key art by
+Petěrko
+!
+This cool drawing of The Necrobinder and Osty by
+ねこま
+!
+A very detailed illustration of various Slay the Spire characters by
+Dusk’s Knife
+!
+An adorable drawing of The Defect and Flaw by
+Axye
+!
+This funny little Regent doodle (feat. a sus cameo) by
+Bukie
+!
+And last but not least, a full map-drawn animation of Bad Apple by
+Terminaidan
+!
+Community Corner
+Thank you to
+DotNetIzzy
+for this month’s lovely sakura-themed cover image! Shoutout to the other awesome submissions from 디제이구름, Muki, and Ren (who used traditional watercolor and ink!)
+Next month’s theme is:
+Mother (of Resurrection)’s Day!
+If you’d like to submit your art for consideration, reminder that it must be submitted to us via
+[email protected]
+or in our
+Discord’s
+fanart channel, have dimensions of 800x450px, feature no text, and leave room for a title!
+Now it’s time for the rest of our usual community highlights, which are only the tip of the iceberg of the HUGE amount of incredible fanworks we’ve been seeing. Every illustration, video, meme, cosplay, etc that we come across makes our day–so thank you!
+This art of The Necrobinder sporting a different, super-cute style by
+Radio
+!
+This very cool art of a Silent x Ceremonial Beast fusion by
+Potari
+!
+This incredible, colorful portrait of The Regent by
+Jan
+!
+That’s all for the April 2026 issue of the Neowsletter, see you again next month with more updates and highlights!

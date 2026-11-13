@@ -1,0 +1,1482 @@
+[
+  {
+    "year": 1,
+    "title": "适应与基础",
+    "layers": 12,
+    "relic_layers": [
+      3,
+      9
+    ],
+    "nodes": [
+      {
+        "key": "y1l1s0",
+        "year": 1,
+        "layer": 1,
+        "subtype": "N",
+        "title": "课后习题",
+        "kind": "normal",
+        "next": [
+          "y1l2s0",
+          "y1l2s1"
+        ]
+      },
+      {
+        "key": "y1l2s0",
+        "year": 1,
+        "layer": 2,
+        "subtype": "E",
+        "title": "社团招新",
+        "kind": "event",
+        "next": [
+          "y1l3s0"
+        ]
+      },
+      {
+        "key": "y1l2s1",
+        "year": 1,
+        "layer": 2,
+        "subtype": "N",
+        "title": "英语小作文",
+        "kind": "normal",
+        "next": [
+          "y1l3s0"
+        ]
+      },
+      {
+        "key": "y1l3s0",
+        "year": 1,
+        "layer": 3,
+        "subtype": "S",
+        "title": "校园商店",
+        "kind": "shop",
+        "next": [
+          "y1l4s0",
+          "y1l4s1"
+        ]
+      },
+      {
+        "key": "y1l4s0",
+        "year": 1,
+        "layer": 4,
+        "subtype": "N",
+        "title": "C语言练习",
+        "kind": "normal",
+        "next": [
+          "y1l5s0"
+        ]
+      },
+      {
+        "key": "y1l4s1",
+        "year": 1,
+        "layer": 4,
+        "subtype": "EL",
+        "title": "随堂小测",
+        "kind": "elite",
+        "next": [
+          "y1l5s0"
+        ]
+      },
+      {
+        "key": "y1l5s0",
+        "year": 1,
+        "layer": 5,
+        "subtype": "R",
+        "title": "宿舍休息",
+        "kind": "rest",
+        "next": [
+          "y1l6s0"
+        ]
+      },
+      {
+        "key": "y1l6s0",
+        "year": 1,
+        "layer": 6,
+        "subtype": "N",
+        "title": "基础课程阶段作业",
+        "kind": "normal",
+        "next": [
+          "y1l7s0",
+          "y1l7s1"
+        ]
+      },
+      {
+        "key": "y1l7s0",
+        "year": 1,
+        "layer": 7,
+        "subtype": "N",
+        "title": "课后习题A",
+        "kind": "normal",
+        "next": [
+          "y1l8s0",
+          "y1l8s1"
+        ]
+      },
+      {
+        "key": "y1l7s1",
+        "year": 1,
+        "layer": 7,
+        "subtype": "N",
+        "title": "英语小作文B",
+        "kind": "normal",
+        "next": [
+          "y1l8s1",
+          "y1l8s2"
+        ]
+      },
+      {
+        "key": "y1l8s0",
+        "year": 1,
+        "layer": 8,
+        "subtype": "E",
+        "title": "室友夜谈",
+        "kind": "event",
+        "next": [
+          "y1l9s0"
+        ]
+      },
+      {
+        "key": "y1l8s1",
+        "year": 1,
+        "layer": 8,
+        "subtype": "N",
+        "title": "C语言练习C",
+        "kind": "normal",
+        "next": [
+          "y1l9s0",
+          "y1l9s1"
+        ]
+      },
+      {
+        "key": "y1l8s2",
+        "year": 1,
+        "layer": 8,
+        "subtype": "C",
+        "title": "社团活动",
+        "kind": "rest",
+        "next": [
+          "y1l9s1"
+        ]
+      },
+      {
+        "key": "y1l9s0",
+        "year": 1,
+        "layer": 9,
+        "subtype": "S",
+        "title": "校园商店",
+        "kind": "shop",
+        "next": [
+          "y1l10s0"
+        ]
+      },
+      {
+        "key": "y1l9s1",
+        "year": 1,
+        "layer": 9,
+        "subtype": "L",
+        "title": "图书馆",
+        "kind": "rest",
+        "next": [
+          "y1l10s0",
+          "y1l10s1"
+        ]
+      },
+      {
+        "key": "y1l10s0",
+        "year": 1,
+        "layer": 10,
+        "subtype": "N",
+        "title": "实验预习",
+        "kind": "normal",
+        "next": [
+          "y1l11s0"
+        ]
+      },
+      {
+        "key": "y1l10s1",
+        "year": 1,
+        "layer": 10,
+        "subtype": "EL",
+        "title": "期中考试",
+        "kind": "elite",
+        "next": [
+          "y1l11s0",
+          "y1l11s1"
+        ]
+      },
+      {
+        "key": "y1l11s0",
+        "year": 1,
+        "layer": 11,
+        "subtype": "R",
+        "title": "宿舍休息",
+        "kind": "rest",
+        "next": [
+          "y1l12s0"
+        ]
+      },
+      {
+        "key": "y1l11s1",
+        "year": 1,
+        "layer": 11,
+        "subtype": "C",
+        "title": "社团聚会",
+        "kind": "rest",
+        "next": [
+          "y1l12s0"
+        ]
+      },
+      {
+        "key": "y1l12s0",
+        "year": 1,
+        "layer": 12,
+        "subtype": "B",
+        "title": "大一学年综合考核",
+        "kind": "boss",
+        "next": []
+      }
+    ]
+  },
+  {
+    "year": 2,
+    "title": "分流与专业",
+    "layers": 12,
+    "relic_layers": [
+      3,
+      9
+    ],
+    "nodes": [
+      {
+        "key": "y2l1s0",
+        "year": 2,
+        "layer": 1,
+        "subtype": "N",
+        "title": "专业课作业",
+        "kind": "normal",
+        "next": [
+          "y2l2s0",
+          "y2l2s1"
+        ]
+      },
+      {
+        "key": "y2l1s1",
+        "year": 2,
+        "layer": 1,
+        "subtype": "N",
+        "title": "英语文献",
+        "kind": "normal",
+        "next": [
+          "y2l2s1",
+          "y2l2s2"
+        ]
+      },
+      {
+        "key": "y2l2s0",
+        "year": 2,
+        "layer": 2,
+        "subtype": "E",
+        "title": "专业分流宣讲",
+        "kind": "event",
+        "next": [
+          "y2l3s0"
+        ]
+      },
+      {
+        "key": "y2l2s1",
+        "year": 2,
+        "layer": 2,
+        "subtype": "N",
+        "title": "课程设计",
+        "kind": "normal",
+        "next": [
+          "y2l3s0",
+          "y2l3s1"
+        ]
+      },
+      {
+        "key": "y2l2s2",
+        "year": 2,
+        "layer": 2,
+        "subtype": "C",
+        "title": "社团换届",
+        "kind": "rest",
+        "next": [
+          "y2l3s1"
+        ]
+      },
+      {
+        "key": "y2l3s0",
+        "year": 2,
+        "layer": 3,
+        "subtype": "S",
+        "title": "教材商店",
+        "kind": "shop",
+        "next": [
+          "y2l4s0",
+          "y2l4s1"
+        ]
+      },
+      {
+        "key": "y2l3s1",
+        "year": 2,
+        "layer": 3,
+        "subtype": "LAB",
+        "title": "实验室",
+        "kind": "rest",
+        "next": [
+          "y2l4s1",
+          "y2l4s2"
+        ]
+      },
+      {
+        "key": "y2l4s0",
+        "year": 2,
+        "layer": 4,
+        "subtype": "N",
+        "title": "课程设计实践",
+        "kind": "normal",
+        "next": [
+          "y2l5s0",
+          "y2l5s2"
+        ]
+      },
+      {
+        "key": "y2l4s1",
+        "year": 2,
+        "layer": 4,
+        "subtype": "K",
+        "title": "学科竞赛",
+        "kind": "elite",
+        "next": [
+          "y2l5s1"
+        ]
+      },
+      {
+        "key": "y2l4s2",
+        "year": 2,
+        "layer": 4,
+        "subtype": "EL",
+        "title": "课程设计中期检查",
+        "kind": "elite",
+        "next": [
+          "y2l5s1",
+          "y2l5s2"
+        ]
+      },
+      {
+        "key": "y2l5s0",
+        "year": 2,
+        "layer": 5,
+        "subtype": "R",
+        "title": "休息",
+        "kind": "rest",
+        "next": [
+          "y2l6s0"
+        ]
+      },
+      {
+        "key": "y2l5s1",
+        "year": 2,
+        "layer": 5,
+        "subtype": "T",
+        "title": "导师",
+        "kind": "rest",
+        "next": [
+          "y2l6s0"
+        ]
+      },
+      {
+        "key": "y2l5s2",
+        "year": 2,
+        "layer": 5,
+        "subtype": "C",
+        "title": "社团活动",
+        "kind": "rest",
+        "next": [
+          "y2l6s0"
+        ]
+      },
+      {
+        "key": "y2l6s0",
+        "year": 2,
+        "layer": 6,
+        "subtype": "N",
+        "title": "专业基础阶段作业",
+        "kind": "normal",
+        "next": [
+          "y2l7s0",
+          "y2l7s1"
+        ]
+      },
+      {
+        "key": "y2l7s0",
+        "year": 2,
+        "layer": 7,
+        "subtype": "N",
+        "title": "实验报告",
+        "kind": "normal",
+        "next": [
+          "y2l8s0",
+          "y2l8s1"
+        ]
+      },
+      {
+        "key": "y2l7s1",
+        "year": 2,
+        "layer": 7,
+        "subtype": "N",
+        "title": "课程设计",
+        "kind": "normal",
+        "next": [
+          "y2l8s1",
+          "y2l8s2"
+        ]
+      },
+      {
+        "key": "y2l8s0",
+        "year": 2,
+        "layer": 8,
+        "subtype": "E",
+        "title": "竞赛报名",
+        "kind": "event",
+        "next": [
+          "y2l9s0",
+          "y2l9s1"
+        ]
+      },
+      {
+        "key": "y2l8s1",
+        "year": 2,
+        "layer": 8,
+        "subtype": "N",
+        "title": "文献综述",
+        "kind": "normal",
+        "next": [
+          "y2l9s0",
+          "y2l9s2"
+        ]
+      },
+      {
+        "key": "y2l8s2",
+        "year": 2,
+        "layer": 8,
+        "subtype": "C",
+        "title": "社团活动",
+        "kind": "rest",
+        "next": [
+          "y2l9s1",
+          "y2l9s2"
+        ]
+      },
+      {
+        "key": "y2l9s0",
+        "year": 2,
+        "layer": 9,
+        "subtype": "S",
+        "title": "教材商店",
+        "kind": "shop",
+        "next": [
+          "y2l10s0",
+          "y2l10s1"
+        ]
+      },
+      {
+        "key": "y2l9s1",
+        "year": 2,
+        "layer": 9,
+        "subtype": "LAB",
+        "title": "实验室",
+        "kind": "rest",
+        "next": [
+          "y2l10s1",
+          "y2l10s2"
+        ]
+      },
+      {
+        "key": "y2l9s2",
+        "year": 2,
+        "layer": 9,
+        "subtype": "L",
+        "title": "图书馆",
+        "kind": "rest",
+        "next": [
+          "y2l10s0",
+          "y2l10s2"
+        ]
+      },
+      {
+        "key": "y2l10s0",
+        "year": 2,
+        "layer": 10,
+        "subtype": "N",
+        "title": "课程设计总结",
+        "kind": "normal",
+        "next": [
+          "y2l11s0"
+        ]
+      },
+      {
+        "key": "y2l10s1",
+        "year": 2,
+        "layer": 10,
+        "subtype": "K",
+        "title": "学科竞赛",
+        "kind": "elite",
+        "next": [
+          "y2l11s1"
+        ]
+      },
+      {
+        "key": "y2l10s2",
+        "year": 2,
+        "layer": 10,
+        "subtype": "EL",
+        "title": "期中考试",
+        "kind": "elite",
+        "next": [
+          "y2l11s1"
+        ]
+      },
+      {
+        "key": "y2l11s0",
+        "year": 2,
+        "layer": 11,
+        "subtype": "R",
+        "title": "休息",
+        "kind": "rest",
+        "next": [
+          "y2l12s0"
+        ]
+      },
+      {
+        "key": "y2l11s1",
+        "year": 2,
+        "layer": 11,
+        "subtype": "T",
+        "title": "导师",
+        "kind": "rest",
+        "next": [
+          "y2l12s0"
+        ]
+      },
+      {
+        "key": "y2l12s0",
+        "year": 2,
+        "layer": 12,
+        "subtype": "B",
+        "title": "大二学年综合评测",
+        "kind": "boss",
+        "next": []
+      }
+    ]
+  },
+  {
+    "year": 3,
+    "title": "冲刺与选择",
+    "layers": 14,
+    "relic_layers": [
+      4,
+      11
+    ],
+    "nodes": [
+      {
+        "key": "y3l1s0",
+        "year": 3,
+        "layer": 1,
+        "subtype": "N",
+        "title": "专业课程",
+        "kind": "normal",
+        "next": [
+          "y3l2s0",
+          "y3l2s1"
+        ]
+      },
+      {
+        "key": "y3l1s1",
+        "year": 3,
+        "layer": 1,
+        "subtype": "N",
+        "title": "文献阅读",
+        "kind": "normal",
+        "next": [
+          "y3l2s1",
+          "y3l2s2"
+        ]
+      },
+      {
+        "key": "y3l2s0",
+        "year": 3,
+        "layer": 2,
+        "subtype": "E",
+        "title": "保研政策宣讲",
+        "kind": "event",
+        "next": [
+          "y3l3s0",
+          "y3l3s1"
+        ]
+      },
+      {
+        "key": "y3l2s1",
+        "year": 3,
+        "layer": 2,
+        "subtype": "N",
+        "title": "课程作业",
+        "kind": "normal",
+        "next": [
+          "y3l3s0",
+          "y3l3s2"
+        ]
+      },
+      {
+        "key": "y3l2s2",
+        "year": 3,
+        "layer": 2,
+        "subtype": "I",
+        "title": "实习投递",
+        "kind": "rest",
+        "next": [
+          "y3l3s1",
+          "y3l3s2"
+        ]
+      },
+      {
+        "key": "y3l3s0",
+        "year": 3,
+        "layer": 3,
+        "subtype": "S",
+        "title": "书店",
+        "kind": "shop",
+        "next": [
+          "y3l4s0",
+          "y3l4s1"
+        ]
+      },
+      {
+        "key": "y3l3s1",
+        "year": 3,
+        "layer": 3,
+        "subtype": "LAB",
+        "title": "实验室",
+        "kind": "rest",
+        "next": [
+          "y3l4s1",
+          "y3l4s2"
+        ]
+      },
+      {
+        "key": "y3l3s2",
+        "year": 3,
+        "layer": 3,
+        "subtype": "L",
+        "title": "图书馆",
+        "kind": "rest",
+        "next": [
+          "y3l4s0"
+        ]
+      },
+      {
+        "key": "y3l4s0",
+        "year": 3,
+        "layer": 4,
+        "subtype": "N",
+        "title": "课程作业实践",
+        "kind": "normal",
+        "next": [
+          "y3l5s0",
+          "y3l5s2"
+        ]
+      },
+      {
+        "key": "y3l4s1",
+        "year": 3,
+        "layer": 4,
+        "subtype": "K",
+        "title": "学科竞赛",
+        "kind": "elite",
+        "next": [
+          "y3l5s1"
+        ]
+      },
+      {
+        "key": "y3l4s2",
+        "year": 3,
+        "layer": 4,
+        "subtype": "EL",
+        "title": "小组项目冲刺",
+        "kind": "elite",
+        "next": [
+          "y3l5s1",
+          "y3l5s2"
+        ]
+      },
+      {
+        "key": "y3l5s0",
+        "year": 3,
+        "layer": 5,
+        "subtype": "R",
+        "title": "休息",
+        "kind": "rest",
+        "next": [
+          "y3l6s0",
+          "y3l6s1"
+        ]
+      },
+      {
+        "key": "y3l5s1",
+        "year": 3,
+        "layer": 5,
+        "subtype": "T",
+        "title": "导师",
+        "kind": "rest",
+        "next": [
+          "y3l6s0",
+          "y3l6s2"
+        ]
+      },
+      {
+        "key": "y3l5s2",
+        "year": 3,
+        "layer": 5,
+        "subtype": "I",
+        "title": "招聘会",
+        "kind": "rest",
+        "next": [
+          "y3l6s1",
+          "y3l6s2"
+        ]
+      },
+      {
+        "key": "y3l6s0",
+        "year": 3,
+        "layer": 6,
+        "subtype": "N",
+        "title": "科研组会",
+        "kind": "normal",
+        "next": [
+          "y3l7s0"
+        ]
+      },
+      {
+        "key": "y3l6s1",
+        "year": 3,
+        "layer": 6,
+        "subtype": "N",
+        "title": "课程作业总结",
+        "kind": "normal",
+        "next": [
+          "y3l7s0"
+        ]
+      },
+      {
+        "key": "y3l6s2",
+        "year": 3,
+        "layer": 6,
+        "subtype": "ST",
+        "title": "导师项目",
+        "kind": "rest",
+        "next": [
+          "y3l7s0"
+        ]
+      },
+      {
+        "key": "y3l7s0",
+        "year": 3,
+        "layer": 7,
+        "subtype": "N",
+        "title": "阶段成果汇报",
+        "kind": "normal",
+        "next": [
+          "y3l8s0",
+          "y3l8s1"
+        ]
+      },
+      {
+        "key": "y3l8s0",
+        "year": 3,
+        "layer": 8,
+        "subtype": "N",
+        "title": "专业课程",
+        "kind": "normal",
+        "next": [
+          "y3l9s0",
+          "y3l9s1"
+        ]
+      },
+      {
+        "key": "y3l8s1",
+        "year": 3,
+        "layer": 8,
+        "subtype": "N",
+        "title": "文献阅读",
+        "kind": "normal",
+        "next": [
+          "y3l9s1",
+          "y3l9s2"
+        ]
+      },
+      {
+        "key": "y3l9s0",
+        "year": 3,
+        "layer": 9,
+        "subtype": "E",
+        "title": "秋招宣讲",
+        "kind": "event",
+        "next": [
+          "y3l10s0",
+          "y3l10s1"
+        ]
+      },
+      {
+        "key": "y3l9s1",
+        "year": 3,
+        "layer": 9,
+        "subtype": "N",
+        "title": "课程作业",
+        "kind": "normal",
+        "next": [
+          "y3l10s0",
+          "y3l10s2"
+        ]
+      },
+      {
+        "key": "y3l9s2",
+        "year": 3,
+        "layer": 9,
+        "subtype": "I",
+        "title": "实习面试",
+        "kind": "rest",
+        "next": [
+          "y3l10s1",
+          "y3l10s2"
+        ]
+      },
+      {
+        "key": "y3l10s0",
+        "year": 3,
+        "layer": 10,
+        "subtype": "S",
+        "title": "书店",
+        "kind": "shop",
+        "next": [
+          "y3l11s0",
+          "y3l11s1"
+        ]
+      },
+      {
+        "key": "y3l10s1",
+        "year": 3,
+        "layer": 10,
+        "subtype": "LAB",
+        "title": "实验室",
+        "kind": "rest",
+        "next": [
+          "y3l11s1",
+          "y3l11s2"
+        ]
+      },
+      {
+        "key": "y3l10s2",
+        "year": 3,
+        "layer": 10,
+        "subtype": "L",
+        "title": "图书馆",
+        "kind": "rest",
+        "next": [
+          "y3l11s0"
+        ]
+      },
+      {
+        "key": "y3l11s0",
+        "year": 3,
+        "layer": 11,
+        "subtype": "N",
+        "title": "课程作业实践",
+        "kind": "normal",
+        "next": [
+          "y3l12s0",
+          "y3l12s2"
+        ]
+      },
+      {
+        "key": "y3l11s1",
+        "year": 3,
+        "layer": 11,
+        "subtype": "K",
+        "title": "学科竞赛",
+        "kind": "elite",
+        "next": [
+          "y3l12s1"
+        ]
+      },
+      {
+        "key": "y3l11s2",
+        "year": 3,
+        "layer": 11,
+        "subtype": "EL",
+        "title": "实习群面",
+        "kind": "elite",
+        "next": [
+          "y3l12s1",
+          "y3l12s2"
+        ]
+      },
+      {
+        "key": "y3l12s0",
+        "year": 3,
+        "layer": 12,
+        "subtype": "R",
+        "title": "休息",
+        "kind": "rest",
+        "next": [
+          "y3l13s0",
+          "y3l13s1"
+        ]
+      },
+      {
+        "key": "y3l12s1",
+        "year": 3,
+        "layer": 12,
+        "subtype": "T",
+        "title": "导师",
+        "kind": "rest",
+        "next": [
+          "y3l13s0",
+          "y3l13s2"
+        ]
+      },
+      {
+        "key": "y3l12s2",
+        "year": 3,
+        "layer": 12,
+        "subtype": "I",
+        "title": "招聘会",
+        "kind": "rest",
+        "next": [
+          "y3l13s1",
+          "y3l13s2"
+        ]
+      },
+      {
+        "key": "y3l13s0",
+        "year": 3,
+        "layer": 13,
+        "subtype": "N",
+        "title": "科研组会",
+        "kind": "normal",
+        "next": [
+          "y3l14s0"
+        ]
+      },
+      {
+        "key": "y3l13s1",
+        "year": 3,
+        "layer": 13,
+        "subtype": "N",
+        "title": "课程作业总结",
+        "kind": "normal",
+        "next": [
+          "y3l14s0"
+        ]
+      },
+      {
+        "key": "y3l13s2",
+        "year": 3,
+        "layer": 13,
+        "subtype": "EL",
+        "title": "保研夏令营",
+        "kind": "elite",
+        "next": [
+          "y3l14s0"
+        ]
+      },
+      {
+        "key": "y3l14s0",
+        "year": 3,
+        "layer": 14,
+        "subtype": "B",
+        "title": "大三学年综合评测",
+        "kind": "boss",
+        "next": []
+      }
+    ]
+  },
+  {
+    "year": 4,
+    "title": "收束与毕业",
+    "layers": 14,
+    "relic_layers": [
+      4,
+      11
+    ],
+    "nodes": [
+      {
+        "key": "y4l1s0",
+        "year": 4,
+        "layer": 1,
+        "subtype": "N",
+        "title": "毕设文献A",
+        "kind": "normal",
+        "next": [
+          "y4l2s0",
+          "y4l2s1"
+        ]
+      },
+      {
+        "key": "y4l1s1",
+        "year": 4,
+        "layer": 1,
+        "subtype": "N",
+        "title": "毕设文献B",
+        "kind": "normal",
+        "next": [
+          "y4l2s0",
+          "y4l2s2"
+        ]
+      },
+      {
+        "key": "y4l1s2",
+        "year": 4,
+        "layer": 1,
+        "subtype": "N",
+        "title": "课程作业",
+        "kind": "normal",
+        "next": [
+          "y4l2s1",
+          "y4l2s2"
+        ]
+      },
+      {
+        "key": "y4l2s0",
+        "year": 4,
+        "layer": 2,
+        "subtype": "ST",
+        "title": "开题答辩",
+        "kind": "rest",
+        "next": [
+          "y4l3s1",
+          "y4l3s2"
+        ]
+      },
+      {
+        "key": "y4l2s1",
+        "year": 4,
+        "layer": 2,
+        "subtype": "N",
+        "title": "课程实践",
+        "kind": "normal",
+        "next": [
+          "y4l3s0",
+          "y4l3s1"
+        ]
+      },
+      {
+        "key": "y4l2s2",
+        "year": 4,
+        "layer": 2,
+        "subtype": "E",
+        "title": "导师约谈",
+        "kind": "event",
+        "next": [
+          "y4l3s0",
+          "y4l3s2"
+        ]
+      },
+      {
+        "key": "y4l3s0",
+        "year": 4,
+        "layer": 3,
+        "subtype": "S",
+        "title": "打印店",
+        "kind": "shop",
+        "next": [
+          "y4l4s0",
+          "y4l4s1"
+        ]
+      },
+      {
+        "key": "y4l3s1",
+        "year": 4,
+        "layer": 3,
+        "subtype": "LAB",
+        "title": "实验室",
+        "kind": "rest",
+        "next": [
+          "y4l4s1",
+          "y4l4s2"
+        ]
+      },
+      {
+        "key": "y4l3s2",
+        "year": 4,
+        "layer": 3,
+        "subtype": "L",
+        "title": "图书馆",
+        "kind": "rest",
+        "next": [
+          "y4l4s0",
+          "y4l4s2"
+        ]
+      },
+      {
+        "key": "y4l4s0",
+        "year": 4,
+        "layer": 4,
+        "subtype": "N",
+        "title": "课程总结",
+        "kind": "normal",
+        "next": [
+          "y4l5s1",
+          "y4l5s2"
+        ]
+      },
+      {
+        "key": "y4l4s1",
+        "year": 4,
+        "layer": 4,
+        "subtype": "LAB",
+        "title": "实验补测",
+        "kind": "rest",
+        "next": [
+          "y4l5s0",
+          "y4l5s1"
+        ]
+      },
+      {
+        "key": "y4l4s2",
+        "year": 4,
+        "layer": 4,
+        "subtype": "EL",
+        "title": "小组项目冲刺",
+        "kind": "elite",
+        "next": [
+          "y4l5s1"
+        ]
+      },
+      {
+        "key": "y4l5s0",
+        "year": 4,
+        "layer": 5,
+        "subtype": "T",
+        "title": "导师",
+        "kind": "rest",
+        "next": [
+          "y4l6s0",
+          "y4l6s1"
+        ]
+      },
+      {
+        "key": "y4l5s1",
+        "year": 4,
+        "layer": 5,
+        "subtype": "I",
+        "title": "招聘会",
+        "kind": "rest",
+        "next": [
+          "y4l6s0",
+          "y4l6s2"
+        ]
+      },
+      {
+        "key": "y4l5s2",
+        "year": 4,
+        "layer": 5,
+        "subtype": "R",
+        "title": "休息",
+        "kind": "rest",
+        "next": [
+          "y4l6s1",
+          "y4l6s2"
+        ]
+      },
+      {
+        "key": "y4l6s0",
+        "year": 4,
+        "layer": 6,
+        "subtype": "ST",
+        "title": "中期检查",
+        "kind": "rest",
+        "next": [
+          "y4l7s0",
+          "y4l7s2"
+        ]
+      },
+      {
+        "key": "y4l6s1",
+        "year": 4,
+        "layer": 6,
+        "subtype": "E",
+        "title": "论文投稿",
+        "kind": "event",
+        "next": [
+          "y4l7s1"
+        ]
+      },
+      {
+        "key": "y4l6s2",
+        "year": 4,
+        "layer": 6,
+        "subtype": "I",
+        "title": "实习",
+        "kind": "rest",
+        "next": [
+          "y4l7s1"
+        ]
+      },
+      {
+        "key": "y4l7s0",
+        "year": 4,
+        "layer": 7,
+        "subtype": "ST",
+        "title": "预答辩",
+        "kind": "rest",
+        "next": [
+          "y4l8s0",
+          "y4l8s1"
+        ]
+      },
+      {
+        "key": "y4l7s1",
+        "year": 4,
+        "layer": 7,
+        "subtype": "N",
+        "title": "阶段综合作业",
+        "kind": "normal",
+        "next": [
+          "y4l8s0",
+          "y4l8s2"
+        ]
+      },
+      {
+        "key": "y4l7s2",
+        "year": 4,
+        "layer": 7,
+        "subtype": "ST",
+        "title": "毕业规划",
+        "kind": "rest",
+        "next": [
+          "y4l8s1",
+          "y4l8s2"
+        ]
+      },
+      {
+        "key": "y4l8s0",
+        "year": 4,
+        "layer": 8,
+        "subtype": "N",
+        "title": "毕设文献",
+        "kind": "normal",
+        "next": [
+          "y4l9s0",
+          "y4l9s1"
+        ]
+      },
+      {
+        "key": "y4l8s1",
+        "year": 4,
+        "layer": 8,
+        "subtype": "N",
+        "title": "求职材料",
+        "kind": "normal",
+        "next": [
+          "y4l9s0",
+          "y4l9s2"
+        ]
+      },
+      {
+        "key": "y4l8s2",
+        "year": 4,
+        "layer": 8,
+        "subtype": "N",
+        "title": "考研真题",
+        "kind": "normal",
+        "next": [
+          "y4l9s1",
+          "y4l9s2"
+        ]
+      },
+      {
+        "key": "y4l9s0",
+        "year": 4,
+        "layer": 9,
+        "subtype": "E",
+        "title": "查重说明",
+        "kind": "event",
+        "next": [
+          "y4l10s0",
+          "y4l10s1"
+        ]
+      },
+      {
+        "key": "y4l9s1",
+        "year": 4,
+        "layer": 9,
+        "subtype": "N",
+        "title": "课程作业",
+        "kind": "normal",
+        "next": [
+          "y4l10s0",
+          "y4l10s2"
+        ]
+      },
+      {
+        "key": "y4l9s2",
+        "year": 4,
+        "layer": 9,
+        "subtype": "ST",
+        "title": "延期咨询",
+        "kind": "rest",
+        "next": [
+          "y4l10s1",
+          "y4l10s2"
+        ]
+      },
+      {
+        "key": "y4l10s0",
+        "year": 4,
+        "layer": 10,
+        "subtype": "S",
+        "title": "打印店",
+        "kind": "shop",
+        "next": [
+          "y4l11s0",
+          "y4l11s1"
+        ]
+      },
+      {
+        "key": "y4l10s1",
+        "year": 4,
+        "layer": 10,
+        "subtype": "LAB",
+        "title": "实验室",
+        "kind": "rest",
+        "next": [
+          "y4l11s0",
+          "y4l11s2"
+        ]
+      },
+      {
+        "key": "y4l10s2",
+        "year": 4,
+        "layer": 10,
+        "subtype": "L",
+        "title": "图书馆",
+        "kind": "rest",
+        "next": [
+          "y4l11s0"
+        ]
+      },
+      {
+        "key": "y4l11s0",
+        "year": 4,
+        "layer": 11,
+        "subtype": "N",
+        "title": "毕业课程实践",
+        "kind": "normal",
+        "next": [
+          "y4l12s1",
+          "y4l12s2"
+        ]
+      },
+      {
+        "key": "y4l11s1",
+        "year": 4,
+        "layer": 11,
+        "subtype": "K",
+        "title": "学科竞赛",
+        "kind": "elite",
+        "next": [
+          "y4l12s0",
+          "y4l12s1"
+        ]
+      },
+      {
+        "key": "y4l11s2",
+        "year": 4,
+        "layer": 11,
+        "subtype": "EL",
+        "title": "补考",
+        "kind": "elite",
+        "next": [
+          "y4l12s1"
+        ]
+      },
+      {
+        "key": "y4l12s0",
+        "year": 4,
+        "layer": 12,
+        "subtype": "T",
+        "title": "导师",
+        "kind": "rest",
+        "next": [
+          "y4l13s0",
+          "y4l13s1"
+        ]
+      },
+      {
+        "key": "y4l12s1",
+        "year": 4,
+        "layer": 12,
+        "subtype": "I",
+        "title": "招聘会",
+        "kind": "rest",
+        "next": [
+          "y4l13s0",
+          "y4l13s2"
+        ]
+      },
+      {
+        "key": "y4l12s2",
+        "year": 4,
+        "layer": 12,
+        "subtype": "R",
+        "title": "休息",
+        "kind": "rest",
+        "next": [
+          "y4l13s1",
+          "y4l13s2"
+        ]
+      },
+      {
+        "key": "y4l13s0",
+        "year": 4,
+        "layer": 13,
+        "subtype": "ST",
+        "title": "盲审查重",
+        "kind": "rest",
+        "next": [
+          "y4l14s0"
+        ]
+      },
+      {
+        "key": "y4l13s1",
+        "year": 4,
+        "layer": 13,
+        "subtype": "E",
+        "title": "毕业旅行",
+        "kind": "event",
+        "next": [
+          "y4l14s0"
+        ]
+      },
+      {
+        "key": "y4l13s2",
+        "year": 4,
+        "layer": 13,
+        "subtype": "I",
+        "title": "实习",
+        "kind": "rest",
+        "next": [
+          "y4l14s0"
+        ]
+      },
+      {
+        "key": "y4l14s0",
+        "year": 4,
+        "layer": 14,
+        "subtype": "B",
+        "title": "毕业去向终局",
+        "kind": "boss",
+        "next": []
+      }
+    ]
+  }
+]

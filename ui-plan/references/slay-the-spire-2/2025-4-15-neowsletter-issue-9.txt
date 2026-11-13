@@ -1,0 +1,106 @@
+The Neowsletter - April 2025
+April 15, 2025
+Slay the Spire
+Slay the Spire 2
+Oh hey, it’s the April Meowsletter… I mean Neowsletter! (This is as close to an April Fool’s joke as you’re gonna get from us this year.)
+Thank you again for all the fantastic cover art submissions, this one is brought to you by Caleb! May’s prompt is: Neow and Mother’s Day flowers! It’s what she deserves, being the Mother of Resurrection and all. Send them to us either in the fanart channel of our
+Discord
+or via
+[email protected]
+, and reminder that the dimensions should be 800x450px and leave room for the title text, which we’ll add!
+There’s still a lot of work ahead of us, but maybe
+because
+we know that things may get hectic when Early Access starts, the whole Mega Crit team (and some friends) took a trip to Japan! We’ve been working on
+Slay the Spire 2
+for more than 3 years but as a hybrid-remote studio, many of our employees have never met in-person.
+That’s now changed! We met up in Japan to see the sights, enjoy the almost-ready cherry blossoms, take part in various traditions, karaoke, and really just hang out in a non-work environment. So much grass and moss was touched. The Ghibli Museum is quite something! With the power of okonomiyaki, Tower of the Sun, and my terrible singing, Mega Crit is considerably more powerful than before.
+(Demi’s note: Neow joined us on our journey, too! You can check out her little TikTok diary
+here
+.)
+Alright, enough of this human experience nonsense. Here’s a sneak peak at a new way for monsters to ruin your day. Afflictions!
+Afflictions
+Those who were savvy enough to look under the hood at Slay the Spire’s game code probably noticed a similar system that wasn’t used… However, here they are in
+Slay the Spire 2
+! It’s quite simple. A creature that wants you dead will “Afflict” some of your cards in all sorts of mean ways.
+I wish I had made a cool VFX for this move…
+Once your cards are promptly afflicted, you end up with something like this.
+Hmm, how would you work around this conundrum?
+Spire Spotting
+This is Demi now, here to say hello to all our intrepid Spireologists! Thank you for all of your hypotheses of what this mystery creature could be:
+So let’s see which ones came the closest (or made us laugh the most)!
+The award for memey-ist submission goes to GM_Whitose for this Ironclad creature!
+The award for most accurate goes to WildSamich, who was actually our first submission I believe, but got the toad-like essence of the creature right away!
+Though we’ve been receiving so many submissions that it’s impossible to include them all, here are some more runner ups!
+Credit in order from left to right: Niek_Alexander, grunk, syrupybug, Shep, moo_cactus, roygbic, bbron, ssorgatem, niko, Boltman, kwayan42, and U_1065.
+So then, let’s take a look at this creature, now that it’s been unveiled…
+Voila! It is a spiny toad monster of some sort! Which means hopefully the person who goes by “Frog Nuggets” who emailed us specifically to ask if there were going to be any frogs in StS2 is satisfied.
+And–you guessed it–another shadowy enemy just appeared!
+What could it be? What could it do?? Submit your guesses in our Discord, on socials, or via
+[email protected]
+, as usual!
+Q&A with C&A
+It’s Questions & Answers with Casey & Anthony! Do you have questions? We have answers! Though sometimes we withhold them because you’ve asked for too much. If you’d like to see your questions answered, submit them to
+[email protected]
+and title it like “I have a Question!” or something and be sure to provide a pen name/alias if you want to retain some anonymity. Okay, on with it!
+King?? asks:
+Not quite related to STS 2, but I really liked the desk mats you guys released and was wondering where we can expect more STS merch in the future.
+Casey:
+The deskmat is sold independently by our background and key art illustrator for Slay the Spire, Bruce Brenneise. In general, we’re doing considerably more merch as we have a larger team but it’ll likely ramp up after Early Access begins.
+Braiam asks:
+I hope the dev cycle is going well. I have a question about game balancing and design philosophy in Slay the Spire. In the patch notes, you say that random temporary card generation (like dead branch and distraction) cannot generate healing cards. How does alchemize fit into this?
+Casey:
+Alchemize, a card which generates potions, can be duplicated with Nightmare (which can be duplicate itself with Nightmares if you have two) and players can farm for infinite Fruit Juices if a combat could be stalled. While we encourage abusing mechanics to eke out every advantage, we try to disincentivize those which require repetitive card play.
+Airank asks:
+Why is Deca called Deca if it is clearly an octahedron, not a decahedron?
+Casey:
+I like being wrong on purpose sometimes. When people correct us it’s a learning moment for everyone. We’ve done this a few times. But for this specific case it’s because Octa sounds like an octopus as well. It doesn’t roll off the tongue. I’d rather things be memorable than right!
+Bobberation asks:
+If Slime Boss is green and splits into a green slime and a grey slime… where does the grey slime come from?
+Casey:
+Well, our organs are red so maybe the Slime Boss’s organs are grey. I don’t know I just transcribe what the Spire asks me to.
+NikkoJ asks:
+I was wondering if the Face Trader will be in Slay The Spire 2? If so, will there be interesting new faces to acquire? And will trading faces change the appearance of your character this time (a feature I felt should have been present in the original…)
+I also found the Face Trader’s appearance to be terrifying, yet strangely alluring… I think I need help!
+Casey:
+You don’t need help! I think masks are quite an engrossing concept. In fact, I’ve been drawing masked figures since I can remember. A long time ago, I was fascinated by an artist named R.S. Connett. He had a lot of psychedelic, disturbing, and beautiful paintings accompanied by stories of house fires, drugs, and trauma. I forget which painting now, but one had a deep fascination with masks and I, too, drew many masked figures since! Here’s a 20+ year old drawing titled maskman5.jpg. This character feels kinda familiar.
+As for interesting faces to acquire, not sure yet! We’re still making more and more events and new mysteries every day.
+baibai from China asks:
+Will the ascension mode be the same as that in Slay the Spire, or will it still be 20 levels of ascension, or perhaps more? Are the effects of each level of ascension the same as before?
+Casey:
+First of all, it’s always exciting to receive fanmail from outside the US! I’m happy to see global participation in our C&A. Thank you!
+Ascensions will be available from Early Access and it’ll be seeing some changes! It’s important to ease players into the difficult world of Slay the Spire. However, whether or not we’ll make tweaks or add more levels during Early Access remains to be seen.
+The Bartening asks:
+can we see a new relic but you dont explain anything about it?
+Casey:
+Yeah sure why not
+The Dylster asks:
+Does the Transient like to play chess
+Anthony:
+No
+targetson. asks:
+Does Silent have a better starter deck?
+Anthony:
+No
+Merch Madness
+You can now live your dream of snuggling up with The Silent OR celebrate the Year of the Snecko with these brand new limited edition plushies from YouTooz! Look at them, just a couple of green, sneaky friends :‘D Pre-order them today
+here
+!
+And back by popular demand, Fangamer is re-launching their
+Slay the Spire collection
+, including two very cool tees AND a cute Cultist pin which ACTUALLY MOVES ITS ARMS!! Your power is sure to be unmatched with this lil guy upon your plumage.
+Triple-i Returns
+Did you know the Triple-i Initiative just held another showcase? While we’re not participating this year, they did a fantastic job at showcasing a consortium of exciting indie game reveals, updates, and other stuff! Give your local indie devs a look and–WAIT IS THAT A KATANA ZERO DLC??? Anyways, go check it out!!
+Connections Section
+Another
+Slay the Spire Connections puzzle
+is here (hopefully it’s not as tricky as the last one but not too easy either… hopefully it’s purr-fect!)
+Community Corner
+First of all, we’d like to highlight some of the runner ups for this month’s cover image! Again, we received a LOT (thank you!!) so we’re featuring as many as we reasonably can:
+Credit in order from left to right: The LiliPad, nekotrapik, ICantEatThis, Amy, Alcalmy, grunk, Kirby, Arthur, Maeva, PseudoJames, pearblo, and ssorgatem.
+Now for the rest of the community highlights!
+The final installment (for now) in the Choose Your Own Ascension series by
+Alex Zapata aka boosta11b
+!
+Another hilarious Slay the Spire song and animation by Atillion!
+Slay the Spire 2 reimagined in Unreal by 星门望天!
+And that’s all for this month! See you again next time, come what May!

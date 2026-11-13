@@ -1,0 +1,142 @@
+[
+  {
+    "file": "silent_anim.gif",
+    "frames": 121,
+    "total_ms": 2420,
+    "sample_ms": [
+      0,
+      220,
+      440,
+      660,
+      880,
+      1100,
+      1300,
+      1520,
+      1740,
+      1960,
+      2180,
+      2400
+    ],
+    "timing": "GIF encoded durations; not verified game timings"
+  },
+  {
+    "file": "ento_attack3.gif",
+    "frames": 124,
+    "total_ms": 2480,
+    "sample_ms": [
+      0,
+      220,
+      440,
+      680,
+      900,
+      1120,
+      1340,
+      1560,
+      1780,
+      2020,
+      2240,
+      2460
+    ],
+    "timing": "GIF encoded durations; not verified game timings"
+  },
+  {
+    "file": "final_aeonglass.gif",
+    "frames": 98,
+    "total_ms": 2950,
+    "sample_ms": [
+      0,
+      280,
+      550,
+      790,
+      1060,
+      1330,
+      1600,
+      1870,
+      2140,
+      2380,
+      2650,
+      2920
+    ],
+    "timing": "GIF encoded durations; not verified game timings"
+  },
+  {
+    "file": "shiny_rare_qol.gif",
+    "frames": 48,
+    "total_ms": 2880,
+    "sample_ms": [
+      0,
+      240,
+      540,
+      780,
+      1020,
+      1260,
+      1560,
+      1800,
+      2040,
+      2280,
+      2580,
+      2820
+    ],
+    "timing": "GIF encoded durations; not verified game timings"
+  },
+  {
+    "file": "treasure_open.gif",
+    "frames": 89,
+    "total_ms": 4450,
+    "sample_ms": [
+      0,
+      400,
+      800,
+      1200,
+      1600,
+      2000,
+      2400,
+      2800,
+      3200,
+      3600,
+      4000,
+      4400
+    ],
+    "timing": "GIF encoded durations; not verified game timings"
+  },
+  {
+    "file": "event_3.gif",
+    "frames": 149,
+    "total_ms": 4470,
+    "sample_ms": [
+      0,
+      390,
+      810,
+      1200,
+      1620,
+      2010,
+      2430,
+      2820,
+      3240,
+      3630,
+      4050,
+      4440
+    ],
+    "timing": "GIF encoded durations; not verified game timings"
+  },
+  {
+    "file": "event1.gif",
+    "frames": 170,
+    "total_ms": 5100,
+    "sample_ms": [
+      0,
+      450,
+      930,
+      1380,
+      1830,
+      2310,
+      2760,
+      3240,
+      3690,
+      4140,
+      4620,
+      5070
+    ],
+    "timing": "GIF encoded durations; not verified game timings"
+  }
+]
