@@ -520,6 +520,8 @@ func prepare_rule(shell: GameShell, uid: String) -> String:
 		shell.press(uid)
 		return uid + "_confirm"
 	if uid.begins_with("event:"):
+		if not shell.page.action_draft(uid).is_empty():
+			return uid
 		shell.press(uid)
 		return "event:confirm"
 	if uid.begins_with("shop:buy:"):

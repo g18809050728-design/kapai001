@@ -1,5 +1,7 @@
 # 《杀戮尖塔2》参考证据与动态拆解
 
+2026-11-14追加：[特效连续观察](vfx-observations-20261114.md)复核本目录已归档的攻击/退场、光球/射线、敌方与Aeonglass片段，区分可见事实、校园转译和未验证推断。它支持本批G6材料核对，不代表已验证二代最新构建或本作最终动作时序。
+
 采集日期：2026-11-13。来源为 Mega Crit 官方网站及其 Steam 商店媒体。Steam API 的名称与开发者已核对为 Slay the Spire 2 / Mega Crit；[原始元数据](steam-appdetails.json)记录抢先体验发布日期为 2026-03-05。这里研究的是注明日期的材料，不声称掌握当前构建的全部 UI 细节。
 
 web 搜索工具本轮未返回可用正文；通过 HTTPS 直接取得官方原文和媒体。原始地址、采集 UTC 时间、SHA256 见[下载记录](downloads.json)、[官方动图记录](official-media.json)、[文章索引](articles-index.json)和[视频来源](video-sources.json)。首版 `../slay-the-spire/` 是一代材料，不计入本轮二代证据。

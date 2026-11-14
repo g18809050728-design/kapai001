@@ -19,7 +19,7 @@ func build(screen: BattleScreen) -> void:
 	background.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 	background.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	stage.add_child(background)
-	_rect(stage, Rect2(0, 0, 1280, 800), Color(0.04, 0.1, 0.13, 0.20))
+	_rect(stage, Rect2(0, 0, 1280, 800), Color(0.035, 0.07, 0.11, 0.34))
 	var gradient := Gradient.new()
 	gradient.colors = PackedColorArray([Color(0.03, 0.08, 0.1, 0.0), Color(0.03, 0.08, 0.1, 0.96)])
 	var texture := GradientTexture2D.new()
@@ -36,7 +36,7 @@ func build(screen: BattleScreen) -> void:
 	_player()
 	_tasks()
 	_units()
-	_rect(stage, Rect2(176, 761, 920, 39), Color(0.04, 0.1, 0.13, 0.85))
+
 	_hand()
 	_controls()
 	_v3_summary()
@@ -45,11 +45,11 @@ func build(screen: BattleScreen) -> void:
 	page._aim.z_index = 70
 	stage.add_child(page._aim)
 	page._feedback_label = _text(
-		stage, Rect2(26, 78, 210, 34) if not page._dict(page.view.get("v3")).is_empty() else Rect2(290, 78, 710, 44), page._feedback_text, 13 if not page._dict(page.view.get("v3")).is_empty() else 16, LIGHT, HORIZONTAL_ALIGNMENT_CENTER
+		stage, Rect2(410, 146, 460, 28), page._feedback_text, 13 if not page._dict(page.view.get("v3")).is_empty() else 16, LIGHT, HORIZONTAL_ALIGNMENT_CENTER
 	)
 	page._feedback_label.visible = not page._feedback_text.is_empty()
 	page._hint_label = _text(
-		stage, Rect2(176, 762, 920, 23), _selection_hint(), 14, LIGHT, HORIZONTAL_ALIGNMENT_CENTER
+		stage, Rect2(250, 123, 780, 24), _selection_hint(), 14, LIGHT, HORIZONTAL_ALIGNMENT_CENTER
 	)
 	page._hint_label.name = "HandActionHint"
 	page._hint_label.max_lines_visible = 1
@@ -66,7 +66,7 @@ func build(screen: BattleScreen) -> void:
 
 
 func _hover_window() -> void:
-	var factor := UiStyle.text_scale if page._compact_layout else 1.0
+	var factor := UiStyle.text_scale
 	var panel := Panel.new()
 	panel.size = Vector2(360, 168) * factor
 	panel.visible = false
@@ -103,90 +103,45 @@ func _hover_window() -> void:
 
 
 func _header() -> void:
-	_rect(stage, Rect2(0, 0, 1280, 66), Color(0.035, 0.09, 0.11, 0.9))
-	_text(stage, Rect2(26, 10, 350, 23), "DDL 战争  /  " + str(page.view.get("year_label", "第一学期")), 16, Color("e6c68d"))
-	_text(stage, Rect2(26, 34, 400, 25), page._battle_subtitle(), 18, LIGHT)
-	_text(
-		stage,
-		Rect2(414, 14, 320, 38),
-		(
-			"第 %s 回合 · %s | DDL %s次轮末"
-			% [
-				page.view.get("round_index", 0),
-				UiStyle.label(str(page.view.get("phase", ""))),
-				page.view.get("ddl", 0)
-			]
-		),
-		17,
-		Color("ffab91") if int(page.view.get("ddl", 0)) <= 1 else (Color("f6d184") if int(page.view.get("ddl", 0)) <= 3 else LIGHT),
-		HORIZONTAL_ALIGNMENT_CENTER
-	)
-	if int(page.view.get("ddl", 0)) <= 3:
-		_text(stage, Rect2(430, 53, 290, 22), "DDL 紧迫：请尽快完成任务" if int(page.view.get("ddl", 0)) > 1 else "DDL 仅剩 1：本轮必须推进", 13, Color("ffcbab"), HORIZONTAL_ALIGNMENT_CENTER)
-	_pile_button(Rect2(752, 3, 72, 58), "deck", Callable(page, "_show_deck"))
-	_pile_button(Rect2(830, 3, 72, 58), "log", Callable(page, "_show_log"))
-	_button(Rect2(908, 14, 72, 36), "battle:rules", "规则", {}, Callable(page, "_show_rules"))
-	_button(
-		Rect2(986, 14, 62, 36),
-		"battle:speed",
-		"×%s" % page.speed_scale,
-		{},
-		Callable(page, "_cycle_speed")
-	)
-	_button(
-		Rect2(1054, 14, 66, 36),
-		"battle:animation",
-		"动画" + ("开" if page.animation_enabled else "关"),
-		{},
-		Callable(page, "_toggle_animation")
-	)
-	_button(Rect2(1126, 14, 62, 36), "battle:save", "保存", {"type": "ui.save", "payload": {}})
-	_button(Rect2(1194, 14, 62, 36), "battle:menu", "菜单", {"type": "ui.menu", "payload": {}})
+	var player := page._dict(page.view.get("player"))
+	page._toolbar = UiRunToolbar.new()
+	page.add_child(page._toolbar)
+	page._toolbar.configure(page, {
+		"battle": true, "vitality": player.get("vitality", 0), "max_vitality": page.view.get("max_vitality", 0), "money": page.view.get("money", 0),
+		"journey": "%s  ·  %s" % [page.view.get("year_label", ""), page._battle_subtitle()],
+		"relics_uid": "battle:relics", "relics_count": page._array(page.view.get("relics")).size(), "relics_callback": Callable(page, "_show_relics"),
+		"map_uid": "battle:map", "map_callback": Callable(page, "_show_map"),
+		"deck_uid": "battle:deck", "deck_count": page._array(page.view.get("cards")).size(), "deck_callback": Callable(page, "_show_deck"),
+		"toggle_uid": "battle:options", "close_uid": "battle:close_options", "help_uid": "battle:rules", "help_callback": Callable(page, "_show_rules"),
+		"save_uid": "battle:save", "home_uid": "battle:menu", "log_callback": Callable(page, "_show_log"),
+		"speed_callback": Callable(page, "_cycle_speed"), "animation_callback": Callable(page, "_toggle_animation")
+	})
+	page._toolbar.mark_active("deck", page._panel_zone == "deck" and not page._panel_text.is_empty())
+	var urgent := int(page.view.get("ddl",0)) <= 3
+	_text(stage,Rect2(470,84,340,30),"第 %s 回合  ·  DDL %s 次轮末" % [page.view.get("round_index",0),page.view.get("ddl",0)],18,Color("ffb18e") if urgent else Color("d9c99e"),HORIZONTAL_ALIGNMENT_CENTER)
 
 
 func _player() -> void:
 	var player := page._dict(page.view.get("player"))
 	var player_id := str(player.get("entity_id", ""))
-	_actor(Rect2(40, 158, 224, 276), player_id, str(page.view.get("character_id", "P01")), "player")
-	_panel(stage,Rect2(38,416,224,76),Color(UiStyle.NIGHT,.86),Color(UiStyle.BRASS,.35))
-	_text(stage, Rect2(52, 422, 196, 27), UiStyle.label(str(page.view.get("character_id", "P01"))).split("·")[0], 20, LIGHT, HORIZONTAL_ALIGNMENT_CENTER)
-	var hp := int(player.get("vitality", 0))
-	var max_hp := int(page.view.get("max_vitality", maxi(1, hp)))
-	_bar(stage, Rect2(52, 454, 196, 6), float(hp) / maxi(1, max_hp), Color("ba7469"))
-	_text(
-		stage,
-		Rect2(52, 466, 202, 23),
-		"精力 %s / %s  ·  放松 %s" % [hp, max_hp, player.get("relax", 0)],
-		14,
-		LIGHT
-	)
-	_text(stage, Rect2(48, 119, 210, 24), "本回合 · 做出选择", 15, Color("f0d4a0"))
-	var statuses := page._array(page.view.get("statuses"))
-	var player_statuses: Array = []
-	for value in statuses:
-		if str(page._dict(value).get("target_id", "")) == player_id:
-			player_statuses.append(value)
-	if not player_statuses.is_empty():
-		var status_label := _text(stage, Rect2(26, 484, 148, 68), page._status_text(player_statuses), 14, Color("e5c894"))
-		status_label.max_lines_visible = 3
-		status_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-		var status_hit := _button(
-			Rect2(26, 484, 148, 68),
-			"statuses:player",
-			"",
-			{},
-			Callable(page, "_open_detail_for_uid").bind("statuses:player")
-		)
-		_transparent_target(status_hit)
-	var scene := page._dict(page.view.get("scene"))
-	if not scene.is_empty() and page._dict(page.view.get("v3")).is_empty():
-		_text(
-			stage,
-			Rect2(280, 86, 310, 30),
-			"场景 · " + UiStyle.label(str(scene.get("definition_id", ""))),
-			16,
-			SOFT
-		)
+	_actor(Rect2(98,206,224,284),player_id,str(page.view.get("character_id","P01")),"player")
+	var hp := int(player.get("vitality",0))
+	var max_hp := int(page.view.get("max_vitality",maxi(1,hp)))
+	_bar(stage,Rect2(115,483,190,14),float(hp)/maxi(1,max_hp),Color("659fc5"))
+	var vitality := _text(stage,Rect2(115,475,190,28),"%s / %s" % [hp,max_hp],roundi(18*minf(UiStyle.text_scale,1.2)),LIGHT,HORIZONTAL_ALIGNMENT_CENTER)
+	vitality.name = "PlayerVitalityValue"
+	_text(stage,Rect2(65,475,47,29),"◇%s" % player.get("relax",0),19,Color("b4d7ed"),HORIZONTAL_ALIGNMENT_CENTER)
+	_text(stage,Rect2(102,499,218,22),UiStyle.label(str(page.view.get("character_id","P01"))).split("·")[0],16,LIGHT,HORIZONTAL_ALIGNMENT_CENTER)
+	var statuses: Array = []
+	for value in page._array(page.view.get("statuses")):
+		if str(page._dict(value).get("target_id","")) == player_id:
+			statuses.append(value)
+	if not statuses.is_empty():
+		var label := _text(stage,Rect2(70,522,210,26),page._status_text(statuses),13,Color("e8d3a4"),HORIZONTAL_ALIGNMENT_CENTER)
+		label.max_lines_visible = 1
+		label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		var hit := _button(Rect2(70,522,210,26),"statuses:player","",{},Callable(page,"_open_detail_for_uid").bind("statuses:player"))
+		_transparent_target(hit)
 
 
 func _v3_summary() -> void:
@@ -220,69 +175,54 @@ func _v3_summary() -> void:
 	var scene := page._dict(page.view.get("scene"))
 	if not scene.is_empty():
 		lines[0] += "　场景：" + UiStyle.label(str(scene.get("definition_id", "")))
-	var panel := _panel(stage, Rect2(286, 78, 968, 48), Color(UiStyle.NIGHT,.90), Color(UiStyle.BRASS,.3))
+	var panel := _panel(stage, Rect2(20, 84, 272, 31), Color(UiStyle.NIGHT,.72), Color(UiStyle.BRASS,.18))
 	panel.name = "V3Summary"
-	_text(panel, Rect2(12, 4, 944, 40), "\n".join(lines), 14, LIGHT)
-	var info_hit := _button(Rect2(286, 78, 968, 48), "battle:resources", "", {}, func(): page._open_detail_for_uid("battle:resources"))
+	var compact := lines[0].split(" · ")[0]
+	if str(page.view.get("character_id","")) == "P02":
+		compact = "论文 %s/10  引用 %s/5  修正 %s" % [paper.get("progress",0),paper.get("citations",0),paper.get("modifier",0)]
+	var resource_label := _text(panel, Rect2(10, 3, 252, 25), compact+"  ·  I 详情", 13, SOFT)
+	resource_label.max_lines_visible = 2
+	resource_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	var info_hit := _button(Rect2(20, 84, 272, 31), "battle:resources", "", {}, func(): page._open_detail_for_uid("battle:resources"))
 	_transparent_target(info_hit)
 
 
 func _tasks() -> void:
 	var tasks := page._array(page.view.get("tasks"))
 	if tasks.is_empty():
-		_text(stage, Rect2(600, 240, 450, 80), "当前任务已完成", 25, LIGHT, HORIZONTAL_ALIGNMENT_CENTER)
-	var width := minf(234, 752.0 / maxi(1, tasks.size()) - 16)
-	var start := 500 + (752 - tasks.size() * (width + 16)) * 0.5
+		_text(stage,Rect2(610,280,470,50),"当前任务已完成",25,LIGHT,HORIZONTAL_ALIGNMENT_CENTER)
+	var width := minf(234,660.0/maxi(1,tasks.size())-12)
+	var start := 568+(660-tasks.size()*(width+12))*.5
 	for index in tasks.size():
 		var task := page._dict(tasks[index])
-		var id := str(task.get("task_id", ""))
-		var x := start + index * (width + 16)
-		var intent := page._intent_text(page._dict(task.get("intent_snapshot")))
-		var badge := _panel(
-			stage, Rect2(x, 146, width, 50), Color(UiStyle.NIGHT,.92), Color("a8875b")
-		)
-		_text(
-			badge,
-			Rect2(8, 4, width - 16, 42),
-			"下回合意图\n" + intent,
-			14,
-			Color("f3d2a1"),
-			HORIZONTAL_ALIGNMENT_CENTER
-		)
-		var frame := _actor(Rect2(x, 260, width, 182), id, str(task.get("definition_id", "")), "task", int(task.get("phase_index", 1)))
-		var task_title := _text(stage, Rect2(x, 205, width, 28), UiStyle.label(str(task.get("definition_id", ""))), 21, LIGHT, HORIZONTAL_ALIGNMENT_CENTER)
-		task_title.name = "TaskTitle_" + id.validate_node_name()
-		var phase_count := int(task.get("phase_count", 1))
+		var id := str(task.get("task_id",""))
+		var x := start+index*(width+12)
+		var intent := page._task_intent_text(task)
+		var intent_label := _text(stage,Rect2(x-5,180,width+10,56),intent,roundi(20*minf(UiStyle.text_scale,1.2)),Color("ffe4b9"),HORIZONTAL_ALIGNMENT_CENTER)
+		intent_label.name = "TaskIntent_"+id.validate_node_name()
+		intent_label.add_theme_color_override("font_shadow_color",Color.BLACK)
+		intent_label.add_theme_constant_override("shadow_offset_y",2)
+		var phase_count := int(task.get("phase_count",1))
 		if phase_count > 1:
-			var phase_index := int(task.get("phase_index", 1))
-			_text(stage, Rect2(x, 233, width, 18), "第 %s / %s 阶段" % [phase_index, phase_count], 12, SOFT, HORIZONTAL_ALIGNMENT_CENTER)
-			_text(stage, Rect2(x, 251, width, 18), "最终阶段" if phase_index == phase_count else "完成后进入下一阶段", 12, SOFT, HORIZONTAL_ALIGNMENT_CENTER)
-		var remaining := int(task.get("work_remaining", 0))
-		var maximum := maxi(1, int(task.get("work_max", 1)))
-		var fill := _bar(stage, Rect2(x, 447, width, 10), float(remaining) / maximum, Color("b77566"))
-		var work_label := _text(
-			stage,
-			Rect2(x - 4, 463, width + 8, 24),
-			"剩余 %s/%s  ·  屏障 %s" % [remaining, maximum, task.get("shield", 0)],
-			16,
-			LIGHT,
-			HORIZONTAL_ALIGNMENT_CENTER
-		)
-		page._task_meters[id] = {"fill": fill, "label": work_label, "width": width, "maximum": maximum}
-		var target := _button(Rect2(x, 207, width, 236), "task:" + id, "", {}, page._bind_task(id))
+			_text(stage,Rect2(x,237,width,36),"第 %s / %s 阶段 · " % [task.get("phase_index",1),phase_count]+("最终阶段" if int(task.get("phase_index",1)) == phase_count else "完成后进入下一阶段"),13,SOFT,HORIZONTAL_ALIGNMENT_CENTER)
+		var frame := _actor(Rect2(x,270,width,207),id,str(task.get("definition_id","")),"task",int(task.get("phase_index",1)))
+		var remaining := int(task.get("work_remaining",0))
+		var maximum := maxi(1,int(task.get("work_max",1)))
+		var fill := _bar(stage,Rect2(x,483,width,14),float(remaining)/maximum,Color("c85d5b"))
+		var work_label := _text(stage,Rect2(x-4,474,width+8,32),"%s / %s  ·  屏障 %s" % [remaining,maximum,task.get("shield",0)],roundi((16 if tasks.size() >= 4 else 18)*minf(UiStyle.text_scale,1.2)),LIGHT,HORIZONTAL_ALIGNMENT_CENTER)
+		work_label.name = "TaskWorkValue_"+id.validate_node_name()
+		page._task_meters[id] = {"fill":fill,"label":work_label,"width":width,"maximum":maximum}
+		var task_title := _text(stage,Rect2(x,500,width,25),UiStyle.label(str(task.get("definition_id",""))),16,LIGHT,HORIZONTAL_ALIGNMENT_CENTER)
+		task_title.name = "TaskTitle_"+id.validate_node_name()
+		var target := _button(Rect2(x,263,width,214),"task:"+id,"",{},page._bind_task(id))
 		_transparent_target(target)
-		page._target_frames["task:" + id] = frame
+		page._target_frames["task:"+id] = frame
 		var status_text := _task_status_text(id)
 		if not status_text.is_empty():
-			var statuses := _text(stage, Rect2(x + 7, 385, width - 14, 44), status_text, 13, Color("ffe0aa"), HORIZONTAL_ALIGNMENT_CENTER)
-			statuses.name = "TaskStatus_" + id.validate_node_name()
-			var status_style := UiStyle.box(Color("233d43"))
-			status_style.set_content_margin_all(3)
-			statuses.add_theme_stylebox_override("normal", status_style)
+			var statuses := _text(stage,Rect2(x,526,width,42),status_text,13,Color("ffe0aa"),HORIZONTAL_ALIGNMENT_CENTER)
+			statuses.name = "TaskStatus_"+id.validate_node_name()
 			statuses.max_lines_visible = 2
 			statuses.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-			statuses.z_index = 2
-			statuses.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 
 func _task_status_text(task_id: String) -> String:
@@ -300,19 +240,12 @@ func _task_status_text(task_id: String) -> String:
 func _units() -> void:
 	var units := page._array(page.view.get("units"))
 	if units.is_empty():
-		_text(
-			stage,
-			Rect2(272, 376, 190, 55),
-			"协作区\n合作伙伴将在这里加入",
-			14,
-			SOFT,
-			HORIZONTAL_ALIGNMENT_CENTER
-		)
+		return
 	var height := minf(136, 290.0 / maxi(1, units.size()) - 8)
 	for index in units.size():
 		var unit := page._dict(units[index])
 		var id := str(unit.get("unit_id", ""))
-		var bounds := Rect2(268, 160 + index * (height + 12), 205, height)
+		var bounds := Rect2(324, 205 + index * (height + 12), 205, height)
 		var frame := _actor(Rect2(bounds.position, Vector2(94, height)), id, str(unit.get("definition_id", "")), "unit")
 		_text(stage, Rect2(bounds.position+Vector2(94, 8), Vector2(111, 34)), UiStyle.label(str(unit.get("definition_id", ""))).split("：")[0], 16, LIGHT)
 		_text(stage, Rect2(bounds.position+Vector2(94, 43), Vector2(111, height-45)), "精力 %s\n协作 %s\n放松 %s · 护卫 %s" % [unit.get("vitality",0), unit.get("cooperation",0), unit.get("relax",0), unit.get("guard",0)], 13, SOFT)
@@ -322,18 +255,25 @@ func _units() -> void:
 
 
 func _actor(bounds: Rect2, id: String, definition: String, kind: String, phase: int = 1) -> BattleActorView:
-	var actor := BattleActorView.new()
-	actor.configure(definition, kind, phase)
+	var actor := page._take_pilot_actor(id, definition, kind, phase)
+	var fresh := not is_instance_valid(actor)
+	if fresh:
+		actor = BattleActorView.new()
+		actor.configure(definition, kind, phase)
 	actor.position = bounds.position
 	actor.size = bounds.size
 	stage.add_child(actor)
+	actor._fit_rig()
+	actor.set_motion(page.animation_enabled)
 	page._actors[id] = actor
+	if fresh and is_instance_valid(actor.rig) and page.animation_enabled:
+		page._presentation._tweens.append(actor.cue("enter", page.effect_speed()))
 	return actor
 
 
 func _hand() -> void:
 	var cards := page._array(page.view.get("hand"))
-	var step := minf(146, 720.0 / maxi(1, cards.size() - 1))
+	var step := minf(126, 660.0 / maxi(1, cards.size() - 1))
 	var start := 640 - (step * (cards.size() - 1) + BattleCard.FACE_SIZE.x) * 0.5
 	for index in cards.size():
 		var data := page._dict(cards[index])
@@ -344,8 +284,8 @@ func _hand() -> void:
 		card.set_meta("uid", "card:" + id)
 		card.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		var offset := float(index) - (cards.size() - 1) * 0.5
-		card.home_rotation = deg_to_rad(clampf(offset * 1.6, -5, 5))
-		card.home_position = Vector2(start + index * step, 495 + minf(absf(offset), 3) * 2)
+		card.home_rotation = deg_to_rad(clampf(offset * 5.0, -16, 16))
+		card.home_position = Vector2(start + index * step, 548 + minf(offset * offset * 2.0, 30))
 		card.home_order = 10 + index
 		card.position = card.home_position
 		card.rotation = card.home_rotation
@@ -365,7 +305,7 @@ func _hand() -> void:
 		)
 	_text(
 		stage,
-		Rect2(300, 786, 680, 14),
+		Rect2(310, 782, 660, 17),
 		"1—9 选牌 / 点击或拖拽出牌 / I 详情 / 右键或 Esc 取消",
 		11,
 		SOFT,
@@ -377,18 +317,19 @@ func _hand() -> void:
 func _controls() -> void:
 	var player := page._dict(page.view.get("player"))
 	var orb := BattleActionButton.new()
+	orb.name = "FocusDevice"
 	orb.configure("focus", int(player.get("focus", 0)))
-	orb.position = Vector2(40, 572)
-	orb.size = Vector2(120, 92)
+	orb.position = Vector2(34, 603)
+	orb.size = Vector2(118, 116)
 	orb.tooltip_text = "专注用于支付卡牌费用，准备阶段恢复。"
 	orb.focus_mode = Control.FOCUS_NONE
 	stage.add_child(orb)
-	_pile_button(Rect2(40, 684, 104, 108), "draw", Callable(page, "_show_draw"))
-	_pile_button(Rect2(1106, 690, 72, 102), "discard", Callable(page, "_show_discard"))
-	_pile_button(Rect2(1188, 690, 72, 102), "exhaust", Callable(page, "_show_exhaust"))
-	page.add_end_turn(stage, Rect2(1102, 587, 150, 72))
+	_pile_button(Rect2(12, 716, 86, 78), "draw", Callable(page, "_show_draw"))
+	_pile_button(Rect2(1166, 706, 92, 88), "discard", Callable(page, "_show_discard"))
+	_pile_button(Rect2(1088, 739, 66, 55), "exhaust", Callable(page, "_show_exhaust"))
+	page.add_end_turn(stage, Rect2(1094, 610, 172, 62))
 	var cancel := _button(
-		Rect2(1102, 541, 150, 34),
+		Rect2(1094, 570, 172, 33),
 		"battle:cancel",
 		"取消选择  Esc",
 		{},
@@ -396,9 +337,6 @@ func _controls() -> void:
 	)
 	cancel.visible = not page._selected_card_id.is_empty() or not page._selected_unit_id.is_empty()
 	cancel.disabled = not cancel.visible
-	var notice := _text(stage, Rect2(22, 666, 148, 20), str(page.view.get("notice", "")), 12, SOFT)
-	notice.max_lines_visible = 1
-	notice.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 
 
 func _pile_button(bounds: Rect2, kind: String, callback: Callable) -> BattlePileButton:
@@ -528,11 +466,12 @@ func _choice_panel() -> void:
 	confirm.size = Vector2(260, 52)
 	_style_button(confirm)
 	var restart := page.add_button(
-		overlay, "choice:new_run", "新一局", {"type": "ui.new_run", "payload": {}}
+		overlay, "choice:menu", "返回主页", {"type": "ui.menu", "payload": {}}
 	)
 	_style_button(restart)
-	restart.position = Vector2(820, 444)
+	restart.position = Vector2(40, 444)
 	restart.size = Vector2(210, 42)
+	confirm.position = Vector2(770, 438)
 
 
 func _info_panel() -> void:
@@ -594,19 +533,12 @@ func _button(
 
 
 func _style_button(button: Button) -> void:
-	button.add_theme_font_size_override("font_size", 15)
-	button.add_theme_color_override("font_color", LIGHT)
-	button.add_theme_color_override("font_hover_color", Color("ffde9d"))
-	button.add_theme_color_override("font_disabled_color", Color("788b88"))
-	for state in ["normal", "hover", "pressed", "disabled", "focus"]:
-		var style := UiStyle.box(Color("27474a") if state == "normal" else Color("365957"))
-		style.border_color = Color("d8ba7c") if state in ["hover", "focus"] else Color("718d82")
-		style.set_border_width_all(1)
-		style.content_margin_top = 2
-		style.content_margin_bottom = 2
-		style.content_margin_left = 3
-		style.content_margin_right = 3
-		button.add_theme_stylebox_override(state, style)
+	UiStyle.button_skin(button,"secondary",true)
+	button.add_theme_font_size_override("font_size",14)
+	for state in ["normal","hover","pressed","disabled","focus"]:
+		var style := button.get_theme_stylebox(state).duplicate() as StyleBox
+		style.set_content_margin_all(2)
+		button.add_theme_stylebox_override(state,style)
 
 
 func _transparent_target(button: Button) -> void:
@@ -630,6 +562,10 @@ func _text(
 	var label := Label.new()
 	label.add_theme_font_size_override("font_size", font_size)
 	label.add_theme_color_override("font_color", color)
+	label.add_theme_color_override("font_shadow_color", Color(0,0,0,.8))
+	label.add_theme_color_override("font_outline_color", Color("14212a"))
+	label.add_theme_constant_override("outline_size", 2)
+	label.add_theme_constant_override("shadow_offset_y", 1)
 	label.size = bounds.size
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	label.text = value

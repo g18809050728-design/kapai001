@@ -1,6 +1,9 @@
 class_name BattleActorView
 extends Control
 
+static var pilot_enabled := false
+var rig: NativeActorRig
+
 ## Prototype paper stage. Portrait, moving prop, silhouette and hit zone are separate.
 var definition_id := ""
 var actor_kind := "task"
@@ -21,6 +24,9 @@ var guard_strength := 0.0:
 var _portrait: Texture2D
 var _pose_tween: Tween
 
+func _ready() -> void:
+	_fit_rig()
+
 func configure(id: String, kind: String, phase: int = 1) -> void:
 	definition_id = id
 	actor_kind = kind
@@ -34,13 +40,31 @@ func configure(id: String, kind: String, phase: int = 1) -> void:
 		var file := "res://assets/art/presentation-v2/actors/"+id+".png"
 		_portrait = load(file) as Texture2D if ResourceLoader.exists(file) else UiStyle.texture(id)
 	resized.connect(queue_redraw)
+	if pilot_enabled:
+		var rig_file := "res://assets/art/actor-rig-pilot/" + id + "/rig.json"
+		if FileAccess.file_exists(rig_file):
+			rig = NativeActorRig.new()
+			rig.name = "NativeActorRig"
+			add_child(rig)
+			if not rig.configure(rig_file):
+				rig.queue_free()
+				rig = null
+			else:
+				resized.connect(_fit_rig)
+				_fit_rig()
 	queue_redraw()
+
+func _fit_rig() -> void:
+	if is_instance_valid(rig):
+		rig.fit(self.size)
 
 func set_targeted(value: bool) -> void:
 	targeted = value
 	queue_redraw()
 
 func cue(kind: String, speed: float) -> Tween:
+	if is_instance_valid(rig):
+		return rig.cue(kind, speed)
 	var property := "hit_strength" if kind == "hit" else ("guard_strength" if kind == "guard" else "action_strength")
 	var tween := create_tween()
 	tween.tween_property(self,property,1.0,.18/maxf(.05,speed)).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
@@ -48,13 +72,21 @@ func cue(kind: String, speed: float) -> Tween:
 	return tween
 
 func reset_pose() -> void:
+	if is_instance_valid(rig):
+		rig.finish_action()
 	action_strength = 0
 	hit_strength = 0
 	guard_strength = 0
 	modulate.a = 1
 
 func action_anchor() -> Vector2:
+	if is_instance_valid(rig) and is_inside_tree():
+		return get_global_transform().affine_inverse() * rig.to_global(rig.action_anchor())
 	return Vector2(size.x*.7,size.y*.48)
+
+func set_motion(enabled: bool) -> void:
+	if is_instance_valid(rig):
+		rig.set_motion(enabled)
 
 func _draw() -> void:
 	var floor_center := Vector2(size.x*.5,size.y-12)
@@ -63,7 +95,9 @@ func _draw() -> void:
 	if targeted:
 		draw_circle(Vector2.ZERO,size.x*.44,UiStyle.GREEN.darkened(.1),false,3,true)
 	draw_set_transform(Vector2.ZERO)
-	if actor_kind == "task":
+	if is_instance_valid(rig):
+		pass
+	elif actor_kind == "task":
 		_draw_task()
 	else:
 		if _portrait != null:

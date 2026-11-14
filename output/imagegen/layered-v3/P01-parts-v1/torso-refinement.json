@@ -1,0 +1,71 @@
+{
+  "source": "parts/P01_torso.png",
+  "source_sha256": "fbc4f591d56eeb56e06f725d9b95b4256434664f553b9c312addfc506827cc57",
+  "output": "parts/P01_torso_articulation.png",
+  "output_sha256": "b52dc2bf0c44e0ef21ca1b638ef0035f642b129aa0565d7c027ea1a3c80e972e",
+  "contour_px": [
+    [
+      108,
+      0
+    ],
+    [
+      168,
+      0
+    ],
+    [
+      217,
+      47
+    ],
+    [
+      239,
+      67
+    ],
+    [
+      230,
+      108
+    ],
+    [
+      224,
+      160
+    ],
+    [
+      225,
+      210
+    ],
+    [
+      232,
+      247
+    ],
+    [
+      58,
+      250
+    ],
+    [
+      52,
+      236
+    ],
+    [
+      58,
+      179
+    ],
+    [
+      60,
+      141
+    ],
+    [
+      51,
+      103
+    ],
+    [
+      45,
+      71
+    ],
+    [
+      68,
+      48
+    ]
+  ],
+  "method": "inspected alpha contour removes fixed sleeve shapes; native canvas retained",
+  "hidden_region_source": "original atlas painted full central jacket and T-shirt; no full-character crop, no newly invented or synthesized torso pixels",
+  "limitations": "this local cleanup does not approve the overall illustration style or prove every joint seam"
+}

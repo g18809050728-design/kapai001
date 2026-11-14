@@ -1,0 +1,484 @@
+{
+  "created_at_utc": "2026-11-13T18:34:40.605721+00:00",
+  "command": [
+    "output/imagegen/layered-v3/VFX-study-v1/build_materials.py"
+  ],
+  "platform": "Windows-11-10.0.26200-SP0",
+  "source": "VFX-material-atlas-v1.png",
+  "source_sha256": "15bc6996d6f112517477df20962f5d29355aa360b984026e13410f3695614ecf",
+  "actual_mode": "RGB",
+  "actual_size": [
+    1536,
+    1024
+  ],
+  "script_sha256": "2604b215ea17be4c8914a4c94ba6e3ccffd8c85e6f93c030b22ff2afd8495750",
+  "method": "flat magenta distance key; thresholds 18/105; fractional-alpha matte reconstruction; tight crop with 8px transparent padding",
+  "native_transparency": false,
+  "static_materials_not_animation_frames": true,
+  "materials": [
+    {
+      "id": "pen_trail",
+      "label": "笔锋轨迹",
+      "requirement_ids": [
+        "UIR-055"
+      ],
+      "file": "materials/pen_trail.png",
+      "source_region_xyxy": [
+        0,
+        0,
+        384,
+        341
+      ],
+      "original_cell_alpha_bbox": [
+        34,
+        66,
+        362,
+        288
+      ],
+      "original_margin_px": [
+        34,
+        66,
+        22,
+        53
+      ],
+      "touches_cell_boundary": false,
+      "size": [
+        344,
+        238
+      ],
+      "sha256": "102fd15866d1756b94f08605c2bf4fb7a98aeae2799924c663446894803a05e9",
+      "transparent_fraction": 0.8091777408637874,
+      "semitransparent_pixels": 2539,
+      "matte_spill_indicator_pixels": 548,
+      "candidate_status": "extracted_pending_visual_review",
+      "selected": false
+    },
+    {
+      "id": "light_hit",
+      "label": "轻命中",
+      "requirement_ids": [
+        "UIR-016",
+        "UIR-055"
+      ],
+      "file": "materials/light_hit.png",
+      "source_region_xyxy": [
+        384,
+        0,
+        768,
+        341
+      ],
+      "original_cell_alpha_bbox": [
+        52,
+        66,
+        327,
+        293
+      ],
+      "original_margin_px": [
+        52,
+        66,
+        57,
+        48
+      ],
+      "touches_cell_boundary": false,
+      "size": [
+        291,
+        243
+      ],
+      "sha256": "9370010b1658b5809ab6dbf550746db7b14968fa7c4a5e6bf6e96d051835fda8",
+      "transparent_fraction": 0.7535530949047559,
+      "semitransparent_pixels": 2800,
+      "matte_spill_indicator_pixels": 502,
+      "candidate_status": "extracted_pending_visual_review",
+      "selected": false
+    },
+    {
+      "id": "heavy_hit",
+      "label": "重命中",
+      "requirement_ids": [
+        "UIR-055",
+        "UIR-056"
+      ],
+      "file": "materials/heavy_hit.png",
+      "source_region_xyxy": [
+        768,
+        0,
+        1152,
+        341
+      ],
+      "original_cell_alpha_bbox": [
+        18,
+        36,
+        350,
+        299
+      ],
+      "original_margin_px": [
+        18,
+        36,
+        34,
+        42
+      ],
+      "touches_cell_boundary": false,
+      "size": [
+        348,
+        279
+      ],
+      "sha256": "30f19f3637b892433da7a33564a6e54238e6546e20106f311fc2f20afa1e6ac1",
+      "transparent_fraction": 0.6535759897828863,
+      "semitransparent_pixels": 2753,
+      "matte_spill_indicator_pixels": 952,
+      "candidate_status": "extracted_pending_visual_review",
+      "selected": false
+    },
+    {
+      "id": "pressure_trail",
+      "label": "压力轨迹",
+      "requirement_ids": [
+        "UIR-016",
+        "UIR-055"
+      ],
+      "file": "materials/pressure_trail.png",
+      "source_region_xyxy": [
+        1152,
+        0,
+        1536,
+        341
+      ],
+      "original_cell_alpha_bbox": [
+        20,
+        0,
+        384,
+        287
+      ],
+      "original_margin_px": [
+        20,
+        0,
+        0,
+        54
+      ],
+      "touches_cell_boundary": true,
+      "size": [
+        380,
+        303
+      ],
+      "sha256": "020eed595787bf73572aa186aa1e578541298f0669826dd259181cfadc480e52",
+      "transparent_fraction": 0.7889786347055758,
+      "semitransparent_pixels": 1942,
+      "matte_spill_indicator_pixels": 1078,
+      "candidate_status": "extracted_pending_visual_review",
+      "selected": false
+    },
+    {
+      "id": "protection",
+      "label": "防护",
+      "requirement_ids": [
+        "UIR-041",
+        "UIR-055"
+      ],
+      "file": "materials/protection.png",
+      "source_region_xyxy": [
+        0,
+        341,
+        384,
+        683
+      ],
+      "original_cell_alpha_bbox": [
+        53,
+        39,
+        350,
+        282
+      ],
+      "original_margin_px": [
+        53,
+        39,
+        34,
+        60
+      ],
+      "touches_cell_boundary": false,
+      "size": [
+        313,
+        259
+      ],
+      "sha256": "0be0612625d8ea472e1fc6903cbb30d71740606e0a0cfc3aa4ac4b9a6753389b",
+      "transparent_fraction": 0.6734676255443028,
+      "semitransparent_pixels": 1395,
+      "matte_spill_indicator_pixels": 216,
+      "candidate_status": "extracted_pending_visual_review",
+      "selected": false
+    },
+    {
+      "id": "block_contact",
+      "label": "抵挡",
+      "requirement_ids": [
+        "UIR-041",
+        "UIR-055"
+      ],
+      "file": "materials/block_contact.png",
+      "source_region_xyxy": [
+        384,
+        341,
+        768,
+        683
+      ],
+      "original_cell_alpha_bbox": [
+        67,
+        52,
+        309,
+        281
+      ],
+      "original_margin_px": [
+        67,
+        52,
+        75,
+        61
+      ],
+      "touches_cell_boundary": false,
+      "size": [
+        258,
+        245
+      ],
+      "sha256": "1991b84c7265226de128fa658b856e1c6735c6bd1ef479896f47e1df74e2fbf6",
+      "transparent_fraction": 0.6603860148710647,
+      "semitransparent_pixels": 1510,
+      "matte_spill_indicator_pixels": 268,
+      "candidate_status": "extracted_pending_visual_review",
+      "selected": false
+    },
+    {
+      "id": "guard_break",
+      "label": "破防",
+      "requirement_ids": [
+        "UIR-041",
+        "UIR-055"
+      ],
+      "file": "materials/guard_break.png",
+      "source_region_xyxy": [
+        768,
+        341,
+        1152,
+        683
+      ],
+      "original_cell_alpha_bbox": [
+        37,
+        39,
+        331,
+        277
+      ],
+      "original_margin_px": [
+        37,
+        39,
+        53,
+        65
+      ],
+      "touches_cell_boundary": false,
+      "size": [
+        310,
+        254
+      ],
+      "sha256": "054058219d4008d76afa7354b4436fcb20908abbe9a21bdc8c758f959263e4d7",
+      "transparent_fraction": 0.6878587757175514,
+      "semitransparent_pixels": 1787,
+      "matte_spill_indicator_pixels": 415,
+      "candidate_status": "extracted_pending_visual_review",
+      "selected": false
+    },
+    {
+      "id": "restore",
+      "label": "恢复",
+      "requirement_ids": [
+        "UIR-016",
+        "UIR-055"
+      ],
+      "file": "materials/restore.png",
+      "source_region_xyxy": [
+        1152,
+        341,
+        1536,
+        683
+      ],
+      "original_cell_alpha_bbox": [
+        48,
+        38,
+        326,
+        281
+      ],
+      "original_margin_px": [
+        48,
+        38,
+        58,
+        61
+      ],
+      "touches_cell_boundary": false,
+      "size": [
+        294,
+        259
+      ],
+      "sha256": "a81bb391dcb22f12559b6a18133773ff063f67343a6430deaa9d2f90303b3bae",
+      "transparent_fraction": 0.7911380768523626,
+      "semitransparent_pixels": 2737,
+      "matte_spill_indicator_pixels": 189,
+      "candidate_status": "extracted_pending_visual_review",
+      "selected": false
+    },
+    {
+      "id": "focus_gain",
+      "label": "专注变化",
+      "requirement_ids": [
+        "UIR-016",
+        "UIR-055"
+      ],
+      "file": "materials/focus_gain.png",
+      "source_region_xyxy": [
+        0,
+        683,
+        384,
+        1024
+      ],
+      "original_cell_alpha_bbox": [
+        0,
+        11,
+        307,
+        341
+      ],
+      "original_margin_px": [
+        0,
+        11,
+        77,
+        0
+      ],
+      "touches_cell_boundary": true,
+      "size": [
+        323,
+        346
+      ],
+      "sha256": "0a4aea5e64b0c4028b62655e7bf8a28ee3f2414e26443fb9e053ff5c27dfc63f",
+      "transparent_fraction": 0.8584709819431271,
+      "semitransparent_pixels": 2155,
+      "matte_spill_indicator_pixels": 448,
+      "candidate_status": "extracted_pending_visual_review",
+      "selected": false
+    },
+    {
+      "id": "partner_arrival",
+      "label": "伙伴入场",
+      "requirement_ids": [
+        "UIR-042",
+        "UIR-055"
+      ],
+      "file": "materials/partner_arrival.png",
+      "source_region_xyxy": [
+        384,
+        683,
+        768,
+        1024
+      ],
+      "original_cell_alpha_bbox": [
+        43,
+        53,
+        333,
+        255
+      ],
+      "original_margin_px": [
+        43,
+        53,
+        51,
+        86
+      ],
+      "touches_cell_boundary": false,
+      "size": [
+        306,
+        218
+      ],
+      "sha256": "16e5d611d06b0ac62f3e2d589f54d0724d4deb6e1b7b87e44feb08c78ae4ca23",
+      "transparent_fraction": 0.7732056125202375,
+      "semitransparent_pixels": 1934,
+      "matte_spill_indicator_pixels": 359,
+      "candidate_status": "extracted_pending_visual_review",
+      "selected": false
+    },
+    {
+      "id": "status_attachment",
+      "label": "状态附着",
+      "requirement_ids": [
+        "UIR-042",
+        "UIR-055"
+      ],
+      "file": "materials/status_attachment.png",
+      "source_region_xyxy": [
+        768,
+        683,
+        1152,
+        1024
+      ],
+      "original_cell_alpha_bbox": [
+        46,
+        53,
+        291,
+        259
+      ],
+      "original_margin_px": [
+        46,
+        53,
+        93,
+        82
+      ],
+      "touches_cell_boundary": false,
+      "size": [
+        261,
+        222
+      ],
+      "sha256": "7ca7ebe539810c3c516fbd981cd442c6a578d6d6bff90aa7909e2bf4abaeefad",
+      "transparent_fraction": 0.8023023023023023,
+      "semitransparent_pixels": 1199,
+      "matte_spill_indicator_pixels": 449,
+      "candidate_status": "extracted_pending_visual_review",
+      "selected": false
+    },
+    {
+      "id": "phase_pulse",
+      "label": "阶段冲击",
+      "requirement_ids": [
+        "UIR-042",
+        "UIR-056"
+      ],
+      "file": "materials/phase_pulse.png",
+      "source_region_xyxy": [
+        1152,
+        683,
+        1536,
+        1024
+      ],
+      "original_cell_alpha_bbox": [
+        18,
+        47,
+        384,
+        341
+      ],
+      "original_margin_px": [
+        18,
+        47,
+        0,
+        0
+      ],
+      "touches_cell_boundary": true,
+      "size": [
+        382,
+        310
+      ],
+      "sha256": "6afac394f8cd0d53a9a1f577bc10728f54dfdaea87196899effb5fd8972c915a",
+      "transparent_fraction": 0.7876541124809998,
+      "semitransparent_pixels": 2694,
+      "matte_spill_indicator_pixels": 723,
+      "candidate_status": "extracted_pending_visual_review",
+      "selected": false
+    }
+  ],
+  "clipping_indicators": [
+    "pressure_trail",
+    "focus_gain",
+    "phase_pulse"
+  ],
+  "visual_review": "pending",
+  "runtime_integration": "not_started",
+  "human_acceptance": "pending",
+  "release_license": "pending"
+}

@@ -208,9 +208,14 @@ static func decode_session(snapshot: Variant, catalog: ContentDB) -> GameResult:
 		and legacy_campaign.get("campaign", {}).get("version") == 1
 		and catalog.accepts_legacy_four_year_hash(str(snapshot.content_hash))
 	)
+	var additive_hash: bool = (
+		legacy_campaign is Dictionary
+		and legacy_campaign.get("difficulty") == "normal"
+		and catalog.accepts_previous_four_year_hash(str(snapshot.content_hash))
+	)
 	if (
 		snapshot.content_version != info.content_version
-		or (snapshot.content_hash != info.content_hash and not legacy_hash)
+		or (snapshot.content_hash != info.content_hash and not legacy_hash and not additive_hash)
 		or snapshot.manifest_id != info.id
 	):
 		return _error(

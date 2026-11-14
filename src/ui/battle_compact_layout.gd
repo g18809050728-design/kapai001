@@ -218,4 +218,4 @@ func _choice(page: BattleScreen) -> void:
 		var definition := str(detail.get("definition_id", option.get("label_key", id)))
 		page.add_card(grid, "choice:" + id, definition, detail.get("face", detail.get("detail", detail)), UiStyle.label(definition), page._choice_selected_ids.has(id), page._bind_choice(id))
 	page.add_button(page.footer, "choice:confirm", "确认必选结果", page._choice_draft())
-	page.add_button(page.footer, "choice:new_run", "配置新一局", {"type": "ui.new_run", "payload": {}})
+	page.add_button(page.footer, "choice:menu", "返回主页", {"type": "ui.menu", "payload": {}})

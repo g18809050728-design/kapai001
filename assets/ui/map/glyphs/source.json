@@ -1,0 +1,64 @@
+{
+  "origin": "Original campus vector paths authored for UIR-019/063 composition correction",
+  "viewbox": [
+    48,
+    48
+  ],
+  "base_stroke": 2.25,
+  "external_images": false,
+  "game_rng_used": false,
+  "glyphs": {
+    "N": {
+      "file": "n.svg",
+      "sha256": "32c50fa01ed4f3aa0f764c944d51b3d3d930d41d06e7c6a05ee0e13409615552"
+    },
+    "EL": {
+      "file": "el.svg",
+      "sha256": "e608caf4dcc5c49eee60a15d6163110cb6089e8bd18aaf001b8743ac3a196989"
+    },
+    "B": {
+      "file": "b.svg",
+      "sha256": "6a4b6da90904a8cf83215b37f67dd658a32d1fbc7723ef3b5fd7ec7df5067b5e"
+    },
+    "S": {
+      "file": "s.svg",
+      "sha256": "db6c135b29ae47b6eb7f22d27d9fe20c3b5ae0c945a6540f65a0dfb0b9cdc7ff"
+    },
+    "R": {
+      "file": "r.svg",
+      "sha256": "935edd6f7fae26063b676d2bf46ff61c8f45b9ec9d29c061ca9df654609de70c"
+    },
+    "L": {
+      "file": "l.svg",
+      "sha256": "214d95f62847ee743245e4108fdc18ee5f19afcdda9a050ef0d09e3cdddb5a14"
+    },
+    "LAB": {
+      "file": "lab.svg",
+      "sha256": "2144a7c0f38aa4b8b015c95991d51df592f0bc08f4ce3c60771b68a494fb2e05"
+    },
+    "K": {
+      "file": "k.svg",
+      "sha256": "590d9ccdcde71a89942c0fb34dc950d0b136d92636b96fa4f91d2e327e63fc51"
+    },
+    "C": {
+      "file": "c.svg",
+      "sha256": "a8f47f5a4e194a55fcc259a407b652a6b4db611b616a519f0b2cf58ea631653b"
+    },
+    "T": {
+      "file": "t.svg",
+      "sha256": "7f3bcb9466aff95b1216a4047f04d3de66e3c8c2cb9973a80276f602ea43397a"
+    },
+    "I": {
+      "file": "i.svg",
+      "sha256": "9af0cfe807c7a68c04cc827c28f0895fcb2273a8c0c3400b243db7273cd04bb1"
+    },
+    "ST": {
+      "file": "st.svg",
+      "sha256": "1ba7280b374ec8aaf100b81d1918e6d299bf9cdc3f244cdca87f0eaee07114d0"
+    },
+    "E": {
+      "file": "e.svg",
+      "sha256": "a3fbf0ad6567c8f7ed3dbd5513977ceaec653bb16309a403365187c7cb3e970d"
+    }
+  }
+}

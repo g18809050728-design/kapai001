@@ -1,0 +1,527 @@
+{
+  "schema": "p01-offline-parts-v1",
+  "entity_id": "P01",
+  "version": "parts-v1",
+  "requirement_ids": [
+    "UIR-052",
+    "UIR-054",
+    "UIR-057"
+  ],
+  "canvas_size": [
+    640,
+    720
+  ],
+  "coordinate_system": "x right, y down; degrees clockwise",
+  "transform": "joint = parent_joint + rotate(parent_angle, rest_offset); angle = parent_angle + rest_angle + delta; sprite scale does not propagate",
+  "purpose": "G6 asset articulation and seam inspection only; not game timing or runtime",
+  "source_atlas": "P01-parts-atlas-v1.png",
+  "source_atlas_sha256": "7e952ba60a0f6a5becdc95070fd0d3399d86e29d8b93a5e70cc7058ee7e74616",
+  "prop_ids": [
+    "laptop",
+    "pen"
+  ],
+  "parts": [
+    {
+      "id": "pelvis_coat_hem",
+      "file": "parts/P01_pelvis_coat_hem.png",
+      "parent": null,
+      "pivot_px": [
+        125.0,
+        17.5
+      ],
+      "scale": [
+        0.576,
+        0.5028571428571429
+      ],
+      "rendered_size": [
+        144,
+        88
+      ],
+      "rest_offset": [
+        320,
+        400
+      ],
+      "rest_angle_deg": 0,
+      "z_index": 9,
+      "role": "body",
+      "image_size": [
+        250,
+        175
+      ],
+      "sha256": "24a766524eb4b1dd86f7c5a7fe16fc69d3f5514cfece2f0c34069092f3d2bb87"
+    },
+    {
+      "id": "torso",
+      "file": "parts/P01_torso_articulation.png",
+      "parent": "pelvis_coat_hem",
+      "pivot_px": [
+        139.0,
+        230.92
+      ],
+      "scale": [
+        0.658273381294964,
+        0.6693227091633466
+      ],
+      "rendered_size": [
+        183,
+        168
+      ],
+      "rest_offset": [
+        0,
+        -6
+      ],
+      "rest_angle_deg": 0,
+      "z_index": 10,
+      "role": "body",
+      "image_size": [
+        278,
+        251
+      ],
+      "sha256": "b52dc2bf0c44e0ef21ca1b638ef0035f642b129aa0565d7c027ea1a3c80e972e"
+    },
+    {
+      "id": "head",
+      "file": "parts/P01_head.png",
+      "parent": "torso",
+      "pivot_px": [
+        90.3,
+        229.32
+      ],
+      "scale": [
+        0.5813953488372093,
+        0.5833333333333334
+      ],
+      "rendered_size": [
+        125,
+        147
+      ],
+      "rest_offset": [
+        8,
+        -139
+      ],
+      "rest_angle_deg": 0,
+      "z_index": 12,
+      "role": "body",
+      "image_size": [
+        215,
+        252
+      ],
+      "sha256": "1ac6a2094acd5ccd5735ac6d97a8172d8f7e1229d8c43442102adc89d9c2434b"
+    },
+    {
+      "id": "hair_back",
+      "file": "parts/P01_hair_back.png",
+      "parent": "head",
+      "pivot_px": [
+        127.0,
+        151.2
+      ],
+      "scale": [
+        0.562992125984252,
+        0.5396825396825397
+      ],
+      "rendered_size": [
+        143,
+        102
+      ],
+      "rest_offset": [
+        0,
+        -64
+      ],
+      "rest_angle_deg": 0,
+      "z_index": 11,
+      "role": "body",
+      "image_size": [
+        254,
+        189
+      ],
+      "sha256": "2ed7deba55dcce6479ef5f3613bd974c8de58fa7917a76cba1e726bdb380f84d"
+    },
+    {
+      "id": "hair_front",
+      "file": "parts/P01_hair_front.png",
+      "parent": "head",
+      "pivot_px": [
+        132.0,
+        157.44
+      ],
+      "scale": [
+        0.5416666666666666,
+        0.5
+      ],
+      "rendered_size": [
+        143,
+        96
+      ],
+      "rest_offset": [
+        3,
+        -64
+      ],
+      "rest_angle_deg": 0,
+      "z_index": 13,
+      "role": "body",
+      "image_size": [
+        264,
+        192
+      ],
+      "sha256": "243843cda5421f7d9ac9ac9f5eeebcf9b1f98d0c2c8f50530c730a2e7afcecc0"
+    },
+    {
+      "id": "arm_far_upper",
+      "file": "parts/P01_arm_far_upper.png",
+      "parent": "torso",
+      "pivot_px": [
+        74.8,
+        29.96
+      ],
+      "scale": [
+        0.4485294117647059,
+        0.514018691588785
+      ],
+      "rendered_size": [
+        61,
+        110
+      ],
+      "rest_offset": [
+        -62,
+        -125
+      ],
+      "rest_angle_deg": -14,
+      "z_index": 4,
+      "role": "body",
+      "image_size": [
+        136,
+        214
+      ],
+      "sha256": "0aff2953d97fde56da87be5bae226daef8985b9e61dd6e9cededc22349a47933"
+    },
+    {
+      "id": "arm_far_lower_hand",
+      "file": "parts/P01_arm_far_lower_hand.png",
+      "parent": "arm_far_upper",
+      "pivot_px": [
+        44.1,
+        28.2
+      ],
+      "scale": [
+        0.4777777777777778,
+        0.4765957446808511
+      ],
+      "rendered_size": [
+        43,
+        112
+      ],
+      "rest_offset": [
+        0,
+        77
+      ],
+      "rest_angle_deg": -52,
+      "z_index": 16,
+      "role": "body",
+      "image_size": [
+        90,
+        235
+      ],
+      "sha256": "37f188c04d7f6516330ab38509d8e1b212b09dce2638fec799ddc02b1ad733dd"
+    },
+    {
+      "id": "arm_near_upper",
+      "file": "parts/P01_arm_near_upper.png",
+      "parent": "torso",
+      "pivot_px": [
+        70.72,
+        26.65
+      ],
+      "scale": [
+        0.5,
+        0.5317073170731708
+      ],
+      "rendered_size": [
+        68,
+        109
+      ],
+      "rest_offset": [
+        61,
+        -124
+      ],
+      "rest_angle_deg": -8,
+      "z_index": 18,
+      "role": "body",
+      "image_size": [
+        136,
+        205
+      ],
+      "sha256": "24788f884c858ba8b1da9a6b9655daf48cfe1c22f28c8114aedf2f6c5e45df41"
+    },
+    {
+      "id": "arm_near_lower",
+      "file": "parts/P01_arm_near_lower.png",
+      "parent": "arm_near_upper",
+      "pivot_px": [
+        51.84,
+        26.16
+      ],
+      "scale": [
+        0.4166666666666667,
+        0.5045871559633027
+      ],
+      "rendered_size": [
+        45,
+        110
+      ],
+      "rest_offset": [
+        0,
+        78
+      ],
+      "rest_angle_deg": -23,
+      "z_index": 19,
+      "role": "body",
+      "image_size": [
+        108,
+        218
+      ],
+      "sha256": "3017c97a4122f0e35d4c857436a560aa78e29aa9073ae59c0b9cfdadee8bcac2"
+    },
+    {
+      "id": "hand_near",
+      "file": "parts/P01_hand_near.png",
+      "parent": "arm_near_lower",
+      "pivot_px": [
+        58.14,
+        21.98
+      ],
+      "scale": [
+        0.38235294117647056,
+        0.39490445859872614
+      ],
+      "rendered_size": [
+        39,
+        62
+      ],
+      "rest_offset": [
+        0,
+        85
+      ],
+      "rest_angle_deg": -5,
+      "z_index": 20,
+      "role": "body",
+      "image_size": [
+        102,
+        157
+      ],
+      "sha256": "d334110495865c0ab524b67814b606e7c8f6bd60371583901231a0fb64bf86b9"
+    },
+    {
+      "id": "leg_far_upper",
+      "file": "parts/P01_leg_far_upper.png",
+      "parent": "pelvis_coat_hem",
+      "pivot_px": [
+        69.6,
+        33.04
+      ],
+      "scale": [
+        0.4413793103448276,
+        0.4576271186440678
+      ],
+      "rendered_size": [
+        64,
+        108
+      ],
+      "rest_offset": [
+        -31,
+        41
+      ],
+      "rest_angle_deg": 8,
+      "z_index": 3,
+      "role": "body",
+      "image_size": [
+        145,
+        236
+      ],
+      "sha256": "02f97c175cc5fbbaf9ab88ea372637f921f8d229c3d3c314604c5c228454f20e"
+    },
+    {
+      "id": "leg_far_lower_foot",
+      "file": "parts/P01_leg_far_lower_foot.png",
+      "parent": "leg_far_upper",
+      "pivot_px": [
+        50.12,
+        21.87
+      ],
+      "scale": [
+        0.48044692737430167,
+        0.49382716049382713
+      ],
+      "rendered_size": [
+        86,
+        120
+      ],
+      "rest_offset": [
+        0,
+        80
+      ],
+      "rest_angle_deg": -8,
+      "z_index": 2,
+      "role": "body",
+      "image_size": [
+        179,
+        243
+      ],
+      "sha256": "9bb7efeffef578cafe7fa46ca28b9bfd38c1daabf7a6a1335844f1af40ca539d"
+    },
+    {
+      "id": "leg_near_upper",
+      "file": "parts/P01_leg_near_upper.png",
+      "parent": "pelvis_coat_hem",
+      "pivot_px": [
+        63.45,
+        31.22
+      ],
+      "scale": [
+        0.5037037037037037,
+        0.484304932735426
+      ],
+      "rendered_size": [
+        68,
+        108
+      ],
+      "rest_offset": [
+        32,
+        41
+      ],
+      "rest_angle_deg": -8,
+      "z_index": 8,
+      "role": "body",
+      "image_size": [
+        135,
+        223
+      ],
+      "sha256": "af6d0c3c4dc7586346c0e5e3d1e808d3963ca47f291a3729d640488b58c14f5c"
+    },
+    {
+      "id": "leg_near_lower_foot",
+      "file": "parts/P01_leg_near_lower_foot.png",
+      "parent": "leg_near_upper",
+      "pivot_px": [
+        88.48,
+        26.5
+      ],
+      "scale": [
+        0.2848101265822785,
+        0.4528301886792453
+      ],
+      "rendered_size": [
+        90,
+        120
+      ],
+      "rest_offset": [
+        0,
+        80
+      ],
+      "rest_angle_deg": 8,
+      "z_index": 7,
+      "role": "body",
+      "image_size": [
+        316,
+        265
+      ],
+      "sha256": "64a16835c96471bda7807a2f7a242afe31aa09fadbccc619cd9fb691067fa957"
+    },
+    {
+      "id": "laptop",
+      "file": "parts/P01_laptop.png",
+      "parent": "arm_far_lower_hand",
+      "pivot_px": [
+        98.7,
+        110.5
+      ],
+      "scale": [
+        0.3702127659574468,
+        0.5470588235294118
+      ],
+      "rendered_size": [
+        87,
+        93
+      ],
+      "rest_offset": [
+        0,
+        89
+      ],
+      "rest_angle_deg": 56,
+      "z_index": 15,
+      "role": "prop",
+      "image_size": [
+        235,
+        170
+      ],
+      "sha256": "f450dbc2150c2fdb7eb89e38a6d9572f29aba6dcb02b4e285eb441f672f37f0f"
+    },
+    {
+      "id": "pen",
+      "file": "parts/P01_pen.png",
+      "parent": "hand_near",
+      "pivot_px": [
+        18.0,
+        123.0
+      ],
+      "scale": [
+        0.3333333333333333,
+        0.44878048780487806
+      ],
+      "rendered_size": [
+        12,
+        92
+      ],
+      "rest_offset": [
+        6,
+        35
+      ],
+      "rest_angle_deg": -120,
+      "z_index": 21,
+      "role": "prop",
+      "image_size": [
+        36,
+        205
+      ],
+      "sha256": "2182bbfac70a5526dcb2d5901d89ae2606b39565748518ef8ec64d6cdd1259d2"
+    }
+  ],
+  "poses": {
+    "breath": {
+      "torso": -2,
+      "head": 3,
+      "arm_near_upper": 3,
+      "arm_far_upper": -2
+    },
+    "reach": {
+      "torso": -5,
+      "head": 7,
+      "arm_near_upper": -45,
+      "arm_near_lower": -25,
+      "hand_near": 13,
+      "leg_near_upper": -4,
+      "leg_near_lower_foot": 4
+    },
+    "lean": {
+      "torso": 11,
+      "head": -9,
+      "arm_near_upper": 20,
+      "arm_near_lower": 18,
+      "arm_far_upper": 4,
+      "leg_near_upper": -10,
+      "leg_near_lower_foot": 10
+    },
+    "fold": {
+      "torso": 17,
+      "head": 9,
+      "arm_near_upper": 27,
+      "arm_near_lower": -57,
+      "arm_far_upper": 12,
+      "leg_far_upper": 8,
+      "leg_far_lower_foot": -8
+    }
+  },
+  "human_acceptance": "pending",
+  "release_license": "pending",
+  "runtime_integration": "not_started"
+}

@@ -7,16 +7,17 @@ const MUTED := Color("637871")
 const GREEN := Color("78978e")
 const GOLD := Color("dda957")
 const RED := Color("bd6b64")
-const NIGHT := Color("172c30")
+const NIGHT := Color("172731")
 const BRASS := Color("c9a86b")
 const CREAM := Color("fbf5e8")
-const FOREST := Color("355b53")
+const FOREST := Color("304d5b")
 const LABELS = preload("res://src/ui/ui_labels.json")
 static var _textures: Dictionary = {}
 static var text_scale := 1.0
 static var reduced_motion := false
 static var _title_font: SystemFont
 static var _gradients: Dictionary = {}
+static var _cut_styles: Dictionary = {}
 
 
 static func gradient(first: Color, last: Color, horizontal: bool = false) -> GradientTexture2D:
@@ -54,33 +55,53 @@ static func button_skin(button: Button, role: String = "secondary", dark: bool =
 	var primary := role == "primary"
 	var quiet := role == "quiet"
 	for state in ["normal", "hover", "pressed", "disabled", "focus"]:
-		var color := FOREST if primary else (Color(NIGHT,.72) if dark else Color("f1ead9"))
-		if quiet:
-			color = Color(1,1,1,.025) if dark else Color(NIGHT,.035)
+		var color := Color("655235") if primary else Color("293f4b")
 		if state == "hover":
-			color = color.lightened(.12) if primary or dark else Color("fff6de")
+			color = color.lightened(.17)
 		if state == "pressed":
-			color = color.darkened(.17)
+			color = color.darkened(.22)
 		if state == "disabled":
-			color = Color(NIGHT,.26) if dark else Color("dcd9cf")
-		var style := surface(color, BRASS if primary or state == "hover" else (Color("658079") if dark else Color("c7beaa")), 3)
-		style.content_margin_left = 14
-		style.content_margin_right = 14
-		style.content_margin_top = 7
-		style.content_margin_bottom = 7
-		style.shadow_size = 3 if primary else 0
-		style.shadow_offset = Vector2(0,2)
-		if quiet:
-			style.set_border_width_all(0)
+			color = Color("25333b")
+		var border := BRASS if primary or state == "hover" else Color("657c85")
+		if state == "disabled":
+			border = Color("53636b")
+		var style: StyleBox = cut_surface(color, border)
+		if quiet and state == "normal":
+			style = StyleBoxEmpty.new()
 		if state == "focus":
-			style.bg_color = Color.TRANSPARENT
-			style.border_color = BRASS
-			style.set_border_width_all(2)
+			style = cut_surface(Color(0,0,0,0), Color("f9d583"))
+		if quiet:
+			style = style.duplicate() as StyleBox
+			style.content_margin_left = 6
+			style.content_margin_right = 6
+			style.content_margin_top = 2
+			style.content_margin_bottom = 2
 		button.add_theme_stylebox_override(state,style)
-	var ink := CREAM if primary or dark else INK
 	for state in ["font_color","font_hover_color","font_pressed_color","font_focus_color"]:
-		button.add_theme_color_override(state,ink)
-	button.add_theme_color_override("font_disabled_color",Color("86918b") if dark else Color("929387"))
+		button.add_theme_color_override(state,CREAM)
+	button.add_theme_color_override("font_disabled_color",Color("98a5ad"))
+	button.add_theme_color_override("font_shadow_color", Color(0,0,0,.75))
+	button.add_theme_constant_override("shadow_offset_y", 2)
+
+
+static func cut_surface(color: Color, border: Color = BRASS) -> StyleBoxTexture:
+	var key := color.to_html() + border.to_html()
+	if not _cut_styles.has(key):
+		var svg := '<svg xmlns="http://www.w3.org/2000/svg" width="120" height="48"><defs><linearGradient id="g" x2="0" y2="1"><stop stop-color="#%s" stop-opacity="%s"/><stop offset="1" stop-color="#%s" stop-opacity="%s"/></linearGradient></defs><path d="M11 2H108L118 23L107 45H11L2 24Z" fill="#080f17" fill-opacity=".8"/><path d="M11 1H107L117 22L107 43H11L2 22Z" fill="url(#g)" stroke="#%s" stroke-opacity="%s" stroke-width="1.5"/><path d="M13 4H105L113 22L104 39H13" fill="none" stroke="#ffffff" stroke-opacity=".12"/></svg>' % [color.lightened(.08).to_html(false), color.a, color.darkened(.16).to_html(false), color.a, border.to_html(false), border.a]
+		var bitmap := Image.new()
+		bitmap.load_svg_from_string(svg)
+		var style := StyleBoxTexture.new()
+		style.texture = ImageTexture.create_from_image(bitmap)
+		style.texture_margin_left = 14
+		style.texture_margin_right = 14
+		style.texture_margin_top = 8
+		style.texture_margin_bottom = 8
+		style.content_margin_left = 18
+		style.content_margin_right = 18
+		style.content_margin_top = 8
+		style.content_margin_bottom = 8
+		_cut_styles[key] = style
+	return _cut_styles[key]
 
 
 static func label(id: String) -> String:
@@ -455,8 +476,10 @@ static func make_theme() -> Theme:
 			style.set_border_width_all(2)
 		theme.set_stylebox(state, "Button", style)
 	theme.set_stylebox("panel", "PanelContainer", surface(CREAM))
-	theme.set_stylebox("normal", "LineEdit", box(Color("ffffff")))
-	theme.set_color("font_color", "LineEdit", INK)
+	theme.set_stylebox("normal", "LineEdit", surface(Color("20323f"),Color("70818a")))
+	theme.set_stylebox("focus", "LineEdit", surface(Color("283e4d"),BRASS))
+	theme.set_color("font_placeholder_color", "LineEdit", Color("9aabb0"))
+	theme.set_color("font_color", "LineEdit", CREAM)
 	return theme
 
 

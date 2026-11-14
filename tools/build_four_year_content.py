@@ -198,6 +198,9 @@ def main():
         c["starter_relic_id"] = relics[0]["id"]  # Schema reference only: campaign has no starter relic.
     rules = definitions["rulesets"][0]
     rules["run"].update(term_count=4, relic_slots=3)
+    rules["difficulty_overrides"].update(
+        relaxed=dict(starting_vitality=84, ddl_offset=2, pressure_percent=80),
+        hard=dict(starting_vitality=60, ddl_offset=-1, pressure_percent=120))
     rules["rewards"]["normal_money_by_term"] = [15, 20, 25, 30]
     rules["shop"]["relic_stock"] = dict(white=0, blue=0)
     rules["shop"].update(card_prices=dict(white=35, blue=55, purple=85))

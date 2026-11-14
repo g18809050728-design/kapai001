@@ -143,7 +143,9 @@ func _check_restart_pending() -> void:
 		return
 	var old_id: String = shell.session.get_view().run_id
 	var pending := _fingerprint(shell)
-	_check(shell.press("choice:new_run"), "pending modal can open new-run setup")
+	_check(shell.press("choice:menu"), "pending modal returns to homepage")
+	_check(_fingerprint(shell) == pending, "returning home preserves the pending workspace")
+	_check(shell.press("menu:new"), "homepage can explicitly open a new run")
 	_check(shell.press("setup:start"), "pending restart requires confirmation")
 	_check(_fingerprint(shell) == pending, "confirmation preserves pending workspace")
 	_check(
@@ -151,7 +153,7 @@ func _check_restart_pending() -> void:
 	)
 	_check(shell.press("menu:continue"), "return to original pending choice")
 	_check(_fingerprint(shell) == pending, "return preserves complete pending state and RNG")
-	_check(shell.press("choice:new_run") and shell.press("setup:start"), "reopen pending restart")
+	_check(shell.press("choice:menu") and shell.press("menu:new") and shell.press("setup:start"), "reopen pending restart from homepage")
 	_check(shell.press("setup:restart_confirm"), "confirm restart while choice is pending")
 	var current := shell.session.get_view()
 	_check(current.run_id != old_id and current.revision == 0, "pending restart creates fresh run")

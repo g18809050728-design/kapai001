@@ -28,7 +28,9 @@ func run() -> Array[String]:
 	_test_rejection(generator)
 	var density_suite: RefCounted = load("res://tests/suites/test_annual_map_generator_density.gd").new()
 	failures.append_array(density_suite.run())
-	var directory := "res://artifacts/verification/adaptive-maps-20261113/density-generator-worker"
+	var directory := OS.get_environment("CAMPUS_MAP_EVIDENCE_OUT") + "/v1"
+	if OS.get_environment("CAMPUS_MAP_EVIDENCE_OUT").is_empty():
+		directory = "user://map-property-evidence/v1"
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(directory))
 	var output := FileAccess.open(directory + "/property-inputs.json", FileAccess.WRITE)
 	if output != null:

@@ -28,6 +28,10 @@ var _submitted_scope := ""
 var _business_notice := ""
 var _damage_layer: Control
 var _waiting_for_battle := false
+var _remembered_choice: Dictionary = {}
+var _save_status := "尚无本次会话的手动保存结果"
+var _ui_feedback: Label
+var _ui_feedback_generation := 0
 
 
 func _ready() -> void:
@@ -92,6 +96,16 @@ func _build_frame() -> void:
 	_damage_layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_damage_layer.z_index = 500
 	add_child(_damage_layer)
+	_ui_feedback = Label.new()
+	_ui_feedback.name = "UiActionFeedback"
+	_ui_feedback.z_index = 600
+	_ui_feedback.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_ui_feedback.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_ui_feedback.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_ui_feedback.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_ui_feedback.add_theme_stylebox_override("normal", UiStyle.surface(Color("20353d"), UiStyle.BRASS, 4))
+	_ui_feedback.hide()
+	add_child(_ui_feedback)
 
 
 func show_screen(screen: String) -> void:
@@ -102,6 +116,8 @@ func show_screen(screen: String) -> void:
 func refresh() -> void:
 	if _waiting_for_battle or not is_instance_valid(_host):
 		return
+	if is_instance_valid(_ui_feedback):
+		_ui_feedback.hide()
 	if session.has_test_room():
 		_refresh_test_room()
 		return
@@ -128,6 +144,8 @@ func refresh() -> void:
 			data = {
 				"characters": options.data.characters,
 				"difficulties": options.data.difficulties,
+				"difficulty_details": options.data.difficulty_details,
+				"default_difficulty": String(options.data.default_difficulty),
 				"manifests": options.data.manifests,
 				"default_seed": options.data.default_seed
 			}
@@ -165,6 +183,9 @@ func refresh() -> void:
 					data.character_id = current.run.get("character_id", "P01")
 					data.max_vitality = current.run.get("max_vitality", 1)
 					data.money = current.run.get("money", 0)
+					data.route_nodes = current.run.get("nodes",[]).filter(func(node): return int(node.get("term",1)) == int(current.run.get("term",1))).duplicate(true)
+					data.route_current = current.run.get("current_node_id","")
+					data.route_reachable = current.run.get("reachable_node_ids",[]).duplicate()
 					data.cards = current.run.get("cards", []).duplicate(true)
 					data.relics = current.run.get("relics", []).duplicate(true)
 			else:
@@ -177,8 +198,19 @@ func refresh() -> void:
 			data.profile_commit_status = current.profile_commit_status
 	data.run_id = str(current.run_id) if current.run_id != null else ""
 	data.revision = current.revision
+	data.event_log = current.event_log.duplicate(true)
+	data.can_save = current.can_save
+	data.save_reason = "可保存当前完整进度" if current.can_save else ("请先完成卡牌效果中的选择" if current.pending_choice != null else "尚未开始冒险")
+	data.save_status = _save_status
+	data.autosave = session.get_profile().autosave
+	if current.run is Dictionary:
+		data.difficulty = current.run.get("difficulty", "normal")
+		data.character_id = current.run.get("character_id", "")
+		data.relic_slots = current.run.get("relic_slots", 3)
 	if page == null or _page_key != screen:
 		if page != null:
+			if page is BattleScreen:
+				_remembered_choice = page.export_choice_selection()
 			_host.remove_child(page)
 			page.queue_free()
 		if screen == "battle":
@@ -201,6 +233,9 @@ func refresh() -> void:
 			page.speed_scale = maxf(1, int(preferences.animation_speed))
 			page.set_meta("presentation", preferences.duplicate(true))
 	page.render(data)
+	if page is BattleScreen and not _remembered_choice.is_empty():
+		page.restore_choice_selection(_remembered_choice)
+		_remembered_choice.clear()
 	_regate()
 	var background_id: String = (
 		{"shop": "BG_shop", "rest": "BG_dorm", "battle": "BG_classroom", "summary": "BG_success"}
@@ -235,8 +270,8 @@ func _set_battle_frame(battle: bool) -> void:
 		_frame_margin.add_theme_constant_override("margin_" + side, 0)
 	_frame_column.add_theme_constant_override("separation", 0)
 	_status_label.visible = false
-	_notice_label.visible = not battle
-	_notice_label.custom_minimum_size.y = 28 if battle else 22
+	_notice_label.visible = last_error != null
+	_notice_label.custom_minimum_size.y = 28 if last_error != null else 0
 	if battle:
 		_frame_panel.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
 		# Apply the hidden header/footer and panel style before the hand is
@@ -323,8 +358,8 @@ func _regate() -> void:
 		var type := str(draft.get("type", ""))
 		if type == "ui.save":
 			gates[uid] = {
-				"ok": current.can_save,
-				"reason": "请先完成当前选择" if current.pending_choice != null else "尚未开始冒险"
+				"ok": current.can_save and not session.has_test_room(),
+				"reason": "测试房间请通过测试工具保存独立快照" if session.has_test_room() else ("" if current.can_save else ("请先完成当前选择" if current.pending_choice != null else "尚未开始冒险"))
 			}
 		elif (
 			current.pending_choice != null
@@ -507,6 +542,7 @@ func _test_battle_data(test_view: Dictionary) -> Dictionary:
 	data["run_id"] = str(test_state.get("test_id", ""))
 	data["revision"] = int(test_state.get("revision", 0))
 	data["can_save"] = false
+	data["save_reason"] = "测试房间请通过测试工具保存独立快照"
 	data["notice"] = notice
 	data["character_id"] = str(config.get("character_id", "P01"))
 	data["max_vitality"] = int((battle.get("player", {}) as Dictionary).get("max_vitality", 1))
@@ -514,8 +550,9 @@ func _test_battle_data(test_view: Dictionary) -> Dictionary:
 	data["cards"] = config.get("cards", [])
 	var relics: Array[Dictionary] = []
 	for relic_id in battle.get("relics", []):
-		relics.append({"definition_id": str(relic_id), "relic_id": str(relic_id), "detail": {}})
+		relics.append({"definition_id": str(relic_id), "relic_id": str(relic_id), "slot": relics.size(), "detail": battle.get("relic_details", {}).get(str(relic_id), {}).duplicate(true)})
 	data["relics"] = relics
+	data["relic_slots"] = maxi(3, relics.size())
 	data["year_label"] = "测试实验"
 	return data
 
@@ -839,6 +876,7 @@ func _navigate(type: String, payload: Dictionary) -> void:
 				session.restart_run(request, true) if replacing or session.get_view().run_id != null else session.start_run(request)
 			)
 			if started.accepted:
+				_save_status = "本次冒险尚无手动保存结果"
 				_active_seed = request.seed
 				_ui_screen = ""
 				_restart_confirmation = false
@@ -873,6 +911,11 @@ func _navigate(type: String, payload: Dictionary) -> void:
 		"ui.save":
 			if _handle_save(session.save_current()):
 				_advance_paused = false
+			if page != null:
+				page.view.save_status = _save_status
+			_regate()
+			_show_ui_feedback(notice, last_error != null)
+			return
 		"ui.save_settings":
 			var changed := session.update_settings(payload)
 			if changed.ok:
@@ -895,6 +938,25 @@ func _navigate(type: String, payload: Dictionary) -> void:
 					return
 			get_tree().quit()
 	refresh()
+	if type == "ui.save_settings":
+		_show_ui_feedback(notice, last_error != null)
+
+
+func _show_ui_feedback(message: String, error: bool = false) -> void:
+	_ui_feedback_generation += 1
+	var generation := _ui_feedback_generation
+	_ui_feedback.add_theme_font_size_override("font_size", roundi(17 * UiStyle.text_scale))
+	_ui_feedback.add_theme_color_override("font_color", Color("ffd0ba") if error else UiStyle.CREAM)
+	var width := minf(600 * minf(UiStyle.text_scale, 1.2), size.x - 64)
+	_ui_feedback.position = Vector2((size.x - width) * .5, 66)
+	# Give wrapping its final width before setting text, otherwise an initially
+	# zero-width Label caches one character per line and stays unnecessarily tall.
+	_ui_feedback.size = Vector2(width, 0)
+	_ui_feedback.text = message
+	_ui_feedback.size.y = 0
+	_ui_feedback.show()
+	get_tree().create_timer(6.0 if error else 3.5).timeout.connect(func():
+		if generation == _ui_feedback_generation and is_instance_valid(_ui_feedback): _ui_feedback.hide())
 
 
 func _apply_presentation() -> void:
@@ -976,8 +1038,10 @@ func _present_card_gain(before: SessionView, after: SessionView) -> void:
 func _handle_save(result: GameResult) -> bool:
 	if not result.ok:
 		_report_error(result.error)
+		_save_status = "最近手动保存失败：" + UiStyle.error_text(result.error)
 		return false
 	notice = _persistence_notice(&"saved", result.data.profile_merge, result.data.profile_cleanup)
+	_save_status = "最近手动保存：" + notice
 	return (
 		result.data.profile_merge not in [&"failed", &"pending"]
 		and result.data.profile_cleanup not in [&"failed", &"pending"]

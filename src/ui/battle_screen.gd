@@ -9,6 +9,9 @@ var animation_enabled: bool = true:
 		animation_enabled = value
 		if not value and _presentation != null:
 			_finish_event_presentation()
+		for actor in _actors.values():
+			if is_instance_valid(actor):
+				actor.set_motion(value)
 var speed_scale: float = 1.0
 var use_shell_damage_popups := false
 const EFFECT_SPEED := 4.0
@@ -18,6 +21,8 @@ var _feedback_text: String = ""
 var _feedback_label: Label
 var _panel_text: String = ""
 var _panel_zone := ""
+var _full_map: UiRouteOverlay
+var _toolbar: UiRunToolbar
 var _selected_card_id: String = ""
 var _selected_unit_id: String = ""
 var _target_ids: Array[String] = []
@@ -33,6 +38,7 @@ var _stage: Control
 var _hand_cards: Array[BattleCard] = []
 var _target_frames: Dictionary = {}
 var _actors: Dictionary = {}
+var _pilot_actor_cache: Dictionary = {}
 var _stage_effects: BattleStageEffects
 var _aim: BattleAim
 var _hover_panel: Control
@@ -84,6 +90,7 @@ func _init() -> void:
 
 func _exit_tree() -> void:
 	_presentation.finish()
+	_release_pilot_actor_cache()
 
 
 func _finish_event_presentation() -> void:
@@ -115,6 +122,8 @@ func _process(delta: float) -> void:
 
 
 func render(data: Dictionary) -> void:
+	if is_instance_valid(_reference):
+		_reference.close()
 	_presentation.finish()
 	var next_view := data.duplicate(true)
 	var next_revision := int(next_view.get("revision", -1))
@@ -168,7 +177,9 @@ func damage_target_anchors() -> Dictionary:
 		var id := str(task.get("task_id", ""))
 		var uid := "task:" + id
 		var target: Control = _target_frames.get(uid, _buttons.get(uid))
-		if is_instance_valid(target):
+		if _stage_effects.has_actor(id):
+			anchors[id] = _stage.get_global_transform_with_canvas() * _stage_effects.target_anchor(id)
+		elif is_instance_valid(target):
 			anchors[id] = target.get_global_rect().get_center()
 	return anchors
 
@@ -235,6 +246,17 @@ func selection_snapshot() -> Dictionary:
 	}
 
 
+func export_choice_selection() -> Dictionary:
+	return {"run_id": view.get("run_id", ""), "revision": view.get("revision", -1), "choice_id": _choice_id_seen, "selected_ids": _choice_selected_ids.duplicate()}
+
+
+func restore_choice_selection(saved: Dictionary) -> void:
+	if saved.get("run_id") != view.get("run_id") or saved.get("revision") != view.get("revision") or saved.get("choice_id", "") != _choice_id_seen or _choice_id_seen.is_empty():
+		return
+	_choice_selected_ids.assign(saved.get("selected_ids", []))
+	_render_from_local()
+
+
 func display_snapshot() -> Dictionary:
 	return {
 		"zone_counts": _dict(view.get("zone_counts")),
@@ -259,23 +281,41 @@ func action_draft(uid: String) -> Dictionary:
 	if _result_pending:
 		return {}
 	var draft := super.action_draft(uid)
-	if is_locked() and str(draft.get("type", "")) not in ["confirm_choice", "ui.new_run"]:
+	if is_locked() and str(draft.get("type", "")) not in ["confirm_choice", "ui.new_run", "ui.menu"]:
 		return {}
 	return draft
 
 
 func _render_battle() -> void:
-	var dimensions := size if size.x > 0 else (get_viewport_rect().size if is_inside_tree() else Vector2(1280, 800))
-	_compact_layout = dimensions.x < 1100 or dimensions.y < 700 or UiStyle.text_scale > 1.0
-	set_meta("compact_cards", _compact_layout)
+	# One battlefield composition at every supported window size.
+	_compact_layout = false
+	set_meta("compact_cards", false)
 	_battle_layout_size = size
-	if _compact_layout:
-		BattleCompactLayout.new().build(self)
-	else:
-		BattleLayout.new().build(self)
+	BattleLayout.new().build(self)
+	_release_pilot_actor_cache()
+
+
+func _take_pilot_actor(id: String, definition: String, kind: String, phase: int) -> BattleActorView:
+	var actor: BattleActorView = _pilot_actor_cache.get(id)
+	_pilot_actor_cache.erase(id)
+	if is_instance_valid(actor) and actor.definition_id == definition and actor.actor_kind == kind and actor.phase_index == phase:
+		return actor
+	if is_instance_valid(actor):
+		actor.queue_free()
+	return null
+
+
+func _release_pilot_actor_cache() -> void:
+	for actor in _pilot_actor_cache.values():
+		if is_instance_valid(actor):
+			actor.queue_free()
+	_pilot_actor_cache.clear()
 
 
 func _reset_stage() -> void:
+	if is_instance_valid(_toolbar):
+		_toolbar.close_menu(false)
+	_toolbar = null
 	close_card_preview()
 	_pointer_card = null
 	_hovered_card = null
@@ -284,6 +324,12 @@ func _reset_stage() -> void:
 	_dragging = false
 	_hand_cards.clear()
 	_target_frames.clear()
+	# Keep the opt-in rig node and its loop clock across local UI rebuilds.
+	for id in _actors:
+		var actor: BattleActorView = _actors[id]
+		if is_instance_valid(actor) and is_instance_valid(actor.rig):
+			actor.get_parent().remove_child(actor)
+			_pilot_actor_cache[id] = actor
 	_actors.clear()
 	_task_meters.clear()
 	_buttons.clear()
@@ -306,9 +352,9 @@ func _fit_stage() -> void:
 	if size != _battle_layout_size and not _battle_resize_pending:
 		_battle_resize_pending = true
 		_rebuild_for_size.call_deferred()
-	var factor := 1.0 if _compact_layout else minf(size.x/1280.0,size.y/800.0)
+	var factor := minf(size.x/1280.0,size.y/800.0)
 	_stage.scale = Vector2.ONE*factor
-	_stage.position = Vector2.ZERO if _compact_layout else (size-Vector2(1280,800)*factor)*.5
+	_stage.position = (size-Vector2(1280,800)*factor)*.5
 
 
 func _rebuild_for_size() -> void:
@@ -322,7 +368,13 @@ func _rebuild_for_size() -> void:
 
 
 func _input(event: InputEvent) -> void:
+	if is_instance_valid(_reference) and _reference.visible:
+		return
 	if _result_pending or not is_visible_in_tree() or not is_instance_valid(_stage):
+		return
+	if is_instance_valid(_full_map) and _full_map.visible:
+		return
+	if is_instance_valid(_toolbar) and _toolbar.route_input(event):
 		return
 	if is_instance_valid(_card_preview) and event is InputEventKey and event.pressed and event.keycode == KEY_ESCAPE:
 		close_card_preview()
@@ -339,6 +391,8 @@ func _input(event: InputEvent) -> void:
 			return
 	if event is InputEventKey and event.pressed and not event.echo and not event.ctrl_pressed and not event.alt_pressed and not event.meta_pressed and not is_locked():
 		match event.keycode:
+			KEY_F10:
+				press("battle:options")
 			KEY_P:
 				if not _is_card_detail(_hover_target):
 					_hover_pinned = not _hover_pinned
@@ -348,12 +402,14 @@ func _input(event: InputEvent) -> void:
 				_show_deck()
 			KEY_L:
 				_show_log()
+			KEY_M:
+				_show_map()
 			KEY_E:
 				if _panel_text.is_empty():
 					_emit_draft(_end_turn_draft().call())
 			_:
 				pass
-		if event.keycode in [KEY_P, KEY_G, KEY_F1, KEY_D, KEY_L, KEY_E]:
+		if event.keycode in [KEY_P, KEY_G, KEY_F1, KEY_D, KEY_L, KEY_E, KEY_M, KEY_F10]:
 			get_viewport().set_input_as_handled()
 			return
 	if (
@@ -468,6 +524,11 @@ func _card_at(point: Vector2) -> BattleCard:
 
 
 func _update_pointer(delta: float) -> void:
+	if is_instance_valid(_toolbar) and _toolbar.is_menu_open():
+		_hover_target = {}
+		if is_instance_valid(_hover_panel):
+			_hover_panel.hide()
+		return
 	if not is_instance_valid(_stage):
 		return
 	var reading_pinned := not _pinned_card_detail.is_empty() and _hover_panel.visible and _hover_panel.get_global_rect().has_point(_pointer_position)
@@ -538,7 +599,7 @@ func _update_hover_window() -> void:
 		return
 	_hover_title.text = str(target.get("title", ""))
 	_hover_meta.text = str(target.get("meta", ""))
-	var factor := UiStyle.text_scale if _compact_layout else 1.0
+	var factor := UiStyle.text_scale
 	var width := minf((380.0 if card_detail else 360.0) * minf(factor, 1.2), _stage.size.x - 24)
 	var height := minf(440.0 * factor, _stage.size.y - 100) if card_detail else 168.0 * factor
 	if _compact_layout and not card_detail and is_instance_valid(header):
@@ -576,7 +637,7 @@ func _is_card_detail(target: Dictionary) -> bool:
 func _place_card_detail(target: Dictionary) -> void:
 	var inverse := _stage.get_global_transform_with_canvas().affine_inverse()
 	var bounds: Rect2 = inverse * target.get("rect", Rect2())
-	var gap := 12.0
+	var gap := 14.0 / maxf(.1,_stage.scale.x)
 	var left_space := bounds.position.x - gap - 12
 	var right_space := _stage.size.x - bounds.end.x - gap - 12
 	var use_right := right_space >= left_space
@@ -636,6 +697,10 @@ func _place_hover_panel() -> void:
 	candidates.append(local + Vector2(-size.x - 20, -size.y - 20))
 	candidates.append(Vector2(12, top_margin + 12))
 	candidates.append(Vector2(canvas.x - size.x - 12, top_margin + 12))
+	if is_instance_valid(_hint_label):
+		var hint_end := (inverse * _hint_label.get_global_rect()).end.y + 12
+		candidates.append(Vector2(12,hint_end))
+		candidates.append(Vector2(canvas.x-size.x-12,hint_end))
 	for candidate in candidates:
 		var pos: Vector2 = candidate
 		pos.x = clampf(pos.x, 12, maxf(12, canvas.x - size.x - 12))
@@ -826,7 +891,7 @@ func _task_hover_target(task_id: String) -> Dictionary:
 		return {}
 	var phase_count := maxi(1, int(task.get("phase_count", 1)))
 	var phase_index := maxi(1, int(task.get("phase_index", 1)))
-	var intent := _intent_text(_dict(task.get("intent_snapshot")))
+	var intent := _task_intent_text(task)
 	var statuses := _statuses_for(task_id)
 	var summary := (
 		"%s · 第 %s/%s 阶段 · 剩余 %s/%s · 屏障 %s"
@@ -1506,7 +1571,7 @@ func _set_enabled(uid: String, enabled: bool, reason: String) -> void:
 		card.set_meta("disabled_reason", "" if enabled else reason)
 		card.tooltip_text = ""
 	else:
-		_buttons[uid].tooltip_text = "" if enabled else reason
+		_buttons[uid].tooltip_text = str(_buttons[uid].get_meta("navigation_hint", "")) if enabled else reason
 
 
 func _render_from_local() -> void:
@@ -1592,7 +1657,9 @@ func _show_completion_feedback(event: Dictionary, data: Dictionary) -> void:
 		return
 	var target_id := "task:" + str(targets[0])
 	var target: Control = _target_frames.get(target_id)
-	var center: Vector2 = _stage_center(target) if is_instance_valid(target) else _previous_target_centers.get(target_id, _stage.size * Vector2(0.72, 0.35))
+	if not _stage_effects.has_actor(str(targets[0])):
+		return
+	var center := _stage_effects.target_anchor(str(targets[0]))
 	var parts: Array[String] = []
 	var work_lost := maxi(0, int(data.get("work_before", 0)) - int(data.get("work_after", 0)))
 	var shield_lost := maxi(0, int(data.get("shield_before", 0)) - int(data.get("shield_after", 0)))
@@ -1616,10 +1683,9 @@ func _show_completion_feedback(event: Dictionary, data: Dictionary) -> void:
 func _show_pressure_feedback(event: Dictionary, data: Dictionary) -> void:
 	var targets := _array(event.get("target_ids"))
 	var target_id := str(targets[0]) if not targets.is_empty() else ""
-	var control: Control = _target_frames.get("unit:" + target_id)
-	if control == null:
-		control = _buttons.get("battle:resources") if _compact_layout else null
-	var center := _stage_center(control) if is_instance_valid(control) else _stage.size * Vector2(0.12, 0.40)
+	if not _stage_effects.has_actor(target_id):
+		return
+	var center := _stage_effects.target_anchor(target_id)
 	var vitality_lost := maxi(0, int(data.get("vitality_before", 0)) - int(data.get("vitality_after", 0)))
 	var relaxed := maxi(0, int(data.get("relax_before", 0)) - int(data.get("relax_after", 0)))
 	var parts: Array[String] = []
@@ -1639,8 +1705,10 @@ func _float_event_text(text: String, center: Vector2, color: Color, seconds: flo
 	feedback.add_theme_color_override("font_outline_color", Color("192f35"))
 	feedback.add_theme_constant_override("outline_size", 5)
 	feedback.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	feedback.size = Vector2(300, 38)
+	feedback.size = Vector2(minf(300,maxf(40,_stage.size.x-16)), 38)
 	feedback.position = center - Vector2(feedback.size.x * 0.5, 36)
+	feedback.position.x = clampf(feedback.position.x,8,maxf(8,_stage.size.x-feedback.size.x-8))
+	feedback.position.y = clampf(feedback.position.y,34,maxf(34,_stage.size.y-feedback.size.y-8))
 	feedback.z_index = 181
 	feedback.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	feedback.set_meta("battle_event_effect", true)
@@ -1692,7 +1760,8 @@ func _toggle_animation() -> void:
 		return
 	animation_enabled = not animation_enabled
 	_animator.animation_enabled = animation_enabled
-	_render_from_local()
+	if is_instance_valid(_toolbar):
+		_toolbar.refresh_presentation()
 
 
 func _cycle_speed() -> void:
@@ -1700,18 +1769,37 @@ func _cycle_speed() -> void:
 		return
 	speed_scale = 1.0 if speed_scale >= 2.0 else (2.0 if speed_scale >= 1.5 else 1.5)
 	_animator.speed_scale = effect_speed()
-	_render_from_local()
+	if is_instance_valid(_toolbar):
+		_toolbar.refresh_presentation()
 
 
 func _show_draw() -> void:
 	_show_zone("draw", "抽牌堆")
 
 
+func _show_map() -> void:
+	if is_locked():
+		return
+	if is_instance_valid(_full_map) and not _full_map.is_queued_for_deletion():
+		_full_map.close()
+		return
+	close_card_preview()
+	_full_map = UiRouteOverlay.new()
+	add_child(_full_map)
+	_full_map.configure(_array(view.get("route_nodes")),str(view.get("route_current","")),_array(view.get("route_reachable")),str(view.get("year_label","")))
+	_toolbar.mark_active("map", true)
+	_buttons["battle:close_panel"] = _full_map._close
+	_full_map.closed.connect(func():
+		_buttons.erase("battle:close_panel")
+		if is_instance_valid(_toolbar):
+			_toolbar.mark_active("map", false))
+
+
 func _show_deck() -> void:
 	if is_locked():
 		return
 	_detail_terms.clear()
-	_panel_zone = ""
+	_panel_zone = "deck"
 	_inspect_open = false
 	var cards := _array(view.get("cards")).duplicate(true)
 	cards.sort_custom(
@@ -1770,6 +1858,19 @@ func _show_zone(zone: String, title: String) -> void:
 
 func populate_info(parent: Node, on_dark: bool = false) -> void:
 	var ink := UiStyle.PAPER if on_dark else UiStyle.INK
+	if _panel_zone == "route":
+		var map_column := VBoxContainer.new()
+		map_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		parent.add_child(map_column)
+		add_text(map_column,_panel_text,18,ink)
+		var route := UiRouteCanvas.new()
+		route.overview = true
+		route.overview_height = 260
+		route.configure(_array(view.get("route_nodes")),[],str(view.get("route_current","")))
+		route.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		map_column.add_child(route)
+		route.arrange.call_deferred()
+		return
 	if _panel_zone.is_empty():
 		add_text(parent, _panel_text, 18, ink)
 		return
@@ -1777,17 +1878,17 @@ func populate_info(parent: Node, on_dark: bool = false) -> void:
 	column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	parent.add_child(column)
 	add_text(column, _panel_text.get_slice("\n", 0) + (" · 按卡牌整理，隐藏抽取顺序" if _panel_zone == "draw" else " · 点击 / 悬停查看卡文"), 17, ink)
-	var cards := _array(_dict(view.get("zones_public")).get(_panel_zone))
+	var cards := _array(view.get("cards")) if _panel_zone == "deck" else _array(_dict(view.get("zones_public")).get(_panel_zone))
 	if cards.is_empty():
 		add_text(column, "这里暂时没有卡牌。", 19, ink)
 	var grid := GridContainer.new()
-	grid.columns = 3 if size.x >= 750 and UiStyle.text_scale <= 1.25 else 2
+	grid.columns = 4 if UiStyle.text_scale <= 1.0 else (3 if UiStyle.text_scale <= 1.25 else 2)
 	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	grid.add_theme_constant_override("h_separation", 18)
 	grid.add_theme_constant_override("v_separation", 18)
 	column.add_child(grid)
 	for card in cards:
-		var detail := _dict(card.get("face", card.get("effective_card", {}))).duplicate(true)
+		var detail := _dict(card.get("face", card.get("effective_card", card.get("detail",{})))).duplicate(true)
 		detail.cost = card.get("effective_cost", detail.get("cost", 0))
 		detail.vitality_cost = card.get("effective_vitality_cost", detail.get("vitality_cost", 0))
 		var button := add_card(grid, "pile:card:" + str(card.card_id), str(card.definition_id), detail, UiStyle.label(str(card.definition_id)), false, func(): pass)
@@ -1820,35 +1921,37 @@ func add_end_turn(parent: Node, bounds: Rect2 = Rect2()) -> Button:
 
 
 func _show_rules() -> void:
-	_panel_zone = ""
-	_detail_terms.clear()
-	_inspect_open = false
-	_panel_text = "把鼠标移到卡牌、任务、单位或状态上可看摘要；按 I 打开详情与词条，Esc 关闭。\n\n点击或拖拽整张卡牌出牌。数字 1—9 对应从左到右的手牌，与点击相同。需要目标的牌，选牌后点击高亮任务/伙伴，或直接拖到目标后松手。\n\n不需要目标的牌，可点击或按对应数字使用，也可拖出底部手牌区域后松手使用。拖回底部、右键或 Esc 可取消。\n\n点击伙伴，再点击任务可指定协作目标。需要换班时，选择高亮伙伴。结束回合前可选择本回合保留牌。\n\n牌组可查看本局全部卡牌与饰品。弃牌和消耗堆可查看公开牌效果，抽牌堆公开剩余卡牌，按卡牌整理，不显示实际抽取顺序。卡牌效果产生待选时，须先在中央选牌面板完成选择。"
-	_panel_text += "\n\n快捷键：P 固定/解除悬停摘要，G 或 F1 打开本帮助，D 查看牌组，L 查看记录，E 结束回合。效果内待选时须先完成选择。固定摘要在新命令或 Esc 后解除。"
-	_panel_text = "完成所有任务才是整场胜利；阶段完成后可能还有下一阶段。精力耗尽，或DDL到期仍有任务时失败。\n精力是本局生命资源；专注支付卡牌费用；放松抵挡压力。DDL表示剩余完整轮末次数，按轮末时序结算。\n\n" + _panel_text
-	var v3 := _dict(view.get("v3"))
-	if not v3.is_empty():
-		var paper := _dict(v3.get("paper"))
-		_panel_text += "\n\n人物资源：论文进度 %d/10，引用 %d/5，修正 %d，增幅 %d；协同 %d/6。" % [int(paper.get("progress", 0)), int(paper.get("citations", 0)), int(paper.get("modifier", 0)), int(paper.get("amplify", 0)), int(v3.get("synergy", 0))]
-		for entry in _array(paper.get("chapters")):
-			_panel_text += "\n章节：%s · %s" % [UiStyle.label(str(entry.get("definition_id", ""))), "下回合生效" if int(entry.get("deployed_round", 0)) >= int(view.get("round_index", 0)) else "已生效"]
-		for ability in _array(v3.get("abilities")):
-			_panel_text += "\n持续能力：%s · %s" % [UiStyle.label(str(ability.get("definition_id", ""))), "下回合生效" if int(ability.get("activate_round", 0)) > int(view.get("round_index", 0)) else "已生效"]
-	_render_from_local()
+	_open_reference("rules")
 
 
 func _show_log() -> void:
-	_panel_zone = ""
-	_detail_terms.clear()
-	_inspect_open = false
-	var lines: Array[String] = []
-	for value in _array(view.get("event_log")):
-		lines.append(_event_text(_dict(value)))
-	_panel_text = "战斗记录\n\n" + ("\n".join(lines) if not lines.is_empty() else "暂无记录")
-	_render_from_local()
+	_open_reference("log")
+
+
+func _show_relics() -> void:
+	_open_reference("relics")
+
+
+func _open_reference(kind: String, relic_id: String = "") -> void:
+	if is_locked() or _result_pending:
+		return
+	if is_instance_valid(_toolbar):
+		_toolbar.close_menu()
+	_panel_text = str({"rules": "规则帮助", "log": "战斗记录", "relics": "携带饰品", "info": "冒险信息"}.get(kind, "冒险信息"))
+	var overlay := open_reference(kind, relic_id)
+	_buttons["battle:close_panel"] = overlay._close
+	if is_instance_valid(_toolbar):
+		_toolbar.mark_active("relics", kind == "relics")
+	overlay.closed.connect(func():
+		_panel_text = ""
+		_buttons.erase("battle:close_panel")
+		if is_instance_valid(_toolbar): _toolbar.mark_active("relics", false))
 
 
 func _close_panel() -> void:
+	if is_instance_valid(_reference):
+		_reference.close()
+		return
 	close_card_preview()
 	_panel_zone = ""
 	_panel_text = ""
@@ -1943,6 +2046,15 @@ func _unit_definition(unit_id: String) -> String:
 	return unit_id
 
 
+func _task_intent_text(task: Dictionary) -> String:
+	var intent := _dict(task.get("intent_snapshot")).duplicate(true)
+	if task.has("effective_pressure"):
+		intent.pressure = int(task.effective_pressure)
+	var text := _intent_text(intent)
+	var times := int(intent.get("pressure_times", 1))
+	return text + (" ×%d段" % times if times > 1 else "")
+
+
 func _intent_text(intent: Dictionary) -> String:
 	var parts: Array[String] = []
 	if int(intent.get("pressure", 0)) != 0:
@@ -1975,7 +2087,7 @@ func _zone_details(zone: String, title: String) -> String:
 	var lines: Array[String] = ["%s · %s 张" % [title, cards.size()]]
 	for value in cards:
 		var card := _dict(value)
-		var detail := _dict(card.get("face", card.get("effective_card", {}))).duplicate(true)
+		var detail := _dict(card.get("face", card.get("effective_card", card.get("detail",{})))).duplicate(true)
 		detail.cost = card.get("effective_cost", detail.get("cost", 0))
 		detail.vitality_cost = card.get("effective_vitality_cost", detail.get("vitality_cost", 0))
 		lines.append(

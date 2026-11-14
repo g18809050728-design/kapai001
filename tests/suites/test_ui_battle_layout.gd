@@ -17,6 +17,14 @@ func run() -> Array[String]:
 	_shell.show_screen("")
 	_check(_helpers.enter_node(_shell, str(_shell.session.get_view().run.reachable_node_ids[0])), "enters real battle")
 	var original: String = _helpers.fingerprint(_shell.session)
+	_check(_shell.press("battle:map"), "battle map is available through its HUD button")
+	await _frames()
+	_check(is_instance_valid(_battle()._full_map) and _battle()._full_map.visible, "battle map opens a complete read-only map overlay")
+	var route := _battle().find_children("*", "Control", true, false).filter(func(node): return node is UiRouteCanvas)
+	_check(route.size() == 1 and route[0].nodes == _battle().view.route_nodes, "overlay uses the current frozen annual route")
+	_check(not _shell.press("battle:end_turn"), "route inspection blocks background battle input")
+	_check(_shell.press("battle:close_panel"), "route overlay returns to the battle")
+	_check(_helpers.fingerprint(_shell.session) == original, "battle route inspection preserves state, RNG and revision")
 	for dimensions in [Vector2i(1280, 800), Vector2i(960, 600)]:
 		for scale in [100, 125, 150]:
 			tree.root.size = dimensions
@@ -25,7 +33,7 @@ func run() -> Array[String]:
 			_shell.refresh()
 			await _frames()
 			var label := "%s / %d%%" % [dimensions, scale]
-			for kind in ["deck", "log", "draw", "discard", "exhaust"]:
+			for kind in ["deck", "draw", "discard", "exhaust"]:
 				var uid: String = "battle:" + kind
 				var button: Button = _battle()._buttons[uid]
 				_check(button is BattlePileButton, "card-shaped " + uid + " at " + label)

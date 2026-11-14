@@ -19,8 +19,11 @@ def main():
     parser.add_argument("name")
     parser.add_argument("--visual", action="store_true")
     parser.add_argument("--verbose", action="store_true")
+    parser.add_argument("--timeout", type=int, default=240, help="Per-engine timeout in seconds; recorded with each result")
     parser.add_argument("scripts", nargs="*")
     args = parser.parse_args()
+    if args.timeout <= 0:
+        parser.error("--timeout must be positive")
     out = ROOT / "artifacts/verification/four-year-20261104" / args.name
     out.mkdir(parents=True, exist_ok=True)
     def write(name, data):
@@ -41,16 +44,16 @@ def main():
     for name, command in checks:
         isolated = out / "user_data" / name
         isolated.mkdir(parents=True, exist_ok=True)
-        env = dict(os.environ, APPDATA=str(isolated), LOCALAPPDATA=str(isolated), PYTHONUTF8="1")
+        env = dict(os.environ, APPDATA=str(isolated), LOCALAPPDATA=str(isolated), PYTHONUTF8="1", CAMPUS_MAP_EVIDENCE_OUT=str(out / "map-properties"))
         start = time.monotonic()
         with (out / (name + ".stdout.txt")).open("wb") as stdout, (out / (name + ".stderr.txt")).open("wb") as stderr:
             try:
-                code = subprocess.run(command, cwd=ROOT, env=env, stdout=stdout, stderr=stderr, timeout=240, creationflags=subprocess.CREATE_NO_WINDOW).returncode
+                code = subprocess.run(command, cwd=ROOT, env=env, stdout=stdout, stderr=stderr, timeout=args.timeout, creationflags=subprocess.CREATE_NO_WINDOW).returncode
             except subprocess.TimeoutExpired:
                 code = 124
         errors = (out / (name + ".stderr.txt")).read_text(encoding="utf-8", errors="replace")
         engine_errors = sum(1 for line in errors.splitlines() if line.startswith(("ERROR:", "SCRIPT ERROR:")))
-        result = dict(name=name, command=command, isolated_appdata=str(isolated), exit_code=code, engine_errors=engine_errors, seconds=round(time.monotonic()-start, 3))
+        result = dict(name=name, command=command, isolated_appdata=str(isolated), exit_code=code, engine_errors=engine_errors, timeout_seconds=args.timeout, seconds=round(time.monotonic()-start, 3))
         results.append(result)
         print(json.dumps(result), flush=True)
     write("summary.json", results)

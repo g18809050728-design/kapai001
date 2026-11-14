@@ -1,0 +1,151 @@
+{
+  "batch_id": "p01-parts-20261114",
+  "authorized_scope": "one P01 independent body-layer candidate package",
+  "jobs_authorized": 1,
+  "maximum_jobs_including_explicit_repairs": 3,
+  "human_acceptance": "rejected_by_user",
+  "release_license": "pending",
+  "runtime_integration": "not_started",
+  "assets": [
+    {
+      "asset_id": "P01-parts-atlas-v1",
+      "requirement_ids": [
+        "UIR-052",
+        "UIR-054",
+        "UIR-057"
+      ],
+      "model": "gpt-image-2.5-sunburst",
+      "service": "https://api-slb.jiji.cc/v1",
+      "configuration_sha256": "9ca45acd3f1ed937efe6a35cc4e4db434557b994eed2b7b9158fb0163f5cbeb5",
+      "prompt_file": "output/imagegen/layered-v3/P01-parts-v1/P01-parts-atlas-v1.txt",
+      "prompt_sha256": "db380c1672e6ccc9504c631121b81a0e03117a204811864b0b0420efb8966e6c",
+      "output_file": "output/imagegen/layered-v3/P01-parts-v1/P01-parts-atlas-v1.png",
+      "requested_parameters": {
+        "size": "1536x1024",
+        "quality": "medium",
+        "n": 1,
+        "output_format": "png"
+      },
+      "input_images_uploaded": [],
+      "status": "rejected_by_user_unusable",
+      "selected": false,
+      "native_transparency_requested": false,
+      "alpha_method": "solid-magenta color key, recorded in extraction.json; torso alpha contour refinement recorded separately",
+      "actual_size": [
+        1536,
+        1024
+      ],
+      "output_sha256": "7e952ba60a0f6a5becdc95070fd0d3399d86e29d8b93a5e70cc7058ee7e74616"
+    }
+  ],
+  "source_visual_review": {
+    "reviewer": "AI",
+    "reviewed_at_utc": "2026-11-13T17:20:09.571239+00:00",
+    "result": "candidate_requires_assembly_review",
+    "observed": [
+      "16 disconnected corresponding part illustrations exist; not a full-character crop",
+      "head and torso extend slightly below first nominal cell boundary",
+      "torso contains unwanted fixed upper-sleeve shapes; assembly cleanup or regeneration must resolve",
+      "joint cap coverage and dark/light transparency edge review pending",
+      "rendering still trends toward illustrative/anime shading; overall target style is not approved"
+    ],
+    "human_acceptance": "pending"
+  },
+  "package": {
+    "part_count": 16,
+    "body_count": 14,
+    "prop_count": 2,
+    "rig": "rig.json",
+    "preview": "preview.html",
+    "continuous_preview": "articulation-check.gif",
+    "requirement_ids": [
+      "UIR-052",
+      "UIR-054",
+      "UIR-057"
+    ],
+    "actual_layer_files": [
+      {
+        "path": "output/imagegen/layered-v3/P01-parts-v1/parts/P01_pelvis_coat_hem.png",
+        "sha256": "24a766524eb4b1dd86f7c5a7fe16fc69d3f5514cfece2f0c34069092f3d2bb87"
+      },
+      {
+        "path": "output/imagegen/layered-v3/P01-parts-v1/parts/P01_torso_articulation.png",
+        "sha256": "b52dc2bf0c44e0ef21ca1b638ef0035f642b129aa0565d7c027ea1a3c80e972e"
+      },
+      {
+        "path": "output/imagegen/layered-v3/P01-parts-v1/parts/P01_head.png",
+        "sha256": "1ac6a2094acd5ccd5735ac6d97a8172d8f7e1229d8c43442102adc89d9c2434b"
+      },
+      {
+        "path": "output/imagegen/layered-v3/P01-parts-v1/parts/P01_hair_back.png",
+        "sha256": "2ed7deba55dcce6479ef5f3613bd974c8de58fa7917a76cba1e726bdb380f84d"
+      },
+      {
+        "path": "output/imagegen/layered-v3/P01-parts-v1/parts/P01_hair_front.png",
+        "sha256": "243843cda5421f7d9ac9ac9f5eeebcf9b1f98d0c2c8f50530c730a2e7afcecc0"
+      },
+      {
+        "path": "output/imagegen/layered-v3/P01-parts-v1/parts/P01_arm_far_upper.png",
+        "sha256": "0aff2953d97fde56da87be5bae226daef8985b9e61dd6e9cededc22349a47933"
+      },
+      {
+        "path": "output/imagegen/layered-v3/P01-parts-v1/parts/P01_arm_far_lower_hand.png",
+        "sha256": "37f188c04d7f6516330ab38509d8e1b212b09dce2638fec799ddc02b1ad733dd"
+      },
+      {
+        "path": "output/imagegen/layered-v3/P01-parts-v1/parts/P01_arm_near_upper.png",
+        "sha256": "24788f884c858ba8b1da9a6b9655daf48cfe1c22f28c8114aedf2f6c5e45df41"
+      },
+      {
+        "path": "output/imagegen/layered-v3/P01-parts-v1/parts/P01_arm_near_lower.png",
+        "sha256": "3017c97a4122f0e35d4c857436a560aa78e29aa9073ae59c0b9cfdadee8bcac2"
+      },
+      {
+        "path": "output/imagegen/layered-v3/P01-parts-v1/parts/P01_hand_near.png",
+        "sha256": "d334110495865c0ab524b67814b606e7c8f6bd60371583901231a0fb64bf86b9"
+      },
+      {
+        "path": "output/imagegen/layered-v3/P01-parts-v1/parts/P01_leg_far_upper.png",
+        "sha256": "02f97c175cc5fbbaf9ab88ea372637f921f8d229c3d3c314604c5c228454f20e"
+      },
+      {
+        "path": "output/imagegen/layered-v3/P01-parts-v1/parts/P01_leg_far_lower_foot.png",
+        "sha256": "9bb7efeffef578cafe7fa46ca28b9bfd38c1daabf7a6a1335844f1af40ca539d"
+      },
+      {
+        "path": "output/imagegen/layered-v3/P01-parts-v1/parts/P01_leg_near_upper.png",
+        "sha256": "af6d0c3c4dc7586346c0e5e3d1e808d3963ca47f291a3729d640488b58c14f5c"
+      },
+      {
+        "path": "output/imagegen/layered-v3/P01-parts-v1/parts/P01_leg_near_lower_foot.png",
+        "sha256": "64a16835c96471bda7807a2f7a242afe31aa09fadbccc619cd9fb691067fa957"
+      },
+      {
+        "path": "output/imagegen/layered-v3/P01-parts-v1/parts/P01_laptop.png",
+        "sha256": "f450dbc2150c2fdb7eb89e38a6d9572f29aba6dcb02b4e285eb441f672f37f0f"
+      },
+      {
+        "path": "output/imagegen/layered-v3/P01-parts-v1/parts/P01_pen.png",
+        "sha256": "2182bbfac70a5526dcb2d5901d89ae2606b39565748518ef8ec64d6cdd1259d2"
+      }
+    ],
+    "machine_checks": "passed_with_recorded_scope",
+    "ai_visual_review": "historical_style_rework_superseded_by_user_rejection",
+    "source": "independent painted atlas parts; not a visible-area full-character cut",
+    "human_acceptance": "rejected_by_user",
+    "release_license": "pending",
+    "runtime_integration": "not_started",
+    "status": "rejected_unusable",
+    "selected": false
+  },
+  "status": "rejected_unusable",
+  "selected": false,
+  "user_decision": {
+    "date": "2026-11-14",
+    "verbatim": "目前的人物分层也太丑了,上网上找一些资源来使用吧,目前这个跟僵尸一样,不能用",
+    "decision": "rejected_unusable",
+    "next_action": "source_authored_external_character_assets",
+    "further_generation_or_repair": "stopped",
+    "historical_machine_checks": "unchanged; do not establish visual acceptance"
+  }
+}

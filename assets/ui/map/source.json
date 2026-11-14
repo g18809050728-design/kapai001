@@ -1,0 +1,15 @@
+{
+  "asset": "parchment-fiber-v1.png",
+  "sha256": "a0d342705680725260efe3ac71f47e084d7d4b4bd8accdde9a11f663ed765185",
+  "dimensions": [
+    1024,
+    2048
+  ],
+  "origin": "original procedural drawing",
+  "generator": "tools/build_map_paper.py",
+  "seed": 261114,
+  "date": "2026-11-14",
+  "external_images": [],
+  "game_rng_used": false,
+  "purpose": "UIR-019 map and preview paper; not character art"
+}

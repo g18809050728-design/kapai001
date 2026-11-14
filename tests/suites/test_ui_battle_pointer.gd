@@ -176,11 +176,12 @@ func run() -> Array[String]:
 	_mouse_button(confirm_point, false)
 	await _frames()
 	_check(not _battle().is_locked(), "physical confirmation closes pending choice")
-	# Small windows use native text and independently scrolling content with fixed actions.
+	# Small windows retain the same battlefield and fan as the full-size game UI.
 	var old_size := _shell.get_tree().root.size
 	_shell.get_tree().root.size = Vector2i(960, 640)
 	await _frames()
-	_check(_battle()._compact_layout and _battle()._stage.scale == Vector2.ONE, "small battle uses native layout without whole-screen shrinking")
+	_check(not _battle()._compact_layout and _battle()._stage.scale == Vector2(.75,.75), "small battle retains the scaled battlefield composition")
+	_check(not _battle()._hand_cards.is_empty() and _battle()._hand_cards[0].home_rotation < 0, "small battle retains a curved hand fan")
 	var stage_rect := _battle()._stage.get_global_rect()
 	_check(
 		stage_rect.size.x <= _shell.size.x + 1 and stage_rect.size.y <= _shell.size.y + 1,

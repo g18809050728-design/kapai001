@@ -5,10 +5,11 @@ signal node_inspected(node_id: String)
 
 const Forecast = preload("res://src/run/route_forecast.gd")
 const NodeStamp = preload("res://src/ui/map_node_stamp.gd")
+const Paper = preload("res://src/ui/map_paper.gd")
 const NODE_WIDTH := 76.0
 const COLUMN_GAP := 16.0
 const ROW_HEIGHT := 98.0
-const ROUTE_SPAN := 6 * (NODE_WIDTH + COLUMN_GAP)
+const ROUTE_SPAN := 624.0
 
 var nodes: Array = []
 var reachable: Array = []
@@ -17,10 +18,12 @@ var selected := ""
 var positions: Dictionary = {}
 var forecast_node_ids: Array[String] = []
 var overview := false
+var detailed_overview := false
 var overview_height := 210.0
 var background_texture: Texture2D
 var node_textures: Dictionary = {}
 var edge_paths: Dictionary = {}
+var edge_segments: Dictionary = {}
 
 
 func row_height() -> float:
@@ -59,6 +62,12 @@ func _load_optional_art() -> void:
 			node_textures[str(node.node_id)] = icon
 
 
+func select_node(id: String) -> void:
+	selected = id
+	forecast_node_ids.assign(Forecast.describe(nodes, selected).node_ids)
+	queue_redraw()
+
+
 func arrange() -> void:
 	positions.clear()
 	var layers := {}
@@ -69,16 +78,27 @@ func arrange() -> void:
 		if not layers.has(layer):
 			layers[layer] = []
 		layers[layer].append(node)
-	var width := minf(ROUTE_SPAN, maxf(1, size.x - (32 if overview else NODE_WIDTH)))
+	var width := minf(ROUTE_SPAN, maxf(1, size.x - (48 if overview else NODE_WIDTH + 16)))
 	var padding := (size.x - width) * .5
-	var row_step := (size.y - 28) / maxi(1, last_layer - 1) if overview else row_height()
+	var row_step := (size.y - 48) / maxi(1, last_layer - 1) if overview else row_height()
 	for layer in layers:
 		var entries: Array = layers[layer]
 		entries.sort_custom(func(a, b): return str(a.node_id) < str(b.node_id))
+		var columns: Array[float] = []
+		for index in entries.size():
+			columns.append(clampf(float(entries[index].column), 0, 6) if entries[index].has("column") else (index + 1) * 6.0 / (entries.size() + 1))
+		var left_limit: float = (24.0 if overview else NODE_WIDTH * .5 + 8) - padding - columns.min() * width / 6.0
+		var right_limit: float = size.x - (24.0 if overview else NODE_WIDTH * .5 + 8) - padding - columns.max() * width / 6.0
+		var drift := clampf(sin(float(layer) * 1.13) * minf(29, width * .05), left_limit, right_limit)
 		for index in entries.size():
 			var node: Dictionary = entries[index]
-			var column := clampf(float(node.column), 0, 6) if node.has("column") else (index + 1) * 6.0 / (entries.size() + 1)
-			positions[str(node.node_id)] = Vector2(padding + column * width / 6.0, (14 if overview else 52) + (last_layer - int(layer)) * row_step)
+			var column: float = columns[index]
+			# The visual offset depends only on frozen layer/column, never selection,
+			# input order or a random stream. Lane order and boundary lanes stay fixed.
+			var wave := sin(float(layer) * 1.27 + column * .63) * sin(column * PI / 6.0)
+			var offset_x := wave * minf(4, width / 130)
+			var offset_y := sin(float(layer) * 1.73 + column * 1.17) * minf(7, row_step * .07)
+			positions[str(node.node_id)] = Vector2(padding + column * width / 6.0 + drift + offset_x, (24 if overview else 52) + (last_layer - int(layer)) * row_step + offset_y)
 	for child in get_children():
 		var id := str(child.get_meta("node_id", ""))
 		if child is Control and positions.has(id):
@@ -90,62 +110,68 @@ func arrange() -> void:
 
 func _arrange_edges() -> void:
 	edge_paths.clear()
+	edge_segments.clear()
 	var buttons := {}
-	var incoming := {}
-	for node in nodes:
-		for next_id in node.get("next_ids", []):
-			var id := str(next_id)
-			if not incoming.has(id):
-				incoming[id] = []
-			incoming[id].append(str(node.node_id))
-	for id in incoming:
-		incoming[id].sort_custom(func(a, b): return positions.get(a, Vector2.ZERO).x < positions.get(b, Vector2.ZERO).x)
+	var keepouts: Array[Rect2] = []
 	for child in get_children():
 		if child is Button and child.has_meta("node_id"):
 			buttons[str(child.get_meta("node_id"))] = child
+			if not overview and child.has_method("label_rect"):
+				var label: Rect2 = child.label_rect()
+				label.position += child.position
+				keepouts.append(label.grow(4))
 	for node in nodes:
 		var source := str(node.node_id)
 		if not positions.has(source):
 			continue
-		var next_ids: Array = node.get("next_ids", [])
-		for index in next_ids.size():
-			var destination := str(next_ids[index])
+		for next_id in node.get("next_ids", []):
+			var destination := str(next_id)
 			if not positions.has(destination):
 				continue
 			var start: Vector2 = positions[source]
 			var end: Vector2 = positions[destination]
+			var radius := minf(9, start.distance_to(end) * .25) if overview else 25.0
+			if not overview and buttons.has(source) and buttons.has(destination):
+				start = buttons[source].position + buttons[source].stamp_center()
+				end = buttons[destination].position + buttons[destination].stamp_center()
+			var direction := (end - start).normalized()
+			start += direction * radius
+			end -= direction * radius
+			var travel := end - start
+			var sway := sin(float(node.get("layer", 1)) * 1.41 + float(node.get("column", 3))) * minf(11, absf(travel.y) * .14)
 			var curve := Curve2D.new()
-			if overview or not buttons.has(source) or not buttons.has(destination):
-				var bend := Vector2(0, (end.y - start.y) * .45)
-				curve.add_point(start, Vector2.ZERO, bend)
-				curve.add_point(end, -bend)
-			else:
-				var source_button: Button = buttons[destination]
-				var target_button: Button = buttons[source]
-				start = source_button.position + source_button.stamp_center()
-				end = target_button.position + target_button.stamp_center()
-				var side := signf(end.x - start.x)
-				if is_zero_approx(side):
-					side = -1 if next_ids.size() > 1 and index == 0 else 1
-				# Exit beside the stamp, pass outside its label, then turn in the
-				# gap between rows. Separate ports keep a fork's arrows distinct.
-				var arrivals: Array = incoming[destination]
-				var port_angle := (0.0 if side > 0 else PI) + (arrivals.find(source) - (arrivals.size() - 1) * .5) * .30
-				var port := start + Vector2.from_angle(port_angle) * 23
-				var label: Rect2 = source_button.label_rect()
-				var corridor := start.x + side * maxf(25, label.size.x * .5 + 9)
-				var band := source_button.get_rect().end.y + 6 + index * 3
-				var turn := Vector2(corridor, band)
-				var angle := -PI / 2 + (index - (next_ids.size() - 1) * .5) * .45
-				var tip := end + Vector2.from_angle(angle) * 23
-				curve.add_point(port, Vector2.ZERO, Vector2(corridor - port.x, 0))
-				curve.add_point(turn, Vector2(0, -14), Vector2(0, 6))
-				curve.add_point(tip, Vector2(0, band - tip.y))
+			curve.add_point(start, Vector2.ZERO, Vector2(travel.x * .28 + sway, travel.y * .40))
+			curve.add_point(end, Vector2(-travel.x * .28 + sway, -travel.y * .40))
 			curve.bake_interval = 2
 			var points := curve.get_baked_points()
-			if not overview and buttons.has(source) and buttons.has(destination):
-				points.reverse()
-			edge_paths[source + ">" + destination] = points
+			var key := source + ">" + destination
+			edge_paths[key] = points
+			edge_segments[key] = _without_labels(points, keepouts)
+
+
+func _without_labels(points: PackedVector2Array, keepouts: Array[Rect2]) -> Array[PackedVector2Array]:
+	# Keep the continuous geometry; leave a short clean gap beneath each caption.
+	# Sampling below one pixel keeps every drawn segment outside the text bounds.
+	var result: Array[PackedVector2Array] = []
+	var segment := PackedVector2Array()
+	for index in range(1, points.size()):
+		var steps := maxi(1, ceili(points[index - 1].distance_to(points[index]) * 2))
+		for step in range(steps + 1):
+			var point := points[index - 1].lerp(points[index], float(step) / steps)
+			var blocked := false
+			for label in keepouts:
+				if label.has_point(point):
+					blocked = true
+					break
+			if blocked:
+				if segment.size() > 1:
+					result.append(segment)
+				segment = PackedVector2Array()
+			else:
+				segment.append(point)
+	if segment.size() > 1:
+		result.append(segment)
+	return result
 
 
 func _link_keyboard_neighbors() -> void:
@@ -184,22 +210,15 @@ func _link_keyboard_neighbors() -> void:
 
 func _draw() -> void:
 	# The drawing is a projection of frozen nodes; no visual randomness enters a run.
-	var paper := UiStyle.surface(Color("f6efdf"),Color("bba787"),3)
-	paper.shadow_size = 0
-	draw_style_box(paper,Rect2(Vector2.ZERO,size))
-	if not overview:
-		draw_rect(Rect2(0,0,18,size.y),UiStyle.FOREST)
-		draw_line(Vector2(29,0),Vector2(29,size.y),Color(UiStyle.RED,.28),1,true)
-		for y in range(21,int(size.y),42):
-			draw_arc(Vector2(10,y),5,-PI*.65,PI*.65,12,Color(UiStyle.BRASS,.8),1.6,true)
-		for y in range(24,int(size.y),28):
-			draw_line(Vector2(34,y),Vector2(size.x-12,y),Color(UiStyle.INK,.055),.8,true)
+	Paper.paint(self, Rect2(Vector2.ZERO, size))
+	if not overview and size.x > 750:
+		_draw_compass(Vector2(53, size.y - 73))
 	var visited := {}
 	for node in nodes:
 		if node.get("status", "") == "completed" or str(node.node_id) == current:
 			visited[str(node.node_id)] = true
 	if background_texture != null:
-		draw_texture_rect(background_texture, Rect2(Vector2.ZERO, size), false, Color(1, 1, 1, .06))
+		draw_texture_rect(background_texture, Rect2(Vector2.ZERO, size), false, Color(1, 1, 1, .025))
 	for node in nodes:
 		var source := str(node.node_id)
 		if not positions.has(source):
@@ -208,52 +227,93 @@ func _draw() -> void:
 			if not positions.has(str(next_id)):
 				continue
 			var destination := str(next_id)
-			var color := Color("9daca1")
-			var width := 1.5
+			var color := Color("6e624a", .57)
+			var width := 1.3
 			var walked: bool = visited.has(source) and visited.has(destination)
 			if walked:
-				color = UiStyle.INK
-				width = 2.5
+				color = Color("514c39", .88)
+				width = 2.0
 			if forecast_node_ids.has(source) and forecast_node_ids.has(destination):
-				color = UiStyle.GREEN.darkened(.22)
-				width = 3.5
+				color = Color("91533c", .76)
+				width = 1.7
 			if source == current and reachable.has(destination):
-				color = UiStyle.GREEN.darkened(.28)
-				width = 4
-			var points: PackedVector2Array = edge_paths.get(source + ">" + destination, PackedVector2Array())
-			if points.size() < 2:
-				continue
-			if overview or walked or source == current or forecast_node_ids.has(source):
-				draw_polyline(points, color, width if not overview else minf(width, 1.5), true)
-			else:
-				for point_index in range(0, points.size() - 1, 5):
-					var end := mini(point_index + 2, points.size() - 1)
-					draw_polyline(points.slice(point_index,end+1),Color(color,.8),width,true)
-			if not overview:
-				var tip := points[points.size() - 1]
-				var direction := (tip - points[maxi(0, points.size() - 5)]).normalized()
-				var across := direction.orthogonal() * 3
-				draw_colored_polygon(PackedVector2Array([tip, tip - direction * 6 + across, tip - direction * 6 - across]), color)
+				color = Color("5d573e", .94)
+				width = 1.8
+			for points: PackedVector2Array in edge_segments.get(source + ">" + destination, []):
+				if points.size() < 2:
+					continue
+				if walked:
+					draw_polyline(points, color, width if not overview else 1.5, true)
+				else:
+					_draw_dashes(points, color, minf(width, 1.2) if overview else width, 2.2 if overview else 3.4, 3.6 if overview else 4.6)
 	if overview:
 		var last_layer := 1
 		for node in nodes:
 			last_layer = maxi(last_layer, int(node.get("layer", 1)))
-		var radius := clampf((size.y - 28) / maxi(1, last_layer - 1) * .38, 2, 5)
-		var icon_size := clampf((size.y - 28) / maxi(1, last_layer - 1) * .8, 4, 20)
+		var row_step := (size.y - 48) / maxi(1, last_layer - 1)
+		var radius := clampf(row_step * .38, 2, 5)
+		var icon_size := clampf(row_step * .8, 4, 20)
 		for node in nodes:
 			var id := str(node.node_id)
+			if not positions.has(id):
+				continue
 			var point: Vector2 = positions[id]
-			var color := UiStyle.INK if id == current else (UiStyle.GREEN if forecast_node_ids.has(id) else Color("a1b2a5"))
-			draw_circle(point, radius, color, true, -1, true)
+			var color := Color("413b2d") if id == current else (Color("88513b") if forecast_node_ids.has(id) else Color("847455"))
 			var icon: Texture2D = node_textures.get(id)
 			var marker_radius := radius
-			if icon != null:
-				draw_texture_rect(icon, Rect2(point - Vector2.ONE * icon_size * .5, Vector2.ONE * icon_size), false)
-				marker_radius = icon_size * .5
-				if id == current:
-					draw_circle(point, marker_radius + 2, UiStyle.INK, false, 2, true)
+			if detailed_overview:
+				marker_radius = clampf(row_step * .31, 8, 13)
+				var glyph_scale := marker_radius / 15.0
+				var subtype := str(node.get("subtype", ""))
+				if subtype.is_empty():
+					subtype = str({"normal":"N", "elite":"EL", "boss":"B", "shop":"S", "rest":"R", "event":"E"}.get(str(node.get("kind", "")), "E"))
+				draw_set_transform(point, 0, Vector2.ONE * glyph_scale)
+				var ink := MapNodeGlyph.ink(subtype)
+				ink.a = .92 if id == current or reachable.has(id) or forecast_node_ids.has(id) else .70
+				MapNodeGlyph.paint(self, subtype, Vector2.ZERO, ink)
+				draw_set_transform(Vector2.ZERO)
+				if id == current or node.get("status", "") == "completed":
+					draw_circle(point, marker_radius + 4, Color("4a5340", .8), false, 1.4, true)
+			else:
+				draw_circle(point, radius, color, true, -1, true)
+				if icon != null:
+					draw_texture_rect(icon, Rect2(point - Vector2.ONE * icon_size * .5, Vector2.ONE * icon_size), false)
+					marker_radius = icon_size * .5
 			if reachable.has(id) or id == selected:
-				draw_circle(point, marker_radius + (2 if id == selected else 1), UiStyle.GOLD.darkened(.25), false, 2, true)
+				draw_circle(point, marker_radius + (4 if id == selected else 3), Color("983e2e") if id == selected else Color("746344"), false, 1.5, true)
+
+
+func _draw_dashes(points: PackedVector2Array, color: Color, width: float, dash: float, gap: float) -> void:
+	var distance := 0.0
+	for index in range(1, points.size()):
+		var start := points[index - 1]
+		var end := points[index]
+		var length := start.distance_to(end)
+		if length < .001:
+			continue
+		var cursor := 0.0
+		while cursor < length:
+			var phase := fmod(distance + cursor, dash + gap)
+			var visible := phase < dash
+			var step := minf(length - cursor, (dash if visible else dash + gap) - phase)
+			if step < .001:
+				step = minf(.001, length - cursor)
+			if visible:
+				draw_line(start.lerp(end, cursor / length), start.lerp(end, (cursor + step) / length), color, width, true)
+			cursor += step
+		distance += length
+
+
+func _draw_compass(center: Vector2) -> void:
+	var ink := Color("62513a", .30)
+	draw_arc(center, 22, 0, TAU, 48, ink, .8, true)
+	for index in 4:
+		var direction := Vector2.from_angle(-PI / 2 + index * PI / 2)
+		var normal := direction.orthogonal()
+		draw_colored_polygon(PackedVector2Array([center + direction * 30, center + normal * 4, center]), ink)
+		draw_polyline(PackedVector2Array([center + direction * 30, center - normal * 4, center]), ink, .8, true)
+	draw_circle(center, 3, ink, true, -1, true)
+
 
 
 func _gui_input(event: InputEvent) -> void:

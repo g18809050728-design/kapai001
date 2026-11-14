@@ -1,0 +1,219 @@
+{
+  "status": "pilot_only_pending_user_art_acceptance",
+  "requirements": [
+    "UIR-011",
+    "UIR-013",
+    "UIR-051",
+    "UIR-052",
+    "UIR-054",
+    "UIR-057",
+    "UIR-059"
+  ],
+  "provider": "configured jiji.cc image API",
+  "model": "gpt-image-2.5-sunburst",
+  "method": "reference-image edit: separated complete parts, local magenta chroma removal and recorded joint fitting",
+  "alpha_method": "R > 1.35G+25 and B > 1.35G+25 -> transparent, crop alpha bounds, Lanczos RGBA resize",
+  "master": "enemy-master-v1.png",
+  "used_parts": [
+    "far_foot",
+    "near_foot",
+    "fan",
+    "back_arm",
+    "loose_sheet",
+    "body",
+    "clip",
+    "pencil",
+    "tab"
+  ],
+  "parts": [
+    {
+      "source": "output/imagegen/actor-rig-pilot-20261114/enemy-parts-v1.png",
+      "region": [
+        58,
+        12,
+        510,
+        418
+      ],
+      "trim_box": [
+        27,
+        21,
+        437,
+        395
+      ],
+      "size": [
+        490,
+        650
+      ],
+      "file": "assets/art/actor-rig-pilot/N01/body.png",
+      "sha256": "f765c774268b1402d4cc46a202f31f233ad468716fca5ada6742e7d15a78d856"
+    },
+    {
+      "source": "output/imagegen/actor-rig-pilot-20261114/enemy-parts-v1.png",
+      "region": [
+        570,
+        15,
+        1035,
+        408
+      ],
+      "trim_box": [
+        31,
+        30,
+        453,
+        358
+      ],
+      "size": [
+        500,
+        440
+      ],
+      "file": "assets/art/actor-rig-pilot/N01/fan.png",
+      "sha256": "37de7b45a58592b1b14b89d0ff5df76a2e2db90fddf46e013cb863ae7faa4e84"
+    },
+    {
+      "source": "output/imagegen/actor-rig-pilot-20261114/enemy-parts-v1.png",
+      "region": [
+        1134,
+        12,
+        1492,
+        391
+      ],
+      "trim_box": [
+        31,
+        31,
+        314,
+        348
+      ],
+      "size": [
+        240,
+        250
+      ],
+      "file": "assets/art/actor-rig-pilot/N01/clip.png",
+      "sha256": "5763e5cb4995653a894dd7acdc5b3e1ca3ff3719531e078a7f299fe77810baf2"
+    },
+    {
+      "source": "output/imagegen/actor-rig-pilot-20261114/enemy-parts-v1.png",
+      "region": [
+        15,
+        454,
+        553,
+        695
+      ],
+      "trim_box": [
+        34,
+        39,
+        527,
+        213
+      ],
+      "size": [
+        480,
+        175
+      ],
+      "file": "assets/art/actor-rig-pilot/N01/pencil.png",
+      "sha256": "218a38134ca6ff207b432cf047c12ebc6ffd5e857fbf0d1fb8ff3905e6440dd5"
+    },
+    {
+      "source": "output/imagegen/actor-rig-pilot-20261114/enemy-parts-v1.png",
+      "region": [
+        681,
+        410,
+        943,
+        711
+      ],
+      "trim_box": [
+        30,
+        21,
+        231,
+        283
+      ],
+      "size": [
+        185,
+        250
+      ],
+      "file": "assets/art/actor-rig-pilot/N01/back_arm.png",
+      "sha256": "fcef0f9c9087c86a01d4e17bc827b03b543c92acdae1af967c0150dc46c5ad4d"
+    },
+    {
+      "source": "output/imagegen/actor-rig-pilot-20261114/enemy-parts-v1.png",
+      "region": [
+        1068,
+        443,
+        1463,
+        680
+      ],
+      "trim_box": [
+        25,
+        33,
+        363,
+        208
+      ],
+      "size": [
+        270,
+        180
+      ],
+      "file": "assets/art/actor-rig-pilot/N01/near_foot.png",
+      "sha256": "eee9270439cce9af2c44f6d407a03147a621b5341db4dfb447d70adb6716a6a4"
+    },
+    {
+      "source": "output/imagegen/actor-rig-pilot-20261114/enemy-parts-v1.png",
+      "region": [
+        72,
+        744,
+        462,
+        991
+      ],
+      "trim_box": [
+        30,
+        29,
+        364,
+        210
+      ],
+      "size": [
+        210,
+        175
+      ],
+      "file": "assets/art/actor-rig-pilot/N01/far_foot.png",
+      "sha256": "4bceb4abd387f2787696965944e2518a6975950eaaa3e8da2b3bf414b7bcc532"
+    },
+    {
+      "source": "output/imagegen/actor-rig-pilot-20261114/enemy-parts-v1.png",
+      "region": [
+        670,
+        781,
+        877,
+        963
+      ],
+      "trim_box": [
+        25,
+        29,
+        175,
+        151
+      ],
+      "size": [
+        95,
+        100
+      ],
+      "file": "assets/art/actor-rig-pilot/N01/tab.png",
+      "sha256": "f40a70db17eb708c33a6b88eab1eab8b805b54c4d54f3350e822d7df9d8aeb7b"
+    },
+    {
+      "source": "output/imagegen/actor-rig-pilot-20261114/enemy-parts-v1.png",
+      "region": [
+        1070,
+        719,
+        1472,
+        1008
+      ],
+      "trim_box": [
+        22,
+        36,
+        360,
+        262
+      ],
+      "size": [
+        340,
+        300
+      ],
+      "file": "assets/art/actor-rig-pilot/N01/loose_sheet.png",
+      "sha256": "1430e3239dcd7c5ab02684d64022302a43546cd93a9ccc8bc0de033e8d3b5cc3"
+    }
+  ]
+}

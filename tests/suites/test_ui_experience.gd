@@ -183,6 +183,10 @@ func _campaign_loop() -> void:
 			_check(_all_text(shell.page).contains("方向") if kind == "direction" else _all_text(shell.page).contains("毕设"), "known consequence displayed")
 		else:
 			shell.press("campaign:skip")
+		if kind == "service":
+			_check(_helpers.fingerprint(session) != before, "leaving an ordinary service submits once")
+			shell.free()
+			continue
 		_check(_helpers.fingerprint(session) == before, "all local campaign browsing preserves full state/RNG: " + kind)
 		_check(shell.press("campaign:confirm"), "one final campaign confirmation: " + kind)
 		_check(_helpers.fingerprint(session) != before, "only final confirmation mutates: " + kind)
@@ -282,7 +286,7 @@ func _large_text_and_focus() -> void:
 	tree.root.add_child(page)
 	page.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	var name := "用于验证长名称完整换行的校园协作与期末资料整理卡牌"
-	var data := {"run_id": "layout", "revision": 0, "cards": [], "relics": [], "pending_reward": {"offer_id": "layout", "items": [{"item_id": "long", "kind": "card", "status": "pending", "candidates": [name], "candidate_details": {name: {"cost": 1, "type": "strategy", "effects": [{"op": "draw", "amount": 2}]}}, "skippable": true}]}}
+	var data := {"run_id": "layout", "revision": 0, "cards": [], "relics": [], "pending_reward": {"offer_id": "layout", "items": [{"item_id": "long", "kind": "card", "status": "pending", "candidates": [name, "layout:second", "layout:third"], "candidate_details": {name: {"cost": 1, "type": "strategy", "effects": [{"op": "draw", "amount": 2}]}}, "skippable": true}]}}
 	for dimensions in [Vector2i(1280, 800), Vector2i(960, 600)]:
 		tree.root.size = dimensions
 		await _frames()
@@ -291,6 +295,9 @@ func _large_text_and_focus() -> void:
 			page.render(data)
 			await _frames()
 			var card: UiOfferCard = page._buttons["reward:long:pick:" + name]
+			for candidate in [name, "layout:second", "layout:third"]:
+				var candidate_card: UiOfferCard = page._buttons["reward:long:pick:" + candidate]
+				_check(page._scroll.get_global_rect().encloses(candidate_card._face.get_global_rect()), "all three reward faces completely visible at %s %s" % [dimensions, scale])
 			_check(page.get_global_rect().encloses(page._buttons["reward:long:claim"].get_global_rect()), "long name/missing art keeps confirmation accessible at %s %s" % [dimensions, scale])
 			for label in card._face.find_children("*", "Label", true, false):
 				_check(card.get_global_rect().encloses(label.get_global_rect()), "missing art and long card text remain inside the card at %s %s" % [dimensions, scale])

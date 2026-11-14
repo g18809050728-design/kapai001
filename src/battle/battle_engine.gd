@@ -956,50 +956,7 @@ func _end_turn(
 		if int(task.get("eligible_round", 1)) <= state.round_index:
 			var task_id := str(task.get("task_id", ""))
 			var intent: Dictionary = task.get("intent_snapshot", {})
-			var pressure := int(intent.get("pressure", 0))
-			var extra := _status_stacks(state, "extra_requirements", task_id)
-			pressure += extra * int(pressure_rules.get("pressure_per_stack", 0))
-			var brainstorm := _status_stacks(state, "brainstorm", task_id)
-			pressure += brainstorm * int(brainstorm_rules.get("pressure_per_stack", 0))
-			var per_unit := int(intent.get("pressure_per_unit", 0))
-			if per_unit > 0:
-				var scaled := per_unit * state.units.size()
-				var scaled_cap := int(intent.get("pressure_per_unit_cap", scaled))
-				pressure += mini(scaled, maxi(0, scaled_cap))
-			var per_vitality := int(intent.get("pressure_per_vitality", 0))
-			if per_vitality > 0:
-				var step := int(intent.get("pressure_vitality_step", 10))
-				pressure += per_vitality * int(int(state.player.get("vitality", 0)) / maxi(1, step))
-			if int(task.get("shield", 0)) > 0:
-				pressure += int(intent.get("pressure_when_shield", 0))
-			var per_card_type: Variant = intent.get("pressure_per_card_type", {})
-			if per_card_type is Dictionary:
-				for card_type in per_card_type:
-					var played_key := BattleState.counter_key(
-						GameConstants.COUNTER_SCOPE_BATTLE, "card_type:" + str(card_type), &"played"
-					)
-					pressure += (
-						int(per_card_type[card_type]) * int(state.counters.get(played_key, 0))
-					)
-			if state.units.is_empty():
-				var no_unit_mult := int(intent.get("pressure_no_unit_mult", 100))
-				if no_unit_mult != 100:
-					pressure = int(ceil(pressure * no_unit_mult / 100.0))
-			else:
-				var has_unit_mult := int(intent.get("pressure_has_unit_mult", 100))
-				if has_unit_mult != 100:
-					pressure = int(ceil(pressure * has_unit_mult / 100.0))
-			var feeble := _status_stacks(state, "feebleness", task_id)
-			if feeble > 0:
-				var flat := int(
-					ruleset_result.data.statuses.get("feebleness", {}).get("pressure_flat", 1)
-				)
-				pressure = maxi(0, pressure - feeble * flat)
-			if _status_stacks(state, "weakness", task_id) > 0:
-				var weakness_percent := int(
-					ruleset_result.data.statuses.get("weakness", {}).get("pressure_percent", 75)
-				)
-				pressure = int(floor(pressure * weakness_percent / 100.0))
+			var pressure := intent_pressure(state, task, ruleset_result.data)
 			var times := maxi(1, int(intent.get("pressure_times", 1)))
 			for segment_index in times:
 				if pressure > 0:
@@ -1141,6 +1098,64 @@ func _execute_effect_list(
 			break
 	state.resolution = previous_resolution
 	return GameResult.success(null)
+
+
+func intent_pressure(state: BattleState, task: Dictionary, rules: Dictionary = {}) -> int:
+	if rules.is_empty():
+		var loaded := _loaded_ruleset()
+		if not loaded.ok:
+			return 0
+		rules = loaded.data
+	var intent: Dictionary = task.get("intent_snapshot", {})
+	var task_id := str(task.get("task_id", ""))
+	var pressure_rules: Dictionary = rules.statuses.get("extra_requirements", {})
+	var brainstorm_rules: Dictionary = rules.statuses.get("brainstorm", {})
+	var pressure := int(intent.get("pressure", 0))
+	var extra := _status_stacks(state, "extra_requirements", task_id)
+	pressure += extra * int(pressure_rules.get("pressure_per_stack", 0))
+	var brainstorm := _status_stacks(state, "brainstorm", task_id)
+	pressure += brainstorm * int(brainstorm_rules.get("pressure_per_stack", 0))
+	var per_unit := int(intent.get("pressure_per_unit", 0))
+	if per_unit > 0:
+		var scaled := per_unit * state.units.size()
+		var scaled_cap := int(intent.get("pressure_per_unit_cap", scaled))
+		pressure += mini(scaled, maxi(0, scaled_cap))
+	var per_vitality := int(intent.get("pressure_per_vitality", 0))
+	if per_vitality > 0:
+		var step := int(intent.get("pressure_vitality_step", 10))
+		pressure += per_vitality * int(int(state.player.get("vitality", 0)) / maxi(1, step))
+	if int(task.get("shield", 0)) > 0:
+		pressure += int(intent.get("pressure_when_shield", 0))
+	var per_card_type: Variant = intent.get("pressure_per_card_type", {})
+	if per_card_type is Dictionary:
+		for card_type in per_card_type:
+			var played_key := BattleState.counter_key(
+				GameConstants.COUNTER_SCOPE_BATTLE, "card_type:" + str(card_type), &"played"
+			)
+			pressure += (
+				int(per_card_type[card_type]) * int(state.counters.get(played_key, 0))
+			)
+	if state.units.is_empty():
+		var no_unit_mult := int(intent.get("pressure_no_unit_mult", 100))
+		if no_unit_mult != 100:
+			pressure = int(ceil(pressure * no_unit_mult / 100.0))
+	else:
+		var has_unit_mult := int(intent.get("pressure_has_unit_mult", 100))
+		if has_unit_mult != 100:
+			pressure = int(ceil(pressure * has_unit_mult / 100.0))
+	pressure = DifficultyRules.scale_pressure(pressure, state.difficulty, rules)
+	var feeble := _status_stacks(state, "feebleness", task_id)
+	if feeble > 0:
+		var flat := int(
+			rules.statuses.get("feebleness", {}).get("pressure_flat", 1)
+		)
+		pressure = maxi(0, pressure - feeble * flat)
+	if _status_stacks(state, "weakness", task_id) > 0:
+		var weakness_percent := int(
+			rules.statuses.get("weakness", {}).get("pressure_percent", 75)
+		)
+		pressure = int(floor(pressure * weakness_percent / 100.0))
+	return pressure
 
 
 func _execute_intent_skill(

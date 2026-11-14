@@ -2,8 +2,9 @@ class_name AnnualMapGenerator
 extends RefCounted
 ## Pure annual map generation. Identity is local to the year; no RunState or global RNG is used.
 
-const VERSION := 2
+const VERSION := 3
 const LEGACY := preload("res://src/run/annual_map_generator_v1.gd")
+const LEGACY_DENSE := preload("res://src/run/annual_map_generator_v2.gd")
 const YEAR_LAYERS := [12, 12, 14, 14]
 const YEAR_TITLES := ["适应与基础", "分流与专业", "履历与实践", "毕设与毕业去向"]
 const MAP_FIELDS := ["version", "year", "title", "layers", "relic_layers", "seed", "profile", "nodes"]
@@ -39,6 +40,8 @@ const DESTINATION_CHALLENGES := {"job": "求职终审", "exam": "升学综合考
 static func generate(year: int, seed: String, profile: Dictionary = {}, version: int = VERSION) -> Dictionary:
 	if version == 1:
 		return LEGACY.generate(year, seed, profile)
+	if version == 2:
+		return LEGACY_DENSE.generate(year, seed, profile)
 	if version != VERSION or year < 1 or year > 4:
 		return {}
 	var normalized := _normalize_profile(profile)
@@ -46,12 +49,15 @@ static func generate(year: int, seed: String, profile: Dictionary = {}, version:
 	var topology_rng := _random(year, seed, "topology", [])
 	var content_rng := _random(year, seed, "content", normalized.values())
 	var layers: int = YEAR_LAYERS[year - 1]
-	var detours := _detours(layers, topology_rng)
 	var safe_lane := topology_rng.randi_range(0, 2)
 	var side_columns := [topology_rng.randi_range(0, 1) * 2, 4 + topology_rng.randi_range(0, 1) * 2]
 	var schedules: Array[Dictionary] = []
 	for lane in 3:
 		schedules.append(_lane_schedule(year, lane, safe_lane, _random(year, seed, "schedule-lane-%d" % lane, [])))
+	var detours := _meaningful_detours(year, schedules, topology_rng)
+	if detours.size() != 2:
+		push_error("Annual map has no distinct branch schedules")
+		return {}
 	var nodes: Array = [_node(year, 1, 0, 3, "N", content_rng, normalized)]
 	for layer in range(2, layers):
 		for lane in 3:
@@ -62,11 +68,8 @@ static func generate(year: int, seed: String, profile: Dictionary = {}, version:
 			var side := 0 if lane == 0 else 1
 			var detour: Dictionary = detours[side]
 			if layer > detour.fork and layer < detour.merge:
-				# Detours inherit their main lane's exact category at every layer.
-				# Service opportunities may differ without changing a complete route's budget.
-				var side_subtype := subtype
-				if subtype in ["L", "LAB", "T", "I", "C"]:
-					side_subtype = _service_subtype(content_rng, normalized)
+				# Same segment budget, independently ordered encounters and supplies.
+				var side_subtype := _resolve_subtype(detour.schedule[layer], content_rng, normalized)
 				nodes.append(_node(year, layer, 3 + side, side_columns[side], side_subtype, content_rng, normalized))
 	nodes.append(_node(year, layers, 0, 3, "B", content_rng, normalized))
 	for node in nodes:
@@ -99,6 +102,57 @@ static func generate(year: int, seed: String, profile: Dictionary = {}, version:
 	return map
 
 
+static func _meaningful_detours(year: int, schedules: Array[Dictionary], rng: RandomNumberGenerator) -> Array[Dictionary]:
+	var layers: int = YEAR_LAYERS[year - 1]
+	var long_side := rng.randi_range(0, 1)
+	var result: Array[Dictionary] = []
+	for side in 2:
+		var schedule: Dictionary = schedules[0 if side == 0 else 2]
+		var required := ceili((layers - 2) / 2.0) if side == long_side else 3
+		var candidates: Array = []
+		for fork in range(2, layers - required - 1):
+			for merge in range(fork + required + 1, layers):
+				candidates.append({"fork": fork, "merge": merge})
+		_shuffle(candidates, rng)
+		for candidate in candidates:
+			var changed := _reorder_segment(year, schedule, candidate.fork, candidate.merge, rng)
+			if changed.is_empty():
+				continue
+			result.append({"fork": candidate.fork, "merge": candidate.merge, "schedule": changed})
+			break
+	return result
+
+
+static func _category(token: String) -> String:
+	return "service" if token in ["research", "service", "I", "C"] else token
+
+
+static func _reorder_segment(year: int, schedule: Dictionary, fork: int, merge: int, rng: RandomNumberGenerator) -> Dictionary:
+	var positions: Array = []
+	for layer in range(fork + 1, merge):
+		# Keep risk slots: no new consecutive elites or early risk can arise.
+		if schedule[layer] != "risk":
+			positions.append(layer)
+	var pairs: Array = []
+	for i in positions.size():
+		for j in range(i + 1, positions.size()):
+			if positions[i] <= fork + 3 and _category(schedule[positions[i]]) != _category(schedule[positions[j]]):
+				pairs.append([positions[i], positions[j]])
+	_shuffle(pairs, rng)
+	for pair in pairs:
+		var changed := schedule.duplicate(true)
+		changed[pair[0]] = schedule[pair[1]]
+		changed[pair[1]] = schedule[pair[0]]
+		if year == 2:
+			var late := false
+			for layer in range(7, YEAR_LAYERS[year - 1] - 1):
+				late = late or changed[layer] in ["research", "service", "I", "C"]
+			if not late:
+				continue
+		return changed
+	return {}
+
+
 static func _detours(layers: int, rng: RandomNumberGenerator) -> Array[Dictionary]:
 	# One branch spans at least half the middle layers; the other lasts at least three.
 	# Sampling the longer side and both fork/merge points varies actual edges across seeds.
@@ -116,6 +170,8 @@ static func _detours(layers: int, rng: RandomNumberGenerator) -> Array[Dictionar
 static func validate(map: Dictionary) -> Array[String]:
 	if typeof(map.get("version")) == TYPE_INT and map.version == 1:
 		return LEGACY.validate(map)
+	if typeof(map.get("version")) == TYPE_INT and map.version == 2:
+		return LEGACY_DENSE.validate(map)
 	var issues: Array[String] = []
 	if not _exact_fields(map, MAP_FIELDS):
 		issues.append("map fields must exactly match the annual map schema")
@@ -302,7 +358,29 @@ static func validate(map: Dictionary) -> Array[String]:
 							issues.append("forks must retain three independent nodes before merging")
 							break
 	issues.append_array(_validate_route_multisets(by_layer, start, layers, year))
+	issues.append_array(_validate_distinct_branches(nodes, map.nodes, layers))
 	return issues
+
+
+static func _validate_distinct_branches(nodes: Dictionary, entries: Array, layers: int) -> Array[String]:
+	var result: Array[String] = []
+	for node in entries:
+		if node.layer == 1 or node.next.size() != 2:
+			continue
+		var arms: Array = []
+		for target in node.next:
+			var sequence: Array[String] = []
+			var id: String = target
+			while int(nodes[id].layer) < layers:
+				var child: Dictionary = nodes[id]
+				sequence.append(str(child.subtype) if child.kind == "rest" else str(child.kind))
+				if child.next.size() != 1:
+					break
+				id = child.next[0]
+			arms.append(sequence)
+		if arms[0] == arms[1]:
+			result.append("fork arms must differ in encounter order or service opportunity")
+	return result
 
 
 static func _validate_route_multisets(by_layer: Dictionary, start: Dictionary, layers: int, year: int) -> Array[String]:

@@ -26,6 +26,7 @@ var _preview_pinned := false
 var _preview_focus: Control
 var _preview_focus_modes: Dictionary = {}
 var _restoring_preview_focus := false
+var _reference: UiReferenceOverlay
 
 
 func render(data: Dictionary) -> void:
@@ -34,6 +35,8 @@ func render(data: Dictionary) -> void:
 
 
 func reset_page(title: String, subtitle: String = "", compact: bool = false) -> VBoxContainer:
+	if is_instance_valid(_reference):
+		_reference.close()
 	close_card_preview()
 	var scope := "%s|%s|%s" % [title, view.get("run_id", ""), view.get("current_node_id", "")]
 	if scope != _scroll_scope:
@@ -229,7 +232,7 @@ func _show_card_preview(pinned: bool) -> void:
 	_card_preview = PanelContainer.new()
 	_card_preview.name = "CardDetails"
 	_card_preview.z_index = 400
-	var preview_style := UiStyle.box(Color("fffbef"))
+	var preview_style := UiStyle.box(Color("1d303e"))
 	preview_style.border_color = UiStyle.GREEN
 	preview_style.set_border_width_all(1)
 	preview_style.shadow_color = Color(0.02, 0.06, 0.07, .18)
@@ -247,7 +250,7 @@ func _show_card_preview(pinned: bool) -> void:
 	add_child(_card_preview)
 	var column := VBoxContainer.new()
 	_card_preview.add_child(column)
-	add_text(column, _preview_card.text, 20)
+	add_text(column, _preview_card.text, 20, UiStyle.CREAM)
 	var scroller := ScrollContainer.new()
 	scroller.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	scroller.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
@@ -256,10 +259,10 @@ func _show_card_preview(pinned: bool) -> void:
 	text_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	scroller.add_child(text_column)
 	var detail := _preview_card.detail
-	add_text(text_column, _card_preview_text(detail), 16)
+	add_text(text_column, _card_preview_text(detail), 16, UiStyle.CREAM)
 	var keyword_help := _card_preview_keyword_help(detail)
 	if not keyword_help.is_empty():
-		add_text(text_column, keyword_help, 14, UiStyle.MUTED)
+		add_text(text_column, keyword_help, 14, Color("d2b989"))
 	var controls := add_row(column)
 	var pin := add_button(controls, "card:pin", "关闭 · Esc" if pinned else "固定 · I", {}, close_card_preview if pinned else func(): _show_card_preview(true))
 	if pinned:
@@ -381,6 +384,19 @@ func press(uid: String) -> bool:
 	return true
 
 
+func open_reference(kind: String, relic_id: String = "") -> UiReferenceOverlay:
+	close_card_preview()
+	if is_instance_valid(_reference):
+		_reference.selected_relic = relic_id
+		_reference.show_section(kind)
+		return _reference
+	_reference = UiReferenceOverlay.new()
+	add_child(_reference)
+	_reference.configure(self, kind, view, relic_id)
+	_reference.closed.connect(func(): _reference = null)
+	return _reference
+
+
 func button_uids() -> Array:
 	return _buttons.keys()
 
@@ -405,7 +421,8 @@ func apply_gating(results: Dictionary) -> void:
 	for uid in results:
 		if _buttons.has(uid):
 			_buttons[uid].disabled = not results[uid].get("ok", false)
-			_buttons[uid].tooltip_text = str(results[uid].get("reason", ""))
+			var reason := str(results[uid].get("reason", ""))
+			_buttons[uid].tooltip_text = reason if not reason.is_empty() else str(_buttons[uid].get_meta("navigation_hint", ""))
 
 
 func button_disabled(uid: String) -> bool:

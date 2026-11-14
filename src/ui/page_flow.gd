@@ -994,30 +994,18 @@ func _open_inspector(kind: String) -> void:
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	panel.add_child(scroll)
 	var grid := GridContainer.new()
-	grid.columns = 2 if size.x >= 700 else 1
-	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	grid.add_theme_constant_override("h_separation", 14)
-	grid.add_theme_constant_override("v_separation", 14)
+	grid.columns = maxi(2,mini(5,int((size.x-100)/(204*UiStyle.text_scale))))
+	grid.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	grid.add_theme_constant_override("h_separation",18)
+	grid.add_theme_constant_override("v_separation",22)
 	scroll.add_child(grid)
 	if entries.is_empty():
-		add_text(grid, "暂未携带饰品。" if kind == "relics" else "牌组为空。", 18)
+		add_text(grid,"暂未携带饰品。" if kind == "relics" else "牌组为空。",18)
 	for entry in entries:
-		var item := add_panel(grid)
-		var id := str(entry.get("definition_id", ""))
-		var row := add_row(item)
-		var art := add_art(row, id, Vector2(112, 84) if kind == "deck" else Vector2(70, 70))
-		art.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
-		add_text(row, _card_name(entry) if kind == "deck" else UiStyle.label(id), 21)
-		var detail := _dict(entry.get("detail"))
-		add_text(
-			item,
-			(
-				UiContentText.describe_card(detail)
-				if kind == "deck"
-				else UiContentText.describe_relic(detail)
-			),
-			17
-		)
+		var id := str(entry.get("definition_id",""))
+		var item_id := str(entry.get("card_id",entry.get("relic_id",id)))
+		var card := add_card(grid,"inspect:card:"+item_id,id,_dict(entry.get("detail")),_card_name(entry) if kind == "deck" else UiStyle.label(id),false,func(): pass,kind != "deck")
+		card.pressed.connect(func(): _preview_card = card; _show_card_preview(true))
 
 
 func _close_inspector() -> void:
@@ -1163,7 +1151,7 @@ func _node_hint(kind: String) -> String:
 
 func _difficulty_name(id: String) -> String:
 	return str(
-		{"easy": "轻松", "normal": "标准", "hard": "挑战", "standard": "标准"}.get(id, UiStyle.label(id))
+		{"easy": "宽松", "relaxed": "宽松", "normal": "标准", "hard": "挑战", "standard": "标准"}.get(id, UiStyle.label(id))
 	)
 
 

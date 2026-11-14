@@ -17,8 +17,19 @@ var _map_detail_scroll := 0
 var _settings_status: Label
 var _map_preview: PanelContainer
 var _map_preview_words: VBoxContainer
+var _map_forecast_words: VBoxContainer
+var _map_selection_hint: Label
 var _room_figure: BattleActorView
 var _room_expanded := false
+var _room_illustration: CampusRoomIllustration
+var _full_map: UiRouteOverlay
+var _toolbar: UiRunToolbar
+var _map_press_id := ""
+var _map_press_origin := Vector2.ZERO
+var _map_press_selected := false
+var _map_press_double := false
+var _map_press_dragged := false
+var _map_entry_generation := -1
 
 
 func _notification(what: int) -> void:
@@ -40,8 +51,17 @@ func _restore_local_focus(uid: String) -> void:
 
 
 func render(data: Dictionary) -> void:
+	if is_instance_valid(_toolbar):
+		_toolbar.close_menu(false)
+	_toolbar = null
+	_map_press_id = ""
+	var reopen_seed := bool(get_meta("seed_open", false)) and screen == "setup"
+	_close_inspector()
+	if is_instance_valid(_full_map) and not _full_map.is_queued_for_deletion():
+		_full_map.close()
 	z_index = 1
 	_room_figure = null
+	_room_illustration = null
 	_room_expanded = false
 	var scope := "%s|%s|%s" % [data.get("run_id", ""), data.get("revision", -1), screen]
 	if str(get_meta("view_scope", "")) != scope:
@@ -53,16 +73,23 @@ func render(data: Dictionary) -> void:
 	scene.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	scene.z_index = -1
 	add_child(scene)
-	for region in [header, footer]:
-		if screen == "menu" or region.get_child_count() == 0:
-			continue
-		var backing := UiStyle.surface(Color(UiStyle.NIGHT,.95),Color(UiStyle.BRASS,.3),0)
-		backing.shadow_size = 0
-		region.draw.connect(func(): region.draw_style_box(backing,Rect2(Vector2(-24,-4),region.size+Vector2(48,8))))
+	if screen != "menu" and not is_instance_valid(_toolbar):
+		var rail := SpireTopRail.new()
+		rail.name = "SharedTopRail"
+		rail.size = Vector2(size.x,48)
+		rail.z_index = -1
+		add_child(rail)
+		if header.get_child_count() > 1:
+			var heading := header.get_child(1) as Label
+			if heading != null:
+				heading.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+				heading.add_theme_color_override("font_color",Color("ead09a"))
 	if not _local_focus.is_empty() and _buttons.has(_local_focus):
 		_restore_local_focus.call_deferred(_local_focus)
 	_local_focus = ""
 	_layout_regions.call_deferred()
+	if reopen_seed:
+		_open_inspector("seed")
 
 
 func _in_region(node: Node, region: Control) -> bool:
@@ -73,7 +100,8 @@ func _on_paper(node: Node) -> bool:
 	var ancestor := node
 	while ancestor != null and ancestor != self:
 		if ancestor is PanelContainer:
-			return true
+			var skin: StyleBox = ancestor.get_theme_stylebox("panel")
+			return skin is StyleBoxFlat and skin.bg_color.get_luminance() > .5
 		ancestor = ancestor.get_parent()
 	return false
 
@@ -108,12 +136,16 @@ func add_button(parent: Node, uid: String, caption: String, draft: Variant = {},
 			button.size_flags_horizontal = Control.SIZE_SHRINK_END
 	if _in_region(parent,header):
 		button.custom_minimum_size = Vector2(58,34)
+	if _in_region(parent,footer):
+		button.size_flags_horizontal = Control.SIZE_SHRINK_END
+		var text_width := button.get_theme_font("font").get_string_size(caption,HORIZONTAL_ALIGNMENT_LEFT,-1,button.get_theme_font_size("font_size")).x
+		button.custom_minimum_size.x = clampf(text_width+40,112,300)
 	return button
 
 
 func add_card(parent: Node, uid: String, id: String, detail: Dictionary, caption: String, picked: bool, callback: Callable, relic: bool = false) -> UiOfferCard:
 	var card := super.add_card(parent,uid,id,detail,caption,picked,callback,relic)
-	card._caption.add_theme_color_override("font_color",UiStyle.INK if _on_paper(parent) else UiStyle.CREAM)
+	card._caption.add_theme_color_override("font_color",UiStyle.CREAM)
 	return card
 
 
@@ -135,21 +167,38 @@ func _grid(parent: Node, columns: int = 3) -> GridContainer:
 
 
 func _run_bar(_parent: Node) -> void:
-	var row := add_row(header)
-	header.move_child(row,0)
-	row.tooltip_text = str(view.get("map_influence",""))
-	row.add_theme_constant_override("separation",6)
-	var name := UiStyle.label(str(view.get("character_id", ""))).split("·")[0]
-	add_text(row, "%s    精力 %s/%s    金钱 %s" % [name,view.get("vitality",0),view.get("max_vitality",0),view.get("money",0)], 14)
-	for entry in [["inspect:deck", "牌组 %d" % _array(view.get("cards")).size(), func(): _open_inspector("deck")], ["inspect:relics", "饰品 %d/3" % _array(view.get("relics")).size(), func(): _open_inspector("relics")], [screen+":save","保存",Callable()], [screen+":menu","菜单",Callable()], ["flow:help","帮助",_help]]:
-		var draft := _ui("save") if entry[0] == screen+":save" else (_ui("menu") if entry[0] == screen+":menu" else {})
-		var button := add_button(row,entry[0],entry[1],draft,entry[2])
-		button.custom_minimum_size = Vector2(62,36)
-		button.size_flags_horizontal = Control.SIZE_SHRINK_END
-		button.add_theme_font_size_override("font_size",roundi(13*UiStyle.text_scale))
+	var spacer := Control.new()
+	spacer.custom_minimum_size.y = UiRunToolbar.HEIGHT - 4
+	header.add_child(spacer)
+	header.move_child(spacer, 0)
+	_toolbar = UiRunToolbar.new()
+	add_child(_toolbar)
+	_toolbar.configure(self, {
+		"vitality": view.get("vitality", 0), "max_vitality": view.get("max_vitality", 0), "money": view.get("money", 0),
+		"journey": str(view.get("year_title", "校园冒险")),
+		"relics_uid": "inspect:relics", "relics_count": _array(view.get("relics")).size(), "relics_callback": func(): _open_inspector("relics"),
+		"map_uid": "flow:map", "map_callback": _open_full_map,
+		"show_map": screen != "map", "map_shortcut_uid": "map:overview" if screen == "map" else "flow:map",
+		"deck_uid": "inspect:deck", "deck_count": _array(view.get("cards")).size(), "deck_callback": func(): _open_inspector("deck"),
+		"toggle_uid": "flow:options", "close_uid": "flow:close_options", "help_uid": "flow:help", "help_callback": _help,
+		"save_uid": screen + ":save", "home_uid": screen + ":menu"
+	})
+	_toolbar.tooltip_text = str(view.get("map_influence", ""))
+	for child in header.get_children():
+		if child is Label and child.get_theme_font_size("font_size") < roundi(20*UiStyle.text_scale):
+			child.tooltip_text = child.text
+			child.visible = false
 
 
 func _layout_regions() -> void:
+	if is_instance_valid(footer):
+		for row in footer.get_children():
+			if not row is HBoxContainer:
+				continue
+			for button in row.get_children():
+				if button is Button and (str(button.get_meta("uid", "")).ends_with(":confirm") or str(button.get_meta("uid", "")).ends_with(":claim") or button.get_meta("uid", "") in ["map:enter","setup:start","setup:restart_confirm"]):
+					row.alignment = BoxContainer.ALIGNMENT_END
+					row.move_child(button,row.get_child_count()-1)
 	super._layout_regions()
 	header.offset_left = 24
 	header.offset_right = -24
@@ -166,17 +215,50 @@ func _layout_regions() -> void:
 		_scroll.offset_left = size.x*.065-12
 		_scroll.offset_right = -size.x*.59
 		_scroll.offset_bottom = -20
-	if screen in ["event", "rest", "setup"] and not _room_expanded:
+	if (screen in ["event", "rest"] or is_instance_valid(_room_illustration)) and not _room_expanded:
 		_scroll.offset_left = size.x*.45
 		_scroll.offset_right = -size.x*.055
+	if is_instance_valid(_room_illustration):
+		_room_illustration.visible = not _room_expanded
+		_room_illustration.position = Vector2(size.x*.055,_scroll.offset_top+18)
+		_room_illustration.size = Vector2(size.x*.35,maxf(100,size.y+_scroll.offset_bottom-_scroll.offset_top-36))
 	if is_instance_valid(_room_figure):
 		_room_figure.position = Vector2(size.x*.05,_scroll.offset_top+14)
 		_room_figure.size = Vector2(size.x*.36,maxf(100,size.y+_scroll.offset_bottom-_scroll.offset_top-24))
+	if screen == "setup":
+		_scroll.offset_left = size.x*.07
+		_scroll.offset_right = -size.x*.55
+		if is_instance_valid(_room_figure):
+			_room_figure.position.x = size.x*.5
+			_room_figure.size.x = size.x*.36
+	if screen == "reward" or (screen == "campaign" and (not is_instance_valid(_room_illustration) or _room_expanded)):
+		_scroll.offset_left = size.x*.06
+		_scroll.offset_right = -size.x*.06
+		_fit_reward_cards()
 	if screen == "map" and is_instance_valid(_map_preview) and not _map_preview.is_queued_for_deletion():
 		var width := 272.0 if size.x < 1100 else 300.0
 		_scroll.offset_right = -width-16
 		_map_preview.position = Vector2(size.x-width-10,_scroll.offset_top)
 		_map_preview.size = Vector2(width,maxf(100,size.y+_scroll.offset_bottom-_scroll.offset_top))
+
+
+func _fit_reward_cards() -> void:
+	var available_width := size.x + _scroll.offset_right - _scroll.offset_left - 24
+	var available_height := size.y + _scroll.offset_bottom - _scroll.offset_top - 32
+	for grid in body.find_children("*", "GridContainer", true, false):
+		if not grid.get_meta("reward_cards", false):
+			continue
+		var columns := mini(3, grid.get_child_count())
+		grid.columns = maxi(1, columns)
+		var width := minf(220*UiStyle.text_scale, (available_width-16*(columns-1))/maxi(1,columns))
+		for card in grid.get_children():
+			if not card is UiOfferCard:
+				continue
+			var ratio := 1.05 if card._relic else 244.0/168
+			var fitted_width := maxf(120, minf(width,(available_height-36*UiStyle.text_scale)/ratio))
+			card.custom_minimum_size = Vector2(fitted_width, fitted_width*ratio+36*UiStyle.text_scale)
+			card._base_height = card.custom_minimum_size.y
+			card._fit_contents()
 
 
 func _scene_character(id: String) -> void:
@@ -186,12 +268,44 @@ func _scene_character(id: String) -> void:
 	add_child(_room_figure)
 
 
+func _show_room(subtype: String, title: String) -> void:
+	_room_illustration = CampusRoomIllustration.new()
+	_room_illustration.configure(subtype, title)
+	add_child(_room_illustration)
+
+
+func _open_full_map() -> void:
+	if is_instance_valid(_full_map) and not _full_map.is_queued_for_deletion():
+		_full_map.close()
+		return
+	close_card_preview()
+	_close_inspector()
+	_full_map = UiRouteOverlay.new()
+	add_child(_full_map)
+	_full_map.configure(_array(view.get("nodes")), str(view.get("current_node_id", "")), _array(view.get("reachable_node_ids")), str(view.get("year_title", "本学年")))
+	if is_instance_valid(_toolbar):
+		_toolbar.mark_active("map", true)
+	_full_map.closed.connect(func():
+		if is_instance_valid(_toolbar):
+			_toolbar.mark_active("map", false))
+
+
+func _event_needs_confirmation(option: Dictionary) -> bool:
+	for amount in _dict(option.get("cost")).values():
+		if int(amount) > 0:
+			return true
+	for effect in _array(option.get("effects")):
+		if str(effect.get("op", "")) in ["upgrade_card", "remove_card", "gain_card", "gain_relic"]:
+			return true
+	return false
+
+
 func _render_menu() -> void:
 	reset_page("DDL 战争", "把校园日常，打成自己的牌。")
 	var title_label := header.get_child(0) as Label
 	title_label.add_theme_font_size_override("font_size",roundi(64*UiStyle.text_scale))
 	add_text(body,"四学年 · 校园卡牌冒险",16,UiStyle.BRASS)
-	add_text(body,"决定下一条路线，\n打出属于你的四年。",24)
+
 	var resume := add_button(body,"menu:continue","继续冒险",_ui("continue"))
 	resume.disabled = not bool(view.get("has_active_session",false)) and not bool(view.get("can_continue",false))
 	if resume.disabled:
@@ -202,6 +316,15 @@ func _render_menu() -> void:
 	add_button(body,"menu:new","新的四年",_ui("new_run"))
 	add_button(body,"menu:test","测试房间",_ui("test_room"))
 	add_button(body,"menu:settings","设置与存档",_ui("settings"))
+	for uid in ["menu:continue","menu:new","menu:test","menu:settings"]:
+		var option: Button = _buttons[uid]
+		option.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		option.custom_minimum_size = Vector2(220,52)
+		option.add_theme_font_override("font",UiStyle.title_font())
+		option.add_theme_font_size_override("font_size",roundi(25*UiStyle.text_scale))
+		for state in ["normal","hover","pressed","focus","disabled"]:
+			option.add_theme_stylebox_override(state,StyleBoxEmpty.new())
+		option.add_theme_color_override("font_hover_color",Color("ffe6a0"))
 	if bool(view.get("has_active_session",false)):
 		add_text(body,"当前冒险已保留。",14,UiStyle.MUTED)
 	if not str(view.get("save_error","")).is_empty():
@@ -209,28 +332,40 @@ func _render_menu() -> void:
 
 
 func _map_preview_node(node: Dictionary, reachable: Array) -> void:
-	if not is_instance_valid(_map_preview_words):
+	if not is_instance_valid(_map_preview_words) or not is_instance_valid(_map_forecast_words):
 		return
-	for child in _map_preview_words.get_children():
-		child.queue_free()
-		_map_preview_words.remove_child(child)
+	for column in [_map_preview_words, _map_forecast_words]:
+		for child in column.get_children():
+			column.remove_child(child)
+			child.queue_free()
 	var id := str(node.get("node_id", ""))
 	var forecast := MapForecast.describe(_array(view.get("nodes")),id)
-	add_text(_map_preview_words,"路线手册  /  第 %02d 层" % int(node.get("layer",0)),12,UiStyle.MUTED)
+	add_text(_map_preview_words,"第 %02d 层  /  %s" % [int(node.get("layer",0)), _map_short_name(node)],13,Color("76522c"))
 	var scene_key := str({"normal":"BG_classroom","elite":"BG_classroom","boss":"BG_classroom","rest":"BG_dorm","shop":"BG_shop","event":"BG_campus"}.get(str(node.get("kind","")),"BG_study"))
 	var thumbnail := TextureRect.new()
 	thumbnail.texture = UiStyle.texture(scene_key)
-	thumbnail.custom_minimum_size.y = 112
+	thumbnail.custom_minimum_size.y = (48 if UiStyle.text_scale > 1.0 else 64) if size.y < 700 else 86
 	thumbnail.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	thumbnail.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	thumbnail.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_map_preview_words.add_child(thumbnail)
-	add_text(_map_preview_words,_map_short_name(node),19,UiStyle.RED if str(node.get("subtype","")) in ["EL","K","B"] else UiStyle.MUTED)
-	add_text(_map_preview_words,_map_node_title(node),18)
-	add_text(_map_preview_words,"第%d层 · %s" % [int(node.get("layer",0)),"已预选" if str(_choices.get("map:node","")) == id and reachable.has(id) else ("可以前往" if reachable.has(id) else "路线预览")],14,UiStyle.GREEN.darkened(.2))
-	add_text(_map_preview_words,_campaign_node_hint(node) if not str(node.get("subtype","")).is_empty() else _node_hint(str(node.get("kind",""))),14)
-	add_text(_map_preview_words,str(forecast.text),14)
+	var title := add_text(_map_preview_words,_map_node_title(node),18,Color("3d382b"))
+	title.add_theme_font_override("font", UiStyle.title_font())
+	title.name = "PreviewNodeTitle"
+	title.max_lines_visible = 2
+	title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	title.tooltip_text = title.text
+	var selected := str(_choices.get("map:node","")) == id
+	var status := "✓ 已预选 · 可进入" if selected and reachable.has(id) else ("→ 可进入 · 单击预选" if reachable.has(id) else "○ 仅预览 · 不能进入")
+	var status_label := add_text(_map_preview_words,status,14,Color("763c2b") if reachable.has(id) else Color("665d48"))
+	status_label.name = "PreviewNodeStatus"
+	add_text(_map_forecast_words,_campaign_node_hint(node) if not str(node.get("subtype","")).is_empty() else _node_hint(str(node.get("kind",""))),14,Color("47402f"))
+	var text := add_text(_map_forecast_words,str(forecast.text),14,Color("47402f"))
+	text.name = "ForecastFullText"
 	if not reachable.has(id):
-		add_text(_map_preview_words,"这里只预览路线，确认可达节点后才会前进。",13,UiStyle.MUTED)
+		add_text(_map_forecast_words,"这里只预览路线，确认可达节点后才会前进。",13,Color("665d48"))
+	var scroll := _map_forecast_words.get_parent() as ScrollContainer
+	scroll.scroll_vertical = 0
 
 
 func _overview_locate(id: String) -> void:
@@ -261,6 +396,9 @@ func _local_button(parent: Node, uid: String, title: String, key: String, value:
 
 
 func _choose(key: String, value: String) -> void:
+	if key == "map:node" and screen == "map":
+		_select_map_node(value)
+		return
 	if key in ["campaign:deck_mode", "campaign:category"] and str(_choices.get(key, "")) != value:
 		for field in ["campaign:option", "campaign:target", "campaign:replace"]:
 			_choices.erase(field)
@@ -269,9 +407,17 @@ func _choose(key: String, value: String) -> void:
 	super._choose(key, value)
 
 
+func add_panel(parent: Node) -> VBoxContainer:
+	var column := super.add_panel(parent)
+	var skin := UiStyle.surface(Color("20323f"),Color("5c6a6f"),4)
+	skin.bg_color.a = .93
+	column.get_parent().add_theme_stylebox_override("panel",skin)
+	return column
+
+
 func _choice_panel(parent: Node, selected: bool) -> VBoxContainer:
 	var column := add_panel(parent)
-	var style := UiStyle.surface(Color("f8f0dd") if selected else UiStyle.CREAM,UiStyle.BRASS if selected else Color("c1b696"))
+	var style := UiStyle.surface(Color("344d5b") if selected else Color("243947"),UiStyle.BRASS if selected else Color("607581"))
 	style.border_width_left = 4 if selected else 1
 	column.get_parent().add_theme_stylebox_override("panel", style)
 	return column
@@ -296,6 +442,7 @@ func _render_reward() -> void:
 	var relic: bool = item.get("kind", "card") == "relic"
 	add_text(header, "已获得金钱 %d · 待处理 %d 项 · %s" % [money, pending.size(), "饰品奖励" if relic else "卡牌奖励"], 15)
 	var grid := _grid(body)
+	grid.set_meta("reward_cards", true)
 	body.alignment = BoxContainer.ALIGNMENT_CENTER
 	body.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	var details := _dict(item.get("candidate_details"))
@@ -306,7 +453,11 @@ func _render_reward() -> void:
 	if relic and _relics_full():
 		_replacement_picker(body, "reward:" + id, id + ":replace")
 	var skipping: bool = _choices.get(id + ":skip", "") == "yes"
-	var row := _bottom("确认跳过这项奖励？" if skipping else ("已选：" + UiStyle.label(selected) if not selected.is_empty() else "请选择一个候选；查看说明不会领取奖励。"))
+	var summary := "已选：" + UiStyle.label(selected) if not selected.is_empty() else "请选择一个候选；查看说明不会领取奖励。"
+	if relic and _relics_full() and not selected.is_empty():
+		var replacement := str(_choices.get(id + ":replace", ""))
+		summary += " · 装备槽已满，请向下选择替换对象" if replacement.is_empty() else " · 将失去：" + _relic_name(replacement)
+	var row := _bottom("确认跳过这项奖励？" if skipping else summary)
 	if skipping:
 		add_button(row, "reward:%s:skip_confirm" % id, "确认跳过", _action("skip_reward", {"offer_id": offer.get("offer_id", ""), "item_id": id}))
 		_cancel(row, id + ":skip", "继续选牌")
@@ -315,8 +466,9 @@ func _render_reward() -> void:
 		if not str(_choices.get(id + ":replace", "")).is_empty():
 			payload.replace_relic_id = _choices[id + ":replace"]
 		var confirm := add_button(row, "reward:%s:claim" % id, "领取这件饰品" if relic else "领取这张卡", _action("claim_reward", payload))
-		if selected.is_empty():
+		if selected.is_empty() or (relic and _relics_full() and not payload.has("replace_relic_id")):
 			confirm.disabled = true
+			confirm.tooltip_text = "请先选择要替换的已装备饰品" if not selected.is_empty() else "请先预选奖励"
 		_cancel(row, id)
 		if item.get("skippable", true):
 			_local_button(row, "reward:%s:skip" % id, "跳过此项", id + ":skip", "yes")
@@ -326,7 +478,8 @@ func _render_campaign() -> void:
 	var offer := _dict(view.get("campaign_offer"))
 	_scope(str(offer.get("offer_id", "")))
 	var kind := str(offer.get("kind", ""))
-	reset_page(str({"grand": "学年大奖励", "relic": "学年纪念饰品", "direction": "选择学习方向", "destination": "选择毕业去向", "service": "校园服务", "familiar": "校园熟人"}.get(kind, "学年选择")), "候选已固定 · 查看和返回不会消耗奖励")
+	var title := str(_dict(offer.get("node_meta")).get("title","校园服务")) if kind == "service" else str({"grand": "学年大奖励", "relic": "学年纪念饰品", "direction": "选择学习方向", "destination": "选择毕业去向", "familiar": "校园熟人"}.get(kind, "学年选择"))
+	reset_page(title, "候选已固定 · 查看和返回不会消耗奖励")
 	_run_bar(header)
 	var category := str(_choices.get("campaign:category", ""))
 	if kind == "grand":
@@ -359,15 +512,20 @@ func _render_campaign() -> void:
 		_campaign_deck(offer, false)
 	elif kind == "service":
 		var meta := _dict(offer.get("node_meta"))
-		add_text(header, str(meta.get("title", "")), 16)
+		_room_expanded = not str(_choices.get("campaign:deck_mode", "")).is_empty()
+		_show_room(str(meta.get("subtype", "E")),str(meta.get("title", "校园服务")))
+		if not _room_expanded:
+			add_text(body,CampusRoomIllustration.narrative(str(meta.get("subtype", "E"))),17)
 		if meta.get("subtype", "") in ["L", "LAB", "T"]:
+			if not _room_expanded:
+				add_text(body,"服务费用：%d 金钱%s" % [int(offer.get("service_cost",0))," + 5 精力（至少保留1）" if meta.get("subtype") == "LAB" else ""],16,UiStyle.BRASS)
 			_campaign_deck(offer, meta.get("subtype", "") == "LAB")
 		else:
-			var row := add_row(body)
 			for option in ["heal", "money", "progress"]:
 				var quote := _preview_quote(offer, option)
 				if quote.get("ok", false):
-					_local_button(row, "campaign:" + option, _quote(offer, option), "campaign:option", option)
+					var label := str({"heal":"和伙伴休息片刻","money":"参与活动 / 实践","progress":"整理毕设进度"}[option])
+					add_button(body,"campaign:"+option,label+"\n"+_quote(offer,option),_campaign_action(offer,option,""))
 		if int(view.get("term", 1)) == 2 and int(meta.get("layer", 0)) >= 7 and not bool(view.get("campaign", {}).get("direction_changed", false)):
 			add_text(body, "更换一次方向 · 支付30金钱", 18)
 			for id in CampaignService.DIRECTIONS:
@@ -409,7 +567,15 @@ func _render_campaign() -> void:
 				pick.custom_minimum_size.y = 30
 				pick.add_theme_font_size_override("font_size", 14)
 	elif kind == "familiar":
-		_local_button(body, "campaign:familiar", "咨询校园熟人 · 获得10金钱", "campaign:option", "money")
+		_show_room("T","校园熟人")
+		add_text(body,CampusRoomIllustration.narrative("T"),17)
+		add_button(body,"campaign:familiar","咨询校园熟人 · 获得10金钱",_campaign_action(offer,"money",""))
+	if kind in ["service","familiar"] and not _room_expanded and str(_choices.get("campaign:option", "")).is_empty():
+		var exit_row := _bottom("行动收益已列明 · 点击行动完成本次活动")
+		if kind == "service" and _dict(offer.get("node_meta")).get("subtype") in ["L","LAB","T"]:
+			(footer.get_child(0) as Label).text = "选择卡牌，比较前后效果，再确认服务"
+		add_button(exit_row,"campaign:skip","离开这里",_campaign_action(offer,"skip",""))
+		return
 	var option := str(_choices.get("campaign:option", ""))
 	var target := str(_choices.get("campaign:target", ""))
 	if kind == "grand" and category in ["resources", "skip"]:
@@ -440,6 +606,7 @@ func _render_campaign() -> void:
 func _candidates(offer: Dictionary, relic: bool) -> void:
 	var target := str(_choices.get("campaign:target", ""))
 	var grid := _grid(body)
+	grid.set_meta("reward_cards", true)
 	for value in _array(offer.get("candidates")):
 		var id := str(value)
 		add_card(grid, "campaign:claim:" + id, id, _dict(offer.get("details", {}).get(id)), UiStyle.label(id), _choices.get("campaign:target", "") == id, func():
@@ -448,32 +615,45 @@ func _candidates(offer: Dictionary, relic: bool) -> void:
 			_choices.erase("campaign:skip")
 			refresh_local(), relic)
 	if relic:
-		add_text(body, "携带 %d/3 件饰品；预选后查看三个装备槽。" % _array(view.get("relics")).size(), 15)
+		add_text(body, "携带 %d/%d 件饰品；预选后比较实际装备槽。" % [_array(view.get("relics")).size(), int(view.get("relic_slots", 3))], 15)
 		if not target.is_empty():
 			_replacement_picker(body, "campaign", "campaign:replace")
 
 
 func _replacement_picker(parent: Node, uid_prefix: String, choice_key: String) -> void:
-	add_text(parent, "三个装备槽 · 选择替换后失去的旧效果" if _relics_full() else "当前装备槽 · 领取后保留已有饰品", 17)
+	add_text(parent, "%d个装备槽 · 选择替换后失去的旧效果" % int(view.get("relic_slots", 3)) if _relics_full() else "当前装备槽 · 领取后保留已有饰品", 17)
 	var grid := _grid(parent)
 	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	var relics := _array(view.get("relics"))
-	for index in 3:
+	for index in int(view.get("relic_slots", 3)):
 		var panel := add_panel(grid)
 		panel.add_theme_constant_override("separation", 4)
-		var style := UiStyle.box(Color("fffbef"))
+		var style := UiStyle.box(Color("253947"))
 		for side in ["left", "right", "top", "bottom"]:
 			style.set("content_margin_" + side, 4)
 		panel.get_parent().add_theme_stylebox_override("panel", style)
-		if index >= relics.size():
+		var relic: Dictionary = {}
+		for entry in relics:
+			if int(entry.get("slot", relics.find(entry))) == index:
+				relic = entry
+		if relic.is_empty():
 			add_text(panel, "空槽 %d" % (index + 1), 18)
 			continue
-		var relic: Dictionary = relics[index]
 		var id := str(relic.relic_id)
+		add_art(panel, str(relic.definition_id), Vector2(90, 64))
+		add_text(panel, "装备槽 %d · %s" % [int(relic.get("slot", index)) + 1, "将被替换" if _choices.get(choice_key, "") == id else "已装备"], 14)
 		add_text(panel, UiStyle.label(str(relic.definition_id)), 16)
 		add_text(panel, UiContentText.describe_relic(_dict(relic.get("detail"))), 14)
+		add_button(panel, uid_prefix + ":inspect:" + id, "查看完整饰品", {}, func(): _open_reference("relics", id))
 		if _relics_full():
 			_local_button(panel, uid_prefix + ":replace:" + id, "✓ 将失去此效果" if _choices.get(choice_key, "") == id else "替换这一槽", choice_key, id)
+
+
+func _relic_name(instance_id: String) -> String:
+	for relic in _array(view.get("relics")):
+		if str(relic.get("relic_id", "")) == instance_id:
+			return UiStyle.label(str(relic.get("definition_id", "")))
+	return "所选饰品"
 
 
 func _campaign_deck(offer: Dictionary, upgrade_only: bool) -> void:
@@ -565,15 +745,16 @@ func _render_map() -> void:
 	var selected := str(_choices.get("map:node", ""))
 	var forecast := MapForecast.describe(nodes, selected)
 	if not _map_overview:
-		var legend := add_text(body, "◆ 当前　→ 可入　✓ 已过　○ 后续　× 不可达　· 金环选中 / 青线后3层", 12 if compact_map else 14, UiStyle.MUTED)
+		var legend := add_text(body, "◆ 当前　✓ 已过　断圈可入　淡墨不可达　· 红圈预选 / 朱线预览后3层", 12 if compact_map else 14, UiStyle.MUTED)
 		legend.tooltip_text = "当前：%s · %d 个相邻后继可入\n%s" % [current_title, reachable.size(), view.get("map_influence", "")]
 	if nodes.is_empty():
 		add_text(body, "本学年地图尚未生成。确认方向或毕业去向后再查看；未来学年不会提前展示。", 18)
 	if _map_overview and not nodes.is_empty():
-		add_text(body, "本学年全图 · 当前：%s · 金环可入/选中 · 绿线后3层" % current_title, 14)
+		add_text(body, "本学年全图 · 当前：%s · 圈记可入 · 朱线预览后3层" % current_title, 14)
 		var overview := RouteCanvas.new()
 		overview.name = "MapOverview"
 		overview.overview = true
+		overview.detailed_overview = true
 		overview.configure(nodes, reachable, current_id, selected)
 		overview.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		overview.node_inspected.connect(_overview_locate)
@@ -611,6 +792,7 @@ func _render_map() -> void:
 		button.set_pressed_no_signal(id == selected)
 		button.set_meta("current_node", current)
 		button.tooltip_text = "第%s层 · %s · %s\n%s\n%s" % [node.layer, _map_node_title(node), status, _node_hint(str(node.kind)), _campaign_node_hint(node)]
+		button.tooltip_text += "\n首次点击预选 · 再次点击或双击进入" if reachable.has(id) else "\n点击查看路线"
 		if id == selected:
 			description = "已选：%s · %s · 第%s层" % [_map_node_title(node), status, node.layer]
 			if str(node.get("kind", "")) == "elite":
@@ -618,24 +800,32 @@ func _render_map() -> void:
 	canvas.arrange.call_deferred()
 	if not _map_overview and node_ids.has(selected) and _local_focus == "node:" + selected:
 		_ensure_map_selection_visible.call_deferred(selected, _render_generation)
-	var scope := "%s|%s|%s|%s" % [view.get("run_id", ""), view.get("term", 0), current_id, view.get("revision", -1)]
+	var scope := "%s|%s|%s|%s|%s|%s" % [view.get("run_id", ""), view.get("term", 0), current_id, view.get("revision", -1), size, UiStyle.text_scale]
 	if scope != _map_focus_scope:
 		var focus_id := str(reachable[0]) if not reachable.is_empty() else current_id
 		if not focus_id.is_empty():
 			_focus_map_after_layout.call_deferred(weakref(canvas), focus_id, _render_generation, scope)
-	_map_preview = PanelContainer.new()
+	_map_preview = UiMapPaper.new()
 	_map_preview.name = "MapNodePreview"
-	var preview_style := UiStyle.surface(UiStyle.CREAM,Color("a7997a"))
-	_map_preview.add_theme_stylebox_override("panel",preview_style)
+	_map_preview.cool = true
 	add_child(_map_preview)
+	var preview_column := VBoxContainer.new()
+	preview_column.add_theme_constant_override("separation",10)
+	_map_preview.add_child(preview_column)
+	_map_preview_words = VBoxContainer.new()
+	_map_preview_words.name = "MapNodeSummary"
+	_map_preview_words.add_theme_constant_override("separation",6)
+	preview_column.add_child(_map_preview_words)
+	preview_column.add_child(HSeparator.new())
 	var preview_scroll := ScrollContainer.new()
 	preview_scroll.name = "RouteForecast"
 	preview_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	_map_preview.add_child(preview_scroll)
-	_map_preview_words = VBoxContainer.new()
-	_map_preview_words.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_map_preview_words.add_theme_constant_override("separation",10)
-	preview_scroll.add_child(_map_preview_words)
+	preview_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	preview_column.add_child(preview_scroll)
+	_map_forecast_words = VBoxContainer.new()
+	_map_forecast_words.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_map_forecast_words.add_theme_constant_override("separation",10)
+	preview_scroll.add_child(_map_forecast_words)
 	var preview_id := selected if node_ids.has(selected) else (str(reachable[0]) if not reachable.is_empty() else current_id)
 	for node in nodes:
 		if str(node.node_id) == preview_id:
@@ -646,31 +836,91 @@ func _render_map() -> void:
 			node_button.focus_entered.connect(func(): _map_preview_node(node,reachable))
 	_layout_regions.call_deferred()
 
-	var row := _bottom(description + "  ·  双击可达节点直接进入")
-	var enter := add_button(row, "map:enter", "进入此节点", _action("enter_node", {"node_id": selected}))
+	var row := _bottom(description + "  ·  再次点击已选节点进入 / 可双击")
+	_map_selection_hint = footer.get_child(0) as Label
+	# Selection text cannot resize the footer and shift the node under a second click.
+	_map_selection_hint.autowrap_mode = TextServer.AUTOWRAP_OFF
+	_map_selection_hint.clip_text = true
+	_map_selection_hint.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	_map_selection_hint.tooltip_text = _map_selection_hint.text
+	var enter := add_button(row, "map:enter", "进入此节点", func(): return _action("enter_node", {"node_id": str(_choices.get("map:node", ""))}))
 	enter.disabled = not node_ids.has(selected) or not reachable.has(selected)
 	if enter.disabled:
 		enter.tooltip_text = "请先选择当前位置直接相连的真实可入节点。"
 	add_button(row, "map:current", "定位当前" if compact_map else "回到当前位置", {}, func(): _focus_map(canvas, current_id if not current_id.is_empty() else str(reachable[0]) if not reachable.is_empty() else ""))
-	add_button(row, "map:overview", "收起全图" if _map_overview else "全图概览", {}, _toggle_map_overview)
+	var overview_button := add_button(row, "map:overview", "收起全图" if _map_overview else "全图概览", {}, _toggle_map_overview)
+	overview_button.tooltip_text = "切换本页全图概览 · M"
 	add_button(row, "map:abandon", "放弃本局", {}, func(): _confirm_abandon = not _confirm_abandon; refresh_local())
 	if _confirm_abandon:
 		add_button(add_row(footer), "map:abandon_confirm", "确认放弃本局", _action("abandon_run", {"confirmed": true}))
 
 
-func _map_node_input(event: InputEvent, id: String, generation: int) -> void:
-	if not event is InputEventMouseButton or not event.pressed or event.button_index != MOUSE_BUTTON_LEFT or not event.double_click:
+func _select_map_node(id: String) -> void:
+	var nodes: Array = _array(view.get("nodes")).filter(func(node): return int(node.get("term", view.get("term", 1))) == int(view.get("term", 1)))
+	var selected_node: Dictionary = {}
+	for node in nodes:
+		if str(node.node_id) == id:
+			selected_node = node
+			break
+	if selected_node.is_empty():
 		return
-	if screen != "map" or generation != _render_generation or not _array(view.get("reachable_node_ids")).has(id):
+	_choices["map:node"] = id
+	var reachable := _array(view.get("reachable_node_ids"))
+	var forecast := MapForecast.describe(nodes, id)
+	# Keep native buttons, focus, scroll and input capture intact between clicks.
+	for node in nodes:
+		var button: Button = _buttons.get("node:" + str(node.node_id))
+		if is_instance_valid(button):
+			button.set_pressed_no_signal(str(node.node_id) == id)
+			button.set("forecast", forecast.node_ids.has(str(node.node_id)))
+			button.queue_redraw()
+	for canvas_name in ["RouteMap", "MapOverview"]:
+		var canvas := find_child(canvas_name, true, false) as UiRouteCanvas
+		if is_instance_valid(canvas):
+			canvas.select_node(id)
+	_map_preview_node(selected_node, reachable)
+	var button: Button = _buttons.get("node:" + id)
+	var status := str(button.get("map_status")) if is_instance_valid(button) else ""
+	_map_selection_hint.text = "已选：%s · %s · 第%s层%s  ·  再次点击此节点进入 / 可双击" % [_map_node_title(selected_node), status, selected_node.layer, " · 高风险" if str(selected_node.kind) == "elite" else ""]
+	_map_selection_hint.tooltip_text = _map_selection_hint.text
+	var enter: Button = _buttons.get("map:enter")
+	enter.disabled = not reachable.has(id)
+	enter.tooltip_text = "确认前往预选节点；也可再次点击此节点或双击进入。" if reachable.has(id) else "这里只预览路线；请选择当前位置直接相连的可入节点。"
+	local_selection_changed.emit(_choices.duplicate(true))
+
+
+func _map_node_input(event: InputEvent, id: String, generation: int) -> void:
+	if not is_inside_tree() or screen != "map" or generation != _render_generation or _map_entry_generation == generation:
 		return
 	var button: Button = _buttons.get("node:"+id)
 	if not is_instance_valid(button) or button.disabled:
 		return
+	if event is InputEventMouseMotion and _map_press_id == id:
+		_map_press_dragged = _map_press_dragged or event.global_position.distance_to(_map_press_origin) > 8
+		return
+	if not event is InputEventMouseButton or event.button_index != MOUSE_BUTTON_LEFT:
+		return
 	button.accept_event()
-	# Build the same current draft as single-click + Enter; the shell regates it
-	# against GameSession before press() can submit it, including stale revisions.
-	_choose("map:node",id)
-	press("map:enter")
+	if event.pressed:
+		_map_press_id = id
+		_map_press_origin = event.global_position
+		_map_press_selected = str(_choices.get("map:node", "")) == id
+		_map_press_double = event.double_click
+		_map_press_dragged = false
+		button.grab_focus()
+		return
+	if _map_press_id != id:
+		return
+	_map_press_id = ""
+	if _map_press_dragged or not Rect2(Vector2.ZERO, button.size).has_point(event.position):
+		return
+	var enter := (_map_press_selected or _map_press_double) and _array(view.get("reachable_node_ids")).has(id)
+	_choose("map:node", id)
+	if enter:
+		# Reuse the fixed CTA's preview, current draft and shell revision gate.
+		_map_entry_generation = generation
+		if not press("map:enter"):
+			_map_entry_generation = -1
 
 
 func _map_short_name(node: Dictionary) -> String:
@@ -751,28 +1001,52 @@ func _render_shop() -> void:
 		summary = "支付 %s 金钱 · 余额 %d · 移除后 %d 张牌" % [removal.get("price", 0), int(view.get("money", 0)) - int(removal.get("price", 0)), _array(view.get("cards")).size() - 1]
 		action = _action("remove_card", {"shop_id": shop.get("shop_id", ""), "card_instance_id": _choices.get("shop:card", "")})
 	else:
-		var grid := _grid(body)
 		body.alignment = BoxContainer.ALIGNMENT_CENTER
 		body.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		var tableau := VBoxContainer.new()
+		tableau.name = "ShopTableau"
+		tableau.add_theme_constant_override("separation",12)
+		body.add_child(tableau)
+		var cards_row := add_row(tableau)
+		cards_row.alignment = BoxContainer.ALIGNMENT_CENTER
+		var supplies_row := add_row(tableau)
+		supplies_row.alignment = BoxContainer.ALIGNMENT_CENTER
 		var stocks := _array(shop.get("stocks"))
-		var shelf := clampi(int(_choices.get("shop:shelf", "0")),0,maxi(0,ceili(stocks.size()/3.0)-1))
 		for stock_index in stocks.size():
 			var stock: Dictionary = stocks[stock_index]
 			var id := str(stock.stock_id)
-			var panel := add_panel(grid)
-			panel.get_parent().add_theme_stylebox_override("panel",StyleBoxEmpty.new())
-			panel.get_parent().visible = stock_index / 3 == shelf
 			var kind := str(stock.kind)
+			var panel := add_panel(cards_row if kind == "card" else supplies_row)
+			panel.get_parent().size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+			panel.get_parent().add_theme_stylebox_override("panel",StyleBoxEmpty.new())
+			panel.add_theme_constant_override("separation",5)
 			var status := "已售罄" if stock.get("sold", false) else ("金钱不足" if int(stock.price) > int(view.get("money", 0)) else "可购买")
-			var price := add_text(panel, "%s 金钱 · %s" % [stock.price, status], 17, UiStyle.RED if status != "可购买" else UiStyle.BRASS)
+			var price := add_text(panel, "%s 金钱\n%s" % [stock.price, status], 14, UiStyle.RED if status != "可购买" else UiStyle.BRASS)
+			price.name = "StockPrice_" + id.validate_node_name()
 			price.add_theme_color_override("font_color",UiStyle.RED.lightened(.3) if status != "可购买" else UiStyle.CREAM)
+			var price_skin := UiStyle.surface(Color("263943"), Color("7e704f"), 3)
+			price_skin.set_content_margin_all(4)
+			price_skin.shadow_size = 0
+			price.add_theme_stylebox_override("normal", price_skin)
+			price.tooltip_text = "%s 金钱 · %s" % [stock.price, status]
 			price.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 			if kind == "meal":
-				add_art(panel, "campus_meal", Vector2(184, 144))
-				_local_button(panel, "shop:pick:" + id, "校园餐食\n实际回复 %s 精力" % stock.get("detail", {}).get("heal_amount", 0), "shop:stock", id)
+				var meal_row := add_row(panel)
+				add_art(meal_row, "campus_meal", Vector2(84, 76))
+				var meal_info := VBoxContainer.new()
+				meal_info.custom_minimum_size.x = 162 * UiStyle.text_scale
+				meal_row.add_child(meal_info)
+				_local_button(meal_info, "shop:pick:" + id, "校园餐食\n实际回复 %s 精力" % stock.get("detail", {}).get("heal_amount", 0), "shop:stock", id)
+				price.reparent(meal_info)
 			else:
 				var stock_card := add_card(panel, "shop:pick:" + id, str(stock.definition_id), _dict(stock.get("detail")), UiStyle.label(str(stock.definition_id)), selected == id, func(): _choose("shop:stock", id), kind == "relic")
 				stock_card._caption.add_theme_color_override("font_color",UiStyle.CREAM)
+				var width := (148.0 if size.x >= 1100 else 126.0)*minf(UiStyle.text_scale,1.25)
+				stock_card.custom_minimum_size.x = width
+				stock_card._base_height = width*(1.0 if kind == "relic" else 244.0/168)+24
+				stock_card.custom_minimum_size.y = stock_card._base_height
+				stock_card._fit_contents()
+				panel.move_child(price,panel.get_child_count()-1)
 			if selected == id:
 				summary = "%s · 支付%s · 余额%d" % ["校园餐食" if kind == "meal" else UiStyle.label(str(stock.definition_id)), stock.price, int(view.get("money", 0)) - int(stock.price)]
 				if kind == "meal":
@@ -782,12 +1056,6 @@ func _render_shop() -> void:
 					_replacement_picker(body, "shop:" + id, id + ":replace")
 					if _choices.has(id + ":replace"):
 						action.payload.replace_relic_id = _choices[id + ":replace"]
-	if not removing:
-		var shelves := add_row(footer)
-		var count := ceili(_array(shop.get("stocks")).size()/3.0)
-		add_text(shelves,"货架 · 第%d/%d页" % [int(_choices.get("shop:shelf","0"))+1,maxi(1,count)],14)
-		for index in count:
-			_local_button(shelves,"shop:shelf:"+str(index),"第%d页" % (index+1),"shop:shelf",str(index))
 	var row := _bottom(summary)
 	if not action.is_empty():
 		add_button(row, "shop:confirm", "移除这张卡" if removing else "购买所选商品", action)
@@ -798,23 +1066,32 @@ func _render_shop() -> void:
 func _render_event() -> void:
 	var event := _dict(view.get("event"))
 	_scope(str(event.get("event_instance_id", "")))
-	reset_page(UiStyle.label(str(event.get("definition_id", ""))), "先查看所有行动；预选后再选择所需目标")
+	reset_page("")
 	_run_bar(header)
 	var selected := str(_choices.get("event:option", ""))
 	_room_expanded = not selected.is_empty()
 	if not _room_expanded:
-		_scene_character(str(view.get("character_id","P01")))
+		_show_room("E",UiStyle.label(str(event.get("definition_id",""))))
 	if selected.is_empty():
+		add_text(body,UiStyle.label(str(event.get("definition_id",""))),28,UiStyle.BRASS)
+		add_text(body,CampusRoomIllustration.narrative("E"),16)
 		for option in _array(event.get("options")):
-			var panel := _choice_panel(body, false)
-			add_text(panel, _event_option_name(str(option.option_id), str(option.get("label_key", ""))), 20)
-			add_text(panel, "消耗：" + _cost_text(_dict(option.get("cost"))) + "\n" + UiStyle.describe_effects(_array(option.get("effects"))), 16)
-			var pick := _local_button(panel, "event:option:leave" if option.option_id == "leave" else "event:" + str(option.option_id), "预选此项" if option.get("enabled", true) else "不可用", "event:option", str(option.option_id))
-			pick.disabled = not option.get("enabled", true)
+			var caption := _event_option_name(str(option.option_id),str(option.get("label_key","")))
+			caption += "\n"+"消耗："+_cost_text(_dict(option.get("cost")))+" · "+UiStyle.describe_effects(_array(option.get("effects")))
+			var uid := "event:option:leave" if option.option_id == "leave" else "event:"+str(option.option_id)
+			var pick: Button
+			if _event_needs_confirmation(option):
+				pick = _local_button(body,uid,caption,"event:option",str(option.option_id))
+			else:
+				pick = add_button(body,uid,caption,_event_action(event,option))
+			pick.alignment = HORIZONTAL_ALIGNMENT_LEFT
+			pick.custom_minimum_size.y = 74*UiStyle.text_scale
+			pick.disabled = not option.get("enabled",true)
 			if pick.disabled:
-				add_text(panel, "资源不足、没有合法目标或此事件已完成。", 15, UiStyle.RED)
-		_bottom("请选择一项行动。查看目标后仍可返回。")
+				pick.tooltip_text = "资源不足、没有合法目标或此事件已完成。"
+		_bottom("点击行动执行 · 需要选牌或支付的行动先查看详情")
 		return
+
 	for option in _array(event.get("options")):
 		if str(option.option_id) != selected:
 			continue
@@ -849,27 +1126,35 @@ func _render_event() -> void:
 func _render_rest() -> void:
 	var rest := _dict(view.get("rest"))
 	_scope(str(view.get("current_node_id", "")))
-	reset_page("休整时光", "选择行动后查看结果，确认一次完成")
+	reset_page("休整时光", "点击恢复即可休息 · 升级与移除先选牌")
 	_run_bar(header)
 	var selected := str(_choices.get("rest:option", ""))
 	_room_expanded = selected in ["upgrade","remove"]
 	if not _room_expanded:
-		_scene_character(str(view.get("character_id","P01")))
+		_show_room("R","宿舍休息")
 		add_text(body,"精力 %s / %s" % [view.get("vitality",0),view.get("max_vitality",0)],23)
 	var options := body
 	for option in _array(rest.get("options")):
-		var panel := _choice_panel(options,selected == str(option.option_id))
-		var headline := add_row(panel)
+		var caption := _rest_name(str(option.option_id))+"\n"
+		caption += "实际回复 %s 精力" % rest.get("effective_heal_amount",rest.get("heal_amount",0)) if not option.get("needs_card",false) else "查看牌组，比较后确认一张实例"
+		var pick: Button
+		if option.get("needs_card",false):
+			pick = _local_button(options,"rest:option:"+str(option.option_id),caption,"rest:option",str(option.option_id))
+		else:
+			pick = add_button(options,"rest:option:"+str(option.option_id),caption,_action("take_rest",{"node_id":view.get("current_node_id",""),"option_id":option.option_id}))
+		pick.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		pick.custom_minimum_size.y = 80*UiStyle.text_scale
+		for state in ["normal","hover","pressed","disabled","focus"]:
+			var skin := pick.get_theme_stylebox(state).duplicate() as StyleBox
+			skin.set_content_margin(SIDE_LEFT,52)
+			pick.add_theme_stylebox_override(state,skin)
 		var glyph := Control.new()
-		var glyph_kind := "heart" if not option.get("needs_card",false) else "book"
-		glyph.custom_minimum_size = Vector2(30,30)
+		glyph.position = Vector2(16,26)
 		glyph.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		glyph.draw.connect(func(): EffectGlyph.paint(glyph,glyph_kind,Vector2(15,15),11,UiStyle.GREEN.darkened(.3)))
-		headline.add_child(glyph)
-		add_text(headline,_rest_name(str(option.option_id)),20)
-		add_text(panel,"实际回复 %s 精力" % rest.get("effective_heal_amount",rest.get("heal_amount",0)) if not option.get("needs_card",false) else "查看牌组，比较后确认一张实例",15)
-		var pick := _local_button(panel, "rest:option:" + str(option.option_id), "✓ 已预选" if selected == str(option.option_id) else "选择此行动", "rest:option", str(option.option_id))
-		pick.disabled = not option.get("enabled", true)
+		var glyph_kind := "heart" if not option.get("needs_card",false) else "book"
+		glyph.draw.connect(func(): EffectGlyph.paint(glyph,glyph_kind,Vector2(12,12),11,UiStyle.BRASS))
+		pick.add_child(glyph)
+		pick.disabled = not option.get("enabled",true)
 		if pick.disabled:
 			pick.tooltip_text = "没有合法目标，或本节点已使用。"
 	var action := {}
@@ -889,7 +1174,8 @@ func _render_rest() -> void:
 	var row := _bottom(summary)
 	if not action.is_empty():
 		add_button(row, "rest:confirm", "确认休整", action)
-	_cancel(row, "rest:option")
+	if not selected.is_empty():
+		_cancel(row, "rest:option")
 
 
 func _target_or_comparison(prefix: String, mode: String, key: String) -> void:
@@ -918,6 +1204,8 @@ func _render_setup() -> void:
 		button.icon = UiStyle.texture(id)
 		button.expand_icon = true
 		button.add_theme_constant_override("icon_max_width",34)
+		button.autowrap_mode = TextServer.AUTOWRAP_OFF
+		button.custom_minimum_size.x = button.get_theme_font("font").get_string_size(button.text,HORIZONTAL_ALIGNMENT_LEFT,-1,button.get_theme_font_size("font_size")).x+78
 		button.disabled = bool(character.get("locked", false))
 		button.tooltip_text = str(character.get("reason", ""))
 		UiStyle.button_skin(button,"primary" if _character == id else "secondary",true)
@@ -925,7 +1213,7 @@ func _render_setup() -> void:
 		if str(character.id) != _character:
 			continue
 		var info := add_panel(body)
-		info.get_parent().add_theme_stylebox_override("panel",UiStyle.surface(UiStyle.CREAM,UiStyle.BRASS))
+		info.get_parent().add_theme_stylebox_override("panel",UiStyle.surface(Color(UiStyle.NIGHT,.78),Color(UiStyle.BRASS,.4)))
 		add_text(info,"人物  /  " + str(characters.find(character)+1).pad_zeros(2),12,UiStyle.MUTED)
 		add_text(info, UiStyle.label(_character), 32)
 		add_text(info,str({"P01":"策略铺垫 → 工作连携 → 取回策略","P02":"开题 → 编排章节 → 发表论文","P03":"叠加不同负面 → 触发复合反应","P04":"伙伴协作 → 积攒协同 → 团队爆发"}.get(_character,"")),19,UiStyle.GREEN.darkened(.3))
@@ -935,21 +1223,16 @@ func _render_setup() -> void:
 	if _seed_revision != int(view.get("seed_revision", 0)):
 		_seed = str(view.get("default_seed", ""))
 		_seed_revision = int(view.get("seed_revision", 0))
-	add_button(body, "setup:advanced", "收起种子设置" if _advanced else "高级设置 · 种子", {}, func(): _advanced = not _advanced; refresh_local())
-	if _advanced:
-		var seed_row := add_row(body)
-		var seed_input := LineEdit.new()
-		seed_input.text = _seed
-		seed_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		seed_input.custom_minimum_size.y = 44
-		seed_input.text_changed.connect(func(value): _seed = value)
-		seed_row.add_child(seed_input)
-		add_button(seed_row, "setup:seed_random", "随机种子", _ui("random_seed"))
 	var difficulty_row := add_row(footer)
+	difficulty_row.name = "SetupConfiguration"
 	add_text(difficulty_row,"冒险难度",14,UiStyle.MUTED)
 	for difficulty in difficulties:
 		var id := _option_id(difficulty)
-		add_button(difficulty_row, "setup:difficulty:" + id, ("✓ " if _difficulty == id else "") + _difficulty_name(id), {}, func(): _select_setup("difficulty", id))
+		var pick := add_button(difficulty_row, "setup:difficulty:" + id, ("✓ " if _difficulty == id else "") + _difficulty_name(id), {}, func(): _select_setup("difficulty", id))
+		pick.tooltip_text = DifficultyRules.description(_dict(view.get("difficulty_details",{}).get(id)))
+		UiStyle.button_skin(pick,"primary" if _difficulty == id else "secondary",true)
+	add_button(difficulty_row,"setup:advanced","高级设置",{},func(): _open_inspector("seed"))
+	add_text(footer,DifficultyRules.description(_dict(view.get("difficulty_details",{}).get(_difficulty))),14,UiStyle.MUTED).name = "DifficultyEffects"
 	var confirming := bool(view.get("confirm_restart", false))
 	var row := _bottom(("确认结束旧局并替换当前存档？" if confirming else "人物：" + UiStyle.label(_character) + " · " + _difficulty_name(_difficulty)))
 	add_button(row, "setup:restart_confirm" if confirming else "setup:start", "结束旧局并开始" if confirming else "开始四年冒险", func(): return _ui("start_run", {"character_id": _character, "difficulty": _difficulty, "manifest_id": _manifest, "seed": _seed, "confirmed": confirming}))
@@ -1026,7 +1309,7 @@ func _mark_setting(uid: String, selected: bool) -> void:
 	button.set_meta("setting_selected", selected)
 	if selected:
 		button.text = "✓ " + button.text + " · 已选"
-		var style := UiStyle.box(Color("e6ecdf"))
+		var style := UiStyle.box(Color("3a5263"))
 		style.border_color = UiStyle.GOLD
 		style.set_border_width_all(2)
 		for state in ["normal", "hover", "pressed", "hover_pressed"]:
@@ -1061,16 +1344,81 @@ func _render_summary() -> void:
 			label.text = label.text.replace("完成战斗", "已结算战斗")
 
 
+func _open_seed_settings() -> void:
+	_close_inspector()
+	_inspect_return_focus = get_viewport().gui_get_focus_owner()
+	for control in find_children("*", "Control", true, false):
+		if control.focus_mode != Control.FOCUS_NONE:
+			_inspector_focus_modes[control] = control.focus_mode
+			control.focus_mode = Control.FOCUS_NONE
+	_inspector = Control.new()
+	_inspector.name = "SeedSettings"
+	_inspector.z_index = 200
+	_inspector.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_inspector.mouse_filter = Control.MOUSE_FILTER_STOP
+	add_child(_inspector)
+	var shade := ColorRect.new()
+	shade.color = Color(.02,.04,.06,.86)
+	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_inspector.add_child(shade)
+	shade.gui_input.connect(func(event):
+		if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+			_close_inspector())
+	var center := CenterContainer.new()
+	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	center.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_inspector.add_child(center)
+	var panel := PanelContainer.new()
+	panel.name = "SeedSettingsPanel"
+	panel.custom_minimum_size.x = minf(680,size.x-64)
+	panel.mouse_filter = Control.MOUSE_FILTER_STOP
+	panel.add_theme_stylebox_override("panel",UiStyle.surface(UiStyle.NIGHT,UiStyle.BRASS))
+	center.add_child(panel)
+	var words := VBoxContainer.new()
+	words.add_theme_constant_override("separation",18)
+	panel.add_child(words)
+	var heading := add_row(words)
+	var title := add_text(heading,"高级设置 · 本局种子",24)
+	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	var close := add_button(heading,"inspect:close","完成 · Esc",{},_close_inspector)
+	close.autowrap_mode = TextServer.AUTOWRAP_OFF
+	close.size_flags_horizontal = Control.SIZE_SHRINK_END
+	close.custom_minimum_size.x = 136
+	add_text(words,"相同种子与选择可重现冒险；开始后不能修改。关闭后保留当前输入。",16)
+	var input := LineEdit.new()
+	input.name = "RunSeedInput"
+	input.text = _seed
+	input.placeholder_text = "十进制整数种子"
+	input.custom_minimum_size.y = 48
+	input.add_theme_font_size_override("font_size",roundi(18*UiStyle.text_scale))
+	input.text_changed.connect(func(value): _seed = value)
+	words.add_child(input)
+	var actions := add_row(words)
+	actions.alignment = BoxContainer.ALIGNMENT_END
+	add_button(actions,"setup:seed_random","重新生成种子",_ui("random_seed"))
+	set_meta("seed_open",true)
+	_focus_seed.call_deferred(weakref(input),_render_generation)
+
+
 func _open_inspector(kind: String) -> void:
 	close_card_preview()
+	if kind == "seed":
+		_open_seed_settings()
+		return
+	if kind in ["relics", "help", "rules", "log", "info"]:
+		_open_reference(kind)
+		return
 	super._open_inspector(kind)
+	_inspector.z_index = 200
+	if is_instance_valid(_toolbar):
+		_toolbar.mark_active("deck" if kind == "deck" else "relics", kind in ["deck", "relics"])
 	if kind != "deck":
 		return
 	var grid: GridContainer = _inspector.find_children("*", "GridContainer", true, false)[0]
 	for child in grid.get_children():
 		grid.remove_child(child)
 		child.queue_free()
-	grid.columns = 3 if size.x >= 750 else 2
+	grid.columns = maxi(2,mini(5,int((size.x-90)/(194*UiStyle.text_scale+18))))
 	var cards := _array(view.get("cards"))
 	for index in cards.size():
 		var entry: Dictionary = cards[index]
@@ -1097,6 +1445,12 @@ func _open_inspector(kind: String) -> void:
 
 
 func _close_inspector() -> void:
+	if is_instance_valid(_reference):
+		_reference.close()
+	if is_instance_valid(_toolbar):
+		_toolbar.mark_active("deck", false)
+		_toolbar.mark_active("relics", false)
+	set_meta("seed_open", false)
 	close_card_preview()
 	super._close_inspector()
 	for uid in _buttons.keys():
@@ -1104,20 +1458,52 @@ func _close_inspector() -> void:
 			_buttons.erase(uid)
 
 
+func _focus_seed(field: WeakRef, generation: int) -> void:
+	var input: LineEdit = field.get_ref()
+	if generation == _render_generation and is_instance_valid(input) and input.is_inside_tree() and not input.is_queued_for_deletion():
+		input.grab_focus()
+
+
 func _help() -> void:
-	_open_inspector("help")
-	# Inspector supplies focus isolation and the fixed close action.
-	var grid: GridContainer = _inspector.find_children("*", "GridContainer", true, false)[0]
-	var labels := _inspector.find_children("*", "Label", true, false)
-	labels[0].text = "规则帮助"
-	labels[1].text = "先了解胜负与资源，再按需查阅卡牌。"
-	for child in grid.get_children():
-		child.queue_free()
-	grid.columns = 1
-	add_text(grid, "完成全部任务才能获胜；阶段完成后可能出现下一阶段。\n精力降为0或DDL到期且仍有任务时失败。\n专注用于支付卡牌费用；放松抵挡压力。\nDDL是剩余完整轮末次数，按规则书的轮末时序结算。\n连携：前牌策略→本牌工作。\n效果内强制待选必须完成；此时不能保存半条效果。\n悬停/聚焦看说明，I固定详情，Esc关闭详情或取消本地预选。", 18)
+	_open_reference("rules")
+
+
+func _open_reference(kind: String, relic_id: String = "") -> void:
+	if is_instance_valid(_inspector) and not is_instance_valid(_reference):
+		_close_inspector()
+	_inspector = open_reference("rules" if kind == "help" else kind, relic_id)
+	_buttons["inspect:close"] = _reference._close
+	if is_instance_valid(_toolbar):
+		_toolbar.mark_active("relics", kind == "relics")
+	_reference.closed.connect(func():
+		_inspector = null
+		_buttons.erase("inspect:close")
+		if is_instance_valid(_toolbar): _toolbar.mark_active("relics", false))
 
 
 func _input(event: InputEvent) -> void:
+	if is_instance_valid(_reference) and _reference.visible:
+		return
+	if is_instance_valid(_toolbar) and _toolbar.route_input(event):
+		return
+	if is_instance_valid(_full_map) and _full_map.visible:
+		return
+	if is_instance_valid(_toolbar) and not is_instance_valid(_inspector) and event is InputEventKey and event.pressed and not event.echo and not event.ctrl_pressed and not event.alt_pressed and not event.meta_pressed:
+		if event.keycode == KEY_F10:
+			press("flow:options")
+			get_viewport().set_input_as_handled()
+			return
+		if event.keycode in [KEY_D, KEY_G, KEY_F1, KEY_L]:
+			press("inspect:deck" if event.keycode == KEY_D else ("flow:log" if event.keycode == KEY_L else "flow:help"))
+			get_viewport().set_input_as_handled()
+			return
+	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_M and not is_instance_valid(_inspector) and not _array(view.get("nodes")).is_empty():
+		if screen == "map":
+			press("map:overview")
+		else:
+			_open_full_map()
+		get_viewport().set_input_as_handled()
+		return
 	if _preview_pinned and event is InputEventMouseButton and not _card_preview.get_global_rect().has_point(get_global_mouse_position()):
 		get_viewport().set_input_as_handled()
 		return

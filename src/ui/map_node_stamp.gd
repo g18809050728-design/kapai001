@@ -22,7 +22,8 @@ func configure(type: String, title: String, status: String, highlighted: bool, t
 	caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	caption.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	caption.add_theme_font_size_override("font_size", roundi(14 * UiStyle.text_scale))
-	caption.add_theme_color_override("font_color", UiStyle.INK if status != "不可达" else UiStyle.MUTED)
+	caption.add_theme_font_override("font", UiStyle.title_font())
+	caption.add_theme_color_override("font_color", Color("928468") if status == "不可达" else (Color("786d54") if status == "后续" else Color("504a39")))
 	add_child(caption)
 	custom_minimum_size = Vector2(76, 48 + caption.get_minimum_size().y)
 	size = custom_minimum_size
@@ -46,96 +47,47 @@ func _draw() -> void:
 	var center := stamp_center()
 	var current := map_status == "当前"
 	var available := map_status == "可入"
-	var ink := UiStyle.CREAM if current or available else UiStyle.INK
-	var border := UiStyle.BRASS.darkened(.1) if available else (UiStyle.INK if current else UiStyle.MUTED)
-	var fill := UiStyle.INK if current else (UiStyle.FOREST if available else UiStyle.CREAM.lerp(UiStyle.GREEN,.14 if forecast or is_hovered() else .02))
-	draw_circle(center + Vector2(0, 3), 20, Color(UiStyle.INK, .16), true, -1, true)
-	draw_circle(center, 19, fill, true, -1, true)
+	var ink := MapNodeGlyph.ink(subtype)
 	if map_status == "不可达":
-		for segment in 10:
-			draw_arc(center, 19, segment * TAU / 10, (segment + .55) * TAU / 10, 6, border, 1, true)
-	else:
-		draw_circle(center, 19, border, false, 2 if available or current else 1.25, true)
-	if forecast and not current:
-		draw_arc(center, 22, .15, TAU - .15, 48, UiStyle.GREEN.darkened(.15), 1, true)
-	if button_pressed:
-		draw_circle(center, 24, UiStyle.GOLD.darkened(.18), false, 2, true)
+		ink.a = .40
+	elif map_status == "后续":
+		ink.a = .82
+	if current or button_pressed or is_hovered():
+		var ring := PackedVector2Array()
+		for index in 65:
+			var angle := TAU*index/64.0
+			var radius := 24.0+sin(angle*3.0+.7)*.65
+			ring.append(center+Vector2(cos(angle)*radius,sin(angle)*radius*.91))
+		draw_polyline(ring,Color("8c4031") if button_pressed else Color("494535", .7),2.0 if button_pressed or current else 1.2,true)
+	elif available:
+		for arc_start in [-2.7, .45]:
+			draw_arc(center, 24, arc_start, arc_start + 1.3, 16, Color("63553b", .8), 1.5, true)
 	if has_focus():
-		for segment in 12:
-			draw_arc(center, 27, segment * TAU / 12, (segment + .55) * TAU / 12, 5, UiStyle.INK, 1.5, true)
+		for direction in [Vector2(-1,-1),Vector2(1,-1),Vector2(-1,1),Vector2(1,1)]:
+			var corner: Vector2 = center + direction * Vector2(29, 24)
+			draw_polyline(PackedVector2Array([corner - Vector2(direction.x*5, 0),corner,corner-Vector2(0,direction.y*5)]),Color("403d30"),1.5,true)
 	if node_texture != null:
 		draw_texture_rect(node_texture, Rect2(center - Vector2(13, 13), Vector2(26, 26)), false)
 	else:
-		_draw_type(center, ink)
-	_draw_status(center + Vector2(17, -13))
+		draw_set_transform(center, 0, Vector2.ONE * 1.2)
+		_draw_type(Vector2.ZERO, ink)
+		draw_set_transform(Vector2.ZERO)
+	_draw_status(center + Vector2(21, 15))
 
 
 func _draw_status(point: Vector2) -> void:
-	var color := UiStyle.INK if map_status == "当前" else (UiStyle.GREEN.darkened(.25) if map_status == "可入" else UiStyle.MUTED)
-	draw_circle(point, 7, UiStyle.PAPER, true, -1, true)
+	if map_status not in ["当前", "已过"]:
+		return
+	var color := Color("8c3526") if map_status == "当前" else Color("4d5032")
+	draw_circle(point, 5, Color("d6c297"), true, -1, true)
 	match map_status:
 		"当前":
 			draw_colored_polygon(PackedVector2Array([point + Vector2(0, -5), point + Vector2(4, 0), point + Vector2(0, 5), point + Vector2(-4, 0)]), color)
 		"已过":
 			draw_polyline(PackedVector2Array([point + Vector2(-4, 0), point + Vector2(-1, 3), point + Vector2(4, -4)]), color, 2, true)
-		"可入":
-			draw_line(point + Vector2(-4, 0), point + Vector2(4, 0), color, 2, true)
-			draw_polyline(PackedVector2Array([point + Vector2(0, -4), point + Vector2(4, 0), point + Vector2(0, 4)]), color, 2, true)
-		"不可达":
-			draw_line(point - Vector2(3, 3), point + Vector2(3, 3), color, 1.5, true)
-			draw_line(point + Vector2(-3, 3), point + Vector2(3, -3), color, 1.5, true)
 		_:
-			draw_circle(point, 3, color, false, 1, true)
+			pass
 
 
 func _draw_type(center: Vector2, color: Color) -> void:
-	# Each type has its own silhouette, independent of font symbol coverage.
-	match subtype:
-		"N", "EL":
-			EffectGlyph.paint(self, "work", center, 11, color)
-			if subtype == "EL":
-				_stroke(center, [Vector2(-10, -10), Vector2(-7, -14), Vector2(-3, -10), Vector2(1, -14), Vector2(4, -10)], color)
-		"B":
-			_stroke(center, [Vector2(-10, -6), Vector2(-5, -2), Vector2(0, -10), Vector2(5, -2), Vector2(10, -6), Vector2(7, 7), Vector2(-7, 7), Vector2(-10, -6)], color)
-			draw_line(center + Vector2(-7, 10), center + Vector2(7, 10), color, 2, true)
-		"S":
-			draw_rect(Rect2(center + Vector2(-8, -3), Vector2(16, 13)), color, false, 2)
-			draw_arc(center + Vector2(0, -3), 5, PI, TAU, 16, color, 2, true)
-		"R":
-			_stroke(center, [Vector2(-11,-5),Vector2(9,-7),Vector2(12,6),Vector2(-9,8),Vector2(-11,-5)],color)
-			draw_arc(center+Vector2(5,-10),4,.3,4.6,16,color,1.5,true)
-		"L":
-			_stroke(center, [Vector2(0, -6), Vector2(-9, -9), Vector2(-9, 7), Vector2(0, 10), Vector2(9, 7), Vector2(9, -9), Vector2(0, -6), Vector2(0, 10)], color)
-		"LAB":
-			_stroke(center, [Vector2(-4, -10), Vector2(4, -10), Vector2(4, -2), Vector2(10, 9), Vector2(-10, 9), Vector2(-4, -2), Vector2(-4, -10)], color)
-			draw_line(center + Vector2(-6, 4), center + Vector2(6, 4), color, 2, true)
-		"K":
-			_stroke(center, [Vector2(-7, -9), Vector2(7, -9), Vector2(5, 3), Vector2(0, 6), Vector2(-5, 3), Vector2(-7, -9)], color)
-			_stroke(center, [Vector2(-8, -6), Vector2(-11, -6), Vector2(-10, 0), Vector2(-5, 2)], color)
-			_stroke(center, [Vector2(8, -6), Vector2(11, -6), Vector2(10, 0), Vector2(5, 2)], color)
-			_stroke(center, [Vector2(0, 6), Vector2(0, 11), Vector2(-5, 11), Vector2(5, 11)], color)
-		"C":
-			for x in [-7, 7]:
-				draw_circle(center + Vector2(x, -5), 3, color, false, 1.5, true)
-				draw_arc(center + Vector2(x, 7), 5, PI, TAU, 12, color, 2, true)
-		"T":
-			_stroke(center, [Vector2(-12, -4), Vector2(0, -10), Vector2(12, -4), Vector2(0, 2), Vector2(-12, -4)], color)
-			_stroke(center, [Vector2(-7, 0), Vector2(-7, 6), Vector2(0, 9), Vector2(7, 6), Vector2(7, 0)], color)
-		"I":
-			draw_rect(Rect2(center + Vector2(-10, -5), Vector2(20, 15)), color, false, 2)
-			_stroke(center, [Vector2(-4, -5), Vector2(-4, -10), Vector2(4, -10), Vector2(4, -5)], color)
-			draw_line(center + Vector2(-9, 1), center + Vector2(9, 1), color, 1.5, true)
-		"ST":
-			_stroke(center, [Vector2(-7, -11), Vector2(4, -11), Vector2(9, -6), Vector2(9, 11), Vector2(-7, 11), Vector2(-7, -11)], color)
-			for y in [-3, 2, 7]:
-				draw_line(center + Vector2(-3, y), center + Vector2(5, y), color, 1.5, true)
-		_:
-			_stroke(center, [Vector2(-6, -6), Vector2(-3, -10), Vector2(4, -10), Vector2(7, -6), Vector2(5, -2), Vector2(0, 1), Vector2(0, 4)], color)
-			draw_circle(center + Vector2(0, 10), 1.5, color, true, -1, true)
-
-
-func _stroke(center: Vector2, points: Array, color: Color) -> void:
-	var line := PackedVector2Array()
-	for point in points:
-		line.append(center + point)
-	draw_polyline(line, color, 1.8, true)
+	MapNodeGlyph.paint(self, subtype, center, color)

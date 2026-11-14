@@ -150,6 +150,9 @@ func _reward_and_services(suffix: String) -> void:
 	var item: Dictionary = shell.session.get_view().run.pending_reward.items[0]
 	var prefix := "reward:%s" % item.item_id
 	var fingerprint: String = _helpers.fingerprint(shell.session)
+	var initial_sizes := {}
+	for id in item.candidates:
+		initial_sizes[str(id)] = (shell.page._buttons[prefix + ":pick:" + str(id)] as UiOfferCard).size
 	for repetition in 3:
 		for id in item.candidates:
 			await _click_card(shell, prefix + ":pick:" + str(id))
@@ -157,7 +160,7 @@ func _reward_and_services(suffix: String) -> void:
 			for other in item.candidates:
 				var card: UiOfferCard = shell.page._buttons[prefix + ":pick:" + str(other)]
 				_check(card._face.size.y <= card.size.y + 1, "selected reward face stays inside its allocated height")
-				_check(card.size.y < 350, "reward height stays stable over repeated real clicks")
+				_check(card.size.is_equal_approx(initial_sizes[str(other)]), "reward size stays stable over repeated real clicks")
 	_check(_helpers.fingerprint(shell.session) == fingerprint, "real reward clicks are read-only")
 	_check(is_instance_valid(shell.page._card_preview) and shell.page.get_global_rect().encloses(shell.page._card_preview.get_global_rect()), "reward popup stays within page after rebuilding")
 	await _save("reward-selected-" + suffix)
@@ -183,7 +186,7 @@ func _reward_and_services(suffix: String) -> void:
 		if kind == "event":
 			var options: Array = shell.session.get_view().run.event.options
 			for option in options:
-				if option.enabled and str(option.option_id) != "leave":
+				if option.enabled and (shell.page as UiExperiencePage)._event_needs_confirmation(option):
 					shell.press("event:" + str(option.option_id))
 					break
 			_check(shell.page.button_uids().has("selection:cancel") and shell.page.button_uids().has("event:confirm"), "event preselection shows a reversible confirmation")
@@ -193,7 +196,6 @@ func _reward_and_services(suffix: String) -> void:
 			for option in options:
 				_check(shell.page.button_uids().has("event:option:leave" if option.option_id == "leave" else "event:" + str(option.option_id)), "event return restores every candidate")
 			shell.press("event:option:leave")
-			shell.press("event:confirm")
 		else:
 			for stock in shell.session.get_view().run.shop.stocks:
 				if stock.kind == "card":
@@ -419,7 +421,10 @@ func _battle_and_map(suffix: String) -> void:
 	session._state.battle.zones.draw.reverse()
 	_check(_helpers.fingerprint(session) == fingerprint, "privacy check restores its controlled fixture exactly")
 	if not battle._compact_layout:
-		_check(battle._buttons["battle:log"].position.x < battle._buttons["battle:rules"].position.x, "record precedes rules after swap")
+		battle.press("battle:options")
+		await _frames()
+		_check(battle._buttons["battle:log"].global_position.y < battle._buttons["battle:rules"].global_position.y, "record precedes rules in the grouped menu")
+		battle.press("battle:close_options")
 	_check(battle._buttons["battle:end_turn"] is BattleActionButton, "end turn uses matching paper control")
 	await _save("battle-controls-" + suffix)
 	for kind in ["draw", "discard", "exhaust"]:

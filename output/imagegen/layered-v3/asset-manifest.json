@@ -1,0 +1,121 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-14",
+  "scope": "one P01 concept candidate only, no runtime installation or G7 implementation",
+  "jobs_authorized": 1,
+  "image_count_per_job": 1,
+  "cli_max_attempts": 1,
+  "provider_or_sdk_retries": "not_guaranteed_absent",
+  "actual_billing": "unknown",
+  "assets": [
+    {
+      "asset_id": "P01-concept-v1",
+      "definition_id": "P01",
+      "requirement_ids": [
+        "UIR-049",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057"
+      ],
+      "version": 1,
+      "purpose": "full-body campus battle character concept review; not layered assets",
+      "prompt_file": "output/imagegen/layered-v3/P01-concept-v1.txt",
+      "prompt_sha256": "52fd566126ece56c6c2fdfefea348113eb8ac30585d9d5190a3fba24ad4b967f",
+      "configuration_sha256": "9ca45acd3f1ed937efe6a35cc4e4db434557b994eed2b7b9158fb0163f5cbeb5",
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "images.generate; text-only",
+      "requested_parameters": {
+        "size": "1024x1024",
+        "quality": "low",
+        "n": 1,
+        "output_format": "png"
+      },
+      "background_parameter": null,
+      "input_images_uploaded": [],
+      "local_references": [
+        {
+          "path": "assets/art/g6-v1/portraits/P01_v1.png",
+          "role": "P01 identity; local observation and text description only",
+          "sha256": "61871a29312b54da3af9ea7c0282a51d3983e3d87cd366c7e00de93a07265b52",
+          "uploaded_to_api": false
+        },
+        {
+          "path": "artifacts/verification/missing-art-usage-20261104/portrait-contact.jpg",
+          "role": "existing portraits; local observation only",
+          "sha256": "c6c4e9651d00e888303d47c5f25f43f82e746494913a858dd94edb871ffb6b79",
+          "uploaded_to_api": false
+        },
+        {
+          "path": "artifacts/verification/visual-cohesion-20261113/task-contact.jpg",
+          "role": "existing task prototypes, page 1; local observation only",
+          "sha256": "fb3054ae46df9b3450e730c44a132995d4033deb4e93db0990c4a0597894e9c9",
+          "uploaded_to_api": false
+        },
+        {
+          "path": "artifacts/verification/visual-cohesion-20261113/task-contact-2.jpg",
+          "role": "existing task prototypes, page 2; local observation only",
+          "sha256": "b14456a869674985cb1e043b319cbc97ec57e5b3e6f32b110db940480b72a1d5",
+          "uploaded_to_api": false
+        },
+        {
+          "path": "artifacts/verification/visual-cohesion-20261113/layouts-a/battle-1280.png",
+          "role": "historical controlled render; local observation only",
+          "sha256": "024a14fe40ccbc5ddbfd35b6eaa39fb0ed3b7f655fa81b2a642e897e14e1e0a2",
+          "uploaded_to_api": false
+        },
+        {
+          "path": "ui-plan/references/slay-the-spire-2/screenshots-contact.jpg",
+          "role": "official visual relationships; research only",
+          "sha256": "3237152bc6219f5e508e7ac73ce8dfec5f870b4adb4b0e6f7274dc4b5dc67719",
+          "uploaded_to_api": false
+        },
+        {
+          "path": "ui-plan/references/slay-the-spire-2/silent_anim-sequence.jpg",
+          "role": "official sampled character poses; research only",
+          "sha256": "975fcdab25dbfa7c3fe22848f69dd0776af3ab74cdcd822d97e9b33a5f1a6463",
+          "uploaded_to_api": false
+        },
+        {
+          "path": "ui-plan/references/slay-the-spire-2/ento_attack3-sequence.jpg",
+          "role": "official sampled enemy poses; research only",
+          "sha256": "5ad5a6ae25dac925f884f9926dc71e73f837f8db6ee2f9982b7d35aeefe1f2f7",
+          "uploaded_to_api": false
+        }
+      ],
+      "output_file": "output/imagegen/layered-v3/P01-concept-v1.png",
+      "output_sha256": "51ef7c5287d62de2643b207914754f724d5707529dca0f92384d980a6ddf4551",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "generation_status": "completed",
+      "machine_check": "passed; one opaque concept only",
+      "AI_visual_review": "completed; needs_rework",
+      "candidate_status": "needs_rework",
+      "human_approval": "pending",
+      "license_review": "pending; provider terms and source publication scope not verified",
+      "layered_package_status": "not_produced",
+      "processing": [],
+      "G6_exit": "not_passed",
+      "execution_interface": "bundled image_gen.py generate-batch; one JSONL job; concurrency 1",
+      "preflight_notes": [
+        "First dry-run exited 2: generate rejects --max-attempts; no API request. Original command and log preserved. Using documented generate-batch for the same one-image job."
+      ],
+      "actual_mode": "RGB",
+      "actual_alpha": {
+        "has_alpha_channel": false,
+        "transparent_fraction": 0.0
+      },
+      "machine_check_file": "artifacts/verification/g6-layered-20261114/candidate-audit.json",
+      "AI_visual_review_file": "artifacts/verification/g6-layered-20261114/candidate-visual-review.json",
+      "selected": false,
+      "generation_evidence": "artifacts/verification/g6-layered-20261114/generation-run.json",
+      "next_revision_file": "output/imagegen/layered-v3/P01-rework-notes.md"
+    }
+  ],
+  "jobs_executed": 1,
+  "images_generated": 1,
+  "selected_images": 0
+}

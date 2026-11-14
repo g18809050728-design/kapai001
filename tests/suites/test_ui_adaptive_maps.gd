@@ -83,7 +83,8 @@ func _canvas_layout() -> void:
 	canvas.size = Vector2(840, 600)
 	(Engine.get_main_loop() as SceneTree).root.add_child(canvas)
 	canvas.arrange()
-	_check(is_equal_approx(canvas.positions.shop.x, canvas.positions.rest.x) and is_equal_approx(canvas.positions.risk.x, canvas.positions.lab.x), "stable columns align across different layers")
+	_check(absf(canvas.positions.shop.x - canvas.positions.rest.x) <= 66 and absf(canvas.positions.risk.x - canvas.positions.lab.x) <= 66, "frozen lanes retain local continuity across organic layer offsets")
+	_check(not is_equal_approx(canvas.positions.shop.x, canvas.positions.rest.x), "different layers have stable visual staggering instead of mechanical alignment")
 	_check(canvas.positions.shop.x < canvas.positions.start.x and canvas.positions.start.x < canvas.positions.risk.x, "column values determine horizontal order")
 	var x: float = canvas.positions.shop.x
 	canvas.nodes.reverse()
@@ -205,7 +206,7 @@ func _selection_and_navigation() -> void:
 			await _frames(12)
 			_check(page.button_disabled("map:enter"), "enter requires explicit reachable selection")
 			_check(not page.button_uids().has("node:future"), "future years are not displayed")
-			_check(_all_text(page).contains(data.map_influence) or page.header.get_child(0).tooltip_text.contains(data.map_influence), "experience influence banner or compact title tooltip comes from view")
+			_check(_all_text(page).contains(data.map_influence) or page._toolbar.tooltip_text.contains(data.map_influence), "experience influence banner or shared toolbar tooltip comes from view")
 			_check(page.press("node:unrelated"), "unreachable node remains inspectable")
 			await _frames()
 			_check(page.button_disabled("map:enter") and _all_text(page).contains("路线预告"), "inspect unreachable node without enabling enter")
@@ -333,27 +334,36 @@ func _dense_production_layout() -> void:
 				_check(not button.disabled and button.focus_mode == Control.FOCUS_ALL, "all statuses remain inspectable and keyboard focusable")
 				for other in range(index + 1, buttons.size()):
 					_check(not rect.intersects(buttons[other].get_rect()), "dense production labels and hit targets never overlap")
-			_check(right - left <= 700 and absf((left + right) * .5 - canvas.size.x * .5) <= 1, "route occupies a centered bounded width")
+			_check(right - left <= 760 and absf((left + right) * .5 - canvas.size.x * .5) <= 38, "route uses a balanced bounded composition with stable layer drift")
 			_check(canvas.custom_minimum_size.y < 112 * (int(data.year_layers) - 1) + 104, "dense route has shorter row spacing")
 			var routes: Dictionary = canvas.get("edge_paths")
 			var expected_edges := 0
-			var arrows: Array = []
+			var ports: Array = []
 			for node in data.nodes:
 				expected_edges += node.next_ids.size()
 			_check(routes.size() == expected_edges, "each actual dense graph connection has its own curved path")
 			for route in routes.values():
 				_check(route.size() > 4, "edges are sampled curves rather than straight chords")
 				var tip: Vector2 = route[route.size() - 1]
-				for other_tip in arrows:
-					_check(tip.distance_to(other_tip) > 3, "converging routes have distinct directional arrow ports")
-				arrows.append(tip)
+				for other_tip in ports:
+					_check(tip.distance_to(other_tip) > 3, "converging routes retain individually traceable connection ports")
+				ports.append(tip)
+				var monotone := true
+				var distance := 0.0
+				for point_index in range(1, route.size()):
+					monotone = monotone and route[point_index].y <= route[point_index - 1].y + .01
+					distance += route[point_index].distance_to(route[point_index - 1])
+				_check(monotone and distance <= route[0].distance_to(tip) * 1.15, "route flows toward its real successor without corridor detours or hairpins")
+			_check(canvas.edge_segments.size() == expected_edges, "each real edge retains visible geometry after text clearance")
+			for segments in canvas.edge_segments.values():
 				var clear := true
 				for button in buttons:
 					var label: Rect2 = button.call("label_rect")
 					label.position += button.position
-					for point in route:
-						if label.grow(1).has_point(point):
-							clear = false
+					for segment in segments:
+						for point in segment:
+							if label.grow(1).has_point(point):
+								clear = false
 				_check(clear, "every curved route avoids every dense node label")
 			var selected := str(data.reachable_node_ids[0])
 			page._buttons["node:" + selected].grab_focus()

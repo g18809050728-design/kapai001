@@ -1,0 +1,578 @@
+{
+  "batch_id": "vfx-reference-20261114",
+  "authorized_scope": "one 4x3 isolated original VFX material atlas, no runtime integration",
+  "jobs_authorized": 1,
+  "maximum_jobs": 1,
+  "human_acceptance": "pending",
+  "release_license": "pending",
+  "runtime_integration": "not_started",
+  "assets": [
+    {
+      "asset_id": "VFX-material-atlas-v1",
+      "requirement_ids": [
+        "UIR-016",
+        "UIR-041",
+        "UIR-042",
+        "UIR-055",
+        "UIR-056",
+        "UIR-059"
+      ],
+      "model": "gpt-image-2.5-sunburst",
+      "service": "https://api-slb.jiji.cc/v1",
+      "configuration_sha256": "9ca45acd3f1ed937efe6a35cc4e4db434557b994eed2b7b9158fb0163f5cbeb5",
+      "prompt_file": "output/imagegen/layered-v3/VFX-study-v1/VFX-material-atlas-v1-repaired.txt",
+      "prompt_sha256": "20e7c3e404b911319dacbaced1fe26479ddcfa8bd2282bc4a089c3446b7acd24",
+      "output_file": "output/imagegen/layered-v3/VFX-study-v1/VFX-material-atlas-v1.png",
+      "requested_parameters": {
+        "size": "1536x1024",
+        "quality": "medium",
+        "n": 1,
+        "output_format": "png"
+      },
+      "status": "generated_12_material_candidates_7_retained_5_rework_none_selected",
+      "selected": false,
+      "input_images_uploaded": [],
+      "native_transparency_requested": false,
+      "alpha_method": "derived magenta key plus despill in extraction-v2.json; originals retained",
+      "actual_size": [
+        1536,
+        1024
+      ],
+      "output_sha256": "15bc6996d6f112517477df20962f5d29355aa360b984026e13410f3695614ecf"
+    }
+  ],
+  "maximum_requests": 2,
+  "request_repair": {
+    "reason": "HTTP400 explicitly rejected missing reference image; confirmed no local output",
+    "checked_at_utc": "2026-11-13T18:21:10.741114+00:00",
+    "original_prompt": "output/imagegen/layered-v3/VFX-study-v1/VFX-material-atlas-v1.txt",
+    "original_prompt_sha256": "cbeb51922623b9dc46a8ee778f20bfb1f77ada8c4a877296a6f7a52cdd053407",
+    "original_attempt": "artifacts/verification/vfx-reference-20261114/generation-run.json",
+    "changes": "remove named stylistic reference and no-reference-images sentence; preserve material shapes and grid",
+    "further_requests": "not_authorized_in_this_batch",
+    "actual_billing": "unknown"
+  },
+  "successful_output_images": 1,
+  "actual_cli_requests": 2,
+  "actual_billing": "unknown",
+  "materials": [
+    {
+      "id": "pen_trail",
+      "label": "笔锋轨迹",
+      "requirement_ids": [
+        "UIR-055"
+      ],
+      "file": "materials-v2/pen_trail.png",
+      "source_region_xyxy": [
+        0,
+        0,
+        384,
+        341
+      ],
+      "original_cell_alpha_bbox": [
+        35,
+        66,
+        362,
+        287
+      ],
+      "original_margin_px": [
+        35,
+        66,
+        22,
+        54
+      ],
+      "touches_cell_boundary": false,
+      "size": [
+        343,
+        237
+      ],
+      "sha256": "fc418bf6735e1bc446a856df9d4c0ae16e4a21670ae5c10472a4708f1e713f07",
+      "transparent_fraction": 0.8288986480668217,
+      "semitransparent_pixels": 1028,
+      "matte_spill_indicator_pixels": 0,
+      "candidate_status": "alpha_v2_pending_visual_review",
+      "selected": false,
+      "despill_changed_pixels": 1212,
+      "ai_status": "retain_for_resource_comparison",
+      "ai_reason": "有明确笔锋方向，明暗和粗细可读；仍偏直硬闪电，要在最终人体尺度下复核。",
+      "human_acceptance": "pending",
+      "release_license": "pending"
+    },
+    {
+      "id": "light_hit",
+      "label": "轻命中",
+      "requirement_ids": [
+        "UIR-016",
+        "UIR-055"
+      ],
+      "file": "materials-v2/light_hit.png",
+      "source_region_xyxy": [
+        384,
+        0,
+        768,
+        341
+      ],
+      "original_cell_alpha_bbox": [
+        55,
+        67,
+        326,
+        292
+      ],
+      "original_margin_px": [
+        55,
+        67,
+        58,
+        49
+      ],
+      "touches_cell_boundary": false,
+      "size": [
+        287,
+        241
+      ],
+      "sha256": "e8f340c45156293f1b691310eb76218346352270ab81746d5cf778be3f239544",
+      "transparent_fraction": 0.7733456706232741,
+      "semitransparent_pixels": 1163,
+      "matte_spill_indicator_pixels": 0,
+      "candidate_status": "alpha_v2_pending_visual_review",
+      "selected": false,
+      "despill_changed_pixels": 1164,
+      "ai_status": "retain_for_resource_comparison",
+      "ai_reason": "局部亮核、外射短线和碎片可读；须在G7缩短覆盖范围并与真实作用点绑定。",
+      "human_acceptance": "pending",
+      "release_license": "pending"
+    },
+    {
+      "id": "heavy_hit",
+      "label": "重命中",
+      "requirement_ids": [
+        "UIR-055",
+        "UIR-056"
+      ],
+      "file": "materials-v2/heavy_hit.png",
+      "source_region_xyxy": [
+        768,
+        0,
+        1152,
+        341
+      ],
+      "original_cell_alpha_bbox": [
+        19,
+        37,
+        350,
+        298
+      ],
+      "original_margin_px": [
+        19,
+        37,
+        34,
+        43
+      ],
+      "touches_cell_boundary": false,
+      "size": [
+        347,
+        277
+      ],
+      "sha256": "5a4b783e51cdcbaab66e7b7834c04d7d80810267dd0f2b2d8b2ce3ecfc8095f9",
+      "transparent_fraction": 0.6699611939366826,
+      "semitransparent_pixels": 1250,
+      "matte_spill_indicator_pixels": 0,
+      "candidate_status": "alpha_v2_pending_visual_review",
+      "selected": false,
+      "despill_changed_pixels": 1583,
+      "ai_status": "retain_for_resource_comparison",
+      "ai_reason": "轮廓更粗重、碎片更大，与轻命中有区别；中央亮区较大，有遮挡风险。",
+      "human_acceptance": "pending",
+      "release_license": "pending"
+    },
+    {
+      "id": "pressure_trail",
+      "label": "压力轨迹",
+      "requirement_ids": [
+        "UIR-016",
+        "UIR-055"
+      ],
+      "file": "materials-v2/pressure_trail.png",
+      "source_region_xyxy": [
+        1152,
+        0,
+        1536,
+        341
+      ],
+      "original_cell_alpha_bbox": [
+        21,
+        70,
+        349,
+        286
+      ],
+      "original_margin_px": [
+        21,
+        70,
+        35,
+        55
+      ],
+      "touches_cell_boundary": false,
+      "size": [
+        344,
+        232
+      ],
+      "sha256": "e800cf6013db51b041725eff0aff208827696425e89b43c7a558b1cb5d561974",
+      "transparent_fraction": 0.7136627906976745,
+      "semitransparent_pixels": 1094,
+      "matte_spill_indicator_pixels": 0,
+      "candidate_status": "alpha_v2_pending_visual_review",
+      "selected": false,
+      "despill_changed_pixels": 3510,
+      "ai_status": "semantic_rework_required",
+      "ai_reason": "方向明确，但更像火焰法术；需加入校园压力/纸笔语义再核对。",
+      "human_acceptance": "pending",
+      "release_license": "pending"
+    },
+    {
+      "id": "protection",
+      "label": "防护",
+      "requirement_ids": [
+        "UIR-041",
+        "UIR-055"
+      ],
+      "file": "materials-v2/protection.png",
+      "source_region_xyxy": [
+        0,
+        341,
+        384,
+        683
+      ],
+      "original_cell_alpha_bbox": [
+        55,
+        40,
+        349,
+        281
+      ],
+      "original_margin_px": [
+        55,
+        40,
+        35,
+        61
+      ],
+      "touches_cell_boundary": false,
+      "size": [
+        310,
+        257
+      ],
+      "sha256": "a7df6829e4d6ddc64cd38e8d374b1c595b11ac7fe2803e37c6420947fb6b4278",
+      "transparent_fraction": 0.6780343918664491,
+      "semitransparent_pixels": 581,
+      "matte_spill_indicator_pixels": 0,
+      "candidate_status": "alpha_v2_pending_visual_review",
+      "selected": false,
+      "despill_changed_pixels": 613,
+      "ai_status": "retain_for_resource_comparison",
+      "ai_reason": "开口弧形与攻击星芒区分；人物前叠时遮住脸/躯干，不能将检查页默认尺度直接当运行规格。",
+      "human_acceptance": "pending",
+      "release_license": "pending"
+    },
+    {
+      "id": "block_contact",
+      "label": "抵挡",
+      "requirement_ids": [
+        "UIR-041",
+        "UIR-055"
+      ],
+      "file": "materials-v2/block_contact.png",
+      "source_region_xyxy": [
+        384,
+        341,
+        768,
+        683
+      ],
+      "original_cell_alpha_bbox": [
+        68,
+        53,
+        309,
+        280
+      ],
+      "original_margin_px": [
+        68,
+        53,
+        75,
+        62
+      ],
+      "touches_cell_boundary": false,
+      "size": [
+        257,
+        243
+      ],
+      "sha256": "c77bb968970b48b4942bb0cf9a0fd2a3c864bd5d665c959900fc1bcdb6f86c5c",
+      "transparent_fraction": 0.6710220813117485,
+      "semitransparent_pixels": 691,
+      "matte_spill_indicator_pixels": 0,
+      "candidate_status": "alpha_v2_pending_visual_review",
+      "selected": false,
+      "despill_changed_pixels": 793,
+      "ai_status": "retain_for_resource_comparison",
+      "ai_reason": "冷色撞击与折面可读；需要真实吸收事件，不能替代精力减少反馈。",
+      "human_acceptance": "pending",
+      "release_license": "pending"
+    },
+    {
+      "id": "guard_break",
+      "label": "破防",
+      "requirement_ids": [
+        "UIR-041",
+        "UIR-055"
+      ],
+      "file": "materials-v2/guard_break.png",
+      "source_region_xyxy": [
+        768,
+        341,
+        1152,
+        683
+      ],
+      "original_cell_alpha_bbox": [
+        38,
+        39,
+        330,
+        276
+      ],
+      "original_margin_px": [
+        38,
+        39,
+        54,
+        66
+      ],
+      "touches_cell_boundary": false,
+      "size": [
+        308,
+        253
+      ],
+      "sha256": "f8613d12f2515d3c08751cb9a4990ecd9d2279d25d029095ba135b87b31a4c7d",
+      "transparent_fraction": 0.6986166007905138,
+      "semitransparent_pixels": 850,
+      "matte_spill_indicator_pixels": 0,
+      "candidate_status": "alpha_v2_pending_visual_review",
+      "selected": false,
+      "despill_changed_pixels": 1059,
+      "ai_status": "retain_for_resource_comparison",
+      "ai_reason": "碎裂外张与完整防护有轮廓差异；碎片偏冰晶，需最终校园拟物核对。",
+      "human_acceptance": "pending",
+      "release_license": "pending"
+    },
+    {
+      "id": "restore",
+      "label": "恢复",
+      "requirement_ids": [
+        "UIR-016",
+        "UIR-055"
+      ],
+      "file": "materials-v2/restore.png",
+      "source_region_xyxy": [
+        1152,
+        341,
+        1536,
+        683
+      ],
+      "original_cell_alpha_bbox": [
+        49,
+        39,
+        326,
+        280
+      ],
+      "original_margin_px": [
+        49,
+        39,
+        58,
+        62
+      ],
+      "touches_cell_boundary": false,
+      "size": [
+        293,
+        257
+      ],
+      "sha256": "585b3dd0e9d341e07739d2a12d7e34454cfb5f05b8178fd49b0f8cbf9b61eaf2",
+      "transparent_fraction": 0.8102946840015405,
+      "semitransparent_pixels": 1089,
+      "matte_spill_indicator_pixels": 0,
+      "candidate_status": "alpha_v2_pending_visual_review",
+      "selected": false,
+      "despill_changed_pixels": 993,
+      "ai_status": "semantic_rework_required",
+      "ai_reason": "三段尖锐旋纹容易读成攻击划痕，恢复的温和聚合和流向不明确。",
+      "human_acceptance": "pending",
+      "release_license": "pending"
+    },
+    {
+      "id": "focus_gain",
+      "label": "专注变化",
+      "requirement_ids": [
+        "UIR-016",
+        "UIR-055"
+      ],
+      "file": "materials-v2/focus_gain.png",
+      "source_region_xyxy": [
+        0,
+        683,
+        384,
+        1024
+      ],
+      "original_cell_alpha_bbox": [
+        80,
+        12,
+        306,
+        250
+      ],
+      "original_margin_px": [
+        80,
+        12,
+        78,
+        91
+      ],
+      "touches_cell_boundary": false,
+      "size": [
+        242,
+        254
+      ],
+      "sha256": "0b4af9699343488d94cf28d60a7ace27271c0cbda5216f01af9191993bc69f33",
+      "transparent_fraction": 0.7645604216828268,
+      "semitransparent_pixels": 906,
+      "matte_spill_indicator_pixels": 0,
+      "candidate_status": "alpha_v2_pending_visual_review",
+      "selected": false,
+      "despill_changed_pixels": 1039,
+      "ai_status": "semantic_rework_required",
+      "ai_reason": "当前像向下爆裂/尖刺，不能明确表达专注获得；需区别支付和获得。",
+      "human_acceptance": "pending",
+      "release_license": "pending"
+    },
+    {
+      "id": "partner_arrival",
+      "label": "伙伴入场",
+      "requirement_ids": [
+        "UIR-042",
+        "UIR-055"
+      ],
+      "file": "materials-v2/partner_arrival.png",
+      "source_region_xyxy": [
+        384,
+        683,
+        768,
+        1024
+      ],
+      "original_cell_alpha_bbox": [
+        44,
+        54,
+        332,
+        254
+      ],
+      "original_margin_px": [
+        44,
+        54,
+        52,
+        87
+      ],
+      "touches_cell_boundary": false,
+      "size": [
+        304,
+        216
+      ],
+      "sha256": "c41276486cc0091ed72f9b8926924407937079012a6f2a9173f26af12936b581",
+      "transparent_fraction": 0.7876157407407407,
+      "semitransparent_pixels": 878,
+      "matte_spill_indicator_pixels": 0,
+      "candidate_status": "alpha_v2_pending_visual_review",
+      "selected": false,
+      "despill_changed_pixels": 963,
+      "ai_status": "retain_for_resource_comparison",
+      "ai_reason": "地面弧与纸条有校园意象；纸片不等同伙伴身体分层或实际召入完成。",
+      "human_acceptance": "pending",
+      "release_license": "pending"
+    },
+    {
+      "id": "status_attachment",
+      "label": "状态附着",
+      "requirement_ids": [
+        "UIR-042",
+        "UIR-055"
+      ],
+      "file": "materials-v2/status_attachment.png",
+      "source_region_xyxy": [
+        768,
+        683,
+        1152,
+        1024
+      ],
+      "original_cell_alpha_bbox": [
+        47,
+        53,
+        291,
+        259
+      ],
+      "original_margin_px": [
+        47,
+        53,
+        93,
+        82
+      ],
+      "touches_cell_boundary": false,
+      "size": [
+        260,
+        222
+      ],
+      "sha256": "8168157360df89571ce8cafd13286e35e9a94106fa358b204956089b376b864b",
+      "transparent_fraction": 0.81498613998614,
+      "semitransparent_pixels": 667,
+      "matte_spill_indicator_pixels": 0,
+      "candidate_status": "alpha_v2_pending_visual_review",
+      "selected": false,
+      "despill_changed_pixels": 940,
+      "ai_status": "semantic_rework_required",
+      "ai_reason": "勾形更像斩击，持续附着语义不明确；暗色在深底还需轮廓增强。",
+      "human_acceptance": "pending",
+      "release_license": "pending"
+    },
+    {
+      "id": "phase_pulse",
+      "label": "阶段冲击",
+      "requirement_ids": [
+        "UIR-042",
+        "UIR-056"
+      ],
+      "file": "materials-v2/phase_pulse.png",
+      "source_region_xyxy": [
+        1152,
+        683,
+        1536,
+        1024
+      ],
+      "original_cell_alpha_bbox": [
+        19,
+        48,
+        342,
+        252
+      ],
+      "original_margin_px": [
+        19,
+        48,
+        42,
+        89
+      ],
+      "touches_cell_boundary": false,
+      "size": [
+        339,
+        220
+      ],
+      "sha256": "45f03c147c78c176c03cd7b8866f74b9a0ba52925bc90a775f137296768a8c4c",
+      "transparent_fraction": 0.6868195226602306,
+      "semitransparent_pixels": 1166,
+      "matte_spill_indicator_pixels": 0,
+      "candidate_status": "alpha_v2_pending_visual_review",
+      "selected": false,
+      "despill_changed_pixels": 1328,
+      "ai_status": "semantic_rework_required",
+      "ai_reason": "尖锐弧形偏火焰爆炸，不能独立表达具体阶段变化；需与适用实体轮廓共同核对。",
+      "human_acceptance": "pending",
+      "release_license": "pending"
+    }
+  ],
+  "preview": "preview.html",
+  "machine_checks": "12 actual alpha PNGs, 36 browser renders and 13 browser checks passed",
+  "overall_style_acceptance": "not_approved"
+}

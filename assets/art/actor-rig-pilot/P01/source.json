@@ -1,0 +1,218 @@
+{
+  "status": "pilot_only_pending_user_art_acceptance",
+  "requirements": [
+    "UIR-011",
+    "UIR-013",
+    "UIR-051",
+    "UIR-052",
+    "UIR-054",
+    "UIR-057",
+    "UIR-059"
+  ],
+  "provider": "configured jiji.cc image API",
+  "model": "gpt-image-2.5-sunburst",
+  "method": "reference-image edit: separated complete parts, local magenta chroma removal and recorded joint fitting",
+  "alpha_method": "R > 1.35G+25 and B > 1.35G+25 -> transparent, crop alpha bounds, Lanczos RGBA resize",
+  "master": "hero-master-v1.png",
+  "used_parts": [
+    "rear_leg",
+    "front_leg",
+    "far_upper",
+    "torso",
+    "head",
+    "near_upper",
+    "near_forearm",
+    "laptop_forearm"
+  ],
+  "parts": [
+    {
+      "source": "output/imagegen/actor-rig-pilot-20261114/hero-parts-v1.png",
+      "region": [
+        70,
+        0,
+        465,
+        356
+      ],
+      "trim_box": [
+        61,
+        23,
+        334,
+        346
+      ],
+      "size": [
+        230,
+        265
+      ],
+      "file": "assets/art/actor-rig-pilot/P01/head.png",
+      "sha256": "b86739d090478f1f0c9434439b3eeab663ec8ff1e55bf450395863cd73c1bf16"
+    },
+    {
+      "source": "output/imagegen/actor-rig-pilot-20261114/hero-torso-v2.png",
+      "region": [
+        0,
+        0,
+        1024,
+        1024
+      ],
+      "trim_box": [
+        206,
+        46,
+        817,
+        925
+      ],
+      "size": [
+        350,
+        460
+      ],
+      "file": "assets/art/actor-rig-pilot/P01/torso.png",
+      "sha256": "3aae6546a02c2fa779f5e54a1ff7b8c209cce96f612a6edc22710108a73d7208"
+    },
+    {
+      "source": "output/imagegen/actor-rig-pilot-20261114/hero-parts-v1.png",
+      "region": [
+        1086,
+        0,
+        1434,
+        355
+      ],
+      "trim_box": [
+        41,
+        35,
+        237,
+        331
+      ],
+      "size": [
+        160,
+        265
+      ],
+      "file": "assets/art/actor-rig-pilot/P01/near_upper.png",
+      "sha256": "47eedb57f66473606ca2f9393315d6759062f89859aee4c5f2cdb42100ff1f50"
+    },
+    {
+      "source": "output/imagegen/actor-rig-pilot-20261114/hero-parts-v1.png",
+      "region": [
+        80,
+        397,
+        468,
+        646
+      ],
+      "trim_box": [
+        29,
+        25,
+        359,
+        209
+      ],
+      "size": [
+        300,
+        170
+      ],
+      "file": "assets/art/actor-rig-pilot/P01/near_forearm.png",
+      "sha256": "7e9f6e636036f2dd4e277fd101959e16669e4ddbc279d0a28be1d59b28e63576"
+    },
+    {
+      "source": "output/imagegen/actor-rig-pilot-20261114/hero-parts-v1.png",
+      "region": [
+        656,
+        398,
+        906,
+        665
+      ],
+      "trim_box": [
+        60,
+        16,
+        215,
+        261
+      ],
+      "size": [
+        125,
+        245
+      ],
+      "file": "assets/art/actor-rig-pilot/P01/far_upper.png",
+      "sha256": "63c61eea199bdfae060d93996f4eaa7c42116db0087a5ada8e5c376e0d133f30"
+    },
+    {
+      "source": "output/imagegen/actor-rig-pilot-20261114/hero-parts-v1.png",
+      "region": [
+        1055,
+        388,
+        1505,
+        663
+      ],
+      "trim_box": [
+        21,
+        20,
+        393,
+        255
+      ],
+      "size": [
+        350,
+        240
+      ],
+      "file": "assets/art/actor-rig-pilot/P01/laptop_forearm.png",
+      "sha256": "f375c0af550247eb2df44dcba08c81df47476a169cb7fd8060a435fdad745b32"
+    },
+    {
+      "source": "output/imagegen/actor-rig-pilot-20261114/hero-parts-v1.png",
+      "region": [
+        110,
+        659,
+        414,
+        1024
+      ],
+      "trim_box": [
+        49,
+        8,
+        258,
+        355
+      ],
+      "size": [
+        190,
+        650
+      ],
+      "file": "assets/art/actor-rig-pilot/P01/rear_leg.png",
+      "sha256": "177ac5194f363c0e6b5645895cbc20d0cbc39cc64ed1364b8bdd05d6e9944586"
+    },
+    {
+      "source": "output/imagegen/actor-rig-pilot-20261114/hero-parts-v1.png",
+      "region": [
+        690,
+        666,
+        911,
+        1024
+      ],
+      "trim_box": [
+        25,
+        12,
+        185,
+        347
+      ],
+      "size": [
+        165,
+        650
+      ],
+      "file": "assets/art/actor-rig-pilot/P01/front_leg.png",
+      "sha256": "def3889cb24289ffc8c6e22daca820956fd5bda72dc07aed7082b9181994bc4c"
+    },
+    {
+      "source": "output/imagegen/actor-rig-pilot-20261114/hero-parts-v1.png",
+      "region": [
+        1110,
+        714,
+        1443,
+        976
+      ],
+      "trim_box": [
+        43,
+        26,
+        305,
+        232
+      ],
+      "size": [
+        340,
+        235
+      ],
+      "file": "assets/art/actor-rig-pilot/P01/hem.png",
+      "sha256": "663d55a8f2f6791cfcb2b97cbb1a6d188973c10c206472d65d540e82a7fa9ad4"
+    }
+  ]
+}

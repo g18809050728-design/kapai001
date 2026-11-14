@@ -18,7 +18,7 @@ func run() -> Array[String]:
 	_run = created.data.state
 	_rng = created.data.rng_states
 	_check(_run.campaign.version == 2, "new run uses annual-map version2")
-	_check(_run.campaign.map_version == 2 and _run.campaign.years[0].version == 2, "new runs use the denser generation algorithm version2")
+	_check(_run.campaign.map_version == 3 and _run.campaign.years[0].version == 3, "new runs use distinct branch generation version3")
 	_check(_run.nodes.all(func(node): return node.term == 1), "future years are not generated at setup")
 	_check(_run.nodes.size() > 20, "year1 has sustained route choices")
 	_check(_run.validate().is_empty(), "new map passes aggregate validation")
@@ -207,40 +207,41 @@ func _test_corruption() -> void:
 func _test_generator_version_compatibility() -> void:
 	var saved_run := _run
 	var saved_rng := _rng.duplicate(true)
-	var created := _service.create(StartRunRequest.new("P02", &"normal", "campus_four_year", "42"))
-	_check(created.ok, "legacy annual fixture starts")
-	if not created.ok: return
-	_run = created.data.state
-	_rng = created.data.rng_states
-	_run.campaign.map_version = 1
-	_run.campaign.years.clear()
-	_run.nodes.clear()
-	_check(CampaignProgression.ensure_year(_run).ok, "algorithm1 can still publish its original first year")
-	_check(_run.campaign.years.size() == 1 and _run.campaign.years[0].version == 1, "algorithm1 stays frozen rather than silently upgrading")
-	var expected_seed := ("annual-map-v1|42|1|" + SnapshotCodec.canonical_json(_run.campaign.years[0].profile)).sha256_text()
-	_check(_run.campaign.years[0].seed == expected_seed, "legacy seed derivation retains original version1 domain")
-	var old_graph: Array = _run.campaign.years.duplicate(true)
-	var session := SessionState.new()
-	session.run = _run
-	session.random_snapshot = _rng.duplicate(true)
-	var snapshot := SnapshotCodec.encode_session(session, _catalog.get_info())
-	_check(snapshot.ok, "legacy annual graph encodes through public snapshot")
-	if snapshot.ok:
-		var decoded := SnapshotCodec.decode_session(snapshot.data, _catalog)
-		_check(decoded.ok, "legacy annual graph restores through public snapshot")
-		if decoded.ok:
-			_run = decoded.data.run
-			_check(_run.campaign.years == old_graph, "restoring legacy snapshot preserves every frozen node")
-	_walk()
-	_check(_run.outcome == "won" and _run.campaign.years.size() == 4, "legacy annual save can continue through all four years")
-	_check(_run.campaign.years.all(func(map): return map.version == 1), "future legacy years use original generation algorithm")
-	_check(_run.campaign.years[0] == old_graph[0], "legacy progression does not rewrite already published map")
+	for legacy_version in [1, 2]:
+		var created := _service.create(StartRunRequest.new("P02", &"normal", "campus_four_year", "42"))
+		_check(created.ok, "legacy annual fixture starts")
+		if not created.ok: return
+		_run = created.data.state
+		_rng = created.data.rng_states
+		_run.campaign.map_version = legacy_version
+		_run.campaign.years.clear()
+		_run.nodes.clear()
+		_check(CampaignProgression.ensure_year(_run).ok, "algorithm1 can still publish its original first year")
+		_check(_run.campaign.years.size() == 1 and _run.campaign.years[0].version == legacy_version, "historical algorithm stays frozen rather than silently upgrading")
+		var expected_seed := ("annual-map-v%d|42|1|" % legacy_version + SnapshotCodec.canonical_json(_run.campaign.years[0].profile)).sha256_text()
+		_check(_run.campaign.years[0].seed == expected_seed, "legacy seed derivation retains original version1 domain")
+		var old_graph: Array = _run.campaign.years.duplicate(true)
+		var session := SessionState.new()
+		session.run = _run
+		session.random_snapshot = _rng.duplicate(true)
+		var snapshot := SnapshotCodec.encode_session(session, _catalog.get_info())
+		_check(snapshot.ok, "legacy annual graph encodes through public snapshot")
+		if snapshot.ok:
+			var decoded := SnapshotCodec.decode_session(snapshot.data, _catalog)
+			_check(decoded.ok, "legacy annual graph restores through public snapshot")
+			if decoded.ok:
+				_run = decoded.data.run
+				_check(_run.campaign.years == old_graph, "restoring legacy snapshot preserves every frozen node")
+		_walk()
+		_check(_run.outcome == "won" and _run.campaign.years.size() == 4, "legacy annual save can continue through all four years")
+		_check(_run.campaign.years.all(func(map): return map.version == legacy_version), "future legacy years use original generation algorithm")
+		_check(_run.campaign.years[0] == old_graph[0], "legacy progression does not rewrite already published map")
 	var mixed := saved_run.to_dictionary()
 	mixed.campaign.map_version = 1
 	_check(not RunCodec.decode(mixed, _catalog).ok, "algorithm2 maps cannot masquerade as algorithm1")
 	mixed = _run.to_dictionary()
-	mixed.campaign.map_version = 2
-	_check(not RunCodec.decode(mixed, _catalog).ok, "algorithm1 maps cannot masquerade as algorithm2")
+	mixed.campaign.map_version = 3
+	_check(not RunCodec.decode(mixed, _catalog).ok, "algorithm2 maps cannot masquerade as algorithm3")
 	mixed = saved_run.to_dictionary()
 	mixed.campaign.map_version = 999
 	_check(not RunCodec.decode(mixed, _catalog).ok, "unknown generator versions still reject")

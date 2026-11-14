@@ -1,0 +1,263 @@
+{
+  "version": 1,
+  "definition_id": "P01",
+  "canvas": [
+    1000,
+    1370
+  ],
+  "ground": [
+    500,
+    1340
+  ],
+  "action_bone": "action_tip",
+  "bones": [
+    {
+      "id": "root",
+      "parent": "",
+      "position": [
+        0,
+        0
+      ],
+      "length": 70
+    },
+    {
+      "id": "torso",
+      "parent": "root",
+      "position": [
+        0,
+        -640
+      ],
+      "length": 70
+    },
+    {
+      "id": "loop_chest",
+      "parent": "torso",
+      "position": [
+        0,
+        -225
+      ],
+      "length": 70
+    },
+    {
+      "id": "head",
+      "parent": "loop_chest",
+      "position": [
+        20,
+        -205
+      ],
+      "length": 70
+    },
+    {
+      "id": "loop_head",
+      "parent": "head",
+      "position": [
+        0,
+        0
+      ],
+      "length": 70
+    },
+    {
+      "id": "near_upper",
+      "parent": "loop_chest",
+      "position": [
+        -135,
+        -140
+      ],
+      "length": 70
+    },
+    {
+      "id": "near_forearm",
+      "parent": "near_upper",
+      "position": [
+        -78,
+        216
+      ],
+      "length": 70
+    },
+    {
+      "id": "action_tip",
+      "parent": "near_forearm",
+      "position": [
+        220,
+        -65
+      ],
+      "length": 70
+    },
+    {
+      "id": "far_upper",
+      "parent": "loop_chest",
+      "position": [
+        120,
+        -125
+      ],
+      "length": 70
+    },
+    {
+      "id": "far_forearm",
+      "parent": "far_upper",
+      "position": [
+        30,
+        210
+      ],
+      "length": 70
+    },
+    {
+      "id": "rear_leg",
+      "parent": "root",
+      "position": [
+        -40,
+        -630
+      ],
+      "length": 70
+    },
+    {
+      "id": "front_leg",
+      "parent": "root",
+      "position": [
+        65,
+        -630
+      ],
+      "length": 70
+    },
+    {
+      "id": "loop_cloth",
+      "parent": "torso",
+      "position": [
+        0,
+        -60
+      ],
+      "length": 70
+    }
+  ],
+  "parts": [
+    {
+      "id": "rear_leg",
+      "bone": "rear_leg",
+      "offset": [
+        -150,
+        -20
+      ],
+      "z": -3,
+      "file": "res://assets/art/actor-rig-pilot/P01/rear_leg.png"
+    },
+    {
+      "id": "front_leg",
+      "bone": "front_leg",
+      "offset": [
+        -46,
+        -20
+      ],
+      "z": -2,
+      "file": "res://assets/art/actor-rig-pilot/P01/front_leg.png"
+    },
+    {
+      "id": "far_upper",
+      "bone": "far_upper",
+      "offset": [
+        -38,
+        -18
+      ],
+      "z": -1,
+      "file": "res://assets/art/actor-rig-pilot/P01/far_upper.png"
+    },
+    {
+      "id": "torso",
+      "mesh": true,
+      "bone": "loop_chest",
+      "base_bone": "loop_cloth",
+      "position": [
+        -175,
+        -1070
+      ],
+      "size": [
+        350,
+        460
+      ],
+      "z": 0,
+      "file": "res://assets/art/actor-rig-pilot/P01/torso.png"
+    },
+    {
+      "id": "head",
+      "bone": "loop_head",
+      "offset": [
+        -115,
+        -243
+      ],
+      "z": 2,
+      "file": "res://assets/art/actor-rig-pilot/P01/head.png"
+    },
+    {
+      "id": "near_upper",
+      "bone": "near_upper",
+      "offset": [
+        -118,
+        -21
+      ],
+      "z": 3,
+      "file": "res://assets/art/actor-rig-pilot/P01/near_upper.png"
+    },
+    {
+      "id": "near_forearm",
+      "bone": "near_forearm",
+      "offset": [
+        -39,
+        -122
+      ],
+      "z": 4,
+      "file": "res://assets/art/actor-rig-pilot/P01/near_forearm.png"
+    },
+    {
+      "id": "laptop_forearm",
+      "bone": "far_forearm",
+      "offset": [
+        -35,
+        -197
+      ],
+      "z": 5,
+      "file": "res://assets/art/actor-rig-pilot/P01/laptop_forearm.png"
+    }
+  ],
+  "idle": {
+    "loop_chest": 0.008,
+    "loop_head": -0.016,
+    "loop_cloth": 0.028
+  },
+  "poses": {
+    "action": {
+      "torso": 0.06,
+      "head": -0.12,
+      "near_upper": -0.32,
+      "near_forearm": 0.7,
+      "far_forearm": -0.035
+    },
+    "hit": {
+      "torso": -0.12,
+      "head": 0.18,
+      "near_upper": 0.25,
+      "near_forearm": -0.16,
+      "far_upper": 0.08
+    },
+    "guard": {
+      "torso": -0.025,
+      "near_upper": -0.1,
+      "near_forearm": -0.42,
+      "head": -0.09
+    },
+    "enter": {
+      "torso": -0.045,
+      "head": -0.08,
+      "far_upper": 0.07,
+      "near_forearm": 0.12
+    },
+    "depart": {
+      "torso": -0.2,
+      "head": 0.12,
+      "near_upper": 0.2
+    },
+    "phase": {
+      "torso": 0.055,
+      "head": -0.1,
+      "near_forearm": 0.25
+    }
+  }
+}

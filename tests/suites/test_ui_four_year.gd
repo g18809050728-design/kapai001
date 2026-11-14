@@ -40,7 +40,8 @@ func run() -> Array[String]:
 			_check(shell.press("campaign:skip"), "skip advances campaign choice: " + kind)
 		else:
 			_check(shell.press("campaign:" + ("theory" if kind == "direction" else "job")), "year start choice submits")
-		_check(shell.press("campaign:confirm"), "campaign final confirmation submits")
+		if kind != "service":
+			_check(shell.press("campaign:confirm"), "campaign final confirmation submits")
 		_check(session.get_view().run.campaign.pending.get("offer_id", "") != offer.offer_id, "choice is resolved once: " + kind)
 		await shell.get_tree().create_timer(0.08).timeout
 		shell.free()
@@ -71,6 +72,7 @@ func _test_setup() -> void:
 		_check(shell.press("setup:character:" + character_id), "character selects: " + character_id)
 		shell.press("setup:advanced")
 		_check(shell.press("setup:seed_random"), "seed refresh keeps the setup selection")
+		shell.press("inspect:close")
 		_check(shell.press("setup:start"), "setup starts: " + character_id)
 		if not legacy_run_id.is_empty():
 			_check(str(session.get_view().run_id) == legacy_run_id, "restart confirmation preserves the old run")

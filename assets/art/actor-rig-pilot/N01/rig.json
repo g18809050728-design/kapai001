@@ -1,0 +1,262 @@
+{
+  "version": 1,
+  "definition_id": "N01",
+  "canvas": [
+    1300,
+    1020
+  ],
+  "ground": [
+    650,
+    1000
+  ],
+  "action_bone": "action_tip",
+  "bones": [
+    {
+      "id": "root",
+      "parent": "",
+      "position": [
+        0,
+        0
+      ],
+      "length": 70
+    },
+    {
+      "id": "near_foot",
+      "parent": "root",
+      "position": [
+        -65,
+        -92
+      ],
+      "length": 70
+    },
+    {
+      "id": "far_foot",
+      "parent": "root",
+      "position": [
+        190,
+        -95
+      ],
+      "length": 70
+    },
+    {
+      "id": "torso",
+      "parent": "root",
+      "position": [
+        20,
+        -130
+      ],
+      "length": 70
+    },
+    {
+      "id": "loop_body",
+      "parent": "torso",
+      "position": [
+        0,
+        -300
+      ],
+      "length": 70
+    },
+    {
+      "id": "loop_fan",
+      "parent": "loop_body",
+      "position": [
+        140,
+        -40
+      ],
+      "length": 70
+    },
+    {
+      "id": "clip",
+      "parent": "loop_body",
+      "position": [
+        10,
+        -330
+      ],
+      "length": 70
+    },
+    {
+      "id": "loop_clip",
+      "parent": "clip",
+      "position": [
+        0,
+        0
+      ],
+      "length": 70
+    },
+    {
+      "id": "pencil",
+      "parent": "loop_body",
+      "position": [
+        -155,
+        -50
+      ],
+      "length": 70
+    },
+    {
+      "id": "action_tip",
+      "parent": "pencil",
+      "position": [
+        -430,
+        -45
+      ],
+      "length": 70
+    },
+    {
+      "id": "back_arm",
+      "parent": "loop_body",
+      "position": [
+        230,
+        -35
+      ],
+      "length": 70
+    },
+    {
+      "id": "loop_paper",
+      "parent": "torso",
+      "position": [
+        150,
+        -120
+      ],
+      "length": 70
+    }
+  ],
+  "parts": [
+    {
+      "id": "far_foot",
+      "bone": "far_foot",
+      "offset": [
+        -110,
+        -82
+      ],
+      "z": -4,
+      "file": "res://assets/art/actor-rig-pilot/N01/far_foot.png"
+    },
+    {
+      "id": "near_foot",
+      "bone": "near_foot",
+      "offset": [
+        -150,
+        -92
+      ],
+      "z": -3,
+      "file": "res://assets/art/actor-rig-pilot/N01/near_foot.png"
+    },
+    {
+      "id": "fan",
+      "bone": "loop_fan",
+      "offset": [
+        -190,
+        -360
+      ],
+      "z": -2,
+      "file": "res://assets/art/actor-rig-pilot/N01/fan.png"
+    },
+    {
+      "id": "back_arm",
+      "bone": "back_arm",
+      "offset": [
+        -15,
+        -30
+      ],
+      "z": -1,
+      "file": "res://assets/art/actor-rig-pilot/N01/back_arm.png"
+    },
+    {
+      "id": "loose_sheet",
+      "mesh": true,
+      "bone": "torso",
+      "base_bone": "loop_paper",
+      "position": [
+        140,
+        -700
+      ],
+      "size": [
+        340,
+        300
+      ],
+      "z": -1,
+      "file": "res://assets/art/actor-rig-pilot/N01/loose_sheet.png"
+    },
+    {
+      "id": "body",
+      "bone": "loop_body",
+      "offset": [
+        -220,
+        -350
+      ],
+      "z": 0,
+      "file": "res://assets/art/actor-rig-pilot/N01/body.png"
+    },
+    {
+      "id": "clip",
+      "bone": "loop_clip",
+      "offset": [
+        -90,
+        -205
+      ],
+      "z": 2,
+      "file": "res://assets/art/actor-rig-pilot/N01/clip.png"
+    },
+    {
+      "id": "pencil",
+      "bone": "pencil",
+      "offset": [
+        -450,
+        -85
+      ],
+      "z": 3,
+      "file": "res://assets/art/actor-rig-pilot/N01/pencil.png"
+    },
+    {
+      "id": "tab",
+      "bone": "loop_body",
+      "offset": [
+        110,
+        -290
+      ],
+      "z": 3,
+      "file": "res://assets/art/actor-rig-pilot/N01/tab.png"
+    }
+  ],
+  "idle": {
+    "loop_body": 0.012,
+    "loop_fan": -0.03,
+    "loop_clip": 0.024,
+    "loop_paper": 0.045
+  },
+  "poses": {
+    "action": {
+      "torso": -0.055,
+      "pencil": 0.32,
+      "back_arm": -0.18,
+      "clip": -0.12
+    },
+    "hit": {
+      "torso": 0.11,
+      "pencil": -0.24,
+      "back_arm": 0.19,
+      "clip": 0.2
+    },
+    "guard": {
+      "torso": 0.035,
+      "pencil": -0.2,
+      "back_arm": -0.3
+    },
+    "enter": {
+      "torso": -0.035,
+      "pencil": 0.12,
+      "clip": -0.08
+    },
+    "depart": {
+      "torso": 0.32,
+      "pencil": -0.3,
+      "back_arm": 0.35,
+      "clip": 0.25
+    },
+    "phase": {
+      "torso": -0.08,
+      "pencil": 0.25,
+      "clip": -0.3
+    }
+  }
+}

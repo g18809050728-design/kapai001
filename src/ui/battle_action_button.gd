@@ -22,22 +22,29 @@ func configure(control_kind: String, value: int = 0) -> void:
 
 func _draw() -> void:
 	var active := (is_hovered() or has_focus()) and not disabled
-	var ink := UiStyle.CREAM if not disabled else Color("9baca3")
-	var paper := UiStyle.surface(Color(UiStyle.NIGHT,.95) if kind == "focus" or disabled else UiStyle.FOREST,UiStyle.GOLD if active else UiStyle.BRASS)
-	paper.border_width_bottom = 3
-	paper.shadow_color = Color(0.02, 0.06, 0.07, 0.24)
-	paper.shadow_size = 4
-	paper.shadow_offset = Vector2(0, 3)
-	draw_style_box(paper, Rect2(Vector2(3, 2), size - Vector2(6, 6)))
+	var ink := UiStyle.CREAM if not disabled else Color("83949c")
 	var font := get_theme_font("font")
 	if kind == "focus":
-		var center := Vector2(size.x * 0.5, size.y * 0.34)
-		draw_circle(center, 22,Color(UiStyle.BRASS,.08))
-		draw_arc(center, 22, 0, TAU, 48, UiStyle.BRASS, 1.5, true)
-		draw_string(font, center + Vector2(-22, 9), str(amount), HORIZONTAL_ALIGNMENT_CENTER, 44, 27, ink)
-		draw_string(font, Vector2(0, size.y - 18), "可用专注", HORIZONTAL_ALIGNMENT_CENTER, size.x, roundi(14 * UiStyle.text_scale), ink)
+		var c := Vector2(size.x * .5, size.y * .43)
+		var radius := minf(size.x * .37, size.y * .38)
+		draw_circle(c + Vector2(0, 5), radius + 5, Color(0, 0, 0, .5), true, -1, true)
+		draw_circle(c, radius + 3, Color("15262b"), true, -1, true)
+		draw_circle(c, radius, Color("7e8576"), true, -1, true)
+		draw_arc(c, radius, PI * 1.05, PI * 1.93, 48, Color("ead5a6"), 3, true)
+		draw_arc(c, radius - 2, .1, PI * .92, 48, Color("4c5955"), 3, true)
+		draw_circle(c, radius - 5, Color("142f42") if amount > 0 else Color("283a40"), true, -1, true)
+		for index in 18:
+			var fraction := index / 18.0
+			draw_circle(c + Vector2(-2, -3) * fraction, (radius - 7) * (1.0 - fraction), Color("347d9c") if amount > 0 else Color("3c535b"), true, -1, true)
+		draw_arc(c, radius - 7, PI * 1.02, PI * 1.84, 40, Color("9bc7cc") if amount > 0 else Color("688486"), 1.5, true)
+		for angle in [PI * .25, PI * .75, PI * 1.25, PI * 1.75]:
+			draw_circle(c + Vector2.from_angle(angle) * (radius - 1), 2, Color("e2cca1"), true, -1, true)
+		var pixels := roundi(34 * minf(UiStyle.text_scale, 1.25))
+		draw_string_outline(font, c + Vector2(-radius, pixels * .31), str(amount), HORIZONTAL_ALIGNMENT_CENTER, radius * 2, pixels, 5, Color("102934"))
+		draw_string(font, c + Vector2(-radius, pixels * .31), str(amount), HORIZONTAL_ALIGNMENT_CENTER, radius * 2, pixels, Color("f2f5e6"))
+		draw_string(font, Vector2(0, size.y - 4), "专注", HORIZONTAL_ALIGNMENT_CENTER, size.x, roundi(15 * UiStyle.text_scale), Color("ede0c2"))
 	else:
-		var center := Vector2(size.x - 24, size.y * 0.5)
-		draw_arc(center, 10, -.8, 4.7, 32, UiStyle.BRASS, 1.7, true)
-		draw_polyline(PackedVector2Array([center + Vector2(3, -14), center + Vector2(8, -7), center + Vector2(1, -5)]), UiStyle.BRASS, 1.7, true)
-		draw_string(font, Vector2(10, size.y * 0.5 + 6), "结束回合", HORIZONTAL_ALIGNMENT_CENTER, size.x - 46, roundi(16 * UiStyle.text_scale), ink)
+		var color := Color("475563") if not disabled else Color("28333e")
+		draw_style_box(UiStyle.cut_surface(color.lightened(.15) if active else color,UiStyle.GOLD if active else UiStyle.BRASS),Rect2(2,2,size.x-4,size.y-4))
+		draw_string_outline(font,Vector2(9,size.y*.5+7),"结束回合",HORIZONTAL_ALIGNMENT_CENTER,size.x-18,20,3,Color("1d252b"))
+		draw_string(font,Vector2(9,size.y*.5+7),"结束回合",HORIZONTAL_ALIGNMENT_CENTER,size.x-18,20,ink)

@@ -1,0 +1,9 @@
+# 特效材料候选
+
+离线打开[preview.html](preview.html)可切换12种材料、3种底色、人物前后叠放、透明度/旋转/尺寸，并比较3种材料组合。所有图像内嵌，无网络或游戏状态读写；默认叠放尺寸不是运行规格。
+
+`VFX-material-atlas-v1.png`为原始不透明图集，`materials/`是保留的首版提取，`materials-v2/`是按实际底色修正后的透明候选。原提示词与修正提示词、`extraction.json`/`extraction-v2.json`及脚本均保留。深浅底查看`materials-v2-contact-dark.jpg`和`materials-v2-contact-light.jpg`；`material-transform-check.gif`只是离线旋转检查，12种材料不等于12段已完成动画。
+
+7项保留资源比较，压力轨迹/恢复/专注变化/状态附着/阶段冲击5项语义需返工，全部未正式选用。首次请求400明确失败且无产图，文案修正后第二次成功；实际计费未知。模型和请求参数、各文件hash、AI结论、人工/许可待办统一见[manifest](asset-manifest.json)。
+
+对应[需求§7.1](../../../../动作或者图片描述/整体表现重制需求_20261113.md)、[G6材料核对](../../../../docs/G6特效材料核对_20261114.md)与[证据](../../../../artifacts/verification/vfx-reference-20261114/README.md)。来源姿态、实际作用点、轻重节奏、倍速/减少动态和事件一次消费仍需G7，当前无运行资产接入。

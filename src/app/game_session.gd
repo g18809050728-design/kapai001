@@ -75,7 +75,7 @@ func start_run(request: StartRunRequest) -> ActionResult:
 	if (
 		request == null
 		or not _is_manifest_allowed(request.manifest_id)
-		or request.difficulty != &"normal"
+		or request.difficulty not in [&"relaxed", &"normal", &"hard"]
 	):
 		return _reject(GameConstants.ERROR_INVALID_ARGUMENT, "error.run.manifest")
 	var previous := _store.load("current_run")
@@ -134,7 +134,7 @@ func _prepare_run(request: StartRunRequest) -> GameResult:
 	if (
 		request == null
 		or not _is_manifest_allowed(request.manifest_id)
-		or request.difficulty != &"normal"
+		or request.difficulty not in [&"relaxed", &"normal", &"hard"]
 	):
 		return _failure(GameConstants.ERROR_INVALID_ARGUMENT, "error.run.manifest")
 	var loaded := _load_catalog(request.manifest_id)
@@ -483,7 +483,10 @@ func get_setup_options() -> GameResult:
 		for card_id in definition.starter_cards:
 			starter_details.append({"definition_id": card_id, "card_id": card_id, "detail": view_service._reward_candidate_view("card", str(card_id), rules)})
 		options.characters[-1].starter_details = starter_details
-	options.difficulties = [&"normal"]
+	for id in [&"relaxed", &"normal", &"hard"]:
+		if rules.difficulty_overrides.has(String(id)):
+			options.difficulties.append(id)
+	options.difficulty_details = rules.difficulty_overrides.duplicate(true)
 	return GameResult.success(options)
 
 
@@ -742,6 +745,10 @@ func _battle_view(
 	for zone in battle.zones:
 		counts[zone] = battle.zones[zone].size()
 	var effect_sources := {battle.character_id: str(battle.player.get("entity_id", ""))}
+	# Initial runtime cards need not have entries in source_registry. They still
+	# have an explicit player owner; expose that read-only presentation mapping.
+	for card_id in battle.card_by_id:
+		effect_sources[str(card_id)] = str(battle.player.get("entity_id", ""))
 	for ability in battle.v3.get("abilities", []):
 		if ability is Dictionary:
 			effect_sources[str(ability.get("ability_id", ""))] = str(battle.player.get("entity_id", ""))
@@ -752,6 +759,12 @@ func _battle_view(
 				effect_sources[id] = str(battle.player.get("entity_id", ""))
 			"task", "unit":
 				effect_sources[id] = str(id)
+	var engine := engine_override if engine_override != null else _battle_engine
+	var tasks: Array = []
+	for task in battle.tasks:
+		var item := _task_view(task, catalog_override)
+		item.effective_pressure = engine.intent_pressure(battle, task)
+		tasks.append(item)
 	return {
 		"battle_id": battle.battle_id,
 		"node_id": battle.node_id,
@@ -764,7 +777,7 @@ func _battle_view(
 		"character_info": _character_info(battle, character_id),
 		"hand": hand,
 		"units": battle.units.duplicate(true),
-		"tasks": battle.tasks.map(func(task): return _task_view(task, catalog_override)),
+		"tasks": tasks,
 		"statuses": battle.statuses.duplicate(true),
 		"scene": battle.scene.duplicate(true) if battle.scene is Dictionary else null,
 		"zone_counts": counts,

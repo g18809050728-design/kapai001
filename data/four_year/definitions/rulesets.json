@@ -191,6 +191,16 @@
         "starting_vitality": 72,
         "ddl_offset": 0,
         "pressure_percent": 100
+      },
+      "relaxed": {
+        "starting_vitality": 84,
+        "ddl_offset": 2,
+        "pressure_percent": 80
+      },
+      "hard": {
+        "starting_vitality": 60,
+        "ddl_offset": -1,
+        "pressure_percent": 120
       }
     }
   }

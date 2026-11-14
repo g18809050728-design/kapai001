@@ -1,0 +1,26 @@
+Use case: illustration
+Asset type: a single 4-column by 3-row atlas of TWELVE ISOLATED ORIGINAL 2D COMBAT VFX MATERIALS, 1536 by 1024 pixels, for a hand-painted university-themed roguelike deckbuilding game. This is a texture-material sheet, NOT a finished combat screenshot, UI, storyboard, logo or icon set.
+
+Art direction: bold readable graphic silhouettes, hand-painted irregular tapered strokes and ragged angular chips. Small hot ivory cores inside controlled colored shapes, a darker secondary rim, a few sparse directional fragments. Three or four clear value groups, purposeful negative space, chunky shapes readable at small battle scale. Match the crisp painterly combat-impact character of Slay the Spire 2 as a broad stylistic reference, but create new shapes and university pen/paper metaphors. No copied game assets or characters. No soft airbrush blob, no photorealism, no manga speed-line background, no polished mobile UI badge, no broad neon haze, no many nested magic circles. Vary silhouettes and direction; do not draw the same glowing ring twelve times.
+
+Layout: exactly 4 equal columns and 3 equal rows, read left to right then top to bottom. Each cell is 384 by roughly 341 pixels. Center each independent effect within its own cell with at least 40 pixels of blank margin on every side. Nothing touches a neighboring cell. No drawn grid or frames. The entire background, including cell gaps and empty centers, must be a FLAT UNIFORM PURE MAGENTA RGB(255,0,255), for later chroma-key extraction. No floor, shadows, paper panel, gradient, checkerboard or background scenery. No magenta/pink-purple in the effect itself. All visible material strokes must be opaque painted shapes against magenta; avoid diffuse translucent glows. NO TEXT, LETTERS, NUMERALS OR LABELS ANYWHERE.
+
+Row 1:
+1. PEN TRAIL: an elongated diagonal ivory-and-pale-gold brush slash, a thick sharp leading tip and thin torn taper behind it, three short ink-blue accents. A stroke, not a physical pen or sword. Strong left-to-right motion.
+2. LIGHT HIT: a compact asymmetric ivory star-shaped contact core, five to seven warm orange/gold tapered rays, a few tiny warm angular chips. Broad empty space around a small concentrated center.
+3. HEAVY HIT: a much chunkier irregular cream/gold impact silhouette with dark burnt-orange interlocking outer shards, sparse long tapering spokes, stronger weight than the light hit. No round fireball.
+4. PRESSURE TRAIL: a crooked rust-red and orange hook-shaped sweeping stroke with a sharp forward tip and several dark red chips trailing behind it. Visibly different from row-1 pen trail.
+
+Row 2:
+5. PROTECTION: a cool cyan/ivory faceted protective arc or half-shell opening toward the right, angular layered thick rim, largely empty center. No shield emblem or metal shield object.
+6. BLOCK CONTACT: a small ivory flash against a short thick cyan angular plate, four cool blue chips deflecting outward. A collision material, not a circular sparkle.
+7. GUARD BREAK: five large broken cyan/blue angular shell shards spreading apart around a clearly empty center, with a couple of thin bright crack accents; distinct from block contact.
+8. RESTORE: three soft-shaped but crisply painted sage/teal and ivory upcurving brush wisps converging toward a quiet empty central space, three small warm flecks. Gentle upward flow, no crosses, hearts or plus signs.
+
+Row 3:
+9. FOCUS GAIN: a vertically compressed cluster of upward-pointing ochre/gold and ivory short strokes, with two small concentrated gold sparks. Compact rising resource material, not a coin or sun emblem.
+10. PARTNER ARRIVAL: a thin incomplete floor-level teal elliptical sweep with three off-white torn-paper strips curling upward from one side; open center. An entrance material, no person or portal scenery.
+11. STATUS ATTACHMENT: a tight dark indigo curved ink hook, two smaller blue-gray accent chips and a small ivory contact dot. Modest asymmetric mark without circles, letters, disease or face.
+12. PHASE PULSE: a broad open cream/ochre jagged crescent shockwave with a few graphite-blue torn-paper shards spreading outward. Heavy half-moon silhouette, not the same as protection or a complete circular ring.
+
+All twelve materials share the same painterly edge language and controlled values. Preserve isolated full silhouettes, every shard and the blank cell margins. Only these twelve original material images on flat magenta. No reference images are attached. Text: none.

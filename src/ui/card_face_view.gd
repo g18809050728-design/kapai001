@@ -17,53 +17,73 @@ func _draw() -> void:
 static func paint(canvas: Control, bounds: Rect2, data: Dictionary, selected: bool = false, disabled: bool = false, shortcut: int = 0) -> void:
 	if data.is_empty():
 		return
-	var scale_factor := bounds.size / Vector2(168,244)
-	canvas.draw_set_transform(bounds.position,0,scale_factor)
+	canvas.draw_set_transform(bounds.position, 0, bounds.size / Vector2(168,244))
 	var category := str(data.get("category", "utility"))
 	var accent := category_color(category)
-	var edge := UiStyle.GOLD.darkened(.15) if selected else accent
-	var shadow := UiStyle.box(Color(0.02,.05,.06,.38))
-	canvas.draw_style_box(shadow,Rect2(2,5,168,244))
-	var frame := UiStyle.box(UiStyle.NIGHT)
-	frame.set_corner_radius_all(6)
-	frame.border_color = edge
-	frame.set_border_width_all(3 if selected else 2)
-	canvas.draw_style_box(frame,Rect2(0,0,168,244))
-	var paper := UiStyle.box(UiStyle.CREAM)
-	paper.set_corner_radius_all(3)
-	canvas.draw_style_box(paper,Rect2(5,130,158,109))
-	canvas.draw_rect(Rect2(5,38,3,196),accent)
-	canvas.draw_line(Vector2(7,35),Vector2(160,35),Color(UiStyle.BRASS,.65),1,true)
-	canvas.draw_line(Vector2(8,240),Vector2(160,240),Color(UiStyle.BRASS,.55),.7,true)
-	var font := canvas.get_theme_font("font")
-	var title := TextParagraph.new()
-	title.add_string(str(data.get("name","")),font,14)
-	title.width = 117
-	title.max_lines_visible = 2
-	title.alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.draw(canvas.get_canvas_item(),Vector2(42,7),UiStyle.CREAM)
-	var art := UiStyle.texture(str(data.get("id","")))
+	var identity := str(data.get("id", ""))
+	var frame_color := Color("327c84")
+	if identity.contains("P01"):
+		frame_color = Color("8b3d36")
+	elif identity.contains("P02"):
+		frame_color = Color("385f96")
+	elif identity.contains("P03"):
+		frame_color = Color("536c49")
+	elif identity.contains("P04"):
+		frame_color = Color("77538a")
+	if category == "burden":
+		frame_color = Color("605a68")
+	var rarity := str(data.get("rarity", "common"))
+	var edge := Color("bbad88")
+	if rarity in ["rare", "advanced"]:
+		edge = Color("edc567")
+	elif rarity == "uncommon":
+		edge = Color("a9d0e5")
+	if selected:
+		edge = Color("ffe79e")
+	var frame := UiStyle.surface(frame_color.darkened(.27), edge, 10)
+	frame.shadow_color = Color(0,0,0,.7)
+	frame.shadow_size = 7
+	frame.shadow_offset = Vector2(0,5)
+	frame.set_border_width_all(3)
+	canvas.draw_style_box(frame, Rect2(0,0,168,244))
+	var inset := UiStyle.surface(frame_color, frame_color.lightened(.36), 7)
+	inset.shadow_size = 0
+	canvas.draw_style_box(inset, Rect2(5,5,158,234))
+	var art := UiStyle.texture(identity)
 	if art != null:
 		var source := Rect2(Vector2.ZERO,art.get_size())
-		var ratio := 154.0/94
-		if source.size.x/source.size.y > ratio:
+		var ratio := 148.0 / 103.0
+		if source.size.x / source.size.y > ratio:
 			source.size.x = source.size.y * ratio
 			source.position.x = (art.get_width()-source.size.x)*.5
 		else:
-			source.size.y = source.size.x/ratio
+			source.size.y = source.size.x / ratio
 			source.position.y = (art.get_height()-source.size.y)*.38
-		canvas.draw_texture_rect_region(art,Rect2(8,38,154,94),source)
+		canvas.draw_texture_rect_region(art,Rect2(10,31,148,103),source)
 	else:
-		canvas.draw_rect(Rect2(8,38,154,94),Color("d9ddce"))
-		EffectGlyph.paint(canvas,"book",Vector2(85,84),25,Color(accent,.6))
-	canvas.draw_line(Vector2(8,132),Vector2(160,132),Color(UiStyle.BRASS,.65),1,true)
-	paint_category_badge(canvas, category, Vector2(21,22), 18)
-	paint_category_cost(canvas, font, category, str(data.get("cost","—")), Vector2(21,22), 18)
+		canvas.draw_rect(Rect2(10,31,148,103),frame_color.darkened(.4))
+		EffectGlyph.paint(canvas,"book",Vector2(84,82),27,edge)
+	canvas.draw_rect(Rect2(10,31,148,103),edge,false,1.4)
+	var paper := UiStyle.surface(Color("e8dcc4"),Color("bba780"),5)
+	paper.shadow_size = 0
+	canvas.draw_style_box(paper,Rect2(9,137,150,97))
+	# Keep the reference hierarchy and the user's original type-shaped cost corner.
+	canvas.draw_style_box(UiStyle.cut_surface(frame_color.darkened(.1),edge),Rect2(18,5,143,30))
+	var font := canvas.get_theme_font("font")
+	var title := TextParagraph.new()
+	title.add_string(str(data.get("name","")),font,14)
+	title.width = 115
+	title.max_lines_visible = 1
+	title.alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.draw(canvas.get_canvas_item(),Vector2(39,10),Color("fff3d8"))
+	var cost := str(data.get("cost","—"))
+	paint_category_badge(canvas, category, Vector2(18,18), 18)
+	paint_category_cost(canvas, font, category, cost, Vector2(18,18), 18)
 	var category_name := str(data.get("category_name", "功能"))
 	var rule_kind := UiStyle.label(str(data.get("kind","")))
-	var semantics := category_name + (" · " + rule_kind if category_name != rule_kind else "") + " · " + str(data.get("target",""))
-	canvas.draw_string(font,Vector2(10,145),semantics,HORIZONTAL_ALIGNMENT_CENTER,148,10,accent)
-	canvas.draw_line(Vector2(12,150),Vector2(156,150),Color(accent,.24),1,true)
+	var semantics := category_name + (" · " + rule_kind if category_name != rule_kind else "")
+	canvas.draw_style_box(UiStyle.cut_surface(frame_color.darkened(.18),edge),Rect2(36,126,96,19))
+	canvas.draw_string(font,Vector2(36,139),semantics,HORIZONTAL_ALIGNMENT_CENTER,96,10,Color("fff4db"))
 	var summary := str(data.get("summary",""))
 	var requirements := str(data.get("requirements",""))
 	if not requirements.is_empty():
@@ -72,25 +92,24 @@ static func paint(canvas: Control, bounds: Rect2, data: Dictionary, selected: bo
 		summary = "支付%d精力\n" % data.vitality_cost + summary
 	var paragraph := TextParagraph.new()
 	paragraph.add_string(summary,font,13)
-	paragraph.width = 140
+	paragraph.width = 134
+	paragraph.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	paragraph.break_flags = TextServer.BREAK_MANDATORY | TextServer.BREAK_WORD_BOUND
-	var overflow := paragraph.get_size().y > 64
+	var overflow := paragraph.get_size().y > 62
 	paragraph.max_lines_visible = 3 if overflow else 4
-	paragraph.draw(canvas.get_canvas_item(),Vector2(14,156),UiStyle.INK)
+	paragraph.draw(canvas.get_canvas_item(),Vector2(17,151),Color("302c2b"))
 	if overflow:
-		canvas.draw_string(font,Vector2(13,216),"… I 查看完整条件与效果",HORIZONTAL_ALIGNMENT_LEFT,142,10,accent)
-	canvas.draw_line(Vector2(12,221),Vector2(156,221),Color(accent,.3),1,true)
+		canvas.draw_string(font,Vector2(16,222),"… I 查看完整条件与效果",HORIZONTAL_ALIGNMENT_CENTER,136,10,accent)
 	var tags := str(data.get("tags",""))
 	if tags.is_empty():
 		tags = str(data.get("timing","即时"))
-	canvas.draw_string(font,Vector2(11,235),tags,HORIZONTAL_ALIGNMENT_LEFT,145,10,UiStyle.MUTED)
+	if not overflow:
+		canvas.draw_string(font,Vector2(15,229),tags,HORIZONTAL_ALIGNMENT_CENTER,138,9,Color("6d5b4c"))
 	if shortcut > 0:
-		canvas.draw_circle(Vector2(149,120),8,UiStyle.NIGHT,true,-1,true)
-		canvas.draw_string(font,Vector2(141,124),str(shortcut),HORIZONTAL_ALIGNMENT_CENTER,16,10,UiStyle.CREAM)
-	if selected:
-		EffectGlyph.line(canvas,Vector2(147,233),6,[[-1,0],[-.3,.6],[1,-.8]],UiStyle.INK)
+		canvas.draw_circle(Vector2(147,118),8,UiStyle.NIGHT,true,-1,true)
+		canvas.draw_string(font,Vector2(139,122),str(shortcut),HORIZONTAL_ALIGNMENT_CENTER,16,10,UiStyle.CREAM)
 	if disabled:
-		canvas.draw_style_box(UiStyle.box(Color(.1,.15,.16,.22)),Rect2(0,0,168,244))
+		canvas.draw_style_box(UiStyle.box(Color(.03,.06,.09,.35)),Rect2(0,0,168,244))
 	canvas.draw_set_transform(Vector2.ZERO)
 
 

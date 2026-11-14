@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://qpys0g0u41bk"
+
+[deps]
+
+files=["res://docs/提交文档_20261114/需求_设计_测试追踪矩阵.标题.translation", "res://docs/提交文档_20261114/需求_设计_测试追踪矩阵.原需求编号.translation", "res://docs/提交文档_20261114/需求_设计_测试追踪矩阵.来源.translation", "res://docs/提交文档_20261114/需求_设计_测试追踪矩阵.概要设计.translation", "res://docs/提交文档_20261114/需求_设计_测试追踪矩阵.详细设计.translation", "res://docs/提交文档_20261114/需求_设计_测试追踪矩阵.验收用例.translation", "res://docs/提交文档_20261114/需求_设计_测试追踪矩阵.需求状态.translation", "res://docs/提交文档_20261114/需求_设计_测试追踪矩阵.本次游戏执行状态.translation", "res://docs/提交文档_20261114/需求_设计_测试追踪矩阵.已知阻塞.translation"]
+
+source_file="res://docs/提交文档_20261114/需求_设计_测试追踪矩阵.csv"
+dest_files=["res://docs/提交文档_20261114/需求_设计_测试追踪矩阵.标题.translation", "res://docs/提交文档_20261114/需求_设计_测试追踪矩阵.原需求编号.translation", "res://docs/提交文档_20261114/需求_设计_测试追踪矩阵.来源.translation", "res://docs/提交文档_20261114/需求_设计_测试追踪矩阵.概要设计.translation", "res://docs/提交文档_20261114/需求_设计_测试追踪矩阵.详细设计.translation", "res://docs/提交文档_20261114/需求_设计_测试追踪矩阵.验收用例.translation", "res://docs/提交文档_20261114/需求_设计_测试追踪矩阵.需求状态.translation", "res://docs/提交文档_20261114/需求_设计_测试追踪矩阵.本次游戏执行状态.translation", "res://docs/提交文档_20261114/需求_设计_测试追踪矩阵.已知阻塞.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

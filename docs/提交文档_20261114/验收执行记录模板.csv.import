@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://25gn3uo2agfd"
+
+[deps]
+
+files=["res://docs/提交文档_20261114/验收执行记录模板.用例名称.translation", "res://docs/提交文档_20261114/验收执行记录模板.需求ID.translation", "res://docs/提交文档_20261114/验收执行记录模板.阶段.translation", "res://docs/提交文档_20261114/验收执行记录模板.状态.translation"]
+
+source_file="res://docs/提交文档_20261114/验收执行记录模板.csv"
+dest_files=["res://docs/提交文档_20261114/验收执行记录模板.用例名称.translation", "res://docs/提交文档_20261114/验收执行记录模板.需求ID.translation", "res://docs/提交文档_20261114/验收执行记录模板.阶段.translation", "res://docs/提交文档_20261114/验收执行记录模板.状态.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

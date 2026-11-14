@@ -3,10 +3,11 @@ extends RefCounted
 var failures: Array[String] = []
 var evidence: Array = []
 var helpers: RefCounted
+var expected_version := 2
 
 
 func run() -> Array[String]:
-	var generator: GDScript = load("res://src/run/annual_map_generator.gd")
+	var generator: GDScript = load("res://src/run/annual_map_generator_v2.gd")
 	_check(generator != null and generator.can_instantiate(), "density generator loads")
 	if generator == null or not generator.can_instantiate():
 		return failures
@@ -23,7 +24,9 @@ func run() -> Array[String]:
 	_test_variation(generator)
 	_test_fork_boundary(generator)
 	_test_rejection(generator)
-	var directory := "res://artifacts/verification/adaptive-maps-20261113/density-generator-worker-v2"
+	var directory := OS.get_environment("CAMPUS_MAP_EVIDENCE_OUT") + "/v2"
+	if OS.get_environment("CAMPUS_MAP_EVIDENCE_OUT").is_empty():
+		directory = "user://map-property-evidence/v2"
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(directory))
 	var output := FileAccess.open(directory + "/property-inputs.json", FileAccess.WRITE)
 	if output != null:
@@ -81,7 +84,7 @@ func _test_properties(generator: GDScript) -> void:
 
 
 func _inspect(map: Dictionary, context: String) -> Dictionary:
-	_check(map.version == 2 and map.layers == [12, 12, 14, 14][map.year - 1], context + ": version and annual length")
+	_check(map.version == expected_version and map.layers == [12, 12, 14, 14][map.year - 1], context + ": version and annual length")
 	_check(helpers._exact_fields(map, helpers.MAP_FIELDS), context + ": exact map schema")
 	_check(helpers._exact_fields(map.profile, helpers.PROFILE_FIELDS), context + ": exact profile schema")
 	_check(map.relic_layers == ([3, 9] if map.year <= 2 else [3, 10]), context + ": two original relic layers")

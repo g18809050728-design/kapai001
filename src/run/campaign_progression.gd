@@ -1,8 +1,8 @@
 class_name CampaignProgression
 extends RefCounted
 
-const MAP_VERSION := 2
-const SUPPORTED_MAP_VERSIONS := [1, 2]
+const MAP_VERSION := 3
+const SUPPORTED_MAP_VERSIONS := [1, 2, 3]
 const COUNTERS := ["research", "competition", "internship", "community"]
 const MAP_FIELDS := {"root_seed": TYPE_STRING, "map_version": TYPE_INT, "years": TYPE_ARRAY, "summaries": TYPE_ARRAY}
 

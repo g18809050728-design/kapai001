@@ -248,6 +248,11 @@ func view() -> Dictionary:
 		battle_view["draw_order"] = state.battle.zones.get("draw", []).duplicate()
 		battle_view["source_count"] = state.battle.source_registry.size()
 		battle_view["relics"] = state.battle.relics.duplicate()
+		battle_view["relic_details"] = {}
+		for id in state.battle.relics:
+			var definition := catalog.get_definition("relic", str(id))
+			if definition.ok:
+				battle_view.relic_details[str(id)] = definition.data.duplicate(true)
 		battle_view["counters"] = state.battle.counters.duplicate(true)
 		battle_view["exam_flags"] = state.battle.exam_flags.duplicate()
 		var chapter_cards: Array[Dictionary] = []

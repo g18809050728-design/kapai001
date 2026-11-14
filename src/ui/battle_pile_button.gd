@@ -41,36 +41,40 @@ func hover_content() -> Dictionary:
 
 
 func _draw() -> void:
+	if bool(get_meta("toolbar_button", false)):
+		UiNavigationButton.paint(self)
+		return
 	var active := (is_hovered() or has_focus()) and not disabled
-	var ink := UiStyle.INK if not disabled else UiStyle.MUTED
-	var accent := UiStyle.GOLD if active else Color("78978e")
 	var font := get_theme_font("font")
-	var caption_size := roundi(14 * UiStyle.text_scale)
-	var caption_height := font.get_height(caption_size) + 2
-	var height := maxf(26, size.y - caption_height - 9)
-	var width := minf(size.x - 16, height * 0.72)
-	var face := Rect2((size.x - width) * 0.5 - 3, 2 if active else 4, width, height)
-	for offset in [Vector2(6, 4), Vector2(3, 2), Vector2.ZERO]:
-		var paper := UiStyle.box(Color("d7d4c5") if offset != Vector2.ZERO else UiStyle.PAPER)
-		paper.set_corner_radius_all(3)
-		paper.border_color = accent
-		paper.set_border_width_all(2 if active else 1)
-		draw_style_box(paper, Rect2(face.position + offset, face.size))
-	var inset := minf(7, width * 0.18)
-	var x := face.position.x + inset
-	var line_width := width - inset * 2
-	if kind == "log":
-		for row in 3:
-			var y := face.position.y + height * (0.3 + row * 0.2)
-			draw_line(Vector2(x, y), Vector2(x + line_width, y), ink, 1.5, true)
+	var small := size.y < 60
+	if small:
+		var accent := UiStyle.GOLD if active else UiStyle.BRASS
+		if active:
+			draw_style_box(UiStyle.surface(Color("314654"),accent,3),Rect2(Vector2.ZERO,size))
+		draw_texture_rect(UiNavIcon.texture(kind),Rect2(Vector2(2,6),Vector2(23,23)),false,Color(1,1,1,.45) if disabled else Color.WHITE)
+		draw_string(font,Vector2(25,29),str(count),HORIZONTAL_ALIGNMENT_CENTER,maxf(18,size.x-25),13,UiStyle.CREAM)
+		return
+	var h := size.y-20 if not small else size.y-8
+	var w := minf(size.x-22,h*.73)
+	var face := Rect2((size.x-w)*.5-3,1,w,h)
+	var accent := UiStyle.GOLD if active else Color("b2bda9")
+	var color := Color("386584") if kind == "draw" else (Color("576d7b") if kind == "discard" else Color("d3c6ab"))
+	if kind == "exhaust":
+		color = Color("76607b")
+	for offset in [Vector2(6,4),Vector2(3,2),Vector2.ZERO]:
+		var paper := UiStyle.surface(color.darkened(.18) if offset != Vector2.ZERO else color,accent,3)
+		paper.shadow_size = 0
+		draw_style_box(paper,Rect2(face.position+offset,face.size))
+	var c := face.get_center()
+	if kind in ["deck","log"]:
+		EffectGlyph.paint(self,"book",c,minf(11,h*.25),Color("394552"))
 	else:
-		draw_line(Vector2(x, face.position.y + height * 0.2), Vector2(x + line_width, face.position.y + height * 0.2), accent, 1, true)
-		draw_line(Vector2(x, face.end.y - height * 0.2), Vector2(x + line_width, face.end.y - height * 0.2), accent, 1, true)
-		var number_size := roundi(clampf(height * 0.35, 14, 27))
-		while number_size > 10 and font.get_string_size(str(count), HORIZONTAL_ALIGNMENT_LEFT, -1, number_size).x > width - 6:
-			number_size -= 1
-		draw_string(font, Vector2(face.position.x, face.get_center().y + number_size * 0.35), str(count), HORIZONTAL_ALIGNMENT_CENTER, width, number_size, ink)
-	var label_color := Color("f4eedf") if on_dark else UiStyle.INK
-	if disabled:
-		label_color.a = 0.5
-	draw_string(font, Vector2(0, size.y - font.get_descent(caption_size)), text, HORIZONTAL_ALIGNMENT_CENTER, size.x, caption_size, label_color)
+		draw_rect(face.grow(-5),Color(accent,.6),false,1)
+		var diamond := PackedVector2Array([c+Vector2(0,-h*.27),c+Vector2(w*.28,0),c+Vector2(0,h*.27),c-Vector2(w*.28,0),c+Vector2(0,-h*.27)])
+		draw_polyline(diamond,Color(accent,.7),1,true)
+	var badge := Vector2(face.end.x+4,face.end.y-2)
+	draw_circle(badge,10 if small else 12,Color("182a3a"),true,-1,true)
+	draw_circle(badge,10 if small else 12,accent,false,1,true)
+	draw_string(font,badge+Vector2(-12,5),str(count),HORIZONTAL_ALIGNMENT_CENTER,24,12 if small else 15,UiStyle.CREAM)
+	if not small:
+		draw_string(font,Vector2(0,size.y-2),text,HORIZONTAL_ALIGNMENT_CENTER,size.x,12,UiStyle.CREAM if on_dark else UiStyle.INK)
