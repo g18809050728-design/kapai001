@@ -1,0 +1,32 @@
+{
+  "asset_id": "T",
+  "requirement_id": "UIR-070",
+  "version": 1,
+  "title": "导师交流",
+  "prompt_file": "output/imagegen/event-polish-20261115/T-v1-prompt.txt",
+  "prompt_sha256": "bf62cc0f56befb5a3a4433db03ece9648af70e28e7cd610e81f543b12bcc6b97",
+  "provider": "https://api-slb.jiji.cc/v1",
+  "model": "gpt-image-2.5-sunburst",
+  "requested_size": "1024x1024",
+  "actual_size": [
+    1024,
+    1024
+  ],
+  "quality": "high",
+  "original": "output/imagegen/event-polish-20261115/originals/T-v1.png",
+  "original_sha256": "22d149388f9a75df52d1c4adb394d9fe659b25cca535c4c586da15adccf36f8f",
+  "selected": true,
+  "review_status": "AI visual review, final user art judgment remains",
+  "derivatives": [
+    {
+      "path": "assets/art/events/T/illustration.png",
+      "sha256": "cc68e9ab5502c762912d873adde02c2e7b2529e916d519ff843199e495c26281",
+      "processing": "Original RGB untouched; add 66px smoothstep alpha perimeter, no content crop/stretch."
+    },
+    {
+      "path": "assets/art/events/T/background.png",
+      "sha256": "7efae3987203f3a22f235b4eea9334f9b8cf41b1fcbeb7ce4dc8ed15d59d3a97",
+      "processing": "768x768 Lanczos, Gaussian blur radius16; UI uses aspect-preserving cover and dark overlay."
+    }
+  ]
+}

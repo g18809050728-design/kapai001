@@ -1,0 +1,270 @@
+{
+  "api_before_successful": 6,
+  "authorized_total": 200,
+  "assets": [
+    {
+      "asset_id": "P01-heads-v1",
+      "requirement_id": [
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "prompt_file": "output/imagegen/actor-rig-drawings-20261115/P01-heads-v1.prompt.txt",
+      "prompt_sha256": "81e49b9c69343bcc93c8deb97307ca3aaabe87c6f55176431a3cf1382a505645",
+      "images": [
+        "output/imagegen/actor-rig-pilot-20261114/hero-master-v1.png",
+        "assets/art/actor-rig-pilot/P01/head.png"
+      ],
+      "output": "output/imagegen/actor-rig-drawings-20261115/P01-heads-v1.png",
+      "mode": "edit",
+      "size": "1536x1024",
+      "quality": "medium",
+      "status": "generated_needs_revision",
+      "visual_note": "Retained but superseded: hair reaches image edges and yaw difference weak.",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "output_sha256": "4fed336e8d423e0c8131931adb4827a034c1c059f9be3a0d29bc0521106994ec",
+      "actual_size": [
+        1536,
+        1024
+      ],
+      "api_exit_code": 0,
+      "inputs": [
+        {
+          "file": "output/imagegen/actor-rig-pilot-20261114/hero-master-v1.png",
+          "sha256": "139121340dae465ec3db8dfed11670eaf72b4481684af728b07c00a4b4839694"
+        },
+        {
+          "file": "assets/art/actor-rig-pilot/P01/head.png",
+          "sha256": "b86739d090478f1f0c9434439b3eeab663ec8ff1e55bf450395863cd73c1bf16"
+        }
+      ],
+      "cost": "not returned by API; no amount inferred"
+    },
+    {
+      "asset_id": "P01-strike-arm-v1",
+      "requirement_id": [
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "prompt_file": "output/imagegen/actor-rig-drawings-20261115/P01-strike-arm-v1.prompt.txt",
+      "prompt_sha256": "8db90a12fe60291f1c61715dc8da7e06d1e1b8ea50d81091b05685b82838f7fa",
+      "images": [
+        "output/imagegen/actor-rig-pilot-20261114/hero-master-v1.png",
+        "assets/art/actor-rig-pilot/P01/near_forearm.png"
+      ],
+      "output": "output/imagegen/actor-rig-drawings-20261115/P01-strike-arm-v1.png",
+      "mode": "edit",
+      "size": "1536x1024",
+      "quality": "medium",
+      "status": "selected_for_isolated_rig_pending_user_visual_review",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "output_sha256": "54c696e5fbe39e39557898e0e22a5e573d4b6f490e434bcf0427231c8c7790f2",
+      "actual_size": [
+        1536,
+        1024
+      ],
+      "api_exit_code": 0,
+      "inputs": [
+        {
+          "file": "output/imagegen/actor-rig-pilot-20261114/hero-master-v1.png",
+          "sha256": "139121340dae465ec3db8dfed11670eaf72b4481684af728b07c00a4b4839694"
+        },
+        {
+          "file": "assets/art/actor-rig-pilot/P01/near_forearm.png",
+          "sha256": "7e9f6e636036f2dd4e277fd101959e16669e4ddbc279d0a28be1d59b28e63576"
+        }
+      ],
+      "cost": "not returned by API; no amount inferred",
+      "visual_note": "Complete cuff and 5-finger pen grip; two forearms require different registration scales; horizontal primary pen silhouette."
+    },
+    {
+      "asset_id": "P01-turn-torso-v1",
+      "requirement_id": [
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "prompt_file": "output/imagegen/actor-rig-drawings-20261115/P01-turn-torso-v1.prompt.txt",
+      "prompt_sha256": "d8c4fadbcf92f988e87e0113e4c3ba171865b7aedfefce6e03e83228cfa40d2f",
+      "images": [
+        "output/imagegen/actor-rig-pilot-20261114/hero-master-v1.png",
+        "assets/art/actor-rig-pilot/P01/torso.png"
+      ],
+      "output": "output/imagegen/actor-rig-drawings-20261115/P01-turn-torso-v1.png",
+      "mode": "edit",
+      "size": "1536x1024",
+      "quality": "medium",
+      "status": "selected_for_isolated_rig_pending_user_visual_review",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "output_sha256": "364090ea331c681c8e5c84a67f1903900a602c7e5f14a1b92825c048f72818f6",
+      "actual_size": [
+        1536,
+        1024
+      ],
+      "api_exit_code": 0,
+      "inputs": [
+        {
+          "file": "output/imagegen/actor-rig-pilot-20261114/hero-master-v1.png",
+          "sha256": "139121340dae465ec3db8dfed11670eaf72b4481684af728b07c00a4b4839694"
+        },
+        {
+          "file": "assets/art/actor-rig-pilot/P01/torso.png",
+          "sha256": "3aae6546a02c2fa779f5e54a1ff7b8c209cce96f612a6edc22710108a73d7208"
+        }
+      ],
+      "cost": "not returned by API; no amount inferred",
+      "visual_note": "Same jacket/notebook/shirt, moderate turn; separate sleeves preserved."
+    },
+    {
+      "asset_id": "N01-face-poses-v1",
+      "requirement_id": [
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "prompt_file": "output/imagegen/actor-rig-drawings-20261115/N01-face-poses-v1.prompt.txt",
+      "prompt_sha256": "c6c59d89e36a1f5affb11ce684548178887c37ef54bef6b5262dcaa9a22f514a",
+      "images": [
+        "output/imagegen/actor-rig-pilot-20261114/enemy-master-v1.png",
+        "assets/art/actor-rig-pilot/N01/body.png"
+      ],
+      "output": "output/imagegen/actor-rig-drawings-20261115/N01-face-poses-v1.png",
+      "mode": "edit",
+      "size": "1536x1024",
+      "quality": "medium",
+      "status": "selected_for_isolated_rig_pending_user_visual_review",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "output_sha256": "d111122662bd2e0431c58c5700d18aae39199f62c9cf2f17efbc665925f89196",
+      "actual_size": [
+        1536,
+        1024
+      ],
+      "api_exit_code": 0,
+      "inputs": [
+        {
+          "file": "output/imagegen/actor-rig-pilot-20261114/enemy-master-v1.png",
+          "sha256": "8fa973d3d099c426f258aaa6d5b8c8cdb66cd63bc0637236d1d50a789e4c1989"
+        },
+        {
+          "file": "assets/art/actor-rig-pilot/N01/body.png",
+          "sha256": "f765c774268b1402d4cc46a202f31f233ad468716fca5ada6742e7d15a78d856"
+        }
+      ],
+      "cost": "not returned by API; no amount inferred",
+      "visual_note": "Complete central page stacks; hit has clear pinched eyes and diagonal fold; windup and strike remain subtle."
+    },
+    {
+      "asset_id": "N01-fan-poses-v1",
+      "requirement_id": [
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "prompt_file": "output/imagegen/actor-rig-drawings-20261115/N01-fan-poses-v1.prompt.txt",
+      "prompt_sha256": "57a996487073435cd30c6bb7bef0df42a03b011c3fb9cc649d25ec25b684e816",
+      "images": [
+        "output/imagegen/actor-rig-pilot-20261114/enemy-master-v1.png",
+        "assets/art/actor-rig-pilot/N01/fan.png"
+      ],
+      "output": "output/imagegen/actor-rig-drawings-20261115/N01-fan-poses-v1.png",
+      "mode": "edit",
+      "size": "1536x1024",
+      "quality": "medium",
+      "status": "selected_for_isolated_rig_pending_user_visual_review",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "output_sha256": "15e4ea66027e6c2216fdde703838ecdd1b8077a954b533a5035a303c455f7a3f",
+      "actual_size": [
+        1536,
+        1024
+      ],
+      "api_exit_code": 0,
+      "inputs": [
+        {
+          "file": "output/imagegen/actor-rig-pilot-20261114/enemy-master-v1.png",
+          "sha256": "8fa973d3d099c426f258aaa6d5b8c8cdb66cd63bc0637236d1d50a789e4c1989"
+        },
+        {
+          "file": "assets/art/actor-rig-pilot/N01/fan.png",
+          "sha256": "37de7b45a58592b1b14b89d0ff5df76a2e2db90fddf46e013cb863ae7faa4e84"
+        }
+      ],
+      "cost": "not returned by API; no amount inferred",
+      "visual_note": "Complete accordion fans, narrow and broad; shared root registered locally."
+    },
+    {
+      "asset_id": "P01-heads-v2",
+      "requirement_id": [
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "prompt_file": "output/imagegen/actor-rig-drawings-20261115/P01-heads-v2.prompt.txt",
+      "prompt_sha256": "99ff565f260563cdbbf28467fe7bfe4a3ab8a8d61cb9269c5a8de322c5036b65",
+      "images": [
+        "output/imagegen/actor-rig-drawings-20261115/P01-heads-v1.png",
+        "assets/art/actor-rig-pilot/P01/head.png"
+      ],
+      "output": "output/imagegen/actor-rig-drawings-20261115/P01-heads-v2.png",
+      "mode": "edit",
+      "size": "1536x1024",
+      "quality": "medium",
+      "status": "selected_for_isolated_rig_pending_user_visual_review",
+      "revision_reason": "v1 hair touches image/cell edges; yaw separation insufficient",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "output_sha256": "73692d88b51170ec97b2df7869be5a39b4aa1b0b8dcb3dd1e39dde43be7f8c7a",
+      "actual_size": [
+        1536,
+        1024
+      ],
+      "api_exit_code": 0,
+      "inputs": [
+        {
+          "file": "output/imagegen/actor-rig-drawings-20261115/P01-heads-v1.png",
+          "sha256": "4fed336e8d423e0c8131931adb4827a034c1c059f9be3a0d29bc0521106994ec"
+        },
+        {
+          "file": "assets/art/actor-rig-pilot/P01/head.png",
+          "sha256": "b86739d090478f1f0c9434439b3eeab663ec8ff1e55bf450395863cd73c1bf16"
+        }
+      ],
+      "cost": "not returned by API; no amount inferred",
+      "visual_note": "Complete components at x=6..503,523..1014,1032..1534; requested 48px gutters not obeyed; connected-component extraction keeps entire visible contours. Turn/profile/hit read distinctly."
+    }
+  ],
+  "successful_outputs_this_batch": 6,
+  "cumulative_successful_outputs": 12,
+  "remaining_authorized_outputs": 188,
+  "billing": "unknown",
+  "api_mode": "edit; each call uploads two actual images; 6 CLI invocations, upstream/SDK retries and billing not audited"
+}

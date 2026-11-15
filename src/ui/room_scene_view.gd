@@ -3,6 +3,7 @@ extends Control
 
 var room := "menu"
 var title := ""
+var story_background: Texture2D
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -10,7 +11,7 @@ func _ready() -> void:
 
 func _draw() -> void:
 	var key := str({"menu":"BG_home","setup":"BG_campus","shop":"BG_shop","event":"BG_dorm","rest":"BG_dorm","campaign":"BG_study","reward":"BG_success","summary":"BG_success","map":"BG_campus","settings":"BG_study"}.get(room,"BG_campus"))
-	var art := UiStyle.texture(key)
+	var art := story_background if story_background != null else UiStyle.texture(key)
 	if art != null:
 		var source := Rect2(Vector2.ZERO,art.get_size())
 		var ratio := size.x/maxf(1,size.y)
@@ -21,6 +22,8 @@ func _draw() -> void:
 			source.size.y = source.size.x/ratio
 			source.position.y = (art.get_height()-source.size.y)*.5
 		draw_texture_rect_region(art,Rect2(Vector2.ZERO,size),source)
+	if story_background != null:
+		draw_rect(Rect2(Vector2.ZERO, size), Color(UiStyle.NIGHT, .62))
 	draw_rect(Rect2(Vector2.ZERO,size),Color(UiStyle.NIGHT,.18 if room in ["setup","shop"] else .35))
 	draw_texture_rect(UiStyle.gradient(Color(UiStyle.NIGHT,0),Color(UiStyle.NIGHT,.82)),Rect2(0,size.y*.3,size.x,size.y*.7),false)
 	if room == "menu":

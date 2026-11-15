@@ -1,0 +1,23 @@
+{
+  "images": [
+    "https://asset.booth.pm/assets/booth_logo-cd38e1da31e93676b081bd8f0aca2805f758f514c8e95dc3f1a8aac5e58dffec.svg"
+  ],
+  "links": [
+    {
+      "text": "利用規約",
+      "href": "https://policies.pixiv.net/#booth"
+    },
+    {
+      "text": "プライバシーポリシー",
+      "href": "https://booth.pm/privacy"
+    },
+    {
+      "text": "pixivアカウントが未連携の場合は…",
+      "href": "https://booth.pm/users/sign_in_by_password"
+    },
+    {
+      "text": "",
+      "href": "https://booth.pm/"
+    }
+  ]
+}

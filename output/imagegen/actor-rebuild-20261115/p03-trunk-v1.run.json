@@ -1,0 +1,49 @@
+﻿{
+    "output":  {
+                   "sha256":  "528b4d8a3947c3dab66a570e2e7b4decf0264c9a6ea9fb314f2294b33e0d503d",
+                   "path":  "output/imagegen/actor-rebuild-20261115/p03-trunk-v1.png"
+               },
+    "cost":  "unknown",
+    "inputs":  [
+                   {
+                       "sha256":  "9bd07b62ede14c544507b0b9b445ec16d070b27b01bdb04c7590ab445c49970d",
+                       "path":  "output/imagegen/actor-rebuild-20261115/p03-master-v3.png"
+                   },
+                   {
+                       "sha256":  "8750248c63cb265497d2ba68e9a7fffeb78f88a4dff81e1e22a5afdf258ad770",
+                       "path":  "output/imagegen/actor-rebuild-20261115/p03-trunk-mask-v1.png"
+                   },
+                   {
+                       "sha256":  "394dd064e3e59759798b19e6e98e1be1befd2ed40721a750185164094b29b47e",
+                       "path":  "output/imagegen/actor-rebuild-20261115/prompts/p03-trunk-v1.txt"
+                   }
+               ],
+    "started_utc":  "2026-11-15T05:04:11.3326244Z",
+    "model":  "gpt-image-2.5-sunburst",
+    "mode":  "edit",
+    "cli_args":  [
+                     "edit",
+                     "--model",
+                     "gpt-image-2.5-sunburst",
+                     "--image",
+                     "output/imagegen/actor-rebuild-20261115/p03-master-v3.png",
+                     "--mask",
+                     "output/imagegen/actor-rebuild-20261115/p03-trunk-mask-v1.png",
+                     "--prompt-file",
+                     "output/imagegen/actor-rebuild-20261115/prompts/p03-trunk-v1.txt",
+                     "--size",
+                     "1024x1536",
+                     "--quality",
+                     "medium",
+                     "--n",
+                     "1",
+                     "--out",
+                     "output/imagegen/actor-rebuild-20261115/p03-trunk-v1.png"
+                 ],
+    "quality":  "medium",
+    "size":  "1024x1536",
+    "n":  1,
+    "completed_utc":  "2026-11-15T05:04:46.8241958Z",
+    "exit_code":  0,
+    "base_url":  "https://api-slb.jiji.cc/v1"
+}

@@ -1,0 +1,22 @@
+﻿{
+    "output":  "output/imagegen/card-style-20261115/P01-03.png",
+    "cost":  "not returned",
+    "reference_image":  "output/imagegen/card-style-20261115/references/P01.png",
+    "prompt_file":  "output/imagegen/card-style-20261115/prompts/P01-03.txt",
+    "output_sha256":  null,
+    "reference_sha256":  "3cee8da9e8adf0f26c11ee7ec2876e63c11df148b490c5366d6f9a47bcfffbdf",
+    "exit_code":  0,
+    "seconds":  0.2007724,
+    "started_utc":  "2026-11-15T12:40:37.2146925Z",
+    "model":  "gpt-image-2.5-sunburst",
+    "quality":  "medium",
+    "batch_id":  "P01-03",
+    "prompt_sha256":  "c2b4fd369d007c7659c60a3c748f5a792c5ecf171005655a6d4b87a0aa8fac1a",
+    "completed_utc":  "2026-11-15T12:40:37.4160980Z",
+    "size":  "1024x1536",
+    "dry_run":  true,
+    "retry_note":  "Bundled CLI and SDK default retry/timeout behavior; no claim of a single charge.",
+    "provider":  "https://api-slb.jiji.cc/v1",
+    "n":  1,
+    "mode":  "bundled CLI edit"
+}

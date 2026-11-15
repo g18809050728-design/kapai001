@@ -1,0 +1,77 @@
+{
+	"characters": [
+		{
+			"character": "P01",
+			"neutral": "res://assets/art/characters/P01/neutral.png",
+			"neutral_error": 0,
+			"portrait": "res://assets/art/characters/P01/portrait.png",
+			"portrait_crop": [
+				355,
+				0,
+				349,
+				349
+			],
+			"portrait_error": 0,
+			"rig": "res://assets/art/actor-lin-polish/P01/rig.json",
+			"version": 12
+		},
+		{
+			"character": "P02",
+			"neutral": "res://assets/art/characters/P02/neutral.png",
+			"neutral_error": 0.0,
+			"portrait": "res://assets/art/characters/P02/portrait.png",
+			"portrait_crop": [
+				317.0,
+				152.0,
+				357.0,
+				357.0
+			],
+			"portrait_error": 0.0,
+			"rig": "res://assets/art/actor-proportions/P02/rig.json",
+			"version": 8.0
+		},
+		{
+			"character": "P03",
+			"neutral": "res://assets/art/characters/P03/neutral.png",
+			"neutral_error": 0.0,
+			"portrait": "res://assets/art/characters/P03/portrait.png",
+			"portrait_crop": [
+				355.0,
+				134.0,
+				316.0,
+				316.0
+			],
+			"portrait_error": 0.0,
+			"rig": "res://assets/art/actor-rebuild/P03/rig.json",
+			"version": 10.0
+		},
+		{
+			"character": "P04",
+			"neutral": "res://assets/art/characters/P04/neutral.png",
+			"neutral_error": 0.0,
+			"portrait": "res://assets/art/characters/P04/portrait.png",
+			"portrait_crop": [
+				323.0,
+				141.0,
+				392.0,
+				392.0
+			],
+			"portrait_error": 0.0,
+			"rig": "res://assets/art/actor-motion/P04/rig.json",
+			"version": 11.0
+		}
+	],
+	"engine": {
+		"build": "official",
+		"hash": "ed1daf0bf001b61586d9930840f2f1394092c079",
+		"hex": 263938.0,
+		"major": 4.0,
+		"minor": 7.0,
+		"patch": 2.0,
+		"status": "stable",
+		"string": "4.7.2-stable (official)",
+		"timestamp": 0.0
+	},
+	"p01_renderer": "res://tools/render_lin_character_art.gd",
+	"source": "selected neutral native rigs, rendered in Godot; P01 V12 refined from same-source AI artwork"
+}

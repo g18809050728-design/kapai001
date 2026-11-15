@@ -20,6 +20,7 @@ var _map_preview_words: VBoxContainer
 var _map_forecast_words: VBoxContainer
 var _map_selection_hint: Label
 var _room_figure: BattleActorView
+var character_motion_enabled := true
 var _room_expanded := false
 var _room_illustration: CampusRoomIllustration
 var _full_map: UiRouteOverlay
@@ -70,6 +71,13 @@ func render(data: Dictionary) -> void:
 	super.render(data)
 	var scene := RoomSceneView.new()
 	scene.room = screen
+	if screen == "event":
+		scene.story_background = CampusRoomIllustration.background_texture("E", str(_dict(view.get("event")).get("definition_id", "")))
+	elif screen == "campaign":
+		var offer := _dict(view.get("campaign_offer"))
+		var subtype := "FAMILIAR" if offer.get("kind") == "familiar" else str(_dict(offer.get("node_meta")).get("subtype", ""))
+		if offer.get("kind") in ["service", "familiar"]:
+			scene.story_background = CampusRoomIllustration.background_texture(subtype)
 	scene.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	scene.z_index = -1
 	add_child(scene)
@@ -124,7 +132,7 @@ func add_text(parent: Node, value: String, font_size: int = 18, color: Color = U
 func add_button(parent: Node, uid: String, caption: String, draft: Variant = {}, local_callback: Callable = Callable()) -> Button:
 	var button := super.add_button(parent,uid,caption,draft,local_callback)
 	var dark := _in_region(parent,header) or _in_region(parent,footer) or not _on_paper(parent)
-	var primary := uid.ends_with(":confirm") or uid.ends_with(":claim") or uid in ["map:enter","setup:start","setup:restart_confirm","menu:continue","menu:new"]
+	var primary := uid.ends_with(":confirm") or uid.ends_with(":claim") or uid in ["map:enter","setup:start","setup:restart_confirm","menu:continue","menu:new","settings:apply"]
 	var quiet := uid.ends_with(":back") or uid.ends_with(":menu") or uid.ends_with(":save") or uid in ["flow:help","menu:test","menu:settings","setup:advanced","setup:deck","selection:cancel","map:abandon"]
 	UiStyle.button_skin(button,"primary" if primary else ("quiet" if quiet else "secondary"),dark)
 	if quiet:
@@ -135,7 +143,7 @@ func add_button(parent: Node, uid: String, caption: String, draft: Variant = {},
 		if _in_region(parent,footer):
 			button.size_flags_horizontal = Control.SIZE_SHRINK_END
 	if _in_region(parent,header):
-		button.custom_minimum_size = Vector2(58,34)
+		button.custom_minimum_size = Vector2(58,44)
 	if _in_region(parent,footer):
 		button.size_flags_horizontal = Control.SIZE_SHRINK_END
 		var text_width := button.get_theme_font("font").get_string_size(caption,HORIZONTAL_ALIGNMENT_LEFT,-1,button.get_theme_font_size("font_size")).x
@@ -266,11 +274,12 @@ func _scene_character(id: String) -> void:
 	_room_figure.configure(id,"player")
 	_room_figure.z_index = 0
 	add_child(_room_figure)
+	_room_figure.set_motion(character_motion_enabled)
 
 
-func _show_room(subtype: String, title: String) -> void:
+func _show_room(subtype: String, title: String, event_id: String = "") -> void:
 	_room_illustration = CampusRoomIllustration.new()
-	_room_illustration.configure(subtype, title)
+	_room_illustration.configure(subtype, title, event_id)
 	add_child(_room_illustration)
 
 
@@ -302,6 +311,7 @@ func _event_needs_confirmation(option: Dictionary) -> bool:
 
 func _render_menu() -> void:
 	reset_page("DDL 战争", "把校园日常，打成自己的牌。")
+	_scroll.follow_focus = true
 	var title_label := header.get_child(0) as Label
 	title_label.add_theme_font_size_override("font_size",roundi(64*UiStyle.text_scale))
 	add_text(body,"四学年 · 校园卡牌冒险",16,UiStyle.BRASS)
@@ -314,9 +324,10 @@ func _render_menu() -> void:
 			resume.tooltip_text = "还没有可以继续的冒险。"
 		add_text(body,resume.tooltip_text,14,UiStyle.MUTED)
 	add_button(body,"menu:new","新的四年",_ui("new_run"))
+	add_button(body,"menu:compendium","图鉴",_ui("compendium"))
 	add_button(body,"menu:test","测试房间",_ui("test_room"))
 	add_button(body,"menu:settings","设置与存档",_ui("settings"))
-	for uid in ["menu:continue","menu:new","menu:test","menu:settings"]:
+	for uid in ["menu:continue","menu:new","menu:compendium","menu:test","menu:settings"]:
 		var option: Button = _buttons[uid]
 		option.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		option.custom_minimum_size = Vector2(220,52)
@@ -391,7 +402,7 @@ func _local_button(parent: Node, uid: String, title: String, key: String, value:
 	var selected := not value.is_empty() and str(_choices.get(key, "")) == value
 	var button := add_button(parent, uid, ("✓ " if selected and not title.begins_with("✓") else "") + title, {}, func(): _choose(key, value))
 	if selected:
-		UiStyle.button_skin(button,"primary",true)
+		UiStyle.button_skin(button,"selected",true)
 	return button
 
 
@@ -479,8 +490,12 @@ func _render_campaign() -> void:
 	_scope(str(offer.get("offer_id", "")))
 	var kind := str(offer.get("kind", ""))
 	var title := str(_dict(offer.get("node_meta")).get("title","校园服务")) if kind == "service" else str({"grand": "学年大奖励", "relic": "学年纪念饰品", "direction": "选择学习方向", "destination": "选择毕业去向", "familiar": "校园熟人"}.get(kind, "学年选择"))
-	reset_page(title, "候选已固定 · 查看和返回不会消耗奖励")
+	var story_room := kind in ["service", "familiar"]
+	reset_page("" if story_room else title, "" if story_room else "候选已固定 · 查看和返回不会消耗奖励")
 	_run_bar(header)
+	if story_room:
+		var heading := add_text(body, title, 28, UiStyle.BRASS)
+		heading.name = "EventTitle"
 	var category := str(_choices.get("campaign:category", ""))
 	if kind == "grand":
 		if category.is_empty():
@@ -515,7 +530,8 @@ func _render_campaign() -> void:
 		_room_expanded = not str(_choices.get("campaign:deck_mode", "")).is_empty()
 		_show_room(str(meta.get("subtype", "E")),str(meta.get("title", "校园服务")))
 		if not _room_expanded:
-			add_text(body,CampusRoomIllustration.narrative(str(meta.get("subtype", "E"))),17)
+			var story := add_text(body,CampusRoomIllustration.narrative(str(meta.get("subtype", "E"))),17)
+			story.name = "EventNarrative"
 		if meta.get("subtype", "") in ["L", "LAB", "T"]:
 			if not _room_expanded:
 				add_text(body,"服务费用：%d 金钱%s" % [int(offer.get("service_cost",0))," + 5 精力（至少保留1）" if meta.get("subtype") == "LAB" else ""],16,UiStyle.BRASS)
@@ -525,7 +541,8 @@ func _render_campaign() -> void:
 				var quote := _preview_quote(offer, option)
 				if quote.get("ok", false):
 					var label := str({"heal":"和伙伴休息片刻","money":"参与活动 / 实践","progress":"整理毕设进度"}[option])
-					add_button(body,"campaign:"+option,label+"\n"+_quote(offer,option),_campaign_action(offer,option,""))
+					var action_button := add_button(body,"campaign:"+option,label+"\n"+_quote(offer,option),_campaign_action(offer,option,""))
+					UiStyle.story_choice(action_button)
 		if int(view.get("term", 1)) == 2 and int(meta.get("layer", 0)) >= 7 and not bool(view.get("campaign", {}).get("direction_changed", false)):
 			add_text(body, "更换一次方向 · 支付30金钱", 18)
 			for id in CampaignService.DIRECTIONS:
@@ -567,9 +584,11 @@ func _render_campaign() -> void:
 				pick.custom_minimum_size.y = 30
 				pick.add_theme_font_size_override("font_size", 14)
 	elif kind == "familiar":
-		_show_room("T","校园熟人")
-		add_text(body,CampusRoomIllustration.narrative("T"),17)
-		add_button(body,"campaign:familiar","咨询校园熟人 · 获得10金钱",_campaign_action(offer,"money",""))
+		_show_room("FAMILIAR","校园熟人")
+		var story := add_text(body,CampusRoomIllustration.narrative("FAMILIAR"),17)
+		story.name = "EventNarrative"
+		var action_button := add_button(body,"campaign:familiar","和熟人聊一聊\n"+_quote(offer,"money"),_campaign_action(offer,"money",""))
+		UiStyle.story_choice(action_button)
 	if kind in ["service","familiar"] and not _room_expanded and str(_choices.get("campaign:option", "")).is_empty():
 		var exit_row := _bottom("行动收益已列明 · 点击行动完成本次活动")
 		if kind == "service" and _dict(offer.get("node_meta")).get("subtype") in ["L","LAB","T"]:
@@ -659,9 +678,15 @@ func _relic_name(instance_id: String) -> String:
 func _campaign_deck(offer: Dictionary, upgrade_only: bool) -> void:
 	var option := str(_choices.get("campaign:deck_mode", ""))
 	var row := add_row(body)
-	_local_button(row, "campaign:mode:upgrade", "升级一张牌", "campaign:deck_mode", "upgrade")
+	var upgrade := _local_button(row, "campaign:mode:upgrade", "升级一张牌", "campaign:deck_mode", "upgrade")
+	if offer.get("kind") == "service":
+		upgrade.text += "\n查看当前牌组，比较升级效果"
+		UiStyle.story_choice(upgrade)
 	if not upgrade_only:
-		_local_button(row, "campaign:mode:remove", "移除一张牌", "campaign:deck_mode", "remove")
+		var remove := _local_button(row, "campaign:mode:remove", "移除一张牌", "campaign:deck_mode", "remove")
+		if offer.get("kind") == "service":
+			remove.text += "\n选择一张实例，整理牌组"
+			UiStyle.story_choice(remove)
 	if option.is_empty():
 		return
 	_local_button(row, "campaign:mode:back", "返回行动", "campaign:deck_mode", "")
@@ -1065,19 +1090,26 @@ func _render_shop() -> void:
 
 func _render_event() -> void:
 	var event := _dict(view.get("event"))
+	var event_id := str(event.get("definition_id", ""))
 	_scope(str(event.get("event_instance_id", "")))
 	reset_page("")
 	_run_bar(header)
 	var selected := str(_choices.get("event:option", ""))
 	_room_expanded = not selected.is_empty()
 	if not _room_expanded:
-		_show_room("E",UiStyle.label(str(event.get("definition_id",""))))
+		_show_room("E",UiStyle.label(event_id),event_id)
 	if selected.is_empty():
-		add_text(body,UiStyle.label(str(event.get("definition_id",""))),28,UiStyle.BRASS)
-		add_text(body,CampusRoomIllustration.narrative("E"),16)
+		var title := add_text(body,UiStyle.label(event_id),28,UiStyle.BRASS)
+		title.name = "EventTitle"
+		var story := add_text(body,CampusRoomIllustration.narrative("E",event_id),16)
+		story.name = "EventNarrative"
 		for option in _array(event.get("options")):
-			var caption := _event_option_name(str(option.option_id),str(option.get("label_key","")))
-			caption += "\n"+"消耗："+_cost_text(_dict(option.get("cost")))+" · "+UiStyle.describe_effects(_array(option.get("effects")))
+			var caption := CampusRoomIllustration.option_title(event_id,str(option.option_id),_event_option_name(str(option.option_id),str(option.get("label_key",""))))
+			var effects_text := UiStyle.describe_effects(_array(option.get("effects")))
+			caption += "\n消耗："+_cost_text(_dict(option.get("cost")))+(" · "+effects_text if not effects_text.is_empty() else " · 继续当前路线")
+			var blocking := _event_blocking_text(option)
+			if not blocking.is_empty():
+				caption += "\n不可用："+blocking
 			var uid := "event:option:leave" if option.option_id == "leave" else "event:"+str(option.option_id)
 			var pick: Button
 			if _event_needs_confirmation(option):
@@ -1088,14 +1120,15 @@ func _render_event() -> void:
 			pick.custom_minimum_size.y = 74*UiStyle.text_scale
 			pick.disabled = not option.get("enabled",true)
 			if pick.disabled:
-				pick.tooltip_text = "资源不足、没有合法目标或此事件已完成。"
+				pick.tooltip_text = blocking
+			UiStyle.story_choice(pick)
 		_bottom("点击行动执行 · 需要选牌或支付的行动先查看详情")
 		return
 
 	for option in _array(event.get("options")):
 		if str(option.option_id) != selected:
 			continue
-		add_text(header, _event_option_name(selected, str(option.get("label_key", ""))), 18)
+		add_text(header, CampusRoomIllustration.option_title(event_id,selected,_event_option_name(selected, str(option.get("label_key", "")))), 18)
 		var effects := _array(option.get("effects"))
 		for index in effects.size():
 			var effect: Dictionary = effects[index]
@@ -1121,6 +1154,16 @@ func _render_event() -> void:
 		var row := _bottom("消耗：" + _cost_text(_dict(option.get("cost"))) + " · " + UiStyle.describe_effects(effects))
 		add_button(row, "event:confirm", "确认此行动", _event_action(event, option))
 		_cancel(row, "event:option", "返回所有选项")
+
+
+func _event_blocking_text(option: Dictionary) -> String:
+	var reasons: Array[String] = []
+	for item in _array(option.get("blocking")):
+		var code := str(item.get("code", ""))
+		var reason := str({"INSUFFICIENT_RESOURCE":"资源不足，行动后需至少保留1精力", "INVALID_TARGET":"当前牌组没有符合条件的目标", "ALREADY_RESOLVED":"本次事件已经完成"}.get(code,"当前条件不满足"))
+		if not reasons.has(reason):
+			reasons.append(reason)
+	return "；".join(reasons)
 
 
 func _render_rest() -> void:
@@ -1201,7 +1244,7 @@ func _render_setup() -> void:
 	for character in characters:
 		var id := str(character.id)
 		var button := add_button(tabs, "setup:character:" + id, ("✓ " if _character == id else "") + UiStyle.label(id).split("·")[0], {}, func(): _select_setup("character", id))
-		button.icon = UiStyle.texture(id)
+		button.icon = UiStyle.character_portrait(id)
 		button.expand_icon = true
 		button.add_theme_constant_override("icon_max_width",34)
 		button.autowrap_mode = TextServer.AUTOWRAP_OFF
@@ -1309,11 +1352,7 @@ func _mark_setting(uid: String, selected: bool) -> void:
 	button.set_meta("setting_selected", selected)
 	if selected:
 		button.text = "✓ " + button.text + " · 已选"
-		var style := UiStyle.box(Color("3a5263"))
-		style.border_color = UiStyle.GOLD
-		style.set_border_width_all(2)
-		for state in ["normal", "hover", "pressed", "hover_pressed"]:
-			button.add_theme_stylebox_override(state, style)
+	UiStyle.button_skin(button,"selected" if selected else "secondary",true)
 
 
 func _presentation_summary(value: Dictionary) -> String:

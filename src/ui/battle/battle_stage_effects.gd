@@ -7,6 +7,7 @@ var _previous: Dictionary = {}
 var _lanes: Dictionary = {}
 var _event_type := ""
 var _event_index := -1
+var _refined_transients: Dictionary = {}
 
 func _init(screen: BattleScreen) -> void:
 	page = screen
@@ -44,7 +45,7 @@ func target_anchor(id: String) -> Vector2:
 	return _previous.get(id, {}).get("impact", Vector2.ZERO)
 
 func cue(id: String, kind: String) -> void:
-	var actor: BattleActorView = page._actors.get(id)
+	var actor := _visible_actor(id)
 	if is_instance_valid(actor):
 		page._presentation._tweens.append(actor.cue(kind,page.effect_speed()))
 
@@ -118,6 +119,33 @@ func _impact(kind: String, data: Dictionary, source: String, target: String) -> 
 	var absorbed := maxi(0,int(data.get("shield_before" if work else "relax_before",0))-int(data.get("shield_after" if work else "relax_after",0)))
 	if loss == 0 and absorbed == 0:
 		return
+	var actor := _visible_actor(source)
+	if is_instance_valid(actor) and is_instance_valid(actor.rig) and actor.rig.refined and page.animation_enabled:
+		cue(source, "action")
+		_restore_refined_target(target)
+		var delay := actor.rig.seconds_to_contact()
+		if delay > .005:
+			var event_type := _event_type
+			var event_index := _event_index
+			var tween := page.create_tween()
+			page._presentation._tweens.append(tween)
+			tween.tween_interval(delay)
+			tween.tween_callback(func():
+				var previous_type := _event_type
+				var previous_index := _event_index
+				_event_type = event_type
+				_event_index = event_index
+				_impact_now(kind, data, source, target)
+				_event_type = previous_type
+				_event_index = previous_index)
+			return
+	_impact_now(kind, data, source, target)
+
+
+func _impact_now(kind: String, data: Dictionary, source: String, target: String) -> void:
+	var work := kind == "completion_applied"
+	var loss := maxi(0,int(data.get("work_before" if work else "vitality_before",0))-int(data.get("work_after" if work else "vitality_after",0)))
+	var absorbed := maxi(0,int(data.get("shield_before" if work else "relax_before",0))-int(data.get("shield_after" if work else "relax_after",0)))
 	var color := UiStyle.GOLD if work else Color("ec967e")
 	var direction := target_anchor(target)-anchor(source) if has_actor(source) else Vector2.RIGHT
 	cue(source,"action")
@@ -214,7 +242,7 @@ func _trail(source: String, target: String, glyph: String, color: Color) -> void
 	tween.tween_callback(trail.queue_free)
 
 func _depart(id: String) -> void:
-	var actor: BattleActorView = page._actors.get(id)
+	var actor := _visible_actor(id)
 	if not is_instance_valid(actor) and _previous.has(id):
 		var old: Dictionary = _previous[id]
 		actor = BattleActorView.new()
@@ -232,7 +260,46 @@ func _depart(id: String) -> void:
 	var tween := actor.create_tween().set_parallel(true)
 	page._presentation._tweens.append(tween)
 	tween.tween_property(actor,"hit_strength",1.0,.3/page.effect_speed())
-	tween.tween_property(actor,"modulate:a",0.0,.8/page.effect_speed())
+	if is_instance_valid(actor.rig) and actor.rig.refined and page.animation_enabled:
+		var duration := actor.rig.action_length("depart") / page.effect_speed()
+		tween.tween_property(actor,"modulate:a",0.0,duration * .4).set_delay(duration * .58)
+	else:
+		tween.tween_property(actor,"modulate:a",0.0,.8/page.effect_speed())
+
+
+func _visible_actor(id: String) -> BattleActorView:
+	var actor: BattleActorView = page._actors.get(id)
+	if not is_instance_valid(actor):
+		actor = _refined_transients.get(id)
+	return actor if is_instance_valid(actor) else null
+
+
+func impact_feedback_delay(event: Dictionary) -> float:
+	var actor := _visible_actor(source_actor(event))
+	if is_instance_valid(actor) and is_instance_valid(actor.rig) and actor.rig.refined and page.animation_enabled:
+		return actor.rig.seconds_to_contact()
+	return 0.0
+
+
+func _restore_refined_target(id: String) -> void:
+	if is_instance_valid(_visible_actor(id)) or not _previous.has(id):
+		return
+	var old: Dictionary = _previous[id]
+	var file := BattleActorView.rig_resource_path(str(old.definition), str(old.kind))
+	if file.is_empty():
+		return
+	var resource: Variant = JSON.parse_string(FileAccess.get_file_as_string(file))
+	if not resource is Dictionary or int(resource.get("version", 1)) < 2:
+		return
+	var actor := BattleActorView.new()
+	actor.configure(old.definition, old.kind, old.phase)
+	actor.size = old.size
+	actor.position = old.center - actor.size * .5
+	actor.set_meta("battle_event_effect", true)
+	page._stage.add_child(actor)
+	actor._fit_rig()
+	actor.set_motion(page.animation_enabled)
+	_refined_transients[id] = actor
 
 func _pilot_cue(id: String, kind: String) -> void:
 	var actor: BattleActorView = page._actors.get(id)

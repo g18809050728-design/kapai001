@@ -1,0 +1,63 @@
+{
+  "utc": "2026-11-14T17:11:25.927899+00:00",
+  "prior_successful_outputs": 5,
+  "this_batch_attempts": 2,
+  "this_batch_successful_outputs": 1,
+  "cumulative_successful_outputs": 6,
+  "maximum_authorized_images": 200,
+  "requests": [
+    {
+      "asset_id": "classroom-stage-v1",
+      "requirements": [
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "status": "rejected_http_400_no_output",
+      "endpoint": "https://api-slb.jiji.cc/v1/images/generations",
+      "model": "gpt-image-2.5-sunburst",
+      "size": "1536x1024",
+      "quality": "medium",
+      "prompt_file": "output/imagegen/actor-rig-refinement-20261115/classroom-stage-v1.prompt.txt",
+      "prompt_sha256": "c4e68ec7a1d3bc9c916ba45081935a82846d5d993dbe345d910bac0e6a769aca",
+      "cli_prompt_augmentation": "Primary request: prefix added by bundled CLI",
+      "uploaded_images": [],
+      "output": null,
+      "image_sha256": null,
+      "returned_images": 0,
+      "fees": "not returned by API; rejected request billing unknown"
+    },
+    {
+      "asset_id": "classroom-stage-v2",
+      "requirements": [
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "status": "success",
+      "endpoint": "https://api-slb.jiji.cc/v1/images/edits",
+      "model": "gpt-image-2.5-sunburst",
+      "size": "1536x1024",
+      "quality": "medium",
+      "prompt_file": "output/imagegen/actor-rig-refinement-20261115/classroom-stage-v2.prompt.txt",
+      "prompt_sha256": "6fad1377245b2e210449b4a8b443ac9d8612e036dcf31bc3af150496e775e6cd",
+      "cli_prompt_augmentation": "Primary request: prefix added by bundled CLI",
+      "uploaded_images": [
+        "assets/art/g6-v1/backgrounds/BG_classroom_v1.png"
+      ],
+      "output": "output/imagegen/actor-rig-refinement-20261115/classroom-stage-v2.png",
+      "image_sha256": "25e9e4caa6e0e15e2b8fcc71c962b8787f09bd3158c34f27952e1d4d72fd1153",
+      "returned_images": 1,
+      "fees": "not returned by API; rejected request billing unknown"
+    }
+  ],
+  "attempt_scope": "Two CLI invocations; SDK and upstream internal retries and billing were not audited."
+}

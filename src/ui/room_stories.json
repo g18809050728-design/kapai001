@@ -1,0 +1,86 @@
+{
+  "events": {
+    "V01": {
+      "title": "节日放假",
+      "location": "假日前夕 · 校园大门",
+      "narrative": "最后一节课的铃声落下，校门口渐渐热闹起来。行李箱的滚轮声里，有人赶着回家，也有人摊开地图，约着去看看没去过的地方。\n\n难得空下来的一天，你想把时间留给谁，又或者，只留给自己？",
+      "art": "res://assets/art/events/V01/illustration.png",
+      "background": "res://assets/art/events/V01/background.png"
+    },
+    "V03": {
+      "title": "选课咨询",
+      "location": "教学楼 · 选课咨询角",
+      "narrative": "教学楼的咨询桌前摊着几份课程安排。学姐把笔记推到你面前，讲起那些只有上过课才知道的细节：哪里需要多花功夫，哪些习惯可以早点调整。\n\n课表还没定下来。你可以听听建议，也可以重新想想，什么才是自己现在最需要的。",
+      "art": "res://assets/art/events/V03/illustration.png",
+      "background": "res://assets/art/events/V03/background.png",
+      "option_titles": {
+        "consult": "请教选课建议"
+      }
+    },
+    "V04": {
+      "title": "宿舍断电",
+      "location": "夜晚 · 忽然安静的宿舍",
+      "narrative": "啪的一声，宿舍里的灯灭了。电脑屏幕慢慢暗下去，窗外的月光却把桌上的复习资料照出一道银边。走廊传来几声抱怨，很快又安静下来。\n\n少了消息和屏幕的催促，这个夜晚突然有了别的可能：早点睡，或者借着小灯，把手里的内容再理一遍。",
+      "art": "res://assets/art/events/V04/illustration.png",
+      "background": "res://assets/art/events/V04/background.png"
+    },
+    "V10": {
+      "title": "捡到校园卡",
+      "location": "午后 · 林荫路转角",
+      "narrative": "你在林荫路边捡到一张校园卡。卡套上还挂着一枚小小的挂件，像是刚从谁的口袋里滑出来。附近的脚步匆匆，暂时没有人回头寻找。\n\n失主大概还没发现。你望了望路口，又想起不远处的校园服务台。",
+      "art": "res://assets/art/events/V10/illustration.png",
+      "background": "res://assets/art/events/V10/background.png"
+    }
+  },
+  "rooms": {
+    "L": {
+      "title": "图书馆",
+      "location": "午后 · 图书馆阅览区",
+      "narrative": "书架之间只听得见翻页的声音。你找到一张靠窗的空桌，把最近没想明白的问题和做过的笔记一起摊开。\n\n这里不催你赶路。认真整理一次，也许就能让接下来的学习轻松一些。",
+      "art": "res://assets/art/events/L/illustration.png",
+      "background": "res://assets/art/events/L/background.png"
+    },
+    "LAB": {
+      "title": "实验室",
+      "location": "教学楼 · 实验工作台",
+      "narrative": "实验台上留着上一次尝试的记录，几根导线旁边压着改了一半的草稿。把想法说清楚是一回事，让它真正跑起来，又是另一回事。\n\n你挽起袖口，准备从最需要改进的地方开始，再验证一次。",
+      "art": "res://assets/art/events/LAB/illustration.png",
+      "background": "res://assets/art/events/LAB/background.png"
+    },
+    "T": {
+      "title": "导师交流",
+      "location": "傍晚 · 导师办公室",
+      "narrative": "办公室的门还开着。导师把桌上的材料挪了挪，示意你坐下，先说说最近卡在哪里。\n\n你原本准备了一长串问题，坐下后却发现，最需要的可能是把下一步想清楚。桌边的一杯热茶还冒着气。",
+      "art": "res://assets/art/events/T/illustration.png",
+      "background": "res://assets/art/events/T/background.png"
+    },
+    "C": {
+      "title": "社团活动",
+      "location": "傍晚 · 社团活动室",
+      "narrative": "活动室里，伙伴们正把桌椅围成一圈。有人递来饮料，有人邀请你一起完成今天的准备，笑声把赶路时的疲惫冲淡了一点。\n\n待一会儿吧。你可以和大家歇口气，也可以搭把手，参与这次活动。",
+      "art": "res://assets/art/events/C/illustration.png",
+      "background": "res://assets/art/events/C/background.png"
+    },
+    "I": {
+      "title": "实习实践",
+      "location": "白天 · 校外实践工位",
+      "narrative": "临时工位上放着一份待整理的材料，旁边是已经排好顺序的工作清单。这里没有课堂铃声，只有同事偶尔走过，问一句进展如何。\n\n你检查好随身的本子，准备把学到的方法，放到真实的工作里试一试。",
+      "art": "res://assets/art/events/I/illustration.png",
+      "background": "res://assets/art/events/I/background.png"
+    },
+    "ST": {
+      "title": "毕业设计",
+      "location": "深夜 · 毕设工作桌",
+      "narrative": "桌上的材料已经积了厚厚一叠。打印稿留着修改痕迹，草图旁边压着几张实验记录，熟悉的台灯照着这段漫长工作的下一小步。\n\n不必今晚解决所有问题。先把眼前这一部分整理好，让毕业设计再向前一点。",
+      "art": "res://assets/art/events/ST/illustration.png",
+      "background": "res://assets/art/events/ST/background.png"
+    },
+    "FAMILIAR": {
+      "title": "校园熟人",
+      "location": "课间 · 熟悉的走廊",
+      "narrative": "走廊拐角传来一声招呼，是之前见过的熟面孔。你们聊了聊最近的课程和校园里的小事，原本紧绷的步子也跟着慢了下来。\n\n一段短短的闲聊结束，对方笑着挥挥手，催你别误了接下来的安排。",
+      "art": "res://assets/art/events/FAMILIAR/illustration.png",
+      "background": "res://assets/art/events/FAMILIAR/background.png"
+    }
+  }
+}

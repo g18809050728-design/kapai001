@@ -1,0 +1,259 @@
+{
+  "status": "passed",
+  "total": 11,
+  "failed": 0,
+  "duplicates": 0,
+  "expected_size": [
+    1024,
+    1024
+  ],
+  "require_alpha": false,
+  "visual_review": "not_performed_by_script",
+  "contact_sheets": [
+    "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\event-polish-20261115\\contact-sheet-02.jpg"
+  ],
+  "images": [
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\event-polish-20261115\\originals\\C-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 2093351,
+      "sha256": "d41daa857bcccc14360a8bb6fa6974282dfec7d665b3b0d63167dcfca7cdf638",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\event-polish-20261115\\originals\\FAMILIAR-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 2224623,
+      "sha256": "b8f3814601aa3ff1068f4326c7d75a0434966740ef71e18ec58683898a9f6793",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\event-polish-20261115\\originals\\I-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 2223104,
+      "sha256": "eac89652714be35f64a412eaee7eaa045e2992553a18294a1cd74eb70fe77be9",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\event-polish-20261115\\originals\\L-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 2168827,
+      "sha256": "1b8fc63dc9380dd7bedc13efa8e56a1d782e65ebcae61978e6ce89af5e2fc04a",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\event-polish-20261115\\originals\\LAB-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 2117547,
+      "sha256": "9e19baa2349c562c8af991a59d862a47f8ea64c6758270d891343a7df1464463",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\event-polish-20261115\\originals\\ST-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 2178100,
+      "sha256": "1e759ce53954fb285508334ded928be73011e1cdaadadfdc70ea9d169c28b4a7",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\event-polish-20261115\\originals\\T-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 2237084,
+      "sha256": "22d149388f9a75df52d1c4adb394d9fe659b25cca535c4c586da15adccf36f8f",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\event-polish-20261115\\originals\\V01-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 2237828,
+      "sha256": "03609230155ea7c22c46408b1b265696f78fa6b7ab9a939745213ebfa3251a5c",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\event-polish-20261115\\originals\\V03-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 2295183,
+      "sha256": "2ba9c20447827b2978f4d387ae8a39c3699f99aea387ef09695ef6076bbef202",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\event-polish-20261115\\originals\\V04-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 1937235,
+      "sha256": "184c8c4a87a30f936068de48a0602ec703895bb30c72b318af1efb79216ce819",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    },
+    {
+      "path": "E:\\desktop\\项目设计\\项目设计\\output\\imagegen\\event-polish-20261115\\originals\\V10-v1.png",
+      "issues": [],
+      "duplicate_of": null,
+      "bytes": 2233188,
+      "sha256": "e92beb887e8bd81a3b437092a265bd95305e4cec822ee61f715453b4103c101c",
+      "format": "PNG",
+      "mode": "RGB",
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "has_alpha_channel": false,
+      "alpha_range": [
+        255,
+        255
+      ],
+      "transparent_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "nonopaque_fraction": 0.0,
+      "status": "passed"
+    }
+  ]
+}

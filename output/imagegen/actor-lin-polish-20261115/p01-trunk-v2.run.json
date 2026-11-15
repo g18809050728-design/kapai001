@@ -1,0 +1,27 @@
+﻿{
+    "exit_code":  0,
+    "model":  "gpt-image-2.5-sunburst",
+    "cost":  "not returned by CLI",
+    "cli_args":  [
+                     "edit",
+                     "--model",
+                     "gpt-image-2.5-sunburst",
+                     "--image",
+                     "output/imagegen/actor-lin-polish-20261115/p01-trunk-v1.png",
+                     "--mask",
+                     "output/imagegen/actor-lin-polish-20261115/p01-trunk-clean-mask.png",
+                     "--prompt-file",
+                     "output/imagegen/actor-lin-polish-20261115/prompts/p01-trunk-v2.txt",
+                     "--size",
+                     "1024x1536",
+                     "--quality",
+                     "high",
+                     "--out",
+                     "output/imagegen/actor-lin-polish-20261115/p01-trunk-v2.png",
+                     "--no-augment"
+                 ],
+    "completed_utc":  "2026-11-15T07:01:30.7072808Z",
+    "mode":  "edit",
+    "started_utc":  "2026-11-15T07:00:56.5949803Z",
+    "base_url":  "https://api-slb.jiji.cc/v1"
+}

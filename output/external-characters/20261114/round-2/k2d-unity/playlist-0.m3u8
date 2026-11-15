@@ -1,0 +1,6 @@
+#EXTM3U
+#EXT-X-VERSION:3
+#EXT-X-STREAM-INF:BANDWIDTH=4971376,RESOLUTION=1073x720,NAME="720p"
+https://assetstore.unity.com/playlist/6a283e5c474ba317dfb461a9/720p/index.m3u8
+#EXT-X-STREAM-INF:BANDWIDTH=11223792,RESOLUTION=1610x1080,NAME="1080p"
+https://assetstore.unity.com/playlist/6a283e5c474ba317dfb461a9/1080p/index.m3u8

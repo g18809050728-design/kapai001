@@ -1,0 +1,67 @@
+{
+  "id": "N31",
+  "version": 13,
+  "name": "导师催进度",
+  "requirements": [
+    "UIR-069",
+    "UIR-011",
+    "UIR-013",
+    "UIR-051",
+    "UIR-052",
+    "UIR-054",
+    "UIR-057",
+    "UIR-059"
+  ],
+  "source": "output/imagegen/enemy-roster-20261115/N31-v1.png",
+  "source_sha256": "bd1410b003c8114a63f11f3b71caeb00dd169452dd9e1152d2e2f7ffa06beaf0",
+  "source_size": [
+    1024,
+    1024
+  ],
+  "method": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+  "outputs": [
+    {
+      "file": "assets/art/enemies/N31/body.png",
+      "size": [
+        808,
+        830
+      ],
+      "sha256": "5d7b0153ea94e946c453f0fb75b5cb90211c72a27b1750cb05951e9d26b705d3",
+      "source_bbox": [
+        207,
+        109,
+        1015,
+        939
+      ]
+    },
+    {
+      "file": "assets/art/enemies/N31/attack.png",
+      "size": [
+        151,
+        314
+      ],
+      "sha256": "b08e3ab0a7f66f24ac51b10a2e447e8a6122a704822b80624135692175f7ef5b",
+      "source_bbox": [
+        20,
+        129,
+        171,
+        443
+      ]
+    },
+    {
+      "file": "assets/art/enemies/N31/accent.png",
+      "size": [
+        188,
+        220
+      ],
+      "sha256": "76f52dc0cfc099210c93939caecbe05d78b4e215bbee9fe18fc765155aba6991",
+      "source_bbox": [
+        20,
+        661,
+        208,
+        881
+      ]
+    }
+  ],
+  "visual_acceptance": "pending review; machine metrics do not establish visual quality"
+}

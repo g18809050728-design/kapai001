@@ -1,0 +1,32 @@
+{
+  "asset_id": "V01",
+  "requirement_id": "UIR-070",
+  "version": 1,
+  "title": "节日放假",
+  "prompt_file": "output/imagegen/event-polish-20261115/V01-v1-prompt.txt",
+  "prompt_sha256": "92dfed7b6c4724ec27c3d5e8af9650d465e4eddb222ba95afc502a02f8e335a4",
+  "provider": "https://api-slb.jiji.cc/v1",
+  "model": "gpt-image-2.5-sunburst",
+  "requested_size": "1024x1024",
+  "actual_size": [
+    1024,
+    1024
+  ],
+  "quality": "high",
+  "original": "output/imagegen/event-polish-20261115/originals/V01-v1.png",
+  "original_sha256": "03609230155ea7c22c46408b1b265696f78fa6b7ab9a939745213ebfa3251a5c",
+  "selected": true,
+  "review_status": "AI visual review, final user art judgment remains",
+  "derivatives": [
+    {
+      "path": "assets/art/events/V01/illustration.png",
+      "sha256": "f94a82781b22172a8827c0bbc6c93982b8533cb6f2de088bd8f798dc8435be49",
+      "processing": "Original RGB untouched; add 66px smoothstep alpha perimeter, no content crop/stretch."
+    },
+    {
+      "path": "assets/art/events/V01/background.png",
+      "sha256": "68f4459ff157361ff799b2f8cb91574db82a5f335698f9754beed74438853ace",
+      "processing": "768x768 Lanczos, Gaussian blur radius16; UI uses aspect-preserving cover and dark overlay."
+    }
+  ]
+}

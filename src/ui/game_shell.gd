@@ -32,6 +32,7 @@ var _remembered_choice: Dictionary = {}
 var _save_status := "尚无本次会话的手动保存结果"
 var _ui_feedback: Label
 var _ui_feedback_generation := 0
+var _compendium_state: Dictionary = {}
 
 
 func _ready() -> void:
@@ -155,6 +156,12 @@ func refresh() -> void:
 			data.confirm_restart = _restart_confirmation
 			var storage := _storage_view()
 			data.unreadable_save = storage.has_save and not storage.can_continue
+		"compendium":
+			var catalogue := session.get_compendium()
+			data = catalogue.data if catalogue.ok else {"error": UiStyle.error_text(catalogue.error)}
+			var preferences := session.get_presentation_settings()
+			data.motion_enabled = int(preferences.animation_speed) > 0 and not preferences.reduced_motion
+			data.animation_speed = preferences.animation_speed
 		"settings":
 			data = _storage_view()
 			data.settings = {"autosave": session.get_profile().autosave}
@@ -216,6 +223,11 @@ func refresh() -> void:
 		if screen == "battle":
 			page = BattleScreen.new()
 			page.preview_callback = Callable(self, "_preview")
+		elif screen == "compendium":
+			page = UiCompendiumPage.new()
+			if not _compendium_state.is_empty():
+				page.tab = str(_compendium_state.get("tab", "cards"))
+				page._states = _compendium_state.states.duplicate(true)
 		else:
 			page = UiExperiencePage.new()
 			page.screen = screen
@@ -232,6 +244,9 @@ func refresh() -> void:
 			page.animation_enabled = int(preferences.animation_speed) > 0 and not preferences.reduced_motion
 			page.speed_scale = maxf(1, int(preferences.animation_speed))
 			page.set_meta("presentation", preferences.duplicate(true))
+	elif page is UiExperiencePage:
+		var preferences := session.get_presentation_settings()
+		page.character_motion_enabled = int(preferences.animation_speed) > 0 and not preferences.reduced_motion
 	page.render(data)
 	if page is BattleScreen and not _remembered_choice.is_empty():
 		page.restore_choice_selection(_remembered_choice)
@@ -373,7 +388,8 @@ func _regate() -> void:
 					"ui.random_seed",
 					"ui.cancel_restart",
 					"ui.continue",
-					"ui.back"
+					"ui.back",
+					"ui.compendium", "ui.compendium_back"
 				]
 			)
 		):
@@ -435,7 +451,7 @@ func submit_action(draft: Dictionary) -> void:
 	_action_notice(result)
 	var popup_count := 0
 	var preferences := session.get_presentation_settings()
-	if not damage_anchors.is_empty() and result.view.battle is Dictionary:
+	if not damage_anchors.is_empty() and result.view.battle is Dictionary and not (page is BattleScreen and page.has_refined_actors()):
 		popup_count = _damage_layer.queue_events(result.events, damage_anchors, int(preferences.animation_speed) > 0 and not preferences.reduced_motion, maxf(1.0, float(preferences.animation_speed)))
 	if page is BattleScreen and page.animation_enabled and not result.view.battle is Dictionary and not result.events.is_empty():
 		page.use_shell_damage_popups = false
@@ -818,6 +834,13 @@ func _navigate(type: String, payload: Dictionary) -> void:
 		_close_test_room()
 		return
 	match type:
+		"ui.compendium":
+			_ui_screen = "compendium"
+		"ui.compendium_back":
+			if page is UiCompendiumPage:
+				page._states[page.tab].scroll = page._scroll.scroll_vertical
+				_compendium_state = {"tab": page.tab, "states": page._states.duplicate(true)}
+			_ui_screen = "menu"
 		"ui.test_room":
 			_ui_screen = "test_room"
 			_restart_confirmation = false
@@ -938,6 +961,8 @@ func _navigate(type: String, payload: Dictionary) -> void:
 					return
 			get_tree().quit()
 	refresh()
+	if type == "ui.compendium_back" and page != null and page._buttons.has("menu:compendium"):
+		page._buttons["menu:compendium"].grab_focus()
 	if type == "ui.save_settings":
 		_show_ui_feedback(notice, last_error != null)
 

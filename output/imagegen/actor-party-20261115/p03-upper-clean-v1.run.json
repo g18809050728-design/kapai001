@@ -1,0 +1,8 @@
+﻿{
+    "elapsed_seconds":  30.1200011,
+    "exit_code":  0,
+    "output":  "output/imagegen/actor-party-20261115/p03-upper-clean-v1.png",
+    "model":  "gpt-image-2.5-sunburst",
+    "character":  "p03",
+    "api_mode":  "edit"
+}

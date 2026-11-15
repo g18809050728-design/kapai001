@@ -2,6 +2,10 @@
 
 日期：2026-11-14。状态：代表样板已运行、已实渲、定向与回归检查通过；最终美术质量及全量生产尚未验收。
 
+2026-11-15第二轮精修已交付：[最新前后对照](../../artifacts/verification/actor-rig-refinement-20261115/review/index.html)与[结果/可行方案](2026-11-15-actor-refinement-design.md)补肩肘、持物、眨眼、纸扇和地面，287项及兼容/规则/完整UI通过；API累计6/200。本页及下面第一轮精修保持各自原批次语义。
+
+2026-11-15追加精修已交付：优先解决用户提出的僵硬感，完成重心/脚部支点、分关节错峰、独立循环、现姿态混合及命中衔接；请先看[当前精修前后动画](../../artifacts/verification/actor-rig-polish-20261114/review/index.html)和[精修结果/后续方案](2026-11-14-actor-motion-polish-design.md)。新版本259项检查、规则/完整UI及旧样板兼容通过，新增API图片0张；下面的骨骼数、247帧与首版差距保留为本页原批次记录，不混用为精修证据。
+
 **结论：推荐使用 Godot 原生二维骨骼、分层贴图、局部加权网格和独立待机时间线。** 本项目已用林序 P01 与课后习题 N01 跑通真实出牌、敌方行动、受击、离场和奖励流程，证明这条路线能接入现有游戏。要达到《杀戮尖塔2》的角色表现，下一步的主要工作是造型、拆件、关键姿势和动画打磨；本批画面尚未达到该美术标准。这里验证的是二维角色的形体与动作表现，完整三维模型、转动摄影机和全角度转身没有验证。
 
 先看[离线对照与连续动画](../../artifacts/verification/actor-rig-pilot-20261114/review/index.html)，再看[同场四图对照](../../artifacts/verification/actor-rig-pilot-20261114/review/comparison.jpg)、[真实战斗最终报告](../../artifacts/verification/actor-rig-pilot-20261114/render-05/report.json)和[启动脚本](../../tools/start_actor_rig_pilot.ps1)。

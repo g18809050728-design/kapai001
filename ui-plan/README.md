@@ -1,5 +1,27 @@
 # 《交大四年：DDL战争》表现重制文档入口
 
+2026-11-15当前§0.20.25已完成四角色正式接入：林序原V5、许知微V8、沈见章V10、唐以宁V11默认用于选角/战斗、保存继续及测试房间；原仅样板限制在四人范围内已取代。见[正式战斗四人图](../artifacts/verification/actor-integration-20261115/review/battle.jpg)、[选角四人图](../artifacts/verification/actor-integration-20261115/review/setup.jpg)及[实现/结果](../docs/plans/2026-11-15-actor-integration-design.md)。490项实机、22条真实命令对照、61窗口图/300连续帧通过；完整规则63.653秒、完整UI289.659秒和默认入口烟测均退出0/错误0。916保护文件、17份改前快照与10个真实存档文件hash核对通过；API新增0、累计38/200。原G0/G6/G8出口、最终美术签收与慢放手部换面感另记。
+
+2026-11-15当前为唐以宁动作修正V11（§0.20.24）：打开[出手对照与连续慢放](../artifacts/verification/actor-motion-20261115/review/index.html)和[动作设计/实际结果](../docs/plans/2026-11-15-actor-motion-design.md)。保留V8形象，修正肩袖、肩肘、移重/双膝和持板；336实机、5真实命令、53浏览器检查通过。显式启动器默认P04/V11，P03V10/P02V8/P01原V5保持；API新增0，累计38/200，最终动作评价及原阶段出口另记。
+
+2026-11-15当前P03为整套重制V10（§0.20.23，旧V9被用户否决）：打开[完整站姿与头颈/连续动作](../artifacts/verification/actor-rebuild-20261115/review/index.html)和[实际结果](../docs/plans/2026-11-15-actor-rebuild-design.md)。新立绘、同源头颈/肩胸/袖片/表情/持物与身体重新注册；339项、5真实命令、24静态图/673连续帧、66浏览器检查通过。[启动器](../tools/start_actor_party.ps1)默认P03/V10，API9张、累计38/200。P02/P04 V8和P01原V5保持，最终形象待用户查看，慢放手部重影及原G0/G6/G8出口仍记录；以下V9及更早内容保留历史含义。
+
+2026-11-15当前人物版本为比例修正版V8（§0.20.21）：打开[三人完整人物合图](../artifacts/verification/actor-proportions-20261115/review/lineup.jpg)和[前后切换/连续动作评审](../artifacts/verification/actor-proportions-20261115/review/index.html)。三人髋到踝纵向缩短22%、同步腿骨与足点、保留鞋形；沈见章重绘头颈，颈根随胸口，清除领口缺口与重复下颌。[启动器](../tools/start_actor_party.ps1)默认V8，支持选人和`-Version V7`。1004项、17条真实命令、72PNG/2008连续帧及63项浏览器检查通过；P01原V5保持，API本轮1张、累计28/200。[设计与实际结果](../docs/plans/2026-11-15-actor-proportions-design.md)及[验证汇总](../artifacts/verification/actor-proportions-20261115/verification-summary.json)另存；最终用户美术评价待查看，以下V7为历史对照。
+
+2026-11-15最新人物制作：P02许知微、P03沈见章、P04唐以宁已按原V5基准完成完整人物、骨架及战斗动作。打开[三人静止合图](../artifacts/verification/actor-party-20261115/review/lineup.jpg)与[角色切换/连续动作评审](../artifacts/verification/actor-party-20261115/review/index.html)，或用[启动器](../tools/start_actor_party.ps1)指定`-Character P02/P03/P04`试玩。995项、17命令A/B、72PNG/2006帧，原V5兼容、规则/完整UI及44项浏览器检查通过；API本批12张、累计27/200。P01继续原V5；[实际结果与剩余边界](../docs/plans/2026-11-15-actor-party-design.md)单列，用户最终美术认可另记。
+
+2026-11-15当前人物方案按用户最新偏好选回V5。以[V5完整人物与动作评审](../artifacts/verification/actor-anatomy-20261115/review/index.html)和[V5独立试玩](../tools/start_actor_anatomy.ps1)为当前入口，原始资源与动作保留；[V6](../artifacts/verification/actor-seams-20261115/review/index.html)独立留档为未选对照。[选择核对记录](../artifacts/verification/actor-seams-20261115/user-selection-v5-01/report.json)保存本次文档变更与保护文件hash；下文旧批次保留历史含义。
+
+2026-11-15 人物形体修正（§0.20.18）：先看[完整人物前后对照](../artifacts/verification/actor-anatomy-20261115/review/fullbody-comparison.jpg)和[新版全身/连续动作评审](../artifacts/verification/actor-anatomy-20261115/review/index.html)，运行[独立入口](../tools/start_actor_anatomy.ps1)。新连续腰胯/双腿、头身与上下身比例、实际髋膝踝绑定及三权重骨盆，针对用户指出的斜伸畸形左腿和上下身不协调。最终render-05为356项、24图/458帧、5命令A/B一致，v1～v4兼容与规则通过，完整UI最终回归通过；API本轮成功3张、累计15/200。P01为27骨骼/14基础部件/6网格，N01沿用v4。[结果与下一步](../docs/plans/2026-11-15-actor-anatomy-design.md)仍列大角度肩肘/袖片、持物及其他体型缺口，最终美术和全量生产待核收。下列旧入口与数字保留原批次含义。
+
+2026-11-15 第三轮动作补绘（§0.20.17）：[最新v3/v4同步评审](../artifacts/verification/actor-rig-drawings-20261115/review/index.html)、[实现与后续方案](../docs/plans/2026-11-15-actor-drawings-design.md)及[独立入口](../tools/start_actor_rig_drawings.ps1)。P01转体/伸笔/受击、N01合扇/刺击/折痕已接真实骨架与事件；340项、19图/455帧、5命令A/B、v1/v2/v3兼容及规则/完整UI回归通过。API本轮成功6张，累计12/200；全量生产与最终美术未验收。旧批次原样保留。
+
+2026-11-15当前沈见章为体态修正版V9（§0.20.22）：查看[头颈前后近景](../artifacts/verification/actor-posture-20261115/review/neck-before-after.jpg)及[默认P03的完整人物与V8/V9动作评审](../artifacts/verification/actor-posture-20261115/review/index.html)。头回收、下颌抬平、颈根连续，并检查6类动作回正；342项、5条真实命令、24静态图/670连续帧及66项浏览器检查通过。7组下半身像素无变化，P02/P04 V8、P01原V5保持。[启动器](../tools/start_actor_party.ps1)默认V9并保留V8/V7；API本轮1张、累计29/200，见[设计与结果](../docs/plans/2026-11-15-actor-posture-design.md)。用户最终美术判断另记，以下V8及更早结果按历史阅读。
+
+2026-11-15 第二轮精修（§0.20.16）：P01/N01肩肘、持物、眨眼/纸扇与地面已修整，见[上一版/本轮同步动画](../artifacts/verification/actor-rig-refinement-20261115/review/index.html)、[结果与下一步](../docs/plans/2026-11-15-actor-refinement-design.md)及[启动器](../tools/start_actor_rig_refinement.ps1)。287项、19图/456帧、v1/v2兼容与规则/完整UI通过；API本轮1张、累计6/200。默认入口及旧证据保留，全量与最终美术未验收。
+
+2026-11-15 人物动作精修（§0.20.15）：P01/N01重心、脚部支点、部件错峰、独立循环、命中与最后一击衔接已实现。见[前后同步动画](../artifacts/verification/actor-rig-polish-20261114/review/index.html)、[精修结果与后续方案](../docs/plans/2026-11-14-actor-motion-polish-design.md)及[启动器](../tools/start_actor_rig_polish.ps1)。259项检查、19图/459帧、旧样板兼容及规则/完整UI通过；API0新增、累计5/200。官方披露与本作选择分开记录，肩肘/表情/持物及场景承托仍待美术修整，全量生产未恢复。
+
 2026-11-14 菜单与饰品深化（§0.20.13、UIR-068）：规则/记录/冒险信息共用原地查阅，菜单接真实设置、保存和主页操作；真实槽位、完整饰品效果、满槽替换及专注图形已实施。425项定向检查和49张两尺寸三字号实渲见[本批记录](../docs/菜单与饰品查看优化_20261114.md)与[实机对照](../artifacts/verification/menu-relic-feedback-20261114/review/index.html)。本批未修改人物；下面的独立人物实践范围继续保留。
 
 2026-11-14人物实践已完成：[P01/N01离线实渲与动画](../artifacts/verification/actor-rig-pilot-20261114/review/index.html)验证原生二维骨骼、真实战斗/奖励及隔离存档；226项检查、规则与完整UI回归通过，API实际5/200张。结果、画面差距、71个实体/88任务阶段映射与后续排期见[实践与实施方案](../docs/plans/2026-11-14-actor-rig-feasibility-plan.md)和[根计划§0.20.14](../实施计划与验收基线.md)。已否决资源不恢复，正式人物质量和全量G6/G8出口保留。

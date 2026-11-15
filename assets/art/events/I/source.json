@@ -1,0 +1,32 @@
+{
+  "asset_id": "I",
+  "requirement_id": "UIR-070",
+  "version": 1,
+  "title": "实习实践",
+  "prompt_file": "output/imagegen/event-polish-20261115/I-v1-prompt.txt",
+  "prompt_sha256": "2de788ff8b5795f897bf0c1b01fa6c9e51d4c79a536977cc0eb67f964236b60b",
+  "provider": "https://api-slb.jiji.cc/v1",
+  "model": "gpt-image-2.5-sunburst",
+  "requested_size": "1024x1024",
+  "actual_size": [
+    1024,
+    1024
+  ],
+  "quality": "high",
+  "original": "output/imagegen/event-polish-20261115/originals/I-v1.png",
+  "original_sha256": "eac89652714be35f64a412eaee7eaa045e2992553a18294a1cd74eb70fe77be9",
+  "selected": true,
+  "review_status": "AI visual review, final user art judgment remains",
+  "derivatives": [
+    {
+      "path": "assets/art/events/I/illustration.png",
+      "sha256": "5a65cc21878104a7f858589e66435b2ae5a76c63f67e7308aeb665d9952c0ec1",
+      "processing": "Original RGB untouched; add 66px smoothstep alpha perimeter, no content crop/stretch."
+    },
+    {
+      "path": "assets/art/events/I/background.png",
+      "sha256": "55fa3ab12f5b5fc1cfb36126905e261302a78b8c38fb34ddd8329a4ee5764fd6",
+      "processing": "768x768 Lanczos, Gaussian blur radius16; UI uses aspect-preserving cover and dark overlay."
+    }
+  ]
+}

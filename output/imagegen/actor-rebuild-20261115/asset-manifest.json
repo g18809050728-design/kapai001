@@ -1,0 +1,584 @@
+{
+  "version": 10,
+  "provider": "jiji.cc",
+  "model": "gpt-image-2.5-sunburst",
+  "mode": "edit",
+  "api_successful_previous": 29,
+  "api_successful_this_revision": 9,
+  "api_successful_cumulative": 38,
+  "user_limit": 200,
+  "cost": "unknown",
+  "credential_storage": "existing DPAPI; plaintext never saved",
+  "selected_master": "p03-master-v3.png",
+  "records": [
+    {
+      "output": {
+        "sha256": "f3ee5dbb8d4aa98abc53c456f0618746e3dc95e0d33026b7a275e68513b1c1a4",
+        "path": "output/imagegen/actor-rebuild-20261115/p03-focus-v1.png"
+      },
+      "cost": "unknown",
+      "inputs": [
+        {
+          "sha256": "e66579af035d2643c2d17e131790198400e370c1aa8233521b70f2e7849ed67c",
+          "path": "output/imagegen/actor-rebuild-20261115/p03-face-input.png"
+        },
+        {
+          "sha256": "36daa296d8596466d0fb4502f33febbbd6a130579cd96744d08110e1c9ff6f27",
+          "path": "output/imagegen/actor-rebuild-20261115/p03-face-mask.png"
+        },
+        {
+          "sha256": "9b06b2539c9ec33a88a56a85a49adbd5451af6c0bcd040fe572653b5ddc5b319",
+          "path": "output/imagegen/actor-rebuild-20261115/prompts/p03-focus-v1.txt"
+        }
+      ],
+      "started_utc": "2026-11-15T05:04:11.3396452Z",
+      "model": "gpt-image-2.5-sunburst",
+      "mode": "edit",
+      "cli_args": [
+        "edit",
+        "--model",
+        "gpt-image-2.5-sunburst",
+        "--image",
+        "output/imagegen/actor-rebuild-20261115/p03-face-input.png",
+        "--mask",
+        "output/imagegen/actor-rebuild-20261115/p03-face-mask.png",
+        "--prompt-file",
+        "output/imagegen/actor-rebuild-20261115/prompts/p03-focus-v1.txt",
+        "--size",
+        "1024x1024",
+        "--quality",
+        "medium",
+        "--n",
+        "1",
+        "--out",
+        "output/imagegen/actor-rebuild-20261115/p03-focus-v1.png"
+      ],
+      "quality": "medium",
+      "size": "1024x1024",
+      "n": 1,
+      "completed_utc": "2026-11-15T05:04:38.7921007Z",
+      "exit_code": 0,
+      "base_url": "https://api-slb.jiji.cc/v1",
+      "record": "p03-focus-v1.run.json",
+      "decision": "selected component source; local processing documented in extraction.json",
+      "asset_id": "P03.REBUILD.p03-focus-v1",
+      "requirement_ids": [
+        "UIR-052",
+        "UIR-054",
+        "UIR-057"
+      ],
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/actor-rebuild-20261115/prompts/p03-focus-v1.txt",
+      "prompt_sha256": "9b06b2539c9ec33a88a56a85a49adbd5451af6c0bcd040fe572653b5ddc5b319",
+      "full_prompt": "Use case: masked local facial expression for the SAME game character. Preserve the exact 1024x1024 input canvas, hair, ears, outer head silhouette, neck, jaw, shoulders, clothes, colors, light, brushwork and orientation. Only change the facial features inside the mask: make the eyes subtly more intent and confident, eyebrows slightly concentrated, mouth quietly determined. Keep both eyes open, and the head upright without a turn, tilt or forward neck. Keep the facial identity unchanged. This will blend with the neutral drawing on the exact same skeleton. Do not move the eyes or mouth away from their current natural locations. No smile with teeth, no exaggerated aggression. Everything outside the feature mask must remain the same, including the magenta background. No extra figure or label.\n",
+      "processing_record": "artifacts/verification/actor-rebuild-20261115/extraction.json"
+    },
+    {
+      "output": {
+        "sha256": "e3a013aa0d589edc21ef44932b92bb73a33cee2a69105aaec1d35ac287bc0454",
+        "path": "output/imagegen/actor-rebuild-20261115/p03-forearm-v1.png"
+      },
+      "cost": "unknown",
+      "inputs": [
+        {
+          "sha256": "99f00ee0d424c29d3f9299d15536cf011a07b95e25f0f76b414c13620b2ced87",
+          "path": "output/imagegen/actor-rebuild-20261115/p03-forearm-input.png"
+        },
+        {
+          "sha256": "d1fb610bdbf300778ee471532271b82f2d4d777133bbeeeee6499f89d7e7255e",
+          "path": "output/imagegen/actor-rebuild-20261115/prompts/p03-forearm-v1.txt"
+        }
+      ],
+      "started_utc": "2026-11-15T05:06:14.2971308Z",
+      "model": "gpt-image-2.5-sunburst",
+      "mode": "edit",
+      "cli_args": [
+        "edit",
+        "--model",
+        "gpt-image-2.5-sunburst",
+        "--image",
+        "output/imagegen/actor-rebuild-20261115/p03-forearm-input.png",
+        "--prompt-file",
+        "output/imagegen/actor-rebuild-20261115/prompts/p03-forearm-v1.txt",
+        "--size",
+        "1024x1024",
+        "--quality",
+        "medium",
+        "--n",
+        "1",
+        "--out",
+        "output/imagegen/actor-rebuild-20261115/p03-forearm-v1.png"
+      ],
+      "quality": "medium",
+      "size": "1024x1024",
+      "n": 1,
+      "completed_utc": "2026-11-15T05:06:41.7199779Z",
+      "exit_code": 0,
+      "base_url": "https://api-slb.jiji.cc/v1",
+      "record": "p03-forearm-v1.run.json",
+      "decision": "selected component source; local processing documented in extraction.json",
+      "asset_id": "P03.REBUILD.p03-forearm-v1",
+      "requirement_ids": [
+        "UIR-052",
+        "UIR-054",
+        "UIR-057"
+      ],
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/actor-rebuild-20261115/prompts/p03-forearm-v1.txt",
+      "prompt_sha256": "d1fb610bdbf300778ee471532271b82f2d4d777133bbeeeee6499f89d7e7255e",
+      "full_prompt": "Production cleanup of the one isolated forearm, hand and pen in the input. Preserve the exact 1024x1024 canvas and the forearm's original position, length, thickness, elbow on the lower LEFT, wrist near center RIGHT, bent relaxed hand, five ordinary fingers gripping the same thin black pen diagonally down toward the lower right. Keep the same warm skin, confident dark contour, painterly shading, light and exact pose. Remove ALL green/blue shirt fragments and green border around the hand or pen, replacing only those stray fabric pixels with perfectly flat magenta #ff00ff. Reconstruct clean skin/ink edges where the fabric touched. Complete the rounded flesh elbow end with a small natural overlap, no extra cuff. Preserve the whole pen with a clear sharp tip. This is a clean animation component, not a new gesture. No torso, shirt, extra hand, second pen, labels, frame, floor or shadow. Keep the limb in place at the same scale.\n",
+      "processing_record": "artifacts/verification/actor-rebuild-20261115/extraction.json"
+    },
+    {
+      "output": {
+        "sha256": "b37cf8cefe3eda31f4098123fefb494a398f256d758f5762527d83dca13a961b",
+        "path": "output/imagegen/actor-rebuild-20261115/p03-hit-v1.png"
+      },
+      "cost": "unknown",
+      "inputs": [
+        {
+          "sha256": "e66579af035d2643c2d17e131790198400e370c1aa8233521b70f2e7849ed67c",
+          "path": "output/imagegen/actor-rebuild-20261115/p03-face-input.png"
+        },
+        {
+          "sha256": "36daa296d8596466d0fb4502f33febbbd6a130579cd96744d08110e1c9ff6f27",
+          "path": "output/imagegen/actor-rebuild-20261115/p03-face-mask.png"
+        },
+        {
+          "sha256": "f65c637c2e3c4cb6621e03f4b1583f3bba4ee9cb882e46f5fb394fd49d202305",
+          "path": "output/imagegen/actor-rebuild-20261115/prompts/p03-hit-v1.txt"
+        }
+      ],
+      "started_utc": "2026-11-15T05:10:45.4189952Z",
+      "model": "gpt-image-2.5-sunburst",
+      "mode": "edit",
+      "cli_args": [
+        "edit",
+        "--model",
+        "gpt-image-2.5-sunburst",
+        "--image",
+        "output/imagegen/actor-rebuild-20261115/p03-face-input.png",
+        "--mask",
+        "output/imagegen/actor-rebuild-20261115/p03-face-mask.png",
+        "--prompt-file",
+        "output/imagegen/actor-rebuild-20261115/prompts/p03-hit-v1.txt",
+        "--size",
+        "1024x1024",
+        "--quality",
+        "medium",
+        "--n",
+        "1",
+        "--out",
+        "output/imagegen/actor-rebuild-20261115/p03-hit-v1.png"
+      ],
+      "quality": "medium",
+      "size": "1024x1024",
+      "n": 1,
+      "completed_utc": "2026-11-15T05:11:13.5861708Z",
+      "exit_code": 0,
+      "base_url": "https://api-slb.jiji.cc/v1",
+      "record": "p03-hit-v1.run.json",
+      "decision": "selected component source; local processing documented in extraction.json",
+      "asset_id": "P03.REBUILD.p03-hit-v1",
+      "requirement_ids": [
+        "UIR-052",
+        "UIR-054",
+        "UIR-057"
+      ],
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/actor-rebuild-20261115/prompts/p03-hit-v1.txt",
+      "prompt_sha256": "f65c637c2e3c4cb6621e03f4b1583f3bba4ee9cb882e46f5fb394fd49d202305",
+      "full_prompt": "Use case: masked local facial expression for the SAME game character. Preserve the exact 1024x1024 input canvas, hair, ears, outer head silhouette, neck, jaw, shoulders, clothes, colors, light, brushwork and orientation. Only change the facial features inside the mask: both eyelids CLOSED in a brief blink/reaction, eyebrows mildly tense, lips gently pressed. Keep the same calm young man's identity, upright head, unchanged head orientation and unchanged neck. No injury, bruise, blood, grimace or dramatic turn. Do not move or redraw the outer head or hair. Everything outside the feature mask must remain identical including the magenta background. No extra face or label.\n",
+      "processing_record": "artifacts/verification/actor-rebuild-20261115/extraction.json"
+    },
+    {
+      "size": "1024x1536",
+      "model": "gpt-image-2.5-sunburst",
+      "cost": "unknown",
+      "exit_code": 0,
+      "completed_utc": "2026-11-15T04:57:01.0748986Z",
+      "quality": "medium",
+      "success_after": 30,
+      "success_before": 29,
+      "inputs": [
+        {
+          "sha256": "23847b616566092660099e3538f9bf0132831ed9084cf9c101391a8a2b55a3c9",
+          "path": "assets/art/presentation-v2/actors/P03.png"
+        },
+        {
+          "sha256": "65478a8fd9c5dc5213fdc784b9f330b5625d4ed25eade1d2a88ee105e39d2af0",
+          "path": "output/imagegen/actor-party-20261115/v5-style-reference.png"
+        },
+        {
+          "sha256": "6807ae1d0e852b873599c78b5467d152f97d55059b9d874370d5e6f7c7f237f1",
+          "path": "output/imagegen/actor-rebuild-20261115/prompts/p03-master-v1.txt"
+        }
+      ],
+      "cli_args": [
+        "edit",
+        "--model",
+        "gpt-image-2.5-sunburst",
+        "--image",
+        "assets/art/presentation-v2/actors/P03.png",
+        "--image",
+        "output/imagegen/actor-party-20261115/v5-style-reference.png",
+        "--prompt-file",
+        "output/imagegen/actor-rebuild-20261115/prompts/p03-master-v1.txt",
+        "--size",
+        "1024x1536",
+        "--quality",
+        "medium",
+        "--n",
+        "1",
+        "--out",
+        "output/imagegen/actor-rebuild-20261115/p03-master-v1.png"
+      ],
+      "mode": "edit",
+      "started_utc": "2026-11-15T04:56:28.1716031Z",
+      "base_url": "https://api-slb.jiji.cc/v1",
+      "n": 1,
+      "output": {
+        "sha256": "3d68320cf4af3b92c16c2eef51c48c417fdbcd24f5ac6e51ebbfb67da93056ef",
+        "path": "output/imagegen/actor-rebuild-20261115/p03-master-v1.png"
+      },
+      "record": "p03-master-v1.run.json",
+      "decision": "rejected: long neck and forward head",
+      "asset_id": "P03.REBUILD.p03-master-v1",
+      "requirement_ids": [
+        "UIR-052",
+        "UIR-054",
+        "UIR-057"
+      ],
+      "actual_size": [
+        1024,
+        1536
+      ],
+      "prompt_file": "output/imagegen/actor-rebuild-20261115/prompts/p03-master-v1.txt",
+      "prompt_sha256": "6807ae1d0e852b873599c78b5467d152f97d55059b9d874370d5e6f7c7f237f1",
+      "full_prompt": "Use case: full-body hand-painted 2D game character master, rebuilt anatomy for later cutout animation.\n\nInput image 1 is Shen Jianzhang's identity and costume reference only. Input image 2 is the approved series' painterly rendering and believable whole-body proportions only. Draw a NEW, coherent full-body Shen Jianzhang, not a collage or a rotated/patched version of image 1. Do not copy image 2's glasses, blue clothes, laptop or person.\n\nOne young adult East Asian male university student, intelligent, approachable and quietly confident. Preserve tousled short black hair, no glasses, olive green open long-sleeved overshirt with sleeves casually rolled just below elbows, off-white crew-neck T-shirt, subtle purple accent on chest pocket, charcoal straight casual trousers and brown low shoes. The near arm on the viewer's LEFT holds a slim dark pen at a relaxed height near the lower chest. The far arm on the viewer's RIGHT holds a small stack of cream argument cards bearing a simple muted green circular/triangular diagram, no readable writing. Show both hands clearly with normal anatomy.\n\nCritical anatomy: healthy natural upright posture, head directly above the neck and upper ribcage, ear above shoulder, chin gently level. A SHORT natural neck emerging centrally from a continuous shoulder/trapezius mass, with the shirt collar surrounding its base. No forward neck, jutting chin, hunch, turtle posture, steep diagonal neck, downward head tilt, or long exposed throat. Shoulders relaxed, chest and pelvis aligned. A subtle three-quarter turn toward screen RIGHT, so the face and chest both face the same direction. Weight comfortably on two planted feet, knees relaxed, no twisted or collapsed leg. Natural adult proportions around 6.8 to 7 heads tall; full head and neck, broad enough shoulders, normal-length substantial torso and NORMAL legs, no fashion-model long legs. Crotch around the midpoint of the total figure; waist and shirt hem have a clear natural relationship. All body masses must join as one well-observed human figure.\n\nSemi-realistic stylized hand-painted anime game art matching image 2: confident dark contours, warm painterly planes, soft cloth folds with clear volume, readable expressive face, restrained paper-like brush texture. Not photorealism, not chibi, not 3D plastic rendering. Neutral standing animation-ready pose, elbows slightly separated from torso, small asymmetry without leaning. Entire figure head-to-toe centered on a 1024x1536 portrait canvas with at least 65 pixels breathing room around silhouette. Shoes fully visible on one horizontal floor level, no ground plane, no cast shadow. Flat solid pure magenta #ff00ff background, no gradient, no background object, no glow, no outline halo, no magenta reflections on skin or clothes. No captions, labels, panels, extra figures, anatomy guide lines or UI. Deliver one finished coherent character master.\n",
+      "processing_record": "artifacts/verification/actor-rebuild-20261115/extraction.json"
+    },
+    {
+      "size": "1024x1536",
+      "model": "gpt-image-2.5-sunburst",
+      "cost": "unknown",
+      "exit_code": 0,
+      "completed_utc": "2026-11-15T04:58:47.5113845Z",
+      "quality": "medium",
+      "success_after": 31,
+      "success_before": 30,
+      "inputs": [
+        {
+          "sha256": "65478a8fd9c5dc5213fdc784b9f330b5625d4ed25eade1d2a88ee105e39d2af0",
+          "path": "output/imagegen/actor-party-20261115/v5-style-reference.png"
+        },
+        {
+          "sha256": "783e5e864a473f979967df48fa68fe5741e2f08dff29a0da4d551a9ac6748015",
+          "path": "output/imagegen/actor-rebuild-20261115/prompts/p03-master-v2.txt"
+        }
+      ],
+      "cli_args": [
+        "edit",
+        "--model",
+        "gpt-image-2.5-sunburst",
+        "--image",
+        "output/imagegen/actor-party-20261115/v5-style-reference.png",
+        "--prompt-file",
+        "output/imagegen/actor-rebuild-20261115/prompts/p03-master-v2.txt",
+        "--size",
+        "1024x1536",
+        "--quality",
+        "medium",
+        "--n",
+        "1",
+        "--out",
+        "output/imagegen/actor-rebuild-20261115/p03-master-v2.png"
+      ],
+      "mode": "edit",
+      "started_utc": "2026-11-15T04:58:01.0890189Z",
+      "base_url": "https://api-slb.jiji.cc/v1",
+      "n": 1,
+      "output": {
+        "sha256": "42dcfc376b8194e12f0e75b348c21790963358efdbe3b9f53cd930bcc19e6505",
+        "path": "output/imagegen/actor-rebuild-20261115/p03-master-v2.png"
+      },
+      "record": "p03-master-v2.run.json",
+      "decision": "superseded: used as identity input only",
+      "asset_id": "P03.REBUILD.p03-master-v2",
+      "requirement_ids": [
+        "UIR-052",
+        "UIR-054",
+        "UIR-057"
+      ],
+      "actual_size": [
+        1024,
+        1536
+      ],
+      "prompt_file": "output/imagegen/actor-rebuild-20261115/prompts/p03-master-v2.txt",
+      "prompt_sha256": "783e5e864a473f979967df48fa68fe5741e2f08dff29a0da4d551a9ac6748015",
+      "full_prompt": "Use case: create a NEW coherent full-body 2D game character master on a chroma-key background. The input image is ONLY a series art-style and natural proportion reference. The new person is Shen Jianzhang, not the bespectacled man in the reference.\n\nShen Jianzhang is a young adult East Asian male university student, handsome, intelligent, relaxed. Tousled short black hair, NO glasses. Olive green open overshirt with a subdued purple chest pocket, off-white crew-neck T-shirt, sleeves rolled to just below elbows, charcoal straight trousers and brown casual low shoes. On the viewer's LEFT, his near hand holds a slim dark pen, loosely at lower-chest level. On the viewer's RIGHT, his far hand holds a few small cream argument cards with muted green geometric symbols, no writing. Clear ordinary human hands.\n\nPOSTURE IS THE PRIORITY. Draw a healthy upright man with his whole head stacked vertically above the center of the ribcage and pelvis. Mostly frontal torso and head, with only a subtle 15-degree turn toward screen RIGHT. The face and sternum point in the same direction. Chin level, gaze straight ahead, no downward tilt, no neck craning. SHORT natural neck: a small interval between jaw and a reasonably high crew-neck T-shirt collar. The overshirt collar covers the sides of the neck and fits naturally around the trapezius. Do not draw a long open diagonal neck or elongated throat. Broad relaxed shoulders connect continuously to the neck and chest; normal robust upper torso, no sunken chest. Ears sit naturally above the shoulders, never far forward of them. Natural believable adult standing proportions approximately 6.5 to 7 heads tall with a substantial normal-length torso, ordinary legs, and visible weight through both feet. No long-legged fashion illustration, no stretched skinny figure. Keep the full body vertically aligned, legs only slightly apart, knees naturally soft, shoes on the same baseline. An easy confident student standing, not a zombie or a stiff mannequin.\n\nComposition in a 1024x1536 portrait canvas: entire figure from hair to soles, centered, approximately y=100 to y=1440 with generous clean border. The HEAD should be about 195-210 pixels high from hair to chin; neck only a short natural join before shoulders. The crotch is around y=820. Both elbows slightly away from waist to allow animation; hands and props stay in canvas. No other person.\n\nHand-painted stylized anime game artwork in the same series as the reference: clearly modeled painterly fabric and skin, confident dark contours, warm neutral light, readable expressive face and substantial body masses. One coherent drawing, no collage, no seams. Solid flat pure magenta #ff00ff background. No floor, no shadow, no scenery, no labels, no panel border, no glow, no magenta lighting or halo.\n",
+      "processing_record": "artifacts/verification/actor-rebuild-20261115/extraction.json"
+    },
+    {
+      "size": "1024x1536",
+      "model": "gpt-image-2.5-sunburst",
+      "cost": "unknown",
+      "exit_code": 0,
+      "completed_utc": "2026-11-15T05:00:40.0813437Z",
+      "quality": "medium",
+      "success_after": 32,
+      "success_before": 31,
+      "inputs": [
+        {
+          "sha256": "42dcfc376b8194e12f0e75b348c21790963358efdbe3b9f53cd930bcc19e6505",
+          "path": "output/imagegen/actor-rebuild-20261115/p03-master-v2.png"
+        },
+        {
+          "sha256": "65478a8fd9c5dc5213fdc784b9f330b5625d4ed25eade1d2a88ee105e39d2af0",
+          "path": "output/imagegen/actor-party-20261115/v5-style-reference.png"
+        },
+        {
+          "sha256": "f6cf54f5ee5259c768d3b6cd70eef49db127d9f18c0edbb5d83b5dfd422af41d",
+          "path": "output/imagegen/actor-rebuild-20261115/prompts/p03-master-v3.txt"
+        }
+      ],
+      "cli_args": [
+        "edit",
+        "--model",
+        "gpt-image-2.5-sunburst",
+        "--image",
+        "output/imagegen/actor-rebuild-20261115/p03-master-v2.png",
+        "--image",
+        "output/imagegen/actor-party-20261115/v5-style-reference.png",
+        "--prompt-file",
+        "output/imagegen/actor-rebuild-20261115/prompts/p03-master-v3.txt",
+        "--size",
+        "1024x1536",
+        "--quality",
+        "medium",
+        "--n",
+        "1",
+        "--out",
+        "output/imagegen/actor-rebuild-20261115/p03-master-v3.png"
+      ],
+      "mode": "edit",
+      "started_utc": "2026-11-15T05:00:04.7352590Z",
+      "base_url": "https://api-slb.jiji.cc/v1",
+      "n": 1,
+      "output": {
+        "sha256": "9bd07b62ede14c544507b0b9b445ec16d070b27b01bdb04c7590ab445c49970d",
+        "path": "output/imagegen/actor-rebuild-20261115/p03-master-v3.png"
+      },
+      "record": "p03-master-v3.run.json",
+      "decision": "selected whole-body master",
+      "asset_id": "P03.REBUILD.p03-master-v3",
+      "requirement_ids": [
+        "UIR-052",
+        "UIR-054",
+        "UIR-057"
+      ],
+      "actual_size": [
+        1024,
+        1536
+      ],
+      "prompt_file": "output/imagegen/actor-rebuild-20261115/prompts/p03-master-v3.txt",
+      "prompt_sha256": "f6cf54f5ee5259c768d3b6cd70eef49db127d9f18c0edbb5d83b5dfd422af41d",
+      "full_prompt": "Create one newly drawn, anatomically coherent full-body 2D game character. Image 1 is Shen Jianzhang's identity, green overshirt costume, hands, pen and cream argument-card reference. Image 2 is the approved series' painterly style. Preserve Shen's identity, NO glasses, short black tousled hair, olive green open shirt with a plum chest pocket, ivory crew-neck tee, charcoal trousers and brown casual shoes. Near hand on viewer LEFT holds a dark pen near lower chest, far hand on viewer RIGHT holds 2-3 cream cards with simple muted green geometry. This is a complete redraw with improved whole-body proportions, not a pasted or squashed cutout.\n\nThe highest priority is an ordinary healthy relaxed student with COMPACT NATURAL ADULT PROPORTIONS, approximately SIX AND A HALF HEADS tall. Give him a normal substantial torso and moderately SHORTER legs than image 1. Do not repeat image 1's elongated fashion-model silhouette. Crotch-to-sole length should be about 44 percent of the whole figure, shoulder-to-crotch should have a natural substantial length. Legs normal, readable knees, no bowlegs, collapsed knee, ankle twist or lopsided stance. Both feet bear weight on the same horizontal baseline.\n\nMake the head UPRIGHT, jaw level, face almost frontal and gently turned only 15 degrees to screen-right, with head, chest and pelvis vertically stacked. No forward neck, hunch or chin poke. A SHORT normal neck, showing only a small amount of skin between jaw and the normal crew-neck collar, not a long bare throat. Shoulders gently broad and relaxed, the trapezius and overshirt collar join smoothly into the neck. Do not lower the head, bend the back, or stretch the head away from the shoulders. Clear friendly focused expression, eyes open, not stiff or zombie-like.\n\nLayout: 1024x1536 portrait, figure centered from approximately y=70 to y=1470. Hair-to-chin head height around 215 pixels, neck around 40 pixels, natural shoulder line, shirt hem around y=760, crotch around y=850, soles y=1470. Both elbows slightly away from the torso so the hands read clearly. Whole hair and both shoes fully visible. Good asymmetry and fabric folds without leaning the spine.\n\nPolished hand-painted anime game illustration matching image 2, strong readable contours, warm skin, painterly volumetric garment folds, clean silhouette, consistent light. ONE continuous person, no component sheet. Perfectly flat pure magenta #ff00ff background, no shadow, no floor, no props other than pen and cards, no halo, no magenta reflections, no text, no labels, no frames, no UI.\n",
+      "processing_record": "artifacts/verification/actor-rebuild-20261115/extraction.json"
+    },
+    {
+      "output": {
+        "sha256": "a2aa0bbcc8be271cc3d56fc3407f7f9fc33bdee23a313f2a8de65e7a11e16a4a",
+        "path": "output/imagegen/actor-rebuild-20261115/p03-sleeve-v1.png"
+      },
+      "cost": "unknown",
+      "inputs": [
+        {
+          "sha256": "46230ff23cacb68fcdda1e5ab9b51dbaed108cbc631cee8b96dab68906e61ec6",
+          "path": "output/imagegen/actor-rebuild-20261115/p03-sleeve-input.png"
+        },
+        {
+          "sha256": "3979cb3b3ca17022511f4a6e68a0a300c216b52f1ba59e0d5572da838f829055",
+          "path": "output/imagegen/actor-rebuild-20261115/prompts/p03-sleeve-v1.txt"
+        }
+      ],
+      "started_utc": "2026-11-15T05:06:14.2971308Z",
+      "model": "gpt-image-2.5-sunburst",
+      "mode": "edit",
+      "cli_args": [
+        "edit",
+        "--model",
+        "gpt-image-2.5-sunburst",
+        "--image",
+        "output/imagegen/actor-rebuild-20261115/p03-sleeve-input.png",
+        "--prompt-file",
+        "output/imagegen/actor-rebuild-20261115/prompts/p03-sleeve-v1.txt",
+        "--size",
+        "1024x1024",
+        "--quality",
+        "medium",
+        "--n",
+        "1",
+        "--out",
+        "output/imagegen/actor-rebuild-20261115/p03-sleeve-v1.png"
+      ],
+      "quality": "medium",
+      "size": "1024x1024",
+      "n": 1,
+      "completed_utc": "2026-11-15T05:06:49.1118004Z",
+      "exit_code": 0,
+      "base_url": "https://api-slb.jiji.cc/v1",
+      "record": "p03-sleeve-v1.run.json",
+      "decision": "selected component source; local processing documented in extraction.json",
+      "asset_id": "P03.REBUILD.p03-sleeve-v1",
+      "requirement_ids": [
+        "UIR-052",
+        "UIR-054",
+        "UIR-057"
+      ],
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/actor-rebuild-20261115/prompts/p03-sleeve-v1.txt",
+      "prompt_sha256": "3979cb3b3ca17022511f4a6e68a0a300c216b52f1ba59e0d5572da838f829055",
+      "full_prompt": "Production sprite edit of the isolated olive-green rolled shirt sleeve in the input. Keep the exact canvas 1024x1024, sleeve size, upper shoulder cap, long upper-arm shape, orientation, rolled cuff folds, painterly ink contours, muted green fabric palette and lighting. Remove every trace of exposed skin and forearm from the cuff and fill that small hidden elbow area with matching folded green fabric. The sleeve ends in a complete softly rounded cuff/green fabric overlap so the separate forearm can articulate in front of it. Keep the silhouette close to the existing sleeve, no new long sleeve extension. Remove stray torso strips or colored triangles. Pure flat magenta #ff00ff outside the one sleeve. Do not add an arm, a hand, shoulder, torso, prop, dark hollow sleeve socket, labels, shadows or outlines. One clean complete sleeve component, in the exact original canvas position and scale.\n",
+      "processing_record": "artifacts/verification/actor-rebuild-20261115/extraction.json"
+    },
+    {
+      "output": {
+        "sha256": "ad399a41a77d7a840ae3a386814fa58bb60cab6a96332940e68d81fbc181709e",
+        "path": "output/imagegen/actor-rebuild-20261115/p03-strike-v1.png"
+      },
+      "cost": "unknown",
+      "inputs": [
+        {
+          "sha256": "e3a013aa0d589edc21ef44932b92bb73a33cee2a69105aaec1d35ac287bc0454",
+          "path": "output/imagegen/actor-rebuild-20261115/p03-forearm-v1.png"
+        },
+        {
+          "sha256": "375e1e7ccf3e7d51d8ea787fa20b58bd408f9399faf3c000a5b576bd041586db",
+          "path": "output/imagegen/actor-rebuild-20261115/prompts/p03-strike-v1.txt"
+        }
+      ],
+      "started_utc": "2026-11-15T05:10:45.4356114Z",
+      "model": "gpt-image-2.5-sunburst",
+      "mode": "edit",
+      "cli_args": [
+        "edit",
+        "--model",
+        "gpt-image-2.5-sunburst",
+        "--image",
+        "output/imagegen/actor-rebuild-20261115/p03-forearm-v1.png",
+        "--prompt-file",
+        "output/imagegen/actor-rebuild-20261115/prompts/p03-strike-v1.txt",
+        "--size",
+        "1024x1024",
+        "--quality",
+        "medium",
+        "--n",
+        "1",
+        "--out",
+        "output/imagegen/actor-rebuild-20261115/p03-strike-v1.png"
+      ],
+      "quality": "medium",
+      "size": "1024x1024",
+      "n": 1,
+      "completed_utc": "2026-11-15T05:11:27.3635435Z",
+      "exit_code": 0,
+      "base_url": "https://api-slb.jiji.cc/v1",
+      "record": "p03-strike-v1.run.json",
+      "decision": "selected component source; local processing documented in extraction.json",
+      "asset_id": "P03.REBUILD.p03-strike-v1",
+      "requirement_ids": [
+        "UIR-052",
+        "UIR-054",
+        "UIR-057"
+      ],
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/actor-rebuild-20261115/prompts/p03-strike-v1.txt",
+      "prompt_sha256": "375e1e7ccf3e7d51d8ea787fa20b58bd408f9399faf3c000a5b576bd041586db",
+      "full_prompt": "Create a second local drawing of the SAME isolated forearm, hand and slim dark pen on the exact 1024x1024 canvas. Preserve the input's elbow location at lower left, arm length, wrist position, thickness, skin tone, painterly contours and shading. Change only the hand's gesture subtly: a more purposeful secure annotation grip, pen rotated a little more toward screen-right with a crisp clear nib, normal fingers and a natural wrist. Keep the forearm's overall silhouette and the hand's size and position nearly identical, so it can smoothly switch on the same animation bone. Do not stretch or rotate the whole limb, do not change the elbow, do not create a pointing index finger detached from the pen. Remove all green/blue fabric fragments around the limb: only warm skin, hand and the single dark pen remain on flat solid pure magenta #ff00ff. Rounded clean elbow overlap. No sleeve, no clothing, no body, no extra hand, no panel, text or shadow.\n",
+      "processing_record": "artifacts/verification/actor-rebuild-20261115/extraction.json"
+    },
+    {
+      "output": {
+        "sha256": "528b4d8a3947c3dab66a570e2e7b4decf0264c9a6ea9fb314f2294b33e0d503d",
+        "path": "output/imagegen/actor-rebuild-20261115/p03-trunk-v1.png"
+      },
+      "cost": "unknown",
+      "inputs": [
+        {
+          "sha256": "9bd07b62ede14c544507b0b9b445ec16d070b27b01bdb04c7590ab445c49970d",
+          "path": "output/imagegen/actor-rebuild-20261115/p03-master-v3.png"
+        },
+        {
+          "sha256": "8750248c63cb265497d2ba68e9a7fffeb78f88a4dff81e1e22a5afdf258ad770",
+          "path": "output/imagegen/actor-rebuild-20261115/p03-trunk-mask-v1.png"
+        },
+        {
+          "sha256": "394dd064e3e59759798b19e6e98e1be1befd2ed40721a750185164094b29b47e",
+          "path": "output/imagegen/actor-rebuild-20261115/prompts/p03-trunk-v1.txt"
+        }
+      ],
+      "started_utc": "2026-11-15T05:04:11.3326244Z",
+      "model": "gpt-image-2.5-sunburst",
+      "mode": "edit",
+      "cli_args": [
+        "edit",
+        "--model",
+        "gpt-image-2.5-sunburst",
+        "--image",
+        "output/imagegen/actor-rebuild-20261115/p03-master-v3.png",
+        "--mask",
+        "output/imagegen/actor-rebuild-20261115/p03-trunk-mask-v1.png",
+        "--prompt-file",
+        "output/imagegen/actor-rebuild-20261115/prompts/p03-trunk-v1.txt",
+        "--size",
+        "1024x1536",
+        "--quality",
+        "medium",
+        "--n",
+        "1",
+        "--out",
+        "output/imagegen/actor-rebuild-20261115/p03-trunk-v1.png"
+      ],
+      "quality": "medium",
+      "size": "1024x1536",
+      "n": 1,
+      "completed_utc": "2026-11-15T05:04:46.8241958Z",
+      "exit_code": 0,
+      "base_url": "https://api-slb.jiji.cc/v1",
+      "record": "p03-trunk-v1.run.json",
+      "decision": "selected component source; local processing documented in extraction.json",
+      "asset_id": "P03.REBUILD.p03-trunk-v1",
+      "requirement_ids": [
+        "UIR-052",
+        "UIR-054",
+        "UIR-057"
+      ],
+      "actual_size": [
+        1024,
+        1536
+      ],
+      "prompt_file": "output/imagegen/actor-rebuild-20261115/prompts/p03-trunk-v1.txt",
+      "prompt_sha256": "394dd064e3e59759798b19e6e98e1be1befd2ed40721a750185164094b29b47e",
+      "full_prompt": "Use case: precise masked garment reconstruction for a cutout game sprite. The uploaded full-body image is the NEW Shen Jianzhang master. Preserve the 1024x1536 canvas, pose, body position, scale, head and short neck, collar, green overshirt, purple pocket, white tee, trousers and shoes. Edit only the masked region.\n\nRemove BOTH complete arms, rolled sleeves, forearms, hands, pen and cream cards, replacing all their exterior pixels with solid magenta #ff00ff. Reconstruct the green overshirt and white T-shirt CONTINUOUSLY behind the removed limbs, same figure position, original shirt hem, same shoulder width, same folds, buttons and purple pocket. Produce a clean ARMLESS torso for animation, from the exact existing collar and shoulder line to the exact existing hem. The two arm roots must be rounded uninterrupted GREEN FABRIC underlaps, not a dark hole or exposed hollow arm socket. The sleeves will be attached separately later. No new neck, no narrower or shifted torso, no floating hand or pen, no skin on the body except the original neck above the collar. Keep the neck and neckline above the mask unchanged. No captions, guides, shadows or other objects. This is the same character's hidden clothing reconstruction, not a new pose or character redesign.\n",
+      "processing_record": "artifacts/verification/actor-rebuild-20261115/extraction.json"
+    }
+  ],
+  "user_final_art_acceptance": "pending",
+  "updated_utc": "2026-11-15T05:17:51.634366+00:00"
+}

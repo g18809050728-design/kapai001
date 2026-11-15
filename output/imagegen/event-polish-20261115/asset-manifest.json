@@ -1,0 +1,394 @@
+{
+  "requirement_ids": [
+    "UIR-070",
+    "UIR-071"
+  ],
+  "provider": "https://api-slb.jiji.cc/v1",
+  "model": "gpt-image-2.5-sunburst",
+  "api_mode": "images/generations; text prompt only; no uploaded reference",
+  "successful_images_this_batch": 11,
+  "prior_successes": 110,
+  "cumulative_successes": 121,
+  "authorized_maximum": 200,
+  "cost": "not returned by service",
+  "review": {
+    "status": "ai_reviewed_for_integration",
+    "reviewer": "Codex AI visual inspection, not user approval",
+    "contact_sheet": "contact-sheet-02.jpg",
+    "all_11_contact_sheet_entries_viewed": true,
+    "full_size_reviewed": [
+      "V04",
+      "V03",
+      "C",
+      "FAMILIAR",
+      "V10"
+    ],
+    "findings": {
+      "V04": "Dark laptop, moonlit dormitory, battery-style desk lamp and study notes clearly express power outage.",
+      "V03": "Readable consultation scene; female senior means narration/action wording should be aligned.",
+      "V10": "Campus card and ginkgo charm clearly legible at small sizes, no personal text.",
+      "C": "Natural collaborative gestures and coherent table, no visible malformed limbs at intended size.",
+      "FAMILIAR": "Relaxed adult stances and body proportions, suitable as a scene, not as protagonist replacement.",
+      "remaining": "Distinct library, lab, mentor office, internship, thesis desk and holiday gate; shared watercolor/gouache palette."
+    },
+    "limitations": [
+      "Fine abstract scribbles can appear on notebooks, no readable rules or personal data.",
+      "Not motion layers and not a change to confirmed protagonist/enemy artwork.",
+      "Final art approval belongs to the user."
+    ]
+  },
+  "assets": [
+    {
+      "asset_id": "V01",
+      "requirement_id": "UIR-070",
+      "version": 1,
+      "title": "节日放假",
+      "prompt_file": "output/imagegen/event-polish-20261115/V01-v1-prompt.txt",
+      "prompt_sha256": "92dfed7b6c4724ec27c3d5e8af9650d465e4eddb222ba95afc502a02f8e335a4",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "quality": "high",
+      "original": "output/imagegen/event-polish-20261115/originals/V01-v1.png",
+      "original_sha256": "03609230155ea7c22c46408b1b265696f78fa6b7ab9a939745213ebfa3251a5c",
+      "selected": true,
+      "review_status": "AI visual review, final user art judgment remains",
+      "derivatives": [
+        {
+          "path": "assets/art/events/V01/illustration.png",
+          "sha256": "f94a82781b22172a8827c0bbc6c93982b8533cb6f2de088bd8f798dc8435be49",
+          "processing": "Original RGB untouched; add 66px smoothstep alpha perimeter, no content crop/stretch."
+        },
+        {
+          "path": "assets/art/events/V01/background.png",
+          "sha256": "68f4459ff157361ff799b2f8cb91574db82a5f335698f9754beed74438853ace",
+          "processing": "768x768 Lanczos, Gaussian blur radius16; UI uses aspect-preserving cover and dark overlay."
+        }
+      ]
+    },
+    {
+      "asset_id": "V03",
+      "requirement_id": "UIR-070",
+      "version": 1,
+      "title": "选课咨询",
+      "prompt_file": "output/imagegen/event-polish-20261115/V03-v1-prompt.txt",
+      "prompt_sha256": "9f1f5339f2429298a0dfaea027604e99518710662efc7a81b105e4d5cf03cbc4",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "quality": "high",
+      "original": "output/imagegen/event-polish-20261115/originals/V03-v1.png",
+      "original_sha256": "2ba9c20447827b2978f4d387ae8a39c3699f99aea387ef09695ef6076bbef202",
+      "selected": true,
+      "review_status": "AI visual review, final user art judgment remains",
+      "derivatives": [
+        {
+          "path": "assets/art/events/V03/illustration.png",
+          "sha256": "60957ee152ae33fa69c6195d86ce7f5e3f61d7b943f70d47766f6ebbbb72e619",
+          "processing": "Original RGB untouched; add 66px smoothstep alpha perimeter, no content crop/stretch."
+        },
+        {
+          "path": "assets/art/events/V03/background.png",
+          "sha256": "2fd9811c76c09c29b6b46d2dc532a5cd8aabd8310ca632d1b2534fc718fd5518",
+          "processing": "768x768 Lanczos, Gaussian blur radius16; UI uses aspect-preserving cover and dark overlay."
+        }
+      ]
+    },
+    {
+      "asset_id": "V04",
+      "requirement_id": "UIR-070",
+      "version": 1,
+      "title": "宿舍断电",
+      "prompt_file": "output/imagegen/event-polish-20261115/V04-v1-prompt.txt",
+      "prompt_sha256": "63cd45a953f8317a7d0a48f172ef9e5097e8fe8a442ee230c7ea96d2c680953b",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "quality": "high",
+      "original": "output/imagegen/event-polish-20261115/originals/V04-v1.png",
+      "original_sha256": "184c8c4a87a30f936068de48a0602ec703895bb30c72b318af1efb79216ce819",
+      "selected": true,
+      "review_status": "AI visual review, final user art judgment remains",
+      "derivatives": [
+        {
+          "path": "assets/art/events/V04/illustration.png",
+          "sha256": "10a4e73f6a5e5fd9860ae97df4018ccc9e42802b5ebf43e56fd9abc36e867e19",
+          "processing": "Original RGB untouched; add 66px smoothstep alpha perimeter, no content crop/stretch."
+        },
+        {
+          "path": "assets/art/events/V04/background.png",
+          "sha256": "b987ac91b777d60f9a0dd86a307d2d6514758b83387d1225e3acf42482a0f807",
+          "processing": "768x768 Lanczos, Gaussian blur radius16; UI uses aspect-preserving cover and dark overlay."
+        }
+      ]
+    },
+    {
+      "asset_id": "V10",
+      "requirement_id": "UIR-070",
+      "version": 1,
+      "title": "捡到校园卡",
+      "prompt_file": "output/imagegen/event-polish-20261115/V10-v1-prompt.txt",
+      "prompt_sha256": "dbc6ab6debb7daa0a989644c7329e86405faa906af17b05567a35372f4acde41",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "quality": "high",
+      "original": "output/imagegen/event-polish-20261115/originals/V10-v1.png",
+      "original_sha256": "e92beb887e8bd81a3b437092a265bd95305e4cec822ee61f715453b4103c101c",
+      "selected": true,
+      "review_status": "AI visual review, final user art judgment remains",
+      "derivatives": [
+        {
+          "path": "assets/art/events/V10/illustration.png",
+          "sha256": "1947128a510b32fee6da1d49cc61cf0206c166437747c5e4a556d187a322e545",
+          "processing": "Original RGB untouched; add 66px smoothstep alpha perimeter, no content crop/stretch."
+        },
+        {
+          "path": "assets/art/events/V10/background.png",
+          "sha256": "6e2a9b7ac9014d23668735978753cce988dd1ea148478ed0c5c4aae04a134875",
+          "processing": "768x768 Lanczos, Gaussian blur radius16; UI uses aspect-preserving cover and dark overlay."
+        }
+      ]
+    },
+    {
+      "asset_id": "L",
+      "requirement_id": "UIR-070",
+      "version": 1,
+      "title": "图书馆",
+      "prompt_file": "output/imagegen/event-polish-20261115/L-v1-prompt.txt",
+      "prompt_sha256": "d8ac7a0b59848769deaf73c0842a205be93a069dbbd75003e8f4514f660675fc",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "quality": "high",
+      "original": "output/imagegen/event-polish-20261115/originals/L-v1.png",
+      "original_sha256": "1b8fc63dc9380dd7bedc13efa8e56a1d782e65ebcae61978e6ce89af5e2fc04a",
+      "selected": true,
+      "review_status": "AI visual review, final user art judgment remains",
+      "derivatives": [
+        {
+          "path": "assets/art/events/L/illustration.png",
+          "sha256": "0d7dd75acc2b133abef21c5ca5d5b713aef764b47e41049de0ecfe850926c789",
+          "processing": "Original RGB untouched; add 66px smoothstep alpha perimeter, no content crop/stretch."
+        },
+        {
+          "path": "assets/art/events/L/background.png",
+          "sha256": "fc3ee39c8a77b4bf8c95225e2e26fab6e012ca9a2f6e74d3ffc3349e56fa9940",
+          "processing": "768x768 Lanczos, Gaussian blur radius16; UI uses aspect-preserving cover and dark overlay."
+        }
+      ]
+    },
+    {
+      "asset_id": "LAB",
+      "requirement_id": "UIR-070",
+      "version": 1,
+      "title": "实验室",
+      "prompt_file": "output/imagegen/event-polish-20261115/LAB-v1-prompt.txt",
+      "prompt_sha256": "67655c81f1724d468117087852b133e319622858b78e090df70cc86cddf6fc33",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "quality": "high",
+      "original": "output/imagegen/event-polish-20261115/originals/LAB-v1.png",
+      "original_sha256": "9e19baa2349c562c8af991a59d862a47f8ea64c6758270d891343a7df1464463",
+      "selected": true,
+      "review_status": "AI visual review, final user art judgment remains",
+      "derivatives": [
+        {
+          "path": "assets/art/events/LAB/illustration.png",
+          "sha256": "f03ff175b63d98a08fd7278f32fcce69889b498b6e2186c0530143c9015cf2a2",
+          "processing": "Original RGB untouched; add 66px smoothstep alpha perimeter, no content crop/stretch."
+        },
+        {
+          "path": "assets/art/events/LAB/background.png",
+          "sha256": "51ee573254f08589ef910fe700c201a86f95f501c95fcf54831280c2c90d6610",
+          "processing": "768x768 Lanczos, Gaussian blur radius16; UI uses aspect-preserving cover and dark overlay."
+        }
+      ]
+    },
+    {
+      "asset_id": "T",
+      "requirement_id": "UIR-070",
+      "version": 1,
+      "title": "导师交流",
+      "prompt_file": "output/imagegen/event-polish-20261115/T-v1-prompt.txt",
+      "prompt_sha256": "bf62cc0f56befb5a3a4433db03ece9648af70e28e7cd610e81f543b12bcc6b97",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "quality": "high",
+      "original": "output/imagegen/event-polish-20261115/originals/T-v1.png",
+      "original_sha256": "22d149388f9a75df52d1c4adb394d9fe659b25cca535c4c586da15adccf36f8f",
+      "selected": true,
+      "review_status": "AI visual review, final user art judgment remains",
+      "derivatives": [
+        {
+          "path": "assets/art/events/T/illustration.png",
+          "sha256": "cc68e9ab5502c762912d873adde02c2e7b2529e916d519ff843199e495c26281",
+          "processing": "Original RGB untouched; add 66px smoothstep alpha perimeter, no content crop/stretch."
+        },
+        {
+          "path": "assets/art/events/T/background.png",
+          "sha256": "7efae3987203f3a22f235b4eea9334f9b8cf41b1fcbeb7ce4dc8ed15d59d3a97",
+          "processing": "768x768 Lanczos, Gaussian blur radius16; UI uses aspect-preserving cover and dark overlay."
+        }
+      ]
+    },
+    {
+      "asset_id": "C",
+      "requirement_id": "UIR-070",
+      "version": 1,
+      "title": "社团活动",
+      "prompt_file": "output/imagegen/event-polish-20261115/C-v1-prompt.txt",
+      "prompt_sha256": "ce713c41cd932522dbcf4c9752267e09dc57f389b538c1260bac6469451ca503",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "quality": "high",
+      "original": "output/imagegen/event-polish-20261115/originals/C-v1.png",
+      "original_sha256": "d41daa857bcccc14360a8bb6fa6974282dfec7d665b3b0d63167dcfca7cdf638",
+      "selected": true,
+      "review_status": "AI visual review, final user art judgment remains",
+      "derivatives": [
+        {
+          "path": "assets/art/events/C/illustration.png",
+          "sha256": "09dc36ecadd6787f30396b3cb8ad307f48b80ec5501f9b07007e6c1ec340c2f5",
+          "processing": "Original RGB untouched; add 66px smoothstep alpha perimeter, no content crop/stretch."
+        },
+        {
+          "path": "assets/art/events/C/background.png",
+          "sha256": "9636cd6fb68b9ec98e732b11fd612290bef2692b8c0ad7bc5d655a625016713f",
+          "processing": "768x768 Lanczos, Gaussian blur radius16; UI uses aspect-preserving cover and dark overlay."
+        }
+      ]
+    },
+    {
+      "asset_id": "I",
+      "requirement_id": "UIR-070",
+      "version": 1,
+      "title": "实习实践",
+      "prompt_file": "output/imagegen/event-polish-20261115/I-v1-prompt.txt",
+      "prompt_sha256": "2de788ff8b5795f897bf0c1b01fa6c9e51d4c79a536977cc0eb67f964236b60b",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "quality": "high",
+      "original": "output/imagegen/event-polish-20261115/originals/I-v1.png",
+      "original_sha256": "eac89652714be35f64a412eaee7eaa045e2992553a18294a1cd74eb70fe77be9",
+      "selected": true,
+      "review_status": "AI visual review, final user art judgment remains",
+      "derivatives": [
+        {
+          "path": "assets/art/events/I/illustration.png",
+          "sha256": "5a65cc21878104a7f858589e66435b2ae5a76c63f67e7308aeb665d9952c0ec1",
+          "processing": "Original RGB untouched; add 66px smoothstep alpha perimeter, no content crop/stretch."
+        },
+        {
+          "path": "assets/art/events/I/background.png",
+          "sha256": "55fa3ab12f5b5fc1cfb36126905e261302a78b8c38fb34ddd8329a4ee5764fd6",
+          "processing": "768x768 Lanczos, Gaussian blur radius16; UI uses aspect-preserving cover and dark overlay."
+        }
+      ]
+    },
+    {
+      "asset_id": "ST",
+      "requirement_id": "UIR-070",
+      "version": 1,
+      "title": "毕业设计",
+      "prompt_file": "output/imagegen/event-polish-20261115/ST-v1-prompt.txt",
+      "prompt_sha256": "edb12658dc7a37a32bcaabcb5a0a02e040dad7fa43f2fea9084823228f43fd8c",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "quality": "high",
+      "original": "output/imagegen/event-polish-20261115/originals/ST-v1.png",
+      "original_sha256": "1e759ce53954fb285508334ded928be73011e1cdaadadfdc70ea9d169c28b4a7",
+      "selected": true,
+      "review_status": "AI visual review, final user art judgment remains",
+      "derivatives": [
+        {
+          "path": "assets/art/events/ST/illustration.png",
+          "sha256": "de61a0e215d04b11e0e485499feb722b48a6949c807179ccad959a0e20bc9425",
+          "processing": "Original RGB untouched; add 66px smoothstep alpha perimeter, no content crop/stretch."
+        },
+        {
+          "path": "assets/art/events/ST/background.png",
+          "sha256": "eb4f42df53460763c9af0d6d0aa968f9dd769815312964a9ab6e06714b04b37c",
+          "processing": "768x768 Lanczos, Gaussian blur radius16; UI uses aspect-preserving cover and dark overlay."
+        }
+      ]
+    },
+    {
+      "asset_id": "FAMILIAR",
+      "requirement_id": "UIR-070",
+      "version": 1,
+      "title": "校园熟人",
+      "prompt_file": "output/imagegen/event-polish-20261115/FAMILIAR-v1-prompt.txt",
+      "prompt_sha256": "d93d1e5304e487970e637a2c39a1778dbfbc58d65a3d413ae14ea766ff4f2369",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "quality": "high",
+      "original": "output/imagegen/event-polish-20261115/originals/FAMILIAR-v1.png",
+      "original_sha256": "b8f3814601aa3ff1068f4326c7d75a0434966740ef71e18ec58683898a9f6793",
+      "selected": true,
+      "review_status": "AI visual review, final user art judgment remains",
+      "derivatives": [
+        {
+          "path": "assets/art/events/FAMILIAR/illustration.png",
+          "sha256": "dc40fb64aec6e8c98f6cc38e448d33cce163a0744031709cdf9ea04c2b306088",
+          "processing": "Original RGB untouched; add 66px smoothstep alpha perimeter, no content crop/stretch."
+        },
+        {
+          "path": "assets/art/events/FAMILIAR/background.png",
+          "sha256": "c7eaca6de4d1782e992d6ac7b7d8083323f44e684555ad8b25d0d63970b48971",
+          "processing": "768x768 Lanczos, Gaussian blur radius16; UI uses aspect-preserving cover and dark overlay."
+        }
+      ]
+    }
+  ]
+}

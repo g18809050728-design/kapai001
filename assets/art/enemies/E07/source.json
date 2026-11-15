@@ -1,0 +1,67 @@
+{
+  "id": "E07",
+  "version": 13,
+  "name": "补考",
+  "requirements": [
+    "UIR-069",
+    "UIR-011",
+    "UIR-013",
+    "UIR-051",
+    "UIR-052",
+    "UIR-054",
+    "UIR-057",
+    "UIR-059"
+  ],
+  "source": "output/imagegen/enemy-roster-20261115/E07-v1.png",
+  "source_sha256": "11d984932477bab33aac5f67ea62572572e6aa09bf399dabe6f2a20633aeb1da",
+  "source_size": [
+    1024,
+    1024
+  ],
+  "method": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+  "outputs": [
+    {
+      "file": "assets/art/enemies/E07/body.png",
+      "size": [
+        737,
+        969
+      ],
+      "sha256": "81b1ac2166c241ce3c3ad41109cf1d3baa52ff65d482f2373a443c8fd0653872",
+      "source_bbox": [
+        287,
+        31,
+        1024,
+        1000
+      ]
+    },
+    {
+      "file": "assets/art/enemies/E07/attack.png",
+      "size": [
+        222,
+        415
+      ],
+      "sha256": "7e82c1d2656a3ccae4717f3c747bd1bbc4563c86971a663a6f0ba78a3c05d72c",
+      "source_bbox": [
+        30,
+        93,
+        252,
+        508
+      ]
+    },
+    {
+      "file": "assets/art/enemies/E07/accent.png",
+      "size": [
+        226,
+        249
+      ],
+      "sha256": "8849cc8bc511b1158dea370a1c37992cd058efa72b402688497dd8f70a5ca5f0",
+      "source_bbox": [
+        15,
+        696,
+        241,
+        945
+      ]
+    }
+  ],
+  "visual_acceptance": "pending review; machine metrics do not establish visual quality"
+}

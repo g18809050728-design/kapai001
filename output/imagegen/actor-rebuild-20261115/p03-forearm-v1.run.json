@@ -1,0 +1,43 @@
+﻿{
+    "output":  {
+                   "sha256":  "e3a013aa0d589edc21ef44932b92bb73a33cee2a69105aaec1d35ac287bc0454",
+                   "path":  "output/imagegen/actor-rebuild-20261115/p03-forearm-v1.png"
+               },
+    "cost":  "unknown",
+    "inputs":  [
+                   {
+                       "sha256":  "99f00ee0d424c29d3f9299d15536cf011a07b95e25f0f76b414c13620b2ced87",
+                       "path":  "output/imagegen/actor-rebuild-20261115/p03-forearm-input.png"
+                   },
+                   {
+                       "sha256":  "d1fb610bdbf300778ee471532271b82f2d4d777133bbeeeee6499f89d7e7255e",
+                       "path":  "output/imagegen/actor-rebuild-20261115/prompts/p03-forearm-v1.txt"
+                   }
+               ],
+    "started_utc":  "2026-11-15T05:06:14.2971308Z",
+    "model":  "gpt-image-2.5-sunburst",
+    "mode":  "edit",
+    "cli_args":  [
+                     "edit",
+                     "--model",
+                     "gpt-image-2.5-sunburst",
+                     "--image",
+                     "output/imagegen/actor-rebuild-20261115/p03-forearm-input.png",
+                     "--prompt-file",
+                     "output/imagegen/actor-rebuild-20261115/prompts/p03-forearm-v1.txt",
+                     "--size",
+                     "1024x1024",
+                     "--quality",
+                     "medium",
+                     "--n",
+                     "1",
+                     "--out",
+                     "output/imagegen/actor-rebuild-20261115/p03-forearm-v1.png"
+                 ],
+    "quality":  "medium",
+    "size":  "1024x1024",
+    "n":  1,
+    "completed_utc":  "2026-11-15T05:06:41.7199779Z",
+    "exit_code":  0,
+    "base_url":  "https://api-slb.jiji.cc/v1"
+}

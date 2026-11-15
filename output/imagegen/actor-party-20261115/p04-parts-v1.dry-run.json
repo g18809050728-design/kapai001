@@ -1,0 +1,8 @@
+﻿{
+    "elapsed_seconds":  0.21465209999999998,
+    "exit_code":  0,
+    "output":  "output/imagegen/actor-party-20261115/p04-parts-v1.png",
+    "model":  "gpt-image-2.5-sunburst",
+    "character":  "P04",
+    "api_mode":  "edit"
+}

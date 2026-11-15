@@ -1,0 +1,51 @@
+﻿{
+    "size":  "1024x1536",
+    "model":  "gpt-image-2.5-sunburst",
+    "cost":  "unknown",
+    "exit_code":  0,
+    "completed_utc":  "2026-11-15T04:57:01.0748986Z",
+    "quality":  "medium",
+    "success_after":  30,
+    "success_before":  29,
+    "inputs":  [
+                   {
+                       "sha256":  "23847b616566092660099e3538f9bf0132831ed9084cf9c101391a8a2b55a3c9",
+                       "path":  "assets/art/presentation-v2/actors/P03.png"
+                   },
+                   {
+                       "sha256":  "65478a8fd9c5dc5213fdc784b9f330b5625d4ed25eade1d2a88ee105e39d2af0",
+                       "path":  "output/imagegen/actor-party-20261115/v5-style-reference.png"
+                   },
+                   {
+                       "sha256":  "6807ae1d0e852b873599c78b5467d152f97d55059b9d874370d5e6f7c7f237f1",
+                       "path":  "output/imagegen/actor-rebuild-20261115/prompts/p03-master-v1.txt"
+                   }
+               ],
+    "cli_args":  [
+                     "edit",
+                     "--model",
+                     "gpt-image-2.5-sunburst",
+                     "--image",
+                     "assets/art/presentation-v2/actors/P03.png",
+                     "--image",
+                     "output/imagegen/actor-party-20261115/v5-style-reference.png",
+                     "--prompt-file",
+                     "output/imagegen/actor-rebuild-20261115/prompts/p03-master-v1.txt",
+                     "--size",
+                     "1024x1536",
+                     "--quality",
+                     "medium",
+                     "--n",
+                     "1",
+                     "--out",
+                     "output/imagegen/actor-rebuild-20261115/p03-master-v1.png"
+                 ],
+    "mode":  "edit",
+    "started_utc":  "2026-11-15T04:56:28.1716031Z",
+    "base_url":  "https://api-slb.jiji.cc/v1",
+    "n":  1,
+    "output":  {
+                   "sha256":  "3d68320cf4af3b92c16c2eef51c48c417fdbcd24f5ac6e51ebbfb67da93056ef",
+                   "path":  "output/imagegen/actor-rebuild-20261115/p03-master-v1.png"
+               }
+}

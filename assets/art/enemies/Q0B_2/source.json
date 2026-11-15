@@ -1,0 +1,67 @@
+{
+  "id": "Q0B_2",
+  "version": 13,
+  "name": "作业答辩",
+  "requirements": [
+    "UIR-069",
+    "UIR-011",
+    "UIR-013",
+    "UIR-051",
+    "UIR-052",
+    "UIR-054",
+    "UIR-057",
+    "UIR-059"
+  ],
+  "source": "output/imagegen/enemy-roster-20261115/Q0B_2-v1.png",
+  "source_sha256": "6a0e8ffee8d920a055dffbd481b919fbd6d7ad49540f7f81df5d6df529acad67",
+  "source_size": [
+    1024,
+    1024
+  ],
+  "method": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+  "outputs": [
+    {
+      "file": "assets/art/enemies/Q0B_2/body.png",
+      "size": [
+        743,
+        775
+      ],
+      "sha256": "aa93df0aa0d0b12a01431e6d3cc683892779cb82b20845e9f20127ad8c8d1f2b",
+      "source_bbox": [
+        271,
+        170,
+        1014,
+        945
+      ]
+    },
+    {
+      "file": "assets/art/enemies/Q0B_2/attack.png",
+      "size": [
+        230,
+        400
+      ],
+      "sha256": "6a3e03c901f6c87c7d92a39eda9b4eebaa33ffa5c64180c0827d855087b0e3b7",
+      "source_bbox": [
+        26,
+        79,
+        256,
+        479
+      ]
+    },
+    {
+      "file": "assets/art/enemies/Q0B_2/accent.png",
+      "size": [
+        239,
+        244
+      ],
+      "sha256": "56e19652e357991985a0a350900ef91d1ea16f21902e4ba4bc0bbb2af7607507",
+      "source_bbox": [
+        26,
+        662,
+        265,
+        906
+      ]
+    }
+  ],
+  "visual_acceptance": "pending review; machine metrics do not establish visual quality"
+}

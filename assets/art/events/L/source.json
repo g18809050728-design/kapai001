@@ -1,0 +1,32 @@
+{
+  "asset_id": "L",
+  "requirement_id": "UIR-070",
+  "version": 1,
+  "title": "图书馆",
+  "prompt_file": "output/imagegen/event-polish-20261115/L-v1-prompt.txt",
+  "prompt_sha256": "d8ac7a0b59848769deaf73c0842a205be93a069dbbd75003e8f4514f660675fc",
+  "provider": "https://api-slb.jiji.cc/v1",
+  "model": "gpt-image-2.5-sunburst",
+  "requested_size": "1024x1024",
+  "actual_size": [
+    1024,
+    1024
+  ],
+  "quality": "high",
+  "original": "output/imagegen/event-polish-20261115/originals/L-v1.png",
+  "original_sha256": "1b8fc63dc9380dd7bedc13efa8e56a1d782e65ebcae61978e6ce89af5e2fc04a",
+  "selected": true,
+  "review_status": "AI visual review, final user art judgment remains",
+  "derivatives": [
+    {
+      "path": "assets/art/events/L/illustration.png",
+      "sha256": "0d7dd75acc2b133abef21c5ca5d5b713aef764b47e41049de0ecfe850926c789",
+      "processing": "Original RGB untouched; add 66px smoothstep alpha perimeter, no content crop/stretch."
+    },
+    {
+      "path": "assets/art/events/L/background.png",
+      "sha256": "fc3ee39c8a77b4bf8c95225e2e26fab6e012ca9a2f6e74d3ffc3349e56fa9940",
+      "processing": "768x768 Lanczos, Gaussian blur radius16; UI uses aspect-preserving cover and dark overlay."
+    }
+  ]
+}

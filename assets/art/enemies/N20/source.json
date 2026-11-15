@@ -1,0 +1,67 @@
+{
+  "id": "N20",
+  "version": 13,
+  "name": "六级英语词汇",
+  "requirements": [
+    "UIR-069",
+    "UIR-011",
+    "UIR-013",
+    "UIR-051",
+    "UIR-052",
+    "UIR-054",
+    "UIR-057",
+    "UIR-059"
+  ],
+  "source": "output/imagegen/enemy-roster-20261115/N20-v1.png",
+  "source_sha256": "7d681cb51af49e2fe8402b9df678079dc1dbf786b6f57e5541a24337eb80ebe6",
+  "source_size": [
+    1024,
+    1024
+  ],
+  "method": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+  "outputs": [
+    {
+      "file": "assets/art/enemies/N20/body.png",
+      "size": [
+        770,
+        818
+      ],
+      "sha256": "385a5bde2b6eb9015dfe6f5c4ab86b3584d310ca0f44946895a014dfa067e490",
+      "source_bbox": [
+        235,
+        89,
+        1005,
+        907
+      ]
+    },
+    {
+      "file": "assets/art/enemies/N20/attack.png",
+      "size": [
+        208,
+        223
+      ],
+      "sha256": "26ca163a225d7b3369bd4975b347bdf017a0fa35d90221ba28650de319c667d1",
+      "source_bbox": [
+        30,
+        132,
+        238,
+        355
+      ]
+    },
+    {
+      "file": "assets/art/enemies/N20/accent.png",
+      "size": [
+        129,
+        249
+      ],
+      "sha256": "22c9f489aa0cbbbb8f826e1b2febf959d03b0126b21e2797d9de16e078967b0d",
+      "source_bbox": [
+        73,
+        693,
+        202,
+        942
+      ]
+    }
+  ],
+  "visual_acceptance": "pending review; machine metrics do not establish visual quality"
+}

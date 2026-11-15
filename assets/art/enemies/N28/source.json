@@ -1,0 +1,67 @@
+{
+  "id": "N28",
+  "version": 13,
+  "name": "早八",
+  "requirements": [
+    "UIR-069",
+    "UIR-011",
+    "UIR-013",
+    "UIR-051",
+    "UIR-052",
+    "UIR-054",
+    "UIR-057",
+    "UIR-059"
+  ],
+  "source": "output/imagegen/enemy-roster-20261115/N28-v1.png",
+  "source_sha256": "4dfb241cc50f2711c4594c0476de3c83cfb150a9ed6248750ad417b1e68d6416",
+  "source_size": [
+    1024,
+    1024
+  ],
+  "method": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+  "outputs": [
+    {
+      "file": "assets/art/enemies/N28/body.png",
+      "size": [
+        705,
+        872
+      ],
+      "sha256": "1c8121a1eaf4ee464ee88042ea226ebb549d1ef54228cbb2d30198f21f7f4a14",
+      "source_bbox": [
+        310,
+        89,
+        1015,
+        961
+      ]
+    },
+    {
+      "file": "assets/art/enemies/N28/attack.png",
+      "size": [
+        197,
+        356
+      ],
+      "sha256": "e6f64a02855e0227369bf25a4bc1d5793fc205f4d1f7df40e57a5a16702db1f7",
+      "source_bbox": [
+        27,
+        113,
+        224,
+        469
+      ]
+    },
+    {
+      "file": "assets/art/enemies/N28/accent.png",
+      "size": [
+        208,
+        302
+      ],
+      "sha256": "5c0c0949154b1d4b4af55e32a2d7dd741df414ea99a9be1d9eacd9e276baf976",
+      "source_bbox": [
+        30,
+        642,
+        238,
+        944
+      ]
+    }
+  ],
+  "visual_acceptance": "pending review; machine metrics do not establish visual quality"
+}

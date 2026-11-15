@@ -1,0 +1,74 @@
+{
+  "version": 4,
+  "source_rig": "assets/art/actor-anatomy/N01/rig.json",
+  "requirements": [
+    "UIR-011",
+    "UIR-013",
+    "UIR-051",
+    "UIR-052",
+    "UIR-054",
+    "UIR-057",
+    "UIR-059"
+  ],
+  "textures": [
+    {
+      "file": "assets/art/actor-rig-drawings/N01/body_hit.png",
+      "sha256": "bd9245dce9221d35ac59f4cdf3c936b9fed354ae3d959d2ff6f804df6bac0587"
+    },
+    {
+      "file": "assets/art/actor-rig-drawings/N01/body_strike.png",
+      "sha256": "9ad6e8103a0cc69bc6a431c0be2827894a37086fb7b6bbf0f2fddbf0477058d3"
+    },
+    {
+      "file": "assets/art/actor-rig-drawings/N01/body_windup.png",
+      "sha256": "f48c8eac877a19b51da1e0691bc4a828e9efb120dcaa9eebfef60203e79e9a5f"
+    },
+    {
+      "file": "assets/art/actor-rig-drawings/N01/fan_fold.png",
+      "sha256": "74f620bef3391234e15a8c8253f04991213b4aa3bb85ba1341e82de24a00937d"
+    },
+    {
+      "file": "assets/art/actor-rig-drawings/N01/fan_spread.png",
+      "sha256": "6e036561747f23c24e6f9632c15871d553d5342439b87a086b4fa7526ea86556"
+    },
+    {
+      "file": "assets/art/actor-rig-pilot/N01/back_arm.png",
+      "sha256": "fcef0f9c9087c86a01d4e17bc827b03b543c92acdae1af967c0150dc46c5ad4d"
+    },
+    {
+      "file": "assets/art/actor-rig-pilot/N01/body.png",
+      "sha256": "f765c774268b1402d4cc46a202f31f233ad468716fca5ada6742e7d15a78d856"
+    },
+    {
+      "file": "assets/art/actor-rig-pilot/N01/clip.png",
+      "sha256": "5763e5cb4995653a894dd7acdc5b3e1ca3ff3719531e078a7f299fe77810baf2"
+    },
+    {
+      "file": "assets/art/actor-rig-pilot/N01/fan.png",
+      "sha256": "37de7b45a58592b1b14b89d0ff5df76a2e2db90fddf46e013cb863ae7faa4e84"
+    },
+    {
+      "file": "assets/art/actor-rig-pilot/N01/far_foot.png",
+      "sha256": "4bceb4abd387f2787696965944e2518a6975950eaaa3e8da2b3bf414b7bcc532"
+    },
+    {
+      "file": "assets/art/actor-rig-pilot/N01/loose_sheet.png",
+      "sha256": "1430e3239dcd7c5ab02684d64022302a43546cd93a9ccc8bc0de033e8d3b5cc3"
+    },
+    {
+      "file": "assets/art/actor-rig-pilot/N01/near_foot.png",
+      "sha256": "eee9270439cce9af2c44f6d407a03147a621b5341db4dfb447d70adb6716a6a4"
+    },
+    {
+      "file": "assets/art/actor-rig-pilot/N01/pencil.png",
+      "sha256": "218a38134ca6ff207b432cf047c12ebc6ffd5e857fbf0d1fb8ff3905e6440dd5"
+    },
+    {
+      "file": "assets/art/actor-rig-pilot/N01/tab.png",
+      "sha256": "f40a70db17eb708c33a6b88eab1eab8b805b54c4d54f3350e822d7df9d8aeb7b"
+    }
+  ],
+  "api_calls_this_batch": 0,
+  "api_successful_total": 15,
+  "processing": []
+}

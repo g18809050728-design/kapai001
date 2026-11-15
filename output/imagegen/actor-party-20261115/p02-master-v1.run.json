@@ -1,0 +1,8 @@
+﻿{
+    "elapsed_seconds":  40.6312825,
+    "exit_code":  0,
+    "output":  "output/imagegen/actor-party-20261115/p02-master-v1.png",
+    "model":  "gpt-image-2.5-sunburst",
+    "character":  "P02",
+    "api_mode":  "edit"
+}

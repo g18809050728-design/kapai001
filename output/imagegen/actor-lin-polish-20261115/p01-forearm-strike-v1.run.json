@@ -1,0 +1,25 @@
+﻿{
+    "exit_code":  0,
+    "model":  "gpt-image-2.5-sunburst",
+    "cost":  "not returned by CLI",
+    "cli_args":  [
+                     "edit",
+                     "--model",
+                     "gpt-image-2.5-sunburst",
+                     "--image",
+                     "output/imagegen/actor-lin-polish-20261115/p01-forearm-neutral-v1.png",
+                     "--prompt-file",
+                     "output/imagegen/actor-lin-polish-20261115/prompts/p01-forearm-strike-v1.txt",
+                     "--size",
+                     "1024x1024",
+                     "--quality",
+                     "high",
+                     "--out",
+                     "output/imagegen/actor-lin-polish-20261115/p01-forearm-strike-v1.png",
+                     "--no-augment"
+                 ],
+    "completed_utc":  "2026-11-15T07:06:46.2586695Z",
+    "mode":  "edit",
+    "started_utc":  "2026-11-15T07:06:08.7356082Z",
+    "base_url":  "https://api-slb.jiji.cc/v1"
+}

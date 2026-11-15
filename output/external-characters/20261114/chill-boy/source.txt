@@ -1,0 +1,52 @@
+Chill Boy Character
+Author:
+Segel
+Thursday, May 1, 2025 - 01:38
+Art Type:
+2D Art
+Tags:
+boy
+cartoon
+characters
+chill
+guy
+side scroller
+spriter
+sprites
+Platformer
+License(s):
+CC0
+Collections:
+12 Frame Walk Cycles
+All CC0 - Uploader: Segel
+CC0 Walk Cycles
+characters platformer (animated)
+Favorites:
+2
+Preview:
+This is 2D game asset(Sprites) in the form of CHILL BOY character complete with animation. Suitable for side-scrolling, Runner game, or platformer games
+Characters : Just Chill Boy
+Animation List :
+Idle [ Chill Idle ]
+Throw
+Walk
+Running
+Jump Up
+Jump Fall
+Jump Throw
+Hurt
+Dizzy
+Dead1
+Included files : Just PNG
+GET>>
+CHILLBOY_COMPLETE_FILES_&_ANIMATION
+File(s):
+chill_boy_basic_animation.zip
+4.8 Mb
+[
+290
+download(s)]
+Log in
+or
+register
+to post comments

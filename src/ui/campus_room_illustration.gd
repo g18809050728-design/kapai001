@@ -1,6 +1,7 @@
 class_name CampusRoomIllustration
 extends Control
 
+const STORIES = preload("res://src/ui/room_stories.json")
 const SCENES := {
 	"C": ["R3-P04-10", "BG_campus", "社团伙伴围坐讨论，一次活动也可以是喘息的机会。"],
 	"I": ["R3-P04-30", "BG_campus", "从校园走向实践，把今天的投入转成下一段旅程的准备。"],
@@ -15,26 +16,62 @@ var subtype := "C"
 var caption := "校园活动"
 var artwork: Texture2D
 var background: Texture2D
+var story_key := ""
 
 
-func configure(kind: String, title: String) -> void:
+func configure(kind: String, title: String, event_id: String = "") -> void:
 	subtype = kind
 	caption = title
 	var entry: Array = SCENES.get(kind, SCENES.E)
 	artwork = UiStyle.texture(str(entry[0]))
 	background = UiStyle.texture(str(entry[1]))
+	var story := details(kind, event_id)
+	var selected := _texture(str(story.get("art", "")))
+	if selected != null:
+		story_key = event_id if not event_id.is_empty() else kind
+		artwork = selected
+		caption = str(story.get("location", title))
+		var scene := background_texture(kind, event_id)
+		if scene != null:
+			background = scene
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	name = "CampusRoomIllustration"
 	resized.connect(queue_redraw)
 	queue_redraw()
 
 
-static func narrative(kind: String) -> String:
-	return str(SCENES.get(kind, SCENES.E)[2])
+static func details(kind: String, event_id: String = "") -> Dictionary:
+	var group := "events" if not event_id.is_empty() else "rooms"
+	return STORIES.data.get(group, {}).get(event_id if not event_id.is_empty() else kind, {}).duplicate(true)
+
+
+static func narrative(kind: String, event_id: String = "") -> String:
+	return str(details(kind, event_id).get("narrative", SCENES.get(kind, SCENES.E)[2]))
+
+
+static func option_title(event_id: String, option: String, fallback: String) -> String:
+	return str(details("E", event_id).get("option_titles", {}).get(option, fallback))
+
+
+static func background_texture(kind: String, event_id: String = "") -> Texture2D:
+	return _texture(str(details(kind, event_id).get("background", "")))
+
+
+static func _texture(path: String) -> Texture2D:
+	return load(path) as Texture2D if not path.is_empty() and ResourceLoader.exists(path) else null
 
 
 func _draw() -> void:
 	var bounds := Rect2(Vector2.ZERO, size)
+	if not story_key.is_empty():
+		var area := Rect2(0, 0, size.x, maxf(1, size.y - 42))
+		var factor := minf(area.size.x / artwork.get_width(), area.size.y / artwork.get_height())
+		var fitted := artwork.get_size() * factor
+		draw_texture_rect(artwork, Rect2(area.get_center() - fitted * .5, fitted), false)
+		var line_y := minf(area.end.y - 4, area.get_center().y + fitted.y * .5 + 12)
+		draw_line(Vector2(size.x * .32, line_y), Vector2(size.x * .68, line_y), Color(UiStyle.BRASS, .65), 1, true)
+		draw_string(get_theme_font("font"), Vector2(8, line_y + 26), caption, HORIZONTAL_ALIGNMENT_CENTER, maxf(1, size.x - 16), roundi(14 * minf(UiStyle.text_scale, 1.25)), Color("d8ceb8"))
+		return
 	draw_style_box(UiStyle.surface(Color("2d3d45"), UiStyle.BRASS, 3), bounds)
 	if background != null:
 		draw_texture_rect(background, bounds.grow(-4), false, Color(.8, .8, .8, .4))

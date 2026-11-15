@@ -1,0 +1,5413 @@
+{
+  "scope": "60 exact task IDs enabled by campus_four_year; art only; normal game route",
+  "requirements": [
+    "UIR-069"
+  ],
+  "expected": 60,
+  "registered": 60,
+  "new_images_successful": 59,
+  "successful_before_this_task": 51,
+  "successful_total": 110,
+  "authorized_successful_limit": 200,
+  "api_cost": "not returned; failed/cancelled request charges are unknown",
+  "interruption": "remaining batch stopped at 33 successful new images with HTTP 403 insufficient balance; user confirmed balance replenishment; resume-01 only requests 26 absent outputs",
+  "machine_status": "passed",
+  "issues": [],
+  "art_acceptance": "AI visual review is recorded separately; user final review remains open",
+  "entries": [
+    {
+      "asset_id": "N01",
+      "name": "课后习题",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 4,
+      "rig": "res://assets/art/actor-rig-drawings/N01/rig.json",
+      "rig_sha256": "11b0f3e8f42ef6ba81fbc72280ca9ebf1ff08f2093bf36c9959868713d2b68f2",
+      "bones": 15,
+      "parts": 9,
+      "meshes": 3,
+      "body_sha256": "f765c774268b1402d4cc46a202f31f233ad468716fca5ada6742e7d15a78d856",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "reuse_existing_reviewed_v4",
+      "api_images": 0
+    },
+    {
+      "asset_id": "N02",
+      "name": "英语小作文",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/N02/rig.json",
+      "rig_sha256": "7e8c77e0531196593f241da319a769a5ed489e8665c2e1a366adab027c0afaba",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "cc763943e65df024ccb7ff249d6a5e82f5bca4b68a85c642373120566d5b325b",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/N02-v1.txt",
+      "prompt_sha256": "6f402bb641679075006c3ab08ab6e96f7fa1e7a08ea767d18042f05466e1a220",
+      "prompt_file_sha256": "79e22725282babc9c6ca8f707595f5e6e38e62a444ca3ec7ab7bd5980d48b2eb",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/N02-v1.png",
+      "source_sha256": "6eb4d2b5399336cbfeb40b683a963ae45d22faf3f3d29be0d23e59a159ccd390",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/N02/body.png",
+          "size": [
+            701,
+            840
+          ],
+          "sha256": "cc763943e65df024ccb7ff249d6a5e82f5bca4b68a85c642373120566d5b325b",
+          "source_bbox": [
+            308,
+            117,
+            1009,
+            957
+          ],
+          "transparent_ratio": 0.43467495414713675,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N02/attack.png",
+          "size": [
+            246,
+            419
+          ],
+          "sha256": "54d8009d48406b3c244168dfef6319af4221e3aaed660e3ef368cfc730a1235f",
+          "source_bbox": [
+            49,
+            70,
+            295,
+            489
+          ],
+          "transparent_ratio": 0.7218309175931855,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N02/accent.png",
+          "size": [
+            247,
+            197
+          ],
+          "sha256": "74b68e2e7d3a05c87f8b2c1411d1ee1b0fe08bc237b4bd76aca0a67f1287a843",
+          "source_bbox": [
+            27,
+            691,
+            274,
+            888
+          ],
+          "transparent_ratio": 0.499311535378861,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "N03",
+      "name": "C语言练习",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/N03/rig.json",
+      "rig_sha256": "e39c646b53301e41501c73c8bf9b08bc4683c31eb6f3880b531cb4ec3cfd6ac8",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "eafe29a71822308971a4c83f2bf51a0fbae2bc98fd773aca7ccfe824d5f0ed71",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/N03-v1.txt",
+      "prompt_sha256": "3bd214f15dce627a5c9ed5fead69b85b439b5768f70719683a0d636f7f0b74db",
+      "prompt_file_sha256": "738f5982fe5e693b1fd6bbd9586f624389f5c4b7bca2402990407d252d75f9a8",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/N03-v1.png",
+      "source_sha256": "057be666f81245bae7ac6ec37a0ef36a8aaa3f6e40d185e1d42e22cc86dfaf17",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/N03/body.png",
+          "size": [
+            788,
+            797
+          ],
+          "sha256": "eafe29a71822308971a4c83f2bf51a0fbae2bc98fd773aca7ccfe824d5f0ed71",
+          "source_bbox": [
+            202,
+            115,
+            990,
+            912
+          ],
+          "transparent_ratio": 0.4366357979478883,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N03/attack.png",
+          "size": [
+            281,
+            345
+          ],
+          "sha256": "4dcd8f31b49e64e54fff75885df9f75211e53e8ccf02a38cb59b9ca5859e7200",
+          "source_bbox": [
+            34,
+            115,
+            315,
+            460
+          ],
+          "transparent_ratio": 0.4338542472535974,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N03/accent.png",
+          "size": [
+            195,
+            160
+          ],
+          "sha256": "92b3741d636014c900dc32c14bca13c926dded36206358ca57c2978c6e877ef4",
+          "source_bbox": [
+            40,
+            745,
+            235,
+            905
+          ],
+          "transparent_ratio": 0.28025641025641024,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "N04",
+      "name": "实验预习",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/N04/rig.json",
+      "rig_sha256": "08b9042fd4b4b8839960939d645885eac29f198b7699580512753e98b3c300f5",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "7f950a2f27f0a3937b77fb3b15bf572b9bf753ec2588a0b1c376a98f600e2c1c",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/N04-v1.txt",
+      "prompt_sha256": "2ee2e5def34fc06f23a0468cb8d1443486e772bab8abe402050b02b602aef170",
+      "prompt_file_sha256": "a99213ecfd848b4aa5c8e06ccaf6b620ef30904875f28868232b1dd525f14861",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/N04-v1.png",
+      "source_sha256": "096b2b83b7050a049c5a6a8b74a28a0bc8ca23c5dc41240fbdc2e7e146f198d8",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/N04/body.png",
+          "size": [
+            687,
+            716
+          ],
+          "sha256": "7f950a2f27f0a3937b77fb3b15bf572b9bf753ec2588a0b1c376a98f600e2c1c",
+          "source_bbox": [
+            308,
+            170,
+            995,
+            886
+          ],
+          "transparent_ratio": 0.4439409463866052,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N04/attack.png",
+          "size": [
+            230,
+            360
+          ],
+          "sha256": "0568303a16ba7f4feacb679749949ec17b29911f3d9fc373d69c2312ca252b92",
+          "source_bbox": [
+            32,
+            136,
+            262,
+            496
+          ],
+          "transparent_ratio": 0.6397222222222222,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N04/accent.png",
+          "size": [
+            105,
+            104
+          ],
+          "sha256": "cee6a6de46f57aad2fd94f3d127d8cc77944ce8165cbef575f268577abca9501",
+          "source_bbox": [
+            79,
+            697,
+            184,
+            801
+          ],
+          "transparent_ratio": 0.3383699633699634,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "Q01",
+      "name": "随堂小测",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/Q01/rig.json",
+      "rig_sha256": "b7897cd814a8ce194804287fc0d736c554eb647fb8760b326870260516613e59",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "61d2357c3498e81afe8b8465f20ed000cb0b41027c0045643b25a67b5de40a60",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/Q01-v1.txt",
+      "prompt_sha256": "a2fc6e10f577506004f311cfa898b0698edcd3f54f9639633f2eb7f203f5db48",
+      "prompt_file_sha256": "f042f50a57e3a190bd2278c76d9846c5ec4b7ca1dc9a15ac155332e4e2d7a30b",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/Q01-v1.png",
+      "source_sha256": "cdaac7e97d1e933d53bb86e6dc54eb0670e2c051413544500855d989d618cf29",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/Q01/body.png",
+          "size": [
+            741,
+            837
+          ],
+          "sha256": "61d2357c3498e81afe8b8465f20ed000cb0b41027c0045643b25a67b5de40a60",
+          "source_bbox": [
+            280,
+            94,
+            1021,
+            931
+          ],
+          "transparent_ratio": 0.5338534738647925,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/Q01/attack.png",
+          "size": [
+            239,
+            285
+          ],
+          "sha256": "57f7d68e0915baff2ad6360a5aa6aea813fc57eda666ebe6a23f3f606ec7c60b",
+          "source_bbox": [
+            42,
+            104,
+            281,
+            389
+          ],
+          "transparent_ratio": 0.7302943551346986,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/Q01/accent.png",
+          "size": [
+            250,
+            218
+          ],
+          "sha256": "5631f75026d32dbd2ae2b53f798d701e0c4d10767ff1ca02d5c9c3169b1841d7",
+          "source_bbox": [
+            30,
+            687,
+            280,
+            905
+          ],
+          "transparent_ratio": 0.6286238532110092,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "B01",
+      "name": "大一上·高数期末",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/B01/rig.json",
+      "rig_sha256": "cfe6840d7d9a42cc1edf7b01fd48528f35f50bda74f4d1b7364242fab34acc5f",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "d23a1dd15e2f7c032ddd9b3572ed18a26a5d30bc98b8baf32df9c6ca82ac31b0",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/B01-v1.txt",
+      "prompt_sha256": "5fcf66f846c68039eba15fd9e3a38963709ce4b7d76b9fb9665c13e1b54ed1aa",
+      "prompt_file_sha256": "ffc3a1ead4b2f841af23a24e8a59a3aeab277cbbbea552b6b7a071439eaf9eb0",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/B01-v1.png",
+      "source_sha256": "f23a86299d2b396fbf0f3b89e9b5638496f21f3a9969f22129bbec494ae2a535",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/B01/body.png",
+          "size": [
+            777,
+            921
+          ],
+          "sha256": "d23a1dd15e2f7c032ddd9b3572ed18a26a5d30bc98b8baf32df9c6ca82ac31b0",
+          "source_bbox": [
+            229,
+            62,
+            1006,
+            983
+          ],
+          "transparent_ratio": 0.3302283204563335,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/B01/attack.png",
+          "size": [
+            217,
+            383
+          ],
+          "sha256": "7ee257744adaca0738092bc529b380ad0693083ddd5794f99b1d48277377c407",
+          "source_bbox": [
+            35,
+            78,
+            252,
+            461
+          ],
+          "transparent_ratio": 0.6924233855927615,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/B01/accent.png",
+          "size": [
+            192,
+            225
+          ],
+          "sha256": "168952b63bbc30234c5995addcbccc14719178f4c8226acc8057def64f9c13c2",
+          "source_bbox": [
+            63,
+            665,
+            255,
+            890
+          ],
+          "transparent_ratio": 0.3083796296296296,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "E01",
+      "name": "期中考试",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/E01/rig.json",
+      "rig_sha256": "2bf0095678a01ecf924624b483b3ed46a3f8f0b6005074888c3547d1a8bba548",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "f84776bc26d0030a6e60ddc697beafe61a40438bc93759cf02e8496063ffc12d",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/E01-v1.txt",
+      "prompt_sha256": "53d8c982de68f33776efcd1a913014f2195357b2048873050abed4efb82fb71d",
+      "prompt_file_sha256": "6ff1b851c0b80878fe528abb45d2b0633b7915258dd0fd52b3f330d38039aaec",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/E01-v1.png",
+      "source_sha256": "b428331c8cecf38fd195580848458b32ef0ff65b2a2f9f44ca011a5be798ec1e",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/E01/body.png",
+          "size": [
+            763,
+            909
+          ],
+          "sha256": "f84776bc26d0030a6e60ddc697beafe61a40438bc93759cf02e8496063ffc12d",
+          "source_bbox": [
+            261,
+            57,
+            1024,
+            966
+          ],
+          "transparent_ratio": 0.4251658455491683,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/E01/attack.png",
+          "size": [
+            225,
+            394
+          ],
+          "sha256": "19f76554ff87fd1388d4827d988fe8329703a9b1e6ab1c2e9e6354a341a60d7f",
+          "source_bbox": [
+            42,
+            98,
+            267,
+            492
+          ],
+          "transparent_ratio": 0.7103891708967851,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/E01/accent.png",
+          "size": [
+            220,
+            304
+          ],
+          "sha256": "36abb5ab8860c797c84c2120d3021a9b5bf0404093f73aee293dcf87e1c97edd",
+          "source_bbox": [
+            26,
+            628,
+            246,
+            932
+          ],
+          "transparent_ratio": 0.48868122009569376,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "E02",
+      "name": "课程设计中期检查",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/E02/rig.json",
+      "rig_sha256": "4d44ad16697bf7c048648f321b0214213460a7e3cba2fc2ac17d660b25116666",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "38763eedcf9f09668781580cda34fa264c748c6142eec5d0fa6afbfd6db4fbb1",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/E02-v1.txt",
+      "prompt_sha256": "439367dfe5accd2a0805f53ef42e577df277052d1acd243294b9b3533fdf1f3c",
+      "prompt_file_sha256": "97883178dcfd7b57a204cee8fc176ed55065f25cc85ae9f030b33b514137c623",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/E02-v1.png",
+      "source_sha256": "1cd0c9e99d8a71a08db1f5ac3523aba768c7b393b8af19a0dca3047edaf531d9",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/E02/body.png",
+          "size": [
+            728,
+            941
+          ],
+          "sha256": "38763eedcf9f09668781580cda34fa264c748c6142eec5d0fa6afbfd6db4fbb1",
+          "source_bbox": [
+            276,
+            50,
+            1004,
+            991
+          ],
+          "transparent_ratio": 0.5277455010451823,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/E02/attack.png",
+          "size": [
+            257,
+            359
+          ],
+          "sha256": "2ab2c05cdd29f74fde96524888eb8ec1954ebf9a220b92c02394169df9227b9d",
+          "source_bbox": [
+            24,
+            99,
+            281,
+            458
+          ],
+          "transparent_ratio": 0.620909790490229,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/E02/accent.png",
+          "size": [
+            221,
+            258
+          ],
+          "sha256": "825c35e52b59930695d1f399e4aa794b2c3d0422c17896f9094bf8b44a8b390e",
+          "source_bbox": [
+            24,
+            678,
+            245,
+            936
+          ],
+          "transparent_ratio": 0.5368129362657407,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "E03",
+      "name": "小组项目冲刺",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/E03/rig.json",
+      "rig_sha256": "5d8afd6ddc24ae5c41bcea8e8d5b7f79b0a30870fa41f53025cd1419516e7879",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "9c302654b0c4cb3e5e74469f3e612e81b91d2428c6457e6c1373c35514e75334",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/E03-v1.txt",
+      "prompt_sha256": "e34acdaaeba194f4c0f20e66f88e986a345265e2f729911686001979c39c3339",
+      "prompt_file_sha256": "7d1ba3cd717f4a3c40b274d46fe596bac35e706aa17699e92ce53142deb8a09b",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/E03-v1.png",
+      "source_sha256": "4f3d31aeb940b7cd8aab1c7bc1c899760ff6c4cbfccf5bdeccf383563571c133",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/E03/body.png",
+          "size": [
+            711,
+            920
+          ],
+          "sha256": "9c302654b0c4cb3e5e74469f3e612e81b91d2428c6457e6c1373c35514e75334",
+          "source_bbox": [
+            293,
+            52,
+            1004,
+            972
+          ],
+          "transparent_ratio": 0.44688895003974805,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/E03/attack.png",
+          "size": [
+            248,
+            336
+          ],
+          "sha256": "ba72492fafe6317aca076ec1f8cef99045db97edfe94b2f64417c0f518047b61",
+          "source_bbox": [
+            12,
+            118,
+            260,
+            454
+          ],
+          "transparent_ratio": 0.5555875576036866,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/E03/accent.png",
+          "size": [
+            254,
+            181
+          ],
+          "sha256": "340fb7dd015a458d8d237e3e93633a302db816d2dde0fc2164ed12e2a6994632",
+          "source_bbox": [
+            21,
+            711,
+            275,
+            892
+          ],
+          "transparent_ratio": 0.5505068081959368,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "E04_1",
+      "name": "建模",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/E04_1/rig.json",
+      "rig_sha256": "45e023e0582f3fb8a55e57116f6c3646a046287056441aa536273d1799419dbf",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "2751527759bd7d66dd9d180fb27a71c5e86fb7c1202639b58eeb46d9b67104b9",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/E04_1-v1.txt",
+      "prompt_sha256": "49c5f2a546b095fd1d3444f46b0326ace47e24ecd247d1b9fd4101796615ba15",
+      "prompt_file_sha256": "ae8d2a6ee3c92c8402cf591019ce3b7a08c826e548daa07da7e633ba5944e651",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/E04_1-v1.png",
+      "source_sha256": "93277f5e695323cf8d28e6e4e925efc3a463e41b1199dc49ad6c9e83fcd77928",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/E04_1/body.png",
+          "size": [
+            774,
+            879
+          ],
+          "sha256": "2751527759bd7d66dd9d180fb27a71c5e86fb7c1202639b58eeb46d9b67104b9",
+          "source_bbox": [
+            243,
+            79,
+            1017,
+            958
+          ],
+          "transparent_ratio": 0.41843414968266146,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/E04_1/attack.png",
+          "size": [
+            153,
+            397
+          ],
+          "sha256": "43f1db85f4b89ebaa65005588b8883e126a83242f7ea29efc382e87ede06429e",
+          "source_bbox": [
+            41,
+            116,
+            194,
+            513
+          ],
+          "transparent_ratio": 0.6494624718065227,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/E04_1/accent.png",
+          "size": [
+            215,
+            215
+          ],
+          "sha256": "926c6d0bae81790fe8e1da6b9b97eb3807ff0e711e9428532b057ebc6cea0554",
+          "source_bbox": [
+            21,
+            673,
+            236,
+            888
+          ],
+          "transparent_ratio": 0.5482963764196863,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "E04_2",
+      "name": "编程",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/E04_2/rig.json",
+      "rig_sha256": "30a7cdc51c0770e516c1876fdeb673c6d960f8aab85eeeab9e498e9f942aaea5",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "fbe8a1aa8e2685eccf7fbf849114c6d598b98201756cfb444f1d2d24494b0fc6",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/E04_2-v1.txt",
+      "prompt_sha256": "fa53352123ccc626e2a1731b94e251714a78adaa847218e114e7b26629b34177",
+      "prompt_file_sha256": "c24065865c1541eedec8ffef73cdd81aac7d28013c39e9438e8a28cfa33daf3f",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/E04_2-v1.png",
+      "source_sha256": "79161f1fe30021949b0fe47c46a486676df7cc9c19d48a2bfdbe18f2de388b3d",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/E04_2/body.png",
+          "size": [
+            720,
+            890
+          ],
+          "sha256": "fbe8a1aa8e2685eccf7fbf849114c6d598b98201756cfb444f1d2d24494b0fc6",
+          "source_bbox": [
+            289,
+            85,
+            1009,
+            975
+          ],
+          "transparent_ratio": 0.5404588014981273,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/E04_2/attack.png",
+          "size": [
+            192,
+            292
+          ],
+          "sha256": "66347d80552881e4ddd2ac23bbe43dbb8196cdf22df327aa0d9e7ca8a9ca05a6",
+          "source_bbox": [
+            41,
+            162,
+            233,
+            454
+          ],
+          "transparent_ratio": 0.6369684646118722,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/E04_2/accent.png",
+          "size": [
+            145,
+            133
+          ],
+          "sha256": "fd9b705cf9baac704cc12f00ee6b3e3e00b4de9f3da8b56baca0d534ac01a83e",
+          "source_bbox": [
+            61,
+            731,
+            206,
+            864
+          ],
+          "transparent_ratio": 0.3015296862846772,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "E04_3",
+      "name": "论文",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/E04_3/rig.json",
+      "rig_sha256": "88ec3fb48c82ced363e9af89bb216deabec2b6d63ebebbdec2377bddbe62bd80",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "31494c52a95049de389aa179f739ca7c1042dcf6ba751207e4a8e4f9b3ce205f",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/E04_3-v1.txt",
+      "prompt_sha256": "0e75a41fffe9288ab209c80759a125ab7c203b2b4afadbf79e6fb78797a6437d",
+      "prompt_file_sha256": "b9ee4ccab1ea86d2476a28ff616e743747611e259ff450c48c8da364efc91afc",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/E04_3-v1.png",
+      "source_sha256": "d56abc81c70cd31d85fa479480b8611eea207d1750bb15b9914d81d3fdbe87b6",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/E04_3/body.png",
+          "size": [
+            776,
+            874
+          ],
+          "sha256": "31494c52a95049de389aa179f739ca7c1042dcf6ba751207e4a8e4f9b3ce205f",
+          "source_bbox": [
+            237,
+            74,
+            1013,
+            948
+          ],
+          "transparent_ratio": 0.3936000495411545,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/E04_3/attack.png",
+          "size": [
+            188,
+            314
+          ],
+          "sha256": "857bf85f8d99d2fe8ab54f82ac78782b3718375e04986a18a6a9a2b05e22bdb2",
+          "source_bbox": [
+            45,
+            101,
+            233,
+            415
+          ],
+          "transparent_ratio": 0.7546246103808104,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/E04_3/accent.png",
+          "size": [
+            220,
+            255
+          ],
+          "sha256": "a58bd5661eee89e6066a2d05d79132638f37221f9ae9424b71fd8c69bea2dda4",
+          "source_bbox": [
+            25,
+            643,
+            245,
+            898
+          ],
+          "transparent_ratio": 0.4105704099821747,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "E05",
+      "name": "保研夏令营",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/E05/rig.json",
+      "rig_sha256": "9e9ad534cead7dbefe5aae45c6ce270ae0d34a697dbd7dbddfbfa684180416bd",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "d6dfe6c91820e5556a5432e6a9e8f9b758b03983062cb6160e2b462e0cb64e40",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/E05-v1.txt",
+      "prompt_sha256": "d7baf82f174028ae590b8857514202326d8dc9fc7bb7fda7c1f4eab6abd6fb11",
+      "prompt_file_sha256": "568f359971a99f2f4239f8514dcf5ed5e2ba43f2cff18763182154da81645e4d",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/E05-v1.png",
+      "source_sha256": "02e2ce7e3164a0da74b6232da6f75effca329365b04107bd8e11fa5de060c9d8",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/E05/body.png",
+          "size": [
+            747,
+            788
+          ],
+          "sha256": "d6dfe6c91820e5556a5432e6a9e8f9b758b03983062cb6160e2b462e0cb64e40",
+          "source_bbox": [
+            256,
+            131,
+            1003,
+            919
+          ],
+          "transparent_ratio": 0.29862087945691396,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/E05/attack.png",
+          "size": [
+            230,
+            336
+          ],
+          "sha256": "9a819f0da133aabfd06dc92c5bd3a1809ad9112b9a1a3c963405619a83cd5126",
+          "source_bbox": [
+            48,
+            103,
+            278,
+            439
+          ],
+          "transparent_ratio": 0.6662525879917184,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/E05/accent.png",
+          "size": [
+            198,
+            240
+          ],
+          "sha256": "33f06e99872ad4d8d1a3861b963f8007c1cb47b3455ea379da12167ad29fb29b",
+          "source_bbox": [
+            33,
+            652,
+            231,
+            892
+          ],
+          "transparent_ratio": 0.47895622895622897,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "E06",
+      "name": "实习群面",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/E06/rig.json",
+      "rig_sha256": "1e2751d97870daf6e9fae61507d7247197dcd69efe182f053bc9c814d035e465",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "d006bfab7c73ae4c1885f5f03aacf60dbb21a387a3150da80f7f70e93404d6f0",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/E06-v1.txt",
+      "prompt_sha256": "953ffb3977d5657c5bef5375d0db6c94eea371ba9dff5719c53b663b722e3c75",
+      "prompt_file_sha256": "f138d91c04270df0b8ee5e39b811ef6f5d3da1cc9d46e47e27ba1bfd036a509f",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/E06-v1.png",
+      "source_sha256": "aff351dd731c45990ce51f9fb6b351755089563a8c397a4dd3bc9e14182a3494",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/E06/body.png",
+          "size": [
+            750,
+            919
+          ],
+          "sha256": "d006bfab7c73ae4c1885f5f03aacf60dbb21a387a3150da80f7f70e93404d6f0",
+          "source_bbox": [
+            266,
+            46,
+            1016,
+            965
+          ],
+          "transparent_ratio": 0.4865520493289808,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/E06/attack.png",
+          "size": [
+            152,
+            324
+          ],
+          "sha256": "a640ee7d3f6cebee783a721d4ed6d0e282a3522b814c95ae6a2b94eecf93dec0",
+          "source_bbox": [
+            42,
+            154,
+            194,
+            478
+          ],
+          "transparent_ratio": 0.6164514294996751,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/E06/accent.png",
+          "size": [
+            203,
+            196
+          ],
+          "sha256": "471654ef607cfb6ec3f37fe568a0e9024cc1b8daa50ed0ba5611262d0dd60351",
+          "source_bbox": [
+            32,
+            682,
+            235,
+            878
+          ],
+          "transparent_ratio": 0.3004423444254549,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "E07",
+      "name": "补考",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/E07/rig.json",
+      "rig_sha256": "ccd2c96e72a274a7546f886b10f294cc88e1c4a9878bfb904dd24e53d8c95f78",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "81b1ac2166c241ce3c3ad41109cf1d3baa52ff65d482f2373a443c8fd0653872",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/E07-v1.txt",
+      "prompt_sha256": "96f97f341aa2c8e2ce14f71c2a5f11e802634b82f348107b621166aee3f2d7ea",
+      "prompt_file_sha256": "68602650a3f33f102aaca5984c6e3d8ebc996a6ae2c6cec639673c020a39710d",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/E07-v1.png",
+      "source_sha256": "11d984932477bab33aac5f67ea62572572e6aa09bf399dabe6f2a20633aeb1da",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/E07/body.png",
+          "size": [
+            737,
+            969
+          ],
+          "sha256": "81b1ac2166c241ce3c3ad41109cf1d3baa52ff65d482f2373a443c8fd0653872",
+          "source_bbox": [
+            287,
+            31,
+            1024,
+            1000
+          ],
+          "transparent_ratio": 0.4261593804128807,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/E07/attack.png",
+          "size": [
+            222,
+            415
+          ],
+          "sha256": "7e82c1d2656a3ccae4717f3c747bd1bbc4563c86971a663a6f0ba78a3c05d72c",
+          "source_bbox": [
+            30,
+            93,
+            252,
+            508
+          ],
+          "transparent_ratio": 0.586757842179529,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/E07/accent.png",
+          "size": [
+            226,
+            249
+          ],
+          "sha256": "8849cc8bc511b1158dea370a1c37992cd058efa72b402688497dd8f70a5ca5f0",
+          "source_bbox": [
+            15,
+            696,
+            241,
+            945
+          ],
+          "transparent_ratio": 0.5530440345452607,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "Q0A_1",
+      "name": "需求分析",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/Q0A_1/rig.json",
+      "rig_sha256": "5ca7efa3949ce8c5bad778e8d625407f567a4dddd50850fac6c3e2211d06ce1e",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "aad5cafbe0b5ac447e7d0725c099be493b454403e7a1869d777c68b7babcb8bb",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/Q0A_1-v1.txt",
+      "prompt_sha256": "8458cc6fa2afc2a352ac76ec8a0def137ff524259a37eca5cca91b7c2cfc4e6d",
+      "prompt_file_sha256": "2aa8c929ed2812c92c0a0305a0628906e40d8bbc3f3579e30f1f85abfe091a44",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/Q0A_1-v1.png",
+      "source_sha256": "1dd065d46a25de2c3793b33961e2e6987eee38187738dfb4ff2232549b9d3172",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/Q0A_1/body.png",
+          "size": [
+            740,
+            838
+          ],
+          "sha256": "aad5cafbe0b5ac447e7d0725c099be493b454403e7a1869d777c68b7babcb8bb",
+          "source_bbox": [
+            263,
+            99,
+            1003,
+            937
+          ],
+          "transparent_ratio": 0.43695736309101463,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/Q0A_1/attack.png",
+          "size": [
+            195,
+            321
+          ],
+          "sha256": "aba149cb53b9186cde7c19fe2801bdb96852147f332cbc9a7401b09b93dd558a",
+          "source_bbox": [
+            43,
+            99,
+            238,
+            420
+          ],
+          "transparent_ratio": 0.7591500918603722,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/Q0A_1/accent.png",
+          "size": [
+            272,
+            165
+          ],
+          "sha256": "e7b91414389628964a4dfd1de66bea51777b10c4285bca1fccf152f7555c7cec",
+          "source_bbox": [
+            20,
+            692,
+            292,
+            857
+          ],
+          "transparent_ratio": 0.4966354723707665,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "Q0A_2",
+      "name": "文档编写",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/Q0A_2/rig.json",
+      "rig_sha256": "395ba6c5904d9dfd3af932ea8c20826b4d4be1e87f8d19c17b5701bdd4060387",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "da6bb600521c7d1db21c12267ae3f011d43810cd3818ae97f8f2241ed15f4d84",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/Q0A_2-v1.txt",
+      "prompt_sha256": "7d8a44dce9b32b4820af1934b2583e31505d2b3f99387587d2e69cce551c6690",
+      "prompt_file_sha256": "0dce9fa329b26890b4a730255304509de625c09f8d7f335d78aed9055f55a5c9",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/Q0A_2-v1.png",
+      "source_sha256": "de8db29c467b057acdc3ac06aca4e43087a5f9d64175864711abbdeb1a2586f5",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/Q0A_2/body.png",
+          "size": [
+            686,
+            867
+          ],
+          "sha256": "da6bb600521c7d1db21c12267ae3f011d43810cd3818ae97f8f2241ed15f4d84",
+          "source_bbox": [
+            318,
+            56,
+            1004,
+            923
+          ],
+          "transparent_ratio": 0.33747448559255633,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/Q0A_2/attack.png",
+          "size": [
+            277,
+            369
+          ],
+          "sha256": "7adaef16cd6e0f42427aea2d3ea919123f7206e2dc1ccf72b761f4eff72232e0",
+          "source_bbox": [
+            23,
+            101,
+            300,
+            470
+          ],
+          "transparent_ratio": 0.47073268566620685,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/Q0A_2/accent.png",
+          "size": [
+            163,
+            173
+          ],
+          "sha256": "d85429168de226de14a5f2133a4ff66178461d3f685e819e7682acbf568297cf",
+          "source_bbox": [
+            58,
+            668,
+            221,
+            841
+          ],
+          "transparent_ratio": 0.3177417638923366,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "Q0A_3",
+      "name": "代码开发",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/Q0A_3/rig.json",
+      "rig_sha256": "80a32e5a33184def9c6caf88b659658bf481e3bd1a7154b9cf9b239d3c6c0049",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "303d4c3f4875a5cbba243c82d52a8bab6cf5200e38c0222adb6faa0b8b3deb58",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/Q0A_3-v1.txt",
+      "prompt_sha256": "5948faf550b2abec33ba39354b9b8551858232e0bc95d95ba2408bec5abadf82",
+      "prompt_file_sha256": "42e3e52be919397fd331b3cdb67a67c4218d22a9df6f842e18a754fdf9639998",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/Q0A_3-v1.png",
+      "source_sha256": "355f11b807acd92964a0bae324856b26d9fed80aa08fa1c88f7b2cec78c7cc8c",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/Q0A_3/body.png",
+          "size": [
+            720,
+            715
+          ],
+          "sha256": "303d4c3f4875a5cbba243c82d52a8bab6cf5200e38c0222adb6faa0b8b3deb58",
+          "source_bbox": [
+            274,
+            175,
+            994,
+            890
+          ],
+          "transparent_ratio": 0.5315695415695416,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/Q0A_3/attack.png",
+          "size": [
+            198,
+            331
+          ],
+          "sha256": "1204392232514b33a34e25dc1df8f912f0fe38286bea010cdfd9ab2acdbe8c62",
+          "source_bbox": [
+            36,
+            137,
+            234,
+            468
+          ],
+          "transparent_ratio": 0.6929262412646099,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/Q0A_3/accent.png",
+          "size": [
+            160,
+            161
+          ],
+          "sha256": "773b70b9595f439c355a0cd6793479ed9c38524639fe4ffb5281a497aa9ec96b",
+          "source_bbox": [
+            40,
+            698,
+            200,
+            859
+          ],
+          "transparent_ratio": 0.31319875776397516,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "Q0A_3_1",
+      "name": "测试运行",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/Q0A_3_1/rig.json",
+      "rig_sha256": "4257c0aa5bdee61334f19f65884fbd08ad7699e5513ee1cf0fa450074bb766c5",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "27a2802a7291caf0d075823b7344de4040e52c2077ee191c3f01ae26a4bf5388",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/Q0A_3_1-v1.txt",
+      "prompt_sha256": "878f4d904074fbdac73c2727fbf497a1b97f92a5b938df1f51dd6ef28b6aac8c",
+      "prompt_file_sha256": "c5f788375cca94ba901ec252d4955e91b1dca8735e9252ccaddb5f5b270d519e",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/Q0A_3_1-v1.png",
+      "source_sha256": "31f18d923f00d8dc4c97bf249ea82dd8a85ba05b1d3f1700ccba64fd9e770d7d",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/Q0A_3_1/body.png",
+          "size": [
+            703,
+            859
+          ],
+          "sha256": "27a2802a7291caf0d075823b7344de4040e52c2077ee191c3f01ae26a4bf5388",
+          "source_bbox": [
+            307,
+            95,
+            1010,
+            954
+          ],
+          "transparent_ratio": 0.3235940431577954,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/Q0A_3_1/attack.png",
+          "size": [
+            181,
+            283
+          ],
+          "sha256": "4f3ce9ffdcc093fd4c2a1dd6d0964e94a5ce75639e2f7ea503379241d0d70556",
+          "source_bbox": [
+            31,
+            160,
+            212,
+            443
+          ],
+          "transparent_ratio": 0.6977334400562247,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/Q0A_3_1/accent.png",
+          "size": [
+            224,
+            242
+          ],
+          "sha256": "4580ca4feabad44a9050c3b3ed243f923d5ee6c69146f424067e7f78708d4756",
+          "source_bbox": [
+            26,
+            656,
+            250,
+            898
+          ],
+          "transparent_ratio": 0.39331832939787487,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "Q0B_1",
+      "name": "答辩作业",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/Q0B_1/rig.json",
+      "rig_sha256": "ede4a303ea023402a396bb2a831d75941d5606615d29dddc7f26055a72ca0019",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "173ba152974f313a32ba120867dcba840c9435cf108f87e1d935e82908b3393a",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/Q0B_1-v1.txt",
+      "prompt_sha256": "039460abe3e00cef97365211c53ba0b6f5ea823d278dc9bf8a2a716c6462d90b",
+      "prompt_file_sha256": "6eb2d3eae87c4c7b9f18328dc2a54566db9db3c0d62370fdba6c0b849b596d85",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/Q0B_1-v1.png",
+      "source_sha256": "f9df933d5c8cb1ce786f3cb125975a34cc96c27bbf113be7e11747137f652e94",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/Q0B_1/body.png",
+          "size": [
+            747,
+            798
+          ],
+          "sha256": "173ba152974f313a32ba120867dcba840c9435cf108f87e1d935e82908b3393a",
+          "source_bbox": [
+            251,
+            132,
+            998,
+            930
+          ],
+          "transparent_ratio": 0.4545634501246423,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/Q0B_1/attack.png",
+          "size": [
+            189,
+            277
+          ],
+          "sha256": "8aaa7da8079ac236879b360103b6b58c5e960b9c2ba6c06410d70c37d04742a3",
+          "source_bbox": [
+            38,
+            154,
+            227,
+            431
+          ],
+          "transparent_ratio": 0.8758237350295112,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/Q0B_1/accent.png",
+          "size": [
+            266,
+            286
+          ],
+          "sha256": "ca2a219f5ee7e0f39e2160d552a560d280b0cb221dc86d85bbf07ac08e0cc978",
+          "source_bbox": [
+            27,
+            645,
+            293,
+            931
+          ],
+          "transparent_ratio": 0.256808980493191,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "Q0B_2",
+      "name": "作业答辩",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/Q0B_2/rig.json",
+      "rig_sha256": "3d409031ece0dde9de7a75d76b6ac89ea07691715436fb9a8822f243fe7a633f",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "aa93df0aa0d0b12a01431e6d3cc683892779cb82b20845e9f20127ad8c8d1f2b",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/Q0B_2-v1.txt",
+      "prompt_sha256": "598a44484d18b491744b17620cd2306a4dd08b64c1ff9584521200957805e928",
+      "prompt_file_sha256": "fea88cd35d65b45fa198d3820c29cc00573ba89c11b6db5b6d1128e53afb41d4",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/Q0B_2-v1.png",
+      "source_sha256": "6a0e8ffee8d920a055dffbd481b919fbd6d7ad49540f7f81df5d6df529acad67",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/Q0B_2/body.png",
+          "size": [
+            743,
+            775
+          ],
+          "sha256": "aa93df0aa0d0b12a01431e6d3cc683892779cb82b20845e9f20127ad8c8d1f2b",
+          "source_bbox": [
+            271,
+            170,
+            1014,
+            945
+          ],
+          "transparent_ratio": 0.30750141101897277,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/Q0B_2/attack.png",
+          "size": [
+            230,
+            400
+          ],
+          "sha256": "6a3e03c901f6c87c7d92a39eda9b4eebaa33ffa5c64180c0827d855087b0e3b7",
+          "source_bbox": [
+            26,
+            79,
+            256,
+            479
+          ],
+          "transparent_ratio": 0.45853260869565216,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/Q0B_2/accent.png",
+          "size": [
+            239,
+            244
+          ],
+          "sha256": "56e19652e357991985a0a350900ef91d1ea16f21902e4ba4bc0bbb2af7607507",
+          "source_bbox": [
+            26,
+            662,
+            265,
+            906
+          ],
+          "transparent_ratio": 0.5269051375265793,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "Q0C",
+      "name": "英语四级",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/Q0C/rig.json",
+      "rig_sha256": "901c17f082007c52f5dd1a64f033ec687dc90199714b0f52fc6f00004f34d111",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "6e72a94ab6c62118631a2a7f421ae740dbc4838fd80adb6997831c9dd1f0c251",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/Q0C-v1.txt",
+      "prompt_sha256": "3a149605e4421eb4a286892a9f142e9ba69d6ec265aa59fa0b8c5e8764dfa151",
+      "prompt_file_sha256": "f379d96e17cfb6d36600de00d198ff95b69cbdf2023f9d82d9cbfaa80c0b4bed",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/Q0C-v1.png",
+      "source_sha256": "9e1625fa680bab016c4eaeedbaa805cd1ca3bae91ab5961760fa4651eab10cdc",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/Q0C/body.png",
+          "size": [
+            758,
+            835
+          ],
+          "sha256": "6e72a94ab6c62118631a2a7f421ae740dbc4838fd80adb6997831c9dd1f0c251",
+          "source_bbox": [
+            252,
+            94,
+            1010,
+            929
+          ],
+          "transparent_ratio": 0.4217686000031599,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/Q0C/attack.png",
+          "size": [
+            192,
+            376
+          ],
+          "sha256": "d07039c6a5e8f602a847c470af16c04c5393d886e1fcff2ea7a692497f1f0bd5",
+          "source_bbox": [
+            32,
+            172,
+            224,
+            548
+          ],
+          "transparent_ratio": 0.6360815602836879,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/Q0C/accent.png",
+          "size": [
+            220,
+            139
+          ],
+          "sha256": "2fe9e65e5332e1e7ffc709e4709c6c307a2f12d1255fa468fb8837805627041a",
+          "source_bbox": [
+            30,
+            744,
+            250,
+            883
+          ],
+          "transparent_ratio": 0.30307390451275346,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "Q0D",
+      "name": "英语六级",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/Q0D/rig.json",
+      "rig_sha256": "4f4b31d0c54f20540e84403e3913150bf0e683321ba97c23fd0af61fc2f8689b",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "544a6543d3fbca387d03dcc9ed97878237e4dd93dd0249796311d63e48ae8e8f",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/Q0D-v1.txt",
+      "prompt_sha256": "f49f8a64e0960a1871b6839d78cca4f08d33f491e9afbdfb9828a0547582a01c",
+      "prompt_file_sha256": "d6513e9c4ef35b16d32af3452d30176b572846237e8a245ff42185235809e057",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/Q0D-v1.png",
+      "source_sha256": "722935dc01dea7ed8b363dc62d93f2fc2e84f88bb548bf54d025d0bb0835904a",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/Q0D/body.png",
+          "size": [
+            789,
+            958
+          ],
+          "sha256": "544a6543d3fbca387d03dcc9ed97878237e4dd93dd0249796311d63e48ae8e8f",
+          "source_bbox": [
+            222,
+            25,
+            1011,
+            983
+          ],
+          "transparent_ratio": 0.47485784442133616,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/Q0D/attack.png",
+          "size": [
+            153,
+            309
+          ],
+          "sha256": "7e818737d0462f33cdd85d9a073eab56af253a12df489aeabe3e9f617aa5b1f6",
+          "source_bbox": [
+            40,
+            93,
+            193,
+            402
+          ],
+          "transparent_ratio": 0.6341772955136747,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/Q0D/accent.png",
+          "size": [
+            185,
+            312
+          ],
+          "sha256": "9b4c213943cb701d26b301ed3a977313a940787dcbc656480f6522854f08ef43",
+          "source_bbox": [
+            16,
+            622,
+            201,
+            934
+          ],
+          "transparent_ratio": 0.46301108801108803,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "Q0E_1",
+      "name": "大项目",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/Q0E_1/rig.json",
+      "rig_sha256": "12859da2ef3f60841d555d3502945de62ca0b23b19ee126c2025acc7ae9d24d6",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "338c9ea5981a84eae57ff7126a4d55f27d96aed22fc1212abd13e781b4ab63d3",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/Q0E_1-v1.txt",
+      "prompt_sha256": "386c963603437b51275995ddbc26c7ffe705d7834e81a557a12d202e18dc9e75",
+      "prompt_file_sha256": "c75c6df2ab54780e443bee7b7f24ef48f74b1887f8103a0d0fb602fff0ffc52d",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/Q0E_1-v1.png",
+      "source_sha256": "591f9ffe4f1f0d0786415d7bbd4a762434bdc2a7a7aa8ec2fb777935a890ec1e",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/Q0E_1/body.png",
+          "size": [
+            740,
+            894
+          ],
+          "sha256": "338c9ea5981a84eae57ff7126a4d55f27d96aed22fc1212abd13e781b4ab63d3",
+          "source_bbox": [
+            272,
+            69,
+            1012,
+            963
+          ],
+          "transparent_ratio": 0.4022960880343431,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/Q0E_1/attack.png",
+          "size": [
+            105,
+            328
+          ],
+          "sha256": "a15e4f1e5cd973a5fc5c005f709eff4d58c2a8d8c6e90df9eca07f4f4ca44cb0",
+          "source_bbox": [
+            68,
+            111,
+            173,
+            439
+          ],
+          "transparent_ratio": 0.4582171893147503,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/Q0E_1/accent.png",
+          "size": [
+            249,
+            185
+          ],
+          "sha256": "a00092ba55f09c52fee49aada46594f4d9af2620ae4a2e249c85a11a948f0774",
+          "source_bbox": [
+            14,
+            727,
+            263,
+            912
+          ],
+          "transparent_ratio": 0.4946054488223163,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "Q0E_2",
+      "name": "额外需求1",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/Q0E_2/rig.json",
+      "rig_sha256": "1a1899111efcf55b76b44073225b1492efe2f3b3c485beee0706624765f68b73",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "a08eea2d8b6f8cb3fa678e2d8cbb734c293e0de15ba3b977bbb9b0aa554aea1c",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/Q0E_2-v1.txt",
+      "prompt_sha256": "3ebbfc8368c28347672051de25ca0a24b75ca3db5333c5cb524b47ef3d524297",
+      "prompt_file_sha256": "4f974e2d6b2d2e69d3b6ebedb76c6736c81abc60e32773e71d1a3f1e4dbac4a3",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/Q0E_2-v1.png",
+      "source_sha256": "f6c0dcdfdd959580e35c3431c4288619c5a1cc3d86c652c0a262c9a1101082d1",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/Q0E_2/body.png",
+          "size": [
+            742,
+            816
+          ],
+          "sha256": "a08eea2d8b6f8cb3fa678e2d8cbb734c293e0de15ba3b977bbb9b0aa554aea1c",
+          "source_bbox": [
+            269,
+            110,
+            1011,
+            926
+          ],
+          "transparent_ratio": 0.5307644284128746,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/Q0E_2/attack.png",
+          "size": [
+            219,
+            343
+          ],
+          "sha256": "f200459352b267e7e9524ce6c716f372903d12c7a22764cf4989d8424ca22d66",
+          "source_bbox": [
+            33,
+            133,
+            252,
+            476
+          ],
+          "transparent_ratio": 0.45824513758536684,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/Q0E_2/accent.png",
+          "size": [
+            284,
+            168
+          ],
+          "sha256": "bdb0c3f16a73e0d13478a4d63489fd23e3181f1525ed18a72624339305a2bfef",
+          "source_bbox": [
+            33,
+            716,
+            317,
+            884
+          ],
+          "transparent_ratio": 0.5565057008718981,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "Q0E_3",
+      "name": "额外需求2",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/Q0E_3/rig.json",
+      "rig_sha256": "6755b6e98a85623c026dc184d8df9e9f83b8f39d57c48a44a9c94b6f6d305d4e",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "a830da23f7db12397ff43acdc5730fd9b6d28e252176c4dfaa5940975d963ecd",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/Q0E_3-v1.txt",
+      "prompt_sha256": "209fabb83ecd03031b7446984ba940e277cc2aa0639605e13dc38daa0dcf6c34",
+      "prompt_file_sha256": "d776346454ea191116b088b699671b0133d90a550c2d494214c8910882050417",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/Q0E_3-v1.png",
+      "source_sha256": "14efcbfc9d86dba04c71697aca07743188f8c70c23cf708b58ef71ace43e9326",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/Q0E_3/body.png",
+          "size": [
+            710,
+            900
+          ],
+          "sha256": "a830da23f7db12397ff43acdc5730fd9b6d28e252176c4dfaa5940975d963ecd",
+          "source_bbox": [
+            292,
+            58,
+            1002,
+            958
+          ],
+          "transparent_ratio": 0.5010798122065727,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/Q0E_3/attack.png",
+          "size": [
+            200,
+            233
+          ],
+          "sha256": "4a1cb36de3aaf0a8c541247049839419655620f693377cf1fe7f3f4e33c5f521",
+          "source_bbox": [
+            27,
+            170,
+            227,
+            403
+          ],
+          "transparent_ratio": 0.64931330472103,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/Q0E_3/accent.png",
+          "size": [
+            166,
+            288
+          ],
+          "sha256": "23c850122e6f97e1e4309ba98d046eaec47846203ead78448dd3b9c334f07d61",
+          "source_bbox": [
+            39,
+            637,
+            205,
+            925
+          ],
+          "transparent_ratio": 0.4618055555555556,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "N13",
+      "name": "课后作业",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/N13/rig.json",
+      "rig_sha256": "6854383ae1588664f070fed94c4ed377389150cae039c16b5759b6404b81666c",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "6504d39b84c1de0642d82ac68f44dcbfa6fda88233bce237f6e05a10dba748e9",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/N13-v1.txt",
+      "prompt_sha256": "984a9faaf3576dc86e748b9261f060da13807cccaa75c312b01412c2b17e1fe6",
+      "prompt_file_sha256": "92491ff7c0f76e8ba99a85a26b09a22214b743394f35caf5e09f4082eae660af",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/N13-v1.png",
+      "source_sha256": "bec4cb337dcd59f2ccba0cdadeacc9e7741f76576f039e19ae52a62bf36ddd8d",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/N13/body.png",
+          "size": [
+            679,
+            887
+          ],
+          "sha256": "6504d39b84c1de0642d82ac68f44dcbfa6fda88233bce237f6e05a10dba748e9",
+          "source_bbox": [
+            304,
+            69,
+            983,
+            956
+          ],
+          "transparent_ratio": 0.37929643201671004,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N13/attack.png",
+          "size": [
+            145,
+            279
+          ],
+          "sha256": "07564380e759780105e97b4a6a74b64f047e0490fb16394f4131a4466c994c50",
+          "source_bbox": [
+            112,
+            144,
+            257,
+            423
+          ],
+          "transparent_ratio": 0.6731924360400445,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N13/accent.png",
+          "size": [
+            216,
+            267
+          ],
+          "sha256": "b95495c3dc1e391490caab8babcc589ad5851803307e0d46cbfd6ebcbb7fdded",
+          "source_bbox": [
+            39,
+            646,
+            255,
+            913
+          ],
+          "transparent_ratio": 0.4648876404494382,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "N14",
+      "name": "数学基础",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/N14/rig.json",
+      "rig_sha256": "9df9c0d22e91caf280ddbc1c430aaa8b1024908d4f5671b064b53b527f384cfc",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "d188e1ddd748c9ac0b1184fa07a0e89af05e7eab1cd10e8c5adc503aed7f2f6b",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/N14-v1.txt",
+      "prompt_sha256": "81fa436e3edd505f1bda19ec22b5ce1b446eb29e2e75d78e4e1ca57da957330a",
+      "prompt_file_sha256": "4a427713935e1faa31bac78139cd237e4d6a6a5f9d3ba9b31ef94957f14c5fe2",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/N14-v1.png",
+      "source_sha256": "f3fb8fdcea71d55544a9c25f5a6cdc00df049a5673d22ed93427be7e3d19ed48",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/N14/body.png",
+          "size": [
+            775,
+            856
+          ],
+          "sha256": "d188e1ddd748c9ac0b1184fa07a0e89af05e7eab1cd10e8c5adc503aed7f2f6b",
+          "source_bbox": [
+            249,
+            88,
+            1024,
+            944
+          ],
+          "transparent_ratio": 0.32153150437142,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N14/attack.png",
+          "size": [
+            195,
+            423
+          ],
+          "sha256": "beeed1782a586ef4665176e5a02791e89c6e409228439ba572598fc77bb36f31",
+          "source_bbox": [
+            24,
+            106,
+            219,
+            529
+          ],
+          "transparent_ratio": 0.6412802327695944,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N14/accent.png",
+          "size": [
+            215,
+            198
+          ],
+          "sha256": "f42fc171c0562ade5e75af3b54db40349e3bb853c5165a780e25aa322ace75c5",
+          "source_bbox": [
+            25,
+            718,
+            240,
+            916
+          ],
+          "transparent_ratio": 0.4881371858116044,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "N15",
+      "name": "程序",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/N15/rig.json",
+      "rig_sha256": "0a9a9fd01331792300187290d7f000509f06edc7572407085135d47b03d04854",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "3aa86bc29c5acbf9d2b3546f1e83d90d495833104b740b5868d26db9b87e8038",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/N15-v1.txt",
+      "prompt_sha256": "0108e86147e938993b29216a5b3e3bf5c3fd82c9252de6eab138688ebd6e5914",
+      "prompt_file_sha256": "5a37ad0f7d296e221de5d191cf8408ce51bd65bff679de46597c8fa2808c7f88",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/N15-v1.png",
+      "source_sha256": "ff5afa69792758e0edbd60678459b597a232d515a84ab49f402acde4e3a1f64f",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/N15/body.png",
+          "size": [
+            782,
+            829
+          ],
+          "sha256": "3aa86bc29c5acbf9d2b3546f1e83d90d495833104b740b5868d26db9b87e8038",
+          "source_bbox": [
+            226,
+            118,
+            1008,
+            947
+          ],
+          "transparent_ratio": 0.5364519542541935,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N15/attack.png",
+          "size": [
+            233,
+            308
+          ],
+          "sha256": "3452dda5da44cc84c2a6fc3274aca914209c6fdb160db93e422f2f1b4e4f6d5e",
+          "source_bbox": [
+            15,
+            140,
+            248,
+            448
+          ],
+          "transparent_ratio": 0.5350732958029095,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N15/accent.png",
+          "size": [
+            57,
+            102
+          ],
+          "sha256": "ee691b1228958d3285f8cd8dd14e56ad25bf1f64f806aeccd8e4288e4b8fbf93",
+          "source_bbox": [
+            85,
+            703,
+            142,
+            805
+          ],
+          "transparent_ratio": 0.19349845201238391,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "N16",
+      "name": "预习",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/N16/rig.json",
+      "rig_sha256": "1b5467e172b59f515f5fe840778ac8eaa5160061add9b3e30a8bf418c8cea94a",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "ffb881ca8585fef8e6943419a054ea7fc56eeed99491df75b6baa39fc2cc8d04",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/N16-v1.txt",
+      "prompt_sha256": "8f48398fe77bddc05d30ef98bb6bd08177093ff664d209b8cdb740aef4f2c4bd",
+      "prompt_file_sha256": "f4d6c4dca4d184de23a42c4782aa952f13284e0edbd69951dd287f1a89de3309",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/N16-v1.png",
+      "source_sha256": "65388765b0c62535e5cfd1600aa0b5e3820fe5ca4fefad464d2b8221e1ff487d",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/N16/body.png",
+          "size": [
+            661,
+            885
+          ],
+          "sha256": "ffb881ca8585fef8e6943419a054ea7fc56eeed99491df75b6baa39fc2cc8d04",
+          "source_bbox": [
+            352,
+            89,
+            1013,
+            974
+          ],
+          "transparent_ratio": 0.5294306691624572,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N16/attack.png",
+          "size": [
+            220,
+            345
+          ],
+          "sha256": "41239c16ffe6c60ab3e3d4eb3f45b99b2ac7709ccd85f1845668a07a45356564",
+          "source_bbox": [
+            34,
+            170,
+            254,
+            515
+          ],
+          "transparent_ratio": 0.5624901185770751,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N16/accent.png",
+          "size": [
+            81,
+            127
+          ],
+          "sha256": "10b3ce03baf9a48387146af07afb4b99ecca7e03a87af95466e14bb6105cc6e5",
+          "source_bbox": [
+            96,
+            711,
+            177,
+            838
+          ],
+          "transparent_ratio": 0.36823174880917664,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "N17",
+      "name": "文献阅读",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/N17/rig.json",
+      "rig_sha256": "28d0cb1dd601b2087220e232b1d034fabfefac22eded782b968e72b17a8ec95c",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "943c728885072db21b4fb303be69633b08240eabe9836d5cd648a5482fdc05ec",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/N17-v1.txt",
+      "prompt_sha256": "a12a2f5de8ede4deb800ef82ab8103e34f2aab599fcc56cf219e9992a0f8deb5",
+      "prompt_file_sha256": "a42b90d21d25cf91bab231d33239e160d72d3fa1eba73394e7bb050f7ef1f1c3",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/N17-v1.png",
+      "source_sha256": "27cc6a612dfb3c23a86a00d16c9c47330af453ba5c0be845284e8c0adefcda78",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/N17/body.png",
+          "size": [
+            700,
+            910
+          ],
+          "sha256": "943c728885072db21b4fb303be69633b08240eabe9836d5cd648a5482fdc05ec",
+          "source_bbox": [
+            310,
+            67,
+            1010,
+            977
+          ],
+          "transparent_ratio": 0.3899968602825746,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N17/attack.png",
+          "size": [
+            198,
+            494
+          ],
+          "sha256": "a1204d3553beb6d5a2d4fb42599e8ebceb0dd12fcb0a3f36af0a9456883cbf8b",
+          "source_bbox": [
+            60,
+            66,
+            258,
+            560
+          ],
+          "transparent_ratio": 0.7438657833394675,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N17/accent.png",
+          "size": [
+            229,
+            275
+          ],
+          "sha256": "d57897b073fa11692803c60771bf27bb230bec0728a8666d48d09dcf21bf6411",
+          "source_bbox": [
+            23,
+            645,
+            252,
+            920
+          ],
+          "transparent_ratio": 0.36570067487098057,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "N18",
+      "name": "英语作文",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/N18/rig.json",
+      "rig_sha256": "71aa380d98fd535cef91ce6821f7afa7bbea70a507e4fea66b1cc96f713d3782",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "bb70687e9d7d09e07737bd986e9a8e01635f6b9332dbca1a8050c7817d8391e7",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/N18-v1.txt",
+      "prompt_sha256": "abfd5e02e16ee393f18ddf2ff7c1b4b1cb714d3b2f0363d6b1e5838e72328d95",
+      "prompt_file_sha256": "8ab83d183230fcba7b65cdbdd9682fc38cf8a0faa293ed56912d6f03018678a4",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/N18-v1.png",
+      "source_sha256": "0795126965d2e15cef48c9a3c236dae2d2ac842e804af8ba205cc32b456a1812",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/N18/body.png",
+          "size": [
+            703,
+            927
+          ],
+          "sha256": "bb70687e9d7d09e07737bd986e9a8e01635f6b9332dbca1a8050c7817d8391e7",
+          "source_bbox": [
+            306,
+            49,
+            1009,
+            976
+          ],
+          "transparent_ratio": 0.434605274666593,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N18/attack.png",
+          "size": [
+            188,
+            347
+          ],
+          "sha256": "cac4a57c221bb44a4cf6addd2f9a5f57c6e7acfc05f3bd3a24d02c2fc826f198",
+          "source_bbox": [
+            45,
+            122,
+            233,
+            469
+          ],
+          "transparent_ratio": 0.6866913973879453,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N18/accent.png",
+          "size": [
+            212,
+            259
+          ],
+          "sha256": "7b8fe9c23c660c2fc10d1954b8632547be3b1e59068539c768d48ff1622617d9",
+          "source_bbox": [
+            29,
+            664,
+            241,
+            923
+          ],
+          "transparent_ratio": 0.5628141618707656,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "N19",
+      "name": "项目",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/N19/rig.json",
+      "rig_sha256": "c28d9ae14f021d9329baebf2de88acfd35c37834ed7f8e82be3d6de60b958a63",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "d13f8aa0e10de94290d366182cf493c8f6d238d2f10f6186973d455172cc0ec4",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/N19-v1.txt",
+      "prompt_sha256": "0c52208c5d592c75c58af228216ecfe46da04928aebe7be150ddf0f5107a969e",
+      "prompt_file_sha256": "25ad424dbd19339b39fe6b5d1b67ff68939bc9224f0b8f06088d671c3351d25e",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/N19-v1.png",
+      "source_sha256": "3311152165dae82f86dd43bc5ef81aa200d464503b8cc7ed208f1f4c93ffd1c4",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/N19/body.png",
+          "size": [
+            834,
+            646
+          ],
+          "sha256": "d13f8aa0e10de94290d366182cf493c8f6d238d2f10f6186973d455172cc0ec4",
+          "source_bbox": [
+            171,
+            190,
+            1005,
+            836
+          ],
+          "transparent_ratio": 0.42079277754267175,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N19/attack.png",
+          "size": [
+            226,
+            216
+          ],
+          "sha256": "298c84e37b406b4e87e040d163f91fb630502008f8f57898151cb6178d5e034c",
+          "source_bbox": [
+            35,
+            149,
+            261,
+            365
+          ],
+          "transparent_ratio": 0.45753441494591934,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N19/accent.png",
+          "size": [
+            214,
+            122
+          ],
+          "sha256": "66e6b79662a20b6e4faa00ad67e99dd70c33e0b32c39320374fbb13d59f914c1",
+          "source_bbox": [
+            20,
+            763,
+            234,
+            885
+          ],
+          "transparent_ratio": 0.5315612072927838,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "N20",
+      "name": "六级英语词汇",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/N20/rig.json",
+      "rig_sha256": "067423520bad51791da577ad0f9a4fa2b2f996f80115804f17f5adff82d08948",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "385a5bde2b6eb9015dfe6f5c4ab86b3584d310ca0f44946895a014dfa067e490",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/N20-v1.txt",
+      "prompt_sha256": "58cbe14376771e5f31f26d42ba8570fe378fc649c2871f2cb588f823d4b89dfa",
+      "prompt_file_sha256": "b4d543fc55cbec3f359e02fef90094309baae919019545914bfc0c85dbadfea8",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/N20-v1.png",
+      "source_sha256": "7d681cb51af49e2fe8402b9df678079dc1dbf786b6f57e5541a24337eb80ebe6",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/N20/body.png",
+          "size": [
+            770,
+            818
+          ],
+          "sha256": "385a5bde2b6eb9015dfe6f5c4ab86b3584d310ca0f44946895a014dfa067e490",
+          "source_bbox": [
+            235,
+            89,
+            1005,
+            907
+          ],
+          "transparent_ratio": 0.4743927221922332,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N20/attack.png",
+          "size": [
+            208,
+            223
+          ],
+          "sha256": "26ca163a225d7b3369bd4975b347bdf017a0fa35d90221ba28650de319c667d1",
+          "source_bbox": [
+            30,
+            132,
+            238,
+            355
+          ],
+          "transparent_ratio": 0.2983140738185581,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N20/accent.png",
+          "size": [
+            129,
+            249
+          ],
+          "sha256": "22c9f489aa0cbbbb8f826e1b2febf959d03b0126b21e2797d9de16e078967b0d",
+          "source_bbox": [
+            73,
+            693,
+            202,
+            942
+          ],
+          "transparent_ratio": 0.5701254630926808,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "N21",
+      "name": "考前复习",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/N21/rig.json",
+      "rig_sha256": "14f3ecd0adcac7a886f2189eb1640c16f7bb720ef61db71bf3608982d28ab193",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "1a181c4ec7eb224593c2a5272c5df3f75fff8dccd742de7e66f4fefda54c377a",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/N21-v1.txt",
+      "prompt_sha256": "bb493c18f4eb6c439eaa795dc76d04c07c77d9702f6c1f90ecc4453aa2bbff98",
+      "prompt_file_sha256": "36d1dd67ad830168306e1f83a02dfc726c88777d0936c13dcd18278627680ba9",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/N21-v1.png",
+      "source_sha256": "2e54428a732f7e350bbfc1ac168deea11e93065285d7edeff515ec85ae65a68b",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/N21/body.png",
+          "size": [
+            746,
+            771
+          ],
+          "sha256": "1a181c4ec7eb224593c2a5272c5df3f75fff8dccd742de7e66f4fefda54c377a",
+          "source_bbox": [
+            268,
+            133,
+            1014,
+            904
+          ],
+          "transparent_ratio": 0.3048615530125216,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N21/attack.png",
+          "size": [
+            280,
+            297
+          ],
+          "sha256": "6cde04412241ffc0fa200c5c79ebce906f2e1afe14d578258c2425955ab899da",
+          "source_bbox": [
+            7,
+            137,
+            287,
+            434
+          ],
+          "transparent_ratio": 0.3373256373256373,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N21/accent.png",
+          "size": [
+            112,
+            111
+          ],
+          "sha256": "a1d650ec06473261e95093ee975dd8ab9f84421b10014cf81ec665f1da95eb95",
+          "source_bbox": [
+            53,
+            719,
+            165,
+            830
+          ],
+          "transparent_ratio": 0.2084942084942085,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "N22",
+      "name": "自我介绍",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/N22/rig.json",
+      "rig_sha256": "81e81a0c071f8efd5fa1f64c4b12ba4d47438ca241fb10d34a48396dc90d28db",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "fee8a818adeac7d1f0f5bbcf7ce7a5a6f767e5cf50d0b84d1bd3fcf17a03a045",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/N22-v1.txt",
+      "prompt_sha256": "f3a66cfd76a7cd5afeb10edf555319965294928c7bd3bef0c48e66170d92ebce",
+      "prompt_file_sha256": "e4f0e7beff675b9a43e58dc79fafed0f0047993c47e094a4644f90e6cf999e97",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/N22-v1.png",
+      "source_sha256": "2d4623defddb71dc4a1bdaaf636704b0630991d24136ef5252b1fb9359156863",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/N22/body.png",
+          "size": [
+            701,
+            883
+          ],
+          "sha256": "fee8a818adeac7d1f0f5bbcf7ce7a5a6f767e5cf50d0b84d1bd3fcf17a03a045",
+          "source_bbox": [
+            315,
+            50,
+            1016,
+            933
+          ],
+          "transparent_ratio": 0.4829874164557023,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N22/attack.png",
+          "size": [
+            203,
+            240
+          ],
+          "sha256": "c833cf8fff42e7cbc8a272a98a906bc9c63ff40d4b9335c9ff5ed2e61e54ca70",
+          "source_bbox": [
+            49,
+            163,
+            252,
+            403
+          ],
+          "transparent_ratio": 0.4783456486042693,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N22/accent.png",
+          "size": [
+            221,
+            280
+          ],
+          "sha256": "1890e895866b6d68cf8bcce83f4fb50582f23067a3fb30f914ad1b4cb09dbc91",
+          "source_bbox": [
+            23,
+            634,
+            244,
+            914
+          ],
+          "transparent_ratio": 0.7149159663865546,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "N23",
+      "name": "小组展示",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/N23/rig.json",
+      "rig_sha256": "115e2d4f4e3cebfc3a83df563f4198bb7dc096e79cbdb0161431853cc9257592",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "5c3ce8990447d726003ebd0732a34165e08bb971892f310a3569b565e2dbabe3",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/N23-v1.txt",
+      "prompt_sha256": "94da0403dc49382527e7bffa611a96dc6728956191bb3284751c7a6a01c68e7b",
+      "prompt_file_sha256": "ee1a03a32bb37b164d0429d7eb1b424eb249abbd8a5875edabda60f2733465b0",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/N23-v1.png",
+      "source_sha256": "b5749ed2388b4f7c7d3456d58e42f50438717f6b1578e9303b428ea6f11e6256",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/N23/body.png",
+          "size": [
+            733,
+            977
+          ],
+          "sha256": "5c3ce8990447d726003ebd0732a34165e08bb971892f310a3569b565e2dbabe3",
+          "source_bbox": [
+            276,
+            23,
+            1009,
+            1000
+          ],
+          "transparent_ratio": 0.548755063597811,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N23/attack.png",
+          "size": [
+            208,
+            440
+          ],
+          "sha256": "57b05bdc23659be85b648ac701c8c48da38eb1ca6779c468ab401c0f19d08e72",
+          "source_bbox": [
+            20,
+            87,
+            228,
+            527
+          ],
+          "transparent_ratio": 0.421055506993007,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N23/accent.png",
+          "size": [
+            138,
+            156
+          ],
+          "sha256": "3e177c71ab65bd344b3c266a768698de6a6e6c6421c47a98e461fdb56276cbf1",
+          "source_bbox": [
+            72,
+            692,
+            210,
+            848
+          ],
+          "transparent_ratio": 0.20285209959123002,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "N24",
+      "name": "体育测试",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/N24/rig.json",
+      "rig_sha256": "91e1bc26da56cd522f5c6337d426a48317e760e27040fec989a3b588b0e3ec3c",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "f78c5fed9e52b2edf62ecc531a6d5b56af17d4e6484127852f4492a96e27dbda",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/N24-v1.txt",
+      "prompt_sha256": "215b0948c261db2dba629e6ac449b894564e737615aad264d900e78a9bab3d49",
+      "prompt_file_sha256": "81eb99cdc4433bf971a6c2fc1b64010d764830dd29f514b83d476af15681c2cd",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/N24-v1.png",
+      "source_sha256": "469cc9baa2346557d761218c27c90704597b1b9ff2f2dc5d535acd209814d6cb",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/N24/body.png",
+          "size": [
+            747,
+            811
+          ],
+          "sha256": "f78c5fed9e52b2edf62ecc531a6d5b56af17d4e6484127852f4492a96e27dbda",
+          "source_bbox": [
+            277,
+            120,
+            1024,
+            931
+          ],
+          "transparent_ratio": 0.45037197701616166,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N24/attack.png",
+          "size": [
+            189,
+            203
+          ],
+          "sha256": "ed62e9100346abb92f3329fa82957ea3d52b01f9385bfd1713c63180def6bf7b",
+          "source_bbox": [
+            24,
+            208,
+            213,
+            411
+          ],
+          "transparent_ratio": 0.5051737169963771,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N24/accent.png",
+          "size": [
+            216,
+            223
+          ],
+          "sha256": "baa6d30e01c61a387b55b6366ce4a6a5d639ea547a0804584c12ff33eb957aa4",
+          "source_bbox": [
+            25,
+            664,
+            241,
+            887
+          ],
+          "transparent_ratio": 0.4867339312406577,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "N25",
+      "name": "导师约谈",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/N25/rig.json",
+      "rig_sha256": "c6c66253a4daf123a2d661db70593c870258b9700e3197699fe46cd35b647de5",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "6a4f286f762156ad1912a03775cd14adee3f3a2595362ae099101c458d14d316",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/N25-v1.txt",
+      "prompt_sha256": "9258d5b34443c88ef9a3770dc8d28b747c78d159dfee04ca0bdf754efcf2383e",
+      "prompt_file_sha256": "9476a5f031543de30956aee95a280c2663482d06dfd46122fc195259a71cba5f",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/N25-v1.png",
+      "source_sha256": "6e2482b4a67b85ed12449f50f646d7b9765a62a6b374ab32a1f76862309e5abb",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/N25/body.png",
+          "size": [
+            730,
+            858
+          ],
+          "sha256": "6a4f286f762156ad1912a03775cd14adee3f3a2595362ae099101c458d14d316",
+          "source_bbox": [
+            275,
+            103,
+            1005,
+            961
+          ],
+          "transparent_ratio": 0.3006705623143979,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N25/attack.png",
+          "size": [
+            189,
+            292
+          ],
+          "sha256": "59099b4f038330e34929cbd480a0c267755a74889e69d010b7e9ccfd598452b8",
+          "source_bbox": [
+            42,
+            185,
+            231,
+            477
+          ],
+          "transparent_ratio": 0.5652315720808871,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N25/accent.png",
+          "size": [
+            201,
+            170
+          ],
+          "sha256": "58d178c9e94a2d6f7ddafff8ad8fd7439d18faa4c49000ff508550ffd7506f68",
+          "source_bbox": [
+            36,
+            693,
+            237,
+            863
+          ],
+          "transparent_ratio": 0.33260169739537604,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "N26",
+      "name": "讲座考勤",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/N26/rig.json",
+      "rig_sha256": "99f8b6f4cac736bea03f7d56424992d7b0df6e6e96e0d99d1ca86563d040e45e",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "7c5919bac6e4bc10a58d51a2365db95aa77cce34d3e81625bcd319da3956c788",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/N26-v1.txt",
+      "prompt_sha256": "19ac30705b4f6c1fa278abb9a77a0654a4e18e4e1c4b11a6f9a8f2ba6ed95825",
+      "prompt_file_sha256": "b6f45c16627d035c7d16279aac2ca4b85faa378c2d9af395f785d3526c202c39",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/N26-v1.png",
+      "source_sha256": "1e15b1a24e13d42862cf4fa5dd95af2612e4dbd1ca631e1c8af7579e611aab02",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/N26/body.png",
+          "size": [
+            730,
+            964
+          ],
+          "sha256": "7c5919bac6e4bc10a58d51a2365db95aa77cce34d3e81625bcd319da3956c788",
+          "source_bbox": [
+            274,
+            24,
+            1004,
+            988
+          ],
+          "transparent_ratio": 0.44379866992553857,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N26/attack.png",
+          "size": [
+            213,
+            302
+          ],
+          "sha256": "867b1fc331dc568262c13b5523422a8d7de2215d09212ad2a0fdb41ac321a930",
+          "source_bbox": [
+            28,
+            112,
+            241,
+            414
+          ],
+          "transparent_ratio": 0.5086434723129062,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N26/accent.png",
+          "size": [
+            225,
+            233
+          ],
+          "sha256": "4e1f60dbcc622b4f11f88ff8331a4fa9eba6dfb197b3f0fc836e423d1ff4d254",
+          "source_bbox": [
+            29,
+            707,
+            254,
+            940
+          ],
+          "transparent_ratio": 0.4159084406294707,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "N27",
+      "name": "小组作业",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/N27/rig.json",
+      "rig_sha256": "b9a642863e66bc1a3b94b71015067d7c33a3d880285b74c4ce15cf9fb935b59b",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "b2ad7052407605e856e465048f38fc92a0429635f81f489712097bfc255af4f2",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/N27-v1.txt",
+      "prompt_sha256": "dffcfee0c01580885fcf36059f0e77b0fe30951e678045eb3ade5623df6a3f8a",
+      "prompt_file_sha256": "f5c06b67a62ec09a63edcfbfae097eb284ec52a4f18fb074cb768cb0f1ace618",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/N27-v1.png",
+      "source_sha256": "6104afd7833766dcc5e65e235e43402ccc8f746e3276a9698d7af23cdd906af7",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/N27/body.png",
+          "size": [
+            697,
+            785
+          ],
+          "sha256": "b2ad7052407605e856e465048f38fc92a0429635f81f489712097bfc255af4f2",
+          "source_bbox": [
+            305,
+            134,
+            1002,
+            919
+          ],
+          "transparent_ratio": 0.5454605269169964,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N27/attack.png",
+          "size": [
+            188,
+            300
+          ],
+          "sha256": "760981728379abedaebe833aed6c0e54d105d7a69a7bf6a0c8e28518d95b5de3",
+          "source_bbox": [
+            46,
+            133,
+            234,
+            433
+          ],
+          "transparent_ratio": 0.4322695035460993,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N27/accent.png",
+          "size": [
+            259,
+            214
+          ],
+          "sha256": "253b0ea5e2ce8e75b3dd2d987acc209f8b6c78e0a5aced37dac7e1729232845e",
+          "source_bbox": [
+            21,
+            682,
+            280,
+            896
+          ],
+          "transparent_ratio": 0.5908418431782918,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "N28",
+      "name": "早八",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/N28/rig.json",
+      "rig_sha256": "93eb0ec58c68f33d0e9c42125f8a4420137c8639d726249e10167e91deddf218",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "1c8121a1eaf4ee464ee88042ea226ebb549d1ef54228cbb2d30198f21f7f4a14",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/N28-v1.txt",
+      "prompt_sha256": "ff6f6f14aa1388d53737f04d06ce5bebae4b0cbc222be18b2847f99f3dd6e5a0",
+      "prompt_file_sha256": "7ff4c764809aa3ee29f4a02359ec50b24425d7b7f052144b65cfa15903123272",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/N28-v1.png",
+      "source_sha256": "4dfb241cc50f2711c4594c0476de3c83cfb150a9ed6248750ad417b1e68d6416",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/N28/body.png",
+          "size": [
+            705,
+            872
+          ],
+          "sha256": "1c8121a1eaf4ee464ee88042ea226ebb549d1ef54228cbb2d30198f21f7f4a14",
+          "source_bbox": [
+            310,
+            89,
+            1015,
+            961
+          ],
+          "transparent_ratio": 0.4132262996941896,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N28/attack.png",
+          "size": [
+            197,
+            356
+          ],
+          "sha256": "e6f64a02855e0227369bf25a4bc1d5793fc205f4d1f7df40e57a5a16702db1f7",
+          "source_bbox": [
+            27,
+            113,
+            224,
+            469
+          ],
+          "transparent_ratio": 0.6823561284435066,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N28/accent.png",
+          "size": [
+            208,
+            302
+          ],
+          "sha256": "5c0c0949154b1d4b4af55e32a2d7dd741df414ea99a9be1d9eacd9e276baf976",
+          "source_bbox": [
+            30,
+            642,
+            238,
+            944
+          ],
+          "transparent_ratio": 0.5889900662251656,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "N29",
+      "name": "校园网发力",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/N29/rig.json",
+      "rig_sha256": "ad60dcc7ed391eee4f0a8e94ce36164c6ae6f17556575c9e8e05906ba8f44eb6",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "4fe367c8db8991afe96f334a5474d199d98418b56fecd50f720588d6f507a16a",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/N29-v1.txt",
+      "prompt_sha256": "f3205d67cf63e7c222ec1b3f5f7f1a5c6c44d426d4a347b2ec1a80d98d23f818",
+      "prompt_file_sha256": "afdcc096537f3aae990dd2ec1dadb8fdf8cc8af15d7a492ef3eb43673ad50f33",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/N29-v1.png",
+      "source_sha256": "89cc915708c2e9bbf89ae6c30fe658919e49f8068d57544236f6905a6e68120b",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/N29/body.png",
+          "size": [
+            690,
+            921
+          ],
+          "sha256": "4fe367c8db8991afe96f334a5474d199d98418b56fecd50f720588d6f507a16a",
+          "source_bbox": [
+            307,
+            48,
+            997,
+            969
+          ],
+          "transparent_ratio": 0.46470754850587737,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N29/attack.png",
+          "size": [
+            181,
+            287
+          ],
+          "sha256": "c8a71f6a775b6eb814848517b48c681ec2b3e3c7da44f17aeab39be5fe880cbd",
+          "source_bbox": [
+            67,
+            131,
+            248,
+            418
+          ],
+          "transparent_ratio": 0.6915702542976495,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N29/accent.png",
+          "size": [
+            98,
+            97
+          ],
+          "sha256": "0bafc68eee69e72f9fb95fe6204974f6309d1417149cc1a03a51f76b5d22d7f8",
+          "source_bbox": [
+            93,
+            698,
+            191,
+            795
+          ],
+          "transparent_ratio": 0.21944035346097202,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "N30",
+      "name": "组会汇报",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/N30/rig.json",
+      "rig_sha256": "9dcba60cd4d063dd7482b96775b167fcd5a20d91e7d9af5dfbd2d0c018214923",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "624541e45dd3f9f831d434924c7c0b3ddb00073e27ec2b0a595318aa442dec2f",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/N30-v1.txt",
+      "prompt_sha256": "041bed0ec00a0a8be8aa6ac682a46b8b8e8edc98c1414245f54585b2331933da",
+      "prompt_file_sha256": "c21b9347d5abde8609f67a5da0302bfa2fe9c0667d9fd1f7a0f76d419d53ead3",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/N30-v1.png",
+      "source_sha256": "01fb67c19b08f0cfeaca5910542e7af38bf3f8803dcce2419a0d7f5003c8a412",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/N30/body.png",
+          "size": [
+            668,
+            856
+          ],
+          "sha256": "624541e45dd3f9f831d434924c7c0b3ddb00073e27ec2b0a595318aa442dec2f",
+          "source_bbox": [
+            326,
+            83,
+            994,
+            939
+          ],
+          "transparent_ratio": 0.4175055263305165,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N30/attack.png",
+          "size": [
+            334,
+            401
+          ],
+          "sha256": "25fcaf2336f71af3340a31fcc57e975480fff32dff366d87c976078284cb5cda",
+          "source_bbox": [
+            36,
+            109,
+            370,
+            510
+          ],
+          "transparent_ratio": 0.9115758507921812,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N30/accent.png",
+          "size": [
+            185,
+            170
+          ],
+          "sha256": "ee3deae0f14ea7035f1f691c5dd46e3bf2ea00effe04ac6fc3503539ce9698e3",
+          "source_bbox": [
+            36,
+            721,
+            221,
+            891
+          ],
+          "transparent_ratio": 0.29980922098569157,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "N31",
+      "name": "导师催进度",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/N31/rig.json",
+      "rig_sha256": "c3a5d280c81279220ad71566340e5eee78635af64c24864f81914d566d6d4dcc",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "5d7b0153ea94e946c453f0fb75b5cb90211c72a27b1750cb05951e9d26b705d3",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/N31-v1.txt",
+      "prompt_sha256": "33504b9488068442e4e8b04888bc6731a9342153de3255815a1fab35b71efc1c",
+      "prompt_file_sha256": "c852159981e1ea983686da1099fa401d973d1d2d1e516c2ebca389d344716ff9",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/N31-v1.png",
+      "source_sha256": "bd1410b003c8114a63f11f3b71caeb00dd169452dd9e1152d2e2f7ffa06beaf0",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/N31/body.png",
+          "size": [
+            808,
+            830
+          ],
+          "sha256": "5d7b0153ea94e946c453f0fb75b5cb90211c72a27b1750cb05951e9d26b705d3",
+          "source_bbox": [
+            207,
+            109,
+            1015,
+            939
+          ],
+          "transparent_ratio": 0.43586126684957655,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N31/attack.png",
+          "size": [
+            151,
+            314
+          ],
+          "sha256": "b08e3ab0a7f66f24ac51b10a2e447e8a6122a704822b80624135692175f7ef5b",
+          "source_bbox": [
+            20,
+            129,
+            171,
+            443
+          ],
+          "transparent_ratio": 0.4139705572193867,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N31/accent.png",
+          "size": [
+            188,
+            220
+          ],
+          "sha256": "76f52dc0cfc099210c93939caecbe05d78b4e215bbee9fe18fc765155aba6991",
+          "source_bbox": [
+            20,
+            661,
+            208,
+            881
+          ],
+          "transparent_ratio": 0.6358800773694391,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "N32",
+      "name": "奖学金评定",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/N32/rig.json",
+      "rig_sha256": "adf68f741222fb44094e6762938917f47c25b17ad26862eb7b9a6f1f85e54367",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "cae13f25dfb49716f54e6143fa23030d2d792b396244f5f6ab47bd5c2f0d525a",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/N32-v1.txt",
+      "prompt_sha256": "d8c8c2d1bf3f0bdc3838bdeb57a0ff12e0a5683ce5f1452b4a483f2ae1c63e7e",
+      "prompt_file_sha256": "5288f8f5dbe382e3986a504d7a96be96aec2ea931c28abf58d0a35ac187f049e",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/N32-v1.png",
+      "source_sha256": "b6da7596a8b86c7925dfee9ee366990192466685ee817b38214b21aa206f0ef1",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/N32/body.png",
+          "size": [
+            746,
+            883
+          ],
+          "sha256": "cae13f25dfb49716f54e6143fa23030d2d792b396244f5f6ab47bd5c2f0d525a",
+          "source_bbox": [
+            269,
+            79,
+            1015,
+            962
+          ],
+          "transparent_ratio": 0.34272177168378576,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N32/attack.png",
+          "size": [
+            221,
+            249
+          ],
+          "sha256": "7c62e17f1fdc61c4cf024a4508167ca2f6cb07243ab08a8ebd85aada235dcbca",
+          "source_bbox": [
+            29,
+            150,
+            250,
+            399
+          ],
+          "transparent_ratio": 0.6255065510912428,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N32/accent.png",
+          "size": [
+            199,
+            271
+          ],
+          "sha256": "20938eb51a8d66e38a055bec48bedc40b79165bc6c77f90c254e8e5454a2d283",
+          "source_bbox": [
+            34,
+            645,
+            233,
+            916
+          ],
+          "transparent_ratio": 0.4903855068701441,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "N33",
+      "name": "论文查重",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/N33/rig.json",
+      "rig_sha256": "62e695abb5027b3f347db3301c1bf1e98cd2e7f3fbad011c8b09ef6d5d1cd405",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "eda1c4671b3b7f351ea9134432f406c8fecefdc83e9660fb46f4a89fd5896158",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/N33-v1.txt",
+      "prompt_sha256": "3a441b420562c863b725c71b1cac458347cc54ff5c3131c87c8668902d0de10e",
+      "prompt_file_sha256": "856a7847905f8d22a8234d1b9d4e579dcb49aa75777a939e8f4c5c0ea430fad7",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/N33-v1.png",
+      "source_sha256": "e02ef2ded65ac9845c902ebff3c5b6894f4be42e8424b7420b2c3999913e0a16",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/N33/body.png",
+          "size": [
+            786,
+            794
+          ],
+          "sha256": "eda1c4671b3b7f351ea9134432f406c8fecefdc83e9660fb46f4a89fd5896158",
+          "source_bbox": [
+            232,
+            107,
+            1018,
+            901
+          ],
+          "transparent_ratio": 0.5313082854231161,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N33/attack.png",
+          "size": [
+            198,
+            201
+          ],
+          "sha256": "9a83dead21fb52e4550adc9ebd856027a73fbeeb65ff45ec84f2784dbe00618f",
+          "source_bbox": [
+            29,
+            144,
+            227,
+            345
+          ],
+          "transparent_ratio": 0.2690084928890899,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N33/accent.png",
+          "size": [
+            220,
+            241
+          ],
+          "sha256": "89397beb3fbb70f162a4758425c0dcb9989d8d9294f302fa11481fc8e9591660",
+          "source_bbox": [
+            19,
+            676,
+            239,
+            917
+          ],
+          "transparent_ratio": 0.45529988683515654,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "N34",
+      "name": "图书馆占座",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/N34/rig.json",
+      "rig_sha256": "8f4970e9127c48d0ba9718ec5274f1ca65afd0f85e6cf61a26080ddb60155bc5",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "787eae91002dec602e258155af7394c4695b26a3389df1462874444754ed4c3f",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/N34-v1.txt",
+      "prompt_sha256": "6c6c1c5073eb1f3b01370b499092a47809101600568a916edfe5aa8636d0856e",
+      "prompt_file_sha256": "2ea1ffcea48fe592179f4d860335c2d0c0655a4a0b8730288861c83c8680aaa6",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/N34-v1.png",
+      "source_sha256": "655ffe9a3821d26503739654b21163eef9cd37b5f0e68d49e1fa4a977fc9db76",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/N34/body.png",
+          "size": [
+            780,
+            845
+          ],
+          "sha256": "787eae91002dec602e258155af7394c4695b26a3389df1462874444754ed4c3f",
+          "source_bbox": [
+            223,
+            109,
+            1003,
+            954
+          ],
+          "transparent_ratio": 0.3591867698376574,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N34/attack.png",
+          "size": [
+            187,
+            316
+          ],
+          "sha256": "277952d9a2d659135be8cd056ca421b3fbfaf59e142f6ac6c933b4b0aac64200",
+          "source_bbox": [
+            22,
+            164,
+            209,
+            480
+          ],
+          "transparent_ratio": 0.48740946320990997,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N34/accent.png",
+          "size": [
+            149,
+            249
+          ],
+          "sha256": "41a6bd5f84bf2081203b2a45f64b22d07b9e345b06bf3b3d2511eecdf1409064",
+          "source_bbox": [
+            41,
+            687,
+            190,
+            936
+          ],
+          "transparent_ratio": 0.6126519500822081,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "N35",
+      "name": "实习面试",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/N35/rig.json",
+      "rig_sha256": "32769c18a87ae11f895d403f3e582b16cc1ba0c7f6255505c81e7f7fb4a6d698",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "f89c6054f2ccc2a12b57dff4b9079471a7c1c45c0311f14eafd6e429e8123d75",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/N35-v1.txt",
+      "prompt_sha256": "e21890fbd919b0db3dcdf6ed7c153be6e7c7ac1c68126b47dffb85f168aacc28",
+      "prompt_file_sha256": "fb05c4c4f1591bdf6758b1a77accb431c432e1533157313b7f982965c3b614b9",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/N35-v1.png",
+      "source_sha256": "c88dfcd0ce9e45d4079f732a68bfbc41e325ac325b8247ea5c9364f0b9ae80c7",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/N35/body.png",
+          "size": [
+            724,
+            932
+          ],
+          "sha256": "f89c6054f2ccc2a12b57dff4b9079471a7c1c45c0311f14eafd6e429e8123d75",
+          "source_bbox": [
+            286,
+            50,
+            1010,
+            982
+          ],
+          "transparent_ratio": 0.517543807649444,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N35/attack.png",
+          "size": [
+            222,
+            439
+          ],
+          "sha256": "730d77746ec0acfea2c040c6378f275bbd10e9201ed2f2638a7be07270921d36",
+          "source_bbox": [
+            37,
+            117,
+            259,
+            556
+          ],
+          "transparent_ratio": 0.6719920375956823,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N35/accent.png",
+          "size": [
+            99,
+            95
+          ],
+          "sha256": "d7bf34b989a33d33a7ad7c21100b553e7e90facf989d58f7bbed7267c5f78883",
+          "source_bbox": [
+            100,
+            789,
+            199,
+            884
+          ],
+          "transparent_ratio": 0.24646464646464647,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "N36",
+      "name": "四六级报名",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/N36/rig.json",
+      "rig_sha256": "54c5c36e429918fe8aad7b3ce4f35a78b5c4f2304e5cec646fb1213a56c72821",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "1a342ed2ec0d5c99cbd37a9f8f3c029fe506bb3f1895a8e494d854905f08015b",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/N36-v1.txt",
+      "prompt_sha256": "14983de6ce33f1dc9205b0efea2e5ad4c874ca80d9ac1d7f84e6d040d90c8614",
+      "prompt_file_sha256": "97ef0f4c73147acc2fc85e5af0ddafe429b80c62137aeab9848b7839eb9b3a33",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/N36-v1.png",
+      "source_sha256": "9d3769956aa09e98675fcd44f69194ab2a73641c43bc7c2d1b6765777065ae15",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/N36/body.png",
+          "size": [
+            757,
+            789
+          ],
+          "sha256": "1a342ed2ec0d5c99cbd37a9f8f3c029fe506bb3f1895a8e494d854905f08015b",
+          "source_bbox": [
+            248,
+            128,
+            1005,
+            917
+          ],
+          "transparent_ratio": 0.3232190304935934,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N36/attack.png",
+          "size": [
+            261,
+            226
+          ],
+          "sha256": "c0a1500170cdd7025e103b20c5e9757ac68e8847ccaef14b5651f185559dafe8",
+          "source_bbox": [
+            32,
+            128,
+            293,
+            354
+          ],
+          "transparent_ratio": 0.4345946495778659,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N36/accent.png",
+          "size": [
+            162,
+            153
+          ],
+          "sha256": "2fe4974c3da442c8c4fc30bd5e97e2fde120e6fdd2a626a70f6ff4e12f3f6bde",
+          "source_bbox": [
+            31,
+            733,
+            193,
+            886
+          ],
+          "transparent_ratio": 0.19660292100379245,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "N37",
+      "name": "线上考试",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/N37/rig.json",
+      "rig_sha256": "f4829ff7c1d48cca3607454e5c52f7c25251eb43538cc97abde58106d5a8a437",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "2bded2087d64aff28204fa91e7be4f7413e5d6f9011751b08075f82454fb3a3a",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/N37-v1.txt",
+      "prompt_sha256": "de6de26b2b79bbfbd2ae9c64e838ae1b21ed19dbe532a47950eb13d105478340",
+      "prompt_file_sha256": "c60750470ba3fb87ef66a35750d561f08613c8acfde190ec82ccc8a260db2046",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/N37-v1.png",
+      "source_sha256": "350b25eec056ec1bd6e0cff435cf7a6d22ca8bed6d30753825e8783f51955ce5",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/N37/body.png",
+          "size": [
+            738,
+            849
+          ],
+          "sha256": "2bded2087d64aff28204fa91e7be4f7413e5d6f9011751b08075f82454fb3a3a",
+          "source_bbox": [
+            266,
+            92,
+            1004,
+            941
+          ],
+          "transparent_ratio": 0.4887944050229666,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N37/attack.png",
+          "size": [
+            204,
+            214
+          ],
+          "sha256": "62afdc1d553188d2774b05ebef6227c3cca8434e0ad1a03a0243c64f193b1f69",
+          "source_bbox": [
+            33,
+            174,
+            237,
+            388
+          ],
+          "transparent_ratio": 0.31335898845519516,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N37/accent.png",
+          "size": [
+            199,
+            135
+          ],
+          "sha256": "315aac02b81638cd31c792fe81dd04838cac99fafe735138997c1354e19445ae",
+          "source_bbox": [
+            40,
+            697,
+            239,
+            832
+          ],
+          "transparent_ratio": 0.31472175693281224,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "N38",
+      "name": "小组互评",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/N38/rig.json",
+      "rig_sha256": "d7a8eb894f1dd39b6561464c893378d182088e5cf7273e290ba5b45ad5e671b3",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "b05f8611a495fad3356ba891ca4cee5ba929241ab7311dc29ec2fb469aafbdca",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/N38-v1.txt",
+      "prompt_sha256": "1272cb0a627444a2f626b1df4a46bc7bcc96509ab804c018c0e61bafd205790d",
+      "prompt_file_sha256": "70bb6119039297fd639f83a6de001591e71e709d5e0d9e5af2c4a26d249c357c",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/N38-v1.png",
+      "source_sha256": "78b29c862b2b33d19ab203b9a3be90e74560d4618ba4dcd450de11f03f851430",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/N38/body.png",
+          "size": [
+            777,
+            917
+          ],
+          "sha256": "b05f8611a495fad3356ba891ca4cee5ba929241ab7311dc29ec2fb469aafbdca",
+          "source_bbox": [
+            236,
+            51,
+            1013,
+            968
+          ],
+          "transparent_ratio": 0.41339126944361404,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N38/attack.png",
+          "size": [
+            243,
+            258
+          ],
+          "sha256": "8a5ae409b17fae25c490107056de0d648fa0df77b6dc50948240abee7cd92d8c",
+          "source_bbox": [
+            15,
+            106,
+            258,
+            364
+          ],
+          "transparent_ratio": 0.6186078412607267,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/N38/accent.png",
+          "size": [
+            156,
+            200
+          ],
+          "sha256": "fcbdfd974a4f238d93f3bd0e722e4b6a6abddc1d7ed2be4c516f377395ca05c8",
+          "source_bbox": [
+            61,
+            688,
+            217,
+            888
+          ],
+          "transparent_ratio": 0.40278846153846154,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "FY_B1_TASK",
+      "name": "大一学年综合考核",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/FY_B1_TASK/rig.json",
+      "rig_sha256": "060b2cc811e73c4385af3c0ea537323444665dd65affdc49731170aa3979dd63",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "62534d47e0e99a9e2c6c48a3cd84fb5d1ad019d95a7c1e4da20ad727a16360c6",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/FY_B1_TASK-v1.txt",
+      "prompt_sha256": "352b6599fbea6525c1d8a44ea020805beb1c2f89960c17ed531283fe6023ac41",
+      "prompt_file_sha256": "8dfce45bf68c10c5e90890ce9b7324c454d6b123d83fcaee91912ee02cb65e17",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/FY_B1_TASK-v1.png",
+      "source_sha256": "0c53c0fa2ea953c751a83cfe7074f1d660fab9444866be0b7884ca8d01867132",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/FY_B1_TASK/body.png",
+          "size": [
+            775,
+            820
+          ],
+          "sha256": "62534d47e0e99a9e2c6c48a3cd84fb5d1ad019d95a7c1e4da20ad727a16360c6",
+          "source_bbox": [
+            244,
+            108,
+            1019,
+            928
+          ],
+          "transparent_ratio": 0.3469976396538159,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/FY_B1_TASK/attack.png",
+          "size": [
+            302,
+            211
+          ],
+          "sha256": "dad22665255538a2ca873ce3358b425696f686c77f1d4e102ebc1707d3552077",
+          "source_bbox": [
+            4,
+            175,
+            306,
+            386
+          ],
+          "transparent_ratio": 0.5257367941998055,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/FY_B1_TASK/accent.png",
+          "size": [
+            151,
+            193
+          ],
+          "sha256": "a7f232a00893204f313a41dcdf837a1ca4bc4d7b4e6af1f2b6317b71aac30e6d",
+          "source_bbox": [
+            41,
+            698,
+            192,
+            891
+          ],
+          "transparent_ratio": 0.4096009333287582,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "FY_B2_TASK",
+      "name": "大二学年综合评测",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/FY_B2_TASK/rig.json",
+      "rig_sha256": "2bfde931fe4b6a2e97123bb74c5d2dfc3f90536723b5952ed4c13984e8068a37",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "2f7f3e745fb334b90d4aa52b2aba6fa577a1c660ada562d078ddc619d2f46a79",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/FY_B2_TASK-v1.txt",
+      "prompt_sha256": "4f39bc04d544d264ccc55d2e0dd08ed2a5ac4a66c9dc408063c603c7731a622b",
+      "prompt_file_sha256": "b39d475cf8caa38773f8624e42d43f5001cae1880e9f7118607b36161355ad11",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/FY_B2_TASK-v1.png",
+      "source_sha256": "b7a1963441cc3b63749335a06022ba5978df5d2323287a479a7a58c98853dd01",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/FY_B2_TASK/body.png",
+          "size": [
+            742,
+            861
+          ],
+          "sha256": "2f7f3e745fb334b90d4aa52b2aba6fa577a1c660ada562d078ddc619d2f46a79",
+          "source_bbox": [
+            260,
+            107,
+            1002,
+            968
+          ],
+          "transparent_ratio": 0.36153660727981946,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/FY_B2_TASK/attack.png",
+          "size": [
+            276,
+            293
+          ],
+          "sha256": "9adfc06f7735435093d8eba9d232317faff6ab5c45fd4a0c9e2238602d4693e5",
+          "source_bbox": [
+            29,
+            141,
+            305,
+            434
+          ],
+          "transparent_ratio": 0.7052604243953109,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/FY_B2_TASK/accent.png",
+          "size": [
+            142,
+            201
+          ],
+          "sha256": "f8bc2c2eb56bf2af6bcade6302f1311b3798befe72e242910468d0e1bcf2a554",
+          "source_bbox": [
+            31,
+            642,
+            173,
+            843
+          ],
+          "transparent_ratio": 0.3346647046457852,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "FY_B3_TASK",
+      "name": "大三学年综合评测",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/FY_B3_TASK/rig.json",
+      "rig_sha256": "75223f9bd4e54289e50dfc792ee847f4d111c3a6e2f67b2c9456c0492f895e03",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "948eb75f7ed9a3275f5bc796b2741088e9fbf105523b349d7670bc196dc62139",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/FY_B3_TASK-v1.txt",
+      "prompt_sha256": "54e2e955f88c88ed50b74cb3c340cee52ecb03d34e685614d082688cafc4cde5",
+      "prompt_file_sha256": "91de2173f241385390cc65766797c6b81dc31aad28ebd16d75c8c055cf0d7ad2",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/FY_B3_TASK-v1.png",
+      "source_sha256": "a78d7d8b9a18ba1a90acc52d3e881bbde6697fc5742dd54da362a7c97c59ad1b",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/FY_B3_TASK/body.png",
+          "size": [
+            706,
+            872
+          ],
+          "sha256": "948eb75f7ed9a3275f5bc796b2741088e9fbf105523b349d7670bc196dc62139",
+          "source_bbox": [
+            292,
+            78,
+            998,
+            950
+          ],
+          "transparent_ratio": 0.419102645736414,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/FY_B3_TASK/attack.png",
+          "size": [
+            174,
+            351
+          ],
+          "sha256": "8f69bc00e387eca10c6ef356955510dc6f5aaf2734af7044bd910d719623f6b4",
+          "source_bbox": [
+            59,
+            148,
+            233,
+            499
+          ],
+          "transparent_ratio": 0.42099747846874286,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/FY_B3_TASK/accent.png",
+          "size": [
+            199,
+            283
+          ],
+          "sha256": "c669fc1eac547e47494b1bc9495a7351050ca05b2e0e779427411751ef4607df",
+          "source_bbox": [
+            42,
+            639,
+            241,
+            922
+          ],
+          "transparent_ratio": 0.6589839657652219,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "FY_B4_TASK",
+      "name": "毕业答辩",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/FY_B4_TASK/rig.json",
+      "rig_sha256": "42024a6740d442c3a540d3ca8197b9d553cf1fadd3fbae04fc560d541b7972df",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "85a332a0704309ffaf99f8b4624b9b56491ab4f17a1add635e1e2a80b4ea1d3e",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/FY_B4_TASK-v1.txt",
+      "prompt_sha256": "6fdc568f3b72c6c338f623f3f0afeab27e5580829f0749680004c28ec0c90d9a",
+      "prompt_file_sha256": "d88516fd57f5d5dc4e61d9fe0b94c4bb1d26ce8164b565109734b44dd06ee954",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/FY_B4_TASK-v1.png",
+      "source_sha256": "8e562badf825a7f0ec913adfb22417019a645205c7a58a696271476d729f5b96",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/FY_B4_TASK/body.png",
+          "size": [
+            763,
+            911
+          ],
+          "sha256": "85a332a0704309ffaf99f8b4624b9b56491ab4f17a1add635e1e2a80b4ea1d3e",
+          "source_bbox": [
+            250,
+            69,
+            1013,
+            980
+          ],
+          "transparent_ratio": 0.35040778715941606,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/FY_B4_TASK/attack.png",
+          "size": [
+            234,
+            461
+          ],
+          "sha256": "85c2e06f20dd81ab03bdde4566c2569b75fa0f41835aef62671d0a1ed2fb8bed",
+          "source_bbox": [
+            39,
+            51,
+            273,
+            512
+          ],
+          "transparent_ratio": 0.900819474572186,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/FY_B4_TASK/accent.png",
+          "size": [
+            180,
+            251
+          ],
+          "sha256": "32a207e8610220fc8415e6fa40725c58528b9d845c73a73c2c5924089a5936de",
+          "source_bbox": [
+            56,
+            691,
+            236,
+            942
+          ],
+          "transparent_ratio": 0.5749003984063745,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "FY_ROUTE_job_TASK",
+      "name": "秋招终面",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/FY_ROUTE_job_TASK/rig.json",
+      "rig_sha256": "3f877fbaa3d5732c3134c18ac32d6a146ed01adc5ae81e18a49e599674e00dac",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "57f755071fe1d199187b3cfa2fe8262c86305b6e38e9260f89c76d9c4ac4edbf",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/FY_ROUTE_job_TASK-v1.txt",
+      "prompt_sha256": "b86593fc53921b201d458c6aab3794f3e37f9a6e30c29557d3a3a9ff0b71faa6",
+      "prompt_file_sha256": "c681e0e6372e581c3b4481d4a78ca6bc03187522dfb12b6cd441ad1c0e7c3393",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/FY_ROUTE_job_TASK-v1.png",
+      "source_sha256": "61f5cb4a0bde4becb416d085e8657500d3907a4d1f076edad36b7992cb62dae8",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/FY_ROUTE_job_TASK/body.png",
+          "size": [
+            765,
+            847
+          ],
+          "sha256": "57f755071fe1d199187b3cfa2fe8262c86305b6e38e9260f89c76d9c4ac4edbf",
+          "source_bbox": [
+            259,
+            99,
+            1024,
+            946
+          ],
+          "transparent_ratio": 0.3669267155898172,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/FY_ROUTE_job_TASK/attack.png",
+          "size": [
+            196,
+            243
+          ],
+          "sha256": "347d4be50d811157e0bc6d05f2ffeca94448b906d88554173d816eb1b20a3941",
+          "source_bbox": [
+            36,
+            136,
+            232,
+            379
+          ],
+          "transparent_ratio": 0.33751154782900816,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/FY_ROUTE_job_TASK/accent.png",
+          "size": [
+            215,
+            243
+          ],
+          "sha256": "2ca99087fb29b179dbf61206680b907f1f04c3fbd3bdf0366fd8184970492614",
+          "source_bbox": [
+            32,
+            667,
+            247,
+            910
+          ],
+          "transparent_ratio": 0.4338405589051584,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "FY_ROUTE_exam_TASK",
+      "name": "考研复试",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/FY_ROUTE_exam_TASK/rig.json",
+      "rig_sha256": "03b3671f0937c8ff1e80b7b5176e7ebbc64e0ec211114bd918e991f7c2a7cc8e",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "484d72779d0a7e4e7e0aa4ea0080876f79a1216cceb744473fa71989e31e35e7",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/FY_ROUTE_exam_TASK-v1.txt",
+      "prompt_sha256": "a94479bd19ce5d7433757d3f1ee584724379aaf26ad2710f922c838d6ccb7951",
+      "prompt_file_sha256": "95bc3249b7668986653a8f9ce879a0d5d281d540eb2fcd4549b9e1ca5e5804ae",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/FY_ROUTE_exam_TASK-v1.png",
+      "source_sha256": "bab2902a3f1508f76366f6e5649f5388d84f7950865877f8378cb7d090df8a2b",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/FY_ROUTE_exam_TASK/body.png",
+          "size": [
+            753,
+            966
+          ],
+          "sha256": "484d72779d0a7e4e7e0aa4ea0080876f79a1216cceb744473fa71989e31e35e7",
+          "source_bbox": [
+            259,
+            33,
+            1012,
+            999
+          ],
+          "transparent_ratio": 0.42353154669108245,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/FY_ROUTE_exam_TASK/attack.png",
+          "size": [
+            192,
+            437
+          ],
+          "sha256": "ada823b32519414b183e08d3ca54e5c5a63ba3a9aa08692a1d1acbb378b18848",
+          "source_bbox": [
+            40,
+            110,
+            232,
+            547
+          ],
+          "transparent_ratio": 0.6991085049580473,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/FY_ROUTE_exam_TASK/accent.png",
+          "size": [
+            176,
+            203
+          ],
+          "sha256": "21174baae0f104f43a09ee95ca7709cf885ce636c9f38b0464a1ffd1e5531d26",
+          "source_bbox": [
+            46,
+            672,
+            222,
+            875
+          ],
+          "transparent_ratio": 0.3377742946708464,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "FY_ROUTE_research_TASK",
+      "name": "保研答辩",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/FY_ROUTE_research_TASK/rig.json",
+      "rig_sha256": "2b5267439d4c4fd98a307143bb62f1d1bc8fae46b5ae93bf1e8c52d3e3abad33",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "21f0b4ef0a86ba4a378d679a551b662a475a63a72ab5443dd918b5fb709b97e5",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/FY_ROUTE_research_TASK-v1.txt",
+      "prompt_sha256": "adc468f9ec30ccd9b25498d981ec156c5dc38fdef30bd7a51f7ab9a68907cc7f",
+      "prompt_file_sha256": "88f26b72139d905a87fcf0990f371cd9b8453b6b81d37086255b8aacd2fc3745",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/FY_ROUTE_research_TASK-v1.png",
+      "source_sha256": "14d5887cba05beb5e82d1e0039014ca665ee22a08f5aeb3da49e2e680ac16918",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/FY_ROUTE_research_TASK/body.png",
+          "size": [
+            681,
+            985
+          ],
+          "sha256": "21f0b4ef0a86ba4a378d679a551b662a475a63a72ab5443dd918b5fb709b97e5",
+          "source_bbox": [
+            343,
+            19,
+            1024,
+            1004
+          ],
+          "transparent_ratio": 0.4378690638580171,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/FY_ROUTE_research_TASK/attack.png",
+          "size": [
+            224,
+            349
+          ],
+          "sha256": "2b44665d7de06c2705e50f8d3ec3d76a400f1a68cd48813641bd2e882cc58af0",
+          "source_bbox": [
+            23,
+            113,
+            247,
+            462
+          ],
+          "transparent_ratio": 0.543197400736799,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/FY_ROUTE_research_TASK/accent.png",
+          "size": [
+            210,
+            329
+          ],
+          "sha256": "634e90462083ff3d08f094e9223ce11f0a2cc291f75a8c7708ae540e0fffc144",
+          "source_bbox": [
+            35,
+            613,
+            245,
+            942
+          ],
+          "transparent_ratio": 0.5557388913012014,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    },
+    {
+      "asset_id": "FY_ROUTE_abroad_TASK",
+      "name": "留学面试",
+      "requirement_ids": [
+        "UIR-069",
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "version": 13,
+      "rig": "res://assets/art/enemies/FY_ROUTE_abroad_TASK/rig.json",
+      "rig_sha256": "57524ce16fcf68a5ee1fa12ea343db24ec5221b4309fe80ce7f3b7d08a05868b",
+      "bones": 11,
+      "parts": 3,
+      "meshes": 1,
+      "body_sha256": "d4269f3a55f55dc8e1bb731eb69042c0fe69b01833c31be48b14aa8743a73777",
+      "status": "selected_for_production_pending_user_art_review",
+      "visual_review": "See visual-review.json for actual AI observations; no human acceptance claimed.",
+      "source_mode": "fallback_cli_generate-batch_text_only",
+      "api_images": 1,
+      "service": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "requested_size": "1024x1024",
+      "requested_quality": "high",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "prompt_file": "output/imagegen/enemy-roster-20261115/prompts/FY_ROUTE_abroad_TASK-v1.txt",
+      "prompt_sha256": "53997565015ee16d721ebc278cc3bf6b31798fb1c29f73d8dbcbac66f322b27c",
+      "prompt_file_sha256": "d1bd89da8d5690c55740147414d12619edeeaa3cfca372bb16d4d5f11c1154b3",
+      "prompt_hash_note": "Prompt string uses LF as in JSONL requests; Windows text file byte hash is retained separately.",
+      "source_file": "output/imagegen/enemy-roster-20261115/FY_ROUTE_abroad_TASK-v1.png",
+      "source_sha256": "d28fde8c0ee4eb0d0c1451bfba7e6f99c84303c7b30e97bfe5e7ab5ab70d7efe",
+      "uploaded_images": [],
+      "processing": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+      "outputs": [
+        {
+          "file": "assets/art/enemies/FY_ROUTE_abroad_TASK/body.png",
+          "size": [
+            763,
+            873
+          ],
+          "sha256": "d4269f3a55f55dc8e1bb731eb69042c0fe69b01833c31be48b14aa8743a73777",
+          "source_bbox": [
+            261,
+            97,
+            1024,
+            970
+          ],
+          "transparent_ratio": 0.3932403441530463,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/FY_ROUTE_abroad_TASK/attack.png",
+          "size": [
+            245,
+            375
+          ],
+          "sha256": "78001644b00fc8bedd2b4143b39a7eaac1af7c6971e568380e9c8e1ef46479ab",
+          "source_bbox": [
+            29,
+            109,
+            274,
+            484
+          ],
+          "transparent_ratio": 0.5396789115646259,
+          "opaque_magenta_pixels": 0
+        },
+        {
+          "file": "assets/art/enemies/FY_ROUTE_abroad_TASK/accent.png",
+          "size": [
+            189,
+            193
+          ],
+          "sha256": "c6d9e16db1797bf08660f1703b8e364004a94ad8912a4f4f30f6af2f9bccf3ea",
+          "source_bbox": [
+            30,
+            691,
+            219,
+            884
+          ],
+          "transparent_ratio": 0.5524577130794748,
+          "opaque_magenta_pixels": 0
+        }
+      ]
+    }
+  ]
+}

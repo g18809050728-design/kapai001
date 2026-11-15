@@ -1,0 +1,106 @@
+{
+  "version": 8,
+  "definition_id": "P04",
+  "base_version": 7,
+  "status": "registered_pending_engine_and_visual_review",
+  "requirements": [
+    "UIR-011",
+    "UIR-013",
+    "UIR-051",
+    "UIR-052",
+    "UIR-054",
+    "UIR-057",
+    "UIR-059"
+  ],
+  "source_rig": "assets/art/actor-party/P04/rig.json",
+  "source_rig_sha256": "eaed719d6067a89491c7f476ac1e6be553b3d3ca2b9eadfd25fa1998de2c6c8d",
+  "proportions": {
+    "base_version": 7,
+    "vertical_leg_scale": 0.78,
+    "hip_y": -613.08,
+    "ankle_reference_y": -64.74000000000001,
+    "upper_translation_y": 120.6348,
+    "shoes_rigid": true,
+    "head_neck_repaint": false,
+    "selection": "artifacts/verification/actor-proportions-20261115/resource-selection.json"
+  },
+  "api_manifest": "output/imagegen/actor-proportions-20261115/neck-request.json",
+  "textures": [
+    {
+      "file": "assets/art/actor-proportions/P04/far_upper.png",
+      "sha256": "276d67df5e4e9f2837df692f2d53ae8cacf5b47a57af1212460a3283c89583b8"
+    },
+    {
+      "file": "assets/art/actor-proportions/P04/front_leg.png",
+      "sha256": "55bf578ca3a5a6afbb22589bca08a37408abb92ad030e919f019ad570f3acfcd"
+    },
+    {
+      "file": "assets/art/actor-proportions/P04/front_shoe_registered.png",
+      "sha256": "731bb5f8dd78a83542c3c0b631a8d46ecd60347c14596756537d209619398b60"
+    },
+    {
+      "file": "assets/art/actor-proportions/P04/head_focus.png",
+      "sha256": "8592e0550665f83f0332e051d34ce148eee8a34ad7915b3984af364893820f80"
+    },
+    {
+      "file": "assets/art/actor-proportions/P04/head_hit.png",
+      "sha256": "4bbdbffb56a32bde99d6773d06dcc60c2658f1e4d1fc2f163c59ac2716b6eb82"
+    },
+    {
+      "file": "assets/art/actor-proportions/P04/head_neutral.png",
+      "sha256": "ebe1187a1e7df59c6080004370efb0864cd11b2176c242ee14722dea5a70fc2f"
+    },
+    {
+      "file": "assets/art/actor-proportions/P04/held_forearm_registered.png",
+      "sha256": "eeb21f8fe361784f723d69fac7f07dadc52c9b64dd1eb4406bf7186e89f512a2"
+    },
+    {
+      "file": "assets/art/actor-proportions/P04/held_hand_registered.png",
+      "sha256": "8a0e370263297c90642b26fae358b4d5df5a66111ef4285157f2694db888df43"
+    },
+    {
+      "file": "assets/art/actor-proportions/P04/held_laptop_registered.png",
+      "sha256": "0d53549473570a77df9dd3a40f2123f4d0696eaaef98362db353431d37caee74"
+    },
+    {
+      "file": "assets/art/actor-proportions/P04/near_forearm_neutral.png",
+      "sha256": "900c82c009cac31779477246cbeb09e864f4d5062128a2496578ab530c0171f3"
+    },
+    {
+      "file": "assets/art/actor-proportions/P04/near_forearm_strike.png",
+      "sha256": "0760859703aeb5df28d120fd8a5f333cf807a2e86607de85d6662e9927e8ea49"
+    },
+    {
+      "file": "assets/art/actor-proportions/P04/near_upper.png",
+      "sha256": "be05c80bf87a1a156afa753acce5a5919111227b2e55c1e4199cdccfb15bbdb0"
+    },
+    {
+      "file": "assets/art/actor-proportions/P04/neck_overlap_focus.png",
+      "sha256": "1a8e48c7ffce78a057a95bcac4a3a421ea4fd476f7e462840d8f2cd419a09f28"
+    },
+    {
+      "file": "assets/art/actor-proportions/P04/neck_overlap_hit.png",
+      "sha256": "ac490d560d0be5cd971f49fcaa329069a4bf4e0f92c0092452487e99a41d543b"
+    },
+    {
+      "file": "assets/art/actor-proportions/P04/neck_overlap_neutral.png",
+      "sha256": "4dfceb818e019e28b6b3e259ae39a757ac06c90fc636ef80b23f27abf15a52db"
+    },
+    {
+      "file": "assets/art/actor-proportions/P04/pelvis.png",
+      "sha256": "aea381568e082fab121cc45abe6ff42434d7fcb926f1dbeba5635d034829c18e"
+    },
+    {
+      "file": "assets/art/actor-proportions/P04/rear_leg.png",
+      "sha256": "a2b033ecc92ff749a514a7879252219687828c961bcce5d58ccf4e433008ab14"
+    },
+    {
+      "file": "assets/art/actor-proportions/P04/rear_shoe_registered.png",
+      "sha256": "b390630f4256d8742e5ec6845f951eb5d6929cbef2e9dcc6574712063dacc98c"
+    },
+    {
+      "file": "assets/art/actor-proportions/P04/trunk.png",
+      "sha256": "47d4d2a66d297622226a18d30a574c4d96e7aca03f0f0c1b6c7f5d450696f7fa"
+    }
+  ]
+}

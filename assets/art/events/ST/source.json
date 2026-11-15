@@ -1,0 +1,32 @@
+{
+  "asset_id": "ST",
+  "requirement_id": "UIR-070",
+  "version": 1,
+  "title": "毕业设计",
+  "prompt_file": "output/imagegen/event-polish-20261115/ST-v1-prompt.txt",
+  "prompt_sha256": "edb12658dc7a37a32bcaabcb5a0a02e040dad7fa43f2fea9084823228f43fd8c",
+  "provider": "https://api-slb.jiji.cc/v1",
+  "model": "gpt-image-2.5-sunburst",
+  "requested_size": "1024x1024",
+  "actual_size": [
+    1024,
+    1024
+  ],
+  "quality": "high",
+  "original": "output/imagegen/event-polish-20261115/originals/ST-v1.png",
+  "original_sha256": "1e759ce53954fb285508334ded928be73011e1cdaadadfdc70ea9d169c28b4a7",
+  "selected": true,
+  "review_status": "AI visual review, final user art judgment remains",
+  "derivatives": [
+    {
+      "path": "assets/art/events/ST/illustration.png",
+      "sha256": "de61a0e215d04b11e0e485499feb722b48a6949c807179ccad959a0e20bc9425",
+      "processing": "Original RGB untouched; add 66px smoothstep alpha perimeter, no content crop/stretch."
+    },
+    {
+      "path": "assets/art/events/ST/background.png",
+      "sha256": "eb4f42df53460763c9af0d6d0aa968f9dd769815312964a9ab6e06714b04b37c",
+      "processing": "768x768 Lanczos, Gaussian blur radius16; UI uses aspect-preserving cover and dark overlay."
+    }
+  ]
+}

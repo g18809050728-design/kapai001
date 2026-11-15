@@ -1,0 +1,67 @@
+{
+  "id": "N22",
+  "version": 13,
+  "name": "自我介绍",
+  "requirements": [
+    "UIR-069",
+    "UIR-011",
+    "UIR-013",
+    "UIR-051",
+    "UIR-052",
+    "UIR-054",
+    "UIR-057",
+    "UIR-059"
+  ],
+  "source": "output/imagegen/enemy-roster-20261115/N22-v1.png",
+  "source_sha256": "2d4623defddb71dc4a1bdaaf636704b0630991d24136ef5252b1fb9359156863",
+  "source_size": [
+    1024,
+    1024
+  ],
+  "method": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+  "outputs": [
+    {
+      "file": "assets/art/enemies/N22/body.png",
+      "size": [
+        701,
+        883
+      ],
+      "sha256": "fee8a818adeac7d1f0f5bbcf7ce7a5a6f767e5cf50d0b84d1bd3fcf17a03a045",
+      "source_bbox": [
+        315,
+        50,
+        1016,
+        933
+      ]
+    },
+    {
+      "file": "assets/art/enemies/N22/attack.png",
+      "size": [
+        203,
+        240
+      ],
+      "sha256": "c833cf8fff42e7cbc8a272a98a906bc9c63ff40d4b9335c9ff5ed2e61e54ca70",
+      "source_bbox": [
+        49,
+        163,
+        252,
+        403
+      ]
+    },
+    {
+      "file": "assets/art/enemies/N22/accent.png",
+      "size": [
+        221,
+        280
+      ],
+      "sha256": "1890e895866b6d68cf8bcce83f4fb50582f23067a3fb30f914ad1b4cb09dbc91",
+      "source_bbox": [
+        23,
+        634,
+        244,
+        914
+      ]
+    }
+  ],
+  "visual_acceptance": "pending review; machine metrics do not establish visual quality"
+}

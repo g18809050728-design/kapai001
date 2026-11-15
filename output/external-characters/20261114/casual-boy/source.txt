@@ -1,0 +1,47 @@
+2d-Character Animation sprite
+Author:
+Vishwjeet Damor
+Monday, October 3, 2016 - 07:42
+Art Type:
+2D Art
+Tags:
+Character
+walking
+animation
+License(s):
+CC0
+Collections:
+2d platformer characters
+2D::Sprite::Sidescroll
+Chibi heros
+Favorites:
+3
+Preview:
+Conatins PNG Sprite Sheet of the character- standing & walking. Also Contains different body parts as sepeate PNG files, if you want to redo the animation in spriter or spine, or some other animation software.
+File(s):
+Character.zip
+2.5 Mb
+[
+2274
+download(s)]
+Log in
+or
+register
+to post comments
+Comments
+Snabisch
+joined 12 years 2 months ago
+10/03/2016 - 09:57
+Beautiful 2D design, ideal for platform games
+Log in
+or
+register
+to post comments
+Vishwjeet Damor
+joined 10 years 1 month ago
+10/04/2016 - 06:13
+Thanks!
+Log in
+or
+register
+to post comments

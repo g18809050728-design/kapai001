@@ -1,0 +1,67 @@
+{
+  "id": "Q0E_3",
+  "version": 13,
+  "name": "额外需求2",
+  "requirements": [
+    "UIR-069",
+    "UIR-011",
+    "UIR-013",
+    "UIR-051",
+    "UIR-052",
+    "UIR-054",
+    "UIR-057",
+    "UIR-059"
+  ],
+  "source": "output/imagegen/enemy-roster-20261115/Q0E_3-v1.png",
+  "source_sha256": "14efcbfc9d86dba04c71697aca07743188f8c70c23cf708b58ef71ace43e9326",
+  "source_size": [
+    1024,
+    1024
+  ],
+  "method": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+  "outputs": [
+    {
+      "file": "assets/art/enemies/Q0E_3/body.png",
+      "size": [
+        710,
+        900
+      ],
+      "sha256": "a830da23f7db12397ff43acdc5730fd9b6d28e252176c4dfaa5940975d963ecd",
+      "source_bbox": [
+        292,
+        58,
+        1002,
+        958
+      ]
+    },
+    {
+      "file": "assets/art/enemies/Q0E_3/attack.png",
+      "size": [
+        200,
+        233
+      ],
+      "sha256": "4a1cb36de3aaf0a8c541247049839419655620f693377cf1fe7f3f4e33c5f521",
+      "source_bbox": [
+        27,
+        170,
+        227,
+        403
+      ]
+    },
+    {
+      "file": "assets/art/enemies/Q0E_3/accent.png",
+      "size": [
+        166,
+        288
+      ],
+      "sha256": "23c850122e6f97e1e4309ba98d046eaec47846203ead78448dd3b9c334f07d61",
+      "source_bbox": [
+        39,
+        637,
+        205,
+        925
+      ]
+    }
+  ],
+  "visual_acceptance": "pending review; machine metrics do not establish visual quality"
+}

@@ -1,0 +1,49 @@
+﻿{
+    "output":  {
+                   "sha256":  "b37cf8cefe3eda31f4098123fefb494a398f256d758f5762527d83dca13a961b",
+                   "path":  "output/imagegen/actor-rebuild-20261115/p03-hit-v1.png"
+               },
+    "cost":  "unknown",
+    "inputs":  [
+                   {
+                       "sha256":  "e66579af035d2643c2d17e131790198400e370c1aa8233521b70f2e7849ed67c",
+                       "path":  "output/imagegen/actor-rebuild-20261115/p03-face-input.png"
+                   },
+                   {
+                       "sha256":  "36daa296d8596466d0fb4502f33febbbd6a130579cd96744d08110e1c9ff6f27",
+                       "path":  "output/imagegen/actor-rebuild-20261115/p03-face-mask.png"
+                   },
+                   {
+                       "sha256":  "f65c637c2e3c4cb6621e03f4b1583f3bba4ee9cb882e46f5fb394fd49d202305",
+                       "path":  "output/imagegen/actor-rebuild-20261115/prompts/p03-hit-v1.txt"
+                   }
+               ],
+    "started_utc":  "2026-11-15T05:10:45.4189952Z",
+    "model":  "gpt-image-2.5-sunburst",
+    "mode":  "edit",
+    "cli_args":  [
+                     "edit",
+                     "--model",
+                     "gpt-image-2.5-sunburst",
+                     "--image",
+                     "output/imagegen/actor-rebuild-20261115/p03-face-input.png",
+                     "--mask",
+                     "output/imagegen/actor-rebuild-20261115/p03-face-mask.png",
+                     "--prompt-file",
+                     "output/imagegen/actor-rebuild-20261115/prompts/p03-hit-v1.txt",
+                     "--size",
+                     "1024x1024",
+                     "--quality",
+                     "medium",
+                     "--n",
+                     "1",
+                     "--out",
+                     "output/imagegen/actor-rebuild-20261115/p03-hit-v1.png"
+                 ],
+    "quality":  "medium",
+    "size":  "1024x1024",
+    "n":  1,
+    "completed_utc":  "2026-11-15T05:11:13.5861708Z",
+    "exit_code":  0,
+    "base_url":  "https://api-slb.jiji.cc/v1"
+}

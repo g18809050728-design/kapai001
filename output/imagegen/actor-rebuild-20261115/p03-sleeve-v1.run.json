@@ -1,0 +1,43 @@
+﻿{
+    "output":  {
+                   "sha256":  "a2aa0bbcc8be271cc3d56fc3407f7f9fc33bdee23a313f2a8de65e7a11e16a4a",
+                   "path":  "output/imagegen/actor-rebuild-20261115/p03-sleeve-v1.png"
+               },
+    "cost":  "unknown",
+    "inputs":  [
+                   {
+                       "sha256":  "46230ff23cacb68fcdda1e5ab9b51dbaed108cbc631cee8b96dab68906e61ec6",
+                       "path":  "output/imagegen/actor-rebuild-20261115/p03-sleeve-input.png"
+                   },
+                   {
+                       "sha256":  "3979cb3b3ca17022511f4a6e68a0a300c216b52f1ba59e0d5572da838f829055",
+                       "path":  "output/imagegen/actor-rebuild-20261115/prompts/p03-sleeve-v1.txt"
+                   }
+               ],
+    "started_utc":  "2026-11-15T05:06:14.2971308Z",
+    "model":  "gpt-image-2.5-sunburst",
+    "mode":  "edit",
+    "cli_args":  [
+                     "edit",
+                     "--model",
+                     "gpt-image-2.5-sunburst",
+                     "--image",
+                     "output/imagegen/actor-rebuild-20261115/p03-sleeve-input.png",
+                     "--prompt-file",
+                     "output/imagegen/actor-rebuild-20261115/prompts/p03-sleeve-v1.txt",
+                     "--size",
+                     "1024x1024",
+                     "--quality",
+                     "medium",
+                     "--n",
+                     "1",
+                     "--out",
+                     "output/imagegen/actor-rebuild-20261115/p03-sleeve-v1.png"
+                 ],
+    "quality":  "medium",
+    "size":  "1024x1024",
+    "n":  1,
+    "completed_utc":  "2026-11-15T05:06:49.1118004Z",
+    "exit_code":  0,
+    "base_url":  "https://api-slb.jiji.cc/v1"
+}

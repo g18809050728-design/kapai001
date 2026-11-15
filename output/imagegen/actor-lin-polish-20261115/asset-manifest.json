@@ -1,0 +1,618 @@
+{
+  "source": "configured API through bundled imagegen CLI; each input was actually uploaded as an image or mask",
+  "version": 12,
+  "definition_id": "P01",
+  "successful_images": 13,
+  "cumulative_before": 38,
+  "cumulative_after": 51,
+  "authorized_limit": 200,
+  "processing": "Independent V12 directory; flat-magenta extraction/unmatte with support-limited edge alpha; shared source registration; high-resolution face/garment/forearm retained; source cuff contour recovered; hidden pen locally inpainted before garment input. No historical asset overwritten.",
+  "machine_audits": [
+    "artifacts/verification/actor-lin-polish-20261115/raw-audit.json",
+    "artifacts/verification/actor-lin-polish-20261115/runtime-audit.json"
+  ],
+  "visual_review": "AI inspected each selected master/face/garment, raw/runtime contact sheets, actual Godot enlarged before/after and full-body/action frames. User final review pending.",
+  "entries": [
+    {
+      "asset_id": "P01-V12-p01-face-blink-v1",
+      "requirements": [
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "prompt_file": "output/imagegen/actor-lin-polish-20261115/prompts/p01-face-blink-v1.txt",
+      "prompt_sha256": "d5d08d40b7cf9b9b004aef8d05a9aab40a7e98be188668f47e6f7c42ef9bf5ea",
+      "inputs": [
+        {
+          "role": "image",
+          "file": "output/imagegen/actor-lin-polish-20261115/p01-face-neutral-v1.png",
+          "sha256": "f778704959489e94d35abf05205e9254bcc744d2a9817873f34d1da06bca84d0",
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "role": "mask",
+          "file": "output/imagegen/actor-lin-polish-20261115/p01-face-feature-mask.png",
+          "sha256": "50b4a0e15489270a2dc9aa7733063d93334e5d009bd2e4b64c1160820fe78d6b",
+          "size": [
+            1024,
+            1024
+          ]
+        }
+      ],
+      "api_run": "output/imagegen/actor-lin-polish-20261115/p01-face-blink-v1.run.json",
+      "base_url": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "mode": "edit",
+      "size_requested": "1024x1024",
+      "quality": "high",
+      "output": "output/imagegen/actor-lin-polish-20261115/p01-face-blink-v1.png",
+      "sha256": "8eb8cc53180b9ad0f6403239b41682b3471b3adcac0f7dd0242aa75dbee72f2f",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "exit_code": 0,
+      "status": "selected",
+      "cost": "not returned by CLI"
+    },
+    {
+      "asset_id": "P01-V12-p01-face-focus-v1",
+      "requirements": [
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "prompt_file": "output/imagegen/actor-lin-polish-20261115/prompts/p01-face-focus-v1.txt",
+      "prompt_sha256": "a9680f60fa48a008161abe392320a0419151db5af31da58c83caca16dc0ec8c6",
+      "inputs": [
+        {
+          "role": "image",
+          "file": "output/imagegen/actor-lin-polish-20261115/p01-face-neutral-v1.png",
+          "sha256": "f778704959489e94d35abf05205e9254bcc744d2a9817873f34d1da06bca84d0",
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "role": "mask",
+          "file": "output/imagegen/actor-lin-polish-20261115/p01-face-feature-mask.png",
+          "sha256": "50b4a0e15489270a2dc9aa7733063d93334e5d009bd2e4b64c1160820fe78d6b",
+          "size": [
+            1024,
+            1024
+          ]
+        }
+      ],
+      "api_run": "output/imagegen/actor-lin-polish-20261115/p01-face-focus-v1.run.json",
+      "base_url": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "mode": "edit",
+      "size_requested": "1024x1024",
+      "quality": "high",
+      "output": "output/imagegen/actor-lin-polish-20261115/p01-face-focus-v1.png",
+      "sha256": "73f3f19bc3c2d5b23144a8662be334991644fd12d91c0527b956f2d3456b0c60",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "exit_code": 0,
+      "status": "selected",
+      "cost": "not returned by CLI"
+    },
+    {
+      "asset_id": "P01-V12-p01-face-hit-v1",
+      "requirements": [
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "prompt_file": "output/imagegen/actor-lin-polish-20261115/prompts/p01-face-hit-v1.txt",
+      "prompt_sha256": "e68086aa0edf2ef967d7ec4e71a7ee62512d09339c921d612e00a9c37b158b90",
+      "inputs": [
+        {
+          "role": "image",
+          "file": "output/imagegen/actor-lin-polish-20261115/p01-face-neutral-v1.png",
+          "sha256": "f778704959489e94d35abf05205e9254bcc744d2a9817873f34d1da06bca84d0",
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "role": "mask",
+          "file": "output/imagegen/actor-lin-polish-20261115/p01-face-feature-mask.png",
+          "sha256": "50b4a0e15489270a2dc9aa7733063d93334e5d009bd2e4b64c1160820fe78d6b",
+          "size": [
+            1024,
+            1024
+          ]
+        }
+      ],
+      "api_run": "output/imagegen/actor-lin-polish-20261115/p01-face-hit-v1.run.json",
+      "base_url": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "mode": "edit",
+      "size_requested": "1024x1024",
+      "quality": "high",
+      "output": "output/imagegen/actor-lin-polish-20261115/p01-face-hit-v1.png",
+      "sha256": "d5578a1108ed0989d11323a1b199470fd0501e68f0cae4fe1b99a1d51cff5835",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "exit_code": 0,
+      "status": "selected",
+      "cost": "not returned by CLI"
+    },
+    {
+      "asset_id": "P01-V12-p01-face-neutral-v1",
+      "requirements": [
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "prompt_file": "output/imagegen/actor-lin-polish-20261115/prompts/p01-face-neutral-v1.txt",
+      "prompt_sha256": "3293bb7302e4ba385d5f8212a2db520aa6e07eb0ef6389cddda4dff387483e23",
+      "inputs": [
+        {
+          "role": "image",
+          "file": "output/imagegen/actor-lin-polish-20261115/p01-face-input.png",
+          "sha256": "c771c6b7242feb3da1357959587d531702de999a3bed6602a08690740ec3dafb",
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "role": "image",
+          "file": "output/imagegen/actor-rebuild-20261115/p03-master-v3.png",
+          "sha256": "9bd07b62ede14c544507b0b9b445ec16d070b27b01bdb04c7590ab445c49970d",
+          "size": [
+            1024,
+            1536
+          ]
+        }
+      ],
+      "api_run": "output/imagegen/actor-lin-polish-20261115/p01-face-neutral-v1.run.json",
+      "base_url": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "mode": "edit",
+      "size_requested": "1024x1024",
+      "quality": "high",
+      "output": "output/imagegen/actor-lin-polish-20261115/p01-face-neutral-v1.png",
+      "sha256": "f778704959489e94d35abf05205e9254bcc744d2a9817873f34d1da06bca84d0",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "exit_code": 0,
+      "status": "selected",
+      "cost": "not returned by CLI"
+    },
+    {
+      "asset_id": "P01-V12-p01-forearm-neutral-v1",
+      "requirements": [
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "prompt_file": "output/imagegen/actor-lin-polish-20261115/prompts/p01-forearm-neutral-v1.txt",
+      "prompt_sha256": "bae56a9110431929a2ea958eee22dbbba098b844ba5509bd5532eeefba60901a",
+      "inputs": [
+        {
+          "role": "image",
+          "file": "output/imagegen/actor-lin-polish-20261115/p01-forearm-input.png",
+          "sha256": "e48b5c2ef920525135c1e1f23ee46e0ba1c3ef888800910f0ca144e7ab82507c",
+          "size": [
+            1024,
+            1024
+          ]
+        }
+      ],
+      "api_run": "output/imagegen/actor-lin-polish-20261115/p01-forearm-neutral-v1.run.json",
+      "base_url": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "mode": "edit",
+      "size_requested": "1024x1024",
+      "quality": "high",
+      "output": "output/imagegen/actor-lin-polish-20261115/p01-forearm-neutral-v1.png",
+      "sha256": "edf3df0e63cf4aaff4d96e7d5fed51c8b8af23964f5ea07c09627f93e92d8c23",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "exit_code": 0,
+      "status": "selected",
+      "cost": "not returned by CLI"
+    },
+    {
+      "asset_id": "P01-V12-p01-forearm-strike-v1",
+      "requirements": [
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "prompt_file": "output/imagegen/actor-lin-polish-20261115/prompts/p01-forearm-strike-v1.txt",
+      "prompt_sha256": "8c263dc0ab6bf72aed71f2e1f576016b6bfd3cd61ef3597c518fc3af1fcd2738",
+      "inputs": [
+        {
+          "role": "image",
+          "file": "output/imagegen/actor-lin-polish-20261115/p01-forearm-neutral-v1.png",
+          "sha256": "edf3df0e63cf4aaff4d96e7d5fed51c8b8af23964f5ea07c09627f93e92d8c23",
+          "size": [
+            1024,
+            1024
+          ]
+        }
+      ],
+      "api_run": "output/imagegen/actor-lin-polish-20261115/p01-forearm-strike-v1.run.json",
+      "base_url": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "mode": "edit",
+      "size_requested": "1024x1024",
+      "quality": "high",
+      "output": "output/imagegen/actor-lin-polish-20261115/p01-forearm-strike-v1.png",
+      "sha256": "7fc5616854fb30d5ce6d925f9d203b4dd9d6faa2399ef6f2de05de96ab8e737c",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "exit_code": 0,
+      "status": "rejected_action_pose_not_extended",
+      "cost": "not returned by CLI"
+    },
+    {
+      "asset_id": "P01-V12-p01-forearm-strike-v2",
+      "requirements": [
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "prompt_file": "output/imagegen/actor-lin-polish-20261115/prompts/p01-forearm-strike-v2.txt",
+      "prompt_sha256": "b5d4de3bf4fb2464d5acb233918627261b0780091dfb5e93b2ba9b9840b49e84",
+      "inputs": [
+        {
+          "role": "image",
+          "file": "output/imagegen/actor-lin-polish-20261115/p01-forearm-neutral-v1.png",
+          "sha256": "edf3df0e63cf4aaff4d96e7d5fed51c8b8af23964f5ea07c09627f93e92d8c23",
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "role": "image",
+          "file": "assets/art/actor-anatomy/P01/arm_strike.png",
+          "sha256": "cdfe89c336adfa7a5cf1bc7a9fca4cd8dd96b5e7cc137ef0a283938c11038c5c",
+          "size": [
+            352,
+            238
+          ]
+        }
+      ],
+      "api_run": "output/imagegen/actor-lin-polish-20261115/p01-forearm-strike-v2.run.json",
+      "base_url": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "mode": "edit",
+      "size_requested": "1024x1024",
+      "quality": "high",
+      "output": "output/imagegen/actor-lin-polish-20261115/p01-forearm-strike-v2.png",
+      "sha256": "301f3f7230f0fa1772444f01900584805c17eea01bee7d4419c6a8ff36b9e5c3",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "exit_code": 0,
+      "status": "selected",
+      "cost": "not returned by CLI"
+    },
+    {
+      "asset_id": "P01-V12-p01-garment-v1",
+      "requirements": [
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "prompt_file": "output/imagegen/actor-lin-polish-20261115/prompts/p01-garment-v1.txt",
+      "prompt_sha256": "c72e021a25019d1799999f43fb0b647007a783f113cc48d82f482a8f4137e049",
+      "inputs": [
+        {
+          "role": "image",
+          "file": "output/imagegen/actor-lin-polish-20261115/p01-garment-input.png",
+          "sha256": "ba3745cddfa765c58c8321bd58eac748682b05bb3e19d8cc7b4d90513111fe03",
+          "size": [
+            1024,
+            1536
+          ]
+        }
+      ],
+      "api_run": "output/imagegen/actor-lin-polish-20261115/p01-garment-v1.run.json",
+      "base_url": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "mode": "edit",
+      "size_requested": "1024x1536",
+      "quality": "high",
+      "output": "output/imagegen/actor-lin-polish-20261115/p01-garment-v1.png",
+      "sha256": "3098a8941fa7560797af9fe81549d3b479fb4d301de1a7b6d486ed86cfa45478",
+      "actual_size": [
+        1024,
+        1536
+      ],
+      "exit_code": 0,
+      "status": "selected",
+      "cost": "not returned by CLI"
+    },
+    {
+      "asset_id": "P01-V12-p01-master-v1",
+      "requirements": [
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "prompt_file": "output/imagegen/actor-lin-polish-20261115/prompts/p01-master-v1.txt",
+      "prompt_sha256": "95905b6ac01d559528609b00e5a8cfbf72fa4edc0e3b9c5421619f64b05f4d01",
+      "inputs": [
+        {
+          "role": "image",
+          "file": "output/imagegen/actor-lin-polish-20261115/p01-identity.png",
+          "sha256": "a01f62df7f4ce3aef8cefbd1a303d3d3607360360e75f70d288347d88c7409d7",
+          "size": [
+            1024,
+            1536
+          ]
+        },
+        {
+          "role": "image",
+          "file": "output/imagegen/actor-rebuild-20261115/p03-master-v3.png",
+          "sha256": "9bd07b62ede14c544507b0b9b445ec16d070b27b01bdb04c7590ab445c49970d",
+          "size": [
+            1024,
+            1536
+          ]
+        }
+      ],
+      "api_run": "output/imagegen/actor-lin-polish-20261115/p01-master-v1.run.json",
+      "base_url": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "mode": "edit",
+      "size_requested": "1024x1536",
+      "quality": "high",
+      "output": "output/imagegen/actor-lin-polish-20261115/p01-master-v1.png",
+      "sha256": "4934119c30b7a1e2be9887319b22805c646346b406fd2a6e22a735bfeee8fb07",
+      "actual_size": [
+        1024,
+        1536
+      ],
+      "exit_code": 0,
+      "status": "selected",
+      "cost": "not returned by CLI"
+    },
+    {
+      "asset_id": "P01-V12-p01-pants-v1",
+      "requirements": [
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "prompt_file": "output/imagegen/actor-lin-polish-20261115/prompts/p01-pants-v1.txt",
+      "prompt_sha256": "b4d558e64f8bd473afce153db73d51cef0111caebba15c8f1462fa8c0d2da1ae",
+      "inputs": [
+        {
+          "role": "image",
+          "file": "output/imagegen/actor-lin-polish-20261115/p01-master-v1.png",
+          "sha256": "4934119c30b7a1e2be9887319b22805c646346b406fd2a6e22a735bfeee8fb07",
+          "size": [
+            1024,
+            1536
+          ]
+        },
+        {
+          "role": "mask",
+          "file": "output/imagegen/actor-lin-polish-20261115/p01-pants-mask.png",
+          "sha256": "69160be5c4e8038dc8add50802b3851b788ce2575446e87a7b5806e0de25ca03",
+          "size": [
+            1024,
+            1536
+          ]
+        }
+      ],
+      "api_run": "output/imagegen/actor-lin-polish-20261115/p01-pants-v1.run.json",
+      "base_url": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "mode": "edit",
+      "size_requested": "1024x1536",
+      "quality": "high",
+      "output": "output/imagegen/actor-lin-polish-20261115/p01-pants-v1.png",
+      "sha256": "940c3afb68d1409d59c4d822176fea3153f062e340b31acf618c1b2e7c203e21",
+      "actual_size": [
+        1024,
+        1536
+      ],
+      "exit_code": 0,
+      "status": "selected",
+      "cost": "not returned by CLI"
+    },
+    {
+      "asset_id": "P01-V12-p01-sleeve-v1",
+      "requirements": [
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "prompt_file": "output/imagegen/actor-lin-polish-20261115/prompts/p01-sleeve-v1.txt",
+      "prompt_sha256": "b1b6fc8f6c229258c12ff8947987772070cd98acd3e4d70577727f5f376baeda",
+      "inputs": [
+        {
+          "role": "image",
+          "file": "output/imagegen/actor-lin-polish-20261115/p01-sleeve-input.png",
+          "sha256": "52d221ac34c0e8510e43aed0031e43695f096fd5e9305104df25724600bd80a9",
+          "size": [
+            1024,
+            1024
+          ]
+        }
+      ],
+      "api_run": "output/imagegen/actor-lin-polish-20261115/p01-sleeve-v1.run.json",
+      "base_url": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "mode": "edit",
+      "size_requested": "1024x1024",
+      "quality": "high",
+      "output": "output/imagegen/actor-lin-polish-20261115/p01-sleeve-v1.png",
+      "sha256": "df77c31439b9b62e13eae22c8dd78e3a0735bd0e2304cc43330a46ebca969eaa",
+      "actual_size": [
+        1024,
+        1024
+      ],
+      "exit_code": 0,
+      "status": "selected",
+      "cost": "not returned by CLI"
+    },
+    {
+      "asset_id": "P01-V12-p01-trunk-v1",
+      "requirements": [
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "prompt_file": "output/imagegen/actor-lin-polish-20261115/prompts/p01-trunk-v1.txt",
+      "prompt_sha256": "c024b6e1ebdffa07d35549f4485801173b570d406dbd150a7cd7569e117b7ba9",
+      "inputs": [
+        {
+          "role": "image",
+          "file": "output/imagegen/actor-lin-polish-20261115/p01-master-v1.png",
+          "sha256": "4934119c30b7a1e2be9887319b22805c646346b406fd2a6e22a735bfeee8fb07",
+          "size": [
+            1024,
+            1536
+          ]
+        },
+        {
+          "role": "mask",
+          "file": "output/imagegen/actor-lin-polish-20261115/p01-trunk-mask.png",
+          "sha256": "b2e1a732f42ecc3cf5beae79165305a9235a337ebcf0f6161465f9154131dcdd",
+          "size": [
+            1024,
+            1536
+          ]
+        }
+      ],
+      "api_run": "output/imagegen/actor-lin-polish-20261115/p01-trunk-v1.run.json",
+      "base_url": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "mode": "edit",
+      "size_requested": "1024x1536",
+      "quality": "high",
+      "output": "output/imagegen/actor-lin-polish-20261115/p01-trunk-v1.png",
+      "sha256": "81bd7f33e516da86162b081fee66ffe67e272d81f8f4dcdf1f287bc0abf76388",
+      "actual_size": [
+        1024,
+        1536
+      ],
+      "exit_code": 0,
+      "status": "intermediate_pen_and_socket_repair",
+      "cost": "not returned by CLI"
+    },
+    {
+      "asset_id": "P01-V12-p01-trunk-v2",
+      "requirements": [
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "prompt_file": "output/imagegen/actor-lin-polish-20261115/prompts/p01-trunk-v2.txt",
+      "prompt_sha256": "95501094f17abe3f4c5419c13c50d1bd1211fc415fcf75f5e1b3b0fd4e970297",
+      "inputs": [
+        {
+          "role": "image",
+          "file": "output/imagegen/actor-lin-polish-20261115/p01-trunk-v1.png",
+          "sha256": "81bd7f33e516da86162b081fee66ffe67e272d81f8f4dcdf1f287bc0abf76388",
+          "size": [
+            1024,
+            1536
+          ]
+        },
+        {
+          "role": "mask",
+          "file": "output/imagegen/actor-lin-polish-20261115/p01-trunk-clean-mask.png",
+          "sha256": "b9fdac4a3816f08be7d4ce2994ec7df2fbb446b161190b9b5a545b239e0b112c",
+          "size": [
+            1024,
+            1536
+          ]
+        }
+      ],
+      "api_run": "output/imagegen/actor-lin-polish-20261115/p01-trunk-v2.run.json",
+      "base_url": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "mode": "edit",
+      "size_requested": "1024x1536",
+      "quality": "high",
+      "output": "output/imagegen/actor-lin-polish-20261115/p01-trunk-v2.png",
+      "sha256": "880a56870313bb0c2a2370f7e5c2e310e0ed0debb8efdc263160bbdf4c98a026",
+      "actual_size": [
+        1025,
+        1536
+      ],
+      "exit_code": 0,
+      "status": "selected_intermediate_garment_input_extra_right_column_cropped",
+      "cost": "not returned by CLI"
+    }
+  ]
+}

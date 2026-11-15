@@ -11,12 +11,43 @@ var _seed := "42"
 var _prepared := false
 
 
+func add_button(parent: Node, uid: String, caption: String, draft: Variant = {}, local_callback: Callable = Callable()) -> Button:
+	var button := super.add_button(parent, uid, caption, draft, local_callback)
+	var selected := uid == "test:character:" + _character_id
+	var primary := uid in ["test:start", "test:result:continue", "test:result:exit"]
+	var quiet := uid in ["test:back", "test:result:discard"]
+	UiStyle.button_skin(button, "selected" if selected else ("primary" if primary else ("quiet" if quiet else "secondary")), true)
+	return button
+
+
+func add_text(parent: Node, value: String, font_size: int = 18, color: Color = UiStyle.INK) -> Label:
+	var on_paper := false
+	var ancestor := parent
+	while ancestor != null and ancestor != self:
+		if ancestor is PanelContainer:
+			var skin: StyleBox = ancestor.get_theme_stylebox("panel")
+			on_paper = skin is StyleBoxFlat and skin.bg_color.get_luminance() > .5
+			break
+		ancestor = ancestor.get_parent()
+	var label := super.add_text(parent, value, font_size, color if on_paper else (Color("c4d0cf") if color == UiStyle.MUTED else UiStyle.CREAM))
+	if font_size >= 22:
+		label.add_theme_font_override("font", UiStyle.title_font())
+	return label
+
+
 func render(data: Dictionary) -> void:
+	z_index = 1
 	view = data.duplicate(true)
 	if screen == "test_room_result":
 		_render_result()
 	else:
 		_render_home()
+	var scene := RoomSceneView.new()
+	scene.room = "settings" if screen == "test_room_home" else "summary"
+	scene.story_background = UiStyle.texture("BG_study" if screen == "test_room_home" else "BG_success")
+	scene.z_index = -1
+	add_child(scene)
+	scene.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 
 
 func _render_home() -> void:
@@ -62,7 +93,8 @@ func _render_home() -> void:
 	seed_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	seed_input.text_changed.connect(func(value: String): _seed = value.strip_edges())
 	config_panel.add_child(seed_input)
-	var start_row: HBoxContainer = add_row(body)
+	var start_row: HBoxContainer = add_row(footer)
+	add_button(start_row, "test:back", "返回主菜单", {"type": "ui.menu"})
 	add_button(
 		start_row,
 		"test:start",
@@ -78,7 +110,6 @@ func _render_home() -> void:
 			},
 		}
 	)
-	add_button(start_row, "test:back", "返回主菜单", {"type": "ui.menu"})
 	var files: Dictionary = view.get("files", {})
 	var presets: Array = files.get("presets", [])
 	if not presets.is_empty():
@@ -132,7 +163,12 @@ func _render_result() -> void:
 		battle.get("ddl", 0),
 		(battle.get("player", {}) as Dictionary).get("vitality", 0),
 	])
-	var row: HBoxContainer = add_row(body)
+	var row := GridContainer.new()
+	row.columns = 2 if size.x < 1100 or UiStyle.text_scale > 1.0 else 3
+	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.add_theme_constant_override("h_separation", 12)
+	row.add_theme_constant_override("v_separation", 12)
+	body.add_child(row)
 	add_button(row, "test:result:continue", "继续编辑", {"type": "test.continue"})
 	add_button(row, "test:result:retry_same", "同条件重试", {"type": "test.retry_same"})
 	add_button(row, "test:result:retry_current", "以当前为新起点", {"type": "test.retry_current"})

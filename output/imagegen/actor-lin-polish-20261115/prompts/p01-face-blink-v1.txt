@@ -1,0 +1,4 @@
+Use case: identity-preserve
+Asset type: SAME Lin high-resolution 2D game facial expression variant, registered to the neutral head.
+Change ONLY the facial expression inside the mask. Keep the exact SAME Lin identity, hair, glasses frames, nose, jaw silhouette, ears, neck, collars, image placement, scale, painted style and flat magenta background. Every outline and glasses line stays precisely at its current location. No pose/angle/proportion change, no reposition, no redraw of hair or clothes. Fine clean thin contours and restrained warm painted shading consistent with the supplied finished head.
+Natural gentle blink: both upper eyelids close over the eyes, retain calm neutral eyebrows and mouth. No pain, no scowl, no head motion. Preserve glasses frames.

@@ -8,9 +8,10 @@ import platform
 import re
 import subprocess
 import time
+import os
 
 ROOT = Path(__file__).resolve().parents[1]
-EVIDENCE = ROOT / "artifacts/verification/actor-rig-pilot-20261114"
+EVIDENCE = ROOT / os.environ.get("CAMPUS_ACTOR_EVIDENCE", "artifacts/verification/actor-rig-pilot-20261114")
 ENGINE = Path("F:/GoDot/Godot_v4.7.2-stable_win64_console.exe")
 
 
@@ -30,9 +31,22 @@ def main():
     with destination.with_suffix(".stdout.txt").open("wb") as out, destination.with_suffix(".stderr.txt").open("wb") as err:
         result = subprocess.run(command, cwd=ROOT, stdout=out, stderr=err)
     inputs = list((ROOT / "src/ui/battle").glob("*.gd"))
-    inputs += [ROOT / p for p in ("project.godot", "src/app/game_session.gd", "src/ui/battle_screen.gd", "src/ui/battle_layout.gd", "tools/run_actor_rig_pilot.gd")]
+    inputs += [ROOT / p for p in ("project.godot", "src/app/game_session.gd", "src/ui/game_shell.gd", "src/ui/battle_screen.gd", "src/ui/battle_layout.gd", "tools/run_actor_rig_pilot.gd", "tools/build_actor_motion_polish.py", "tools/verify_actor_rig_pilot.py", "tests/run_tests.gd", "tests/run_ui_tests.gd")]
     inputs += list((ROOT / "assets/art/actor-rig-pilot").rglob("*.json"))
     inputs += list((ROOT / "assets/art/actor-rig-pilot").rglob("*.png"))
+    inputs += list((ROOT / "assets/art/actor-rig-polish").rglob("*.json"))
+    inputs += list((ROOT / "assets/art/actor-rig-refinement").rglob("*.json"))
+    inputs += list((ROOT / "assets/art/actor-rig-refinement").rglob("*.png"))
+    inputs += [ROOT / "tools/build_actor_refinement.py"]
+    inputs += list((ROOT / "assets/art/actor-rig-drawings").rglob("*.json"))
+    inputs += list((ROOT / "assets/art/actor-rig-drawings").rglob("*.png"))
+    inputs += [ROOT / "tools/build_actor_drawings.py", ROOT / "src/ui/battle/actor_drawing_mix.gdshader"]
+    inputs += list((ROOT / "assets/art/actor-anatomy").rglob("*.json"))
+    inputs += list((ROOT / "assets/art/actor-anatomy").rglob("*.png"))
+    inputs += [ROOT / "tools/build_actor_anatomy.py"]
+    inputs += list((ROOT / "assets/art/actor-seams").rglob("*.json"))
+    inputs += list((ROOT / "assets/art/actor-seams").rglob("*.png"))
+    inputs += [ROOT / "tools/build_actor_seams.py", ROOT / "tools/start_actor_seams.ps1"]
     hashes = {p.relative_to(ROOT).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest() for p in inputs if p.is_file()}
     raw_logs = "\n".join(destination.with_suffix(s).read_text(encoding="utf-8", errors="replace") for s in (".stdout.txt", ".stderr.txt"))
     engine_errors = len(re.findall(r"(?m)^(?:SCRIPT ERROR:|ERROR:)", raw_logs))

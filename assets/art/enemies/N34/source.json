@@ -1,0 +1,67 @@
+{
+  "id": "N34",
+  "version": 13,
+  "name": "图书馆占座",
+  "requirements": [
+    "UIR-069",
+    "UIR-011",
+    "UIR-013",
+    "UIR-051",
+    "UIR-052",
+    "UIR-054",
+    "UIR-057",
+    "UIR-059"
+  ],
+  "source": "output/imagegen/enemy-roster-20261115/N34-v1.png",
+  "source_sha256": "655ffe9a3821d26503739654b21163eef9cd37b5f0e68d49e1fa4a977fc9db76",
+  "source_size": [
+    1024,
+    1024
+  ],
+  "method": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+  "outputs": [
+    {
+      "file": "assets/art/enemies/N34/body.png",
+      "size": [
+        780,
+        845
+      ],
+      "sha256": "787eae91002dec602e258155af7394c4695b26a3389df1462874444754ed4c3f",
+      "source_bbox": [
+        223,
+        109,
+        1003,
+        954
+      ]
+    },
+    {
+      "file": "assets/art/enemies/N34/attack.png",
+      "size": [
+        187,
+        316
+      ],
+      "sha256": "277952d9a2d659135be8cd056ca421b3fbfaf59e142f6ac6c933b4b0aac64200",
+      "source_bbox": [
+        22,
+        164,
+        209,
+        480
+      ]
+    },
+    {
+      "file": "assets/art/enemies/N34/accent.png",
+      "size": [
+        149,
+        249
+      ],
+      "sha256": "41a6bd5f84bf2081203b2a45f64b22d07b9e345b06bf3b3d2511eecdf1409064",
+      "source_bbox": [
+        41,
+        687,
+        190,
+        936
+      ]
+    }
+  ],
+  "visual_acceptance": "pending review; machine metrics do not establish visual quality"
+}

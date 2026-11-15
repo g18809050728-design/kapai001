@@ -1,0 +1,4 @@
+Use case: identity-preserve
+Asset type: isolated Lin forearm, hand and pen for detailed painted 2D game animation.
+Keep only this same bare forearm, anatomically correct adult hand and one black pen, at the exact input placement and scale. Preserve the elbow cut on the left, forearm silhouette, skin tone, fine warm shading, thin controlled contour and original pen geometry. Refine coherent joints and fingers in the same professional illustration style. No sleeves, jacket, background fragments, extra fingers, second pen, objects or text. Pure flat #ff00ff background everywhere outside the arm and pen. Do not move/resize the component.
+A slightly firmer active pen grip: subtly curl fingers around the SAME pen, with a tiny wrist tension change, while the elbow, wrist center and both pen endpoints remain registered. Never open or invert the palm; no foreshortening or rotation change.

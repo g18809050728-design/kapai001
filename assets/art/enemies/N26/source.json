@@ -1,0 +1,67 @@
+{
+  "id": "N26",
+  "version": 13,
+  "name": "讲座考勤",
+  "requirements": [
+    "UIR-069",
+    "UIR-011",
+    "UIR-013",
+    "UIR-051",
+    "UIR-052",
+    "UIR-054",
+    "UIR-057",
+    "UIR-059"
+  ],
+  "source": "output/imagegen/enemy-roster-20261115/N26-v1.png",
+  "source_sha256": "1e15b1a24e13d42862cf4fa5dd95af2612e4dbd1ca631e1c8af7579e611aab02",
+  "source_size": [
+    1024,
+    1024
+  ],
+  "method": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+  "outputs": [
+    {
+      "file": "assets/art/enemies/N26/body.png",
+      "size": [
+        730,
+        964
+      ],
+      "sha256": "7c5919bac6e4bc10a58d51a2365db95aa77cce34d3e81625bcd319da3956c788",
+      "source_bbox": [
+        274,
+        24,
+        1004,
+        988
+      ]
+    },
+    {
+      "file": "assets/art/enemies/N26/attack.png",
+      "size": [
+        213,
+        302
+      ],
+      "sha256": "867b1fc331dc568262c13b5523422a8d7de2215d09212ad2a0fdb41ac321a930",
+      "source_bbox": [
+        28,
+        112,
+        241,
+        414
+      ]
+    },
+    {
+      "file": "assets/art/enemies/N26/accent.png",
+      "size": [
+        225,
+        233
+      ],
+      "sha256": "4e1f60dbcc622b4f11f88ff8331a4fa9eba6dfb197b3f0fc836e423d1ff4d254",
+      "source_bbox": [
+        29,
+        707,
+        254,
+        940
+      ]
+    }
+  ],
+  "visual_acceptance": "pending review; machine metrics do not establish visual quality"
+}

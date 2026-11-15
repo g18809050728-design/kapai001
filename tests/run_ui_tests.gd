@@ -6,8 +6,26 @@ func _initialize() -> void:
 
 
 func _run() -> void:
+	var failures: Array[String] = await _run_suites()
+	# Release suite/script references before the tree exits and retires renderer resources.
+	for _frame in 6:
+		await process_frame
+	await create_timer(0.1).timeout
+	if failures.is_empty():
+		print("G7 UI tests passed")
+		quit(0)
+		return
+	for failure: String in failures:
+		push_error(failure)
+	quit(1)
+
+
+func _run_suites() -> Array[String]:
 	var failures: Array[String] = []
 	for path in [
+		"test_ui_compendium",
+		"test_ui_character_art",
+		"test_ui_enemy_art",
 		"test_run_content_views",
 		"test_ui_card_categories",
 		"test_ui_semantic_vfx",
@@ -37,15 +55,10 @@ func _run() -> void:
 		if script == null or not script.can_instantiate():
 			failures.append("G7 UI suite failed to load: " + path)
 			continue
-		var result = await script.new().run()
+		var suite = script.new()
+		var result = await suite.run()
 		failures.append_array(result)
-	# Let AudioServer retire stopped playback before the headless process exits.
-	await create_timer(0.1).timeout
-	if failures.is_empty():
-		print("G7 UI tests passed")
-		quit(0)
-		return
-	for failure: String in failures:
-		push_error(failure)
-	quit(1)
+		suite = null
+		script = null
+	return failures
 

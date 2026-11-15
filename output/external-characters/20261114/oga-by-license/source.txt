@@ -1,0 +1,181 @@
+OGA-BY 3.0 FAQ | OpenGameArt.org
+Skip to main content
+User login
+Username or e-mail
+*
+Password
+*
+Create new account
+Request new password
+Register
+Home
+Browse
+2D Art
+3D Art
+Concept Art
+Textures
+Music
+Sound Effects
+Documents
+Featured Tutorials
+Submit Art
+Collect
+My Collections
+Art Collections
+Forums
+FAQ
+Leaderboards
+All Time
+Total Points
+Comments
+Favorites (All)
+Favorites (2D)
+Favorites (3D)
+Favorites (Concept Art)
+Favorites (Music)
+Favorites (Sound)
+Favorites (Textures)
+Weekly
+Total Points
+Comments
+Favorites (All)
+Favorites (2D)
+Favorites (3D)
+Favorites (Concept Art)
+Favorites (Music)
+Favorites (Sound)
+Favorites (Textures)
+❤ Donate
+Search
+Chat with us!
+Discord:
+OpenGameArt
+discord.gg/yDaQ4NcCux
+IRC:
+#OpenGameArt
+on
+freegamedev.net/irc/#opengameart
+Active Forum Topics - (
+view more
+)
+Is it still worth uploading FLAC files?
+6 hours 32 min
+ago
+by
+Spring Spring
+Dino3D.gg – 3D Dinosaur Runner with Google & Discord Login
+1 day 6 hours
+ago
+by
+mctoolbox
+New game "Basic Chess"
+1 day 6 hours
+ago
+by
+mctoolbox
+MHAS Dungeon Sweeper : mix between mineSweeper and rogue like
+1 day 6 hours
+ago
+by
+mctoolbox
+Does the "Im using this button" work? How do I know if someone uses my song?
+1 day 6 hours
+ago
+by
+mctoolbox
+October 2026 Art Challenge - Phobias [Winner: Ategon]
+1 day 11 hours
+ago
+by
+mla
+Sharing My Music and Sound FX - Over 2500 Tracks
+1 day 17 hours
+ago
+by
+Eric Matyas
+Building a Library of Images for Everyone
+4 days 14 hours
+ago
+by
+Eric Matyas
+Recent Comments - (
+view more
+)
+Re:
+A Bunch of Colored Planks 16x Minecraft style
+by
+JoeEnderman
+Re:
+A Bunch of Colored Planks 16x Minecraft style
+by
+JoeEnderman
+Re:
+10 Impact/Shield Blocks
+by
+Insaniscape_Micah
+Re:
+Weapon Slash - Effect
+by
+Insaniscape_Micah
+Re:
+Frog player spritesheets
+by
+Yumgaming
+Re:
+Mini Characters
+by
+MedicineStorm
+Re:
+Alien Face
+by
+Insaniscape_Micah
+Re:
+512x512 explosion
+by
+shampuan
+New Art Collections - (
+view more
+)
+Slope Game Maps - 3D Tracks
+Experience the Thrill of Slope Unblocked
+2D for rotor
+Low Poly Components
+a set of vector elements
+Icons, Symbols, UI Elements
+Urban Modular 3D
+A.L. assets
+Super Cartridge World
+Purrple Cat - Indigo Dreams
+Affiliates
+FLARE
+FreeGameDev
+Kenney
+Liberated Pixel Cup
+Universal LPC Spritesheet Generator
+OGA-BY 3.0 FAQ
+Note: This FAQ is intended to help people understand the nature and purpose of OGA-BY, and is not a legal document.  Please see the text of the license here:
+http://static.opengameart.org/OGA-BY-3.0.txt
+What is OGA-BY 3.0?
+OGA-BY 3.0 is a license based on CC-BY 3.0 that removes that license's restriction on technical measures that prevent redistribution of a work.
+Is OGA-BY endorsed by the Creative Commons?
+No.  The Creative Commons does not endorse OGA-BY in any way.
+Why do we need this license?  Does this mean that you like DRM?
+We need this license because a lot of artists feel that the restrictions on technical measures in CC-BY go against the
+spirit
+of CC-BY, which is to require attribution without imposing other requirements.
+OpenGameArt does not in any way endorse the use of DRM; however, we do endorse the right of artists to license their works the way they want, and would like to provide them with a means to do that so long as the license in question is still compatible with free and open source software.
+Aren't there enough new licenses already?  Why not use [insert license here]?
+CC-BY is well known and people are comfortable with it.  While we considered other licenses, we ultimately decided that it would be best to stick with what most people already know.
+Note that this has been argued extensively on the forums, and is not subject to change.
+Why not just have a rider for CC-BY that removes the clauses about technical restrictions?
+A couple of reasons:
+It's unlikely that any other projects or websites will ever adopt a rider as a standard.
+From a technical standpoint, it would be very difficult to implement a license rider in a sane way.  Imagine that you're searching OGA for content that can be used with DRM.  You would have to search for CC0 content, plus CC-BY content but only content that has the rider checked.  Since CC0 content doesn't require the rider in order to be used with DRM, simply searching on the rider would exclude a lot of usable content.  From a technical standpoint, having a rider instead of a modified license would be a huge mess.
+Does OGA endorse the use of OGA-BY over any other of the licenses on this site?
+No.  Artists should choose whichever license(s) for their work that they feel the most comfortable with.  OGA-BY was the only name we could come up with that wasn't either awkward or potentially confusing.
+Is there an OGA-BY 2.0 or 1.0?
+No.  The version number of OGA-BY tracks the version number of the CC-BY license it is based on.  If the FSF and/or Debian legal approve of the CC 4.0 licenses, there will probably be an OGA-BY 4.0.
+If the technical restrictions clauses are removed from a later version of CC-BY, will OGA-BY be discontinued?
+Yes, because there wouldn't be much point to it.
+Another project, website, or distribution doesn't accept content that's licensed OGA-BY, but they do accept CC-BY content.  What can I do?
+OGA-BY 3.0 explicitly allows content to be relicensed under CC-BY 3.0.  Just change the license to CC-BY 3.0.  No need to get explicit permission to do this, as the license already allows it.

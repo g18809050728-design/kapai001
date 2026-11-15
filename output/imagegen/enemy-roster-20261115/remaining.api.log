@@ -1,0 +1,142 @@
+﻿OPENAI_API_KEY is set.
+[job 1/58] starting
+[job 2/58] starting
+[job 1/58] completed in 34.6s
+[job 3/58] starting
+[job 2/58] completed in 34.9s
+[job 4/58] starting
+[job 4/58] completed in 34.3s
+[job 5/58] starting
+[job 3/58] completed in 35.8s
+[job 6/58] starting
+[job 6/58] completed in 34.6s
+[job 7/58] starting
+[job 5/58] completed in 37.2s
+[job 8/58] starting
+[job 8/58] completed in 37.8s
+[job 9/58] starting
+[job 7/58] completed in 40.9s
+[job 10/58] starting
+[job 9/58] completed in 39.6s
+[job 11/58] starting
+[job 10/58] completed in 42.8s
+[job 12/58] starting
+[job 11/58] completed in 34.9s
+[job 13/58] starting
+[job 12/58] completed in 32.6s
+[job 14/58] starting
+[job 13/58] completed in 32.0s
+[job 15/58] starting
+[job 14/58] completed in 36.2s
+[job 16/58] starting
+[job 15/58] completed in 33.2s
+[job 17/58] starting
+[job 16/58] completed in 30.0s
+[job 18/58] starting
+[job 18/58] completed in 32.1s
+[job 19/58] starting
+[job 17/58] completed in 42.4s
+[job 20/58] starting
+[job 19/58] completed in 31.4s
+[job 21/58] starting
+[job 20/58] completed in 42.5s
+[job 22/58] starting
+[job 21/58] completed in 33.7s
+[job 23/58] starting
+[job 22/58] completed in 36.7s
+[job 24/58] starting
+[job 23/58] completed in 40.4s
+[job 25/58] starting
+[job 24/58] completed in 38.5s
+[job 26/58] starting
+[job 25/58] completed in 36.5s
+[job 27/58] starting
+[job 26/58] completed in 39.9s
+[job 28/58] starting
+[job 27/58] completed in 37.1s
+[job 29/58] starting
+[job 28/58] completed in 41.0s
+[job 30/58] starting
+[job 29/58] completed in 41.4s
+[job 31/58] starting
+[job 30/58] completed in 34.2s
+[job 32/58] starting
+[job 31/58] completed in 38.1s
+[job 33/58] starting
+[job 32/58] completed in 32.2s
+[job 34/58] starting
+[job 34/58] failed: Error code: 403 - {'error': {'message': 'insufficient balance', 'type': 'billing_error'}}
+[job 35/58] starting
+Wrote output\imagegen\enemy-roster-20261115\N03-v1.png
+Wrote output\imagegen\enemy-roster-20261115\N04-v1.png
+Wrote output\imagegen\enemy-roster-20261115\B01-v1.png
+Wrote output\imagegen\enemy-roster-20261115\Q01-v1.png
+Wrote output\imagegen\enemy-roster-20261115\E02-v1.png
+Wrote output\imagegen\enemy-roster-20261115\E01-v1.png
+Wrote output\imagegen\enemy-roster-20261115\E04_1-v1.png
+Wrote output\imagegen\enemy-roster-20261115\E03-v1.png
+Wrote output\imagegen\enemy-roster-20261115\E04_2-v1.png
+Wrote output\imagegen\enemy-roster-20261115\E04_3-v1.png
+Wrote output\imagegen\enemy-roster-20261115\E05-v1.png
+Wrote output\imagegen\enemy-roster-20261115\E06-v1.png
+Wrote output\imagegen\enemy-roster-20261115\E07-v1.png
+Wrote output\imagegen\enemy-roster-20261115\Q0A_1-v1.png
+Wrote output\imagegen\enemy-roster-20261115\Q0A_2-v1.png
+Wrote output\imagegen\enemy-roster-20261115\Q0A_3-v1.png
+Wrote output\imagegen\enemy-roster-20261115\Q0B_1-v1.png
+Wrote output\imagegen\enemy-roster-20261115\Q0A_3_1-v1.png
+Wrote output\imagegen\enemy-roster-20261115\Q0B_2-v1.png
+Wrote output\imagegen\enemy-roster-20261115\Q0C-v1.png
+Wrote output\imagegen\enemy-roster-20261115\Q0D-v1.png
+Wrote output\imagegen\enemy-roster-20261115\Q0E_1-v1.png
+Wrote output\imagegen\enemy-roster-20261115\Q0E_2-v1.png
+Wrote output\imagegen\enemy-roster-20261115\Q0E_3-v1.png
+Wrote output\imagegen\enemy-roster-20261115\N13-v1.png
+Wrote output\imagegen\enemy-roster-20261115\N14-v1.png
+Wrote output\imagegen\enemy-roster-20261115\N15-v1.png
+Wrote output\imagegen\enemy-roster-20261115\N16-v1.png
+Wrote output\imagegen\enemy-roster-20261115\N17-v1.png
+Wrote output\imagegen\enemy-roster-20261115\N18-v1.png
+Wrote output\imagegen\enemy-roster-20261115\N19-v1.png
+Wrote output\imagegen\enemy-roster-20261115\N20-v1.png
+Traceback (most recent call last):
+  File "C:\Users\Dev.LI\.codex\skills\.system\imagegen\scripts\image_gen.py", line 1030, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "C:\Users\Dev.LI\.codex\skills\.system\imagegen\scripts\image_gen.py", line 1025, in main
+    args.func(args)
+    ~~~~~~~~~^^^^^^
+  File "C:\Users\Dev.LI\.codex\skills\.system\imagegen\scripts\image_gen.py", line 729, in _generate_batch
+    exit_code = asyncio.run(_run_generate_batch(args))
+  File "C:\Users\Dev.LI\AppData\Local\Python\pythoncore-3.14-64\Lib\asyncio\runners.py", line 204, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\Dev.LI\AppData\Local\Python\pythoncore-3.14-64\Lib\asyncio\runners.py", line 127, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\Dev.LI\AppData\Local\Python\pythoncore-3.14-64\Lib\asyncio\base_events.py", line 719, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "C:\Users\Dev.LI\.codex\skills\.system\imagegen\scripts\image_gen.py", line 718, in _run_generate_batch
+    await asyncio.gather(*tasks)
+  File "C:\Users\Dev.LI\.codex\skills\.system\imagegen\scripts\image_gen.py", line 688, in run_job
+    result = await _generate_one_with_retries(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "C:\Users\Dev.LI\.codex\skills\.system\imagegen\scripts\image_gen.py", line 566, in _generate_one_with_retries
+    return await client.images.generate(**payload)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Dev.LI\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\openai\resources\images.py", line 1779, in generate
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+    ...<28 lines>...
+    )
+    ^
+  File "C:\Users\Dev.LI\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\openai\_base_client.py", line 1884, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Dev.LI\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\openai\_base_client.py", line 1669, in request
+    raise self._make_status_error_from_response(err.response) from None
+openai.PermissionDeniedError: Error code: 403 - {'error': {'message': 'insufficient balance', 'type': 'billing_error'}}

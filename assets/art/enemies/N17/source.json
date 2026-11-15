@@ -1,0 +1,67 @@
+{
+  "id": "N17",
+  "version": 13,
+  "name": "文献阅读",
+  "requirements": [
+    "UIR-069",
+    "UIR-011",
+    "UIR-013",
+    "UIR-051",
+    "UIR-052",
+    "UIR-054",
+    "UIR-057",
+    "UIR-059"
+  ],
+  "source": "output/imagegen/enemy-roster-20261115/N17-v1.png",
+  "source_sha256": "27cc6a612dfb3c23a86a00d16c9c47330af453ba5c0be845284e8c0adefcda78",
+  "source_size": [
+    1024,
+    1024
+  ],
+  "method": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+  "outputs": [
+    {
+      "file": "assets/art/enemies/N17/body.png",
+      "size": [
+        700,
+        910
+      ],
+      "sha256": "943c728885072db21b4fb303be69633b08240eabe9836d5cd648a5482fdc05ec",
+      "source_bbox": [
+        310,
+        67,
+        1010,
+        977
+      ]
+    },
+    {
+      "file": "assets/art/enemies/N17/attack.png",
+      "size": [
+        198,
+        494
+      ],
+      "sha256": "a1204d3553beb6d5a2d4fb42599e8ebceb0dd12fcb0a3f36af0a9456883cbf8b",
+      "source_bbox": [
+        60,
+        66,
+        258,
+        560
+      ]
+    },
+    {
+      "file": "assets/art/enemies/N17/accent.png",
+      "size": [
+        229,
+        275
+      ],
+      "sha256": "d57897b073fa11692803c60771bf27bb230bec0728a8666d48d09dcf21bf6411",
+      "source_bbox": [
+        23,
+        645,
+        252,
+        920
+      ]
+    }
+  ],
+  "visual_acceptance": "pending review; machine metrics do not establish visual quality"
+}

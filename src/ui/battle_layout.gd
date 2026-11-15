@@ -14,6 +14,9 @@ func build(screen: BattleScreen) -> void:
 	stage = page._stage
 	var background := TextureRect.new()
 	background.texture = UiStyle.texture("BG_classroom")
+	if BattleActorView.pilot_enabled and not BattleActorView.pilot_stage_background.is_empty():
+		background.texture = load(BattleActorView.pilot_stage_background) as Texture2D
+	background.name = "BattleRoomBackground"
 	background.size = Vector2(1280, 800)
 	background.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	background.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED

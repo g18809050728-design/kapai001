@@ -1,0 +1,50 @@
+{
+  "status": "motion_polish_pending_user_visual_review",
+  "version": 2,
+  "source_rig": "assets/art/actor-rig-pilot/P01/rig.json",
+  "api_new_images": 0,
+  "method": "unchanged reviewed textures; local proportions, weighted limb meshes, foot IK, per-channel motion curves",
+  "textures": [
+    {
+      "file": "assets/art/actor-rig-pilot/P01/far_upper.png",
+      "sha256": "63c61eea199bdfae060d93996f4eaa7c42116db0087a5ada8e5c376e0d133f30"
+    },
+    {
+      "file": "assets/art/actor-rig-pilot/P01/front_leg.png",
+      "sha256": "def3889cb24289ffc8c6e22daca820956fd5bda72dc07aed7082b9181994bc4c"
+    },
+    {
+      "file": "assets/art/actor-rig-pilot/P01/head.png",
+      "sha256": "b86739d090478f1f0c9434439b3eeab663ec8ff1e55bf450395863cd73c1bf16"
+    },
+    {
+      "file": "assets/art/actor-rig-pilot/P01/laptop_forearm.png",
+      "sha256": "f375c0af550247eb2df44dcba08c81df47476a169cb7fd8060a435fdad745b32"
+    },
+    {
+      "file": "assets/art/actor-rig-pilot/P01/near_forearm.png",
+      "sha256": "7e9f6e636036f2dd4e277fd101959e16669e4ddbc279d0a28be1d59b28e63576"
+    },
+    {
+      "file": "assets/art/actor-rig-pilot/P01/near_upper.png",
+      "sha256": "47eedb57f66473606ca2f9393315d6759062f89859aee4c5f2cdb42100ff1f50"
+    },
+    {
+      "file": "assets/art/actor-rig-pilot/P01/rear_leg.png",
+      "sha256": "177ac5194f363c0e6b5645895cbc20d0cbc39cc64ed1364b8bdd05d6e9944586"
+    },
+    {
+      "file": "assets/art/actor-rig-pilot/P01/torso.png",
+      "sha256": "3aae6546a02c2fa779f5e54a1ff7b8c209cce96f612a6edc22710108a73d7208"
+    }
+  ],
+  "requirements": [
+    "UIR-011",
+    "UIR-013",
+    "UIR-051",
+    "UIR-052",
+    "UIR-054",
+    "UIR-057",
+    "UIR-059"
+  ]
+}

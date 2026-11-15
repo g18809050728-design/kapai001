@@ -1,0 +1,13 @@
+{
+  "source": "output/imagegen/actor-rig-refinement-20261115/classroom-stage-v2.png",
+  "source_sha256": "25e9e4caa6e0e15e2b8fcc71c962b8787f09bd3158c34f27952e1d4d72fd1153",
+  "edit_input": "assets/art/g6-v1/backgrounds/BG_classroom_v1.png",
+  "method": "wall [0,590) resized to [0,342); floor [590,1024) resized to [342,800), Lanczos; 1280x800",
+  "floor_start": 342,
+  "actor_ground_band": [
+    465,
+    485
+  ],
+  "api_successful_outputs_this_batch": 1,
+  "status": "reviewed_for_isolated_stage_pending_user_visual_review"
+}

@@ -1,0 +1,79 @@
+{
+  "version": 12,
+  "api_manifest": "output/imagegen/actor-lin-polish-20261115/asset-manifest.json",
+  "textures": [
+    {
+      "file": "assets/art/actor-lin-polish/P01/far_upper.png",
+      "sha256": "0556e5ea505890fea466947e4af65d66cb9c727373da0d618195cadb2b924ff4"
+    },
+    {
+      "file": "assets/art/actor-lin-polish/P01/front_leg.png",
+      "sha256": "9b20e36848f95be3611402845ea849c96bd2dbdeef0ab18cfe88df735a306255"
+    },
+    {
+      "file": "assets/art/actor-lin-polish/P01/front_shoe.png",
+      "sha256": "7f2ebab443f13c6223232a948bbd75fa130f8f6b2848cdd5db3290108bb3755c"
+    },
+    {
+      "file": "assets/art/actor-lin-polish/P01/head_blink.png",
+      "sha256": "210a9db1f2dc04cf78f25a180f097c2a10f35620a7dfe9c0e5aca0e23356e558"
+    },
+    {
+      "file": "assets/art/actor-lin-polish/P01/head_focus.png",
+      "sha256": "7ad721a773be879b682e9c7bd7cde743013537b9455e56a35ace91305410dd65"
+    },
+    {
+      "file": "assets/art/actor-lin-polish/P01/head_hit.png",
+      "sha256": "d42176905c19d7b27bbd032224087878bc7c526c28aed7d356cd117483e0ec59"
+    },
+    {
+      "file": "assets/art/actor-lin-polish/P01/head_neutral.png",
+      "sha256": "72dad762558a3241fd418ede3b50b49e4d488601bc08750e55979817106f4abb"
+    },
+    {
+      "file": "assets/art/actor-lin-polish/P01/held_forearm.png",
+      "sha256": "41cea7508eae4ec05cb70c47ec8ebcf540ecfcc0de937483466b91a94c1411c1"
+    },
+    {
+      "file": "assets/art/actor-lin-polish/P01/held_hand.png",
+      "sha256": "1a87cdce197acdeb11ce269318ff27cabb7884196caa12eb7d8844f11db07011"
+    },
+    {
+      "file": "assets/art/actor-lin-polish/P01/held_laptop.png",
+      "sha256": "cbc59e97271f187c477172c3bb693e5add097ecbbd1e23528d873c0c32143fe4"
+    },
+    {
+      "file": "assets/art/actor-lin-polish/P01/near_forearm_neutral.png",
+      "sha256": "2a305943a97f4eff9ede3f6413ed66d10d744b592dffcd525279976bb897e241"
+    },
+    {
+      "file": "assets/art/actor-lin-polish/P01/near_forearm_strike.png",
+      "sha256": "0a9a2212448ec98299edb0549b15bdffa1f5933f353f767f7b18764568b904a2"
+    },
+    {
+      "file": "assets/art/actor-lin-polish/P01/near_upper.png",
+      "sha256": "bb19e7b2c8c2cea412f24c53b47b274d671ebd9740b85df0c7572b7b95cf626c"
+    },
+    {
+      "file": "assets/art/actor-lin-polish/P01/neck_overlap_neutral.png",
+      "sha256": "baca064cb61e22ec35378a7418089dafbca4b71b85012cf0daaecccb335b4793"
+    },
+    {
+      "file": "assets/art/actor-lin-polish/P01/pelvis.png",
+      "sha256": "9ddde083a2ef93be2b075ade33ea2057e6e73e920c5cee6137a48731df29be82"
+    },
+    {
+      "file": "assets/art/actor-lin-polish/P01/rear_leg.png",
+      "sha256": "de7166c5f86e6ad3da9878ae72b2a0d3eab196348445b5367d14aa364059c4de"
+    },
+    {
+      "file": "assets/art/actor-lin-polish/P01/rear_shoe.png",
+      "sha256": "d9125fb35e687834354e5bad63d8b5858a4e3b4c2564ed0781b3c44956564b1a"
+    },
+    {
+      "file": "assets/art/actor-lin-polish/P01/trunk.png",
+      "sha256": "d1289d9fed27354d5656763f4d75879e15b5156ccbeb423bcf9afd18b9f693fe"
+    }
+  ],
+  "master_sha256": "4934119c30b7a1e2be9887319b22805c646346b406fd2a6e22a735bfeee8fb07"
+}

@@ -1,0 +1,67 @@
+Home
+2D
+Characters
+Spine 2D Hero - Hunter And Warrior
+Active slide: 1 of 26
+1
+/
+26
+Overview
+Package Content
+Releases
+Reviews
+Publisher info
+Asset Quality
+Render pipeline compatibility
+The Built-in Render Pipeline is Unity's default render pipeline. It is a general-purpose render pipeline that has limited options for customization. The Universal Render Pipeline (URP) is a Scriptable Render Pipeline that is quick and easy to customize, and lets you create optimized graphics across a wide range of platforms. The High Definition Render Pipeline (HDRP) is a Scriptable Render Pipeline that lets you create cutting-edge, high-fidelity graphics on high-end platforms.
+Unity Version
+Built-in
+URP
+HDRP
+6000.0.17f1
+Compatible
+Not compatible
+Not compatible
+Additional compatibility information
+Description
+Technical details
+Related keywords
+rpg hero
+spine monster
+hero
+spine
+Monster
+spine character
+rpg monster
+Report this asset
+Spine 2D Hero - Hunter And Warrior
+k
+k2dstudio
+(not enough ratings)
+7 users have favourite this asset
+(7)
+$46.99
+Taxes/VAT calculated at checkout
+License type: Single Entity
+Single Entity
+Recommended for individuals and small businesses.
+Multi Entity
+Recommended for large enterprises working across multiple locations.
+See details.
+Refund policy
+This asset is covered by the Unity Refund Policy. Please see the
+EULA
+for details.
+Secure checkout:
+License agreement
+Standard Unity Asset Store EULA
+License type
+Extension Asset
+File size
+35.4 MB
+Latest version
+1.0.3
+Latest release date
+Jun 10, 2026
+Original Unity version
+6000.0.17

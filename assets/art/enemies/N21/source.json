@@ -1,0 +1,67 @@
+{
+  "id": "N21",
+  "version": 13,
+  "name": "考前复习",
+  "requirements": [
+    "UIR-069",
+    "UIR-011",
+    "UIR-013",
+    "UIR-051",
+    "UIR-052",
+    "UIR-054",
+    "UIR-057",
+    "UIR-059"
+  ],
+  "source": "output/imagegen/enemy-roster-20261115/N21-v1.png",
+  "source_sha256": "2e54428a732f7e350bbfc1ac168deea11e93065285d7edeff515ec85ae65a68b",
+  "source_size": [
+    1024,
+    1024
+  ],
+  "method": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+  "outputs": [
+    {
+      "file": "assets/art/enemies/N21/body.png",
+      "size": [
+        746,
+        771
+      ],
+      "sha256": "1a181c4ec7eb224593c2a5272c5df3f75fff8dccd742de7e66f4fefda54c377a",
+      "source_bbox": [
+        268,
+        133,
+        1014,
+        904
+      ]
+    },
+    {
+      "file": "assets/art/enemies/N21/attack.png",
+      "size": [
+        280,
+        297
+      ],
+      "sha256": "6cde04412241ffc0fa200c5c79ebce906f2e1afe14d578258c2425955ab899da",
+      "source_bbox": [
+        7,
+        137,
+        287,
+        434
+      ]
+    },
+    {
+      "file": "assets/art/enemies/N21/accent.png",
+      "size": [
+        112,
+        111
+      ],
+      "sha256": "a1d650ec06473261e95093ee975dd8ab9f84421b10014cf81ec665f1da95eb95",
+      "source_bbox": [
+        53,
+        719,
+        165,
+        830
+      ]
+    }
+  ],
+  "visual_acceptance": "pending review; machine metrics do not establish visual quality"
+}

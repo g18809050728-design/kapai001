@@ -1,0 +1,67 @@
+{
+  "id": "N23",
+  "version": 13,
+  "name": "小组展示",
+  "requirements": [
+    "UIR-069",
+    "UIR-011",
+    "UIR-013",
+    "UIR-051",
+    "UIR-052",
+    "UIR-054",
+    "UIR-057",
+    "UIR-059"
+  ],
+  "source": "output/imagegen/enemy-roster-20261115/N23-v1.png",
+  "source_sha256": "b5749ed2388b4f7c7d3456d58e42f50438717f6b1578e9303b428ea6f11e6256",
+  "source_size": [
+    1024,
+    1024
+  ],
+  "method": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+  "outputs": [
+    {
+      "file": "assets/art/enemies/N23/body.png",
+      "size": [
+        733,
+        977
+      ],
+      "sha256": "5c3ce8990447d726003ebd0732a34165e08bb971892f310a3569b565e2dbabe3",
+      "source_bbox": [
+        276,
+        23,
+        1009,
+        1000
+      ]
+    },
+    {
+      "file": "assets/art/enemies/N23/attack.png",
+      "size": [
+        208,
+        440
+      ],
+      "sha256": "57b05bdc23659be85b648ac701c8c48da38eb1ca6779c468ab401c0f19d08e72",
+      "source_bbox": [
+        20,
+        87,
+        228,
+        527
+      ]
+    },
+    {
+      "file": "assets/art/enemies/N23/accent.png",
+      "size": [
+        138,
+        156
+      ],
+      "sha256": "3e177c71ab65bd344b3c266a768698de6a6e6c6421c47a98e461fdb56276cbf1",
+      "source_bbox": [
+        72,
+        692,
+        210,
+        848
+      ]
+    }
+  ],
+  "visual_acceptance": "pending review; machine metrics do not establish visual quality"
+}

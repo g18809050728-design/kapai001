@@ -1,0 +1,84 @@
+Platformer Characters 1 (5 characters)
+Author:
+Kenney
+Tuesday, January 10, 2017 - 07:24
+Support Kenney on Patreon
+Art Type:
+2D Art
+Tags:
+Character
+Platformer
+zombie
+soldier
+adventurer
+License(s):
+CC0
+Collections:
+2D::Sprite::Sidescroll
+2Use4CG
+All CC0 - Uploader: Kenney
+C0 fantasy modern game
+cartoon art platform
+Cool bees
+Experimental Platformer Possible Assets
+Fantasy Roleplaying Game Collection
+HQ 2D & Isometric
+Kenney assets
+Oddball Gamez Kenney Style
+Platformer
+Platformer Game Project
+Players
+TPCL
+Favorites:
+39
+Preview:
+This package includes 5 charaters in 24 poses, also includes separated limbs (for software like Spine and Spriter) plus vector source files. Characters included:
+Player
+Player (female)
+Zombie
+Adventurer
+Soldier
+Files:
+Separate PNG files (150x)
+Spritesheet(s) / Tilesheet(s)
+Vector file(s)
+Let me know if you have any questions or requests!
+---
+Like to support the creation of free game assets? Consider a donation:
+Copyright/Attribution Notice:
+Credit "Kenney.nl" or "www.kenney.nl", this is not mandatory.
+File(s):
+kenney_platformerCharacters.zip
+1.4 Mb
+[
+4588
+download(s)]
+Log in
+or
+register
+to post comments
+Comments
+dannorder
+joined 12 years 10 months ago
+01/10/2017 - 17:29
+So awesome.
+Log in
+or
+register
+to post comments
+hhx
+joined 10 years 4 months ago
+01/13/2017 - 00:22
+Thnx Kenney.
+Log in
+or
+register
+to post comments
+Afmordeav
+joined 11 years 6 months ago
+02/12/2017 - 19:54
+This is awesome, now i want to ask you how do i turn this into isometric characters? or do you have any kind of charactares thats work fine with your isometric city, landscape and roads?? fiist attemp to create a isometric game, and im kinda lost. thanks for your time, resources and advice.
+Log in
+or
+register
+to post comments

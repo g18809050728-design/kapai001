@@ -1,0 +1,67 @@
+{
+  "id": "N19",
+  "version": 13,
+  "name": "项目",
+  "requirements": [
+    "UIR-069",
+    "UIR-011",
+    "UIR-013",
+    "UIR-051",
+    "UIR-052",
+    "UIR-054",
+    "UIR-057",
+    "UIR-059"
+  ],
+  "source": "output/imagegen/enemy-roster-20261115/N19-v1.png",
+  "source_sha256": "3311152165dae82f86dd43bc5ef81aa200d464503b8cc7ed208f1f4c93ffd1c4",
+  "source_size": [
+    1024,
+    1024
+  ],
+  "method": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+  "outputs": [
+    {
+      "file": "assets/art/enemies/N19/body.png",
+      "size": [
+        834,
+        646
+      ],
+      "sha256": "d13f8aa0e10de94290d366182cf493c8f6d238d2f10f6186973d455172cc0ec4",
+      "source_bbox": [
+        171,
+        190,
+        1005,
+        836
+      ]
+    },
+    {
+      "file": "assets/art/enemies/N19/attack.png",
+      "size": [
+        226,
+        216
+      ],
+      "sha256": "298c84e37b406b4e87e040d163f91fb630502008f8f57898151cb6178d5e034c",
+      "source_bbox": [
+        35,
+        149,
+        261,
+        365
+      ]
+    },
+    {
+      "file": "assets/art/enemies/N19/accent.png",
+      "size": [
+        214,
+        122
+      ],
+      "sha256": "66e6b79662a20b6e4faa00ad67e99dd70c33e0b32c39320374fbb13d59f914c1",
+      "source_bbox": [
+        20,
+        763,
+        234,
+        885
+      ]
+    }
+  ],
+  "visual_acceptance": "pending review; machine metrics do not establish visual quality"
+}

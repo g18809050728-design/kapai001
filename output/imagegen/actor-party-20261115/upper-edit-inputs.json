@@ -1,0 +1,53 @@
+[
+  {
+    "character": "P02",
+    "input": "output/imagegen/actor-party-20261115/p02-upper-input-v1.png",
+    "canvas_offset": [
+      235,
+      128
+    ],
+    "scaled_size": [
+      554,
+      1280
+    ],
+    "original_size": [
+      112,
+      259
+    ],
+    "scale": 4.942084942084942
+  },
+  {
+    "character": "P03",
+    "input": "output/imagegen/actor-party-20261115/p03-upper-input-v1.png",
+    "canvas_offset": [
+      245,
+      128
+    ],
+    "scaled_size": [
+      533,
+      1280
+    ],
+    "original_size": [
+      115,
+      276
+    ],
+    "scale": 4.63768115942029
+  },
+  {
+    "character": "P04",
+    "input": "output/imagegen/actor-party-20261115/p04-upper-input-v1.png",
+    "canvas_offset": [
+      256,
+      128
+    ],
+    "scaled_size": [
+      511,
+      1280
+    ],
+    "original_size": [
+      111,
+      278
+    ],
+    "scale": 4.60431654676259
+  }
+]

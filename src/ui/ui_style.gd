@@ -52,11 +52,17 @@ static func surface(color: Color = CREAM, border: Color = Color("c3b79c"), radiu
 
 
 static func button_skin(button: Button, role: String = "secondary", dark: bool = false) -> void:
-	var primary := role == "primary"
+	var selected := role == "selected"
+	var primary := role == "primary" or selected
 	var quiet := role == "quiet"
-	for state in ["normal", "hover", "pressed", "disabled", "focus"]:
+	button.set_meta("skin_role", role)
+	button.set_meta("skin_dark", dark)
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	for state in ["normal", "hover", "pressed", "hover_pressed", "disabled", "focus"]:
 		var color := Color("655235") if primary else Color("293f4b")
-		if state == "hover":
+		if selected:
+			color = Color("706043")
+		if state in ["hover", "hover_pressed"]:
 			color = color.lightened(.17)
 		if state == "pressed":
 			color = color.darkened(.22)
@@ -82,6 +88,56 @@ static func button_skin(button: Button, role: String = "secondary", dark: bool =
 	button.add_theme_color_override("font_disabled_color",Color("98a5ad"))
 	button.add_theme_color_override("font_shadow_color", Color(0,0,0,.75))
 	button.add_theme_constant_override("shadow_offset_y", 2)
+
+
+static func story_choice(button: Button) -> void:
+	# Keep the native text/UID/hit target for accessibility and existing commands.
+	# Child labels add the title/effect hierarchy without replacing the button.
+	if button.has_meta("story_choice"):
+		return
+	button.set_meta("story_choice", true)
+	var parts := button.text.split("\n", true, 1)
+	var copy := MarginContainer.new()
+	copy.name = "StoryChoiceCopy"
+	copy.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	for side in ["left", "right"]:
+		copy.add_theme_constant_override("margin_" + side, 20)
+	for side in ["top", "bottom"]:
+		copy.add_theme_constant_override("margin_" + side, 9)
+	button.add_child(copy)
+	copy.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	var words := VBoxContainer.new()
+	words.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	words.alignment = BoxContainer.ALIGNMENT_CENTER
+	words.add_theme_constant_override("separation", 4)
+	copy.add_child(words)
+	for index in parts.size():
+		var line := Label.new()
+		line.name = "ChoiceTitle" if index == 0 else "ChoiceEffect"
+		line.text = parts[index]
+		line.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		line.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		line.add_theme_font_size_override("font_size", roundi((17 if index == 0 else 14) * text_scale))
+		line.add_theme_color_override("font_color", Color("f3d38e") if index == 0 else CREAM)
+		line.add_theme_color_override("font_shadow_color", Color(0, 0, 0, .5))
+		line.add_theme_constant_override("shadow_offset_y", 1)
+		words.add_child(line)
+	for key in ["font_color", "font_hover_color", "font_pressed_color", "font_focus_color", "font_disabled_color", "font_hover_pressed_color", "font_shadow_color"]:
+		button.add_theme_color_override(key, Color.TRANSPARENT)
+	var button_ref: WeakRef = weakref(button)
+	var copy_ref: WeakRef = weakref(copy)
+	var fit_copy := func():
+		var target := button_ref.get_ref() as Button
+		var content := copy_ref.get_ref() as Control
+		if is_instance_valid(target) and is_instance_valid(content):
+			var needed := maxf(64 * text_scale, content.get_combined_minimum_size().y)
+			if absf(target.custom_minimum_size.y - needed) > .5:
+				target.custom_minimum_size.y = needed
+	copy.minimum_size_changed.connect(fit_copy)
+	fit_copy.call_deferred()
+	button.draw.connect(func():
+		if is_instance_valid(words):
+			words.modulate = Color("aab3b8") if button.disabled else Color.WHITE)
 
 
 static func cut_surface(color: Color, border: Color = BRASS) -> StyleBoxTexture:
@@ -126,15 +182,30 @@ static func label(id: String) -> String:
 
 
 static func texture(id: String) -> Texture2D:
+	# Route bosses have historical aliases; resolve new art by exact definition ID.
+	var enemy_file := EnemyArt.texture_path(id)
+	if not enemy_file.is_empty() and ResourceLoader.exists(enemy_file):
+		var enemy_key := "enemy:" + id
+		if not _textures.has(enemy_key):
+			_textures[enemy_key] = load(enemy_file) as Texture2D
+		return _textures[enemy_key]
 	var key := str(LABELS.data.get("aliases", {}).get(id, id))
 	if _textures.has(key):
 		return _textures[key]
 	var path := str(LABELS.data.get("textures", {}).get(key, ""))
+	var character_file := CharacterArt.texture_path(key)
+	if not character_file.is_empty() and ResourceLoader.exists(character_file):
+		path = character_file
 	if path.is_empty() or not ResourceLoader.exists(path):
 		return null
 	var value := load(path) as Texture2D
 	_textures[key] = value
 	return value
+
+
+static func character_portrait(id: String) -> Texture2D:
+	var path := CharacterArt.texture_path(id, true)
+	return load(path) as Texture2D if not path.is_empty() and ResourceLoader.exists(path) else texture(id)
 
 
 static func describe_effects(effects: Array) -> String:
@@ -463,18 +534,15 @@ static func make_theme() -> Theme:
 	theme.set_color("font_pressed_color", "Button", INK)
 	theme.set_color("font_focus_color", "Button", INK)
 	theme.set_color("font_disabled_color", "Button", Color("84918b"))
-	for state in ["normal", "hover", "pressed", "disabled", "focus"]:
-		var style := surface(Color("f1ead9") if state == "normal" else Color("fff6de"),Color("c7beaa"),3)
-		style.shadow_size = 0
-		style.content_margin_top = 7
-		style.content_margin_bottom = 7
-		if state == "disabled":
-			style.bg_color = Color("dcd9cf")
-		if state == "focus":
-			style.bg_color = Color.TRANSPARENT
-			style.border_color = GOLD
-			style.set_border_width_all(2)
-		theme.set_stylebox(state, "Button", style)
+	for state in ["normal", "hover", "pressed", "hover_pressed", "disabled", "focus"]:
+		var fill := Color("eee5cf")
+		if state in ["hover", "hover_pressed"]:
+			fill = Color("fff2cf")
+		elif state == "pressed":
+			fill = Color("d6c9a9")
+		elif state == "disabled":
+			fill = Color("d6d2c6")
+		theme.set_stylebox(state, "Button", cut_surface(Color.TRANSPARENT if state == "focus" else fill, GOLD if state == "focus" else Color("879080")))
 	theme.set_stylebox("panel", "PanelContainer", surface(CREAM))
 	theme.set_stylebox("normal", "LineEdit", surface(Color("20323f"),Color("70818a")))
 	theme.set_stylebox("focus", "LineEdit", surface(Color("283e4d"),BRASS))

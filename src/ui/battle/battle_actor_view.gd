@@ -2,9 +2,11 @@ class_name BattleActorView
 extends Control
 
 static var pilot_enabled := false
+static var pilot_resource_root := "res://assets/art/actor-rig-pilot"
+static var pilot_stage_background := ""
 var rig: NativeActorRig
 
-## Prototype paper stage. Portrait, moving prop, silhouette and hit zone are separate.
+## Character art and hit zones are independent; explicit pilots can override art.
 var definition_id := ""
 var actor_kind := "task"
 var phase_index := 1
@@ -24,6 +26,16 @@ var guard_strength := 0.0:
 var _portrait: Texture2D
 var _pose_tween: Tween
 
+static func rig_resource_path(id: String, kind: String) -> String:
+	var file := ""
+	if pilot_enabled:
+		file = pilot_resource_root.path_join(id).path_join("rig.json")
+	elif kind == "player":
+		file = CharacterArt.rig_path(id)
+	elif kind == "task":
+		file = EnemyArt.rig_path(id)
+	return file if not file.is_empty() and FileAccess.file_exists(file) else ""
+
 func _ready() -> void:
 	_fit_rig()
 
@@ -34,24 +46,25 @@ func configure(id: String, kind: String, phase: int = 1) -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	if kind == "task":
 		var key := str(UiStyle.LABELS.data.get("aliases",{}).get(id,id))
-		var file := "res://assets/art/presentation-v3/tasks/"+key+".png"
+		var file := EnemyArt.texture_path(id)
+		if file.is_empty():
+			file = "res://assets/art/presentation-v3/tasks/"+key+".png"
 		_portrait = load(file) as Texture2D if ResourceLoader.exists(file) else null
 	else:
 		var file := "res://assets/art/presentation-v2/actors/"+id+".png"
 		_portrait = load(file) as Texture2D if ResourceLoader.exists(file) else UiStyle.texture(id)
 	resized.connect(queue_redraw)
-	if pilot_enabled:
-		var rig_file := "res://assets/art/actor-rig-pilot/" + id + "/rig.json"
-		if FileAccess.file_exists(rig_file):
-			rig = NativeActorRig.new()
-			rig.name = "NativeActorRig"
-			add_child(rig)
-			if not rig.configure(rig_file):
-				rig.queue_free()
-				rig = null
-			else:
-				resized.connect(_fit_rig)
-				_fit_rig()
+	var rig_file := rig_resource_path(id, kind)
+	if not rig_file.is_empty():
+		rig = NativeActorRig.new()
+		rig.name = "NativeActorRig"
+		add_child(rig)
+		if not rig.configure(rig_file):
+			rig.queue_free()
+			rig = null
+		else:
+			resized.connect(_fit_rig)
+			_fit_rig()
 	queue_redraw()
 
 func _fit_rig() -> void:
@@ -91,7 +104,8 @@ func set_motion(enabled: bool) -> void:
 func _draw() -> void:
 	var floor_center := Vector2(size.x*.5,size.y-12)
 	draw_set_transform(floor_center,0,Vector2(1,.22))
-	draw_circle(Vector2.ZERO,size.x*.4,Color(UiStyle.INK,.15),true,-1,true)
+	if not is_instance_valid(rig) or not rig.refined:
+		draw_circle(Vector2.ZERO,size.x*.4,Color(UiStyle.INK,.15),true,-1,true)
 	if targeted:
 		draw_circle(Vector2.ZERO,size.x*.44,UiStyle.GREEN.darkened(.1),false,3,true)
 	draw_set_transform(Vector2.ZERO)

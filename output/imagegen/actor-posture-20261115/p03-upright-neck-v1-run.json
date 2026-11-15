@@ -1,0 +1,24 @@
+﻿{
+    "exit_code":  0,
+    "model":  "gpt-image-2.5-sunburst",
+    "arguments":  [
+                      "edit",
+                      "--model",
+                      "gpt-image-2.5-sunburst",
+                      "--image",
+                      "output/imagegen/actor-posture-20261115/p03-upright-edit-input.png",
+                      "--prompt-file",
+                      "output/imagegen/actor-posture-20261115/prompts/p03-upright-neck-v1.txt",
+                      "--size",
+                      "1536x1024",
+                      "--quality",
+                      "medium",
+                      "--out",
+                      "output/imagegen/actor-posture-20261115/p03-upright-neck-v1.png"
+                  ],
+    "provider":  "https://api-slb.jiji.cc/v1",
+    "started_at":  "2026-11-15T12:25:17.8989787+08:00",
+    "ended_at":  "2026-11-15T12:25:51.3175229+08:00",
+    "mode":  "edit",
+    "output":  "output/imagegen/actor-posture-20261115/p03-upright-neck-v1.png"
+}

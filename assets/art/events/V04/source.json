@@ -1,0 +1,32 @@
+{
+  "asset_id": "V04",
+  "requirement_id": "UIR-070",
+  "version": 1,
+  "title": "宿舍断电",
+  "prompt_file": "output/imagegen/event-polish-20261115/V04-v1-prompt.txt",
+  "prompt_sha256": "63cd45a953f8317a7d0a48f172ef9e5097e8fe8a442ee230c7ea96d2c680953b",
+  "provider": "https://api-slb.jiji.cc/v1",
+  "model": "gpt-image-2.5-sunburst",
+  "requested_size": "1024x1024",
+  "actual_size": [
+    1024,
+    1024
+  ],
+  "quality": "high",
+  "original": "output/imagegen/event-polish-20261115/originals/V04-v1.png",
+  "original_sha256": "184c8c4a87a30f936068de48a0602ec703895bb30c72b318af1efb79216ce819",
+  "selected": true,
+  "review_status": "AI visual review, final user art judgment remains",
+  "derivatives": [
+    {
+      "path": "assets/art/events/V04/illustration.png",
+      "sha256": "10a4e73f6a5e5fd9860ae97df4018ccc9e42802b5ebf43e56fd9abc36e867e19",
+      "processing": "Original RGB untouched; add 66px smoothstep alpha perimeter, no content crop/stretch."
+    },
+    {
+      "path": "assets/art/events/V04/background.png",
+      "sha256": "b987ac91b777d60f9a0dd86a307d2d6514758b83387d1225e3acf42482a0f807",
+      "processing": "768x768 Lanczos, Gaussian blur radius16; UI uses aspect-preserving cover and dark overlay."
+    }
+  ]
+}

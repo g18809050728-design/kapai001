@@ -1,0 +1,67 @@
+{
+  "id": "N25",
+  "version": 13,
+  "name": "导师约谈",
+  "requirements": [
+    "UIR-069",
+    "UIR-011",
+    "UIR-013",
+    "UIR-051",
+    "UIR-052",
+    "UIR-054",
+    "UIR-057",
+    "UIR-059"
+  ],
+  "source": "output/imagegen/enemy-roster-20261115/N25-v1.png",
+  "source_sha256": "6e2482b4a67b85ed12449f50f646d7b9765a62a6b374ab32a1f76862309e5abb",
+  "source_size": [
+    1024,
+    1024
+  ],
+  "method": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+  "outputs": [
+    {
+      "file": "assets/art/enemies/N25/body.png",
+      "size": [
+        730,
+        858
+      ],
+      "sha256": "6a4f286f762156ad1912a03775cd14adee3f3a2595362ae099101c458d14d316",
+      "source_bbox": [
+        275,
+        103,
+        1005,
+        961
+      ]
+    },
+    {
+      "file": "assets/art/enemies/N25/attack.png",
+      "size": [
+        189,
+        292
+      ],
+      "sha256": "59099b4f038330e34929cbd480a0c267755a74889e69d010b7e9ccfd598452b8",
+      "source_bbox": [
+        42,
+        185,
+        231,
+        477
+      ]
+    },
+    {
+      "file": "assets/art/enemies/N25/accent.png",
+      "size": [
+        201,
+        170
+      ],
+      "sha256": "58d178c9e94a2d6f7ddafff8ad8fd7439d18faa4c49000ff508550ffd7506f68",
+      "source_bbox": [
+        36,
+        693,
+        237,
+        863
+      ]
+    }
+  ],
+  "visual_acceptance": "pending review; machine metrics do not establish visual quality"
+}

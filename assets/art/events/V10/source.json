@@ -1,0 +1,32 @@
+{
+  "asset_id": "V10",
+  "requirement_id": "UIR-070",
+  "version": 1,
+  "title": "捡到校园卡",
+  "prompt_file": "output/imagegen/event-polish-20261115/V10-v1-prompt.txt",
+  "prompt_sha256": "dbc6ab6debb7daa0a989644c7329e86405faa906af17b05567a35372f4acde41",
+  "provider": "https://api-slb.jiji.cc/v1",
+  "model": "gpt-image-2.5-sunburst",
+  "requested_size": "1024x1024",
+  "actual_size": [
+    1024,
+    1024
+  ],
+  "quality": "high",
+  "original": "output/imagegen/event-polish-20261115/originals/V10-v1.png",
+  "original_sha256": "e92beb887e8bd81a3b437092a265bd95305e4cec822ee61f715453b4103c101c",
+  "selected": true,
+  "review_status": "AI visual review, final user art judgment remains",
+  "derivatives": [
+    {
+      "path": "assets/art/events/V10/illustration.png",
+      "sha256": "1947128a510b32fee6da1d49cc61cf0206c166437747c5e4a556d187a322e545",
+      "processing": "Original RGB untouched; add 66px smoothstep alpha perimeter, no content crop/stretch."
+    },
+    {
+      "path": "assets/art/events/V10/background.png",
+      "sha256": "6e2a9b7ac9014d23668735978753cce988dd1ea148478ed0c5c4aae04a134875",
+      "processing": "768x768 Lanczos, Gaussian blur radius16; UI uses aspect-preserving cover and dark overlay."
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "id": "FY_ROUTE_job_TASK",
+  "version": 13,
+  "name": "秋招终面",
+  "requirements": [
+    "UIR-069",
+    "UIR-011",
+    "UIR-013",
+    "UIR-051",
+    "UIR-052",
+    "UIR-054",
+    "UIR-057",
+    "UIR-059"
+  ],
+  "source": "output/imagegen/enemy-roster-20261115/FY_ROUTE_job_TASK-v1.png",
+  "source_sha256": "61f5cb4a0bde4becb416d085e8657500d3907a4d1f076edad36b7992cb62dae8",
+  "source_size": [
+    1024,
+    1024
+  ],
+  "method": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+  "outputs": [
+    {
+      "file": "assets/art/enemies/FY_ROUTE_job_TASK/body.png",
+      "size": [
+        765,
+        847
+      ],
+      "sha256": "57f755071fe1d199187b3cfa2fe8262c86305b6e38e9260f89c76d9c4ac4edbf",
+      "source_bbox": [
+        259,
+        99,
+        1024,
+        946
+      ]
+    },
+    {
+      "file": "assets/art/enemies/FY_ROUTE_job_TASK/attack.png",
+      "size": [
+        196,
+        243
+      ],
+      "sha256": "347d4be50d811157e0bc6d05f2ffeca94448b906d88554173d816eb1b20a3941",
+      "source_bbox": [
+        36,
+        136,
+        232,
+        379
+      ]
+    },
+    {
+      "file": "assets/art/enemies/FY_ROUTE_job_TASK/accent.png",
+      "size": [
+        215,
+        243
+      ],
+      "sha256": "2ca99087fb29b179dbf61206680b907f1f04c3fbd3bdf0366fd8184970492614",
+      "source_bbox": [
+        32,
+        667,
+        247,
+        910
+      ]
+    }
+  ],
+  "visual_acceptance": "pending review; machine metrics do not establish visual quality"
+}

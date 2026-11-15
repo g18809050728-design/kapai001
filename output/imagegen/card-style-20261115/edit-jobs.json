@@ -1,0 +1,2580 @@
+{
+  "execution": "bundled image_gen.py edit, one request per atlas; actual reference upload required",
+  "concurrency_limit": 2,
+  "jobs": [
+    {
+      "batch_id": "P01-01",
+      "owner": "P01",
+      "source_file": "output/imagegen/card-style-20261115/P01-01.png",
+      "prompt_file": "output/imagegen/card-style-20261115/prompts/P01-01.txt",
+      "prompt_sha256": "918c932aec4fb1343856b565818655cb2afc41c5f9744ad6de7b676274ae036d",
+      "operation": "edit",
+      "reference_image": "output/imagegen/card-style-20261115/references/P01.png",
+      "reference_sha256": "3cee8da9e8adf0f26c11ee7ec2876e63c11df148b490c5366d6f9a47bcfffbdf",
+      "model": "gpt-image-2.5-sunburst",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "quality": "medium",
+      "n": 1,
+      "slots": [
+        {
+          "slot": 1,
+          "row": 1,
+          "column": 1,
+          "card_id": "R3-P01-01",
+          "crop": [
+            16,
+            12,
+            496,
+            372
+          ]
+        },
+        {
+          "slot": 2,
+          "row": 1,
+          "column": 2,
+          "card_id": "R3-P01-02",
+          "crop": [
+            528,
+            12,
+            1008,
+            372
+          ]
+        },
+        {
+          "slot": 3,
+          "row": 2,
+          "column": 1,
+          "card_id": "R3-P01-03",
+          "crop": [
+            16,
+            396,
+            496,
+            756
+          ]
+        },
+        {
+          "slot": 4,
+          "row": 2,
+          "column": 2,
+          "card_id": "R3-P01-04",
+          "crop": [
+            528,
+            396,
+            1008,
+            756
+          ]
+        },
+        {
+          "slot": 5,
+          "row": 3,
+          "column": 1,
+          "card_id": "R3-P01-05",
+          "crop": [
+            16,
+            780,
+            496,
+            1140
+          ]
+        },
+        {
+          "slot": 6,
+          "row": 3,
+          "column": 2,
+          "card_id": "R3-P01-06",
+          "crop": [
+            528,
+            780,
+            1008,
+            1140
+          ]
+        },
+        {
+          "slot": 7,
+          "row": 4,
+          "column": 1,
+          "card_id": "R3-P01-07",
+          "crop": [
+            16,
+            1164,
+            496,
+            1524
+          ]
+        },
+        {
+          "slot": 8,
+          "row": 4,
+          "column": 2,
+          "card_id": "R3-P01-08",
+          "crop": [
+            528,
+            1164,
+            1008,
+            1524
+          ]
+        }
+      ],
+      "human_acceptance": "pending"
+    },
+    {
+      "batch_id": "P01-02",
+      "owner": "P01",
+      "source_file": "output/imagegen/card-style-20261115/P01-02.png",
+      "prompt_file": "output/imagegen/card-style-20261115/prompts/P01-02.txt",
+      "prompt_sha256": "bf4ead5105656fcd40eb5ace669ed3aab62f4a52b056e74d00c99d9f877a2a58",
+      "operation": "edit",
+      "reference_image": "output/imagegen/card-style-20261115/references/P01.png",
+      "reference_sha256": "3cee8da9e8adf0f26c11ee7ec2876e63c11df148b490c5366d6f9a47bcfffbdf",
+      "model": "gpt-image-2.5-sunburst",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "quality": "medium",
+      "n": 1,
+      "slots": [
+        {
+          "slot": 1,
+          "row": 1,
+          "column": 1,
+          "card_id": "R3-P01-09",
+          "crop": [
+            16,
+            12,
+            496,
+            372
+          ]
+        },
+        {
+          "slot": 2,
+          "row": 1,
+          "column": 2,
+          "card_id": "R3-P01-10",
+          "crop": [
+            528,
+            12,
+            1008,
+            372
+          ]
+        },
+        {
+          "slot": 3,
+          "row": 2,
+          "column": 1,
+          "card_id": "R3-P01-11",
+          "crop": [
+            16,
+            396,
+            496,
+            756
+          ]
+        },
+        {
+          "slot": 4,
+          "row": 2,
+          "column": 2,
+          "card_id": "R3-P01-12",
+          "crop": [
+            528,
+            396,
+            1008,
+            756
+          ]
+        },
+        {
+          "slot": 5,
+          "row": 3,
+          "column": 1,
+          "card_id": "R3-P01-13",
+          "crop": [
+            16,
+            780,
+            496,
+            1140
+          ]
+        },
+        {
+          "slot": 6,
+          "row": 3,
+          "column": 2,
+          "card_id": "R3-P01-14",
+          "crop": [
+            528,
+            780,
+            1008,
+            1140
+          ]
+        },
+        {
+          "slot": 7,
+          "row": 4,
+          "column": 1,
+          "card_id": "R3-P01-15",
+          "crop": [
+            16,
+            1164,
+            496,
+            1524
+          ]
+        },
+        {
+          "slot": 8,
+          "row": 4,
+          "column": 2,
+          "card_id": "R3-P01-16",
+          "crop": [
+            528,
+            1164,
+            1008,
+            1524
+          ]
+        }
+      ],
+      "human_acceptance": "pending"
+    },
+    {
+      "batch_id": "P01-03",
+      "owner": "P01",
+      "source_file": "output/imagegen/card-style-20261115/P01-03.png",
+      "prompt_file": "output/imagegen/card-style-20261115/prompts/P01-03.txt",
+      "prompt_sha256": "c2b4fd369d007c7659c60a3c748f5a792c5ecf171005655a6d4b87a0aa8fac1a",
+      "operation": "edit",
+      "reference_image": "output/imagegen/card-style-20261115/references/P01.png",
+      "reference_sha256": "3cee8da9e8adf0f26c11ee7ec2876e63c11df148b490c5366d6f9a47bcfffbdf",
+      "model": "gpt-image-2.5-sunburst",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "quality": "medium",
+      "n": 1,
+      "slots": [
+        {
+          "slot": 1,
+          "row": 1,
+          "column": 1,
+          "card_id": "R3-P01-17",
+          "crop": [
+            16,
+            12,
+            496,
+            372
+          ]
+        },
+        {
+          "slot": 2,
+          "row": 1,
+          "column": 2,
+          "card_id": "R3-P01-18",
+          "crop": [
+            528,
+            12,
+            1008,
+            372
+          ]
+        },
+        {
+          "slot": 3,
+          "row": 2,
+          "column": 1,
+          "card_id": "R3-P01-19",
+          "crop": [
+            16,
+            396,
+            496,
+            756
+          ]
+        },
+        {
+          "slot": 4,
+          "row": 2,
+          "column": 2,
+          "card_id": "R3-P01-20",
+          "crop": [
+            528,
+            396,
+            1008,
+            756
+          ]
+        },
+        {
+          "slot": 5,
+          "row": 3,
+          "column": 1,
+          "card_id": "R3-P01-21",
+          "crop": [
+            16,
+            780,
+            496,
+            1140
+          ]
+        },
+        {
+          "slot": 6,
+          "row": 3,
+          "column": 2,
+          "card_id": "R3-P01-22",
+          "crop": [
+            528,
+            780,
+            1008,
+            1140
+          ]
+        },
+        {
+          "slot": 7,
+          "row": 4,
+          "column": 1,
+          "card_id": "R3-P01-23",
+          "crop": [
+            16,
+            1164,
+            496,
+            1524
+          ]
+        },
+        {
+          "slot": 8,
+          "row": 4,
+          "column": 2,
+          "card_id": "R3-P01-24",
+          "crop": [
+            528,
+            1164,
+            1008,
+            1524
+          ]
+        }
+      ],
+      "human_acceptance": "pending"
+    },
+    {
+      "batch_id": "P01-04",
+      "owner": "P01",
+      "source_file": "output/imagegen/card-style-20261115/P01-04.png",
+      "prompt_file": "output/imagegen/card-style-20261115/prompts/P01-04.txt",
+      "prompt_sha256": "26e412d1ca5ab740317ce02ce2b8be561368e878dfee6c10281433ff3decb2c2",
+      "operation": "edit",
+      "reference_image": "output/imagegen/card-style-20261115/references/P01.png",
+      "reference_sha256": "3cee8da9e8adf0f26c11ee7ec2876e63c11df148b490c5366d6f9a47bcfffbdf",
+      "model": "gpt-image-2.5-sunburst",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "quality": "medium",
+      "n": 1,
+      "slots": [
+        {
+          "slot": 1,
+          "row": 1,
+          "column": 1,
+          "card_id": "R3-P01-25",
+          "crop": [
+            16,
+            12,
+            496,
+            372
+          ]
+        },
+        {
+          "slot": 2,
+          "row": 1,
+          "column": 2,
+          "card_id": "R3-P01-26",
+          "crop": [
+            528,
+            12,
+            1008,
+            372
+          ]
+        },
+        {
+          "slot": 3,
+          "row": 2,
+          "column": 1,
+          "card_id": "R3-P01-27",
+          "crop": [
+            16,
+            396,
+            496,
+            756
+          ]
+        },
+        {
+          "slot": 4,
+          "row": 2,
+          "column": 2,
+          "card_id": "R3-P01-28",
+          "crop": [
+            528,
+            396,
+            1008,
+            756
+          ]
+        },
+        {
+          "slot": 5,
+          "row": 3,
+          "column": 1,
+          "card_id": "R3-P01-29",
+          "crop": [
+            16,
+            780,
+            496,
+            1140
+          ]
+        },
+        {
+          "slot": 6,
+          "row": 3,
+          "column": 2,
+          "card_id": "R3-P01-30",
+          "crop": [
+            528,
+            780,
+            1008,
+            1140
+          ]
+        },
+        {
+          "slot": 7,
+          "row": 4,
+          "column": 1,
+          "card_id": "R3-P01-31",
+          "crop": [
+            16,
+            1164,
+            496,
+            1524
+          ]
+        },
+        {
+          "slot": 8,
+          "row": 4,
+          "column": 2,
+          "card_id": "R3-P01-32",
+          "crop": [
+            528,
+            1164,
+            1008,
+            1524
+          ]
+        }
+      ],
+      "human_acceptance": "pending"
+    },
+    {
+      "batch_id": "P01-05",
+      "owner": "P01",
+      "source_file": "output/imagegen/card-style-20261115/P01-05.png",
+      "prompt_file": "output/imagegen/card-style-20261115/prompts/P01-05.txt",
+      "prompt_sha256": "415a9216f256c902e6fa28448fb285ca20b2c6712e982b776713c80b73bbfb26",
+      "operation": "edit",
+      "reference_image": "output/imagegen/card-style-20261115/references/P01.png",
+      "reference_sha256": "3cee8da9e8adf0f26c11ee7ec2876e63c11df148b490c5366d6f9a47bcfffbdf",
+      "model": "gpt-image-2.5-sunburst",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "quality": "medium",
+      "n": 1,
+      "slots": [
+        {
+          "slot": 1,
+          "row": 1,
+          "column": 1,
+          "card_id": "R3-P01-33",
+          "crop": [
+            16,
+            12,
+            496,
+            372
+          ]
+        },
+        {
+          "slot": 2,
+          "row": 1,
+          "column": 2,
+          "card_id": "R3-P01-34",
+          "crop": [
+            528,
+            12,
+            1008,
+            372
+          ]
+        },
+        {
+          "slot": 3,
+          "row": 2,
+          "column": 1,
+          "card_id": "R3-P01-35",
+          "crop": [
+            16,
+            396,
+            496,
+            756
+          ]
+        },
+        {
+          "slot": 4,
+          "row": 2,
+          "column": 2,
+          "card_id": "R3-P01-36",
+          "crop": [
+            528,
+            396,
+            1008,
+            756
+          ]
+        },
+        {
+          "slot": 5,
+          "row": 3,
+          "column": 1,
+          "card_id": "R3-P01-37",
+          "crop": [
+            16,
+            780,
+            496,
+            1140
+          ]
+        },
+        {
+          "slot": 6,
+          "row": 3,
+          "column": 2,
+          "card_id": "R3-P01-38",
+          "crop": [
+            528,
+            780,
+            1008,
+            1140
+          ]
+        },
+        {
+          "slot": 7,
+          "row": 4,
+          "column": 1,
+          "card_id": "R3-P01-39",
+          "crop": [
+            16,
+            1164,
+            496,
+            1524
+          ]
+        },
+        {
+          "slot": 8,
+          "row": 4,
+          "column": 2,
+          "card_id": "R3-P01-40",
+          "crop": [
+            528,
+            1164,
+            1008,
+            1524
+          ]
+        }
+      ],
+      "human_acceptance": "pending"
+    },
+    {
+      "batch_id": "P02-01",
+      "owner": "P02",
+      "source_file": "output/imagegen/card-style-20261115/P02-01.png",
+      "prompt_file": "output/imagegen/card-style-20261115/prompts/P02-01.txt",
+      "prompt_sha256": "2a9b278f4368f5db69bec6593e15f1c3ce097cf2cf2cf93a0fbb3e9a33d6d7f3",
+      "operation": "edit",
+      "reference_image": "output/imagegen/card-style-20261115/references/P02.png",
+      "reference_sha256": "94e4e1f4b20d082a86b2bcd5b4a7c8e39f95aadd766dd0d3ebd6f8030a801bca",
+      "model": "gpt-image-2.5-sunburst",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "quality": "medium",
+      "n": 1,
+      "slots": [
+        {
+          "slot": 1,
+          "row": 1,
+          "column": 1,
+          "card_id": "R3-P02-01",
+          "crop": [
+            16,
+            12,
+            496,
+            372
+          ]
+        },
+        {
+          "slot": 2,
+          "row": 1,
+          "column": 2,
+          "card_id": "R3-P02-02",
+          "crop": [
+            528,
+            12,
+            1008,
+            372
+          ]
+        },
+        {
+          "slot": 3,
+          "row": 2,
+          "column": 1,
+          "card_id": "R3-P02-03",
+          "crop": [
+            16,
+            396,
+            496,
+            756
+          ]
+        },
+        {
+          "slot": 4,
+          "row": 2,
+          "column": 2,
+          "card_id": "R3-P02-04",
+          "crop": [
+            528,
+            396,
+            1008,
+            756
+          ]
+        },
+        {
+          "slot": 5,
+          "row": 3,
+          "column": 1,
+          "card_id": "R3-P02-05",
+          "crop": [
+            16,
+            780,
+            496,
+            1140
+          ]
+        },
+        {
+          "slot": 6,
+          "row": 3,
+          "column": 2,
+          "card_id": "R3-P02-06",
+          "crop": [
+            528,
+            780,
+            1008,
+            1140
+          ]
+        },
+        {
+          "slot": 7,
+          "row": 4,
+          "column": 1,
+          "card_id": "R3-P02-07",
+          "crop": [
+            16,
+            1164,
+            496,
+            1524
+          ]
+        },
+        {
+          "slot": 8,
+          "row": 4,
+          "column": 2,
+          "card_id": "R3-P02-08",
+          "crop": [
+            528,
+            1164,
+            1008,
+            1524
+          ]
+        }
+      ],
+      "human_acceptance": "pending"
+    },
+    {
+      "batch_id": "P02-02",
+      "owner": "P02",
+      "source_file": "output/imagegen/card-style-20261115/P02-02.png",
+      "prompt_file": "output/imagegen/card-style-20261115/prompts/P02-02.txt",
+      "prompt_sha256": "1820ede3e4d6dd0eaf99cea0188ad5cabd3565124f2fd9559fa10242d616d720",
+      "operation": "edit",
+      "reference_image": "output/imagegen/card-style-20261115/references/P02.png",
+      "reference_sha256": "94e4e1f4b20d082a86b2bcd5b4a7c8e39f95aadd766dd0d3ebd6f8030a801bca",
+      "model": "gpt-image-2.5-sunburst",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "quality": "medium",
+      "n": 1,
+      "slots": [
+        {
+          "slot": 1,
+          "row": 1,
+          "column": 1,
+          "card_id": "R3-P02-09",
+          "crop": [
+            16,
+            12,
+            496,
+            372
+          ]
+        },
+        {
+          "slot": 2,
+          "row": 1,
+          "column": 2,
+          "card_id": "R3-P02-10",
+          "crop": [
+            528,
+            12,
+            1008,
+            372
+          ]
+        },
+        {
+          "slot": 3,
+          "row": 2,
+          "column": 1,
+          "card_id": "R3-P02-11",
+          "crop": [
+            16,
+            396,
+            496,
+            756
+          ]
+        },
+        {
+          "slot": 4,
+          "row": 2,
+          "column": 2,
+          "card_id": "R3-P02-12",
+          "crop": [
+            528,
+            396,
+            1008,
+            756
+          ]
+        },
+        {
+          "slot": 5,
+          "row": 3,
+          "column": 1,
+          "card_id": "R3-P02-13",
+          "crop": [
+            16,
+            780,
+            496,
+            1140
+          ]
+        },
+        {
+          "slot": 6,
+          "row": 3,
+          "column": 2,
+          "card_id": "R3-P02-14",
+          "crop": [
+            528,
+            780,
+            1008,
+            1140
+          ]
+        },
+        {
+          "slot": 7,
+          "row": 4,
+          "column": 1,
+          "card_id": "R3-P02-15",
+          "crop": [
+            16,
+            1164,
+            496,
+            1524
+          ]
+        },
+        {
+          "slot": 8,
+          "row": 4,
+          "column": 2,
+          "card_id": "R3-P02-16",
+          "crop": [
+            528,
+            1164,
+            1008,
+            1524
+          ]
+        }
+      ],
+      "human_acceptance": "pending"
+    },
+    {
+      "batch_id": "P02-03",
+      "owner": "P02",
+      "source_file": "output/imagegen/card-style-20261115/P02-03.png",
+      "prompt_file": "output/imagegen/card-style-20261115/prompts/P02-03.txt",
+      "prompt_sha256": "3ebd1ba3a5e39be8f0165c4c76c3d03e2624504a9752314eff09b9bf92ade626",
+      "operation": "edit",
+      "reference_image": "output/imagegen/card-style-20261115/references/P02.png",
+      "reference_sha256": "94e4e1f4b20d082a86b2bcd5b4a7c8e39f95aadd766dd0d3ebd6f8030a801bca",
+      "model": "gpt-image-2.5-sunburst",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "quality": "medium",
+      "n": 1,
+      "slots": [
+        {
+          "slot": 1,
+          "row": 1,
+          "column": 1,
+          "card_id": "R3-P02-17",
+          "crop": [
+            16,
+            12,
+            496,
+            372
+          ]
+        },
+        {
+          "slot": 2,
+          "row": 1,
+          "column": 2,
+          "card_id": "R3-P02-18",
+          "crop": [
+            528,
+            12,
+            1008,
+            372
+          ]
+        },
+        {
+          "slot": 3,
+          "row": 2,
+          "column": 1,
+          "card_id": "R3-P02-19",
+          "crop": [
+            16,
+            396,
+            496,
+            756
+          ]
+        },
+        {
+          "slot": 4,
+          "row": 2,
+          "column": 2,
+          "card_id": "R3-P02-20",
+          "crop": [
+            528,
+            396,
+            1008,
+            756
+          ]
+        },
+        {
+          "slot": 5,
+          "row": 3,
+          "column": 1,
+          "card_id": "R3-P02-21",
+          "crop": [
+            16,
+            780,
+            496,
+            1140
+          ]
+        },
+        {
+          "slot": 6,
+          "row": 3,
+          "column": 2,
+          "card_id": "R3-P02-22",
+          "crop": [
+            528,
+            780,
+            1008,
+            1140
+          ]
+        },
+        {
+          "slot": 7,
+          "row": 4,
+          "column": 1,
+          "card_id": "R3-P02-23",
+          "crop": [
+            16,
+            1164,
+            496,
+            1524
+          ]
+        },
+        {
+          "slot": 8,
+          "row": 4,
+          "column": 2,
+          "card_id": "R3-P02-24",
+          "crop": [
+            528,
+            1164,
+            1008,
+            1524
+          ]
+        }
+      ],
+      "human_acceptance": "pending"
+    },
+    {
+      "batch_id": "P02-04",
+      "owner": "P02",
+      "source_file": "output/imagegen/card-style-20261115/P02-04.png",
+      "prompt_file": "output/imagegen/card-style-20261115/prompts/P02-04.txt",
+      "prompt_sha256": "01ffb2d8fb3864434a745454b19cef356d80b10f140f0cd8fb20a263f440225e",
+      "operation": "edit",
+      "reference_image": "output/imagegen/card-style-20261115/references/P02.png",
+      "reference_sha256": "94e4e1f4b20d082a86b2bcd5b4a7c8e39f95aadd766dd0d3ebd6f8030a801bca",
+      "model": "gpt-image-2.5-sunburst",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "quality": "medium",
+      "n": 1,
+      "slots": [
+        {
+          "slot": 1,
+          "row": 1,
+          "column": 1,
+          "card_id": "R3-P02-25",
+          "crop": [
+            16,
+            12,
+            496,
+            372
+          ]
+        },
+        {
+          "slot": 2,
+          "row": 1,
+          "column": 2,
+          "card_id": "R3-P02-26",
+          "crop": [
+            528,
+            12,
+            1008,
+            372
+          ]
+        },
+        {
+          "slot": 3,
+          "row": 2,
+          "column": 1,
+          "card_id": "R3-P02-27",
+          "crop": [
+            16,
+            396,
+            496,
+            756
+          ]
+        },
+        {
+          "slot": 4,
+          "row": 2,
+          "column": 2,
+          "card_id": "R3-P02-28",
+          "crop": [
+            528,
+            396,
+            1008,
+            756
+          ]
+        },
+        {
+          "slot": 5,
+          "row": 3,
+          "column": 1,
+          "card_id": "R3-P02-29",
+          "crop": [
+            16,
+            780,
+            496,
+            1140
+          ]
+        },
+        {
+          "slot": 6,
+          "row": 3,
+          "column": 2,
+          "card_id": "R3-P02-30",
+          "crop": [
+            528,
+            780,
+            1008,
+            1140
+          ]
+        },
+        {
+          "slot": 7,
+          "row": 4,
+          "column": 1,
+          "card_id": "R3-P02-31",
+          "crop": [
+            16,
+            1164,
+            496,
+            1524
+          ]
+        },
+        {
+          "slot": 8,
+          "row": 4,
+          "column": 2,
+          "card_id": "R3-P02-32",
+          "crop": [
+            528,
+            1164,
+            1008,
+            1524
+          ]
+        }
+      ],
+      "human_acceptance": "pending"
+    },
+    {
+      "batch_id": "P02-05",
+      "owner": "P02",
+      "source_file": "output/imagegen/card-style-20261115/P02-05.png",
+      "prompt_file": "output/imagegen/card-style-20261115/prompts/P02-05.txt",
+      "prompt_sha256": "b5cadd4a8b80aa4d0cc85ac62b37d981c7af54729834a90be199c6528ca579c4",
+      "operation": "edit",
+      "reference_image": "output/imagegen/card-style-20261115/references/P02.png",
+      "reference_sha256": "94e4e1f4b20d082a86b2bcd5b4a7c8e39f95aadd766dd0d3ebd6f8030a801bca",
+      "model": "gpt-image-2.5-sunburst",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "quality": "medium",
+      "n": 1,
+      "slots": [
+        {
+          "slot": 1,
+          "row": 1,
+          "column": 1,
+          "card_id": "R3-P02-33",
+          "crop": [
+            16,
+            12,
+            496,
+            372
+          ]
+        },
+        {
+          "slot": 2,
+          "row": 1,
+          "column": 2,
+          "card_id": "R3-P02-34",
+          "crop": [
+            528,
+            12,
+            1008,
+            372
+          ]
+        },
+        {
+          "slot": 3,
+          "row": 2,
+          "column": 1,
+          "card_id": "R3-P02-35",
+          "crop": [
+            16,
+            396,
+            496,
+            756
+          ]
+        },
+        {
+          "slot": 4,
+          "row": 2,
+          "column": 2,
+          "card_id": "R3-P02-36",
+          "crop": [
+            528,
+            396,
+            1008,
+            756
+          ]
+        },
+        {
+          "slot": 5,
+          "row": 3,
+          "column": 1,
+          "card_id": "R3-P02-37",
+          "crop": [
+            16,
+            780,
+            496,
+            1140
+          ]
+        },
+        {
+          "slot": 6,
+          "row": 3,
+          "column": 2,
+          "card_id": "R3-P02-38",
+          "crop": [
+            528,
+            780,
+            1008,
+            1140
+          ]
+        },
+        {
+          "slot": 7,
+          "row": 4,
+          "column": 1,
+          "card_id": "R3-P02-39",
+          "crop": [
+            16,
+            1164,
+            496,
+            1524
+          ]
+        },
+        {
+          "slot": 8,
+          "row": 4,
+          "column": 2,
+          "card_id": "R3-P02-40",
+          "crop": [
+            528,
+            1164,
+            1008,
+            1524
+          ]
+        }
+      ],
+      "human_acceptance": "pending"
+    },
+    {
+      "batch_id": "P03-01",
+      "owner": "P03",
+      "source_file": "output/imagegen/card-style-20261115/P03-01.png",
+      "prompt_file": "output/imagegen/card-style-20261115/prompts/P03-01.txt",
+      "prompt_sha256": "206801dc7e43171cec801168d9995801186d0b6bc7be0a9f203f806db70ded96",
+      "operation": "edit",
+      "reference_image": "output/imagegen/card-style-20261115/references/P03.png",
+      "reference_sha256": "917d8eabe84d79ec8e4a449463d08cae5d21028308f9889080d76f321e41792e",
+      "model": "gpt-image-2.5-sunburst",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "quality": "medium",
+      "n": 1,
+      "slots": [
+        {
+          "slot": 1,
+          "row": 1,
+          "column": 1,
+          "card_id": "R3-P03-01",
+          "crop": [
+            16,
+            12,
+            496,
+            372
+          ]
+        },
+        {
+          "slot": 2,
+          "row": 1,
+          "column": 2,
+          "card_id": "R3-P03-02",
+          "crop": [
+            528,
+            12,
+            1008,
+            372
+          ]
+        },
+        {
+          "slot": 3,
+          "row": 2,
+          "column": 1,
+          "card_id": "R3-P03-03",
+          "crop": [
+            16,
+            396,
+            496,
+            756
+          ]
+        },
+        {
+          "slot": 4,
+          "row": 2,
+          "column": 2,
+          "card_id": "R3-P03-04",
+          "crop": [
+            528,
+            396,
+            1008,
+            756
+          ]
+        },
+        {
+          "slot": 5,
+          "row": 3,
+          "column": 1,
+          "card_id": "R3-P03-05",
+          "crop": [
+            16,
+            780,
+            496,
+            1140
+          ]
+        },
+        {
+          "slot": 6,
+          "row": 3,
+          "column": 2,
+          "card_id": "R3-P03-06",
+          "crop": [
+            528,
+            780,
+            1008,
+            1140
+          ]
+        },
+        {
+          "slot": 7,
+          "row": 4,
+          "column": 1,
+          "card_id": "R3-P03-07",
+          "crop": [
+            16,
+            1164,
+            496,
+            1524
+          ]
+        },
+        {
+          "slot": 8,
+          "row": 4,
+          "column": 2,
+          "card_id": "R3-P03-08",
+          "crop": [
+            528,
+            1164,
+            1008,
+            1524
+          ]
+        }
+      ],
+      "human_acceptance": "pending"
+    },
+    {
+      "batch_id": "P03-02",
+      "owner": "P03",
+      "source_file": "output/imagegen/card-style-20261115/P03-02.png",
+      "prompt_file": "output/imagegen/card-style-20261115/prompts/P03-02.txt",
+      "prompt_sha256": "41a76374271d4adef8fca064ee429326024cf76d8f329bd71b9a76ef1d9dc442",
+      "operation": "edit",
+      "reference_image": "output/imagegen/card-style-20261115/references/P03.png",
+      "reference_sha256": "917d8eabe84d79ec8e4a449463d08cae5d21028308f9889080d76f321e41792e",
+      "model": "gpt-image-2.5-sunburst",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "quality": "medium",
+      "n": 1,
+      "slots": [
+        {
+          "slot": 1,
+          "row": 1,
+          "column": 1,
+          "card_id": "R3-P03-09",
+          "crop": [
+            16,
+            12,
+            496,
+            372
+          ]
+        },
+        {
+          "slot": 2,
+          "row": 1,
+          "column": 2,
+          "card_id": "R3-P03-10",
+          "crop": [
+            528,
+            12,
+            1008,
+            372
+          ]
+        },
+        {
+          "slot": 3,
+          "row": 2,
+          "column": 1,
+          "card_id": "R3-P03-11",
+          "crop": [
+            16,
+            396,
+            496,
+            756
+          ]
+        },
+        {
+          "slot": 4,
+          "row": 2,
+          "column": 2,
+          "card_id": "R3-P03-12",
+          "crop": [
+            528,
+            396,
+            1008,
+            756
+          ]
+        },
+        {
+          "slot": 5,
+          "row": 3,
+          "column": 1,
+          "card_id": "R3-P03-13",
+          "crop": [
+            16,
+            780,
+            496,
+            1140
+          ]
+        },
+        {
+          "slot": 6,
+          "row": 3,
+          "column": 2,
+          "card_id": "R3-P03-14",
+          "crop": [
+            528,
+            780,
+            1008,
+            1140
+          ]
+        },
+        {
+          "slot": 7,
+          "row": 4,
+          "column": 1,
+          "card_id": "R3-P03-15",
+          "crop": [
+            16,
+            1164,
+            496,
+            1524
+          ]
+        },
+        {
+          "slot": 8,
+          "row": 4,
+          "column": 2,
+          "card_id": "R3-P03-16",
+          "crop": [
+            528,
+            1164,
+            1008,
+            1524
+          ]
+        }
+      ],
+      "human_acceptance": "pending"
+    },
+    {
+      "batch_id": "P03-03",
+      "owner": "P03",
+      "source_file": "output/imagegen/card-style-20261115/P03-03.png",
+      "prompt_file": "output/imagegen/card-style-20261115/prompts/P03-03.txt",
+      "prompt_sha256": "06d86c9706f65e59a2cb138659db23bd82bb276db3fb307ae68df1198d103f74",
+      "operation": "edit",
+      "reference_image": "output/imagegen/card-style-20261115/references/P03.png",
+      "reference_sha256": "917d8eabe84d79ec8e4a449463d08cae5d21028308f9889080d76f321e41792e",
+      "model": "gpt-image-2.5-sunburst",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "quality": "medium",
+      "n": 1,
+      "slots": [
+        {
+          "slot": 1,
+          "row": 1,
+          "column": 1,
+          "card_id": "R3-P03-17",
+          "crop": [
+            16,
+            12,
+            496,
+            372
+          ]
+        },
+        {
+          "slot": 2,
+          "row": 1,
+          "column": 2,
+          "card_id": "R3-P03-18",
+          "crop": [
+            528,
+            12,
+            1008,
+            372
+          ]
+        },
+        {
+          "slot": 3,
+          "row": 2,
+          "column": 1,
+          "card_id": "R3-P03-19",
+          "crop": [
+            16,
+            396,
+            496,
+            756
+          ]
+        },
+        {
+          "slot": 4,
+          "row": 2,
+          "column": 2,
+          "card_id": "R3-P03-20",
+          "crop": [
+            528,
+            396,
+            1008,
+            756
+          ]
+        },
+        {
+          "slot": 5,
+          "row": 3,
+          "column": 1,
+          "card_id": "R3-P03-21",
+          "crop": [
+            16,
+            780,
+            496,
+            1140
+          ]
+        },
+        {
+          "slot": 6,
+          "row": 3,
+          "column": 2,
+          "card_id": "R3-P03-22",
+          "crop": [
+            528,
+            780,
+            1008,
+            1140
+          ]
+        },
+        {
+          "slot": 7,
+          "row": 4,
+          "column": 1,
+          "card_id": "R3-P03-23",
+          "crop": [
+            16,
+            1164,
+            496,
+            1524
+          ]
+        },
+        {
+          "slot": 8,
+          "row": 4,
+          "column": 2,
+          "card_id": "R3-P03-24",
+          "crop": [
+            528,
+            1164,
+            1008,
+            1524
+          ]
+        }
+      ],
+      "human_acceptance": "pending"
+    },
+    {
+      "batch_id": "P03-04",
+      "owner": "P03",
+      "source_file": "output/imagegen/card-style-20261115/P03-04.png",
+      "prompt_file": "output/imagegen/card-style-20261115/prompts/P03-04.txt",
+      "prompt_sha256": "7bc881201655e6b5357ec8a4d07455111a139e7618b6c9881336665c429df7fe",
+      "operation": "edit",
+      "reference_image": "output/imagegen/card-style-20261115/references/P03.png",
+      "reference_sha256": "917d8eabe84d79ec8e4a449463d08cae5d21028308f9889080d76f321e41792e",
+      "model": "gpt-image-2.5-sunburst",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "quality": "medium",
+      "n": 1,
+      "slots": [
+        {
+          "slot": 1,
+          "row": 1,
+          "column": 1,
+          "card_id": "R3-P03-25",
+          "crop": [
+            16,
+            12,
+            496,
+            372
+          ]
+        },
+        {
+          "slot": 2,
+          "row": 1,
+          "column": 2,
+          "card_id": "R3-P03-26",
+          "crop": [
+            528,
+            12,
+            1008,
+            372
+          ]
+        },
+        {
+          "slot": 3,
+          "row": 2,
+          "column": 1,
+          "card_id": "R3-P03-27",
+          "crop": [
+            16,
+            396,
+            496,
+            756
+          ]
+        },
+        {
+          "slot": 4,
+          "row": 2,
+          "column": 2,
+          "card_id": "R3-P03-28",
+          "crop": [
+            528,
+            396,
+            1008,
+            756
+          ]
+        },
+        {
+          "slot": 5,
+          "row": 3,
+          "column": 1,
+          "card_id": "R3-P03-29",
+          "crop": [
+            16,
+            780,
+            496,
+            1140
+          ]
+        },
+        {
+          "slot": 6,
+          "row": 3,
+          "column": 2,
+          "card_id": "R3-P03-30",
+          "crop": [
+            528,
+            780,
+            1008,
+            1140
+          ]
+        },
+        {
+          "slot": 7,
+          "row": 4,
+          "column": 1,
+          "card_id": "R3-P03-31",
+          "crop": [
+            16,
+            1164,
+            496,
+            1524
+          ]
+        },
+        {
+          "slot": 8,
+          "row": 4,
+          "column": 2,
+          "card_id": "R3-P03-32",
+          "crop": [
+            528,
+            1164,
+            1008,
+            1524
+          ]
+        }
+      ],
+      "human_acceptance": "pending"
+    },
+    {
+      "batch_id": "P03-05",
+      "owner": "P03",
+      "source_file": "output/imagegen/card-style-20261115/P03-05.png",
+      "prompt_file": "output/imagegen/card-style-20261115/prompts/P03-05.txt",
+      "prompt_sha256": "9b0395d2fa98e84ec1fe242d45a12de3503c6f1be10f2267cc1d1dd03259506b",
+      "operation": "edit",
+      "reference_image": "output/imagegen/card-style-20261115/references/P03.png",
+      "reference_sha256": "917d8eabe84d79ec8e4a449463d08cae5d21028308f9889080d76f321e41792e",
+      "model": "gpt-image-2.5-sunburst",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "quality": "medium",
+      "n": 1,
+      "slots": [
+        {
+          "slot": 1,
+          "row": 1,
+          "column": 1,
+          "card_id": "R3-P03-33",
+          "crop": [
+            16,
+            12,
+            496,
+            372
+          ]
+        },
+        {
+          "slot": 2,
+          "row": 1,
+          "column": 2,
+          "card_id": "R3-P03-34",
+          "crop": [
+            528,
+            12,
+            1008,
+            372
+          ]
+        },
+        {
+          "slot": 3,
+          "row": 2,
+          "column": 1,
+          "card_id": "R3-P03-35",
+          "crop": [
+            16,
+            396,
+            496,
+            756
+          ]
+        },
+        {
+          "slot": 4,
+          "row": 2,
+          "column": 2,
+          "card_id": "R3-P03-36",
+          "crop": [
+            528,
+            396,
+            1008,
+            756
+          ]
+        },
+        {
+          "slot": 5,
+          "row": 3,
+          "column": 1,
+          "card_id": "R3-P03-37",
+          "crop": [
+            16,
+            780,
+            496,
+            1140
+          ]
+        },
+        {
+          "slot": 6,
+          "row": 3,
+          "column": 2,
+          "card_id": "R3-P03-38",
+          "crop": [
+            528,
+            780,
+            1008,
+            1140
+          ]
+        },
+        {
+          "slot": 7,
+          "row": 4,
+          "column": 1,
+          "card_id": "R3-P03-39",
+          "crop": [
+            16,
+            1164,
+            496,
+            1524
+          ]
+        },
+        {
+          "slot": 8,
+          "row": 4,
+          "column": 2,
+          "card_id": "R3-P03-40",
+          "crop": [
+            528,
+            1164,
+            1008,
+            1524
+          ]
+        }
+      ],
+      "human_acceptance": "pending"
+    },
+    {
+      "batch_id": "P04-01",
+      "owner": "P04",
+      "source_file": "output/imagegen/card-style-20261115/P04-01.png",
+      "prompt_file": "output/imagegen/card-style-20261115/prompts/P04-01.txt",
+      "prompt_sha256": "537b582bfb0263738d14b1d61918418fab90f07b3e7bbf8e1c738f22da4d92d3",
+      "operation": "edit",
+      "reference_image": "output/imagegen/card-style-20261115/references/P04.png",
+      "reference_sha256": "6f28f67271ada9b8b4ad8f12c97d12debd7423f5b58e4fa9a550aa1ece03be26",
+      "model": "gpt-image-2.5-sunburst",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "quality": "medium",
+      "n": 1,
+      "slots": [
+        {
+          "slot": 1,
+          "row": 1,
+          "column": 1,
+          "card_id": "R3-P04-01",
+          "crop": [
+            16,
+            12,
+            496,
+            372
+          ]
+        },
+        {
+          "slot": 2,
+          "row": 1,
+          "column": 2,
+          "card_id": "R3-P04-02",
+          "crop": [
+            528,
+            12,
+            1008,
+            372
+          ]
+        },
+        {
+          "slot": 3,
+          "row": 2,
+          "column": 1,
+          "card_id": "R3-P04-03",
+          "crop": [
+            16,
+            396,
+            496,
+            756
+          ]
+        },
+        {
+          "slot": 4,
+          "row": 2,
+          "column": 2,
+          "card_id": "R3-P04-04",
+          "crop": [
+            528,
+            396,
+            1008,
+            756
+          ]
+        },
+        {
+          "slot": 5,
+          "row": 3,
+          "column": 1,
+          "card_id": "R3-P04-05",
+          "crop": [
+            16,
+            780,
+            496,
+            1140
+          ]
+        },
+        {
+          "slot": 6,
+          "row": 3,
+          "column": 2,
+          "card_id": "R3-P04-06",
+          "crop": [
+            528,
+            780,
+            1008,
+            1140
+          ]
+        },
+        {
+          "slot": 7,
+          "row": 4,
+          "column": 1,
+          "card_id": "R3-P04-07",
+          "crop": [
+            16,
+            1164,
+            496,
+            1524
+          ]
+        },
+        {
+          "slot": 8,
+          "row": 4,
+          "column": 2,
+          "card_id": "R3-P04-08",
+          "crop": [
+            528,
+            1164,
+            1008,
+            1524
+          ]
+        }
+      ],
+      "human_acceptance": "pending"
+    },
+    {
+      "batch_id": "P04-02",
+      "owner": "P04",
+      "source_file": "output/imagegen/card-style-20261115/P04-02.png",
+      "prompt_file": "output/imagegen/card-style-20261115/prompts/P04-02.txt",
+      "prompt_sha256": "0a33d756e69c3841f6133e3a9fc5ac66c5a21faebb7160d3bed17974b097a654",
+      "operation": "edit",
+      "reference_image": "output/imagegen/card-style-20261115/references/P04.png",
+      "reference_sha256": "6f28f67271ada9b8b4ad8f12c97d12debd7423f5b58e4fa9a550aa1ece03be26",
+      "model": "gpt-image-2.5-sunburst",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "quality": "medium",
+      "n": 1,
+      "slots": [
+        {
+          "slot": 1,
+          "row": 1,
+          "column": 1,
+          "card_id": "R3-P04-09",
+          "crop": [
+            16,
+            12,
+            496,
+            372
+          ]
+        },
+        {
+          "slot": 2,
+          "row": 1,
+          "column": 2,
+          "card_id": "R3-P04-10",
+          "crop": [
+            528,
+            12,
+            1008,
+            372
+          ]
+        },
+        {
+          "slot": 3,
+          "row": 2,
+          "column": 1,
+          "card_id": "R3-P04-11",
+          "crop": [
+            16,
+            396,
+            496,
+            756
+          ]
+        },
+        {
+          "slot": 4,
+          "row": 2,
+          "column": 2,
+          "card_id": "R3-P04-12",
+          "crop": [
+            528,
+            396,
+            1008,
+            756
+          ]
+        },
+        {
+          "slot": 5,
+          "row": 3,
+          "column": 1,
+          "card_id": "R3-P04-13",
+          "crop": [
+            16,
+            780,
+            496,
+            1140
+          ]
+        },
+        {
+          "slot": 6,
+          "row": 3,
+          "column": 2,
+          "card_id": "R3-P04-14",
+          "crop": [
+            528,
+            780,
+            1008,
+            1140
+          ]
+        },
+        {
+          "slot": 7,
+          "row": 4,
+          "column": 1,
+          "card_id": "R3-P04-15",
+          "crop": [
+            16,
+            1164,
+            496,
+            1524
+          ]
+        },
+        {
+          "slot": 8,
+          "row": 4,
+          "column": 2,
+          "card_id": "R3-P04-16",
+          "crop": [
+            528,
+            1164,
+            1008,
+            1524
+          ]
+        }
+      ],
+      "human_acceptance": "pending"
+    },
+    {
+      "batch_id": "P04-03",
+      "owner": "P04",
+      "source_file": "output/imagegen/card-style-20261115/P04-03.png",
+      "prompt_file": "output/imagegen/card-style-20261115/prompts/P04-03.txt",
+      "prompt_sha256": "0baee7ac3a5faa51a444e99ead1ff0035d5b9dacaa996fbba85d0a8cc99366fe",
+      "operation": "edit",
+      "reference_image": "output/imagegen/card-style-20261115/references/P04.png",
+      "reference_sha256": "6f28f67271ada9b8b4ad8f12c97d12debd7423f5b58e4fa9a550aa1ece03be26",
+      "model": "gpt-image-2.5-sunburst",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "quality": "medium",
+      "n": 1,
+      "slots": [
+        {
+          "slot": 1,
+          "row": 1,
+          "column": 1,
+          "card_id": "R3-P04-17",
+          "crop": [
+            16,
+            12,
+            496,
+            372
+          ]
+        },
+        {
+          "slot": 2,
+          "row": 1,
+          "column": 2,
+          "card_id": "R3-P04-18",
+          "crop": [
+            528,
+            12,
+            1008,
+            372
+          ]
+        },
+        {
+          "slot": 3,
+          "row": 2,
+          "column": 1,
+          "card_id": "R3-P04-19",
+          "crop": [
+            16,
+            396,
+            496,
+            756
+          ]
+        },
+        {
+          "slot": 4,
+          "row": 2,
+          "column": 2,
+          "card_id": "R3-P04-20",
+          "crop": [
+            528,
+            396,
+            1008,
+            756
+          ]
+        },
+        {
+          "slot": 5,
+          "row": 3,
+          "column": 1,
+          "card_id": "R3-P04-21",
+          "crop": [
+            16,
+            780,
+            496,
+            1140
+          ]
+        },
+        {
+          "slot": 6,
+          "row": 3,
+          "column": 2,
+          "card_id": "R3-P04-22",
+          "crop": [
+            528,
+            780,
+            1008,
+            1140
+          ]
+        },
+        {
+          "slot": 7,
+          "row": 4,
+          "column": 1,
+          "card_id": "R3-P04-23",
+          "crop": [
+            16,
+            1164,
+            496,
+            1524
+          ]
+        },
+        {
+          "slot": 8,
+          "row": 4,
+          "column": 2,
+          "card_id": "R3-P04-24",
+          "crop": [
+            528,
+            1164,
+            1008,
+            1524
+          ]
+        }
+      ],
+      "human_acceptance": "pending"
+    },
+    {
+      "batch_id": "P04-04",
+      "owner": "P04",
+      "source_file": "output/imagegen/card-style-20261115/P04-04.png",
+      "prompt_file": "output/imagegen/card-style-20261115/prompts/P04-04.txt",
+      "prompt_sha256": "f3bc0c0e43fa249345127f1d3d80d6125a83d2b2c14baccc136e4657ea832566",
+      "operation": "edit",
+      "reference_image": "output/imagegen/card-style-20261115/references/P04.png",
+      "reference_sha256": "6f28f67271ada9b8b4ad8f12c97d12debd7423f5b58e4fa9a550aa1ece03be26",
+      "model": "gpt-image-2.5-sunburst",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "quality": "medium",
+      "n": 1,
+      "slots": [
+        {
+          "slot": 1,
+          "row": 1,
+          "column": 1,
+          "card_id": "R3-P04-25",
+          "crop": [
+            16,
+            12,
+            496,
+            372
+          ]
+        },
+        {
+          "slot": 2,
+          "row": 1,
+          "column": 2,
+          "card_id": "R3-P04-26",
+          "crop": [
+            528,
+            12,
+            1008,
+            372
+          ]
+        },
+        {
+          "slot": 3,
+          "row": 2,
+          "column": 1,
+          "card_id": "R3-P04-27",
+          "crop": [
+            16,
+            396,
+            496,
+            756
+          ]
+        },
+        {
+          "slot": 4,
+          "row": 2,
+          "column": 2,
+          "card_id": "R3-P04-28",
+          "crop": [
+            528,
+            396,
+            1008,
+            756
+          ]
+        },
+        {
+          "slot": 5,
+          "row": 3,
+          "column": 1,
+          "card_id": "R3-P04-29",
+          "crop": [
+            16,
+            780,
+            496,
+            1140
+          ]
+        },
+        {
+          "slot": 6,
+          "row": 3,
+          "column": 2,
+          "card_id": "R3-P04-30",
+          "crop": [
+            528,
+            780,
+            1008,
+            1140
+          ]
+        },
+        {
+          "slot": 7,
+          "row": 4,
+          "column": 1,
+          "card_id": "R3-P04-31",
+          "crop": [
+            16,
+            1164,
+            496,
+            1524
+          ]
+        },
+        {
+          "slot": 8,
+          "row": 4,
+          "column": 2,
+          "card_id": "R3-P04-32",
+          "crop": [
+            528,
+            1164,
+            1008,
+            1524
+          ]
+        }
+      ],
+      "human_acceptance": "pending"
+    },
+    {
+      "batch_id": "P04-05",
+      "owner": "P04",
+      "source_file": "output/imagegen/card-style-20261115/P04-05.png",
+      "prompt_file": "output/imagegen/card-style-20261115/prompts/P04-05.txt",
+      "prompt_sha256": "81814b5e5ce3a2cfe2a8aed4cb559d35914f8b60356ef7f2b2fcce1fa54f115d",
+      "operation": "edit",
+      "reference_image": "output/imagegen/card-style-20261115/references/P04.png",
+      "reference_sha256": "6f28f67271ada9b8b4ad8f12c97d12debd7423f5b58e4fa9a550aa1ece03be26",
+      "model": "gpt-image-2.5-sunburst",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "quality": "medium",
+      "n": 1,
+      "slots": [
+        {
+          "slot": 1,
+          "row": 1,
+          "column": 1,
+          "card_id": "R3-P04-33",
+          "crop": [
+            16,
+            12,
+            496,
+            372
+          ]
+        },
+        {
+          "slot": 2,
+          "row": 1,
+          "column": 2,
+          "card_id": "R3-P04-34",
+          "crop": [
+            528,
+            12,
+            1008,
+            372
+          ]
+        },
+        {
+          "slot": 3,
+          "row": 2,
+          "column": 1,
+          "card_id": "R3-P04-35",
+          "crop": [
+            16,
+            396,
+            496,
+            756
+          ]
+        },
+        {
+          "slot": 4,
+          "row": 2,
+          "column": 2,
+          "card_id": "R3-P04-36",
+          "crop": [
+            528,
+            396,
+            1008,
+            756
+          ]
+        },
+        {
+          "slot": 5,
+          "row": 3,
+          "column": 1,
+          "card_id": "R3-P04-37",
+          "crop": [
+            16,
+            780,
+            496,
+            1140
+          ]
+        },
+        {
+          "slot": 6,
+          "row": 3,
+          "column": 2,
+          "card_id": "R3-P04-38",
+          "crop": [
+            528,
+            780,
+            1008,
+            1140
+          ]
+        },
+        {
+          "slot": 7,
+          "row": 4,
+          "column": 1,
+          "card_id": "R3-P04-39",
+          "crop": [
+            16,
+            1164,
+            496,
+            1524
+          ]
+        },
+        {
+          "slot": 8,
+          "row": 4,
+          "column": 2,
+          "card_id": "R3-P04-40",
+          "crop": [
+            528,
+            1164,
+            1008,
+            1524
+          ]
+        }
+      ],
+      "human_acceptance": "pending"
+    },
+    {
+      "batch_id": "C-01",
+      "owner": "C",
+      "source_file": "output/imagegen/card-style-20261115/C-01.png",
+      "prompt_file": "output/imagegen/card-style-20261115/prompts/C-01.txt",
+      "prompt_sha256": "5d4dac2f448ac2924d5f49d997ea1b856d10396986826a5aca48626b4b589398",
+      "operation": "edit",
+      "reference_image": "output/imagegen/card-style-20261115/references/all-characters.png",
+      "reference_sha256": "f368dea52797cb73ac44a99594a8a0858787a250a1cc073f56630aa321625417",
+      "model": "gpt-image-2.5-sunburst",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "quality": "medium",
+      "n": 1,
+      "slots": [
+        {
+          "slot": 1,
+          "row": 1,
+          "column": 1,
+          "card_id": "R3-C-01",
+          "crop": [
+            16,
+            12,
+            496,
+            372
+          ]
+        },
+        {
+          "slot": 2,
+          "row": 1,
+          "column": 2,
+          "card_id": "R3-C-02",
+          "crop": [
+            528,
+            12,
+            1008,
+            372
+          ]
+        },
+        {
+          "slot": 3,
+          "row": 2,
+          "column": 1,
+          "card_id": "R3-C-03",
+          "crop": [
+            16,
+            396,
+            496,
+            756
+          ]
+        },
+        {
+          "slot": 4,
+          "row": 2,
+          "column": 2,
+          "card_id": "R3-C-04",
+          "crop": [
+            528,
+            396,
+            1008,
+            756
+          ]
+        },
+        {
+          "slot": 5,
+          "row": 3,
+          "column": 1,
+          "card_id": "R3-C-05",
+          "crop": [
+            16,
+            780,
+            496,
+            1140
+          ]
+        },
+        {
+          "slot": 6,
+          "row": 3,
+          "column": 2,
+          "card_id": "R3-C-06",
+          "crop": [
+            528,
+            780,
+            1008,
+            1140
+          ]
+        },
+        {
+          "slot": 7,
+          "row": 4,
+          "column": 1,
+          "card_id": "R3-C-07",
+          "crop": [
+            16,
+            1164,
+            496,
+            1524
+          ]
+        },
+        {
+          "slot": 8,
+          "row": 4,
+          "column": 2,
+          "card_id": "R3-C-08",
+          "crop": [
+            528,
+            1164,
+            1008,
+            1524
+          ]
+        }
+      ],
+      "human_acceptance": "pending"
+    },
+    {
+      "batch_id": "C-02",
+      "owner": "C",
+      "source_file": "output/imagegen/card-style-20261115/C-02.png",
+      "prompt_file": "output/imagegen/card-style-20261115/prompts/C-02.txt",
+      "prompt_sha256": "e5d2376817caae773470afaf8d20db792f75ca2f45005e7932791cafd7ebc992",
+      "operation": "edit",
+      "reference_image": "output/imagegen/card-style-20261115/references/all-characters.png",
+      "reference_sha256": "f368dea52797cb73ac44a99594a8a0858787a250a1cc073f56630aa321625417",
+      "model": "gpt-image-2.5-sunburst",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "quality": "medium",
+      "n": 1,
+      "slots": [
+        {
+          "slot": 1,
+          "row": 1,
+          "column": 1,
+          "card_id": "R3-C-09",
+          "crop": [
+            16,
+            12,
+            496,
+            372
+          ]
+        },
+        {
+          "slot": 2,
+          "row": 1,
+          "column": 2,
+          "card_id": "R3-C-10",
+          "crop": [
+            528,
+            12,
+            1008,
+            372
+          ]
+        },
+        {
+          "slot": 3,
+          "row": 2,
+          "column": 1,
+          "card_id": "R3-C-11",
+          "crop": [
+            16,
+            396,
+            496,
+            756
+          ]
+        },
+        {
+          "slot": 4,
+          "row": 2,
+          "column": 2,
+          "card_id": "R3-C-12",
+          "crop": [
+            528,
+            396,
+            1008,
+            756
+          ]
+        },
+        {
+          "slot": 5,
+          "row": 3,
+          "column": 1,
+          "card_id": "R3-T201",
+          "crop": [
+            16,
+            780,
+            496,
+            1140
+          ]
+        },
+        {
+          "slot": 6,
+          "row": 3,
+          "column": 2,
+          "card_id": "R3-T202",
+          "crop": [
+            528,
+            780,
+            1008,
+            1140
+          ]
+        },
+        {
+          "slot": 7,
+          "row": 4,
+          "column": 1,
+          "card_id": null,
+          "crop": [
+            16,
+            1164,
+            496,
+            1524
+          ]
+        },
+        {
+          "slot": 8,
+          "row": 4,
+          "column": 2,
+          "card_id": null,
+          "crop": [
+            528,
+            1164,
+            1008,
+            1524
+          ]
+        }
+      ],
+      "human_acceptance": "pending"
+    }
+  ]
+}

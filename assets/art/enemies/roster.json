@@ -1,0 +1,429 @@
+{
+  "requirements": [
+    "UIR-069"
+  ],
+  "expected_count": 60,
+  "enemies": {
+    "N01": {
+      "rig": "res://assets/art/actor-rig-drawings/N01/rig.json",
+      "texture": "res://assets/art/actor-rig-pilot/N01/body.png",
+      "version": 4,
+      "name": "课后习题",
+      "source": "existing reviewed N01 V4"
+    },
+    "N02": {
+      "rig": "res://assets/art/enemies/N02/rig.json",
+      "texture": "res://assets/art/enemies/N02/body.png",
+      "version": 13,
+      "name": "英语小作文",
+      "source": "output/imagegen/enemy-roster-20261115/N02-v1.png"
+    },
+    "N03": {
+      "rig": "res://assets/art/enemies/N03/rig.json",
+      "texture": "res://assets/art/enemies/N03/body.png",
+      "version": 13,
+      "name": "C语言练习",
+      "source": "output/imagegen/enemy-roster-20261115/N03-v1.png"
+    },
+    "N04": {
+      "rig": "res://assets/art/enemies/N04/rig.json",
+      "texture": "res://assets/art/enemies/N04/body.png",
+      "version": 13,
+      "name": "实验预习",
+      "source": "output/imagegen/enemy-roster-20261115/N04-v1.png"
+    },
+    "Q01": {
+      "rig": "res://assets/art/enemies/Q01/rig.json",
+      "texture": "res://assets/art/enemies/Q01/body.png",
+      "version": 13,
+      "name": "随堂小测",
+      "source": "output/imagegen/enemy-roster-20261115/Q01-v1.png"
+    },
+    "B01": {
+      "rig": "res://assets/art/enemies/B01/rig.json",
+      "texture": "res://assets/art/enemies/B01/body.png",
+      "version": 13,
+      "name": "大一上·高数期末",
+      "source": "output/imagegen/enemy-roster-20261115/B01-v1.png"
+    },
+    "E01": {
+      "rig": "res://assets/art/enemies/E01/rig.json",
+      "texture": "res://assets/art/enemies/E01/body.png",
+      "version": 13,
+      "name": "期中考试",
+      "source": "output/imagegen/enemy-roster-20261115/E01-v1.png"
+    },
+    "E02": {
+      "rig": "res://assets/art/enemies/E02/rig.json",
+      "texture": "res://assets/art/enemies/E02/body.png",
+      "version": 13,
+      "name": "课程设计中期检查",
+      "source": "output/imagegen/enemy-roster-20261115/E02-v1.png"
+    },
+    "E03": {
+      "rig": "res://assets/art/enemies/E03/rig.json",
+      "texture": "res://assets/art/enemies/E03/body.png",
+      "version": 13,
+      "name": "小组项目冲刺",
+      "source": "output/imagegen/enemy-roster-20261115/E03-v1.png"
+    },
+    "E04_1": {
+      "rig": "res://assets/art/enemies/E04_1/rig.json",
+      "texture": "res://assets/art/enemies/E04_1/body.png",
+      "version": 13,
+      "name": "建模",
+      "source": "output/imagegen/enemy-roster-20261115/E04_1-v1.png"
+    },
+    "E04_2": {
+      "rig": "res://assets/art/enemies/E04_2/rig.json",
+      "texture": "res://assets/art/enemies/E04_2/body.png",
+      "version": 13,
+      "name": "编程",
+      "source": "output/imagegen/enemy-roster-20261115/E04_2-v1.png"
+    },
+    "E04_3": {
+      "rig": "res://assets/art/enemies/E04_3/rig.json",
+      "texture": "res://assets/art/enemies/E04_3/body.png",
+      "version": 13,
+      "name": "论文",
+      "source": "output/imagegen/enemy-roster-20261115/E04_3-v1.png"
+    },
+    "E05": {
+      "rig": "res://assets/art/enemies/E05/rig.json",
+      "texture": "res://assets/art/enemies/E05/body.png",
+      "version": 13,
+      "name": "保研夏令营",
+      "source": "output/imagegen/enemy-roster-20261115/E05-v1.png"
+    },
+    "E06": {
+      "rig": "res://assets/art/enemies/E06/rig.json",
+      "texture": "res://assets/art/enemies/E06/body.png",
+      "version": 13,
+      "name": "实习群面",
+      "source": "output/imagegen/enemy-roster-20261115/E06-v1.png"
+    },
+    "E07": {
+      "rig": "res://assets/art/enemies/E07/rig.json",
+      "texture": "res://assets/art/enemies/E07/body.png",
+      "version": 13,
+      "name": "补考",
+      "source": "output/imagegen/enemy-roster-20261115/E07-v1.png"
+    },
+    "Q0A_1": {
+      "rig": "res://assets/art/enemies/Q0A_1/rig.json",
+      "texture": "res://assets/art/enemies/Q0A_1/body.png",
+      "version": 13,
+      "name": "需求分析",
+      "source": "output/imagegen/enemy-roster-20261115/Q0A_1-v1.png"
+    },
+    "Q0A_2": {
+      "rig": "res://assets/art/enemies/Q0A_2/rig.json",
+      "texture": "res://assets/art/enemies/Q0A_2/body.png",
+      "version": 13,
+      "name": "文档编写",
+      "source": "output/imagegen/enemy-roster-20261115/Q0A_2-v1.png"
+    },
+    "Q0A_3": {
+      "rig": "res://assets/art/enemies/Q0A_3/rig.json",
+      "texture": "res://assets/art/enemies/Q0A_3/body.png",
+      "version": 13,
+      "name": "代码开发",
+      "source": "output/imagegen/enemy-roster-20261115/Q0A_3-v1.png"
+    },
+    "Q0A_3_1": {
+      "rig": "res://assets/art/enemies/Q0A_3_1/rig.json",
+      "texture": "res://assets/art/enemies/Q0A_3_1/body.png",
+      "version": 13,
+      "name": "测试运行",
+      "source": "output/imagegen/enemy-roster-20261115/Q0A_3_1-v1.png"
+    },
+    "Q0B_1": {
+      "rig": "res://assets/art/enemies/Q0B_1/rig.json",
+      "texture": "res://assets/art/enemies/Q0B_1/body.png",
+      "version": 13,
+      "name": "答辩作业",
+      "source": "output/imagegen/enemy-roster-20261115/Q0B_1-v1.png"
+    },
+    "Q0B_2": {
+      "rig": "res://assets/art/enemies/Q0B_2/rig.json",
+      "texture": "res://assets/art/enemies/Q0B_2/body.png",
+      "version": 13,
+      "name": "作业答辩",
+      "source": "output/imagegen/enemy-roster-20261115/Q0B_2-v1.png"
+    },
+    "Q0C": {
+      "rig": "res://assets/art/enemies/Q0C/rig.json",
+      "texture": "res://assets/art/enemies/Q0C/body.png",
+      "version": 13,
+      "name": "英语四级",
+      "source": "output/imagegen/enemy-roster-20261115/Q0C-v1.png"
+    },
+    "Q0D": {
+      "rig": "res://assets/art/enemies/Q0D/rig.json",
+      "texture": "res://assets/art/enemies/Q0D/body.png",
+      "version": 13,
+      "name": "英语六级",
+      "source": "output/imagegen/enemy-roster-20261115/Q0D-v1.png"
+    },
+    "Q0E_1": {
+      "rig": "res://assets/art/enemies/Q0E_1/rig.json",
+      "texture": "res://assets/art/enemies/Q0E_1/body.png",
+      "version": 13,
+      "name": "大项目",
+      "source": "output/imagegen/enemy-roster-20261115/Q0E_1-v1.png"
+    },
+    "Q0E_2": {
+      "rig": "res://assets/art/enemies/Q0E_2/rig.json",
+      "texture": "res://assets/art/enemies/Q0E_2/body.png",
+      "version": 13,
+      "name": "额外需求1",
+      "source": "output/imagegen/enemy-roster-20261115/Q0E_2-v1.png"
+    },
+    "Q0E_3": {
+      "rig": "res://assets/art/enemies/Q0E_3/rig.json",
+      "texture": "res://assets/art/enemies/Q0E_3/body.png",
+      "version": 13,
+      "name": "额外需求2",
+      "source": "output/imagegen/enemy-roster-20261115/Q0E_3-v1.png"
+    },
+    "N13": {
+      "rig": "res://assets/art/enemies/N13/rig.json",
+      "texture": "res://assets/art/enemies/N13/body.png",
+      "version": 13,
+      "name": "课后作业",
+      "source": "output/imagegen/enemy-roster-20261115/N13-v1.png"
+    },
+    "N14": {
+      "rig": "res://assets/art/enemies/N14/rig.json",
+      "texture": "res://assets/art/enemies/N14/body.png",
+      "version": 13,
+      "name": "数学基础",
+      "source": "output/imagegen/enemy-roster-20261115/N14-v1.png"
+    },
+    "N15": {
+      "rig": "res://assets/art/enemies/N15/rig.json",
+      "texture": "res://assets/art/enemies/N15/body.png",
+      "version": 13,
+      "name": "程序",
+      "source": "output/imagegen/enemy-roster-20261115/N15-v1.png"
+    },
+    "N16": {
+      "rig": "res://assets/art/enemies/N16/rig.json",
+      "texture": "res://assets/art/enemies/N16/body.png",
+      "version": 13,
+      "name": "预习",
+      "source": "output/imagegen/enemy-roster-20261115/N16-v1.png"
+    },
+    "N17": {
+      "rig": "res://assets/art/enemies/N17/rig.json",
+      "texture": "res://assets/art/enemies/N17/body.png",
+      "version": 13,
+      "name": "文献阅读",
+      "source": "output/imagegen/enemy-roster-20261115/N17-v1.png"
+    },
+    "N18": {
+      "rig": "res://assets/art/enemies/N18/rig.json",
+      "texture": "res://assets/art/enemies/N18/body.png",
+      "version": 13,
+      "name": "英语作文",
+      "source": "output/imagegen/enemy-roster-20261115/N18-v1.png"
+    },
+    "N19": {
+      "rig": "res://assets/art/enemies/N19/rig.json",
+      "texture": "res://assets/art/enemies/N19/body.png",
+      "version": 13,
+      "name": "项目",
+      "source": "output/imagegen/enemy-roster-20261115/N19-v1.png"
+    },
+    "N20": {
+      "rig": "res://assets/art/enemies/N20/rig.json",
+      "texture": "res://assets/art/enemies/N20/body.png",
+      "version": 13,
+      "name": "六级英语词汇",
+      "source": "output/imagegen/enemy-roster-20261115/N20-v1.png"
+    },
+    "N21": {
+      "rig": "res://assets/art/enemies/N21/rig.json",
+      "texture": "res://assets/art/enemies/N21/body.png",
+      "version": 13,
+      "name": "考前复习",
+      "source": "output/imagegen/enemy-roster-20261115/N21-v1.png"
+    },
+    "N22": {
+      "rig": "res://assets/art/enemies/N22/rig.json",
+      "texture": "res://assets/art/enemies/N22/body.png",
+      "version": 13,
+      "name": "自我介绍",
+      "source": "output/imagegen/enemy-roster-20261115/N22-v1.png"
+    },
+    "N23": {
+      "rig": "res://assets/art/enemies/N23/rig.json",
+      "texture": "res://assets/art/enemies/N23/body.png",
+      "version": 13,
+      "name": "小组展示",
+      "source": "output/imagegen/enemy-roster-20261115/N23-v1.png"
+    },
+    "N24": {
+      "rig": "res://assets/art/enemies/N24/rig.json",
+      "texture": "res://assets/art/enemies/N24/body.png",
+      "version": 13,
+      "name": "体育测试",
+      "source": "output/imagegen/enemy-roster-20261115/N24-v1.png"
+    },
+    "N25": {
+      "rig": "res://assets/art/enemies/N25/rig.json",
+      "texture": "res://assets/art/enemies/N25/body.png",
+      "version": 13,
+      "name": "导师约谈",
+      "source": "output/imagegen/enemy-roster-20261115/N25-v1.png"
+    },
+    "N26": {
+      "rig": "res://assets/art/enemies/N26/rig.json",
+      "texture": "res://assets/art/enemies/N26/body.png",
+      "version": 13,
+      "name": "讲座考勤",
+      "source": "output/imagegen/enemy-roster-20261115/N26-v1.png"
+    },
+    "N27": {
+      "rig": "res://assets/art/enemies/N27/rig.json",
+      "texture": "res://assets/art/enemies/N27/body.png",
+      "version": 13,
+      "name": "小组作业",
+      "source": "output/imagegen/enemy-roster-20261115/N27-v1.png"
+    },
+    "N28": {
+      "rig": "res://assets/art/enemies/N28/rig.json",
+      "texture": "res://assets/art/enemies/N28/body.png",
+      "version": 13,
+      "name": "早八",
+      "source": "output/imagegen/enemy-roster-20261115/N28-v1.png"
+    },
+    "N29": {
+      "rig": "res://assets/art/enemies/N29/rig.json",
+      "texture": "res://assets/art/enemies/N29/body.png",
+      "version": 13,
+      "name": "校园网发力",
+      "source": "output/imagegen/enemy-roster-20261115/N29-v1.png"
+    },
+    "N30": {
+      "rig": "res://assets/art/enemies/N30/rig.json",
+      "texture": "res://assets/art/enemies/N30/body.png",
+      "version": 13,
+      "name": "组会汇报",
+      "source": "output/imagegen/enemy-roster-20261115/N30-v1.png"
+    },
+    "N31": {
+      "rig": "res://assets/art/enemies/N31/rig.json",
+      "texture": "res://assets/art/enemies/N31/body.png",
+      "version": 13,
+      "name": "导师催进度",
+      "source": "output/imagegen/enemy-roster-20261115/N31-v1.png"
+    },
+    "N32": {
+      "rig": "res://assets/art/enemies/N32/rig.json",
+      "texture": "res://assets/art/enemies/N32/body.png",
+      "version": 13,
+      "name": "奖学金评定",
+      "source": "output/imagegen/enemy-roster-20261115/N32-v1.png"
+    },
+    "N33": {
+      "rig": "res://assets/art/enemies/N33/rig.json",
+      "texture": "res://assets/art/enemies/N33/body.png",
+      "version": 13,
+      "name": "论文查重",
+      "source": "output/imagegen/enemy-roster-20261115/N33-v1.png"
+    },
+    "N34": {
+      "rig": "res://assets/art/enemies/N34/rig.json",
+      "texture": "res://assets/art/enemies/N34/body.png",
+      "version": 13,
+      "name": "图书馆占座",
+      "source": "output/imagegen/enemy-roster-20261115/N34-v1.png"
+    },
+    "N35": {
+      "rig": "res://assets/art/enemies/N35/rig.json",
+      "texture": "res://assets/art/enemies/N35/body.png",
+      "version": 13,
+      "name": "实习面试",
+      "source": "output/imagegen/enemy-roster-20261115/N35-v1.png"
+    },
+    "N36": {
+      "rig": "res://assets/art/enemies/N36/rig.json",
+      "texture": "res://assets/art/enemies/N36/body.png",
+      "version": 13,
+      "name": "四六级报名",
+      "source": "output/imagegen/enemy-roster-20261115/N36-v1.png"
+    },
+    "N37": {
+      "rig": "res://assets/art/enemies/N37/rig.json",
+      "texture": "res://assets/art/enemies/N37/body.png",
+      "version": 13,
+      "name": "线上考试",
+      "source": "output/imagegen/enemy-roster-20261115/N37-v1.png"
+    },
+    "N38": {
+      "rig": "res://assets/art/enemies/N38/rig.json",
+      "texture": "res://assets/art/enemies/N38/body.png",
+      "version": 13,
+      "name": "小组互评",
+      "source": "output/imagegen/enemy-roster-20261115/N38-v1.png"
+    },
+    "FY_B1_TASK": {
+      "rig": "res://assets/art/enemies/FY_B1_TASK/rig.json",
+      "texture": "res://assets/art/enemies/FY_B1_TASK/body.png",
+      "version": 13,
+      "name": "大一学年综合考核",
+      "source": "output/imagegen/enemy-roster-20261115/FY_B1_TASK-v1.png"
+    },
+    "FY_B2_TASK": {
+      "rig": "res://assets/art/enemies/FY_B2_TASK/rig.json",
+      "texture": "res://assets/art/enemies/FY_B2_TASK/body.png",
+      "version": 13,
+      "name": "大二学年综合评测",
+      "source": "output/imagegen/enemy-roster-20261115/FY_B2_TASK-v1.png"
+    },
+    "FY_B3_TASK": {
+      "rig": "res://assets/art/enemies/FY_B3_TASK/rig.json",
+      "texture": "res://assets/art/enemies/FY_B3_TASK/body.png",
+      "version": 13,
+      "name": "大三学年综合评测",
+      "source": "output/imagegen/enemy-roster-20261115/FY_B3_TASK-v1.png"
+    },
+    "FY_B4_TASK": {
+      "rig": "res://assets/art/enemies/FY_B4_TASK/rig.json",
+      "texture": "res://assets/art/enemies/FY_B4_TASK/body.png",
+      "version": 13,
+      "name": "毕业答辩",
+      "source": "output/imagegen/enemy-roster-20261115/FY_B4_TASK-v1.png"
+    },
+    "FY_ROUTE_job_TASK": {
+      "rig": "res://assets/art/enemies/FY_ROUTE_job_TASK/rig.json",
+      "texture": "res://assets/art/enemies/FY_ROUTE_job_TASK/body.png",
+      "version": 13,
+      "name": "秋招终面",
+      "source": "output/imagegen/enemy-roster-20261115/FY_ROUTE_job_TASK-v1.png"
+    },
+    "FY_ROUTE_exam_TASK": {
+      "rig": "res://assets/art/enemies/FY_ROUTE_exam_TASK/rig.json",
+      "texture": "res://assets/art/enemies/FY_ROUTE_exam_TASK/body.png",
+      "version": 13,
+      "name": "考研复试",
+      "source": "output/imagegen/enemy-roster-20261115/FY_ROUTE_exam_TASK-v1.png"
+    },
+    "FY_ROUTE_research_TASK": {
+      "rig": "res://assets/art/enemies/FY_ROUTE_research_TASK/rig.json",
+      "texture": "res://assets/art/enemies/FY_ROUTE_research_TASK/body.png",
+      "version": 13,
+      "name": "保研答辩",
+      "source": "output/imagegen/enemy-roster-20261115/FY_ROUTE_research_TASK-v1.png"
+    },
+    "FY_ROUTE_abroad_TASK": {
+      "rig": "res://assets/art/enemies/FY_ROUTE_abroad_TASK/rig.json",
+      "texture": "res://assets/art/enemies/FY_ROUTE_abroad_TASK/body.png",
+      "version": 13,
+      "name": "留学面试",
+      "source": "output/imagegen/enemy-roster-20261115/FY_ROUTE_abroad_TASK-v1.png"
+    }
+  },
+  "complete": true
+}

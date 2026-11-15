@@ -1,0 +1,32 @@
+{
+  "asset_id": "FAMILIAR",
+  "requirement_id": "UIR-070",
+  "version": 1,
+  "title": "校园熟人",
+  "prompt_file": "output/imagegen/event-polish-20261115/FAMILIAR-v1-prompt.txt",
+  "prompt_sha256": "d93d1e5304e487970e637a2c39a1778dbfbc58d65a3d413ae14ea766ff4f2369",
+  "provider": "https://api-slb.jiji.cc/v1",
+  "model": "gpt-image-2.5-sunburst",
+  "requested_size": "1024x1024",
+  "actual_size": [
+    1024,
+    1024
+  ],
+  "quality": "high",
+  "original": "output/imagegen/event-polish-20261115/originals/FAMILIAR-v1.png",
+  "original_sha256": "b8f3814601aa3ff1068f4326c7d75a0434966740ef71e18ec58683898a9f6793",
+  "selected": true,
+  "review_status": "AI visual review, final user art judgment remains",
+  "derivatives": [
+    {
+      "path": "assets/art/events/FAMILIAR/illustration.png",
+      "sha256": "dc40fb64aec6e8c98f6cc38e448d33cce163a0744031709cdf9ea04c2b306088",
+      "processing": "Original RGB untouched; add 66px smoothstep alpha perimeter, no content crop/stretch."
+    },
+    {
+      "path": "assets/art/events/FAMILIAR/background.png",
+      "sha256": "c7eaca6de4d1782e992d6ac7b7d8083323f44e684555ad8b25d0d63970b48971",
+      "processing": "768x768 Lanczos, Gaussian blur radius16; UI uses aspect-preserving cover and dark overlay."
+    }
+  ]
+}

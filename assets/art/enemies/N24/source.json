@@ -1,0 +1,67 @@
+{
+  "id": "N24",
+  "version": 13,
+  "name": "体育测试",
+  "requirements": [
+    "UIR-069",
+    "UIR-011",
+    "UIR-013",
+    "UIR-051",
+    "UIR-052",
+    "UIR-054",
+    "UIR-057",
+    "UIR-059"
+  ],
+  "source": "output/imagegen/enemy-roster-20261115/N24-v1.png",
+  "source_sha256": "469cc9baa2346557d761218c27c90704597b1b9ff2f2dc5d535acd209814d6cb",
+  "source_size": [
+    1024,
+    1024
+  ],
+  "method": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+  "outputs": [
+    {
+      "file": "assets/art/enemies/N24/body.png",
+      "size": [
+        747,
+        811
+      ],
+      "sha256": "f78c5fed9e52b2edf62ecc531a6d5b56af17d4e6484127852f4492a96e27dbda",
+      "source_bbox": [
+        277,
+        120,
+        1024,
+        931
+      ]
+    },
+    {
+      "file": "assets/art/enemies/N24/attack.png",
+      "size": [
+        189,
+        203
+      ],
+      "sha256": "ed62e9100346abb92f3329fa82957ea3d52b01f9385bfd1713c63180def6bf7b",
+      "source_bbox": [
+        24,
+        208,
+        213,
+        411
+      ]
+    },
+    {
+      "file": "assets/art/enemies/N24/accent.png",
+      "size": [
+        216,
+        223
+      ],
+      "sha256": "baa6d30e01c61a387b55b6366ce4a6a5d639ea547a0804584c12ff33eb957aa4",
+      "source_bbox": [
+        25,
+        664,
+        241,
+        887
+      ]
+    }
+  ],
+  "visual_acceptance": "pending review; machine metrics do not establish visual quality"
+}

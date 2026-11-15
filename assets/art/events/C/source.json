@@ -1,0 +1,32 @@
+{
+  "asset_id": "C",
+  "requirement_id": "UIR-070",
+  "version": 1,
+  "title": "社团活动",
+  "prompt_file": "output/imagegen/event-polish-20261115/C-v1-prompt.txt",
+  "prompt_sha256": "ce713c41cd932522dbcf4c9752267e09dc57f389b538c1260bac6469451ca503",
+  "provider": "https://api-slb.jiji.cc/v1",
+  "model": "gpt-image-2.5-sunburst",
+  "requested_size": "1024x1024",
+  "actual_size": [
+    1024,
+    1024
+  ],
+  "quality": "high",
+  "original": "output/imagegen/event-polish-20261115/originals/C-v1.png",
+  "original_sha256": "d41daa857bcccc14360a8bb6fa6974282dfec7d665b3b0d63167dcfca7cdf638",
+  "selected": true,
+  "review_status": "AI visual review, final user art judgment remains",
+  "derivatives": [
+    {
+      "path": "assets/art/events/C/illustration.png",
+      "sha256": "09dc36ecadd6787f30396b3cb8ad307f48b80ec5501f9b07007e6c1ec340c2f5",
+      "processing": "Original RGB untouched; add 66px smoothstep alpha perimeter, no content crop/stretch."
+    },
+    {
+      "path": "assets/art/events/C/background.png",
+      "sha256": "9636cd6fb68b9ec98e732b11fd612290bef2692b8c0ad7bc5d655a625016713f",
+      "processing": "768x768 Lanczos, Gaussian blur radius16; UI uses aspect-preserving cover and dark overlay."
+    }
+  ]
+}

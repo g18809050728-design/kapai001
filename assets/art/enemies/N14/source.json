@@ -1,0 +1,67 @@
+{
+  "id": "N14",
+  "version": 13,
+  "name": "数学基础",
+  "requirements": [
+    "UIR-069",
+    "UIR-011",
+    "UIR-013",
+    "UIR-051",
+    "UIR-052",
+    "UIR-054",
+    "UIR-057",
+    "UIR-059"
+  ],
+  "source": "output/imagegen/enemy-roster-20261115/N14-v1.png",
+  "source_sha256": "f3fb8fdcea71d55544a9c25f5a6cdc00df049a5673d22ed93427be7e3d19ed48",
+  "source_size": [
+    1024,
+    1024
+  ],
+  "method": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+  "outputs": [
+    {
+      "file": "assets/art/enemies/N14/body.png",
+      "size": [
+        775,
+        856
+      ],
+      "sha256": "d188e1ddd748c9ac0b1184fa07a0e89af05e7eab1cd10e8c5adc503aed7f2f6b",
+      "source_bbox": [
+        249,
+        88,
+        1024,
+        944
+      ]
+    },
+    {
+      "file": "assets/art/enemies/N14/attack.png",
+      "size": [
+        195,
+        423
+      ],
+      "sha256": "beeed1782a586ef4665176e5a02791e89c6e409228439ba572598fc77bb36f31",
+      "source_bbox": [
+        24,
+        106,
+        219,
+        529
+      ]
+    },
+    {
+      "file": "assets/art/enemies/N14/accent.png",
+      "size": [
+        215,
+        198
+      ],
+      "sha256": "f42fc171c0562ade5e75af3b54db40349e3bb853c5165a780e25aa322ace75c5",
+      "source_bbox": [
+        25,
+        718,
+        240,
+        916
+      ]
+    }
+  ],
+  "visual_acceptance": "pending review; machine metrics do not establish visual quality"
+}

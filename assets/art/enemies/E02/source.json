@@ -1,0 +1,67 @@
+{
+  "id": "E02",
+  "version": 13,
+  "name": "课程设计中期检查",
+  "requirements": [
+    "UIR-069",
+    "UIR-011",
+    "UIR-013",
+    "UIR-051",
+    "UIR-052",
+    "UIR-054",
+    "UIR-057",
+    "UIR-059"
+  ],
+  "source": "output/imagegen/enemy-roster-20261115/E02-v1.png",
+  "source_sha256": "1cd0c9e99d8a71a08db1f5ac3523aba768c7b393b8af19a0dca3047edaf531d9",
+  "source_size": [
+    1024,
+    1024
+  ],
+  "method": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+  "outputs": [
+    {
+      "file": "assets/art/enemies/E02/body.png",
+      "size": [
+        728,
+        941
+      ],
+      "sha256": "38763eedcf9f09668781580cda34fa264c748c6142eec5d0fa6afbfd6db4fbb1",
+      "source_bbox": [
+        276,
+        50,
+        1004,
+        991
+      ]
+    },
+    {
+      "file": "assets/art/enemies/E02/attack.png",
+      "size": [
+        257,
+        359
+      ],
+      "sha256": "2ab2c05cdd29f74fde96524888eb8ec1954ebf9a220b92c02394169df9227b9d",
+      "source_bbox": [
+        24,
+        99,
+        281,
+        458
+      ]
+    },
+    {
+      "file": "assets/art/enemies/E02/accent.png",
+      "size": [
+        221,
+        258
+      ],
+      "sha256": "825c35e52b59930695d1f399e4aa794b2c3d0422c17896f9094bf8b44a8b390e",
+      "source_bbox": [
+        24,
+        678,
+        245,
+        936
+      ]
+    }
+  ],
+  "visual_acceptance": "pending review; machine metrics do not establish visual quality"
+}

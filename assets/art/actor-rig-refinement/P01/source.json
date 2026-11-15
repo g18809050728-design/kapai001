@@ -1,0 +1,67 @@
+{
+  "version": 3,
+  "status": "refinement_pending_user_visual_review",
+  "api_actor_images": 0,
+  "source_rig": "assets/art/actor-rig-polish/P01/rig.json",
+  "local_processing": {
+    "laptop.png": "traced prop; reconstruct hidden pixels from adjacent original prop rows",
+    "held_forearm.png": "original sleeve/forearm; 16 px overlap under the palm",
+    "held_hand.png": "traced original palm/fingers overlay",
+    "head_blink.png": "local iris replacement with skin sampled below eye and closed eyelid; hair/face/glasses unchanged"
+  },
+  "requirements": [
+    "UIR-011",
+    "UIR-013",
+    "UIR-051",
+    "UIR-052",
+    "UIR-054",
+    "UIR-057",
+    "UIR-059"
+  ],
+  "textures": [
+    {
+      "file": "assets/art/actor-rig-pilot/P01/far_upper.png",
+      "sha256": "63c61eea199bdfae060d93996f4eaa7c42116db0087a5ada8e5c376e0d133f30"
+    },
+    {
+      "file": "assets/art/actor-rig-pilot/P01/front_leg.png",
+      "sha256": "def3889cb24289ffc8c6e22daca820956fd5bda72dc07aed7082b9181994bc4c"
+    },
+    {
+      "file": "assets/art/actor-rig-pilot/P01/head.png",
+      "sha256": "b86739d090478f1f0c9434439b3eeab663ec8ff1e55bf450395863cd73c1bf16"
+    },
+    {
+      "file": "assets/art/actor-rig-pilot/P01/near_forearm.png",
+      "sha256": "7e9f6e636036f2dd4e277fd101959e16669e4ddbc279d0a28be1d59b28e63576"
+    },
+    {
+      "file": "assets/art/actor-rig-pilot/P01/near_upper.png",
+      "sha256": "47eedb57f66473606ca2f9393315d6759062f89859aee4c5f2cdb42100ff1f50"
+    },
+    {
+      "file": "assets/art/actor-rig-pilot/P01/rear_leg.png",
+      "sha256": "177ac5194f363c0e6b5645895cbc20d0cbc39cc64ed1364b8bdd05d6e9944586"
+    },
+    {
+      "file": "assets/art/actor-rig-pilot/P01/torso.png",
+      "sha256": "3aae6546a02c2fa779f5e54a1ff7b8c209cce96f612a6edc22710108a73d7208"
+    },
+    {
+      "file": "assets/art/actor-rig-refinement/P01/held_forearm.png",
+      "sha256": "0c9a5f19272585197762abffd7b1e464ae2d514905753258189980078395a4eb"
+    },
+    {
+      "file": "assets/art/actor-rig-refinement/P01/held_hand.png",
+      "sha256": "8632826aa2bc1077b331cd826c1cda7d5b3b34440a47c2eee1ea04dda1d79e27"
+    },
+    {
+      "file": "assets/art/actor-rig-refinement/P01/laptop.png",
+      "sha256": "273016c9c3106e49ee881c1133a3fa99b97687aae40e7b1dbad2fe31d1e21311"
+    },
+    {
+      "file": "assets/art/actor-rig-refinement/P01/head_blink.png",
+      "sha256": "e4e7bde45aad8f359060e2d4492d9141cef546b44b42a8768e1c4624c4f8c62d"
+    }
+  ]
+}

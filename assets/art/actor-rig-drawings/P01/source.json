@@ -1,0 +1,412 @@
+{
+  "version": 4,
+  "status": "implemented_pending_user_visual_review",
+  "source_rig": "assets/art/actor-rig-refinement/P01/rig.json",
+  "requirements": [
+    "UIR-011",
+    "UIR-013",
+    "UIR-051",
+    "UIR-052",
+    "UIR-054",
+    "UIR-057",
+    "UIR-059"
+  ],
+  "api_manifest": "output/imagegen/actor-rig-drawings-20261115/asset-manifest.json",
+  "processing": [
+    {
+      "file": "assets/art/actor-rig-drawings/P01/neck_overlap.png",
+      "size": [
+        92,
+        65
+      ],
+      "sha256": "01ab4ad6388fd003ba2c9b64be2a09d3b8cb540a0535906668f3d47d48fb5533",
+      "source": "assets/art/actor-rig-pilot/P01/head.png",
+      "source_sha256": "b86739d090478f1f0c9434439b3eeab663ec8ff1e55bf450395863cd73c1bf16",
+      "processing": "original neck crop [52,207,154,265] resized to 92x65; tapered alpha overlap behind the jacket collar"
+    },
+    {
+      "file": "assets/art/actor-rig-drawings/P01/head_neutral.png",
+      "size": [
+        300,
+        300
+      ],
+      "sha256": "d62ead9641e6db72c95a833a7eaac50713d9e76aa9a0cb47a9e1c9d843c2dfc9",
+      "source": "assets/art/actor-rig-pilot/P01/head.png",
+      "source_sha256": "b86739d090478f1f0c9434439b3eeab663ec8ff1e55bf450395863cd73c1bf16",
+      "processing": "unchanged RGBA pasted in registered canvas",
+      "paste_origin": [
+        35,
+        30
+      ]
+    },
+    {
+      "file": "assets/art/actor-rig-drawings/P01/head_blink.png",
+      "size": [
+        300,
+        300
+      ],
+      "sha256": "ce73acde5db10bbee30ec109561f56be05c966aeca0c57857c8d7f3ac6145318",
+      "source": "assets/art/actor-rig-refinement/P01/head_blink.png",
+      "source_sha256": "e4e7bde45aad8f359060e2d4492d9141cef546b44b42a8768e1c4624c4f8c62d",
+      "processing": "unchanged RGBA pasted in registered canvas",
+      "paste_origin": [
+        35,
+        30
+      ]
+    },
+    {
+      "file": "assets/art/actor-rig-drawings/P01/head_turn.png",
+      "size": [
+        300,
+        300
+      ],
+      "sha256": "3e1368945e11c4918bbfd1f0f13bb270b29c6cc4ef2cf64739216309def73cc1",
+      "source": "output/imagegen/actor-rig-drawings-20261115/P01-heads-v2.png",
+      "source_sha256": "73692d88b51170ec97b2df7869be5a39b4aa1b0b8dcb3dd1e39dde43be7f8c7a",
+      "region": [
+        0,
+        0,
+        512,
+        1024
+      ],
+      "component_box": [
+        6,
+        175,
+        503,
+        806
+      ],
+      "source_anchor": [
+        225,
+        802
+      ],
+      "target_anchor": [
+        155,
+        290
+      ],
+      "resized_size": [
+        230,
+        265
+      ],
+      "paste_origin": [
+        54,
+        27
+      ],
+      "processing": "largest connected non-magenta component; RGB key R/G and B/G > 1.3 + 20; registered RGBA Lanczos canvas"
+    },
+    {
+      "file": "assets/art/actor-rig-drawings/P01/head_strike.png",
+      "size": [
+        300,
+        300
+      ],
+      "sha256": "6a7d52dcbe4a8e2b98650edd33231d45c10b9bb30577388722f8d838c2208f87",
+      "source": "output/imagegen/actor-rig-drawings-20261115/P01-heads-v2.png",
+      "source_sha256": "73692d88b51170ec97b2df7869be5a39b4aa1b0b8dcb3dd1e39dde43be7f8c7a",
+      "region": [
+        512,
+        0,
+        1026,
+        1024
+      ],
+      "component_box": [
+        523,
+        171,
+        1014,
+        806
+      ],
+      "source_anchor": [
+        740,
+        802
+      ],
+      "target_anchor": [
+        155,
+        290
+      ],
+      "resized_size": [
+        230,
+        265
+      ],
+      "paste_origin": [
+        53,
+        27
+      ],
+      "processing": "largest connected non-magenta component; RGB key R/G and B/G > 1.3 + 20; registered RGBA Lanczos canvas"
+    },
+    {
+      "file": "assets/art/actor-rig-drawings/P01/head_hit.png",
+      "size": [
+        300,
+        300
+      ],
+      "sha256": "2bd0da122c3936304a94c00c498904d3aab9ba05ff71b39d575828f32d3f9b69",
+      "source": "output/imagegen/actor-rig-drawings-20261115/P01-heads-v2.png",
+      "source_sha256": "73692d88b51170ec97b2df7869be5a39b4aa1b0b8dcb3dd1e39dde43be7f8c7a",
+      "region": [
+        1026,
+        0,
+        1536,
+        1024
+      ],
+      "component_box": [
+        1032,
+        181,
+        1534,
+        806
+      ],
+      "source_anchor": [
+        1260,
+        802
+      ],
+      "target_anchor": [
+        155,
+        290
+      ],
+      "resized_size": [
+        230,
+        265
+      ],
+      "paste_origin": [
+        51,
+        27
+      ],
+      "processing": "largest connected non-magenta component; RGB key R/G and B/G > 1.3 + 20; registered RGBA Lanczos canvas"
+    },
+    {
+      "file": "assets/art/actor-rig-drawings/P01/arm_neutral.png",
+      "size": [
+        400,
+        270
+      ],
+      "sha256": "c8bbf10120a7b0ce5293d7b4ba2713cdf7b08a0a7fdc6abab7690aa751100464",
+      "source": "assets/art/actor-rig-pilot/P01/near_forearm.png",
+      "source_sha256": "7e9f6e636036f2dd4e277fd101959e16669e4ddbc279d0a28be1d59b28e63576",
+      "processing": "unchanged RGBA pasted in registered canvas",
+      "paste_origin": [
+        41,
+        13
+      ]
+    },
+    {
+      "file": "assets/art/actor-rig-drawings/P01/arm_strike.png",
+      "size": [
+        400,
+        270
+      ],
+      "sha256": "97ddcf26e5d9d0dcf4f3242504c87766392fd26e6bb3412f3fd6027d9f0d6e94",
+      "source": "output/imagegen/actor-rig-drawings-20261115/P01-strike-arm-v1.png",
+      "source_sha256": "54c696e5fbe39e39557898e0e22a5e573d4b6f490e434bcf0427231c8c7790f2",
+      "region": [
+        0,
+        0,
+        830,
+        1024
+      ],
+      "component_box": [
+        26,
+        350,
+        815,
+        619
+      ],
+      "source_anchor": [
+        122,
+        492
+      ],
+      "target_anchor": [
+        80,
+        135
+      ],
+      "resized_size": [
+        300,
+        102
+      ],
+      "paste_origin": [
+        43,
+        81
+      ],
+      "processing": "largest connected non-magenta component; RGB key R/G and B/G > 1.3 + 20; registered RGBA Lanczos canvas"
+    },
+    {
+      "file": "assets/art/actor-rig-drawings/P01/arm_follow.png",
+      "size": [
+        400,
+        270
+      ],
+      "sha256": "4b74c1b168446599dfe5b98111c6ecadafa507e3e47c7e70e9127e0c1ceae6b9",
+      "source": "output/imagegen/actor-rig-drawings-20261115/P01-strike-arm-v1.png",
+      "source_sha256": "54c696e5fbe39e39557898e0e22a5e573d4b6f490e434bcf0427231c8c7790f2",
+      "region": [
+        830,
+        0,
+        1536,
+        1024
+      ],
+      "component_box": [
+        856,
+        360,
+        1494,
+        701
+      ],
+      "source_anchor": [
+        940,
+        491
+      ],
+      "target_anchor": [
+        80,
+        135
+      ],
+      "resized_size": [
+        287,
+        153
+      ],
+      "paste_origin": [
+        42,
+        76
+      ],
+      "processing": "largest connected non-magenta component; RGB key R/G and B/G > 1.3 + 20; registered RGBA Lanczos canvas"
+    },
+    {
+      "file": "assets/art/actor-rig-drawings/P01/torso_turn.png",
+      "size": [
+        350,
+        460
+      ],
+      "sha256": "d857423c072a630a50aedd62a860ff2b3a5d62ea3fe208e703f1fc88bee73347",
+      "source": "output/imagegen/actor-rig-drawings-20261115/P01-turn-torso-v1.png",
+      "source_sha256": "364090ea331c681c8e5c84a67f1903900a602c7e5f14a1b92825c048f72818f6",
+      "region": [
+        0,
+        0,
+        800,
+        1024
+      ],
+      "component_box": [
+        114,
+        64,
+        715,
+        928
+      ],
+      "source_anchor": null,
+      "target_anchor": null,
+      "resized_size": [
+        350,
+        460
+      ],
+      "paste_origin": [
+        0,
+        0
+      ],
+      "processing": "largest connected non-magenta component; RGB key R/G and B/G > 1.3 + 20; registered RGBA Lanczos canvas"
+    },
+    {
+      "file": "assets/art/actor-rig-drawings/P01/torso_strike.png",
+      "size": [
+        350,
+        460
+      ],
+      "sha256": "3010c1ddfd8a4fa3a9b11f39f405b1bbe6a3bc39820933da88fd9aa0a270e07d",
+      "source": "output/imagegen/actor-rig-drawings-20261115/P01-turn-torso-v1.png",
+      "source_sha256": "364090ea331c681c8e5c84a67f1903900a602c7e5f14a1b92825c048f72818f6",
+      "region": [
+        800,
+        0,
+        1536,
+        1024
+      ],
+      "component_box": [
+        888,
+        65,
+        1437,
+        940
+      ],
+      "source_anchor": null,
+      "target_anchor": null,
+      "resized_size": [
+        350,
+        460
+      ],
+      "paste_origin": [
+        0,
+        0
+      ],
+      "processing": "largest connected non-magenta component; RGB key R/G and B/G > 1.3 + 20; registered RGBA Lanczos canvas"
+    }
+  ],
+  "textures": [
+    {
+      "file": "assets/art/actor-rig-drawings/P01/arm_follow.png",
+      "sha256": "4b74c1b168446599dfe5b98111c6ecadafa507e3e47c7e70e9127e0c1ceae6b9"
+    },
+    {
+      "file": "assets/art/actor-rig-drawings/P01/arm_neutral.png",
+      "sha256": "c8bbf10120a7b0ce5293d7b4ba2713cdf7b08a0a7fdc6abab7690aa751100464"
+    },
+    {
+      "file": "assets/art/actor-rig-drawings/P01/arm_strike.png",
+      "sha256": "97ddcf26e5d9d0dcf4f3242504c87766392fd26e6bb3412f3fd6027d9f0d6e94"
+    },
+    {
+      "file": "assets/art/actor-rig-drawings/P01/head_blink.png",
+      "sha256": "ce73acde5db10bbee30ec109561f56be05c966aeca0c57857c8d7f3ac6145318"
+    },
+    {
+      "file": "assets/art/actor-rig-drawings/P01/head_hit.png",
+      "sha256": "2bd0da122c3936304a94c00c498904d3aab9ba05ff71b39d575828f32d3f9b69"
+    },
+    {
+      "file": "assets/art/actor-rig-drawings/P01/head_neutral.png",
+      "sha256": "d62ead9641e6db72c95a833a7eaac50713d9e76aa9a0cb47a9e1c9d843c2dfc9"
+    },
+    {
+      "file": "assets/art/actor-rig-drawings/P01/head_strike.png",
+      "sha256": "6a7d52dcbe4a8e2b98650edd33231d45c10b9bb30577388722f8d838c2208f87"
+    },
+    {
+      "file": "assets/art/actor-rig-drawings/P01/head_turn.png",
+      "sha256": "3e1368945e11c4918bbfd1f0f13bb270b29c6cc4ef2cf64739216309def73cc1"
+    },
+    {
+      "file": "assets/art/actor-rig-drawings/P01/neck_overlap.png",
+      "sha256": "01ab4ad6388fd003ba2c9b64be2a09d3b8cb540a0535906668f3d47d48fb5533"
+    },
+    {
+      "file": "assets/art/actor-rig-drawings/P01/torso_strike.png",
+      "sha256": "3010c1ddfd8a4fa3a9b11f39f405b1bbe6a3bc39820933da88fd9aa0a270e07d"
+    },
+    {
+      "file": "assets/art/actor-rig-drawings/P01/torso_turn.png",
+      "sha256": "d857423c072a630a50aedd62a860ff2b3a5d62ea3fe208e703f1fc88bee73347"
+    },
+    {
+      "file": "assets/art/actor-rig-pilot/P01/far_upper.png",
+      "sha256": "63c61eea199bdfae060d93996f4eaa7c42116db0087a5ada8e5c376e0d133f30"
+    },
+    {
+      "file": "assets/art/actor-rig-pilot/P01/front_leg.png",
+      "sha256": "def3889cb24289ffc8c6e22daca820956fd5bda72dc07aed7082b9181994bc4c"
+    },
+    {
+      "file": "assets/art/actor-rig-pilot/P01/near_upper.png",
+      "sha256": "47eedb57f66473606ca2f9393315d6759062f89859aee4c5f2cdb42100ff1f50"
+    },
+    {
+      "file": "assets/art/actor-rig-pilot/P01/rear_leg.png",
+      "sha256": "177ac5194f363c0e6b5645895cbc20d0cbc39cc64ed1364b8bdd05d6e9944586"
+    },
+    {
+      "file": "assets/art/actor-rig-pilot/P01/torso.png",
+      "sha256": "3aae6546a02c2fa779f5e54a1ff7b8c209cce96f612a6edc22710108a73d7208"
+    },
+    {
+      "file": "assets/art/actor-rig-refinement/P01/held_forearm.png",
+      "sha256": "0c9a5f19272585197762abffd7b1e464ae2d514905753258189980078395a4eb"
+    },
+    {
+      "file": "assets/art/actor-rig-refinement/P01/held_hand.png",
+      "sha256": "8632826aa2bc1077b331cd826c1cda7d5b3b34440a47c2eee1ea04dda1d79e27"
+    },
+    {
+      "file": "assets/art/actor-rig-refinement/P01/laptop.png",
+      "sha256": "273016c9c3106e49ee881c1133a3fa99b97687aae40e7b1dbad2fe31d1e21311"
+    }
+  ]
+}

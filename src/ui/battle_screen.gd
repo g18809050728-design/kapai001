@@ -79,6 +79,13 @@ func effect_speed() -> float:
 	return maxf(speed_scale, 0.05) * EFFECT_SPEED
 
 
+func has_refined_actors() -> bool:
+	for actor in _actors.values():
+		if is_instance_valid(actor) and is_instance_valid(actor.rig) and actor.rig.refined:
+			return true
+	return false
+
+
 func _init() -> void:
 	automatic_card_details = false
 	_animator = BattleEventAnimator.new()
@@ -1646,9 +1653,21 @@ func _present_event_visual(event: Dictionary) -> void:
 			if destination in ["discard", "exhaust"]:
 				_presentation.move_out(event, destination)
 		"completion_applied":
-			_show_completion_feedback(event, data)
+			_schedule_impact_feedback(event, data, true)
 		"pressure_applied":
-			_show_pressure_feedback(event, data)
+			_schedule_impact_feedback(event, data, false)
+
+
+func _schedule_impact_feedback(event: Dictionary, data: Dictionary, completion: bool) -> void:
+	var callback := _show_completion_feedback.bind(event, data) if completion else _show_pressure_feedback.bind(event, data)
+	var delay := _stage_effects.impact_feedback_delay(event)
+	if delay <= .005:
+		callback.call()
+		return
+	var tween := create_tween()
+	_presentation._tweens.append(tween)
+	tween.tween_interval(delay)
+	tween.tween_callback(callback)
 
 
 func _show_completion_feedback(event: Dictionary, data: Dictionary) -> void:

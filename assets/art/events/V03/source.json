@@ -1,0 +1,32 @@
+{
+  "asset_id": "V03",
+  "requirement_id": "UIR-070",
+  "version": 1,
+  "title": "选课咨询",
+  "prompt_file": "output/imagegen/event-polish-20261115/V03-v1-prompt.txt",
+  "prompt_sha256": "9f1f5339f2429298a0dfaea027604e99518710662efc7a81b105e4d5cf03cbc4",
+  "provider": "https://api-slb.jiji.cc/v1",
+  "model": "gpt-image-2.5-sunburst",
+  "requested_size": "1024x1024",
+  "actual_size": [
+    1024,
+    1024
+  ],
+  "quality": "high",
+  "original": "output/imagegen/event-polish-20261115/originals/V03-v1.png",
+  "original_sha256": "2ba9c20447827b2978f4d387ae8a39c3699f99aea387ef09695ef6076bbef202",
+  "selected": true,
+  "review_status": "AI visual review, final user art judgment remains",
+  "derivatives": [
+    {
+      "path": "assets/art/events/V03/illustration.png",
+      "sha256": "60957ee152ae33fa69c6195d86ce7f5e3f61d7b943f70d47766f6ebbbb72e619",
+      "processing": "Original RGB untouched; add 66px smoothstep alpha perimeter, no content crop/stretch."
+    },
+    {
+      "path": "assets/art/events/V03/background.png",
+      "sha256": "2fd9811c76c09c29b6b46d2dc532a5cd8aabd8310ca632d1b2534fc718fd5518",
+      "processing": "768x768 Lanczos, Gaussian blur radius16; UI uses aspect-preserving cover and dark overlay."
+    }
+  ]
+}

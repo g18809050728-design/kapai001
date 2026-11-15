@@ -1,0 +1,67 @@
+{
+  "id": "N15",
+  "version": 13,
+  "name": "程序",
+  "requirements": [
+    "UIR-069",
+    "UIR-011",
+    "UIR-013",
+    "UIR-051",
+    "UIR-052",
+    "UIR-054",
+    "UIR-057",
+    "UIR-059"
+  ],
+  "source": "output/imagegen/enemy-roster-20261115/N15-v1.png",
+  "source_sha256": "ff5afa69792758e0edbd60678459b597a232d515a84ab49f402acde4e3a1f64f",
+  "source_size": [
+    1024,
+    1024
+  ],
+  "method": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+  "outputs": [
+    {
+      "file": "assets/art/enemies/N15/body.png",
+      "size": [
+        782,
+        829
+      ],
+      "sha256": "3aa86bc29c5acbf9d2b3546f1e83d90d495833104b740b5868d26db9b87e8038",
+      "source_bbox": [
+        226,
+        118,
+        1008,
+        947
+      ]
+    },
+    {
+      "file": "assets/art/enemies/N15/attack.png",
+      "size": [
+        233,
+        308
+      ],
+      "sha256": "3452dda5da44cc84c2a6fc3274aca914209c6fdb160db93e422f2f1b4e4f6d5e",
+      "source_bbox": [
+        15,
+        140,
+        248,
+        448
+      ]
+    },
+    {
+      "file": "assets/art/enemies/N15/accent.png",
+      "size": [
+        57,
+        102
+      ],
+      "sha256": "ee691b1228958d3285f8cd8dd14e56ad25bf1f64f806aeccd8e4288e4b8fbf93",
+      "source_bbox": [
+        85,
+        703,
+        142,
+        805
+      ]
+    }
+  ],
+  "visual_acceptance": "pending review; machine metrics do not establish visual quality"
+}

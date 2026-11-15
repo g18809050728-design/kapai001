@@ -1,0 +1,26 @@
+﻿{
+    "exit_code":  0,
+    "model":  "gpt-image-2.5-sunburst",
+    "arguments":  [
+                      "edit",
+                      "--model",
+                      "gpt-image-2.5-sunburst",
+                      "--image",
+                      "output/imagegen/actor-anatomy-20261115/lowerbody-balanced-v1.png",
+                      "--image",
+                      "output/imagegen/actor-rig-pilot-20261114/hero-master-v1.png",
+                      "--prompt-file",
+                      "output/imagegen/actor-anatomy-20261115/prompts/lowerbody-balanced-v2.txt",
+                      "--size",
+                      "1024x1536",
+                      "--quality",
+                      "medium",
+                      "--out",
+                      "output/imagegen/actor-anatomy-20261115/lowerbody-balanced-v2.png"
+                  ],
+    "name":  "lowerbody-balanced-v2",
+    "billing":  "not returned",
+    "started_utc":  "2026-11-14T18:42:31.6495159Z",
+    "base_url":  "https://api-slb.jiji.cc/v1",
+    "finished_utc":  "2026-11-14T18:43:09.6185866Z"
+}

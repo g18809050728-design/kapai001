@@ -1,0 +1,84 @@
+{
+  "status": "3 API edits succeeded; visual and technical review kept separate",
+  "assets": [
+    {
+      "id": "hero-balanced-v1",
+      "selection": "full-body reference only",
+      "endpoint": "/v1/images/edits",
+      "model": "gpt-image-2.5-sunburst",
+      "request": "output/imagegen/actor-anatomy-20261115/hero-balanced-v1.request.json",
+      "exit_code": 0,
+      "prompt_file": "output/imagegen/actor-anatomy-20261115/prompts/hero-balanced-v1.txt",
+      "prompt_sha256": "37a405d951f77130ff5a9c3d1da627441f9c86d9fe5bfc3b10ad0c31c3423f1a",
+      "inputs": [
+        {
+          "file": "output/imagegen/actor-rig-pilot-20261114/hero-master-v1.png",
+          "sha256": "139121340dae465ec3db8dfed11670eaf72b4481684af728b07c00a4b4839694"
+        }
+      ],
+      "output": "output/imagegen/actor-anatomy-20261115/hero-balanced-v1.png",
+      "output_sha256": "a47ccaa748a0612246183c454c93be26f6cc663bbe02a928fd7c4367e715ba33",
+      "size": [
+        1024,
+        1536
+      ],
+      "api_log": "output/imagegen/actor-anatomy-20261115/hero-balanced-v1.api.log"
+    },
+    {
+      "id": "lowerbody-balanced-v1",
+      "selection": "superseded after visual review: viewer-left calf remains slanted",
+      "endpoint": "/v1/images/edits",
+      "model": "gpt-image-2.5-sunburst",
+      "request": "output/imagegen/actor-anatomy-20261115/lowerbody-balanced-v1.request.json",
+      "exit_code": 0,
+      "prompt_file": "output/imagegen/actor-anatomy-20261115/prompts/lowerbody-balanced-v1.txt",
+      "prompt_sha256": "9c91cf7c3d450a3497249f3e4f9890ce91a9d57c44bb981ec97fd9f34d2a5abd",
+      "inputs": [
+        {
+          "file": "output/imagegen/actor-rig-pilot-20261114/hero-master-v1.png",
+          "sha256": "139121340dae465ec3db8dfed11670eaf72b4481684af728b07c00a4b4839694"
+        }
+      ],
+      "output": "output/imagegen/actor-anatomy-20261115/lowerbody-balanced-v1.png",
+      "output_sha256": "00a0b24580be176bf5645119dba44a21ae3d2f2457809c86dd7c71b611100e85",
+      "size": [
+        1024,
+        1536
+      ],
+      "api_log": "output/imagegen/actor-anatomy-20261115/lowerbody-balanced-v1.api.log"
+    },
+    {
+      "id": "lowerbody-balanced-v2",
+      "selection": "selected continuous lower body for v5",
+      "endpoint": "/v1/images/edits",
+      "model": "gpt-image-2.5-sunburst",
+      "request": "output/imagegen/actor-anatomy-20261115/lowerbody-balanced-v2.request.json",
+      "exit_code": 0,
+      "prompt_file": "output/imagegen/actor-anatomy-20261115/prompts/lowerbody-balanced-v2.txt",
+      "prompt_sha256": "1fb03442f9ec1feda2be85fe5bbdf516eb746d23f19a2125f5c7bdec72e99f2a",
+      "inputs": [
+        {
+          "file": "output/imagegen/actor-anatomy-20261115/lowerbody-balanced-v1.png",
+          "sha256": "00a0b24580be176bf5645119dba44a21ae3d2f2457809c86dd7c71b611100e85"
+        },
+        {
+          "file": "output/imagegen/actor-rig-pilot-20261114/hero-master-v1.png",
+          "sha256": "139121340dae465ec3db8dfed11670eaf72b4481684af728b07c00a4b4839694"
+        }
+      ],
+      "output": "output/imagegen/actor-anatomy-20261115/lowerbody-balanced-v2.png",
+      "output_sha256": "dfd9f6f1aece5533056b382ca50af74a6abe09c9e71982154bb317a0f05fe17f",
+      "size": [
+        1024,
+        1536
+      ],
+      "api_log": "output/imagegen/actor-anatomy-20261115/lowerbody-balanced-v2.api.log"
+    }
+  ],
+  "previous_successful": 12,
+  "successful_this_batch": 3,
+  "cumulative_successful": 15,
+  "limit": 200,
+  "remaining": 185,
+  "billing": "not returned; CLI/upstream retries may be billed separately"
+}

@@ -1,0 +1,67 @@
+{
+  "id": "N35",
+  "version": 13,
+  "name": "实习面试",
+  "requirements": [
+    "UIR-069",
+    "UIR-011",
+    "UIR-013",
+    "UIR-051",
+    "UIR-052",
+    "UIR-054",
+    "UIR-057",
+    "UIR-059"
+  ],
+  "source": "output/imagegen/enemy-roster-20261115/N35-v1.png",
+  "source_sha256": "c88dfcd0ce9e45d4079f732a68bfbc41e325ac325b8247ea5c9364f0b9ae80c7",
+  "source_size": [
+    1024,
+    1024
+  ],
+  "method": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+  "outputs": [
+    {
+      "file": "assets/art/enemies/N35/body.png",
+      "size": [
+        724,
+        932
+      ],
+      "sha256": "f89c6054f2ccc2a12b57dff4b9079471a7c1c45c0311f14eafd6e429e8123d75",
+      "source_bbox": [
+        286,
+        50,
+        1010,
+        982
+      ]
+    },
+    {
+      "file": "assets/art/enemies/N35/attack.png",
+      "size": [
+        222,
+        439
+      ],
+      "sha256": "730d77746ec0acfea2c040c6378f275bbd10e9201ed2f2638a7be07270921d36",
+      "source_bbox": [
+        37,
+        117,
+        259,
+        556
+      ]
+    },
+    {
+      "file": "assets/art/enemies/N35/accent.png",
+      "size": [
+        99,
+        95
+      ],
+      "sha256": "d7bf34b989a33d33a7ad7c21100b553e7e90facf989d58f7bbed7267c5f78883",
+      "source_bbox": [
+        100,
+        789,
+        199,
+        884
+      ]
+    }
+  ],
+  "visual_acceptance": "pending review; machine metrics do not establish visual quality"
+}

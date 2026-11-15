@@ -7,6 +7,11 @@ var control: GameSession
 var output := DEFAULT_OUT
 var capture := false
 var verify := false
+var polished := false
+var refinement := false
+var drawings := false
+var anatomy := false
+var seams := false
 var report := {"checks": [], "failures": [], "commands": [], "screens": [], "frames": []}
 var helpers = preload("res://tests/suites/test_ui_shell_pages.gd").new()
 
@@ -14,13 +19,34 @@ var helpers = preload("res://tests/suites/test_ui_shell_pages.gd").new()
 func _initialize() -> void:
 	capture = "--capture" in OS.get_cmdline_user_args()
 	verify = "--verify" in OS.get_cmdline_user_args()
+	seams = "--seams" in OS.get_cmdline_user_args()
+	anatomy = "--anatomy" in OS.get_cmdline_user_args() or seams
+	drawings = "--drawings" in OS.get_cmdline_user_args() or anatomy
+	refinement = "--refinement" in OS.get_cmdline_user_args() or drawings
+	polished = "--polished" in OS.get_cmdline_user_args() or refinement
+	if polished:
+		BattleActorView.pilot_resource_root = "res://assets/art/actor-rig-polish"
+		output = "res://artifacts/verification/actor-rig-polish-20261114/render-01"
+	if refinement:
+		BattleActorView.pilot_resource_root = "res://assets/art/actor-rig-refinement"
+		BattleActorView.pilot_stage_background = "res://assets/art/actor-rig-refinement/classroom-stage.png"
+		output = "res://artifacts/verification/actor-rig-refinement-20261115/render-01"
+	if drawings:
+		BattleActorView.pilot_resource_root = "res://assets/art/actor-rig-drawings"
+		output = "res://artifacts/verification/actor-rig-drawings-20261115/render-01"
+	if anatomy:
+		BattleActorView.pilot_resource_root = "res://assets/art/actor-anatomy"
+		output = "res://artifacts/verification/actor-anatomy-20261115/render-01"
+	if seams:
+		BattleActorView.pilot_resource_root = "res://assets/art/actor-seams"
+		output = "res://artifacts/verification/actor-seams-20261115/render-01"
 	if not OS.get_environment("CAMPUS_ACTOR_PILOT_OUT").is_empty():
 		output = OS.get_environment("CAMPUS_ACTOR_PILOT_OUT")
 	call_deferred("_start")
 
 
 func _start() -> void:
-	root.title = "人物与敌怪动作实践 · P01 / N01 · 独立存档"
+	root.title = ("人物与敌怪动作精修" if polished else "人物与敌怪动作实践") + " · P01 / N01 · 独立存档"
 	root.size = Vector2i(1280, 800)
 	BattleActorView.pilot_enabled = true
 	var session := GameSession.new(SaveStore.new("user://actor-rig-pilot-%d-%d" % [OS.get_process_id(), Time.get_ticks_usec()]))
@@ -52,6 +78,14 @@ func _start() -> void:
 	if verify:
 		await _verify_matrix()
 		await _verify_lifecycle()
+		if polished:
+			await _verify_motion_polish()
+		if refinement:
+			await _verify_refinement()
+		if drawings:
+			await _verify_drawings()
+		if anatomy:
+			await _verify_anatomy()
 	if capture:
 		await _capture_matrix()
 	await _published_commands()
@@ -61,6 +95,7 @@ func _start() -> void:
 	shell.free()
 	control.free()
 	BattleActorView.pilot_enabled = false
+	BattleActorView.pilot_stage_background = ""
 	await process_frame
 	print("ACTOR_RIG_PILOT_RESULT=", JSON.stringify({"checks": report.checks.size(), "failures": report.failures,
 		"commands": report.commands.size(), "screens": report.screens.size(), "frames": report.frames.size(), "output": output}))
@@ -118,13 +153,17 @@ func _verify_matrix() -> void:
 			for rig in _rigs():
 				_check(rig.scale.x > .08 and rig.scale.x < .5, "rig is visibly fitted at positive stage scale at " + label)
 				_check(rig.z_index > 4, "rear body parts remain above the opaque room background at " + label)
-				_check(rig.skeleton is Skeleton2D and rig.bones.size() >= 10 and rig.meshes.size() == 1, "real bones and weighted mesh at " + label)
+				_check(rig.skeleton is Skeleton2D and rig.bones.size() >= 10 and rig.meshes.size() >= 1, "real bones and weighted mesh at " + label)
 				for mesh in rig.meshes:
-					_check(mesh.get_bone_count() == 2 and mesh.polygon.size() == 36, "mesh has two actual weight sets and 36 vertices at " + label)
+					_check(mesh.get_bone_count() >= 2 and mesh.polygon.size() >= 36, "mesh has actual weights and deformation vertices at " + label)
 				var clock := rig.loop_player.current_animation_position
 				var action := rig.cue("action", page.effect_speed())
-				await create_timer(.085).timeout
-				var moving := absf((rig.bones["near_forearm"] if rig.specification.definition_id == "P01" else rig.bones["pencil"]).rotation)
+				# Observe a short actual interval. A single fixed sample can land
+				# on the limb's zero crossing under headless scheduling jitter.
+				var moving := 0.0
+				for motion_sample in 4:
+					await create_timer(.04 if polished else .021).timeout
+					moving = maxf(moving, absf((rig.bones["near_forearm"] if rig.specification.definition_id == "P01" else rig.bones["pencil"]).rotation))
 				_check(moving > .025 and rig.rotation == 0, "body joint moves independently of the root at " + label)
 				_check(rig.loop_player.current_animation_position != clock, "idle clock advances during action at " + label)
 				var action_count := rig.cue_count
@@ -169,7 +208,7 @@ func _verify_matrix() -> void:
 		var before := Time.get_ticks_msec()
 		await rig.cue("action", page.effect_speed()).finished
 		var elapsed := (Time.get_ticks_msec() - before) / 1000.0
-		var expected: float = .92 / (4.0 * multiplier)
+		var expected: float = rig.action_length("action") / (4.0 * multiplier)
 		_check(absf(elapsed - expected) < .10, "action completion follows effective speed x%s" % multiplier)
 		if not report.has("timings"):
 			report.timings = []
@@ -246,7 +285,8 @@ func _capture_matrix() -> void:
 				for pose in ["action", "hit", "guard", "phase", "depart"]:
 					for rig in _rigs():
 						rig.cue(pose, 1.0)
-					await create_timer(.28).timeout
+					var delay := float({"action": .69, "hit": .20, "guard": .53, "phase": .83, "depart": 1.25}.get(pose, .28)) if polished else .28
+					await create_timer(delay).timeout
 					await _save("pose-%s-%d" % [pose, dimensions.x], "controlled_pose_preview")
 					for rig in _rigs():
 						rig.finish_action()
@@ -256,6 +296,288 @@ func _capture_matrix() -> void:
 	shell.refresh()
 	await _settle()
 	await _record("idle", 3.3)
+	if polished:
+		await _capture_motion_review()
+	if anatomy:
+		await _capture_anatomy()
+
+
+func _capture_motion_review() -> void:
+	for pose in ["action", "hit", "guard", "depart"]:
+		for rig in _rigs():
+			rig.cue(pose, 4.0)
+		await _record("motion-%s-effective4" % pose, .75)
+		for rig in _rigs():
+			rig.finish_action()
+	for pose in ["action", "hit"]:
+		for rig in _rigs():
+			rig.cue(pose, 1.0)
+		await _record("motion-%s-authored1-slow" % pose, 1.95)
+		for rig in _rigs():
+			rig.finish_action()
+
+
+func _verify_motion_polish() -> void:
+	var fingerprint: String = helpers.fingerprint(shell.session)
+	for rig in _rigs():
+		var excursion := 0.0
+		var foot_error := 0.0
+		var rest: Vector2 = rig.bones.torso.position
+		var geometry := _geometry(_page())
+		var clocks := []
+		rig.cue("action", 4.0)
+		for sample in 18:
+			await create_timer(.025).timeout
+			excursion = maxf(excursion, (rig.bones.torso.position as Vector2).distance_to(rest))
+			var snapshot := rig.debug_snapshot()
+			clocks.append(snapshot.loop_time)
+			for foot: Dictionary in snapshot.feet:
+				foot_error = maxf(foot_error, float(foot.error))
+		_check(excursion > 15.0, "refined body transfers weight instead of only rotating a static torso")
+		_check(foot_error < 1.0, "refined planted ankle error remains below one rig unit through full action")
+		_check(geometry == _geometry(_page()), "refined weight transfer leaves HUD and targets stationary")
+		_check(clocks[0] != clocks[-1], "refined action retains an independent live secondary loop")
+		rig.cue("action", 1.0)
+		await create_timer(.65).timeout
+		var before := rig.debug_snapshot()
+		rig.cue("hit", 4.0)
+		var immediate := rig.debug_snapshot()
+		_check(before.rotations == immediate.rotations and before.body_position == immediate.body_position, "interrupt starts from the actual sampled pose without a rest snap")
+		await create_timer(.06).timeout
+		_check(rig.active_pose == "hit", "interrupt actually plays the hit instead of ignoring it")
+		rig.finish_action()
+		rig.set_motion(false)
+		var off := rig.debug_snapshot()
+		await _frames(4)
+		_check(off.rotations == rig.debug_snapshot().rotations and off.body_position == rig.debug_snapshot().body_position, "refined reduced motion settles IK and body completely")
+		rig.set_motion(true)
+	_check(fingerprint == helpers.fingerprint(shell.session), "motion polish and interruptions do not mutate domain or RNG")
+
+
+func _verify_refinement() -> void:
+	var page := _page()
+	var fingerprint: String = helpers.fingerprint(shell.session)
+	var background := page._stage.get_node("BattleRoomBackground") as TextureRect
+	_check(background.texture.resource_path == BattleActorView.pilot_stage_background, "refinement uses the reviewed floor environment only in the opt-in stage")
+	var hero: NativeActorRig
+	for rig in _rigs():
+		if rig.specification.definition_id == "P01":
+			hero = rig
+	if not is_instance_valid(hero):
+		_check(false, "refinement has a real P01 for contact and expression checks")
+		return
+	var hand_id := (hero.parts.held_hand as Sprite2D).get_instance_id()
+	var prop_id := (hero.parts.held_laptop as Sprite2D).get_instance_id()
+	_check(hand_id != prop_id, "palm and laptop are separate rendered parts")
+	var geometry := _geometry(page)
+	var max_contact_error := 0.0
+	var max_foot_error := 0.0
+	var wrist_min := INF
+	var wrist_max := -INF
+	for pose in ["action", "hit", "guard", "phase", "depart", "enter"]:
+		hero.cue(pose, 4.0)
+		for sample in 20:
+			await create_timer(.025).timeout
+			var state := hero.debug_snapshot()
+			max_contact_error = maxf(max_contact_error, state.held_contact_error)
+			for foot: Dictionary in state.feet:
+				max_foot_error = maxf(max_foot_error, float(foot.error))
+			wrist_min = minf(wrist_min, float(state.rotations.held_wrist))
+			wrist_max = maxf(wrist_max, float(state.rotations.held_wrist))
+		hero.finish_action()
+	_check(max_contact_error < .05, "held laptop contact stays with the palm through all six poses")
+	_check(max_foot_error < 1.0, "planted feet remain reachable through action hit guard phase depart and enter")
+	_check(wrist_max - wrist_min > .05, "held wrist visibly articulates independently through recoil and recovery")
+	_check(geometry == _geometry(page), "held prop and shoulder refinements preserve all HUD and target geometry")
+	var seen_blink := false
+	var seen_neutral := false
+	for sample in 100:
+		await create_timer(.033).timeout
+		seen_blink = seen_blink or hero.debug_snapshot().face == "blink"
+		seen_neutral = seen_neutral or hero.debug_snapshot().face == "neutral"
+	_check(seen_blink and seen_neutral, "continuous idle actually renders and releases the blink")
+	hero.set_motion(false)
+	_check(hero.debug_snapshot().face == "neutral", "reduced motion restores a neutral eye instead of freezing a blink")
+	var stopped := hero.debug_snapshot()
+	await _frames(5)
+	_check(stopped == hero.debug_snapshot(), "reduced motion keeps all new wrist and expression channels completely stable")
+	hero.set_motion(true)
+	_check(fingerprint == helpers.fingerprint(shell.session), "all refinement checks preserve domain revision and RNG")
+
+
+func _verify_drawings() -> void:
+	var fingerprint: String = helpers.fingerprint(shell.session)
+	var geometry := _geometry(_page())
+	for rig in _rigs():
+		var hero: bool = str(rig.specification.definition_id) == "P01"
+		var expected_version := (6 if seams else 5) if anatomy and hero else 4
+		_check(rig.specification.version == expected_version and rig.specification.drawings.size() == (3 if hero else 2), "selected actor uses separate local drawings on the live skeleton")
+		for layer: Dictionary in rig.specification.drawings:
+			var material := (rig.parts[str(layer.part)] as CanvasItem).material as ShaderMaterial
+			_check(material != null and material.shader.resource_path.ends_with("actor_drawing_mix.gdshader"), "registered drawings are bound to the rendered part material")
+		var reach_before := rig.action_anchor()
+		rig.cue("action", 1.0)
+		for fraction in [.18, .42, .74]:
+			rig.action_player.seek(rig.action_length("action") * fraction, true)
+			rig._update_feet()
+			rig._update_drawings()
+			rig._update_expression()
+			var state := rig.debug_snapshot()
+			for values: Array in state.drawing_weights.values():
+				var sum := 0.0
+				for value in values:
+					sum += float(value)
+				_check(absf(sum - 1.0) < .0001 and values.min() >= 0.0, "drawing blend retains normalized nonnegative opacity")
+			if fraction < .20:
+				_check(state.drawings.get("head" if hero else "body") == ("head_turn" if hero else "body_windup"), "anticipation has its own registered turn drawing")
+			elif fraction < .5:
+				_check(state.drawings.get("head" if hero else "body") == ("head_strike" if hero else "body_strike"), "contact has its own focused drawing")
+				var tip := rig.bones.action_tip as Bone2D
+				var limb: Bone2D = rig.bones.near_forearm if hero else rig.bones.pencil
+				var direction: Vector2 = tip.global_position - limb.global_position
+				_check((direction.x > 0 if hero else direction.x < 0) and absf(direction.y / direction.x) < .30, "contact points the actual pen or pencil horizontally toward the opponent")
+				if hero:
+					var body_factor := float(rig.specification.get("anatomy", {}).get("upper_scale", 1.0))
+					_check(rig.action_anchor().x > reach_before.x + 160.0 * body_factor, "hero strike extends the real limb silhouette beyond its resting reach")
+					var prop := rig.parts.held_laptop as Sprite2D
+					_check(tip.global_position.y < prop.to_global(Vector2(prop.texture.get_width() * .7, prop.texture.get_height() * .12)).y, "hero strike clears the open laptop instead of looking like typing behind it")
+			elif hero:
+				_check(state.drawings.near_forearm == "arm_follow", "wrist follow-through uses its own drawing before recovery")
+		var before := rig.debug_snapshot()
+		rig.cue("hit", 4.0)
+		_check(before.drawing_weights == rig.debug_snapshot().drawing_weights, "interruption preserves current drawing weights without a neutral flash")
+		rig.action_player.seek(rig.action_length("hit") * .18, true)
+		rig._update_drawings()
+		rig._update_expression()
+		_check(rig.debug_snapshot().drawings.get("head" if hero else "body") == ("head_hit" if hero else "body_hit"), "hit reaction actually changes the facial drawing")
+		rig.set_motion(false)
+		var stopped := rig.debug_snapshot()
+		_check(stopped.drawings.values().all(func(value): return value == "neutral"), "reduced motion restores all local drawings to neutral immediately")
+		await _frames(4)
+		_check(stopped == rig.debug_snapshot(), "reduced motion has no residual drawing or expression progress")
+		rig.set_motion(true)
+		for pose in ["action", "hit", "guard", "phase", "depart", "enter"]:
+			rig.cue(pose, 8.0)
+			await create_timer(.52).timeout
+			_check(rig.active_pose == "idle" and rig.debug_snapshot().drawings.values().all(func(value): return value == "neutral"), "finite completion releases every drawing for " + pose)
+	_check(geometry == _geometry(_page()), "new turn and strike drawings leave HUD and target rectangles fixed")
+	_check(fingerprint == helpers.fingerprint(shell.session), "drawing transitions do not change domain revision events or RNG")
+
+
+func _verify_anatomy() -> void:
+	var hero: NativeActorRig
+	for rig in _rigs():
+		if str(rig.specification.definition_id) == "P01":
+			hero = rig
+	if not is_instance_valid(hero):
+		_check(false, "anatomy has a real P01")
+		return
+	var fingerprint: String = helpers.fingerprint(shell.session)
+	var geometry := _geometry(_page())
+	hero.set_motion(false)
+	var neutral := hero.debug_snapshot()
+	var calibration: Array = hero.specification.anatomy.calibration
+	var bind_error := 0.0
+	for index in neutral.feet.size():
+		for key: String in ["hip", "knee"]:
+			bind_error = maxf(bind_error, NativeActorRig._vector(neutral.feet[index][key]).distance_to(NativeActorRig._vector(calibration[index][key])))
+	_check(bind_error < .05, "neutral IK preserves actual painted hip and knee registration instead of rebending a slanted strip")
+	_check(hero.parts.pelvis is Polygon2D and (hero.parts.pelvis as Polygon2D).get_bone_count() == 3 and hero.parts.rear_shoe is Sprite2D and hero.parts.front_shoe is Sprite2D, "continuous pelvis follows both hips with three real weights while both shoes stay rigid")
+	var rear_length: float = float(calibration[0].lengths[0]) + float(calibration[0].lengths[1])
+	var front_length: float = float(calibration[1].lengths[0]) + float(calibration[1].lengths[1])
+	_check(absf(rear_length - front_length) / maxf(rear_length, front_length) < .04, "measured full leg lengths differ by less than four percent")
+	var max_length_error := 0.0
+	var max_foot_error := 0.0
+	var max_shoe_rotation := 0.0
+	var max_flexion := 0.0
+	var min_signed_flexion := INF
+	var min_reach_margin := INF
+	var samples: Array = []
+	hero.set_motion(true)
+	hero.loop_player.pause()
+	hero.loop_player.seek(0, true)
+	for pose: String in ["action", "hit", "guard", "phase", "depart", "enter"]:
+		hero.cue(pose, 1.0)
+		for fraction: float in [0.0, .08, .18, .30, .42, .55, .70, .86, .96, 1.0]:
+			hero.action_player.seek(hero.action_length(pose) * fraction, true)
+			hero._update_feet()
+			var state := hero.debug_snapshot()
+			for index in state.feet.size():
+				var foot: Dictionary = state.feet[index]
+				for segment in 2:
+					max_length_error = maxf(max_length_error, absf(float(foot.lengths[segment]) - float(calibration[index].lengths[segment])))
+				max_foot_error = maxf(max_foot_error, float(foot.error))
+				max_shoe_rotation = maxf(max_shoe_rotation, absf(float(foot.shoe_rotation)))
+				max_flexion = maxf(max_flexion, absf(float(foot.knee_flexion)))
+				min_signed_flexion = minf(min_signed_flexion, float(foot.knee_flexion) * -float(hero.specification.feet[index].bend))
+				min_reach_margin = minf(min_reach_margin, float(foot.reach_margin))
+			samples.append({"pose": pose, "fraction": fraction, "feet": state.feet})
+		hero.finish_action()
+	hero.set_motion(true)
+	_check(max_length_error < .05, "six poses preserve measured thigh and calf lengths without stretching")
+	_check(max_foot_error < .05 and min_reach_margin > .01, "both feet remain reachable without full-extension clamping in every sampled pose")
+	_check(max_shoe_rotation < .001, "rigid soles stay level while knees and chest move")
+	_check(min_signed_flexion >= -.001 and max_flexion < deg_to_rad(80), "knees retain the authored bend direction without inversion or an extreme folded leg")
+	_check(geometry == _geometry(_page()) and fingerprint == helpers.fingerprint(shell.session), "anatomy correction preserves HUD targets domain and RNG")
+	report.anatomy_geometry = {"neutral_bind_error": bind_error, "leg_lengths": [rear_length, front_length],
+		"max_segment_error": max_length_error, "max_foot_error": max_foot_error, "max_shoe_rotation": max_shoe_rotation,
+		"max_knee_radians": max_flexion, "min_signed_knee_radians": min_signed_flexion, "min_reach_margin": min_reach_margin,
+		"samples": samples, "scope": "geometry only; anatomy silhouette still requires rendered review"}
+
+
+func _capture_anatomy() -> void:
+	# Large, real engine renders for full-body inspection. They are controlled
+	# art previews, kept separate from the live battle and published commands.
+	var viewport := SubViewport.new()
+	viewport.size = Vector2i(1200, 1400)
+	viewport.world_2d = World2D.new()
+	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	root.add_child(viewport)
+	var background := ColorRect.new()
+	background.size = Vector2(1200, 1400)
+	background.color = Color("e6dfd1")
+	viewport.add_child(background)
+	var hero := NativeActorRig.new()
+	viewport.add_child(hero)
+	_check(hero.configure(BattleActorView.pilot_resource_root.path_join("P01/rig.json")), "large full-body anatomy inspection uses the same live resource")
+	hero.fit(Vector2(1000, 1300))
+	var captures: Array = []
+	for item: Array in [["neutral", 0.0], ["action", .42], ["hit", .16], ["guard", .40]]:
+		if str(item[0]) == "neutral":
+			hero.set_motion(false)
+		else:
+			hero.set_motion(true)
+			hero.loop_player.seek(0, true)
+			hero.loop_player.speed_scale = 0.0
+			hero.cue(str(item[0]), 1.0)
+			hero.action_player.seek(hero.action_length(str(item[0])) * float(item[1]), true)
+			# pause() clears current_animation, which the drawing mixer correctly
+			# interprets as neutral. Freeze playback without clearing the pose.
+			hero.action_player.speed_scale = 0.0
+			hero._update_feet()
+			hero._update_drawings()
+			hero._update_expression()
+		await _frames(2)
+		await RenderingServer.frame_post_draw
+		var file := "anatomy-full-%s.png" % str(item[0])
+		viewport.get_texture().get_image().save_png(output.path_join(file))
+		var state := hero.debug_snapshot()
+		if str(item[0]) != "neutral":
+			var expected_head := "head_hit" if str(item[0]) == "hit" else "head_strike"
+			_check(state.drawings.head == expected_head, "large full-body capture retains actual local drawing for " + str(item[0]))
+			if str(item[0]) == "action":
+				_check(state.drawings.near_forearm == "arm_strike" and state.drawings.torso == "torso_strike", "large strike capture uses actual strike forearm and torso drawings")
+		captures.append({"file": file, "pose": item[0], "fraction": item[1], "state": state})
+		report.screens.append({"file": file, "kind": "controlled_fullbody_anatomy_inspection", "size": [1200, 1400]})
+		hero.finish_action()
+	viewport.free()
+	report.anatomy_captures = captures
+	for rig in _rigs():
+		rig.set_motion(false)
+	await _frames(3)
+	await _save("anatomy-reduced-motion-1280", "real_battle_reduced_motion")
+	for rig in _rigs():
+		rig.set_motion(true)
 
 
 func _work_card() -> String:
@@ -395,6 +717,11 @@ func _write_report() -> void:
 	report.engine = Engine.get_version_info()
 	report.renderer = RenderingServer.get_current_rendering_method()
 	report.scope = "Isolated representative pilot. Controlled poses are labeled separately from actual published commands. Capture readback is not a realtime performance benchmark."
+	report.polished = polished
+	report.refinement = refinement
+	report.drawings = drawings
+	report.anatomy = anatomy
+	report.seams = seams
 	var file := FileAccess.open(output.path_join("report.json"), FileAccess.WRITE)
 	file.store_string(JSON.stringify(report, "\t"))
 	file.close()

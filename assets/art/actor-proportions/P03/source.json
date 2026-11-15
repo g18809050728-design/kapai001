@@ -1,0 +1,106 @@
+{
+  "version": 8,
+  "definition_id": "P03",
+  "base_version": 7,
+  "status": "registered_pending_engine_and_visual_review",
+  "requirements": [
+    "UIR-011",
+    "UIR-013",
+    "UIR-051",
+    "UIR-052",
+    "UIR-054",
+    "UIR-057",
+    "UIR-059"
+  ],
+  "source_rig": "assets/art/actor-party/P03/rig.json",
+  "source_rig_sha256": "98a2bf8f654bf10744eab5c3dee5b2721e905f2964366b71f67a7a917cd9059d",
+  "proportions": {
+    "base_version": 7,
+    "vertical_leg_scale": 0.78,
+    "hip_y": -614.6400000000001,
+    "ankle_reference_y": -65.91000000000011,
+    "upper_translation_y": 120.72059999999999,
+    "shoes_rigid": true,
+    "head_neck_repaint": true,
+    "selection": "artifacts/verification/actor-proportions-20261115/resource-selection.json"
+  },
+  "api_manifest": "output/imagegen/actor-proportions-20261115/neck-request.json",
+  "textures": [
+    {
+      "file": "assets/art/actor-proportions/P03/far_upper.png",
+      "sha256": "f6fb06c3d388843c41ab79cf802474a27048fd4d541940c383a8e827ec7e2c75"
+    },
+    {
+      "file": "assets/art/actor-proportions/P03/front_leg.png",
+      "sha256": "b92470936643e9662eb314c22a6fed360a43f3426c032205d29a475077a0d490"
+    },
+    {
+      "file": "assets/art/actor-proportions/P03/front_shoe_registered.png",
+      "sha256": "49e20dd984bbfa3402f1e31acd9dac6c7c6489e4a3da3845fd851aa71153a2a0"
+    },
+    {
+      "file": "assets/art/actor-proportions/P03/head_focus.png",
+      "sha256": "7189fe8e0900aedcd63d6b3642297acda986cf77dc0ce904b3629ee34e862992"
+    },
+    {
+      "file": "assets/art/actor-proportions/P03/head_hit.png",
+      "sha256": "a12bd47af3b3129bd28d7398a163ea3a21ab98fb5e4a4bdda7f64f31979b9f7f"
+    },
+    {
+      "file": "assets/art/actor-proportions/P03/head_neutral.png",
+      "sha256": "40be1542f1156b5e4e4c077b81909540e60196e9737818743fa2505f439e5d59"
+    },
+    {
+      "file": "assets/art/actor-proportions/P03/held_forearm_registered.png",
+      "sha256": "266b83c65077e8e5f598e08657945e58579b515c41adcb9f8ad97c21008f0cd6"
+    },
+    {
+      "file": "assets/art/actor-proportions/P03/held_hand_registered.png",
+      "sha256": "231e63c12b04541b641613371b512b8df2c37268620846c3c0d11f5e5669d06f"
+    },
+    {
+      "file": "assets/art/actor-proportions/P03/held_laptop_registered.png",
+      "sha256": "fe8837489cdfbc4f448a745c03b1c16aa8b6a0b5730188b65c2b904fe8ae6da4"
+    },
+    {
+      "file": "assets/art/actor-proportions/P03/near_forearm_neutral.png",
+      "sha256": "13f9b53b132abbf2f5e64b4d3834aa3bf5db9d265b567f45bca4917e7ae4e956"
+    },
+    {
+      "file": "assets/art/actor-proportions/P03/near_forearm_strike.png",
+      "sha256": "9312105b63950fd386f2c002655bd71bc20feb7f50d75c586a1bc78ff1f0a00b"
+    },
+    {
+      "file": "assets/art/actor-proportions/P03/near_upper.png",
+      "sha256": "92268207a128327db02e386d86a30113fce4adc72cbe9d26415bb1380f76cb47"
+    },
+    {
+      "file": "assets/art/actor-proportions/P03/neck_overlap_focus.png",
+      "sha256": "281dbda118159ebd26c8578013bd6d4a94795db372e83a93e687eaddcca648af"
+    },
+    {
+      "file": "assets/art/actor-proportions/P03/neck_overlap_hit.png",
+      "sha256": "796358348ce67ee2eedb5bdcd3421cc67d6371a5ca978f793a16f56d52c97c58"
+    },
+    {
+      "file": "assets/art/actor-proportions/P03/neck_overlap_neutral.png",
+      "sha256": "544f82078d5ba89d06cb80e3df6e6b1f416ad2916233ce57a5a6f7447caacce5"
+    },
+    {
+      "file": "assets/art/actor-proportions/P03/pelvis.png",
+      "sha256": "d8abf8916c44aad85a1bfb80e4835bf7f71b8ed7b6f4e15bf4a18b7dd79fb60f"
+    },
+    {
+      "file": "assets/art/actor-proportions/P03/rear_leg.png",
+      "sha256": "60bce345b21eb69dfa50276f76498071d63fdd18e841898f3e13a230c7e93769"
+    },
+    {
+      "file": "assets/art/actor-proportions/P03/rear_shoe_registered.png",
+      "sha256": "ad43fb3efae026d844254628818948adf867adc6bf9c8f6307ff474432881e49"
+    },
+    {
+      "file": "assets/art/actor-proportions/P03/trunk.png",
+      "sha256": "8498a4f9bb37ebab99a2bd5cd6ab10d4c43503d38fcd15fe997e42a5e17002fa"
+    }
+  ]
+}

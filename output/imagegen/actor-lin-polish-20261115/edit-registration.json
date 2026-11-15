@@ -1,0 +1,54 @@
+{
+  "face": {
+    "source_crop": [
+      410,
+      50,
+      650,
+      355
+    ],
+    "scale": 3,
+    "offset": [
+      150,
+      48
+    ]
+  },
+  "sleeve": {
+    "source_crop": [
+      250,
+      325,
+      432,
+      623
+    ],
+    "scale": 3,
+    "offset": [
+      230,
+      60
+    ]
+  },
+  "forearm": {
+    "source_crop": [
+      315,
+      410,
+      610,
+      605
+    ],
+    "scale": 3,
+    "offset": [
+      100,
+      200
+    ]
+  },
+  "garment": {
+    "source_crop": [
+      315,
+      250,
+      715,
+      760
+    ],
+    "scale": 2.5,
+    "offset": [
+      12,
+      125
+    ]
+  }
+}

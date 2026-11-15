@@ -1,0 +1,67 @@
+{
+  "id": "E06",
+  "version": 13,
+  "name": "实习群面",
+  "requirements": [
+    "UIR-069",
+    "UIR-011",
+    "UIR-013",
+    "UIR-051",
+    "UIR-052",
+    "UIR-054",
+    "UIR-057",
+    "UIR-059"
+  ],
+  "source": "output/imagegen/enemy-roster-20261115/E06-v1.png",
+  "source_sha256": "aff351dd731c45990ce51f9fb6b351755089563a8c397a4dd3bc9e14182a3494",
+  "source_size": [
+    1024,
+    1024
+  ],
+  "method": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+  "outputs": [
+    {
+      "file": "assets/art/enemies/E06/body.png",
+      "size": [
+        750,
+        919
+      ],
+      "sha256": "d006bfab7c73ae4c1885f5f03aacf60dbb21a387a3150da80f7f70e93404d6f0",
+      "source_bbox": [
+        266,
+        46,
+        1016,
+        965
+      ]
+    },
+    {
+      "file": "assets/art/enemies/E06/attack.png",
+      "size": [
+        152,
+        324
+      ],
+      "sha256": "a640ee7d3f6cebee783a721d4ed6d0e282a3522b814c95ae6a2b94eecf93dec0",
+      "source_bbox": [
+        42,
+        154,
+        194,
+        478
+      ]
+    },
+    {
+      "file": "assets/art/enemies/E06/accent.png",
+      "size": [
+        203,
+        196
+      ],
+      "sha256": "471654ef607cfb6ec3f37fe568a0e9024cc1b8daa50ed0ba5611262d0dd60351",
+      "source_bbox": [
+        32,
+        682,
+        235,
+        878
+      ]
+    }
+  ],
+  "visual_acceptance": "pending review; machine metrics do not establish visual quality"
+}

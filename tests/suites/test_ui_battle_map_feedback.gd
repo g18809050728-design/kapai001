@@ -293,6 +293,12 @@ func _capture_events(shell: GameShell, expected: Array, suffix: String) -> void:
 		var kind := str(battle._animator.last_event.get("type", ""))
 		if expected.has(kind) and not found.has(kind):
 			found[kind] = true
+			if kind == "pressure_applied":
+				var contact := battle._stage_effects.impact_feedback_delay(battle._animator.last_event)
+				if contact > .005:
+					var premature := battle._stage.get_children().filter(func(child): return child is BattleSemanticEffectView and child.get_meta("effect_event_type", "") == kind)
+					_check(premature.is_empty(), "enemy pressure waits for the authored contact at " + suffix)
+					_step_effects(battle, contact + .001)
 			_check(battle.display_snapshot().active_visual_effects > 0, "actual " + kind + " has a visible event effect at " + suffix)
 			if kind in ["card_resolved", "card_discarded"]:
 				var id := battle._presentation.card_id(battle._animator.last_event)
@@ -305,12 +311,16 @@ func _capture_events(shell: GameShell, expected: Array, suffix: String) -> void:
 				var meter: Dictionary = battle._task_meters.get(str(event.target_ids[0]), {})
 				if not meter.is_empty() and int(event.data.work_before) > int(event.data.work_after):
 					_check(float(meter.label.get_meta("displayed_work", -1)) > float(event.data.work_after), "enemy work bar starts at the pre-hit amount")
+					var contact := battle._stage_effects.impact_feedback_delay(event)
+					if contact > .005:
+						_check(is_equal_approx(float(meter.label.get_meta("displayed_work", -1)), float(event.data.work_before)), "work meter waits for authored contact")
+						_step_effects(battle, contact + .001)
 					_step_effects(battle, 0.075)
 					var middle := float(meter.label.get_meta("displayed_work", -1))
-					_check(middle < float(event.data.work_before) and middle > float(event.data.work_after), "4x enemy damage has an intermediate value after 0.075 seconds")
+					_check(middle < float(event.data.work_before) and middle > float(event.data.work_after), "4x enemy damage has an intermediate value after 0.075 seconds from contact")
 					await _save(shell, "damage-middle-" + suffix)
 					_step_effects(battle, 0.075)
-					_check(float(meter.label.get_meta("displayed_work", -1)) > float(event.data.work_after), "4x enemy damage is still animating after 0.15 seconds")
+					_check(float(meter.label.get_meta("displayed_work", -1)) > float(event.data.work_after), "4x enemy damage is still animating after 0.15 seconds from contact")
 			await _save(shell, kind + "-" + suffix)
 		if battle._animator.pending_count() == 0:
 			break

@@ -1,0 +1,16 @@
+﻿{
+    "mode":  "generate-batch",
+    "input":  "output/imagegen/enemy-roster-20261115/resume-01.jsonl",
+    "started_utc":  "2026-11-15T08:29:06.9173789Z",
+    "size":  "1024x1024",
+    "concurrency":  2,
+    "ended_utc":  "2026-11-15T08:37:15.3843853Z",
+    "base_url":  "https://api-slb.jiji.cc/v1",
+    "uploaded_images":  [
+
+                        ],
+    "cost":  "not returned",
+    "model":  "gpt-image-2.5-sunburst",
+    "exit_code":  0,
+    "quality":  "high"
+}

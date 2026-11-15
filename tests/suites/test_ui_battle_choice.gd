@@ -58,6 +58,9 @@ func run() -> Array[String]:
 	)
 	var animated_battle := animated.page as BattleScreen
 	var instant_battle := instant.page as BattleScreen
+	# Let deferred layout/resize rebuilds settle before controlled timed effects.
+	for frame in 3:
+		await animated.get_tree().process_frame
 	animated_battle._finish_event_presentation()
 	if animated_battle.view.hand.size() > 1:
 		var moved: Dictionary = animated_battle.view.hand[1]
@@ -85,7 +88,15 @@ func run() -> Array[String]:
 			},
 			"完成量结算"
 		)
+		var source: String = animated_battle._stage_effects.source_actor({"source_id": str(drawn_card.card_id)})
+		var source_actor: BattleActorView = animated_battle._actors.get(source)
+		if is_instance_valid(source_actor) and is_instance_valid(source_actor.rig):
+			var contact := source_actor.rig.seconds_to_contact()
+			if contact > .005:
+				_check(animated_battle.display_snapshot().active_visual_effects >= 1, "draw feedback remains visible before work contact")
+				await animated.get_tree().create_timer(contact + .02).timeout
 		_check(animated_battle.display_snapshot().active_visual_effects >= 2, "draw and work events create visible card and impact feedback")
+		_check(animated_battle._stage.get_children().any(func(child): return child is BattleSemanticEffectView and child.kind == "work_light"), "work feedback contains the actual contact effect")
 		_check(_fingerprint(animated) == _fingerprint(instant), "visible battle effects preserve complete rule state and RNG")
 		instant_battle._on_event_presented(
 			{

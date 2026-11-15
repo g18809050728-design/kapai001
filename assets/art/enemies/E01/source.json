@@ -1,0 +1,67 @@
+{
+  "id": "E01",
+  "version": 13,
+  "name": "期中考试",
+  "requirements": [
+    "UIR-069",
+    "UIR-011",
+    "UIR-013",
+    "UIR-051",
+    "UIR-052",
+    "UIR-054",
+    "UIR-057",
+    "UIR-059"
+  ],
+  "source": "output/imagegen/enemy-roster-20261115/E01-v1.png",
+  "source_sha256": "b428331c8cecf38fd195580848458b32ef0ff65b2a2f9f44ca011a5be798ec1e",
+  "source_size": [
+    1024,
+    1024
+  ],
+  "method": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+  "outputs": [
+    {
+      "file": "assets/art/enemies/E01/body.png",
+      "size": [
+        763,
+        909
+      ],
+      "sha256": "f84776bc26d0030a6e60ddc697beafe61a40438bc93759cf02e8496063ffc12d",
+      "source_bbox": [
+        261,
+        57,
+        1024,
+        966
+      ]
+    },
+    {
+      "file": "assets/art/enemies/E01/attack.png",
+      "size": [
+        225,
+        394
+      ],
+      "sha256": "19f76554ff87fd1388d4827d988fe8329703a9b1e6ab1c2e9e6354a341a60d7f",
+      "source_bbox": [
+        42,
+        98,
+        267,
+        492
+      ]
+    },
+    {
+      "file": "assets/art/enemies/E01/accent.png",
+      "size": [
+        220,
+        304
+      ],
+      "sha256": "36abb5ab8860c797c84c2120d3021a9b5bf0404093f73aee293dcf87e1c97edd",
+      "source_bbox": [
+        26,
+        628,
+        246,
+        932
+      ]
+    }
+  ],
+  "visual_acceptance": "pending review; machine metrics do not establish visual quality"
+}

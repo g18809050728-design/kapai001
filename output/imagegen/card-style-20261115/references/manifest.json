@@ -1,0 +1,35 @@
+{
+  "P01": {
+    "source": "assets/art/characters/P01/neutral.png",
+    "source_sha256": "fb5ca7391439e2743dabc2ad440cd8e01db145fb4ec5b6743e3a67b4050143e8",
+    "file": "output/imagegen/card-style-20261115/references/P01.png",
+    "sha256": "3cee8da9e8adf0f26c11ee7ec2876e63c11df148b490c5366d6f9a47bcfffbdf",
+    "role": "current formal character identity AND painted linework reference, not an edit target or atlas layout"
+  },
+  "P02": {
+    "source": "assets/art/characters/P02/neutral.png",
+    "source_sha256": "a77e1be6c9fab833286fa356946638676e5ffbee02b89d1d0f1cd62b6ba6a127",
+    "file": "output/imagegen/card-style-20261115/references/P02.png",
+    "sha256": "94e4e1f4b20d082a86b2bcd5b4a7c8e39f95aadd766dd0d3ebd6f8030a801bca",
+    "role": "current formal character identity AND painted linework reference, not an edit target or atlas layout"
+  },
+  "P03": {
+    "source": "assets/art/characters/P03/neutral.png",
+    "source_sha256": "4ae18adf0d6b75b77a8cb7c04add37f866984ad7819a4f7615c9e0efa1f4a93e",
+    "file": "output/imagegen/card-style-20261115/references/P03.png",
+    "sha256": "917d8eabe84d79ec8e4a449463d08cae5d21028308f9889080d76f321e41792e",
+    "role": "current formal character identity AND painted linework reference, not an edit target or atlas layout"
+  },
+  "P04": {
+    "source": "assets/art/characters/P04/neutral.png",
+    "source_sha256": "2eb80332a7b6bf56b59e840468bff49aaf8dd424cc098d02292b10bbd9daf74e",
+    "file": "output/imagegen/card-style-20261115/references/P04.png",
+    "sha256": "6f28f67271ada9b8b4ad8f12c97d12debd7423f5b58e4fa9a550aa1ece03be26",
+    "role": "current formal character identity AND painted linework reference, not an edit target or atlas layout"
+  },
+  "C": {
+    "file": "output/imagegen/card-style-20261115/references/all-characters.png",
+    "sha256": "f368dea52797cb73ac44a99594a8a0858787a250a1cc073f56630aa321625417",
+    "role": "four formal identities and shared rendering; public scenes may show any of these adults"
+  }
+}

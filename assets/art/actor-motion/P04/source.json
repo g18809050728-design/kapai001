@@ -1,0 +1,96 @@
+{
+  "base_rig": {
+    "path": "assets/art/actor-proportions/P04/rig.json",
+    "sha256": "cc16c9fb2199634e36f9a25f77ebac23bb85ef98a8c059094ff3671d59b96f14"
+  },
+  "version": 11,
+  "requirements": [
+    "UIR-011",
+    "UIR-013",
+    "UIR-051",
+    "UIR-052",
+    "UIR-054",
+    "UIR-057",
+    "UIR-059"
+  ],
+  "new_api_images": 0,
+  "api_successful_cumulative": 38,
+  "textures": [
+    {
+      "path": "assets/art/actor-proportions/P04/far_upper.png",
+      "sha256": "276d67df5e4e9f2837df692f2d53ae8cacf5b47a57af1212460a3283c89583b8"
+    },
+    {
+      "path": "assets/art/actor-proportions/P04/front_leg.png",
+      "sha256": "55bf578ca3a5a6afbb22589bca08a37408abb92ad030e919f019ad570f3acfcd"
+    },
+    {
+      "path": "assets/art/actor-proportions/P04/front_shoe_registered.png",
+      "sha256": "731bb5f8dd78a83542c3c0b631a8d46ecd60347c14596756537d209619398b60"
+    },
+    {
+      "path": "assets/art/actor-proportions/P04/head_focus.png",
+      "sha256": "8592e0550665f83f0332e051d34ce148eee8a34ad7915b3984af364893820f80"
+    },
+    {
+      "path": "assets/art/actor-proportions/P04/head_hit.png",
+      "sha256": "4bbdbffb56a32bde99d6773d06dcc60c2658f1e4d1fc2f163c59ac2716b6eb82"
+    },
+    {
+      "path": "assets/art/actor-proportions/P04/head_neutral.png",
+      "sha256": "ebe1187a1e7df59c6080004370efb0864cd11b2176c242ee14722dea5a70fc2f"
+    },
+    {
+      "path": "assets/art/actor-proportions/P04/held_forearm_registered.png",
+      "sha256": "eeb21f8fe361784f723d69fac7f07dadc52c9b64dd1eb4406bf7186e89f512a2"
+    },
+    {
+      "path": "assets/art/actor-proportions/P04/held_hand_registered.png",
+      "sha256": "8a0e370263297c90642b26fae358b4d5df5a66111ef4285157f2694db888df43"
+    },
+    {
+      "path": "assets/art/actor-proportions/P04/held_laptop_registered.png",
+      "sha256": "0d53549473570a77df9dd3a40f2123f4d0696eaaef98362db353431d37caee74"
+    },
+    {
+      "path": "assets/art/actor-proportions/P04/near_forearm_neutral.png",
+      "sha256": "900c82c009cac31779477246cbeb09e864f4d5062128a2496578ab530c0171f3"
+    },
+    {
+      "path": "assets/art/actor-proportions/P04/near_forearm_strike.png",
+      "sha256": "0760859703aeb5df28d120fd8a5f333cf807a2e86607de85d6662e9927e8ea49"
+    },
+    {
+      "path": "assets/art/actor-proportions/P04/near_upper.png",
+      "sha256": "be05c80bf87a1a156afa753acce5a5919111227b2e55c1e4199cdccfb15bbdb0"
+    },
+    {
+      "path": "assets/art/actor-proportions/P04/neck_overlap_focus.png",
+      "sha256": "1a8e48c7ffce78a057a95bcac4a3a421ea4fd476f7e462840d8f2cd419a09f28"
+    },
+    {
+      "path": "assets/art/actor-proportions/P04/neck_overlap_hit.png",
+      "sha256": "ac490d560d0be5cd971f49fcaa329069a4bf4e0f92c0092452487e99a41d543b"
+    },
+    {
+      "path": "assets/art/actor-proportions/P04/neck_overlap_neutral.png",
+      "sha256": "4dfceb818e019e28b6b3e259ae39a757ac06c90fc636ef80b23f27abf15a52db"
+    },
+    {
+      "path": "assets/art/actor-proportions/P04/pelvis.png",
+      "sha256": "aea381568e082fab121cc45abe6ff42434d7fcb926f1dbeba5635d034829c18e"
+    },
+    {
+      "path": "assets/art/actor-proportions/P04/rear_leg.png",
+      "sha256": "a2b033ecc92ff749a514a7879252219687828c961bcce5d58ccf4e433008ab14"
+    },
+    {
+      "path": "assets/art/actor-proportions/P04/rear_shoe_registered.png",
+      "sha256": "b390630f4256d8742e5ec6845f951eb5d6929cbef2e9dcc6574712063dacc98c"
+    },
+    {
+      "path": "assets/art/actor-proportions/P04/trunk.png",
+      "sha256": "47d4d2a66d297622226a18d30a574c4d96e7aca03f0f0c1b6c7f5d450696f7fa"
+    }
+  ]
+}

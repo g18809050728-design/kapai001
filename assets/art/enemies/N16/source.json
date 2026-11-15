@@ -1,0 +1,67 @@
+{
+  "id": "N16",
+  "version": 13,
+  "name": "预习",
+  "requirements": [
+    "UIR-069",
+    "UIR-011",
+    "UIR-013",
+    "UIR-051",
+    "UIR-052",
+    "UIR-054",
+    "UIR-057",
+    "UIR-059"
+  ],
+  "source": "output/imagegen/enemy-roster-20261115/N16-v1.png",
+  "source_sha256": "65388765b0c62535e5cfd1600aa0b5e3820fe5ca4fefad464d2b8221e1ff487d",
+  "source_size": [
+    1024,
+    1024
+  ],
+  "method": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+  "outputs": [
+    {
+      "file": "assets/art/enemies/N16/body.png",
+      "size": [
+        661,
+        885
+      ],
+      "sha256": "ffb881ca8585fef8e6943419a054ea7fc56eeed99491df75b6baa39fc2cc8d04",
+      "source_bbox": [
+        352,
+        89,
+        1013,
+        974
+      ]
+    },
+    {
+      "file": "assets/art/enemies/N16/attack.png",
+      "size": [
+        220,
+        345
+      ],
+      "sha256": "41239c16ffe6c60ab3e3d4eb3f45b99b2ac7709ccd85f1845668a07a45356564",
+      "source_bbox": [
+        34,
+        170,
+        254,
+        515
+      ]
+    },
+    {
+      "file": "assets/art/enemies/N16/accent.png",
+      "size": [
+        81,
+        127
+      ],
+      "sha256": "10b3ce03baf9a48387146af07afb4b99ecca7e03a87af95466e14bb6105cc6e5",
+      "source_bbox": [
+        96,
+        711,
+        177,
+        838
+      ]
+    }
+  ],
+  "visual_acceptance": "pending review; machine metrics do not establish visual quality"
+}

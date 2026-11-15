@@ -1,0 +1,32 @@
+{
+  "asset_id": "LAB",
+  "requirement_id": "UIR-070",
+  "version": 1,
+  "title": "实验室",
+  "prompt_file": "output/imagegen/event-polish-20261115/LAB-v1-prompt.txt",
+  "prompt_sha256": "67655c81f1724d468117087852b133e319622858b78e090df70cc86cddf6fc33",
+  "provider": "https://api-slb.jiji.cc/v1",
+  "model": "gpt-image-2.5-sunburst",
+  "requested_size": "1024x1024",
+  "actual_size": [
+    1024,
+    1024
+  ],
+  "quality": "high",
+  "original": "output/imagegen/event-polish-20261115/originals/LAB-v1.png",
+  "original_sha256": "9e19baa2349c562c8af991a59d862a47f8ea64c6758270d891343a7df1464463",
+  "selected": true,
+  "review_status": "AI visual review, final user art judgment remains",
+  "derivatives": [
+    {
+      "path": "assets/art/events/LAB/illustration.png",
+      "sha256": "f03ff175b63d98a08fd7278f32fcce69889b498b6e2186c0530143c9015cf2a2",
+      "processing": "Original RGB untouched; add 66px smoothstep alpha perimeter, no content crop/stretch."
+    },
+    {
+      "path": "assets/art/events/LAB/background.png",
+      "sha256": "51ee573254f08589ef910fe700c201a86f95f501c95fcf54831280c2c90d6610",
+      "processing": "768x768 Lanczos, Gaussian blur radius16; UI uses aspect-preserving cover and dark overlay."
+    }
+  ]
+}

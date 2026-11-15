@@ -1,0 +1,67 @@
+{
+  "id": "N38",
+  "version": 13,
+  "name": "小组互评",
+  "requirements": [
+    "UIR-069",
+    "UIR-011",
+    "UIR-013",
+    "UIR-051",
+    "UIR-052",
+    "UIR-054",
+    "UIR-057",
+    "UIR-059"
+  ],
+  "source": "output/imagegen/enemy-roster-20261115/N38-v1.png",
+  "source_sha256": "78b29c862b2b33d19ab203b9a3be90e74560d4618ba4dcd450de11f03f851430",
+  "source_size": [
+    1024,
+    1024
+  ],
+  "method": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+  "outputs": [
+    {
+      "file": "assets/art/enemies/N38/body.png",
+      "size": [
+        777,
+        917
+      ],
+      "sha256": "b05f8611a495fad3356ba891ca4cee5ba929241ab7311dc29ec2fb469aafbdca",
+      "source_bbox": [
+        236,
+        51,
+        1013,
+        968
+      ]
+    },
+    {
+      "file": "assets/art/enemies/N38/attack.png",
+      "size": [
+        243,
+        258
+      ],
+      "sha256": "8a5ae409b17fae25c490107056de0d648fa0df77b6dc50948240abee7cd92d8c",
+      "source_bbox": [
+        15,
+        106,
+        258,
+        364
+      ]
+    },
+    {
+      "file": "assets/art/enemies/N38/accent.png",
+      "size": [
+        156,
+        200
+      ],
+      "sha256": "fcbdfd974a4f238d93f3bd0e722e4b6a6abddc1d7ed2be4c516f377395ca05c8",
+      "source_bbox": [
+        61,
+        688,
+        217,
+        888
+      ]
+    }
+  ],
+  "visual_acceptance": "pending review; machine metrics do not establish visual quality"
+}

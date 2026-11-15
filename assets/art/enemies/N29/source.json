@@ -1,0 +1,67 @@
+{
+  "id": "N29",
+  "version": 13,
+  "name": "校园网发力",
+  "requirements": [
+    "UIR-069",
+    "UIR-011",
+    "UIR-013",
+    "UIR-051",
+    "UIR-052",
+    "UIR-054",
+    "UIR-057",
+    "UIR-059"
+  ],
+  "source": "output/imagegen/enemy-roster-20261115/N29-v1.png",
+  "source_sha256": "89cc915708c2e9bbf89ae6c30fe658919e49f8068d57544236f6905a6e68120b",
+  "source_size": [
+    1024,
+    1024
+  ],
+  "method": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+  "outputs": [
+    {
+      "file": "assets/art/enemies/N29/body.png",
+      "size": [
+        690,
+        921
+      ],
+      "sha256": "4fe367c8db8991afe96f334a5474d199d98418b56fecd50f720588d6f507a16a",
+      "source_bbox": [
+        307,
+        48,
+        997,
+        969
+      ]
+    },
+    {
+      "file": "assets/art/enemies/N29/attack.png",
+      "size": [
+        181,
+        287
+      ],
+      "sha256": "c8a71f6a775b6eb814848517b48c681ec2b3e3c7da44f17aeab39be5fe880cbd",
+      "source_bbox": [
+        67,
+        131,
+        248,
+        418
+      ]
+    },
+    {
+      "file": "assets/art/enemies/N29/accent.png",
+      "size": [
+        98,
+        97
+      ],
+      "sha256": "0bafc68eee69e72f9fb95fe6204974f6309d1417149cc1a03a51f76b5d22d7f8",
+      "source_bbox": [
+        93,
+        698,
+        191,
+        795
+      ]
+    }
+  ],
+  "visual_acceptance": "pending review; machine metrics do not establish visual quality"
+}

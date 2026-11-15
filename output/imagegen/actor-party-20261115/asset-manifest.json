@@ -1,0 +1,539 @@
+{
+  "previous_successful": 15,
+  "successful_this_batch": 12,
+  "cumulative_successful": 27,
+  "limit": 200,
+  "assets": [
+    {
+      "asset_id": "P02-master-v1",
+      "character_id": "P02",
+      "name": "许知微",
+      "requirement_ids": [
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "prompt_file": "output/imagegen/actor-party-20261115/prompts/p02-master-v1.txt",
+      "prompt_sha256": "3b3d7e2656a46529a85e72032fd2b4421e0069935845a128bf44a2a16562112d",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "edit",
+      "request_size": "1024x1536",
+      "quality": "medium",
+      "input_images": [
+        {
+          "file": "assets/art/presentation-v2/actors/P02.png",
+          "sha256": "3fcfabc9abdf6a9904d0b0d759a2bd55db8c6b3023ebc547db7a09e14e082e7d"
+        },
+        {
+          "file": "output/imagegen/actor-party-20261115/v5-style-reference.png",
+          "sha256": "65478a8fd9c5dc5213fdc784b9f330b5625d4ed25eade1d2a88ee105e39d2af0"
+        }
+      ],
+      "output": "output/imagegen/actor-party-20261115/p02-master-v1.png",
+      "status": "selected_prototype_ai_render_reviewed_user_acceptance_pending",
+      "actual_size": [
+        1024,
+        1536
+      ],
+      "sha256": "e428082beaecc0ed18bba68e6c4c8aa1ba2c9adc61177966d85add044095427c",
+      "visual_review": "Actual source image and contact sheet viewed; final native Godot full figure and motion reviewed. See artifacts/verification/actor-party-20261115/visual-review.json; user final art acceptance pending.",
+      "run_record": "output/imagegen/actor-party-20261115/p02-master-v1.run.json",
+      "api_log": "output/imagegen/actor-party-20261115/p02-master-v1.api.log"
+    },
+    {
+      "asset_id": "P03-master-v1",
+      "character_id": "P03",
+      "name": "沈见章",
+      "requirement_ids": [
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "prompt_file": "output/imagegen/actor-party-20261115/prompts/p03-master-v1.txt",
+      "prompt_sha256": "a930c350133b1cfaa65af84f67ed690ebb0ea32761258de0d00c0005c2522abf",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "edit",
+      "request_size": "1024x1536",
+      "quality": "medium",
+      "input_images": [
+        {
+          "file": "assets/art/presentation-v2/actors/P03.png",
+          "sha256": "23847b616566092660099e3538f9bf0132831ed9084cf9c101391a8a2b55a3c9"
+        },
+        {
+          "file": "output/imagegen/actor-party-20261115/v5-style-reference.png",
+          "sha256": "65478a8fd9c5dc5213fdc784b9f330b5625d4ed25eade1d2a88ee105e39d2af0"
+        }
+      ],
+      "output": "output/imagegen/actor-party-20261115/p03-master-v1.png",
+      "status": "selected_prototype_ai_render_reviewed_user_acceptance_pending",
+      "actual_size": [
+        1024,
+        1536
+      ],
+      "sha256": "57b06906a812be89ad93c2b0745f35d0216adf297e1bfccf2635a07eec25cb24",
+      "visual_review": "Actual source image and contact sheet viewed; final native Godot full figure and motion reviewed. See artifacts/verification/actor-party-20261115/visual-review.json; user final art acceptance pending.",
+      "run_record": "output/imagegen/actor-party-20261115/p03-master-v1.run.json",
+      "api_log": "output/imagegen/actor-party-20261115/p03-master-v1.api.log"
+    },
+    {
+      "asset_id": "P04-master-v1",
+      "character_id": "P04",
+      "name": "唐以宁",
+      "requirement_ids": [
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "prompt_file": "output/imagegen/actor-party-20261115/prompts/p04-master-v1.txt",
+      "prompt_sha256": "6cc665038072fc253e63722c9acba06b33bb477a5e3b581f375907a5939165ca",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "edit",
+      "request_size": "1024x1536",
+      "quality": "medium",
+      "input_images": [
+        {
+          "file": "assets/art/presentation-v2/actors/P04.png",
+          "sha256": "42e4352727a6d64ba9f2a9da2eb246ff45f54e6c9d4a8cd15ed6c663d3b4db8d"
+        },
+        {
+          "file": "output/imagegen/actor-party-20261115/v5-style-reference.png",
+          "sha256": "65478a8fd9c5dc5213fdc784b9f330b5625d4ed25eade1d2a88ee105e39d2af0"
+        }
+      ],
+      "output": "output/imagegen/actor-party-20261115/p04-master-v1.png",
+      "status": "selected_prototype_ai_render_reviewed_user_acceptance_pending",
+      "actual_size": [
+        1024,
+        1536
+      ],
+      "sha256": "5efec331f3eb7df304a616553f726b8759674a9edb259bfb2c251d1a6ae48e83",
+      "visual_review": "Actual source image and contact sheet viewed; final native Godot full figure and motion reviewed. See artifacts/verification/actor-party-20261115/visual-review.json; user final art acceptance pending.",
+      "run_record": "output/imagegen/actor-party-20261115/p04-master-v1.run.json",
+      "api_log": "output/imagegen/actor-party-20261115/p04-master-v1.api.log"
+    },
+    {
+      "asset_id": "P02-parts-v1",
+      "character_id": "P02",
+      "requirement_ids": [
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "prompt_file": "output/imagegen/actor-party-20261115/prompts/p02-parts-v1.txt",
+      "prompt_sha256": "bdbf8eba02631552c23e4c60290e856c9d3ef7cbd2c0d8c2f5cd45646b4f9cf6",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "edit",
+      "request_size": "1536x1024",
+      "quality": "medium",
+      "input_images": [
+        {
+          "file": "assets/art/presentation-v2/actors/P02.png",
+          "sha256": "3fcfabc9abdf6a9904d0b0d759a2bd55db8c6b3023ebc547db7a09e14e082e7d"
+        },
+        {
+          "file": "output/imagegen/actor-party-20261115/p02-master-v1.png",
+          "sha256": "e428082beaecc0ed18bba68e6c4c8aa1ba2c9adc61177966d85add044095427c"
+        }
+      ],
+      "output": "output/imagegen/actor-party-20261115/p02-parts-v1.png",
+      "status": "selected_prototype_ai_render_reviewed_user_acceptance_pending",
+      "actual_size": [
+        1536,
+        1024
+      ],
+      "sha256": "2ae54b13204bfe1702b920ba6bf058da3b750d16eb398648ae7ce7d94a80b03a",
+      "run_record": "output/imagegen/actor-party-20261115/p02-parts-v1.run.json",
+      "api_log": "output/imagegen/actor-party-20261115/p02-parts-v1.api.log",
+      "visual_review": "Actual source image and contact sheet viewed; final native Godot full figure and motion reviewed. See artifacts/verification/actor-party-20261115/visual-review.json; user final art acceptance pending."
+    },
+    {
+      "asset_id": "P03-parts-v1",
+      "character_id": "P03",
+      "requirement_ids": [
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "prompt_file": "output/imagegen/actor-party-20261115/prompts/p03-parts-v1.txt",
+      "prompt_sha256": "0077b25476510e5f1d8760e9ea2ddf68d5579a3c1b484095bd6dd9b647630874",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "edit",
+      "request_size": "1536x1024",
+      "quality": "medium",
+      "input_images": [
+        {
+          "file": "assets/art/presentation-v2/actors/P03.png",
+          "sha256": "23847b616566092660099e3538f9bf0132831ed9084cf9c101391a8a2b55a3c9"
+        },
+        {
+          "file": "output/imagegen/actor-party-20261115/p03-master-v1.png",
+          "sha256": "57b06906a812be89ad93c2b0745f35d0216adf297e1bfccf2635a07eec25cb24"
+        }
+      ],
+      "output": "output/imagegen/actor-party-20261115/p03-parts-v1.png",
+      "status": "selected_prototype_ai_render_reviewed_user_acceptance_pending",
+      "actual_size": [
+        1536,
+        1024
+      ],
+      "sha256": "49f24c28fdc96f46648fc41cb0c4499280a61deb8872cbeae31333bd7c3b8b62",
+      "run_record": "output/imagegen/actor-party-20261115/p03-parts-v1.run.json",
+      "api_log": "output/imagegen/actor-party-20261115/p03-parts-v1.api.log",
+      "visual_review": "Actual source image and contact sheet viewed; final native Godot full figure and motion reviewed. See artifacts/verification/actor-party-20261115/visual-review.json; user final art acceptance pending."
+    },
+    {
+      "asset_id": "P04-parts-v1",
+      "character_id": "P04",
+      "requirement_ids": [
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "prompt_file": "output/imagegen/actor-party-20261115/prompts/p04-parts-v1.txt",
+      "prompt_sha256": "85e500c46197b2b8cbb06ee3d6b315dbec7393f50c847f4d8e9db9a25063c2b9",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "edit",
+      "request_size": "1536x1024",
+      "quality": "medium",
+      "input_images": [
+        {
+          "file": "assets/art/presentation-v2/actors/P04.png",
+          "sha256": "42e4352727a6d64ba9f2a9da2eb246ff45f54e6c9d4a8cd15ed6c663d3b4db8d"
+        },
+        {
+          "file": "output/imagegen/actor-party-20261115/p04-master-v1.png",
+          "sha256": "5efec331f3eb7df304a616553f726b8759674a9edb259bfb2c251d1a6ae48e83"
+        }
+      ],
+      "output": "output/imagegen/actor-party-20261115/p04-parts-v1.png",
+      "status": "selected_prototype_ai_render_reviewed_user_acceptance_pending",
+      "actual_size": [
+        1536,
+        1024
+      ],
+      "sha256": "7e25de0da416b2ff0953bd156b83635b9d881542555429b841fb1610c654bd7d",
+      "run_record": "output/imagegen/actor-party-20261115/p04-parts-v1.run.json",
+      "api_log": "output/imagegen/actor-party-20261115/p04-parts-v1.api.log",
+      "visual_review": "Actual source image and contact sheet viewed; final native Godot full figure and motion reviewed. See artifacts/verification/actor-party-20261115/visual-review.json; user final art acceptance pending."
+    },
+    {
+      "asset_id": "P02-trunk-v1",
+      "character_id": "P02",
+      "name": "许知微",
+      "requirement_ids": [
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "prompt_file": "output/imagegen/actor-party-20261115/prompts/p02-trunk-v1.txt",
+      "prompt_sha256": "49dda03bc293974a8e98cfe945fea3eda98f80784aadfa31d32474b8b311a429",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "edit",
+      "request_size": "1024x1536",
+      "quality": "medium",
+      "input_images": [
+        {
+          "file": "output/imagegen/actor-party-20261115/p02-master-v1.png",
+          "sha256": "e428082beaecc0ed18bba68e6c4c8aa1ba2c9adc61177966d85add044095427c"
+        }
+      ],
+      "mask": {
+        "file": "output/imagegen/actor-party-20261115/p02-trunk-mask-v1.png",
+        "sha256": "ce2befdad93eb8d24a255078f936019e48eb52f103f60849bdb4aa5abfe889a5"
+      },
+      "output": "output/imagegen/actor-party-20261115/p02-trunk-v1.png",
+      "sha256": "1b19a1680b1ee2af43740455a90a4b512eaa0f2f0a9084316afa4673b551d385",
+      "actual_size": [
+        1024,
+        1536
+      ],
+      "status": "selected_prototype_ai_render_reviewed_user_acceptance_pending",
+      "visual_review": "Actual source image and contact sheet viewed; final native Godot full figure and motion reviewed. See artifacts/verification/actor-party-20261115/visual-review.json; user final art acceptance pending.",
+      "run_record": "output/imagegen/actor-party-20261115/p02-trunk-v1.run.json",
+      "api_log": "output/imagegen/actor-party-20261115/p02-trunk-v1.api.log"
+    },
+    {
+      "asset_id": "P03-trunk-v1",
+      "character_id": "P03",
+      "name": "沈见章",
+      "requirement_ids": [
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "prompt_file": "output/imagegen/actor-party-20261115/prompts/p03-trunk-v1.txt",
+      "prompt_sha256": "49dda03bc293974a8e98cfe945fea3eda98f80784aadfa31d32474b8b311a429",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "edit",
+      "request_size": "1024x1536",
+      "quality": "medium",
+      "input_images": [
+        {
+          "file": "output/imagegen/actor-party-20261115/p03-master-v1.png",
+          "sha256": "57b06906a812be89ad93c2b0745f35d0216adf297e1bfccf2635a07eec25cb24"
+        }
+      ],
+      "mask": {
+        "file": "output/imagegen/actor-party-20261115/p03-trunk-mask-v1.png",
+        "sha256": "4be8404ff1589a159a056727b63548819c127df2e6764c2a2fa7751874d9f069"
+      },
+      "output": "output/imagegen/actor-party-20261115/p03-trunk-v1.png",
+      "sha256": "42803fdf8e10fcad368d35e1026fc6c6a6b7e4a3f7bcd5a9639a40e378888e54",
+      "actual_size": [
+        1024,
+        1536
+      ],
+      "status": "selected_prototype_ai_render_reviewed_user_acceptance_pending",
+      "visual_review": "Actual source image and contact sheet viewed; final native Godot full figure and motion reviewed. See artifacts/verification/actor-party-20261115/visual-review.json; user final art acceptance pending.",
+      "run_record": "output/imagegen/actor-party-20261115/p03-trunk-v1.run.json",
+      "api_log": "output/imagegen/actor-party-20261115/p03-trunk-v1.api.log"
+    },
+    {
+      "asset_id": "P04-trunk-v1",
+      "character_id": "P04",
+      "name": "唐以宁",
+      "requirement_ids": [
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "prompt_file": "output/imagegen/actor-party-20261115/prompts/p04-trunk-v1.txt",
+      "prompt_sha256": "49dda03bc293974a8e98cfe945fea3eda98f80784aadfa31d32474b8b311a429",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "edit",
+      "request_size": "1024x1536",
+      "quality": "medium",
+      "input_images": [
+        {
+          "file": "output/imagegen/actor-party-20261115/p04-master-v1.png",
+          "sha256": "5efec331f3eb7df304a616553f726b8759674a9edb259bfb2c251d1a6ae48e83"
+        }
+      ],
+      "mask": {
+        "file": "output/imagegen/actor-party-20261115/p04-trunk-mask-v1.png",
+        "sha256": "0aed6ecc990815a42b8115c22323cd6ef962a8ff935dfb005f0eee4d4fa81eca"
+      },
+      "output": "output/imagegen/actor-party-20261115/p04-trunk-v1.png",
+      "sha256": "463c018186c83d40877c920c7b8322327f5773481cae5485b27c9f46f1eda41f",
+      "actual_size": [
+        1024,
+        1536
+      ],
+      "status": "selected_prototype_ai_render_reviewed_user_acceptance_pending",
+      "visual_review": "Actual source image and contact sheet viewed; final native Godot full figure and motion reviewed. See artifacts/verification/actor-party-20261115/visual-review.json; user final art acceptance pending.",
+      "run_record": "output/imagegen/actor-party-20261115/p04-trunk-v1.run.json",
+      "api_log": "output/imagegen/actor-party-20261115/p04-trunk-v1.api.log"
+    },
+    {
+      "asset_id": "P02-upper-clean-v1",
+      "character_id": "P02",
+      "name": "许知微",
+      "requirement_ids": [
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "prompt_file": "output/imagegen/actor-party-20261115/prompts/p02-upper-clean-v1.txt",
+      "prompt_sha256": "a01b463ad3efba11cf9e954b7160c3e90fddd8f89d80b4b305ef4f9faa7560ff",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "edit",
+      "request_size": "1024x1536",
+      "quality": "medium",
+      "input_images": [
+        {
+          "file": "output/imagegen/actor-party-20261115/p02-upper-input-v1.png",
+          "sha256": "a7c11d85dd2a372514922256049ef18c5181e03eb012ea6632bfaf6b1e2a7b5b",
+          "derivation": {
+            "character": "P02",
+            "input": "output/imagegen/actor-party-20261115/p02-upper-input-v1.png",
+            "canvas_offset": [
+              235,
+              128
+            ],
+            "scaled_size": [
+              554,
+              1280
+            ],
+            "original_size": [
+              112,
+              259
+            ],
+            "scale": 4.942084942084942
+          }
+        }
+      ],
+      "output": "output/imagegen/actor-party-20261115/p02-upper-clean-v1.png",
+      "sha256": "cdc63af62ecd8b332ec2816895008eb49440d63a9a1a36a1c72f1f8844924e2c",
+      "actual_size": [
+        1024,
+        1536
+      ],
+      "status": "selected_prototype_ai_render_reviewed_user_acceptance_pending",
+      "visual_review": "Actual source image and contact sheet viewed; final native Godot full figure and motion reviewed. See artifacts/verification/actor-party-20261115/visual-review.json; user final art acceptance pending.",
+      "run_record": "output/imagegen/actor-party-20261115/p02-upper-clean-v1.run.json",
+      "api_log": "output/imagegen/actor-party-20261115/p02-upper-clean-v1.api.log"
+    },
+    {
+      "asset_id": "P03-upper-clean-v1",
+      "character_id": "P03",
+      "name": "沈见章",
+      "requirement_ids": [
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "prompt_file": "output/imagegen/actor-party-20261115/prompts/p03-upper-clean-v1.txt",
+      "prompt_sha256": "a01b463ad3efba11cf9e954b7160c3e90fddd8f89d80b4b305ef4f9faa7560ff",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "edit",
+      "request_size": "1024x1536",
+      "quality": "medium",
+      "input_images": [
+        {
+          "file": "output/imagegen/actor-party-20261115/p03-upper-input-v1.png",
+          "sha256": "492522a0f67dd9f1d8f05e37d705abb614fa1b3a9f867728967663a5030deba1",
+          "derivation": {
+            "character": "P03",
+            "input": "output/imagegen/actor-party-20261115/p03-upper-input-v1.png",
+            "canvas_offset": [
+              245,
+              128
+            ],
+            "scaled_size": [
+              533,
+              1280
+            ],
+            "original_size": [
+              115,
+              276
+            ],
+            "scale": 4.63768115942029
+          }
+        }
+      ],
+      "output": "output/imagegen/actor-party-20261115/p03-upper-clean-v1.png",
+      "sha256": "1da50c606b7456c647114e6c89c4002b8913844438e555bff0bc6e37dc71cc83",
+      "actual_size": [
+        1024,
+        1536
+      ],
+      "status": "selected_prototype_ai_render_reviewed_user_acceptance_pending",
+      "visual_review": "Actual source image and contact sheet viewed; final native Godot full figure and motion reviewed. See artifacts/verification/actor-party-20261115/visual-review.json; user final art acceptance pending.",
+      "run_record": "output/imagegen/actor-party-20261115/p03-upper-clean-v1.run.json",
+      "api_log": "output/imagegen/actor-party-20261115/p03-upper-clean-v1.api.log"
+    },
+    {
+      "asset_id": "P04-upper-clean-v1",
+      "character_id": "P04",
+      "name": "唐以宁",
+      "requirement_ids": [
+        "UIR-011",
+        "UIR-013",
+        "UIR-051",
+        "UIR-052",
+        "UIR-054",
+        "UIR-057",
+        "UIR-059"
+      ],
+      "prompt_file": "output/imagegen/actor-party-20261115/prompts/p04-upper-clean-v1.txt",
+      "prompt_sha256": "a01b463ad3efba11cf9e954b7160c3e90fddd8f89d80b4b305ef4f9faa7560ff",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "edit",
+      "request_size": "1024x1536",
+      "quality": "medium",
+      "input_images": [
+        {
+          "file": "output/imagegen/actor-party-20261115/p04-upper-input-v1.png",
+          "sha256": "61765bab1304cbe50f9657a0125d94f17dc5195d581c8c580882c6a02532d240",
+          "derivation": {
+            "character": "P04",
+            "input": "output/imagegen/actor-party-20261115/p04-upper-input-v1.png",
+            "canvas_offset": [
+              256,
+              128
+            ],
+            "scaled_size": [
+              511,
+              1280
+            ],
+            "original_size": [
+              111,
+              278
+            ],
+            "scale": 4.60431654676259
+          }
+        }
+      ],
+      "output": "output/imagegen/actor-party-20261115/p04-upper-clean-v1.png",
+      "sha256": "d868100f13c5ac2fede15955cf85d335fd0e7a9549b8fdbf9fb2032c815555bf",
+      "actual_size": [
+        1024,
+        1536
+      ],
+      "status": "selected_prototype_ai_render_reviewed_user_acceptance_pending",
+      "visual_review": "Actual source image and contact sheet viewed; final native Godot full figure and motion reviewed. See artifacts/verification/actor-party-20261115/visual-review.json; user final art acceptance pending.",
+      "run_record": "output/imagegen/actor-party-20261115/p04-upper-clean-v1.run.json",
+      "api_log": "output/imagegen/actor-party-20261115/p04-upper-clean-v1.api.log"
+    }
+  ],
+  "billing": "not returned",
+  "remaining": 173,
+  "final_visual_record": "artifacts/verification/actor-party-20261115/visual-review.json"
+}

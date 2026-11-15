@@ -1,0 +1,244 @@
+{
+  "version": 6,
+  "source_rig": "assets/art/actor-anatomy/P01/rig.json",
+  "requirements": [
+    "UIR-011",
+    "UIR-013",
+    "UIR-051",
+    "UIR-052",
+    "UIR-054",
+    "UIR-057",
+    "UIR-059"
+  ],
+  "textures": [
+    {
+      "file": "assets/art/actor-anatomy/P01/front_leg.png",
+      "sha256": "8c60df47470a60e261c85ae7a32dc7219ad89ab8cafcf5df2f0a96bfcc766293"
+    },
+    {
+      "file": "assets/art/actor-anatomy/P01/front_shoe_registered.png",
+      "sha256": "5fbb0b2bb9813f13a9a28373abcd0c4aaa3f8454a4f1688c9d41398722d630a0"
+    },
+    {
+      "file": "assets/art/actor-anatomy/P01/head_blink.png",
+      "sha256": "caae8caae354c1c0207cd2dcfe6d9fe18c2d32fca9c4146af2681a5c28766841"
+    },
+    {
+      "file": "assets/art/actor-anatomy/P01/head_hit.png",
+      "sha256": "f16c1b3662a1ab5417f907e2d480893498bb7b7180f81422736e69b9d2ff69df"
+    },
+    {
+      "file": "assets/art/actor-anatomy/P01/head_neutral.png",
+      "sha256": "26a8077fad85dce1ba3a4d92a77db863acd0b1b8d85d13461d2506eabb2408d4"
+    },
+    {
+      "file": "assets/art/actor-anatomy/P01/head_strike.png",
+      "sha256": "d0e6b57644a63e85d7bf6fa5de1f88f893bf6d5f908220d22ec2a1f7ae7f4049"
+    },
+    {
+      "file": "assets/art/actor-anatomy/P01/head_turn.png",
+      "sha256": "5672979211787866466175f3a2a3aa1b2da27358f19c69ebc935a6e514289e97"
+    },
+    {
+      "file": "assets/art/actor-anatomy/P01/near_forearm_neutral.png",
+      "sha256": "bed9d19923680aa7f0fc00a631ca93fc8a3664d23230bfee326c11c39bd9d8e7"
+    },
+    {
+      "file": "assets/art/actor-anatomy/P01/pelvis.png",
+      "sha256": "2b56645ce6660a1ca69d200db3398b404b0dbcfc25d27d955a627906948d6188"
+    },
+    {
+      "file": "assets/art/actor-anatomy/P01/rear_leg.png",
+      "sha256": "e818ca2196bf44aff082832096f7ee869e93f4226c9621a7072edc3c1f9966bd"
+    },
+    {
+      "file": "assets/art/actor-anatomy/P01/rear_shoe_registered.png",
+      "sha256": "d0da1fdedf15873187eeb47b8011aa6584551bfab0b9b54e6760c1a23ed8240b"
+    },
+    {
+      "file": "assets/art/actor-anatomy/P01/torso_neutral.png",
+      "sha256": "71f90ba9d6e13f49b0db9c6521c32c64855d204c3e1848cec5ec648d32585bfb"
+    },
+    {
+      "file": "assets/art/actor-anatomy/P01/torso_strike.png",
+      "sha256": "b99b8bff1cdcf4253a627aa0d4102999d538d6d63f0acbd3a7414472017e33b4"
+    },
+    {
+      "file": "assets/art/actor-anatomy/P01/torso_turn.png",
+      "sha256": "ddd5f21617cf3ab6ff124e7f7ce364b22fabd73459800a711a0c580640e599de"
+    },
+    {
+      "file": "assets/art/actor-rig-pilot/P01/far_upper.png",
+      "sha256": "63c61eea199bdfae060d93996f4eaa7c42116db0087a5ada8e5c376e0d133f30"
+    },
+    {
+      "file": "assets/art/actor-seams/P01/arm_follow.png",
+      "sha256": "eed173bde475638987fd0bc740ab2c3e2ebca54de9ff127cb7514bd6e9ed74cb"
+    },
+    {
+      "file": "assets/art/actor-seams/P01/arm_strike.png",
+      "sha256": "05b9d050c985e996e34a1f81cad42893b9116ff2743276710bccdab096a44f47"
+    },
+    {
+      "file": "assets/art/actor-seams/P01/held_forearm.png",
+      "sha256": "02081a472f131289ae12592f69aa63c3837d0673f0bcd719de73e032851ae331"
+    },
+    {
+      "file": "assets/art/actor-seams/P01/held_hand.png",
+      "sha256": "0dc2d3a3be792e1fb2a8087cebe0b01330ca7da8bb937e8a8dc9933cf9454059"
+    },
+    {
+      "file": "assets/art/actor-seams/P01/held_laptop.png",
+      "sha256": "b6a4b791005dd6fe86621a3e631f05178b99698beb73b440a9ea1db6574b99b6"
+    },
+    {
+      "file": "assets/art/actor-seams/P01/near_upper.png",
+      "sha256": "d19db4e5235d42c91b003a8aa7e0f7f98eaee4f210042136bcb7fc3d6b2f26a3"
+    },
+    {
+      "file": "assets/art/actor-seams/P01/neck_overlap.png",
+      "sha256": "102b670ea8feb549e1436c99f78ce9036d310f3645dacfefbb1ce12a3b7cd2fc"
+    }
+  ],
+  "api_calls_this_batch": 0,
+  "api_successful_total": 15,
+  "processing": [
+    {
+      "file": "assets/art/actor-seams/P01/near_upper.png",
+      "size": [
+        160,
+        265
+      ],
+      "sha256": "d19db4e5235d42c91b003a8aa7e0f7f98eaee4f210042136bcb7fc3d6b2f26a3",
+      "source": "assets/art/actor-rig-pilot/P01/near_upper.png",
+      "source_sha256": "47eedb57f66473606ca2f9393315d6759062f89859aee4c5f2cdb42100ff1f50",
+      "processing": "row-wise premultiplied-alpha taper pinned to inner sleeve edge; small fabric overlap bridges armpit; fade duplicated cuff inside elbow overlap",
+      "width_factors": [
+        [
+          0,
+          0.97
+        ],
+        [
+          48,
+          0.94
+        ],
+        [
+          100,
+          0.8
+        ],
+        [
+          190,
+          0.8
+        ],
+        [
+          264,
+          0.84
+        ]
+      ],
+      "cuff_fade": [
+        221,
+        244
+      ]
+    },
+    {
+      "file": "assets/art/actor-seams/P01/neck_overlap.png",
+      "size": [
+        80,
+        69
+      ],
+      "sha256": "102b670ea8feb549e1436c99f78ce9036d310f3645dacfefbb1ce12a3b7cd2fc",
+      "source": "assets/art/actor-anatomy/P01/neck_overlap_neutral.png",
+      "source_sha256": "68a36871d018289af884f58d316e6c1ce14c5e7f1d47c7f9992c0a95ee85f217",
+      "processing": "extend sampled original neck below collar; taper and feather upper rear edge inside all registered neck silhouettes; original top registration",
+      "paste_origin": [
+        4,
+        0
+      ],
+      "added_height": 18
+    },
+    {
+      "file": "assets/art/actor-seams/P01/held_forearm.png",
+      "size": [
+        308,
+        211
+      ],
+      "sha256": "02081a472f131289ae12592f69aa63c3837d0673f0bcd719de73e032851ae331",
+      "source": "assets/art/actor-rig-pilot/P01/laptop_forearm.png",
+      "source_sha256": "f375c0af550247eb2df44dcba08c81df47476a169cb7fd8060a435fdad745b32",
+      "processing": "registered continuous original arm/palm with feathered 40px internal wrist overlap; prop excluded from forearm",
+      "shared_scale": 0.88,
+      "hand_fade_x": [
+        145,
+        167
+      ],
+      "arm_fade_x": [
+        184,
+        207
+      ]
+    },
+    {
+      "file": "assets/art/actor-seams/P01/held_hand.png",
+      "size": [
+        308,
+        211
+      ],
+      "sha256": "0dc2d3a3be792e1fb2a8087cebe0b01330ca7da8bb937e8a8dc9933cf9454059",
+      "source": "assets/art/actor-rig-pilot/P01/laptop_forearm.png",
+      "source_sha256": "f375c0af550247eb2df44dcba08c81df47476a169cb7fd8060a435fdad745b32",
+      "processing": "registered continuous original arm/palm with feathered 40px internal wrist overlap; prop excluded from forearm",
+      "shared_scale": 0.88,
+      "hand_fade_x": [
+        145,
+        167
+      ],
+      "arm_fade_x": [
+        184,
+        207
+      ]
+    },
+    {
+      "file": "assets/art/actor-seams/P01/held_laptop.png",
+      "size": [
+        308,
+        211
+      ],
+      "sha256": "b6a4b791005dd6fe86621a3e631f05178b99698beb73b440a9ea1db6574b99b6",
+      "source": "assets/art/actor-rig-pilot/P01/laptop_forearm.png",
+      "source_sha256": "f375c0af550247eb2df44dcba08c81df47476a169cb7fd8060a435fdad745b32",
+      "processing": "traced original prop; finger-covered screen pixels reconstructed from adjacent original screen band",
+      "shared_scale": 0.88,
+      "reconstruction_rows": [
+        122,
+        136
+      ]
+    },
+    {
+      "file": "assets/art/actor-seams/P01/arm_strike.png",
+      "size": [
+        352,
+        238
+      ],
+      "sha256": "05b9d050c985e996e34a1f81cad42893b9116ff2743276710bccdab096a44f47",
+      "source": "assets/art/actor-anatomy/P01/arm_strike.png",
+      "source_sha256": "cdfe89c336adfa7a5cf1bc7a9fca4cd8dd96b5e7cc137ef0a283938c11038c5c",
+      "processing": "slim only rolled sleeve around registered elbow; unchanged hand and pen beyond x165",
+      "elbow_y": 118.8,
+      "sleeve_y_scale": 0.88,
+      "unchanged_from_x": 165
+    },
+    {
+      "file": "assets/art/actor-seams/P01/arm_follow.png",
+      "size": [
+        352,
+        238
+      ],
+      "sha256": "eed173bde475638987fd0bc740ab2c3e2ebca54de9ff127cb7514bd6e9ed74cb",
+      "source": "assets/art/actor-anatomy/P01/arm_follow.png",
+      "source_sha256": "09c00a7992ee6850442777cb7230f8fd399da47bba72ca8d9335fe023d063b49",
+      "processing": "slim only rolled sleeve around registered elbow; unchanged hand and pen beyond x165",
+      "elbow_y": 118.8,
+      "sleeve_y_scale": 0.88,
+      "unchanged_from_x": 165
+    }
+  ]
+}

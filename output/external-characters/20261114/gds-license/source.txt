@@ -1,0 +1,83 @@
+Game asset licence
+50,000+ 2d game assets, one art style
+Account
+Basket
+Library
+Saved
+Game assets
+2d Game Asset store
+Suggest an asset
+Gds editor
+About GDS editor
+Launch GDS editor
+launch
+Your GDS
+Log in
+Info
+tools
+news feed
+About
+License
+resources
+License information
+Here at gamedeveloperstudio.com all assets are my own creations! This puts me in the fantastic position of being 
+			able to offer you an extremely flexible license which will allow you to develop your game or media project without 
+			the worry of copyright issues, royalty fees, maximum use or even tiered use amounts. I'm pretty sure you're going to be pleasantly surprised with what
+			this license allows you to do!
+Game developer studio standard license
+Terminology
+Asset / Assets
+The term "asset" or "assets" refers to any media downloaded either freely or for a charge through this 
+				website and its services.
+Website
+Refers to www.gamedeveloperstudio.com  and any of its subdomains, tools or applications.
+Publish
+Means to publicly or privately distribute physical or digital material .
+Agreement
+The general use license  applies to both free and purchased assets downloaded through this site.
+After purchasing an asset from this site you have non-exclusive rights to use  it  in commercial and personal  derivative works which you create or which you create on behalf of another individual or entity, such as a business.
+A derivative work is an end product  that incorporates the asset as well as other things so that it is larger in scope and different 
+				in nature to the individual asset. Typical examples of this would be, but not limited to, a Video Game, a software application, a website, an Ebook, a video, a t-shirt or mug.
+The license holder is granted permission to publish  media containing assets in accordance with this license. The license holder may publish  media containing assets as many times as they wish on as many platforms as they wish as long as the digital media is published under their name or company name. License holders who wish to allow more than one  entity to publish media containing assets under a separate name or company must purchase a license for each subsequent publisher.
+You may use assets in multiple commercial, personal or monetized derivative projects.
+You may modify assets to suit your project needs. Modified assets will still be subject the conditions of this license.
+You may distribute assets to external companies or individuals you hire to work on your media project. Any external companies which you employ and to whom you distribute assets  will not hold any license to publish or distribute the assets.
+Attribution is not required.
+You may use assets in any advertising in relation to the derivative work which you are promoting. This includes but not limited to social media channel art, web advertising,  print media advertising.
+Although unwise, you may also use assets in your trademarks or company logotypes. Due to the nature of stock assets upon doing so you renounce any claims to your trademark or logo's copyright.
+The license for an asset is non-reproducible and cannot be duplicated. There can only be one license holder per license.
+Assets cannot be used and traded publically as non fungible tokens, NFTs.
+Assets cannot be used in game templates designed for resale and republishing.
+You may NOT redistribute, share or make available for download any asset obtained from this site 
+				in any form other than their intended use in derivative works (see above). This would include but not limited to redistributing or reselling assets on other asset stores, stock photography sites, game templates for developers, game templates for publishers and website owners, tutorial resource packages, asset libraries, instruction courses, class room lectures, asset bundles or simply sharing assets within social groups.
+End of  license
+General questions regarding the license
+Some people have written to me to ask for clarification about the license. I'm going to post these questions for the benefit of all users as I understand there still may be doubts about the license. If you have a question about the license or see something which you feel isn't clear please write to me.
+Can I use your graphics for my apps? I usually make free apps with advertising?
+Yes of course. this is their intended purpose
+Can I upload my game to, play store, app store, steam etc with your assets in?
+Yes of course, As the license holder you can publish your media project on as many platforms as you wish under your name or complany name.
+By saying non exclusive rights. In general does that mean I can, or cannot use an asset for commercial use?
+Firstly, yes you can use assets from the site for commercial games. Non exclusive rights  means that you  don't own full
+				copyright permissions over the asset, this allows me to re-license the asset to other users, but you do  have permission to use asset in
+				your commercial games or apps.
+can I make and commercially release a game using just your free assets?
+yes, you certainly can.
+I'm using your assets for upgrades in my game, where users pay for upgrade items, e.g  
+				more powerful weapons, faster cars more gold etc. Does the license allow this?
+Yes of course. you can use the assets in your game in anyway you wish.
+I'm using your assets in an online game development course, can I include your assets for download so users can follow along?
+No, sorry! Whilst you are allowed to use the assets in your tutorials, be they, videos, 
+text or photographic in nature, offering the assets for download  would be considered as redistribution an license duplication.
+				In order to protect my work and in fairness for users who have rightly purchased a license, redistribution is prohibited .
+Can I use the assets in an NFT game I'm creating
+yes and No. You cannot allow others to publish, duplicate or sell the assets unless they hold a license. You can use the assets from this site to create your game or build your game environment for example. But they can never be released to others for sale, or publishing as NFT's on NFT market places.
+www.GameDeveloperStudio.com
+support@gamedeveloperstudio.com
+connect on discord
+2d game assets
+Gds editor
+Ai policy
+terms and conditions
+Privacy
+copyright gamedeveloperstudio 2026

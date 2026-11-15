@@ -1,0 +1,8 @@
+﻿{
+    "elapsed_seconds":  44.707407599999996,
+    "exit_code":  0,
+    "output":  "output/imagegen/actor-party-20261115/p02-trunk-v1.png",
+    "model":  "gpt-image-2.5-sunburst",
+    "character":  "p02",
+    "api_mode":  "edit"
+}

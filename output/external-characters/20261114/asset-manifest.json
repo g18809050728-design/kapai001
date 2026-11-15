@@ -1,0 +1,80 @@
+{
+  "date": "2026-11-14",
+  "stage": "G6",
+  "selected_final_character": null,
+  "rejected_predecessor": "P01-parts-v1",
+  "requirement_ids": [
+    "UIR-049",
+    "UIR-051",
+    "UIR-052",
+    "UIR-054",
+    "UIR-057"
+  ],
+  "candidates": [
+    {
+      "id": "chill-boy",
+      "title": "Chill Boy · Segel2D",
+      "badge": "历史样本 · 用户已否决",
+      "price": "免费版 $0；完整源包价格未核实",
+      "source": "https://opengameart.org/content/chill-boy-character",
+      "offer": "https://segel2d.itch.io/chillboy-character",
+      "license": "OpenGameArt作者发布页标注 CC0。完整商业版的许可另核对，不继承免费版条款。",
+      "actual": "实物：90张 659×626 透明PNG，11个动作/姿态目录；免费包不含身体部件、PSD或SCML。",
+      "assessment": "用户已否决本轮造型；旧观察仅留历史，不再推荐改绘或购买。",
+      "status": "已排除；未选用；保留原作者文件与检查证据。",
+      "historical_assessment": "轮廓清楚，便装和投掷适合校园转译；身体仍是大头卡通，受击偏轻。保留动作基准，不作为最终造型。",
+      "decision": "rejected_by_user",
+      "selected": false,
+      "runtime_integration": "not_started"
+    },
+    {
+      "id": "casual-boy",
+      "title": "现代便装男孩 · Vishwjeet Damor",
+      "badge": "历史样本 · 用户已否决",
+      "price": "免费 $0",
+      "source": "https://opengameart.org/content/2d-character-animation-sprite",
+      "license": "压缩包内 license.txt 明确标注 CC0 1.0；作者称署名非强制。",
+      "actual": "实物：7张透明部件（6个身体件＋闭眼替换头），3待机帧、6行走帧；无绑定工程。",
+      "assessment": "用户已否决本轮造型；旧观察仅留历史，不再推荐改绘或购买。",
+      "status": "已排除；未选用；保留原作者文件与检查证据。",
+      "historical_assessment": "短黑发和便装比盔甲题材更适合校园改绘；肩肘腿未细分，动作少，头身比例仍需审核。",
+      "decision": "rejected_by_user",
+      "selected": false,
+      "runtime_integration": "not_started"
+    },
+    {
+      "id": "gds-man",
+      "title": "男女角色部件包 · Robert Brooks",
+      "badge": "历史样本 · 用户已否决",
+      "price": "男女包各 $19.99；合计 $39.98（非支持者标价）",
+      "source": "https://www.gamedeveloperstudio.com/graphics/viewgraphic.php?item=1q643p2c8t959f6n7v",
+      "offer": "https://www.gamedeveloperstudio.com/graphics/viewgraphic.php?item=1m6u3q9s0k5g1o750b",
+      "license": "作者站Standard License说明允许项目内商用、修改及多项目使用；禁止把源素材单独再分发。未取得购买凭证。",
+      "actual": "商品说明：男12种、女超过12种，PNG动作帧与Spriter木偶，部件可换装。当前只归档公开展示图。",
+      "assessment": "用户已否决本轮造型；旧观察仅留历史，不再推荐改绘或购买。",
+      "status": "已排除；未选用；保留原作者文件与检查证据。",
+      "historical_assessment": "同一作者便于四人统一，有眼镜、便装和职业部件；整体仍是欧美大头卡通，不能直接当作二代画风。",
+      "decision": "rejected_by_user",
+      "selected": false,
+      "runtime_integration": "not_started"
+    },
+    {
+      "id": "skater",
+      "title": "Skater · overcrafted",
+      "badge": "历史样本 · 用户已否决",
+      "price": "免费 $0",
+      "source": "https://opengameart.org/content/2d-skater-sprites",
+      "license": "作者发布页为 OGA-BY 3.0，使用时须署名overcrafted并保留许可链接；本批保留原档。",
+      "actual": "实物：16个身体部件、3个滑板部件、合成图及Adobe Illustrator源文件；没有现成动画或绑定。",
+      "assessment": "用户已否决本轮造型；旧观察仅留历史，不再推荐改绘或购买。",
+      "status": "已排除；未选用；保留原作者文件与检查证据。",
+      "historical_assessment": "四肢长度和重心较清楚，分层细于便装男孩；胡子、滑板、扁平色块与校园主角/二代风格仍有差距。",
+      "decision": "rejected_by_user",
+      "selected": false,
+      "runtime_integration": "not_started"
+    }
+  ],
+  "inventory": "artifacts/verification/external-characters-20261114/inventory.json",
+  "status": "rejected_by_user",
+  "active_review": "campus-round-3/preview.html"
+}

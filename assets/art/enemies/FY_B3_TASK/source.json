@@ -1,0 +1,67 @@
+{
+  "id": "FY_B3_TASK",
+  "version": 13,
+  "name": "大三学年综合评测",
+  "requirements": [
+    "UIR-069",
+    "UIR-011",
+    "UIR-013",
+    "UIR-051",
+    "UIR-052",
+    "UIR-054",
+    "UIR-057",
+    "UIR-059"
+  ],
+  "source": "output/imagegen/enemy-roster-20261115/FY_B3_TASK-v1.png",
+  "source_sha256": "a78d7d8b9a18ba1a90acc52d3e881bbde6697fc5742dd54da362a7c97c59ad1b",
+  "source_size": [
+    1024,
+    1024
+  ],
+  "method": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+  "outputs": [
+    {
+      "file": "assets/art/enemies/FY_B3_TASK/body.png",
+      "size": [
+        706,
+        872
+      ],
+      "sha256": "948eb75f7ed9a3275f5bc796b2741088e9fbf105523b349d7670bc196dc62139",
+      "source_bbox": [
+        292,
+        78,
+        998,
+        950
+      ]
+    },
+    {
+      "file": "assets/art/enemies/FY_B3_TASK/attack.png",
+      "size": [
+        174,
+        351
+      ],
+      "sha256": "8f69bc00e387eca10c6ef356955510dc6f5aaf2734af7044bd910d719623f6b4",
+      "source_bbox": [
+        59,
+        148,
+        233,
+        499
+      ]
+    },
+    {
+      "file": "assets/art/enemies/FY_B3_TASK/accent.png",
+      "size": [
+        199,
+        283
+      ],
+      "sha256": "c669fc1eac547e47494b1bc9495a7351050ca05b2e0e779427411751ef4607df",
+      "source_bbox": [
+        42,
+        639,
+        241,
+        922
+      ]
+    }
+  ],
+  "visual_acceptance": "pending review; machine metrics do not establish visual quality"
+}

@@ -1,0 +1,435 @@
+{
+  "date": "2026-11-14",
+  "stage": "G6",
+  "selected_final_character": null,
+  "human_acceptance": "rejected_by_user",
+  "requirement_ids": [
+    "UIR-049",
+    "UIR-051",
+    "UIR-052",
+    "UIR-054",
+    "UIR-057"
+  ],
+  "canonical_source": "docs/角色与专属卡池重设计_v3.md",
+  "roles": [
+    {
+      "id": "P01",
+      "name": "林序",
+      "behavior": "分步调试、核验、复用方法",
+      "depth": "从自己把方法跑通，到把可复用的方法解释清楚。",
+      "screening": "观察专注检查、记录与执行之间的姿态变化；电脑、便装或眼镜本身不能替代人物表达。"
+    },
+    {
+      "id": "P02",
+      "name": "许知微",
+      "behavior": "组织研究、持续维护章节、选择发表时机",
+      "depth": "结果打磨与维持研究进程之间的取舍。",
+      "screening": "观察整理、阅读、判断与展示成果的表达；不因研究身份指定实验专业或白大褂。"
+    },
+    {
+      "id": "P03",
+      "name": "沈见章",
+      "behavior": "核查、追问、论证、答辩",
+      "depth": "从善于挑出问题，到有分寸地组织论证。",
+      "screening": "观察质询与解释的手势、克制的表情；机制里的毒不能转成毒瓶、法袍或投毒行为。"
+    },
+    {
+      "id": "P04",
+      "name": "唐以宁",
+      "behavior": "分工、协作、伙伴轮换与考试内化",
+      "depth": "从亲自包办，到合理分工并形成独立作答能力。",
+      "screening": "观察交流、分发任务与独立思考的区别；不采用召唤师形象，伙伴离场不表现死亡。"
+    }
+  ],
+  "status": "rejected_by_user_character_ui_paused",
+  "character_work": "paused_by_user",
+  "source_packages_obtained": 0,
+  "editable_body_packages_verified": 0,
+  "runtime_integrations": 0,
+  "preview_count": 20,
+  "resources": [
+    {
+      "id": "raiko-college",
+      "title": "RAIKO · 大学生年龄的便装青年",
+      "author": "RAIKO",
+      "url": "https://booth.pm/ja/items/4220537",
+      "roles": [
+        "P01"
+      ],
+      "decision": "rejected_by_user",
+      "campus_fit": "深色外套、围巾与普通长裤，作者明确为高中至大学年龄的私服青年；校园便装方向成立，年龄范围仍需选角核对。",
+      "role_fit": "可比较林序的内敛状态与外套轮廓；摸围巾的固定动作不能表现调试、核验和方法复用。黑发不等于已满足林序身份。",
+      "style_gap": "偏日系正面立绘，肩髋、重心与侧向行动均未验证；不能作为二代战场动作成品。",
+      "source_claim": "免费版1表情PNG，2000×780；付费版16表情PNG。未声明身体分件或绑定。",
+      "obtained": "2张公开展示JPG与商品网页；免费原包请求跳转登录，未取得ZIP。",
+      "license": "页面允许商用及加笔修改，禁止素材再分发；作者店铺另禁止AI学习/生成用途。本批只作本地观察，未上传生图。",
+      "price_snapshot": "免费版¥0；16表情版¥300（日元，2026-11-14页面）",
+      "body_layers_verified": false,
+      "motion_verified": false,
+      "source_package_obtained": false,
+      "selected": false,
+      "historical_ai_decision": "reference_only",
+      "files": [
+        {
+          "path": "output/external-characters/20261114/campus-round-3/raiko-college/source.html",
+          "bytes": 119156,
+          "sha256": "0ecad47b9d77bcc28170437c8b78e612a27737ae2bb91d7d74d64de9765e8104"
+        },
+        {
+          "path": "output/external-characters/20261114/campus-round-3/raiko-college/source.txt",
+          "bytes": 5899,
+          "sha256": "8c0f3331ba111e8574a852c321a28fb7ea22dbd0c425badf3944878dc81c63e5"
+        },
+        {
+          "path": "output/external-characters/20261114/campus-round-3/raiko-college/previews/0.jpg",
+          "bytes": 234830,
+          "sha256": "da03c84fd84d6b51bcea3b37ec740d3c11076347b11a378f12887c6e7a60d539"
+        },
+        {
+          "path": "output/external-characters/20261114/campus-round-3/raiko-college/previews/1.jpg",
+          "bytes": 360694,
+          "sha256": "5743607d885fc98d6b85fb692d080bd72a6398dfa133ee19bb3e4ca7f1558afb"
+        }
+      ],
+      "preview_count": 2
+    },
+    {
+      "id": "raiko-glasses",
+      "title": "RAIKO · 眼镜与棕色马甲青年",
+      "author": "RAIKO",
+      "url": "https://booth.pm/ja/items/5384173",
+      "roles": [
+        "P03"
+      ],
+      "decision": "rejected_by_user",
+      "campus_fit": "衬衣马甲、普通眼镜与思考手势，可作校园讨论姿态参照；作者未指定大学生身份。",
+      "role_fit": "比奇幻毒师更接近沈见章的观察与论证；只能借鉴思考姿态，尚没有指认问题、陈述观点和收敛锋芒的动作变化。",
+      "style_gap": "日系正面细长立绘，轮廓稳但动作固定；与二代的侧向重心、夸张轮廓及笔触有距离。",
+      "source_claim": "免费版1表情PNG，2500×880；付费版16表情PNG，无身体分件声明。",
+      "obtained": "2张公开展示JPG与商品网页；未取得免费原件、付费表情或绑定。",
+      "license": "页面允许商用、修改；禁止素材本身再分发。作者店铺另禁止AI学习/生成用途。",
+      "price_snapshot": "免费版¥0；16表情版¥300（日元，2026-11-14页面）",
+      "body_layers_verified": false,
+      "motion_verified": false,
+      "source_package_obtained": false,
+      "selected": false,
+      "historical_ai_decision": "reference_only",
+      "files": [
+        {
+          "path": "output/external-characters/20261114/campus-round-3/raiko-glasses/source.html",
+          "bytes": 119100,
+          "sha256": "799b4881b9da435cd7bbd43a71eb866f51137e3d4bcc1ae1f69eeffeede0c30d"
+        },
+        {
+          "path": "output/external-characters/20261114/campus-round-3/raiko-glasses/source.txt",
+          "bytes": 5958,
+          "sha256": "fd7624b7fe02c305cdd381f18a400f68c210f11cb3d698fd664550d92fc27f51"
+        },
+        {
+          "path": "output/external-characters/20261114/campus-round-3/raiko-glasses/previews/0.jpg",
+          "bytes": 238621,
+          "sha256": "b9087a15a18755ea613c8cec39fbbf88f5a364387ead30126f1acc358c0df991"
+        },
+        {
+          "path": "output/external-characters/20261114/campus-round-3/raiko-glasses/previews/1.jpg",
+          "bytes": 370749,
+          "sha256": "03981829f85e47385aca76068ba8a0bcbc13fd83d3fe8bff8213b9ca10328198"
+        }
+      ],
+      "preview_count": 2
+    },
+    {
+      "id": "natsuya-student",
+      "title": "夏屋 · 2343 现代便装学生",
+      "author": "夏屋 / Natsuya",
+      "url": "https://booth.pm/ja/items/5209806",
+      "roles": [
+        "P04"
+      ],
+      "decision": "rejected_by_user",
+      "campus_fit": "卫衣、牛仔裤、便鞋和斜挎包，身体有侧倾与开放手势；作者标注现代学生，但未明确大学年龄。",
+      "role_fit": "可比较唐以宁主动交流的身体语言；不将开朗等同于人物全部性格，仍缺分工后退让、独立作答的状态。",
+      "style_gap": "比僵直站姿有活力，但大眼、发饰和明快配色偏日系；不能据此选为最终角色或固定现有人物性别。",
+      "source_claim": "6张3000×2000透明PNG表情立绘；商品未列身体部件、PSD或动画工程。",
+      "obtained": "2张带Sample的公开展示JPG与网页；未购买、未取得6张原件。",
+      "license": "作者允许商用、修改和衍生；禁止素材转卖/再分发、AI训练及作为配信头像。本批只作本地研究。",
+      "price_snapshot": "¥500（日元，2026-11-14页面）",
+      "body_layers_verified": false,
+      "motion_verified": false,
+      "source_package_obtained": false,
+      "selected": false,
+      "historical_ai_decision": "reference_only",
+      "files": [
+        {
+          "path": "output/external-characters/20261114/campus-round-3/natsuya-student/source.html",
+          "bytes": 114641,
+          "sha256": "9c4ef3f1504a485873b67b099b0213c99192b5ab6f53c3ab25d427940b7218c8"
+        },
+        {
+          "path": "output/external-characters/20261114/campus-round-3/natsuya-student/source.txt",
+          "bytes": 5192,
+          "sha256": "0b545dff366ece82332e0e431f0d64b1da657385f603c0a53097c5115bccf23b"
+        },
+        {
+          "path": "output/external-characters/20261114/campus-round-3/natsuya-student/previews/0.jpg",
+          "bytes": 347310,
+          "sha256": "973710ffe62316c9cf7d806734938e8ff63dbbc59d72ff4421b986e2326764cc"
+        },
+        {
+          "path": "output/external-characters/20261114/campus-round-3/natsuya-student/previews/1.jpg",
+          "bytes": 313173,
+          "sha256": "cec3d00abf0b8ed1dc5dbd23a444f9d278e456d8675a4b6abf404b3fd7ac39bd"
+        }
+      ],
+      "preview_count": 2
+    },
+    {
+      "id": "raiko-teacher",
+      "title": "RAIKO · 白衣中年人物",
+      "author": "RAIKO",
+      "url": "https://booth.pm/ja/items/6943507",
+      "roles": [
+        "staff"
+      ],
+      "decision": "rejected_by_user",
+      "campus_fit": "成年面部、衬衣领带和白衣，可作实验室教职人员的形象参照；原商品只称白衣中年男性，未确认为教师。",
+      "role_fit": "用于比较成年教职人员与学生的年龄、气质区别，不映射为新增NPC，不替换原有任务为教师敌人，也不强加给许知微。",
+      "style_gap": "正面立绘与单一站姿，没有教学、指导或真实身体动作；不得仅凭白衣断定专业。",
+      "source_claim": "免费版通常表情PNG；付费版16表情，PNG高2500像素。没有身体分件或绑定声明。",
+      "obtained": "2张公开展示JPG与商品网页；未取得原件。",
+      "license": "作者页允许商用、修改，禁止素材再分发；店铺禁止AI学习/生成用途。",
+      "price_snapshot": "免费版¥0；16表情版¥300（日元，2026-11-14页面）",
+      "body_layers_verified": false,
+      "motion_verified": false,
+      "source_package_obtained": false,
+      "selected": false,
+      "historical_ai_decision": "reference_only",
+      "files": [
+        {
+          "path": "output/external-characters/20261114/campus-round-3/raiko-teacher/source.html",
+          "bytes": 118991,
+          "sha256": "faaf8dc4070c97db22258b24aac5bc07a90f4e4c51128524e471c92bcc66b9a0"
+        },
+        {
+          "path": "output/external-characters/20261114/campus-round-3/raiko-teacher/source.txt",
+          "bytes": 5924,
+          "sha256": "c4b461bcf8ac3ab2d19f4f7bf1f3b9967fa0dd093fac3ae8a767e639ea6fcd74"
+        },
+        {
+          "path": "output/external-characters/20261114/campus-round-3/raiko-teacher/previews/0.jpg",
+          "bytes": 168935,
+          "sha256": "11cdcb33ab1e5ff4e2d2107fba868c6dd0161f3b356857751c97ac798442c918"
+        },
+        {
+          "path": "output/external-characters/20261114/campus-round-3/raiko-teacher/previews/1.jpg",
+          "bytes": 438524,
+          "sha256": "d4822c0cce37971838ec510c1dc9cc788fe7faf90e940b2ec12830b12016e1dc"
+        }
+      ],
+      "preview_count": 2
+    },
+    {
+      "id": "yashiro-college",
+      "title": "八白嘘 · 夹克男大学生",
+      "author": "八白嘘 / ヤシロヤ",
+      "url": "https://booth.pm/ja/items/4097552",
+      "roles": [
+        "P03"
+      ],
+      "decision": "rejected_by_user",
+      "campus_fit": "作者明确男大学生，夹克、T恤、牛仔裤和运动鞋；校园身份比职业幻想素材直接。",
+      "role_fit": "可比较沈见章观察和持保留态度的静态表情；交叉抱臂过于固定，不能替代质询、论证与有分寸的交流。",
+      "style_gap": "仍偏日系正面立绘；抱臂遮住肩肘且不利于身体活动。",
+      "source_claim": "正文列免费1张/通常10张全身4000×6000 PNG及膝上裁片；公开旧展示图另写PSD面部件，与当前正文不一致，保持未核实。",
+      "obtained": "2张公开展示JPG与网页；免费PNG请求跳转登录，没有把登录HTML算作图片下载。",
+      "license": "允许商用，但公开使用的修改受列明条款限制；私人使用的广泛加工许可不可直接外推到游戏身体重绘。",
+      "price_snapshot": "免费版¥0；通常版¥400（日元，2026-11-14页面）",
+      "body_layers_verified": false,
+      "motion_verified": false,
+      "source_package_obtained": false,
+      "selected": false,
+      "historical_ai_decision": "reference_only",
+      "files": [
+        {
+          "path": "output/external-characters/20261114/campus-round-3/yashiro-college/source.html",
+          "bytes": 119591,
+          "sha256": "c57540bc68cc471764cde106e51d583d065ce2a29cd3004a45412d8f9c59f7ed"
+        },
+        {
+          "path": "output/external-characters/20261114/campus-round-3/yashiro-college/source.txt",
+          "bytes": 5671,
+          "sha256": "1bfedc33a4e7177a9d2da1177f459997d4ee048fc7fe84d5d2992c0d6bccc670"
+        },
+        {
+          "path": "output/external-characters/20261114/campus-round-3/yashiro-college/previews/0.jpg",
+          "bytes": 446063,
+          "sha256": "294e66031b45634f0576f31d562dce1a1c558a398c9bde422818f48333976274"
+        },
+        {
+          "path": "output/external-characters/20261114/campus-round-3/yashiro-college/previews/1.jpg",
+          "bytes": 501593,
+          "sha256": "d4720ec9c87a95d6645bcec573fd6e3b18cffb7e716e30b1b1211264945a01e5"
+        }
+      ],
+      "preview_count": 2
+    },
+    {
+      "id": "mokurou-glasses-student",
+      "title": "黙朗 · 手持平板的眼镜大学生",
+      "author": "黙朗。-もくろう。-",
+      "url": "https://booth.pm/ja/items/8569424",
+      "roles": [
+        "P01",
+        "P02"
+      ],
+      "decision": "rejected_by_user",
+      "campus_fit": "平板、针织上衣和长裤，作者明确大学生；阅读工具及松弛站姿贴近校园日常。",
+      "role_fit": "平板与眼镜可用于检查林序/许知微的工具轮廓，但不能证明核验、组织研究或发表时机的角色深度。",
+      "style_gap": "偏日系细长正面立绘，平板手势单一，未见连续动作。",
+      "source_claim": "免费无眼镜通常表情1张；完整12张1380×4291透明PNG，表情/眼镜差分，不是四肢分层。",
+      "obtained": "2张公开展示JPG与商品网页；没有免费或付费原件。",
+      "license": "正文提及可用于游戏，但详细条款禁止商品化等商业用途，商用游戏边界不明确；修改仅列缩放/裁切，禁止AI训练。本批排除接入。",
+      "price_snapshot": "免费版¥0；完整包¥1000（日元，2026-11-14页面）",
+      "body_layers_verified": false,
+      "motion_verified": false,
+      "source_package_obtained": false,
+      "selected": false,
+      "historical_ai_decision": "exclude_from_integration",
+      "files": [
+        {
+          "path": "output/external-characters/20261114/campus-round-3/mokurou-glasses-student/source.html",
+          "bytes": 121679,
+          "sha256": "4ae3b715a5fc3fb42bd42ce6b6703cdeccbb216ae3ad8d27594e9e44a97fb23b"
+        },
+        {
+          "path": "output/external-characters/20261114/campus-round-3/mokurou-glasses-student/source.txt",
+          "bytes": 7242,
+          "sha256": "a320702ad7474d44545491ac1a0515ce52805e59d63d125fd17cc87cd34cd622"
+        },
+        {
+          "path": "output/external-characters/20261114/campus-round-3/mokurou-glasses-student/previews/0.jpg",
+          "bytes": 262929,
+          "sha256": "6f0f944d7be1cbc96e49c067f4dd1ed1801e3630f50640a4d861fb00b3368d65"
+        },
+        {
+          "path": "output/external-characters/20261114/campus-round-3/mokurou-glasses-student/previews/1.jpg",
+          "bytes": 257483,
+          "sha256": "1a202c310065c010fe696a3e5bee8161c5d27e332dd28abffbcb660cbfad47e0"
+        }
+      ],
+      "preview_count": 2
+    },
+    {
+      "id": "kinako-student",
+      "title": "きなこ · No.7 女大学生",
+      "author": "きなこもっちもち",
+      "url": "https://booth.pm/ja/items/6470696",
+      "roles": [
+        "P02",
+        "P04"
+      ],
+      "decision": "rejected_by_user",
+      "campus_fit": "作者明确女大学生、现代服装；校园身份成立。公开预览只到髋部，未能观察完整下肢与站姿。",
+      "role_fit": "可看讨论与情绪差分，但当前姿态没有研究整理或团队分工行为，不为已有主角硬套人物。",
+      "style_gap": "大眼日系半身表现，无法据样图核对战场全身轮廓、脚点或身体动作。",
+      "source_claim": "商品展示表情差分，正文没有确认完整身体部件、绑定或动作源。",
+      "obtained": "2张公开展示JPG与网页；未购买、未取得源文件。",
+      "license": "页面允许商用游戏；加工需保留原型，禁止素材本身再分发/出售。不能据此假设任意重新分层。",
+      "price_snapshot": "¥300（日元，2026-11-14页面）",
+      "body_layers_verified": false,
+      "motion_verified": false,
+      "source_package_obtained": false,
+      "selected": false,
+      "historical_ai_decision": "exclude_from_battlefield",
+      "files": [
+        {
+          "path": "output/external-characters/20261114/campus-round-3/kinako-student/source.html",
+          "bytes": 85273,
+          "sha256": "ac24ecf908eb1e9ef6323522dab85f32c3758ce0419143b5565a05f49e0c4485"
+        },
+        {
+          "path": "output/external-characters/20261114/campus-round-3/kinako-student/source.txt",
+          "bytes": 3849,
+          "sha256": "014eedcea2a2d5f35f57bd4bdc4db77f07cf0370e3021c0ced6f2fb2fc33a508"
+        },
+        {
+          "path": "output/external-characters/20261114/campus-round-3/kinako-student/previews/0.jpg",
+          "bytes": 235001,
+          "sha256": "1b4feebfda91acee7452363603d4211a720594e4f8454ad57e7a23162d9406be"
+        },
+        {
+          "path": "output/external-characters/20261114/campus-round-3/kinako-student/previews/1.jpg",
+          "bytes": 245081,
+          "sha256": "1df8d949699f38110c5e99ca906f9903ac4d9e83884dd3f9a9c8d5fe9d4ec9ba"
+        }
+      ],
+      "preview_count": 2
+    },
+    {
+      "id": "sakura-researcher",
+      "title": "桜雨工房 · 研究者风人物（AI生成）",
+      "author": "桜雨工房",
+      "url": "https://booth.pm/ja/items/7292972",
+      "roles": [
+        "P02"
+      ],
+      "decision": "rejected_by_user",
+      "campus_fit": "背包、宽松外套与日常服装，商品称研究者风；白衣、发色或商品标签不足以成立许知微的研究身份。",
+      "role_fit": "仅有研究者标签，未见研究组织、章节维护或发表取舍的行为表达，不推荐套用。",
+      "style_gap": "公开图是单一身体姿态；虽有较粗线条，仍不能证明接近二代的身体动作或四人一致性。",
+      "source_claim": "页面明确AI生成；PSD只列眼/口/眉、赤面和汗等表情差分，未列身体分件或动作。",
+      "obtained": "6张公开展示JPG与商品网页；未购买，未取得PSD/PNG原件。",
+      "license": "商品自述允许商用及加工，禁止源素材再分发；本批不将卖家声明当作底层权利或正式游戏许可核收。",
+      "price_snapshot": "¥200（日元，2026-11-14页面）",
+      "body_layers_verified": false,
+      "motion_verified": false,
+      "source_package_obtained": false,
+      "selected": false,
+      "historical_ai_decision": "exclude_from_integration",
+      "files": [
+        {
+          "path": "output/external-characters/20261114/campus-round-3/sakura-researcher/source.html",
+          "bytes": 106618,
+          "sha256": "7e6a405b1ca15b674b9ff6e13892bb316dd4c1672326f029ef64383b96c3e3fd"
+        },
+        {
+          "path": "output/external-characters/20261114/campus-round-3/sakura-researcher/source.txt",
+          "bytes": 4104,
+          "sha256": "cc39f45baa5bdc10da03a896ae5b25bedeec00e5887ac34755f1641f8248b19e"
+        },
+        {
+          "path": "output/external-characters/20261114/campus-round-3/sakura-researcher/previews/0.jpg",
+          "bytes": 408732,
+          "sha256": "6adeb430bbff56407925894e8eb35fc1c238f157cdc5ae6fdaefa227741890b9"
+        },
+        {
+          "path": "output/external-characters/20261114/campus-round-3/sakura-researcher/previews/1.jpg",
+          "bytes": 401132,
+          "sha256": "8c02563cba742dd55a4f5a4c24cc06b78e2b07ae8f88102cc4603ea94e6b2600"
+        },
+        {
+          "path": "output/external-characters/20261114/campus-round-3/sakura-researcher/previews/2.jpg",
+          "bytes": 120080,
+          "sha256": "732ed36ad763fe8ee78eec204f4960d11ab0a2d77473afdb9a8b833305063cd8"
+        },
+        {
+          "path": "output/external-characters/20261114/campus-round-3/sakura-researcher/previews/3.jpg",
+          "bytes": 316158,
+          "sha256": "24b99b6afbd424ba40f44eac1035b9f28342ddcbf886bad04fb5ba9c3e65ce24"
+        },
+        {
+          "path": "output/external-characters/20261114/campus-round-3/sakura-researcher/previews/4.jpg",
+          "bytes": 311663,
+          "sha256": "5ed0f823f5bb8f296d1e80b5a70fd0aa06ac97afc5d90006d981bf667fb48e4e"
+        },
+        {
+          "path": "output/external-characters/20261114/campus-round-3/sakura-researcher/previews/5.jpg",
+          "bytes": 223235,
+          "sha256": "1dd7c75f133a2f9f593ce3517f6345ab71af3d9a3234f03e3bc13783e95eae0f"
+        }
+      ],
+      "preview_count": 6
+    }
+  ],
+  "created_at": "2026-11-14T05:33:40.185695+00:00"
+}

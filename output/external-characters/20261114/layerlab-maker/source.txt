@@ -1,0 +1,496 @@
+2D Casual Character Creator – Modular Art Maker with Spine
+Skip to content
+STORE
+STORE
+All
+GUI
+Icons
+Characters
+Characters
+2D Characters
+3D Characters
+Props
+Environments
+3D
+VFX
+Utility
+MINIMAL GAME
+BLOG
+SUPPORT
+SUPPORT
+Contact
+DIscord
+Licences
+FAQs
+GUIDE
+Log in
+No account yet?
+Create My Account
+STORE
+All
+GUI
+Icons
+Characters
+2D Characters
+3D Characters
+Props
+Environments
+3D
+VFX
+Utility
+MINIMAL GAME
+BLOG
+SUPPORT
+Contact
+DIscord
+Licences
+FAQs
+GUIDE
+Twitter
+Facebook
+Instagram
+YouTube
+Discord
+Search
+Search
+Browse by what you need
+Game UI / GUI
+Godot support guide
+Icons
+Characters
+Free assets
+Try a product name or a shorter term, such as Minimal, RPG or GUI. Check each product’s included formats before buying.
+Log in
+Create My Account
+Cart
+0
+0 items
+Featured
+HOME
+>
+Characters
+2D Art Maker - Casual Character
+Regular price
+$30.00
+-40%
+Sale price
+$30.00
+Regular price
+$49.99
+Unit price
+/
+per
+Ends in
+NOVEMBER SALE 35% OFF
+Find the assets for your next game
+00
+Day
+00
+Hrs
+00
+Mins
+00
+Secs
+1/23
+Description
+Package Contents
+Review
+Release
+Description
+Package Contents
+Review
+[ WEB DEMO ]
+Create your own casual characters with over
+450 modular parts
+. Includes Spine animations, presets, and an intuitive editor for quick and easy customization.
+AT A GLANCE
+✅ 450+ modular parts included
+✅ Mix & match heads, eyes, mouths, outfits, weapons, and more
+✅ Charming
+casual line art style
+✅ Intuitive editor UI for instant customization
+✅ Character presets included
+✅ Basic animations provided (Idle, Walk, Run, Attack, etc.)
+✅ Color customization supported
+✅ Spine source files included (editing requires Spine Pro license)
+✅ Unity package (.unitypackage) included
+✅ Godot package included (requires the official spine-godot 4.3 GDExtension, not included)
+WHAT YOU GET (2 files)
+📦 2D Art Maker - Casual Characters.unitypackage
+📦 2D Art Maker - Casual Characters_Godot.zip
+WHAT'S INSIDE
+Assets Overview
+•
+Default Full-Body Character Size: 106×108
+• Recommended Resolution: 1920×1280
+• Beard 10
+• Brow 10
+• Eye 20
+• Mouth 10
+• Hair 30
+• Eyewear 30
+• Tops 60
+• Bottoms 50
+• Boots 30
+• Gloves 30
+• Helmets 60
+• Gear Left 40
+• Gear Right 40
+• Back Accessories 30
+• Total of 450+ parts
+Animations
+• Attack1 / Attack2 / Attack3
+• Hit
+• Die
+• Idle1 / Idle2
+• Walk
+• Run
+Technical Specifications
+• Unity 2021 or higher
+• Mobile / PC / WebGL compatible
+• Lightweight and performance-optimized
+SPINE NOTES
+Dependency
+• Spine runtime is required to use this package.
+• Download and install
+Spine runtime v4.3
+in your Unity project. The download link is also included in the documentation within the package.
+Original Spine File Included
+The package includes ready-to-use part sets and original Spine source files. Spine Editor users can modify their own parts using the originals included in the asset. Please note that editing the original files requires a Spine Pro license (the originals use meshes).
+⚠️ Spine License Notice
+This asset package contains animations created with Spine, which run via the Spine-Unity runtime.
+• According to the official Spine Editor License (2.4 Requirements), a Spine Editor license is required when you
+integrate the Spine runtime into your project to build and distribute
+a game or software.
+• When a license is required:
+Building / distributing a game that includes the runtime →
+Required
+Editing the .spine source files / creating new content →
+Required (Professional)
+• When a license is NOT required: Evaluating or testing the runtime Distributing a product as-is, without modification
+References
+• License Agreement:
+Spine Editor License
+• Pricing / Purchase:
+Spine Purchase
+⛔ Important
+• NFT use not permitted
+• Complies with Unity Asset Store EULA
+RELATED PACKS
+Interested in related assets?
+👉
+2D Art Maker - Fantasy Character
+🚫
+Assets may be AI-modified or used to generate images for a single project only. AI model training and redistribution or resale of original or derivative assets are prohibited.
+Loading package contents...
+Customer Reviews
+Be the first to write a review
+Write a review
+0%
+(0)
+0%
+(0)
+0%
+(0)
+0%
+(0)
+0%
+(0)
+Release
+Version 1.1.5
+- Added a popup for missing Spine.
+---------------------------------------------------------------
+Version 1.1.4
+- Updated
+Spine Runtime to version 4.3.
+---------------------------------------------------------------
+Version 1.1.3
+- Improved hockey mask icon design
+---------------------------------------------------------------
+Version 1.1.2
+- Fixed 6.4 null reference error
+- Removed camera script
+- Removed player movement
+Release
+Version 1.1.5
+- Added a popup for missing Spine.
+---------------------------------------------------------------
+Version 1.1.4
+- Updated
+Spine Runtime to version 4.3.
+---------------------------------------------------------------
+Version 1.1.3
+- Improved hockey mask icon design
+---------------------------------------------------------------
+Version 1.1.2
+- Fixed 6.4 null reference error
+- Removed camera script
+- Removed player movement
+You May Also Like
+2D Minimal - Character Mount Pack 1 [Expansion]
+Add to Cart
+Sold Out
+2D Minimal - Character Mount Pack 1 [Expansion]
+NEW
+Regular price
+$5.00
+NEW
+-50%
+Sale price
+$5.00
+Regular price
+$9.99
+Unit price
+/
+per
+Minimal Archer Character PSD 2
+Add to Cart
+Sold Out
+Minimal Archer Character PSD 2
+NEW
+Regular price
+$15.00
+NEW
+-50%
+Sale price
+$15.00
+Regular price
+$29.99
+Unit price
+/
+per
+Minimal Archer Character PSD 1
+Add to Cart
+Sold Out
+Minimal Archer Character PSD 1
+NEW
+Regular price
+$15.00
+NEW
+-50%
+Sale price
+$15.00
+Regular price
+$29.99
+Unit price
+/
+per
+GUI - Minimal Daily Spin
+Add to Cart
+Sold Out
+GUI - Minimal Daily Spin
+Regular price
+$4.50
+-50%
+Sale price
+$4.50
+Regular price
+$8.99
+Unit price
+/
+per
+2D Characters - Cute Adventurers
+2D Characters - Cute Adventurers
+Regular price
+FREE
+Sale price
+FREE
+Unit price
+/
+per
+2D Minimal - Enemy Monster 3
+Add to Cart
+Sold Out
+Featured
+2D Minimal - Enemy Monster 3
+Regular price
+$42.00
+-40%
+Sale price
+$42.00
+Regular price
+$69.99
+Unit price
+/
+per
+2D Characters - Pet Pack 4
+Add to Cart
+Sold Out
+2D Characters - Pet Pack 4
+Regular price
+$12.00
+-40%
+Sale price
+$12.00
+Regular price
+$19.99
+Unit price
+/
+per
+2D Characters - Pet Pack 3
+Add to Cart
+Sold Out
+2D Characters - Pet Pack 3
+Regular price
+$19.99
+Sale price
+$19.99
+Unit price
+/
+per
+Browse:
+2D Assets
+2D Characters
+Characters
+Featured
+HOME
+>
+Characters
+2D Art Maker - Casual Character
+Regular price
+$30.00
+-40%
+Sale price
+$30.00
+Regular price
+$49.99
+Unit price
+/
+per
+Ends in
+NOVEMBER SALE 35% OFF
+Find the assets for your next game
+00
+Day
+00
+Hrs
+00
+Mins
+00
+Secs
+Product variants:
+Default Title - $49.99 USD
+Decrease quantity for 2D Art Maker - Casual Character
+Quantity
+Increase quantity for 2D Art Maker - Casual Character
+Add to Cart
+5 seats per quantity - One Time Purchase License
+Included formats
+Technical Info
+• Spine-Unity Version :
+Spine runtime v4.3
+• Unity Version: 2022.3.62f3 or higher
+• Render Pipeline:
+- Built-in: ✔
+- URP: ✔
+- HDRP: ✖
+- Custom RP: ✖
+Tags
+2D asset
+Avatar
+Cartoon
+Casual
+Character
+character pack
+Colorful
+Costume
+game asset
+Godot
+godot asset
+Line
+Prefab
+PSD Not Included
+RPG
+Unity
+unity asset
+Share
+Premium & Free Game Assets for Unity
+LAYER STORE by LayerLab offers premium and free 2D and 3D game assets for Unity, mobile and indie development, including game UI, icons, characters, environments and VFX.
+Company Information
+LAYER LAB Co., Ltd. (주)레이어랩
+|
+제 2024-서울강남-05856 호
+733-88-00239
+|
+HYUNSEOK YU
+support@layerlab.io
+|
++82-70-7722-5911
+6082, 6F, 31, Gangnam-daero 92-gil, Gangnam-gu, Seoul, Republic of Korea
+Support
+Contact
+Discord
+Licensing Terms
+Privacy policy
+Terms of service
+Refound policy
+Support
+Contact
+Discord
+Licensing Terms
+Privacy policy
+Terms of service
+Refound policy
+Other Stores
+LayerStore Korea
+UnityAssetStore
+UnityAssetStore China
+FAB
+itch
+GDM
+Dribbble
+Other Stores
+LayerStore Korea
+UnityAssetStore
+UnityAssetStore China
+FAB
+itch
+GDM
+Dribbble
+JOIN OUR MAILING LIST
+Subscribe and get 15% off your next order!
+Your E-mail
+Subscribe
+You can unsubscribe at any time. Your personal information is securely protected and will never be shared with third parties.
+Payment Available
+Visa
+Mastercard
+American Express
+JCB
+Union Pay
+Discover
+WeChat Pay
+LINE Pay
+비씨카드
+BC
+카카오페이
+pay
+토스
+toss
+네이버페이
+N
+pay
+©
+          
+          
+            2026
+Layer Store
+.
+My Shopping Cart (0)
+You have no products in your shopping cart.
+Start Shopping
+Loading...
+Loading...
+Subtotal
+$0.00 USD
+You Save
+$0.00 USD
+Total
+$0.00 USD
+No shipping required. Access purchased files from your account.
+  
+    Taxes calculated at checkout.
+Update
+Checkout
+View Cart
+Choosing a selection results in a full page refresh.

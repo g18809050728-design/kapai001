@@ -37,49 +37,55 @@ func run() -> Array[String]:
 func _matrix(page: BattleScreen, label: String) -> void:
 	var player := str(page.view.player.entity_id)
 	var task := str(page.view.tasks[0].task_id)
-	_expect(page,"completion_applied",[task],{"work_before":20,"work_after":20,"shield_before":0,"shield_after":0},player,[],label+" zero work")
-	_expect(page,"completion_applied",[task],{"work_before":20,"work_after":16},player,["work_light"],label+" light work")
-	_expect(page,"completion_applied",[task],{"work_before":20,"work_after":7},player,["work_heavy"],label+" heavy work")
-	_expect(page,"completion_applied",[task],{"work_before":20,"work_after":20,"shield_before":8,"shield_after":3},player,["guard_absorb"],label+" shield only")
+	await _expect(page,"completion_applied",[task],{"work_before":20,"work_after":20,"shield_before":0,"shield_after":0},player,[],label+" zero work")
+	await _expect(page,"completion_applied",[task],{"work_before":20,"work_after":16},player,["work_light"],label+" light work")
+	await _expect(page,"completion_applied",[task],{"work_before":20,"work_after":7},player,["work_heavy"],label+" heavy work")
+	await _expect(page,"completion_applied",[task],{"work_before":20,"work_after":20,"shield_before":8,"shield_after":3},player,["guard_absorb"],label+" shield only")
 	await _frames(2)
 	_check(is_zero_approx((page._actors[task] as BattleActorView).hit_strength),"shield-only work never cues body damage at "+label)
 	_check(is_zero_approx((page._actors[task] as BattleActorView).guard_strength),"local shield never adds the oversized legacy body shield at "+label)
-	_expect(page,"completion_applied",[task],{"work_before":20,"work_after":20,"shield_before":5,"shield_after":0},player,["guard_absorb","guard_break"],label+" broken shield without work loss")
-	_expect(page,"pressure_applied",[player],{"vitality_before":70,"vitality_after":70,"relax_before":6,"relax_after":2},task,["guard_absorb"],label+" pressure absorbed")
+	await _expect(page,"completion_applied",[task],{"work_before":20,"work_after":20,"shield_before":5,"shield_after":0},player,["guard_absorb","guard_break"],label+" broken shield without work loss")
+	await _expect(page,"pressure_applied",[player],{"vitality_before":70,"vitality_after":70,"relax_before":6,"relax_after":2},task,["guard_absorb"],label+" pressure absorbed")
 	_check(_labels(page).contains("放松抵消 4") and not _labels(page).contains("精力 −"),"absorbed pressure reports only actual absorption at "+label)
-	_expect(page,"pressure_applied",[player],{"vitality_before":70,"vitality_after":66},task,["pressure_hit"],label+" pressure damage")
+	var emitted: Array = []
+	var observe_trail := func(node: Node):
+		if node is BattleImpactView:
+			emitted.append({"trail": node, "source": page._stage_effects.anchor(task), "target": page._stage_effects.target_anchor(player)})
+	page._stage.child_entered_tree.connect(observe_trail)
+	await _expect(page,"pressure_applied",[player],{"vitality_before":70,"vitality_after":66},task,["pressure_hit"],label+" pressure damage")
+	page._stage.child_entered_tree.disconnect(observe_trail)
 	var trails := _trails(page)
-	_check(trails.size() == 1 and trails[0].origin.is_equal_approx(page._stage_effects.anchor(task)) and trails[0].destination.is_equal_approx(page._stage_effects.target_anchor(player)),"pressure trail uses actual task origin and player impact at "+label)
-	_expect(page,"vitality_changed",[player],{"before":66,"after":70},player,["heal"],label+" heal")
-	_expect(page,"vitality_changed",[player],{"before":70,"after":70},player,[],label+" capped heal")
-	_expect(page,"focus_changed",[player],{"before":1,"after":3,"delta":2},player,["resource_gain"],label+" focus gained")
-	_expect(page,"focus_changed",[player],{"before":3,"after":1,"delta":-2},player,["resource_spend"],label+" focus paid")
+	_check(trails.size() == 1 and emitted.size() == 1 and trails[0] == emitted[0].trail and trails[0].origin.is_equal_approx(emitted[0].source) and trails[0].destination.is_equal_approx(emitted[0].target),"pressure trail uses actual task origin at emission and player impact at "+label)
+	await _expect(page,"vitality_changed",[player],{"before":66,"after":70},player,["heal"],label+" heal")
+	await _expect(page,"vitality_changed",[player],{"before":70,"after":70},player,[],label+" capped heal")
+	await _expect(page,"focus_changed",[player],{"before":1,"after":3,"delta":2},player,["resource_gain"],label+" focus gained")
+	await _expect(page,"focus_changed",[player],{"before":3,"after":1,"delta":-2},player,["resource_spend"],label+" focus paid")
 	_check(_trails(page).is_empty(),"self payment cannot invent an attack trail at "+label)
-	_expect(page,"relax_changed",[player],{"before":0,"after":6,"delta":6},player,["guard_gain"],label+" guard gained")
-	_expect(page,"relax_changed",[player],{"before":6,"after":2,"delta":-4,"reason":"pressure_absorbed"},task,[],label+" no duplicate absorption")
-	_expect(page,"status_gained",[task],{"before":0,"after":2,"status_definition_id":"erosion"},player,["status_attach"],label+" status attached")
-	_expect(page,"status_changed",[task],{"before":2,"after":1,"status_definition_id":"erosion"},"",["status_decay"],label+" status decayed")
-	_expect(page,"status_removed",[task],{"status_definition_id":"erosion"},"",["status_remove"],label+" status removed")
-	_expect(page,"status_gained",[task],{"before":2,"after":2,"status_definition_id":"erosion"},player,[],label+" zero status gain")
-	_expect(page,"status_gained",[player,task],{"before":0,"after":1,"status_definition_id":"weakness"},"",["status_attach","status_attach"],label+" multi-target order")
+	await _expect(page,"relax_changed",[player],{"before":0,"after":6,"delta":6},player,["guard_gain"],label+" guard gained")
+	await _expect(page,"relax_changed",[player],{"before":6,"after":2,"delta":-4,"reason":"pressure_absorbed"},task,[],label+" no duplicate absorption")
+	await _expect(page,"status_gained",[task],{"before":0,"after":2,"status_definition_id":"erosion"},player,["status_attach"],label+" status attached")
+	await _expect(page,"status_changed",[task],{"before":2,"after":1,"status_definition_id":"erosion"},"",["status_decay"],label+" status decayed")
+	await _expect(page,"status_removed",[task],{"status_definition_id":"erosion"},"",["status_remove"],label+" status removed")
+	await _expect(page,"status_gained",[task],{"before":2,"after":2,"status_definition_id":"erosion"},player,[],label+" zero status gain")
+	await _expect(page,"status_gained",[player,task],{"before":0,"after":1,"status_definition_id":"weakness"},"",["status_attach","status_attach"],label+" multi-target order")
 	var ordered := _locals(page)
 	_check(ordered.size() == 2 and ordered[0].get_meta("effect_target") == player and ordered[1].get_meta("effect_target") == task,"all targets keep published order at "+label)
-	_expect(page,"completion_applied",[task],{"work_before":20,"work_after":18},"unknown-source",["work_light"],label+" unknown origin")
+	await _expect(page,"completion_applied",[task],{"work_before":20,"work_after":18},"unknown-source",["work_light"],label+" unknown origin")
 	_check(_trails(page).is_empty(),"unknown source shows local result without fictional player trail at "+label)
-	_expect(page,"pressure_applied",["missing-target"],{"vitality_before":70,"vitality_after":60},task,[],label+" unknown target")
+	await _expect(page,"pressure_applied",["missing-target"],{"vitality_before":70,"vitality_after":60},task,[],label+" unknown target")
 	_check(_labels(page).is_empty(),"unknown target never falls back to player at "+label)
 	page._stage_effects.remember()
-	_expect(page,"task_advanced",[task,"fixture-next-phase"],{"old_task_id":task,"new_task_id":"fixture-next-phase"},task,["phase"],label+" explicit next phase")
+	await _expect(page,"task_advanced",[task,"fixture-next-phase"],{"old_task_id":task,"new_task_id":"fixture-next-phase"},task,["phase"],label+" explicit next phase")
 	var phase_effects := _locals(page)
 	_check(not phase_effects.is_empty() and phase_effects[0].get_meta("effect_target") == "fixture-next-phase","stage effect belongs to new task ID at "+label)
-	_expect(page,"task_transformed",[task],{},task,["phase"],label+" transformed task")
+	await _expect(page,"task_transformed",[task],{},task,["phase"],label+" transformed task")
 	page._presentation.finish()
 	var base := page.view.duplicate(true)
 	var unit_view := base.duplicate(true)
 	unit_view.units.append({"unit_id":"visual-unit","definition_id":"U01","vitality":2,"cooperation":1,"relax":0,"guard":false})
 	page.render(unit_view)
 	await _frames(3)
-	_expect(page,"unit_healed",["visual-unit"],{"before":2,"after":4},player,["heal"],label+" unit recovery display fixture")
+	await _expect(page,"unit_healed",["visual-unit"],{"before":2,"after":4},player,["heal"],label+" unit recovery display fixture")
 	page.render(base)
 	await _frames(3)
 	var anchors := page.damage_target_anchors()
@@ -105,10 +111,17 @@ func _lifecycle(page: BattleScreen, player: String, task: String, label: String)
 	page.present_result([{"index":0,"type":"task_transformed","source_id":task,"target_ids":[task],"data":{}}],[],"semantic-terminal-"+label,_ordinal)
 	page._animator.advance(.06)
 	_check(completed.is_empty() and page._result_pending and page._presentation.is_animating(),"terminal waits for actual phase tween after event queue ends at "+label)
-	await (Engine.get_main_loop() as SceneTree).create_timer(.4).timeout
+	var phase_seconds := .4
+	var actor: BattleActorView = page._actors.get(task)
+	if is_instance_valid(actor) and is_instance_valid(actor.rig):
+		phase_seconds = maxf(phase_seconds, actor.rig.action_length("phase") / page.effect_speed())
+	var deadline := Time.get_ticks_msec() + int((phase_seconds + .6) * 1000)
+	while completed.is_empty() and Time.get_ticks_msec() < deadline:
+		await _frames(1)
+	await _frames(2)
 	_check(completed.size() == 1 and not page._result_pending,"terminal signals once after phase tween finishes at "+label)
 	page.result_presentation_finished.disconnect(callback)
-	_expect(page,"vitality_changed",[player],{"before":60,"after":65},player,["heal"],label+" before disable")
+	await _expect(page,"vitality_changed",[player],{"before":60,"after":65},player,["heal"],label+" before disable")
 	page.animation_enabled = false
 	_check(_locals(page).is_empty() and not page._presentation.is_animating(),"disabling motion cancels live effects at "+label)
 	page._present_event_visual(event)
@@ -148,7 +161,9 @@ func _published_command_modes(shell: GameShell) -> void:
 		page.animation_enabled = mode != "reduced"
 		# A separate presentation stream replays one already-published command.
 		page.consume_events(result.events,"published-mode-"+mode,result.revision)
-		for frame in 70:
+		# Headless frame rates vary; finite presentation completion is a time bound.
+		var replay_deadline := Time.get_ticks_msec() + 5000
+		while Time.get_ticks_msec() < replay_deadline:
 			if page._animator.pending_count() == 0 and not page._presentation.is_animating():
 				break
 			await _frames(1)
@@ -162,6 +177,11 @@ func _expect(page: BattleScreen, kind: String, targets: Array, data: Dictionary,
 	_ordinal += 1
 	var event := {"index":_ordinal,"type":kind,"source_id":source,"target_ids":targets,"data":data}
 	page._present_event_visual(event)
+	if kind in ["completion_applied", "pressure_applied"] and not expected.is_empty():
+		var delay := page._stage_effects.impact_feedback_delay(event)
+		if delay > .005:
+			_check(_locals(page).is_empty(), name + " waits for the authored contact")
+			await (Engine.get_main_loop() as SceneTree).create_timer(delay + .02).timeout
 	var actual: Array = _locals(page).map(func(effect): return effect.kind)
 	_check(actual == expected,name+" -> "+str(expected)+" got "+str(actual))
 	for effect in _locals(page):

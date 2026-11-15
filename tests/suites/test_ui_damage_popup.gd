@@ -74,10 +74,6 @@ func _real_battle_hit() -> void:
 		_check(shell.press("card:" + card_id), "real work card is selected")
 		_check(shell.press("task:" + task_id), "real work card hits task")
 		var after := int(shell.session.get_view().battle.tasks[0].work_remaining)
-		var popups: Array = shell._damage_layer.active_popup_snapshot()
-		_check(popups.size() == 1 and popups[0].text == "-%d" % (before - after), "real battle popup matches committed work loss")
-		if popups.size() == 1:
-			_check(Vector2(popups[0].position).distance_to(anchor) < 110, "real battle popup stays near its task")
 		var page := shell.page as BattleScreen
 		page.set_process(false)
 		_check(page.animation_enabled, "real shell hit exercises animated feedback")
@@ -88,14 +84,22 @@ func _real_battle_hit() -> void:
 		_check(str(page._animator.last_event.get("type", "")) == "completion_applied", "real shell hit presents completion event")
 		var meter_label: Label = page._task_meters[task_id].label
 		_check(is_equal_approx(float(meter_label.get_meta("displayed_work")), float(before)), "shell popup preserves meter animation starting value")
-		for child in page._stage.get_children():
-			if child is Label and child.has_meta("battle_event_effect"):
-				_check(not child.text.contains("完成量"), "shell popup does not duplicate work loss text")
+		_check(shell._damage_layer.active_popup_snapshot().is_empty(), "native contact feedback avoids a duplicate shell popup")
+		var contact := page._stage_effects.impact_feedback_delay(page._animator.last_event)
+		if contact > .005:
+			_check(page._stage.get_children().filter(func(child): return child is Label and child.has_meta("battle_event_effect") and child.text.contains("−%d" % (before - after))).is_empty(), "work loss text waits for authored contact")
+			for tween in page._presentation._tweens.duplicate():
+				if tween.is_valid():
+					tween.custom_step(contact + .001)
+		var popups := page._stage.get_children().filter(func(child): return child is Label and child.has_meta("battle_event_effect") and child.text == "完成量 −%d" % (before - after))
+		_check(popups.size() == 1, "real battle popup matches committed work loss exactly once at contact")
+		if popups.size() == 1:
+			_check(popups[0].get_global_rect().get_center().distance_to(anchor) < 110, "real battle popup stays near its task")
 		for tween in page._presentation._tweens.duplicate():
 			if tween.is_valid():
 				tween.custom_step(0.075)
 		var displayed := float(meter_label.get_meta("displayed_work"))
-		_check(displayed < before and displayed > after, "shell popup preserves intermediate meter animation")
+		_check(displayed < before and displayed > after, "contact popup preserves intermediate meter animation")
 		page._finish_event_presentation()
 	shell.free()
 

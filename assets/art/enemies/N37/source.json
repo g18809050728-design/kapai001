@@ -1,0 +1,67 @@
+{
+  "id": "N37",
+  "version": 13,
+  "name": "线上考试",
+  "requirements": [
+    "UIR-069",
+    "UIR-011",
+    "UIR-013",
+    "UIR-051",
+    "UIR-052",
+    "UIR-054",
+    "UIR-057",
+    "UIR-059"
+  ],
+  "source": "output/imagegen/enemy-roster-20261115/N37-v1.png",
+  "source_sha256": "350b25eec056ec1bd6e0cff435cf7a6d22ca8bed6d30753825e8783f51955ce5",
+  "source_size": [
+    1024,
+    1024
+  ],
+  "method": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+  "outputs": [
+    {
+      "file": "assets/art/enemies/N37/body.png",
+      "size": [
+        738,
+        849
+      ],
+      "sha256": "2bded2087d64aff28204fa91e7be4f7413e5d6f9011751b08075f82454fb3a3a",
+      "source_bbox": [
+        266,
+        92,
+        1004,
+        941
+      ]
+    },
+    {
+      "file": "assets/art/enemies/N37/attack.png",
+      "size": [
+        204,
+        214
+      ],
+      "sha256": "62afdc1d553188d2774b05ebef6227c3cca8434e0ad1a03a0243c64f193b1f69",
+      "source_bbox": [
+        33,
+        174,
+        237,
+        388
+      ]
+    },
+    {
+      "file": "assets/art/enemies/N37/accent.png",
+      "size": [
+        199,
+        135
+      ],
+      "sha256": "315aac02b81638cd31c792fe81dd04838cac99fafe735138997c1354e19445ae",
+      "source_bbox": [
+        40,
+        697,
+        239,
+        832
+      ]
+    }
+  ],
+  "visual_acceptance": "pending review; machine metrics do not establish visual quality"
+}

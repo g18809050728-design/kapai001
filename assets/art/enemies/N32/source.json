@@ -1,0 +1,67 @@
+{
+  "id": "N32",
+  "version": 13,
+  "name": "奖学金评定",
+  "requirements": [
+    "UIR-069",
+    "UIR-011",
+    "UIR-013",
+    "UIR-051",
+    "UIR-052",
+    "UIR-054",
+    "UIR-057",
+    "UIR-059"
+  ],
+  "source": "output/imagegen/enemy-roster-20261115/N32-v1.png",
+  "source_sha256": "b6da7596a8b86c7925dfee9ee366990192466685ee817b38214b21aa206f0ef1",
+  "source_size": [
+    1024,
+    1024
+  ],
+  "method": "Magenta dominance alpha with foreground support limit; edge unmatte; connected-component grouping into body/upper-left prop/lower-left accent; retain original pixels, independent material-specific native rig.",
+  "outputs": [
+    {
+      "file": "assets/art/enemies/N32/body.png",
+      "size": [
+        746,
+        883
+      ],
+      "sha256": "cae13f25dfb49716f54e6143fa23030d2d792b396244f5f6ab47bd5c2f0d525a",
+      "source_bbox": [
+        269,
+        79,
+        1015,
+        962
+      ]
+    },
+    {
+      "file": "assets/art/enemies/N32/attack.png",
+      "size": [
+        221,
+        249
+      ],
+      "sha256": "7c62e17f1fdc61c4cf024a4508167ca2f6cb07243ab08a8ebd85aada235dcbca",
+      "source_bbox": [
+        29,
+        150,
+        250,
+        399
+      ]
+    },
+    {
+      "file": "assets/art/enemies/N32/accent.png",
+      "size": [
+        199,
+        271
+      ],
+      "sha256": "20938eb51a8d66e38a055bec48bedc40b79165bc6c77f90c254e8e5454a2d283",
+      "source_bbox": [
+        34,
+        645,
+        233,
+        916
+      ]
+    }
+  ],
+  "visual_acceptance": "pending review; machine metrics do not establish visual quality"
+}

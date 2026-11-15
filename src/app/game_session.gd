@@ -454,6 +454,14 @@ func generate_run_seed() -> GameResult:
 	return GameResult.success(str(bytes.decode_u64(0) & 0x7fffffffffffffff))
 
 
+func get_compendium() -> GameResult:
+	# Use a separate production catalogue; viewing never switches an active run.
+	var loaded := _load_catalog(NEW_RUN_MANIFEST)
+	if not loaded.ok:
+		return loaded
+	return CompendiumView.build(loaded.data)
+
+
 func get_setup_options() -> GameResult:
 	var options := SetupOptions.new()
 	var catalog := ContentDB.new(str(MANIFEST_ROOTS[NEW_RUN_MANIFEST]))
