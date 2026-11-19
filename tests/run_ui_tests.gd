@@ -34,6 +34,7 @@ func _run_suites() -> Array[String]:
 		"test_ui_flow_feedback",
 		"test_ui_flow_revision",
 		"test_ui_battle_choice",
+		"test_ui_choice_v3",
 		"test_ui_battle_pointer",
 		"test_ui_battle_polish",
 		"test_ui_battle_layout",

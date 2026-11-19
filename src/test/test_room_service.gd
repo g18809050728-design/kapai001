@@ -692,6 +692,16 @@ func preview_action(context: Variant, draft_value: Variant) -> GameResult:
 		return _failure(GameConstants.ERROR_TEST_CHOICE_CONFLICT, "test.action.editing")
 	if state.pending_choice != null and action_type != &"confirm_choice":
 		return _failure(GameConstants.ERROR_CHOICE_PENDING, "error.choice.pending")
+	if action_type in BATTLE_ACTIONS and action_type != &"play_card":
+		# Mirror the live session: non-play actions are validated by applying to a copy.
+		var checked := engine.apply(
+			state.battle, ActionDraft.new(action_type, draft.get("payload", {})), state.rng
+		)
+		var preview := ActionPreview.new()
+		preview.can_submit = checked.ok
+		if not checked.ok:
+			preview.blocking_errors.append(checked.error)
+		return GameResult.success(preview)
 	return engine.preview(state.battle, ActionDraft.new(action_type, draft.get("payload", {})))
 
 

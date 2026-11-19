@@ -62,6 +62,7 @@ func run() -> Array[String]:
 		return failures
 	var engine := BattleEngine.new(catalog)
 	_check_link_retrieve(engine, failures)
+	_check_decline_retrieve(engine, failures)
 	_check_work_bonus(engine, failures)
 	_check_cost_discount(engine, failures)
 	_check_link_sequence(engine, failures)
@@ -105,6 +106,68 @@ func _check_link_retrieve(engine: BattleEngine, failures: Array[String]) -> void
 			"P01 passive retrieve returns the previous strategy",
 			failures
 		)
+
+
+func _check_decline_retrieve(engine: BattleEngine, failures: Array[String]) -> void:
+	var rng := _rng()
+	var deck := _deck([["R3-P01-11", 2], ["R3-P01-02", 8]])
+	var begun := _begin(engine, deck, rng)
+	if not begun.ok:
+		_check(false, "P01 decline battle starts", failures)
+		return
+	var state: BattleState = begun.data.state
+	_move_to_hand(state, "R3-P01-11", 1)
+	_move_to_hand(state, "R3-P01-02", 1)
+	var strategy := _play(engine, begun, "R3-P01-11", [])
+	if not strategy.ok:
+		_check(false, "P01 decline strategy resolves", failures)
+		return
+	var work_card := _hand_card(strategy.data.state, "R3-P01-02")
+	var work := engine.apply(
+		strategy.data.state,
+		ActionDraft.new(
+			GameConstants.ACTION_PLAY_CARD,
+			{"card_instance_id": work_card, "target_ids": [_target_a(strategy)]}
+		),
+		strategy.data.rng_state
+	)
+	_check(work.ok, "P01 decline work resolves", failures)
+	if not work.ok or work.data.pending_choice == null:
+		_check(false, "P01 decline offers a retrieve choice", failures)
+		return
+	var choice: Dictionary = work.data.pending_choice
+	_check(str(choice.get("kind", "")) == "retrieve_strategy", "P01 retrieve choice kind", failures)
+	_check(
+		int(choice.get("min_count", -1)) == 0 and int(choice.get("max_count", -1)) == 1,
+		"P01 retrieve choice allows declining",
+		failures
+	)
+	var confirmed := engine.apply(
+		work.data.state,
+		ActionDraft.new(
+			GameConstants.ACTION_CONFIRM_CHOICE,
+			{"choice_id": str(choice.get("choice_id", "")), "selected_ids": []}
+		),
+		work.data.rng_state
+	)
+	_check(confirmed.ok, "P01 decline confirms", failures)
+	if not confirmed.ok:
+		return
+	_check(
+		not _has_card(confirmed.data.state, "R3-P01-11"),
+		"P01 decline leaves the strategy in the discard pile",
+		failures
+	)
+	_check(
+		bool(confirmed.data.state.v3.get("turn", {}).get("retrieved_strategy", false)),
+		"P01 decline still consumes the turn opportunity",
+		failures
+	)
+	_check(
+		_has_event(confirmed, "passive_retrieve_declined"),
+		"P01 decline emits an event",
+		failures
+	)
 
 
 func _check_work_bonus(engine: BattleEngine, failures: Array[String]) -> void:
@@ -626,6 +689,15 @@ func _any_card(state: BattleState, definition_id: String) -> String:
 func _has_card(state: BattleState, definition_id: String) -> bool:
 	for card_id in state.zones.hand:
 		if str(state.card_by_id.get(card_id, {}).get("definition_id", "")) == definition_id:
+			return true
+	return false
+
+
+func _has_event(step: GameResult, event_type: StringName) -> bool:
+	if not step.ok:
+		return false
+	for event: RuleEvent in step.data.events:
+		if event.type == event_type:
 			return true
 	return false
 

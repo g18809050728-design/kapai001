@@ -44,6 +44,7 @@ func run() -> Array[String]:
 	_check_opening(engine, rng_state, failures)
 	_check_content_contract(catalog, failures)
 	_check_on_complete(engine, catalog, rng_state, failures)
+	_check_attack_immunity(engine, catalog, rng_state, failures)
 	_check_first_card_discard(engine, rng_state, failures)
 	_check_soak(engine, rng_state, failures)
 	_check_codec_roundtrip(engine, catalog, rng_state, failures)
@@ -100,6 +101,16 @@ func _check_content_contract(catalog: ContentDB, failures: Array[String]) -> voi
 	_check(bool(n20.get("self_copy_every_round", false)), "N20 copies itself every round", failures)
 	var n33 := _task(catalog, "N33")
 	_check(bool(n33.get("shield_persistent", false)), "N33 keeps its shield", failures)
+	var n18 := _task(catalog, "N18")
+	_check(
+		not bool(n18.get("shield_persistent", false))
+		and str(
+				_first_phase(n18).get("intents", [])[1].get("gain_status", {}).get("status", "")
+			)
+			== "attack_immunity",
+		"N18 grants one-attack immunity",
+		failures
+	)
 	var n26 := _task(catalog, "N26")
 	_check(int(n26.get("draw_reduction", 0)) == 1, "N26 reduces the player draw", failures)
 	var n34 := _task(catalog, "N34")
@@ -200,6 +211,82 @@ func _check_on_complete(
 		begun.data.rng_state
 	)
 	_check(applied.ok, "N17 completion resolves", failures)
+
+
+func _check_attack_immunity(
+	engine: BattleEngine, catalog: ContentDB, rng_state: Dictionary, failures: Array[String]
+) -> void:
+	var begun := _begin(engine, "N18", _deck("K01", 10), rng_state)
+	if not begun.ok:
+		return
+	var state: BattleState = begun.data.state
+	var intents: Array = _first_phase(_task(catalog, "N18")).get("intents", [])
+	if intents.size() < 2:
+		_check(false, "N18 has an immunity intent", failures)
+		return
+	state.tasks[0].intent_snapshot = intents[1].duplicate(true)
+	var ended := engine.apply(
+		state, ActionDraft.new(GameConstants.ACTION_END_TURN, {}), begun.data.rng_state
+	)
+	_check(ended.ok, "N18 immunity turn resolves", failures)
+	if not ended.ok:
+		return
+	var after: BattleState = ended.data.state
+	var task_id := str(after.tasks[0].task_id)
+	_check(_has_status(after, "attack_immunity", task_id), "N18 gains attack immunity", failures)
+	var before_work := int(after.tasks[0].work_remaining)
+	var first_card := str(after.zones.hand[0])
+	var first := engine.apply(
+		after,
+		ActionDraft.new(
+			GameConstants.ACTION_PLAY_CARD,
+			{"card_instance_id": first_card, "target_ids": [task_id]}
+		),
+		ended.data.rng_state
+	)
+	_check(first.ok, "N18 immunized attack resolves", failures)
+	if not first.ok:
+		return
+	var blocked: BattleState = first.data.state
+	_check(
+		int(blocked.tasks[0].work_remaining) == before_work,
+		"N18 immunity blocks the whole attack",
+		failures
+	)
+	_check(
+		not _has_status(blocked, "attack_immunity", task_id),
+		"N18 immunity is consumed",
+		failures
+	)
+	_check(_has_event(first, "attack_immunized"), "N18 emits an immunity event", failures)
+	if not first.data.stable or blocked.zones.hand.is_empty():
+		return
+	var second_card := str(blocked.zones.hand[0])
+	var second := engine.apply(
+		blocked,
+		ActionDraft.new(
+			GameConstants.ACTION_PLAY_CARD,
+			{"card_instance_id": second_card, "target_ids": [task_id]}
+		),
+		first.data.rng_state
+	)
+	_check(second.ok, "N18 follow-up attack resolves", failures)
+	if second.ok:
+		_check(
+			int(second.data.state.tasks[0].work_remaining) < before_work,
+			"N18 follow-up attack completes work",
+			failures
+		)
+
+
+func _has_status(state: BattleState, status_id: String, target_id: String) -> bool:
+	for status: Dictionary in state.statuses:
+		if (
+			str(status.get("status_id", "")) == status_id
+			and str(status.get("target_id", "")) == target_id
+		):
+			return int(status.get("stacks", 0)) > 0
+	return false
 
 
 func _check_first_card_discard(

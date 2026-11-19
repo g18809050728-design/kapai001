@@ -197,7 +197,8 @@
       "guard",
       "brainstorm",
       "confusion",
-      "work_boost"
+      "work_boost",
+      "attack_immunity"
     ],
     "ruleset": [
       "campus_v1"

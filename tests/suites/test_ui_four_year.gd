@@ -68,7 +68,7 @@ func _test_setup() -> void:
 			descriptions += label.text + "\n"
 		_check(descriptions.contains("被动"), "setup initially focuses one character")
 		if shell.page._character == "P01":
-			_check(descriptions.contains("当前尚无放弃取回选择"), "P01 implementation gap is visible")
+			_check(descriptions.contains("放弃") and descriptions.contains("取回"), "P01 retrieve/decline choice is visible")
 		_check(shell.press("setup:character:" + character_id), "character selects: " + character_id)
 		shell.press("setup:advanced")
 		_check(shell.press("setup:seed_random"), "seed refresh keeps the setup selection")

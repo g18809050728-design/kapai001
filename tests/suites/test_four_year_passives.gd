@@ -16,13 +16,29 @@ func run() -> Array[String]:
 	_test_p04("N01")
 	_test_p04("Q01")
 	if _failures.is_empty():
-		print("FOUR_YEAR_PASSIVES=passed (P01 automatic retrieve; optional decline remains missing)")
+		print("FOUR_YEAR_PASSIVES=passed (P01 offers retrieve or decline)")
 	return _failures
 
 func _test_p01() -> void:
 	var step := _begin("P01", ["R3-P01-04", "R3-P01-11", "R3-P01-02", "R3-P01-02"])
 	step = _play(step, 0)
 	step = _play(step, 2, true)
+	if not step.ok: return
+	if step.data.pending_choice != null:
+		var choice: Dictionary = step.data.pending_choice
+		_check(str(choice.get("kind", "")) == "retrieve_strategy", "P01 offers a retrieve choice")
+		step = _engine.apply(
+			step.data.state,
+			ActionDraft.new(
+				GameConstants.ACTION_CONFIRM_CHOICE,
+				{
+					"choice_id": str(choice.get("choice_id", "")),
+					"selected_ids": [str(choice.get("candidates", [])[0].get("id", ""))]
+				}
+			),
+			step.data.rng_state
+		)
+		_check(step.ok, "P01 retrieve choice confirms")
 	if not step.ok: return
 	_check(step.data.state.zones.hand.has(_instance(step.data.state, 0)), "P01 retrieves the preceding permanent strategy")
 	var repeated := _play(step, 0, false, false)

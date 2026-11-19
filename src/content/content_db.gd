@@ -413,6 +413,7 @@ const STATUS_POLICY := {
 	"extra_requirements": ["task", "capped", "battle", "explicit"],
 	"brainstorm": ["task", "capped", "battle", "explicit"],
 	"confusion": ["task", "capped", "battle", "explicit"],
+	"attack_immunity": ["task", "presence", "battle", "none"],
 	"work_boost": ["player", "capped", "battle", "explicit"],
 	"guard": ["unit", "presence", "unit_departure", "none"],
 	"vulnerability": ["task", "capped", "pressure_window", "explicit"],
@@ -451,8 +452,8 @@ var _enabled: Dictionary = {}
 var _info: ContentInfo
 var _legacy_four_year_hash := ""
 var _previous_four_year_hash := ""
-const PREVIOUS_FOUR_YEAR_HASH := "53beb845aca6a5a97e7934252b3fa42fd24c3be8262031ba23073abe1edfce8c"
-const LEGACY_FOUR_YEAR_HASH := "0936881b5f4eedc6cb63fb51676b1dfaa46000966d04a34aa2382f6ae7d9bbd2"
+const PREVIOUS_FOUR_YEAR_HASH := "b972157fd0a90ab3321a9bdeab66a4815c44f80b78bf3233dec98734f7f30e90"
+const LEGACY_FOUR_YEAR_HASH := "9b046bed0dbc8cb40f48705d4a33a8d140a699eda2b6bf2b7400a1cbc5fd2e03"
 
 
 func _init(data_root: String = "res://data", allow_test_manifests: bool = false) -> void:

@@ -1374,7 +1374,16 @@ func _render_summary() -> void:
 	var summary := _dict(view.get("terminal_summary"))
 	if summary.is_empty():
 		summary = _dict(view.get("run_summary"))
-	var reasons := {"deadline_expired": "DDL 已到期，仍有未完成任务", "vitality_depleted": "精力耗尽", "four_years_completed": "四学年已完成", "abandoned": "你主动结束了本局"}
+	var reasons := {
+		"deadline_expired": "DDL 已到期，仍有未完成任务",
+		"vitality_depleted": "精力耗尽",
+		"battle_lost": "战斗失败",
+		"first_term_completed": "第一学期已完成",
+		"four_years_completed": "四学年已完成",
+		"graduated": "已毕业",
+		"player_abandoned": "你主动结束了本局",
+		"abandoned": "你主动结束了本局",
+	}
 	add_text(header, str(reasons.get(summary.get("reason", ""), "本次冒险已结束")), 21, UiStyle.RED if summary.get("result", "") == "lost" else UiStyle.INK)
 	for uid in ["summary:retry", "summary:menu"]:
 		_buttons[uid].reparent(footer)

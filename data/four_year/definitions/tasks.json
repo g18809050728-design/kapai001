@@ -1097,7 +1097,6 @@
     "id": "N18",
     "name_key": "task.n18.name",
     "kind": "normal",
-    "shield_persistent": true,
     "phases": [
       {
         "phase_key": "main",
@@ -1111,7 +1110,11 @@
           {
             "index": 1,
             "text_key": "task.n18.intent.b",
-            "shield": 5
+            "gain_status": {
+              "status": "attack_immunity",
+              "stacks": 1,
+              "target": "task"
+            }
           }
         ]
       }

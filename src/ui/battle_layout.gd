@@ -416,23 +416,27 @@ func _choice_panel() -> void:
 			"discard": "选择要弃置的卡牌",
 			"recall": "选择要回忆的卡牌",
 			"retain": "选择要保留的卡牌",
+			"retrieve_strategy": "是否取回上一张策略",
 			"purify": "选择要净化的状态",
 			"chapter_replace": "选择要撤下的章节"
 		}
 		. get(str(choice.get("kind", "")), "完成卡牌效果")
 	)
 	_text(overlay, Rect2(30, 24, 1020, 48), title, 28, LIGHT, HORIZONTAL_ALIGNMENT_CENTER)
+	var choice_prompt := (
+		"请选择 %s—%s 项  ·  已选 %s 项"
+		% [
+			choice.get("min_count", 0),
+			choice.get("max_count", 0),
+			page._choice_selected_ids.size()
+		]
+	)
+	if str(choice.get("kind", "")) == "retrieve_strategy":
+		choice_prompt = "选择要取回的牌；不选直接确认则放弃（本回合机会已消耗）"
 	_text(
 		overlay,
 		Rect2(30, 76, 1020, 32),
-		(
-			"请选择 %s—%s 项  ·  已选 %s 项"
-			% [
-				choice.get("min_count", 0),
-				choice.get("max_count", 0),
-				page._choice_selected_ids.size()
-			]
-		),
+		choice_prompt,
 		17,
 		Color("edcc8e"),
 		HORIZONTAL_ALIGNMENT_CENTER
@@ -455,6 +459,11 @@ func _choice_panel() -> void:
 			var hand_card := page._dict(hand_value)
 			if str(hand_card.get("card_id", "")) == id:
 				data.merge(hand_card, true)
+		for zone_name in ["discard", "exhaust"]:
+			for zone_value in page._array(page._dict(page.view.get("zones_public")).get(zone_name, [])):
+				var zone_card := page._dict(zone_value)
+				if str(zone_card.get("card_id", "")) == id:
+					data.merge(zone_card, true)
 		data.definition_id = str(data.get("definition_id", option.get("label_key", id)))
 		data.description = UiStyle.label(str(option.get("label_key", id)))
 		var card := BattleCard.new()

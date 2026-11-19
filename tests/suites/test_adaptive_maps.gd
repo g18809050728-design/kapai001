@@ -340,7 +340,7 @@ func _test_snapshot_compatibility() -> void:
 		var legacy := SnapshotCodec.encode_session(session, _catalog.get_info())
 		_check(legacy.ok, "legacy fixed map still encodes")
 		if legacy.ok:
-			legacy.data.content_hash = "0936881b5f4eedc6cb63fb51676b1dfaa46000966d04a34aa2382f6ae7d9bbd2"
+			legacy.data.content_hash = "9b046bed0dbc8cb40f48705d4a33a8d140a699eda2b6bf2b7400a1cbc5fd2e03"
 			legacy.data.checksum = SnapshotCodec.compute_checksum(legacy.data)
 			_check(SnapshotCodec.decode_session(legacy.data, _catalog).ok, "known unchanged legacy content remains loadable")
 	_test_changed_legacy_definition(session)

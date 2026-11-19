@@ -5,7 +5,7 @@ extends RefCounted
 static func describe_character_passive(passive_id: String) -> String:
 	match passive_id:
 		"r3_p01_link_replay":
-			return "被动 · 步骤复用\n每回合首次合法的“策略→工作”连携后，自动从弃牌堆取回前一张永久策略，费用与限次不变；满手仍消耗机会。当前尚无放弃取回选择。"
+			return "被动 · 步骤复用\n每回合首次合法的“策略→工作”连携后，可选择从弃牌堆取回前一张永久策略；放弃或直接确认不取回也会消耗本回合机会。费用与限次不变，满手时不提供取回。"
 		"r3_p02_paper_record":
 			return "被动 · 论文记录\n开题后，本篇首次使用的牌名使进度 +1（上限 10），重复牌名尝试获得引用 +1（上限 5）。第 3/4/5 层引用额外支付 1/2/3 专注；不足则改抽 1 张。"
 		"r3_p03_compound_reaction":

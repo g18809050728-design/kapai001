@@ -290,7 +290,7 @@ static func describe_effects(effects: Array) -> String:
 			"search_draw_for_type": "检索卡牌",
 			"add_work_bonus": "下张工作完成量加值",
 			"status_complete": "状态完成量",
-			"modify_erosion_window": "侵蚀结算窗口（当前引擎尚未应用数值修正）"
+			"modify_erosion_window": "侵蚀自然结算窗口次数"
 		}
 		var phrase := str(names.get(op, op))
 		if bool(effect.get("up_to", false)):
@@ -506,6 +506,7 @@ static func error_text(error: ApiError) -> String:
 	var reason := str(names.get(String(error.code), "当前操作不可用"))
 	var details := {
 		"error.play.paper_name_used_turn": "本回合此牌名已使用",
+		"error.play.same_name_once_per_turn": "本回合此牌名已使用，不能再次打出",
 		"error.play.requirement_invalid": "未满足使用条件",
 		"error.play.citation_insufficient": "引用不足",
 		"error.play.no_chapter_replace": "无法选择撤下的章节",

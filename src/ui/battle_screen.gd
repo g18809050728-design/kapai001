@@ -2141,7 +2141,14 @@ func _event_text(event: Dictionary) -> String:
 	if type == "task_completed":
 		return "任务全部阶段已完成"
 	if type == "battle_finished":
-		return "战斗胜利" if str(data.get("result", "")) == "won" else "战斗结束"
+		if str(data.get("result", "")) == "won":
+			return "战斗胜利"
+		var defeat_reasons := {
+			"deadline_expired": "DDL 已到期，仍有未完成任务",
+			"vitality_depleted": "精力耗尽",
+			"battle_lost": "战斗失败",
+		}
+		return "战斗失败 · " + str(defeat_reasons.get(str(data.get("reason", "")), "战斗结束"))
 	var source := str(event.get("source_label", event.get("source_id", "")))
 	var suffix := ""
 	if data.has("amount"):

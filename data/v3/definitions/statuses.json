@@ -80,6 +80,14 @@
     "numeric_rule_key": "confusion"
   },
   {
+    "id": "attack_immunity",
+    "name_key": "status.attack_immunity.name",
+    "target": "task",
+    "stack_policy": "presence",
+    "duration_policy": "battle",
+    "dispel_policy": "none"
+  },
+  {
     "id": "work_boost",
     "name_key": "status.work_boost.name",
     "target": "player",

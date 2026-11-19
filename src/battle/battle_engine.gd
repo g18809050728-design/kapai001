@@ -143,6 +143,19 @@ func preview(state: BattleState, draft: ActionDraft) -> GameResult:
 						"error.play.paper_name_used_turn",
 						{"name": preview_name}
 					)
+		if bool(face.get("flags", {}).get("same_name_once_per_turn", false)):
+			var played_name_key := BattleState.counter_key(
+				GameConstants.COUNTER_SCOPE_ROUND,
+				"played:" + str(face.get("id", "")),
+				&"played"
+			)
+			if int(state.counters.get(played_name_key, 0)) > 0:
+				_add_preview_error(
+					result,
+					GameConstants.ERROR_LIMIT_REACHED,
+					"error.play.same_name_once_per_turn",
+					{"definition_id": str(face.get("id", ""))}
+				)
 	result.costs = _preview_costs(state, card_id)
 	if result.costs.is_empty():
 		return _failure(
@@ -1928,6 +1941,8 @@ func _continue_resolution(
 			var finalized := _finalize_card_resolution(state, rng, events)
 			if not finalized.ok:
 				return finalized
+			if state.phase == "awaiting_choice":
+				return finalized
 			continue
 		var effect: Variant = effects[cursor]
 		if typeof(effect) != TYPE_DICTIONARY:
@@ -3050,6 +3065,31 @@ func _apply_completion(
 		if task_index < 0:
 			continue
 		var task: Dictionary = state.tasks[task_index]
+		if str(resolution.get("card_type", "")) == "work":
+			var immunized: Array = resolution.get("immunized_task_ids", [])
+			if not immunized.has(str(task_id)):
+				var immunity_index := _status_index(state, "attack_immunity", str(task_id))
+				if immunity_index >= 0:
+					var immunity: Dictionary = state.statuses[immunity_index]
+					var immunity_before := int(immunity.get("stacks", 0))
+					if immunity_before > 1:
+						immunity.stacks = immunity_before - 1
+					else:
+						state.statuses.remove_at(immunity_index)
+					immunized.append(str(task_id))
+					resolution.immunized_task_ids = immunized
+					_add_event(
+						events,
+						"attack_immunized",
+						str(resolution.get("card_instance_id", "")),
+						[str(task_id)],
+						{
+							"stacks_before": immunity_before,
+							"stacks_after": maxi(0, immunity_before - 1),
+						}
+					)
+			if resolution.get("immunized_task_ids", []).has(str(task_id)):
+				continue
 		var before_shield: int = int(task.get("shield", 0))
 		var before_work: int = int(task.get("work_remaining", 0))
 		var requested_for_target := requested
@@ -3707,6 +3747,37 @@ func _confirm_effect_choice(
 			var retained: Array = resolution.get("retained_card_ids", [])
 			retained.append_array(selected)
 			resolution.retained_card_ids = retained
+		"retrieve_strategy":
+			if not selected.is_empty():
+				var retrieved_id := str(selected[0])
+				var retrieved_definition := str(
+					state.card_by_id.get(retrieved_id, {}).get("definition_id", "")
+				)
+				var retrieve_ruleset := _loaded_ruleset()
+				if (
+					retrieve_ruleset.ok
+					and state.zones.discard.has(retrieved_id)
+					and state.zones.hand.size() < int(retrieve_ruleset.data.battle.hand_limit)
+				):
+					state.zones.discard.erase(retrieved_id)
+					state.zones.hand.append(retrieved_id)
+					resolution.v3_passive_retrieve_confirmed = true
+					_add_event(
+						events,
+						"card_retrieved",
+						str(choice.get("source_card_id", "")),
+						[retrieved_id],
+						{"definition_id": retrieved_definition, "reason": "P01_passive"}
+					)
+			else:
+				_add_event(
+					events,
+					"passive_retrieve_declined",
+					str(choice.get("source_card_id", "")),
+					[],
+					{"reason": "P01_passive"}
+				)
+			resolution.choice_counts[kind] = selected.size()
 		"remove_status":
 			if not selected.is_empty():
 				var status_index := _status_index(
@@ -3824,7 +3895,7 @@ func _gain_status_on_target(
 	var ruleset := _loaded_ruleset()
 	if not ruleset.ok:
 		return ruleset
-	if status_id != "guard" and not ruleset.data.statuses.has(status_id):
+	if status_id not in ["guard", "attack_immunity"] and not ruleset.data.statuses.has(status_id):
 		return _failure(
 			GameConstants.ERROR_CONTENT_INVALID,
 			"battle.status.definition_missing",
@@ -4013,41 +4084,73 @@ func _finalize_card_resolution(
 ) -> GameResult:
 	var resolution: Dictionary = state.resolution
 	var card_id := str(resolution.get("card_instance_id", ""))
-	var definition_id := str(resolution.get("definition_id", ""))
-	var face := {"id": definition_id, "type": str(resolution.get("card_type", ""))}
-	state.zones.resolving.erase(card_id)
-	var destination := "exhaust" if bool(resolution.get("exhaust", false)) else "discard"
-	if bool(resolution.get("v3_chapter_deploy", false)):
-		destination = "chapters"
-	else:
-		state.zones[destination].append(card_id)
-	for retained_id in resolution.get("retained_card_ids", []):
-		if state.zones.hand.has(retained_id) and not state.retained_card_ids.has(retained_id):
-			state.retained_card_ids.append(str(retained_id))
-	_add_event(
-		events,
-		"card_resolved",
-		card_id,
-		[card_id],
-		{"definition_id": definition_id, "destination": destination}
-	)
-	if bool(resolution.get("v3", false)):
-		var compound := _v3_apply_compound_reaction(state, rng, events)
-		if not compound.ok:
-			return compound
-		var recorded := _v3_record_card_played(state, resolution, rng, events)
-		if not recorded.ok:
-			return recorded
-		var erosion_settled := _v3_settle_erosion_events(state, rng, events)
-		if not erosion_settled.ok:
-			return erosion_settled
-		var induced := _v3_induced_window(state, rng, events)
-		if not induced.ok:
-			return induced
-		if int(resolution.get("v3_cost_discount_applied", 0)) > 0:
-			state.v3["pending_cost_discount"] = {"amount": 0, "min_base_cost": 0}
-		if definition_id == "R3-T201":
-			state.v3["publication_discount"] = 0
+	var face := {
+		"id": str(resolution.get("definition_id", "")),
+		"type": str(resolution.get("card_type", ""))
+	}
+	if not bool(resolution.get("v3_finalized", false)):
+		var definition_id := str(resolution.get("definition_id", ""))
+		state.zones.resolving.erase(card_id)
+		var destination := "exhaust" if bool(resolution.get("exhaust", false)) else "discard"
+		if bool(resolution.get("v3_chapter_deploy", false)):
+			destination = "chapters"
+		else:
+			state.zones[destination].append(card_id)
+		for retained_id in resolution.get("retained_card_ids", []):
+			if state.zones.hand.has(retained_id) and not state.retained_card_ids.has(retained_id):
+				state.retained_card_ids.append(str(retained_id))
+		_add_event(
+			events,
+			"card_resolved",
+			card_id,
+			[card_id],
+			{"definition_id": definition_id, "destination": destination}
+		)
+		if bool(resolution.get("v3", false)):
+			var compound := _v3_apply_compound_reaction(state, rng, events)
+			if not compound.ok:
+				return compound
+			var recorded := _v3_record_card_played(state, resolution, rng, events)
+			if not recorded.ok:
+				return recorded
+			var erosion_settled := _v3_settle_erosion_events(state, rng, events)
+			if not erosion_settled.ok:
+				return erosion_settled
+			var induced := _v3_induced_window(state, rng, events)
+			if not induced.ok:
+				return induced
+			if int(resolution.get("v3_cost_discount_applied", 0)) > 0:
+				state.v3["pending_cost_discount"] = {"amount": 0, "min_base_cost": 0}
+			if definition_id == "R3-T201":
+				state.v3["publication_discount"] = 0
+		resolution.v3_finalized = true
+		if state.phase != "finished":
+			var pending_retrieve := str(resolution.get("v3_passive_retrieve_pending", ""))
+			if not pending_retrieve.is_empty():
+				var retrieve_choice := _v3_passive_retrieve_choice(state, pending_retrieve)
+				resolution.v3_passive_retrieve_pending = ""
+				resolution.choice = retrieve_choice
+				state.phase = "awaiting_choice"
+				_add_event(
+					events,
+					"choice_requested",
+					card_id,
+					[],
+					{
+						"choice_id": retrieve_choice.choice_id,
+						"kind": retrieve_choice.kind,
+						"min_count": retrieve_choice.min_count,
+						"max_count": retrieve_choice.max_count,
+					}
+				)
+				return GameResult.success(retrieve_choice.duplicate(true))
+	if bool(resolution.get("v3_passive_retrieve_confirmed", false)):
+		resolution.v3_passive_retrieve_confirmed = false
+		var passive_trigger := _v3_run_ability_trigger(
+			state, "passive_retrieve_success", {"passive_retrieve_success": true}, rng, events
+		)
+		if not passive_trigger.ok:
+			return passive_trigger
 	state.resolution = null
 	if state.phase != "finished":
 		state.phase = "player_action"
@@ -4259,13 +4362,7 @@ func _v3_record_card_played(
 		and link_work
 		and not bool(turn.retrieved_strategy)
 	):
-		var retrieved := _v3_try_passive_retrieve(state, resolution, events)
-		if retrieved:
-			var passive_trigger := _v3_run_ability_trigger(
-				state, "passive_retrieve_success", {"passive_retrieve_success": true}, rng, events
-			)
-			if not passive_trigger.ok:
-				return passive_trigger
+		_v3_queue_passive_retrieve(state, resolution, events)
 	if link_work:
 		var link_trigger := _v3_run_ability_trigger(
 			state, "link_work_resolved", {"link_work": true}, rng, events
@@ -4298,7 +4395,7 @@ func _v3_record_card_played(
 	return GameResult.success(null)
 
 
-func _v3_try_passive_retrieve(
+func _v3_queue_passive_retrieve(
 	state: BattleState, resolution: Dictionary, events: Array[RuleEvent]
 ) -> bool:
 	var turn := _v3_turn(state)
@@ -4321,16 +4418,28 @@ func _v3_try_passive_retrieve(
 		return false
 	if state.zones.hand.size() >= int(ruleset.data.battle.hand_limit):
 		return false
-	state.zones.discard.erase(previous_id)
-	state.zones.hand.append(previous_id)
+	resolution.v3_passive_retrieve_pending = previous_id
 	_add_event(
 		events,
-		"card_retrieved",
+		"passive_retrieve_offered",
 		str(resolution.get("card_instance_id", "")),
 		[previous_id],
 		{"definition_id": previous_definition, "reason": "P01_passive"}
 	)
 	return true
+
+
+func _v3_passive_retrieve_choice(state: BattleState, card_id: String) -> Dictionary:
+	return {
+		"choice_id": _new_instance_id(state, "ch"),
+		"kind": "retrieve_strategy",
+		"prompt_key": "choice.battle.retrieve_strategy",
+		"candidates": [_card_candidate(state, card_id)],
+		"min_count": 0,
+		"max_count": 1,
+		"source_card_id": str(state.resolution.get("card_instance_id", "")),
+		"effect_amount": 1,
+	}
 
 
 func _v3_ability_limit(ability: Dictionary) -> int:

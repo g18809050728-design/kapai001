@@ -1152,7 +1152,10 @@
     "v3": true,
     "owner": "P03",
     "permanent": true,
-    "limits": {}
+    "limits": {},
+    "flags": {
+      "same_name_once_per_turn": true
+    }
   },
   {
     "id": "R3-P03-17",

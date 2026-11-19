@@ -65,6 +65,7 @@ func run() -> Array[String]:
 	_check_induced(engine, failures)
 	_check_compound(engine, failures)
 	_check_poison_count(engine, failures)
+	_check_same_name_limit(engine, failures)
 	_check_burst_activation_and_limit(engine, failures)
 	_check_abilities(engine, failures)
 	_check_pressure_and_shield(engine, failures)
@@ -246,6 +247,27 @@ func _check_poison_count(engine: BattleEngine, failures: Array[String]) -> void:
 			"P03 third erosion event completes task B",
 			failures
 		)
+
+
+func _check_same_name_limit(engine: BattleEngine, failures: Array[String]) -> void:
+	var rng := _rng()
+	var begun := _begin(engine, _deck([["R3-P03-16", 2], ["R3-P03-03", 8]]), rng)
+	if not begun.ok:
+		_check(false, "P03 same-name battle starts", failures)
+		return
+	var state: BattleState = begun.data.state
+	state.player.focus = 10
+	_move_to_hand(state, "R3-P03-16", 2)
+	var first := _play(engine, begun, "R3-P03-16", [])
+	_check(first.ok, "P03-16 first copy resolves", failures)
+	if not first.ok:
+		return
+	var second := _play(engine, first, "R3-P03-16", [])
+	_check(
+		not second.ok and second.error != null and second.error.code == GameConstants.ERROR_LIMIT_REACHED,
+		"P03-16 same name cannot be played twice in one round",
+		failures
+	)
 
 
 func _check_burst_activation_and_limit(engine: BattleEngine, failures: Array[String]) -> void:

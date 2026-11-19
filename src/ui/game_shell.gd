@@ -691,6 +691,9 @@ func _handle_test_command(command: String, payload: Dictionary) -> void:
 			notice = "已继续" if paused else "已暂停"
 			refresh()
 		"test.end_turn":
+			var edit_view := session.get_test_view()
+			if bool(edit_view.get("test", {}).get("editing", false)):
+				session.cancel_test_edit(_test_context())
 			_submit_test_battle_action({"type": "end_turn", "payload": {}})
 		"test.restore_checkpoint":
 			var restored := session.restore_test_checkpoint(
