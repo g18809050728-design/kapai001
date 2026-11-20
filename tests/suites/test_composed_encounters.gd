@@ -146,17 +146,12 @@ func _check_death_effects() -> void:
 		if applied.ok:
 			for task: Dictionary in state.tasks:
 				var task_id := str(task.task_id)
-				if task_id == target_ids["N20"] or task_id == target_ids["N16"]:
+				if task_id == target_ids["N20"]:
 					continue
 				_check(
 					int(task.work_remaining) == int(before[task_id]) - 4,
-					"N20 damages adjacent tasks"
+					"N20 damages every other task"
 				)
-			var far: Dictionary = state.tasks[3]
-			_check(
-				int(far.work_remaining) == int(before[str(far.task_id)]),
-				"N20 does not damage a non-adjacent task"
-			)
 		for task: Dictionary in state.tasks:
 			task.shield = 10
 		var shielded := _apply_death(
@@ -166,11 +161,9 @@ func _check_death_effects() -> void:
 		if shielded.ok:
 			for task: Dictionary in state.tasks:
 				var task_id := str(task.task_id)
-				if task_id == target_ids["N20"] or task_id == target_ids["N16"]:
+				if task_id == target_ids["N20"]:
 					continue
-				_check(int(task.shield) == 2, "N20 lowers adjacent shields by 8 across both effects")
-			var far: Dictionary = state.tasks[3]
-			_check(int(far.shield) == 10, "N20 leaves a non-adjacent shield intact")
+				_check(int(task.shield) == 2, "N20 lowers every other shield by 8 across both effects")
 
 
 func _apply_death(

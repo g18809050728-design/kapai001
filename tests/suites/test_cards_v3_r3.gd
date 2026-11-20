@@ -35,7 +35,7 @@ func run() -> Array[String]:
 
 func _check_manifest(failures: Array[String]) -> void:
 	var enabled := _catalog.get_info().enabled
-	_check(enabled.get("card", []).size() == 174, "R3-T01 all 174 cards enabled", failures)
+	_check(enabled.get("card", []).size() == 176, "R3-T01 all 176 cards enabled", failures)
 	_check(enabled.get("character", []).size() == 4, "R3-T01 four characters enabled", failures)
 	var starters := _catalog.get_definition("ruleset", "campus_v1")
 	_check(

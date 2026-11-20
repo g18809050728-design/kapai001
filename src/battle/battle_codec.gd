@@ -55,6 +55,7 @@ const TASK_FIELDS := {
 	"entered_order": TYPE_INT,
 	"eligible_round": TYPE_INT,
 	"power_percent": TYPE_INT,
+	"taunt": TYPE_BOOL,
 }
 const UNIT_FIELDS := {
 	"id": TYPE_STRING,
@@ -221,7 +222,7 @@ static func _validate_structure(data: Dictionary) -> Array[String]:
 			issues.append("battle.card_by_id key must be string")
 		RunCodec.shape(data.card_by_id[id], CARD_FIELDS, "battle.card_by_id[]", issues)
 	for task in data.tasks:
-		RunCodec.shape(task, TASK_FIELDS, "battle.tasks[]", issues, ["power_percent"])
+		RunCodec.shape(task, TASK_FIELDS, "battle.tasks[]", issues, ["power_percent", "taunt"])
 	for unit in data.units:
 		RunCodec.shape(
 			unit,

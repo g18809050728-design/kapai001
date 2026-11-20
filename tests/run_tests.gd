@@ -58,6 +58,7 @@ func _initialize() -> void:
 		"test_elite_encounters",
 		"test_minion_encounters",
 		"test_composed_encounters",
+		"test_boss_mechanics",
 		"test_cards_v3_catalog",
 		"test_cards_v3_engine",
 		"test_cards_v3_p01",

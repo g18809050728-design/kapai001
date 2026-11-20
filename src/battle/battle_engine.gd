@@ -1057,10 +1057,17 @@ func _end_turn(
 	for task: Dictionary in state.tasks.duplicate(true):
 		var self_copy_def := _catalog.get_definition("task", str(task.get("definition_id", "")))
 		if self_copy_def.ok and bool(self_copy_def.data.get("self_copy_every_round", false)):
+			var copy_interval := maxi(1, int(self_copy_def.data.get("self_copy_interval", 1)))
+			if state.round_index % copy_interval != 0:
+				continue
+			var copy_percent := clampi(
+				int(self_copy_def.data.get("self_copy_work_percent", 100)), 1, 100
+			)
 			self_copy_pending.append(
 				{
 					"source_id": str(task.get("task_id", "")),
-					"spec": {"task": str(task.get("definition_id", "")), "count": 1}
+					"spec":
+					{"task": str(task.get("definition_id", "")), "count": 1, "work_percent": copy_percent}
 				}
 			)
 	for pending: Dictionary in self_copy_pending:
@@ -1226,6 +1233,12 @@ func _execute_intent_skill(
 					"reason": "intent",
 				}
 			)
+	if intent.has("player_reduce_max_vitality"):
+		var max_before := int(state.player.get("max_vitality", 0))
+		var max_after := maxi(1, max_before - maxi(0, int(intent.player_reduce_max_vitality)))
+		if max_after != max_before:
+			state.player.max_vitality = max_after
+			state.player.vitality = mini(int(state.player.get("vitality", 0)), max_after)
 	if intent.has("extra_requirements"):
 		var extra := _gain_status_on_target(
 			state,
@@ -1353,15 +1366,19 @@ func _summon_tasks(
 	var source_index := _task_index(state, source_id)
 	if source_index >= 0:
 		source_power = int(state.tasks[source_index].get("power_percent", 100))
+	var work_percent := clampi(int(spec.get("work_percent", 100)), 1, 100)
+	var summon_taunt := bool(spec.get("taunt", false))
 	for _index in maxi(1, int(spec.get("count", 1))):
 		var cursor := 0
 		var intent: Dictionary = intents[cursor].duplicate(true)
 		var task_id := _new_instance_id(state, "t")
 		var summoned_work := maxi(
-			1, int(ceil(int(phase.get("work_max", 1)) * source_power / 100.0))
+			1,
+			int(ceil(int(phase.get("work_max", 1)) * source_power * work_percent / 10000.0))
 		)
 		var summoned_shield := maxi(
-			0, int(ceil(int(intent.get("shield", 0)) * source_power / 100.0))
+			0,
+			int(ceil(int(intent.get("shield", 0)) * source_power * work_percent / 10000.0))
 		)
 		var summoned := {
 			"task_id": task_id,
@@ -1376,6 +1393,8 @@ func _summon_tasks(
 			"eligible_round": state.round_index + (1 if starts_next_round else 0),
 			"power_percent": source_power,
 		}
+		if summon_taunt:
+			summoned["taunt"] = true
 		_register_source(state, task_id, "task", definition_id)
 		state.tasks.append(summoned)
 		_add_event(
@@ -3016,6 +3035,8 @@ func _task_has_taunt(state: BattleState, task_id: String) -> bool:
 	var task_index := _task_index(state, task_id)
 	if task_index < 0:
 		return false
+	if bool(state.tasks[task_index].get("taunt", false)):
+		return true
 	var definition := _catalog.get_definition(
 		"task", str(state.tasks[task_index].get("definition_id", ""))
 	)

@@ -88,6 +88,8 @@ const DEFINITION_FIELDS := {
 		"discard_on_first_card",
 		"max_vitality_reduction",
 		"self_copy_every_round",
+		"self_copy_interval",
+		"self_copy_work_percent",
 		"spawn_group",
 		"art_key"
 	],
@@ -454,8 +456,8 @@ var _enabled: Dictionary = {}
 var _info: ContentInfo
 var _legacy_four_year_hash := ""
 var _previous_four_year_hash := ""
-const PREVIOUS_FOUR_YEAR_HASH := "6ed6e9af7f0eae6154f40bfea6c53ef4ee18901201764e07e09d7ef43cc57b89"
-const LEGACY_FOUR_YEAR_HASH := "6b31fe923a9dfaced083339aaa874265545ba36b110eaf2e70bdd83708e66bd8"
+const PREVIOUS_FOUR_YEAR_HASH := "193dc115715361a2b7c1102dba8a11aa246f7efcc878d498c7a4395db741075c"
+const LEGACY_FOUR_YEAR_HASH := "e0b81d55004ee304472cfefd4785262dd144159f65a7d9d3adacb44f4b08df72"
 
 
 func _init(data_root: String = "res://data", allow_test_manifests: bool = false) -> void:
@@ -628,6 +630,11 @@ func get_candidates(query: Dictionary) -> Array[String]:
 		var tags: Array = query.get("tags_all", [])
 		var definition_tags: Array = definition.get("tags", [])
 		if tags.any(func(tag): return not definition_tags.has(tag)):
+			continue
+		if (
+			kind == "card"
+			and (definition_tags.has("special") or definition_tags.has("temporary"))
+		):
 			continue
 		if query.get("exclude_ids", []).has(id):
 			continue
@@ -1644,6 +1651,18 @@ func _validate_task(value: Dictionary, location: String, issues: Array[String]) 
 		_validate_bool(value.taunt, "%s.taunt" % location, issues)
 	if value.has("self_copy_every_round"):
 		_validate_bool(value.self_copy_every_round, "%s.self_copy_every_round" % location, issues)
+	if value.has("self_copy_interval"):
+		_validate_int(value.self_copy_interval, "%s.self_copy_interval" % location, 1, issues)
+		if not bool(value.get("self_copy_every_round", false)):
+			issues.append("%s.self_copy_interval requires self_copy_every_round" % location)
+	if value.has("self_copy_work_percent"):
+		_validate_int(
+			value.self_copy_work_percent, "%s.self_copy_work_percent" % location, 1, issues
+		)
+		if int(value.self_copy_work_percent) > 100:
+			issues.append("%s.self_copy_work_percent must be at most 100" % location)
+		if not bool(value.get("self_copy_every_round", false)):
+			issues.append("%s.self_copy_work_percent requires self_copy_every_round" % location)
 	if value.has("spawn_group"):
 		if not ["priority", "other"].has(str(value.spawn_group)):
 			issues.append("%s.spawn_group is invalid" % location)
@@ -1730,6 +1749,7 @@ func _validate_intent(value: Variant, location: String, issues: Array[String]) -
 		"pressure_per_card_type",
 		"player_gain_focus",
 		"player_reduce_focus",
+		"player_reduce_max_vitality",
 		"shield",
 		"work_restore",
 		"extra_requirements",
@@ -1780,7 +1800,7 @@ func _validate_intent(value: Variant, location: String, issues: Array[String]) -
 	for field in ["pressure_has_unit_mult", "pressure_no_unit_mult", "pressure_when_shield"]:
 		if value.has(field):
 			_validate_int(value[field], "%s.%s" % [location, field], 1, issues)
-	for field in ["player_gain_focus", "player_reduce_focus"]:
+	for field in ["player_gain_focus", "player_reduce_focus", "player_reduce_max_vitality"]:
 		if value.has(field):
 			_validate_int(value[field], "%s.%s" % [location, field], 1, issues)
 	if value.has("pressure_per_card_type"):
@@ -1806,7 +1826,7 @@ func _validate_intent(value: Variant, location: String, issues: Array[String]) -
 			for spec in value.summon_tasks:
 				_validate_fields(
 					spec,
-					["task", "count"],
+					["task", "count", "taunt", "work_percent"],
 					["task", "count"],
 					"%s.summon_tasks[]" % location,
 					issues
@@ -1818,6 +1838,21 @@ func _validate_intent(value: Variant, location: String, issues: Array[String]) -
 					_validate_int(
 						spec.get("count"), "%s.summon_tasks[].count" % location, 1, issues
 					)
+					if spec.has("taunt"):
+						_validate_bool(
+							spec.taunt, "%s.summon_tasks[].taunt" % location, issues
+						)
+					if spec.has("work_percent"):
+						_validate_int(
+							spec.work_percent,
+							"%s.summon_tasks[].work_percent" % location,
+							1,
+							issues
+						)
+						if int(spec.work_percent) > 100:
+							issues.append(
+								"%s.summon_tasks[].work_percent must be at most 100" % location
+							)
 	if value.has("transform_task"):
 		_validate_fields(
 			value.transform_task, ["task"], ["task"], "%s.transform_task" % location, issues

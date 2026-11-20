@@ -13,12 +13,12 @@
           {
             "index": 0,
             "text_key": "task.n01.intent.pressure5",
-            "pressure": 5
+            "pressure": 4
           },
           {
             "index": 1,
             "text_key": "task.n01.intent.pressure7",
-            "pressure": 7
+            "pressure": 6
           }
         ]
       }
@@ -43,7 +43,7 @@
           {
             "index": 1,
             "text_key": "task.n02.intent.pressure8",
-            "pressure": 8
+            "pressure": 6
           }
         ]
       }
@@ -102,7 +102,7 @@
           {
             "index": 1,
             "text_key": "task.n04.intent.pressure9",
-            "pressure": 9
+            "pressure": 7
           }
         ]
       }
@@ -1149,7 +1149,7 @@
           {
             "index": 1,
             "text_key": "task.n19.intent.b",
-            "pressure": 10,
+            "pressure": 8,
             "pressure_all": true
           }
         ]
@@ -1166,12 +1166,12 @@
       {
         "op": "complete",
         "amount": 4,
-        "target": "adjacent_tasks"
+        "target": "other_tasks"
       },
       {
         "op": "reduce_shield",
         "amount": 4,
-        "target": "adjacent_tasks"
+        "target": "other_tasks"
       }
     ],
     "phases": [
@@ -1191,7 +1191,9 @@
           }
         ]
       }
-    ]
+    ],
+    "self_copy_interval": 2,
+    "self_copy_work_percent": 50
   },
   {
     "id": "N21",
@@ -1298,12 +1300,12 @@
           {
             "index": 2,
             "text_key": "task.n24.intent.c",
-            "pressure": 16
+            "pressure": 12
           },
           {
             "index": 3,
             "text_key": "task.n24.intent.d",
-            "pressure": 32
+            "pressure": 16
           }
         ]
       }
@@ -1354,7 +1356,7 @@
             "index": 0,
             "text_key": "task.n26.intent.a",
             "add_card": {
-              "card": "R3-C-07",
+              "card": "X03",
               "count": 1,
               "zone": "hand"
             }
@@ -1726,8 +1728,23 @@
         "intents": [
           {
             "index": 0,
-            "text_key": "评审催促7",
-            "pressure": 7
+            "text_key": "催促7 · 精力越高越狠",
+            "pressure": 7,
+            "pressure_per_vitality": 1,
+            "pressure_vitality_step": 30,
+            "gain_status": {
+              "status": "anxiety",
+              "stacks": 1,
+              "target": "player"
+            },
+            "summon_tasks": [
+              {
+                "task": "N14",
+                "count": 1,
+                "taunt": true,
+                "work_percent": 60
+              }
+            ]
           },
           {
             "index": 1,
@@ -1736,8 +1753,19 @@
           },
           {
             "index": 2,
-            "text_key": "评审催促9",
-            "pressure": 9
+            "text_key": "催改通知：塞1张修改意见 · 精力上限-1（9）",
+            "pressure": 9,
+            "player_reduce_max_vitality": 1,
+            "add_card": {
+              "card": "X04",
+              "count": 1,
+              "zone": "discard"
+            },
+            "gain_status": {
+              "status": "drowsiness",
+              "stacks": 1,
+              "target": "player"
+            }
           }
         ]
       },
@@ -1748,8 +1776,15 @@
         "intents": [
           {
             "index": 0,
-            "text_key": "评审催促7",
-            "pressure": 7
+            "text_key": "催促7 · 精力越高越狠",
+            "pressure": 7,
+            "pressure_per_vitality": 1,
+            "pressure_vitality_step": 30,
+            "gain_status": {
+              "status": "anxiety",
+              "stacks": 1,
+              "target": "player"
+            }
           },
           {
             "index": 1,
@@ -1758,8 +1793,19 @@
           },
           {
             "index": 2,
-            "text_key": "评审催促9",
-            "pressure": 9
+            "text_key": "催改通知：塞1张修改意见 · 精力上限-1（9）",
+            "pressure": 9,
+            "player_reduce_max_vitality": 1,
+            "add_card": {
+              "card": "X04",
+              "count": 1,
+              "zone": "discard"
+            },
+            "gain_status": {
+              "status": "drowsiness",
+              "stacks": 1,
+              "target": "player"
+            }
           }
         ]
       },
@@ -1770,8 +1816,15 @@
         "intents": [
           {
             "index": 0,
-            "text_key": "评审催促7",
-            "pressure": 7
+            "text_key": "催促7 · 精力越高越狠",
+            "pressure": 7,
+            "pressure_per_vitality": 1,
+            "pressure_vitality_step": 30,
+            "gain_status": {
+              "status": "anxiety",
+              "stacks": 1,
+              "target": "player"
+            }
           },
           {
             "index": 1,
@@ -1780,8 +1833,19 @@
           },
           {
             "index": 2,
-            "text_key": "评审催促9",
-            "pressure": 9
+            "text_key": "催改通知：塞1张修改意见 · 精力上限-1（9）",
+            "pressure": 9,
+            "player_reduce_max_vitality": 1,
+            "add_card": {
+              "card": "X04",
+              "count": 1,
+              "zone": "discard"
+            },
+            "gain_status": {
+              "status": "drowsiness",
+              "stacks": 1,
+              "target": "player"
+            }
           }
         ]
       }
@@ -1799,8 +1863,23 @@
         "intents": [
           {
             "index": 0,
-            "text_key": "评审催促8",
-            "pressure": 8
+            "text_key": "催促8 · 精力越高越狠",
+            "pressure": 8,
+            "pressure_per_vitality": 1,
+            "pressure_vitality_step": 30,
+            "gain_status": {
+              "status": "anxiety",
+              "stacks": 1,
+              "target": "player"
+            },
+            "summon_tasks": [
+              {
+                "task": "N17",
+                "count": 1,
+                "taunt": true,
+                "work_percent": 60
+              }
+            ]
           },
           {
             "index": 1,
@@ -1809,8 +1888,19 @@
           },
           {
             "index": 2,
-            "text_key": "评审催促10",
-            "pressure": 10
+            "text_key": "催改通知：塞1张修改意见 · 精力上限-1（10）",
+            "pressure": 10,
+            "player_reduce_max_vitality": 1,
+            "add_card": {
+              "card": "X04",
+              "count": 1,
+              "zone": "discard"
+            },
+            "gain_status": {
+              "status": "procrastination",
+              "stacks": 1,
+              "target": "player"
+            }
           }
         ]
       },
@@ -1821,8 +1911,15 @@
         "intents": [
           {
             "index": 0,
-            "text_key": "评审催促8",
-            "pressure": 8
+            "text_key": "催促8 · 精力越高越狠",
+            "pressure": 8,
+            "pressure_per_vitality": 1,
+            "pressure_vitality_step": 30,
+            "gain_status": {
+              "status": "anxiety",
+              "stacks": 1,
+              "target": "player"
+            }
           },
           {
             "index": 1,
@@ -1831,8 +1928,19 @@
           },
           {
             "index": 2,
-            "text_key": "评审催促10",
-            "pressure": 10
+            "text_key": "催改通知：塞1张修改意见 · 精力上限-1（10）",
+            "pressure": 10,
+            "player_reduce_max_vitality": 1,
+            "add_card": {
+              "card": "X04",
+              "count": 1,
+              "zone": "discard"
+            },
+            "gain_status": {
+              "status": "procrastination",
+              "stacks": 1,
+              "target": "player"
+            }
           }
         ]
       },
@@ -1843,8 +1951,15 @@
         "intents": [
           {
             "index": 0,
-            "text_key": "评审催促8",
-            "pressure": 8
+            "text_key": "催促8 · 精力越高越狠",
+            "pressure": 8,
+            "pressure_per_vitality": 1,
+            "pressure_vitality_step": 30,
+            "gain_status": {
+              "status": "anxiety",
+              "stacks": 1,
+              "target": "player"
+            }
           },
           {
             "index": 1,
@@ -1853,8 +1968,19 @@
           },
           {
             "index": 2,
-            "text_key": "评审催促10",
-            "pressure": 10
+            "text_key": "催改通知：塞1张修改意见 · 精力上限-1（10）",
+            "pressure": 10,
+            "player_reduce_max_vitality": 1,
+            "add_card": {
+              "card": "X04",
+              "count": 1,
+              "zone": "discard"
+            },
+            "gain_status": {
+              "status": "procrastination",
+              "stacks": 1,
+              "target": "player"
+            }
           }
         ]
       }
@@ -1872,8 +1998,23 @@
         "intents": [
           {
             "index": 0,
-            "text_key": "评审催促9",
-            "pressure": 9
+            "text_key": "催促9 · 精力越高越狠",
+            "pressure": 9,
+            "pressure_per_vitality": 1,
+            "pressure_vitality_step": 30,
+            "gain_status": {
+              "status": "drowsiness",
+              "stacks": 1,
+              "target": "player"
+            },
+            "summon_tasks": [
+              {
+                "task": "N29",
+                "count": 1,
+                "taunt": true,
+                "work_percent": 60
+              }
+            ]
           },
           {
             "index": 1,
@@ -1882,8 +2023,19 @@
           },
           {
             "index": 2,
-            "text_key": "评审催促11",
-            "pressure": 11
+            "text_key": "催改通知：塞1张修改意见 · 精力上限-1（11）",
+            "pressure": 11,
+            "player_reduce_max_vitality": 1,
+            "add_card": {
+              "card": "X04",
+              "count": 1,
+              "zone": "discard"
+            },
+            "gain_status": {
+              "status": "procrastination",
+              "stacks": 1,
+              "target": "player"
+            }
           }
         ]
       },
@@ -1894,8 +2046,15 @@
         "intents": [
           {
             "index": 0,
-            "text_key": "评审催促9",
-            "pressure": 9
+            "text_key": "催促9 · 精力越高越狠",
+            "pressure": 9,
+            "pressure_per_vitality": 1,
+            "pressure_vitality_step": 30,
+            "gain_status": {
+              "status": "drowsiness",
+              "stacks": 1,
+              "target": "player"
+            }
           },
           {
             "index": 1,
@@ -1904,8 +2063,19 @@
           },
           {
             "index": 2,
-            "text_key": "评审催促11",
-            "pressure": 11
+            "text_key": "催改通知：塞1张修改意见 · 精力上限-1（11）",
+            "pressure": 11,
+            "player_reduce_max_vitality": 1,
+            "add_card": {
+              "card": "X04",
+              "count": 1,
+              "zone": "discard"
+            },
+            "gain_status": {
+              "status": "procrastination",
+              "stacks": 1,
+              "target": "player"
+            }
           }
         ]
       },
@@ -1916,8 +2086,15 @@
         "intents": [
           {
             "index": 0,
-            "text_key": "评审催促9",
-            "pressure": 9
+            "text_key": "催促9 · 精力越高越狠",
+            "pressure": 9,
+            "pressure_per_vitality": 1,
+            "pressure_vitality_step": 30,
+            "gain_status": {
+              "status": "drowsiness",
+              "stacks": 1,
+              "target": "player"
+            }
           },
           {
             "index": 1,
@@ -1926,8 +2103,19 @@
           },
           {
             "index": 2,
-            "text_key": "评审催促11",
-            "pressure": 11
+            "text_key": "催改通知：塞1张修改意见 · 精力上限-1（11）",
+            "pressure": 11,
+            "player_reduce_max_vitality": 1,
+            "add_card": {
+              "card": "X04",
+              "count": 1,
+              "zone": "discard"
+            },
+            "gain_status": {
+              "status": "procrastination",
+              "stacks": 1,
+              "target": "player"
+            }
           }
         ]
       }
@@ -1945,8 +2133,23 @@
         "intents": [
           {
             "index": 0,
-            "text_key": "评审催促10",
-            "pressure": 10
+            "text_key": "催促10 · 精力越高越狠",
+            "pressure": 10,
+            "pressure_per_vitality": 1,
+            "pressure_vitality_step": 30,
+            "gain_status": {
+              "status": "anxiety",
+              "stacks": 1,
+              "target": "player"
+            },
+            "summon_tasks": [
+              {
+                "task": "N14",
+                "count": 1,
+                "taunt": true,
+                "work_percent": 60
+              }
+            ]
           },
           {
             "index": 1,
@@ -1955,8 +2158,19 @@
           },
           {
             "index": 2,
-            "text_key": "评审催促12",
-            "pressure": 12
+            "text_key": "催改通知：塞1张修改意见 · 精力上限-1（12）",
+            "pressure": 12,
+            "player_reduce_max_vitality": 1,
+            "add_card": {
+              "card": "X04",
+              "count": 1,
+              "zone": "discard"
+            },
+            "gain_status": {
+              "status": "drowsiness",
+              "stacks": 1,
+              "target": "player"
+            }
           }
         ]
       },
@@ -1967,8 +2181,15 @@
         "intents": [
           {
             "index": 0,
-            "text_key": "评审催促10",
-            "pressure": 10
+            "text_key": "催促10 · 精力越高越狠",
+            "pressure": 10,
+            "pressure_per_vitality": 1,
+            "pressure_vitality_step": 30,
+            "gain_status": {
+              "status": "anxiety",
+              "stacks": 1,
+              "target": "player"
+            }
           },
           {
             "index": 1,
@@ -1977,8 +2198,19 @@
           },
           {
             "index": 2,
-            "text_key": "评审催促12",
-            "pressure": 12
+            "text_key": "催改通知：塞1张修改意见 · 精力上限-1（12）",
+            "pressure": 12,
+            "player_reduce_max_vitality": 1,
+            "add_card": {
+              "card": "X04",
+              "count": 1,
+              "zone": "discard"
+            },
+            "gain_status": {
+              "status": "drowsiness",
+              "stacks": 1,
+              "target": "player"
+            }
           }
         ]
       },
@@ -1989,8 +2221,15 @@
         "intents": [
           {
             "index": 0,
-            "text_key": "评审催促10",
-            "pressure": 10
+            "text_key": "催促10 · 精力越高越狠",
+            "pressure": 10,
+            "pressure_per_vitality": 1,
+            "pressure_vitality_step": 30,
+            "gain_status": {
+              "status": "anxiety",
+              "stacks": 1,
+              "target": "player"
+            }
           },
           {
             "index": 1,
@@ -1999,8 +2238,19 @@
           },
           {
             "index": 2,
-            "text_key": "评审催促12",
-            "pressure": 12
+            "text_key": "催改通知：塞1张修改意见 · 精力上限-1（12）",
+            "pressure": 12,
+            "player_reduce_max_vitality": 1,
+            "add_card": {
+              "card": "X04",
+              "count": 1,
+              "zone": "discard"
+            },
+            "gain_status": {
+              "status": "drowsiness",
+              "stacks": 1,
+              "target": "player"
+            }
           }
         ]
       }
@@ -2018,18 +2268,44 @@
         "intents": [
           {
             "index": 0,
-            "text_key": "催促12",
-            "pressure": 12
+            "text_key": "催促12 · 精力越高越狠",
+            "pressure": 12,
+            "pressure_per_vitality": 1,
+            "pressure_vitality_step": 30,
+            "gain_status": {
+              "status": "anxiety",
+              "stacks": 1,
+              "target": "player"
+            },
+            "summon_tasks": [
+              {
+                "task": "N17",
+                "count": 1,
+                "taunt": true,
+                "work_percent": 60
+              }
+            ]
           },
           {
             "index": 1,
-            "text_key": "材料复核8",
+            "text_key": "补充材料8",
             "shield": 8
           },
           {
             "index": 2,
-            "text_key": "催促10",
-            "pressure": 10
+            "text_key": "催改通知：塞1张修改意见 · 精力上限-1（10）",
+            "pressure": 10,
+            "player_reduce_max_vitality": 1,
+            "add_card": {
+              "card": "X04",
+              "count": 1,
+              "zone": "discard"
+            },
+            "gain_status": {
+              "status": "procrastination",
+              "stacks": 1,
+              "target": "player"
+            }
           }
         ]
       },
@@ -2040,18 +2316,36 @@
         "intents": [
           {
             "index": 0,
-            "text_key": "催促12",
-            "pressure": 12
+            "text_key": "催促12 · 精力越高越狠",
+            "pressure": 12,
+            "pressure_per_vitality": 1,
+            "pressure_vitality_step": 30,
+            "gain_status": {
+              "status": "anxiety",
+              "stacks": 1,
+              "target": "player"
+            }
           },
           {
             "index": 1,
-            "text_key": "材料复核8",
+            "text_key": "补充材料8",
             "shield": 8
           },
           {
             "index": 2,
-            "text_key": "催促10",
-            "pressure": 10
+            "text_key": "催改通知：塞1张修改意见 · 精力上限-1（10）",
+            "pressure": 10,
+            "player_reduce_max_vitality": 1,
+            "add_card": {
+              "card": "X04",
+              "count": 1,
+              "zone": "discard"
+            },
+            "gain_status": {
+              "status": "procrastination",
+              "stacks": 1,
+              "target": "player"
+            }
           }
         ]
       },
@@ -2062,18 +2356,36 @@
         "intents": [
           {
             "index": 0,
-            "text_key": "催促12",
-            "pressure": 12
+            "text_key": "催促12 · 精力越高越狠",
+            "pressure": 12,
+            "pressure_per_vitality": 1,
+            "pressure_vitality_step": 30,
+            "gain_status": {
+              "status": "anxiety",
+              "stacks": 1,
+              "target": "player"
+            }
           },
           {
             "index": 1,
-            "text_key": "材料复核8",
+            "text_key": "补充材料8",
             "shield": 8
           },
           {
             "index": 2,
-            "text_key": "催促10",
-            "pressure": 10
+            "text_key": "催改通知：塞1张修改意见 · 精力上限-1（10）",
+            "pressure": 10,
+            "player_reduce_max_vitality": 1,
+            "add_card": {
+              "card": "X04",
+              "count": 1,
+              "zone": "discard"
+            },
+            "gain_status": {
+              "status": "procrastination",
+              "stacks": 1,
+              "target": "player"
+            }
           }
         ]
       }
@@ -2091,19 +2403,44 @@
         "intents": [
           {
             "index": 0,
-            "text_key": "催促6",
-            "pressure": 6
+            "text_key": "催促10 · 精力越高越狠",
+            "pressure": 10,
+            "pressure_per_vitality": 1,
+            "pressure_vitality_step": 30,
+            "gain_status": {
+              "status": "drowsiness",
+              "stacks": 1,
+              "target": "player"
+            },
+            "summon_tasks": [
+              {
+                "task": "N29",
+                "count": 1,
+                "taunt": true,
+                "work_percent": 60
+              }
+            ]
           },
           {
             "index": 1,
-            "text_key": "催促8、材料复核8",
-            "pressure": 8,
+            "text_key": "补充材料8",
             "shield": 8
           },
           {
             "index": 2,
-            "text_key": "催促8",
-            "pressure": 8
+            "text_key": "催改通知：塞1张修改意见 · 精力上限-1（12）",
+            "pressure": 12,
+            "player_reduce_max_vitality": 1,
+            "add_card": {
+              "card": "X04",
+              "count": 1,
+              "zone": "discard"
+            },
+            "gain_status": {
+              "status": "anxiety",
+              "stacks": 1,
+              "target": "player"
+            }
           }
         ]
       },
@@ -2114,19 +2451,36 @@
         "intents": [
           {
             "index": 0,
-            "text_key": "催促6",
-            "pressure": 6
+            "text_key": "催促10 · 精力越高越狠",
+            "pressure": 10,
+            "pressure_per_vitality": 1,
+            "pressure_vitality_step": 30,
+            "gain_status": {
+              "status": "drowsiness",
+              "stacks": 1,
+              "target": "player"
+            }
           },
           {
             "index": 1,
-            "text_key": "催促8、材料复核8",
-            "pressure": 8,
+            "text_key": "补充材料8",
             "shield": 8
           },
           {
             "index": 2,
-            "text_key": "催促8",
-            "pressure": 8
+            "text_key": "催改通知：塞1张修改意见 · 精力上限-1（12）",
+            "pressure": 12,
+            "player_reduce_max_vitality": 1,
+            "add_card": {
+              "card": "X04",
+              "count": 1,
+              "zone": "discard"
+            },
+            "gain_status": {
+              "status": "anxiety",
+              "stacks": 1,
+              "target": "player"
+            }
           }
         ]
       },
@@ -2137,19 +2491,36 @@
         "intents": [
           {
             "index": 0,
-            "text_key": "催促6",
-            "pressure": 6
+            "text_key": "催促10 · 精力越高越狠",
+            "pressure": 10,
+            "pressure_per_vitality": 1,
+            "pressure_vitality_step": 30,
+            "gain_status": {
+              "status": "drowsiness",
+              "stacks": 1,
+              "target": "player"
+            }
           },
           {
             "index": 1,
-            "text_key": "催促8、材料复核8",
-            "pressure": 8,
+            "text_key": "补充材料8",
             "shield": 8
           },
           {
             "index": 2,
-            "text_key": "催促8",
-            "pressure": 8
+            "text_key": "催改通知：塞1张修改意见 · 精力上限-1（12）",
+            "pressure": 12,
+            "player_reduce_max_vitality": 1,
+            "add_card": {
+              "card": "X04",
+              "count": 1,
+              "zone": "discard"
+            },
+            "gain_status": {
+              "status": "anxiety",
+              "stacks": 1,
+              "target": "player"
+            }
           }
         ]
       }
@@ -2167,18 +2538,44 @@
         "intents": [
           {
             "index": 0,
-            "text_key": "材料复核8",
-            "shield": 8
+            "text_key": "催促10 · 精力越高越狠",
+            "pressure": 10,
+            "pressure_per_vitality": 1,
+            "pressure_vitality_step": 30,
+            "gain_status": {
+              "status": "anxiety",
+              "stacks": 1,
+              "target": "player"
+            },
+            "summon_tasks": [
+              {
+                "task": "N17",
+                "count": 1,
+                "taunt": true,
+                "work_percent": 60
+              }
+            ]
           },
           {
             "index": 1,
-            "text_key": "催促10",
-            "pressure": 10
+            "text_key": "补充材料8",
+            "shield": 8
           },
           {
             "index": 2,
-            "text_key": "催促12",
-            "pressure": 12
+            "text_key": "催改通知：塞1张修改意见 · 精力上限-1（12）",
+            "pressure": 12,
+            "player_reduce_max_vitality": 1,
+            "add_card": {
+              "card": "X04",
+              "count": 1,
+              "zone": "discard"
+            },
+            "gain_status": {
+              "status": "drowsiness",
+              "stacks": 1,
+              "target": "player"
+            }
           }
         ]
       },
@@ -2189,18 +2586,36 @@
         "intents": [
           {
             "index": 0,
-            "text_key": "材料复核8",
-            "shield": 8
+            "text_key": "催促10 · 精力越高越狠",
+            "pressure": 10,
+            "pressure_per_vitality": 1,
+            "pressure_vitality_step": 30,
+            "gain_status": {
+              "status": "anxiety",
+              "stacks": 1,
+              "target": "player"
+            }
           },
           {
             "index": 1,
-            "text_key": "催促10",
-            "pressure": 10
+            "text_key": "补充材料8",
+            "shield": 8
           },
           {
             "index": 2,
-            "text_key": "催促12",
-            "pressure": 12
+            "text_key": "催改通知：塞1张修改意见 · 精力上限-1（12）",
+            "pressure": 12,
+            "player_reduce_max_vitality": 1,
+            "add_card": {
+              "card": "X04",
+              "count": 1,
+              "zone": "discard"
+            },
+            "gain_status": {
+              "status": "drowsiness",
+              "stacks": 1,
+              "target": "player"
+            }
           }
         ]
       },
@@ -2211,18 +2626,36 @@
         "intents": [
           {
             "index": 0,
-            "text_key": "材料复核8",
-            "shield": 8
+            "text_key": "催促10 · 精力越高越狠",
+            "pressure": 10,
+            "pressure_per_vitality": 1,
+            "pressure_vitality_step": 30,
+            "gain_status": {
+              "status": "anxiety",
+              "stacks": 1,
+              "target": "player"
+            }
           },
           {
             "index": 1,
-            "text_key": "催促10",
-            "pressure": 10
+            "text_key": "补充材料8",
+            "shield": 8
           },
           {
             "index": 2,
-            "text_key": "催促12",
-            "pressure": 12
+            "text_key": "催改通知：塞1张修改意见 · 精力上限-1（12）",
+            "pressure": 12,
+            "player_reduce_max_vitality": 1,
+            "add_card": {
+              "card": "X04",
+              "count": 1,
+              "zone": "discard"
+            },
+            "gain_status": {
+              "status": "drowsiness",
+              "stacks": 1,
+              "target": "player"
+            }
           }
         ]
       }
@@ -2240,19 +2673,44 @@
         "intents": [
           {
             "index": 0,
-            "text_key": "催促11、材料复核4",
+            "text_key": "催促11 · 精力越高越狠",
             "pressure": 11,
-            "shield": 4
+            "pressure_per_vitality": 1,
+            "pressure_vitality_step": 30,
+            "gain_status": {
+              "status": "procrastination",
+              "stacks": 1,
+              "target": "player"
+            },
+            "summon_tasks": [
+              {
+                "task": "N29",
+                "count": 1,
+                "taunt": true,
+                "work_percent": 60
+              }
+            ]
           },
           {
             "index": 1,
-            "text_key": "催促11",
-            "pressure": 11
+            "text_key": "补充材料8",
+            "shield": 8
           },
           {
             "index": 2,
-            "text_key": "材料复核4",
-            "shield": 4
+            "text_key": "催改通知：塞1张修改意见 · 精力上限-1（11）",
+            "pressure": 11,
+            "player_reduce_max_vitality": 1,
+            "add_card": {
+              "card": "X04",
+              "count": 1,
+              "zone": "discard"
+            },
+            "gain_status": {
+              "status": "drowsiness",
+              "stacks": 1,
+              "target": "player"
+            }
           }
         ]
       },
@@ -2263,19 +2721,36 @@
         "intents": [
           {
             "index": 0,
-            "text_key": "催促11、材料复核4",
+            "text_key": "催促11 · 精力越高越狠",
             "pressure": 11,
-            "shield": 4
+            "pressure_per_vitality": 1,
+            "pressure_vitality_step": 30,
+            "gain_status": {
+              "status": "procrastination",
+              "stacks": 1,
+              "target": "player"
+            }
           },
           {
             "index": 1,
-            "text_key": "催促11",
-            "pressure": 11
+            "text_key": "补充材料8",
+            "shield": 8
           },
           {
             "index": 2,
-            "text_key": "材料复核4",
-            "shield": 4
+            "text_key": "催改通知：塞1张修改意见 · 精力上限-1（11）",
+            "pressure": 11,
+            "player_reduce_max_vitality": 1,
+            "add_card": {
+              "card": "X04",
+              "count": 1,
+              "zone": "discard"
+            },
+            "gain_status": {
+              "status": "drowsiness",
+              "stacks": 1,
+              "target": "player"
+            }
           }
         ]
       },
@@ -2286,19 +2761,36 @@
         "intents": [
           {
             "index": 0,
-            "text_key": "催促11、材料复核4",
+            "text_key": "催促11 · 精力越高越狠",
             "pressure": 11,
-            "shield": 4
+            "pressure_per_vitality": 1,
+            "pressure_vitality_step": 30,
+            "gain_status": {
+              "status": "procrastination",
+              "stacks": 1,
+              "target": "player"
+            }
           },
           {
             "index": 1,
-            "text_key": "催促11",
-            "pressure": 11
+            "text_key": "补充材料8",
+            "shield": 8
           },
           {
             "index": 2,
-            "text_key": "材料复核4",
-            "shield": 4
+            "text_key": "催改通知：塞1张修改意见 · 精力上限-1（11）",
+            "pressure": 11,
+            "player_reduce_max_vitality": 1,
+            "add_card": {
+              "card": "X04",
+              "count": 1,
+              "zone": "discard"
+            },
+            "gain_status": {
+              "status": "drowsiness",
+              "stacks": 1,
+              "target": "player"
+            }
           }
         ]
       }

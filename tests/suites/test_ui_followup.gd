@@ -44,7 +44,7 @@ func _card_copy_coverage() -> void:
 	if file == null:
 		return
 	var definitions: Variant = JSON.parse_string(file.get_as_text())
-	_check(definitions is Array and definitions.size() == 174, "copy coverage includes all 174 current card definitions")
+	_check(definitions is Array and definitions.size() == 176, "copy coverage includes all 176 current card definitions")
 	if not definitions is Array:
 		return
 	var tokens: Array[String] = []
