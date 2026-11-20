@@ -1,5 +1,7 @@
 # 《交大四年：DDL战争》设计与实施入口
 
+2026-11-20 饰品扩充设计提案：新增 104 件候选（40 通用、四角色各 16），按现有角色机制定义触发、次数与取舍，并列出三槽投放和首测 24 件。见[饰品设计总表](docs/plans/2026-11-20-relic-pool-design.md)。仅方案，不改变现行饰品、规则、资料包或存档。
+
 2026-11-15当前§0.20.25已完成四角色正式接入：林序原V5、许知微V8、沈见章V10、唐以宁V11默认用于选角/战斗、保存继续及测试房间；原仅样板限制在四人范围内已取代。见[正式战斗四人图](artifacts/verification/actor-integration-20261115/review/battle.jpg)、[选角四人图](artifacts/verification/actor-integration-20261115/review/setup.jpg)及[实现/结果](docs/plans/2026-11-15-actor-integration-design.md)。490项实机、22条真实命令对照、61窗口图/300连续帧通过；完整规则63.653秒、完整UI289.659秒和默认入口烟测均退出0/错误0。916保护文件、17份改前快照与10个真实存档文件hash核对通过；API新增0、累计38/200。原G0/G6/G8出口、最终美术签收与慢放手部换面感另记。
 
 2026-11-15唐以宁动作已修正为V11（§0.20.24）：先看[出手前后](artifacts/verification/actor-motion-20261115/review/p04-action-before-after.jpg)，再打开[V8/V11连续动作与慢放](artifacts/verification/actor-motion-20261115/review/index.html)。肩袖保持连接、肩肘重新联动、减少双膝同时折弯，持板加入轻微缓冲；原形象和上下身比例保持。336项实机、5真实命令和53项浏览器检查通过，见[实际结果](docs/plans/2026-11-15-actor-motion-design.md)与[验证汇总](artifacts/verification/actor-motion-20261115/verification-summary.json)。[启动器](tools/start_actor_party.ps1)默认P04/V11；P03V10、P02V8、P01原V5及正式入口保持。API新增0，累计38/200。慢放手部换面仍有短暂切换感，最终动作观感待查看；以下按历史批次阅读。
