@@ -5,7 +5,11 @@ var _shell: GameShell
 
 
 func _ready() -> void:
-	get_window().min_size = Vector2i(960, 640)
+	if OS.has_feature("web"):
+		UiStyle.web_touch = bool(JavaScriptBridge.eval("window.kapaiMobile === true"))
+		get_window().content_scale_factor = float(JavaScriptBridge.eval("window.kapaiRenderScale || 1"))
+	else:
+		get_window().min_size = Vector2i(960, 640)
 	var relic_pilot := "--relic-pilot" in OS.get_cmdline_user_args()
 	_session = GameSession.new(null, Callable(), relic_pilot)
 	if relic_pilot:

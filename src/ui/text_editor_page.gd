@@ -116,7 +116,7 @@ func render(data: Dictionary) -> void:
 
 
 func _focus_search() -> void:
-	if is_inside_tree() and is_instance_valid(_search):
+	if not UiStyle.web_touch and is_inside_tree() and is_instance_valid(_search):
 		_search.grab_focus()
 
 
@@ -186,7 +186,7 @@ func _build_ui() -> void:
 	_search.placeholder_text = "搜索文本、ID、来源或分类  /"
 	_search.text = query
 	_search.clear_button_enabled = true
-	_search.custom_minimum_size = Vector2(300 * minf(UiStyle.text_scale, 1.2), 44)
+	_search.custom_minimum_size = Vector2((220 if UiStyle.web_touch else 300) * minf(UiStyle.text_scale, 1.2), UiStyle.MOBILE_TARGET if UiStyle.web_touch else 44)
 	_search.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_search.add_theme_font_size_override("font_size", roundi(16 * UiStyle.text_scale))
 	_search.add_theme_color_override("font_color", UiStyle.CREAM)
@@ -197,7 +197,7 @@ func _build_ui() -> void:
 	tools.add_child(_search)
 	_filter = OptionButton.new()
 	_filter.name = "TextEditorFilter"
-	_filter.custom_minimum_size = Vector2(190 * minf(UiStyle.text_scale, 1.2), 44)
+	_filter.custom_minimum_size = Vector2((148 if UiStyle.web_touch else 190) * minf(UiStyle.text_scale, 1.2), UiStyle.MOBILE_TARGET if UiStyle.web_touch else 44)
 	_filter.add_theme_font_size_override("font_size", roundi(15 * UiStyle.text_scale))
 	_filter.add_theme_color_override("font_color", UiStyle.CREAM)
 	_filter.add_theme_stylebox_override("normal", UiStyle.surface(Color("20353d"), Color("657c85"), 4))
@@ -217,7 +217,7 @@ func _build_ui() -> void:
 			{},
 			func(): show_tab(key)
 		)
-		button.custom_minimum_size = Vector2(104 * minf(UiStyle.text_scale, 1.2), 44)
+		button.custom_minimum_size = Vector2((72 if UiStyle.web_touch else 104) * minf(UiStyle.text_scale, 1.2), UiStyle.MOBILE_TARGET if UiStyle.web_touch else 44)
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		button.add_theme_font_size_override("font_size", roundi(15 * UiStyle.text_scale))
 		_tabs[key] = button
@@ -277,7 +277,7 @@ func _build_ui() -> void:
 func _build_list_pane(parent: Node) -> void:
 	var panel := PanelContainer.new()
 	var page_width := size.x if size.x > 0 else 1280.0
-	panel.custom_minimum_size.x = clampf(page_width * 0.34, 320 * minf(UiStyle.text_scale, 1.1), 440)
+	panel.custom_minimum_size.x = clampf(page_width * 0.34, (188 if UiStyle.web_touch else 320) * minf(UiStyle.text_scale, 1.1), 440)
 	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	var skin := UiStyle.surface(Color("111f28"), Color("3c525d"), 6)
 	skin.set_content_margin_all(10)

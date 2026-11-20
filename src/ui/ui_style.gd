@@ -15,9 +15,15 @@ const LABELS = preload("res://src/ui/ui_labels.json")
 static var _textures: Dictionary = {}
 static var text_scale := 1.0
 static var reduced_motion := false
-static var _title_font: SystemFont
+static var web_touch := false
+static var _title_font: Font
 static var _gradients: Dictionary = {}
 static var _cut_styles: Dictionary = {}
+const MOBILE_TARGET := 52.0
+
+
+static func short_web(area: Vector2) -> bool:
+	return OS.has_feature("web") and (web_touch or area.x < 900 or area.y < 540)
 
 
 static func gradient(first: Color, last: Color, horizontal: bool = false) -> GradientTexture2D:
@@ -35,8 +41,12 @@ static func gradient(first: Color, last: Color, horizontal: bool = false) -> Gra
 
 static func title_font() -> Font:
 	if _title_font == null:
-		_title_font = SystemFont.new()
-		_title_font.font_names = PackedStringArray(["STZhongsong", "SimSun", "Noto Serif CJK SC", "serif"])
+		if OS.has_feature("web"):
+			_title_font = load("res://assets/fonts/NotoSerifCJKsc-Regular.otf") as Font
+		else:
+			var font := SystemFont.new()
+			font.font_names = PackedStringArray(["STZhongsong", "SimSun", "Noto Serif CJK SC", "serif"])
+			_title_font = font
 	return _title_font
 
 
@@ -541,11 +551,14 @@ static func error_text(error: ApiError) -> String:
 static func make_theme() -> Theme:
 	var theme := Theme.new()
 	theme.default_font_size = 18
-	var font := SystemFont.new()
-	font.font_names = PackedStringArray(
-		["Microsoft YaHei UI", "Microsoft YaHei", "Noto Sans CJK SC", "sans-serif"]
-	)
-	theme.default_font = font
+	if OS.has_feature("web"):
+		theme.default_font = load("res://assets/fonts/NotoSansCJKsc-Regular.otf") as Font
+	else:
+		var font := SystemFont.new()
+		font.font_names = PackedStringArray(
+			["Microsoft YaHei UI", "Microsoft YaHei", "Noto Sans CJK SC", "sans-serif"]
+		)
+		theme.default_font = font
 	theme.set_color("font_color", "Label", INK)
 	theme.set_color("font_color", "Button", INK)
 	theme.set_color("font_hover_color", "Button", INK)

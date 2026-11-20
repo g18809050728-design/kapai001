@@ -31,6 +31,7 @@ var _map_press_selected := false
 var _map_press_double := false
 var _map_press_dragged := false
 var _map_entry_generation := -1
+var _map_preview_scroll: ScrollContainer
 
 
 func _notification(what: int) -> void:
@@ -143,7 +144,7 @@ func add_button(parent: Node, uid: String, caption: String, draft: Variant = {},
 		if _in_region(parent,footer):
 			button.size_flags_horizontal = Control.SIZE_SHRINK_END
 	if _in_region(parent,header):
-		button.custom_minimum_size = Vector2(58,44)
+		button.custom_minimum_size.x = 58
 	if _in_region(parent,footer):
 		button.size_flags_horizontal = Control.SIZE_SHRINK_END
 		var text_width := button.get_theme_font("font").get_string_size(caption,HORIZONTAL_ALIGNMENT_LEFT,-1,button.get_theme_font_size("font_size")).x
@@ -216,12 +217,12 @@ func _layout_regions() -> void:
 	_scroll.offset_right = -12
 	if screen == "menu":
 		header.offset_left = size.x*.065
-		header.offset_top = size.y*.12
+		header.offset_top = size.y*(.06 if UiStyle.short_web(size) else .12)
 		header.offset_right = -size.x*.54
 		header.offset_bottom = header.offset_top+header.get_combined_minimum_size().y
-		_scroll.offset_top = header.offset_bottom+26
+		_scroll.offset_top = header.offset_bottom+(10 if UiStyle.short_web(size) else 26)
 		_scroll.offset_left = size.x*.065-12
-		_scroll.offset_right = -size.x*.59
+		_scroll.offset_right = -size.x*(.45 if UiStyle.short_web(size) else .59)
 		_scroll.offset_bottom = -20
 	if (screen in ["event", "rest"] or is_instance_valid(_room_illustration)) and not _room_expanded:
 		_scroll.offset_left = size.x*.45
@@ -235,9 +236,9 @@ func _layout_regions() -> void:
 		_room_figure.size = Vector2(size.x*.36,maxf(100,size.y+_scroll.offset_bottom-_scroll.offset_top-24))
 	if screen == "setup":
 		_scroll.offset_left = size.x*.07
-		_scroll.offset_right = -size.x*.55
+		_scroll.offset_right = -size.x*(.44 if UiStyle.short_web(size) else .55)
 		if is_instance_valid(_room_figure):
-			_room_figure.position.x = size.x*.5
+			_room_figure.position.x = size.x*(.57 if UiStyle.short_web(size) else .5)
 			_room_figure.size.x = size.x*.36
 	if screen == "reward" or (screen == "campaign" and (not is_instance_valid(_room_illustration) or _room_expanded)):
 		_scroll.offset_left = size.x*.06
@@ -245,6 +246,8 @@ func _layout_regions() -> void:
 		_fit_reward_cards()
 	if screen == "map" and is_instance_valid(_map_preview) and not _map_preview.is_queued_for_deletion():
 		var width := 272.0 if size.x < 1100 else 300.0
+		if UiStyle.short_web(size):
+			width = clampf(size.x * .29, 184.0, 250.0)
 		_scroll.offset_right = -width-16
 		_map_preview.position = Vector2(size.x-width-10,_scroll.offset_top)
 		_map_preview.size = Vector2(width,maxf(100,size.y+_scroll.offset_bottom-_scroll.offset_top))
@@ -312,28 +315,38 @@ func _event_needs_confirmation(option: Dictionary) -> bool:
 func _render_menu() -> void:
 	reset_page("DDL 战争", "把校园日常，打成自己的牌。")
 	_scroll.follow_focus = true
+	var compact := UiStyle.short_web(size)
 	var title_label := header.get_child(0) as Label
-	title_label.add_theme_font_size_override("font_size",roundi(64*UiStyle.text_scale))
+	title_label.add_theme_font_size_override("font_size",roundi((40 if compact else 64)*UiStyle.text_scale))
 	add_text(body,"饰品试玩 · 24 件 · 独立存档" if view.get("relic_pilot", false) else "四学年 · 校园卡牌冒险",16,UiStyle.BRASS)
+	var options: Control = body
+	if compact:
+		var grid := GridContainer.new()
+		grid.columns = 2
+		grid.add_theme_constant_override("h_separation", 12)
+		grid.add_theme_constant_override("v_separation", 6)
+		body.add_child(grid)
+		options = grid
 
-	var resume := add_button(body,"menu:continue","继续冒险",_ui("continue"))
+	var resume := add_button(options,"menu:continue","继续冒险",_ui("continue"))
 	resume.disabled = not bool(view.get("has_active_session",false)) and not bool(view.get("can_continue",false))
 	if resume.disabled:
 		resume.tooltip_text = str(view.get("save_error",""))
 		if resume.tooltip_text.is_empty():
 			resume.tooltip_text = "还没有可以继续的冒险。"
-		add_text(body,resume.tooltip_text,14,UiStyle.MUTED)
-	add_button(body,"menu:new","新的四年",_ui("new_run"))
-	add_button(body,"menu:compendium","图鉴",_ui("compendium"))
-	add_button(body,"menu:text_editor","文本编辑",_ui("text_editor"))
-	add_button(body,"menu:test","测试房间",_ui("test_room"))
-	add_button(body,"menu:settings","设置与存档",_ui("settings"))
+		if not compact:
+			add_text(body,resume.tooltip_text,14,UiStyle.MUTED)
+	add_button(options,"menu:new","新的四年",_ui("new_run"))
+	add_button(options,"menu:compendium","图鉴",_ui("compendium"))
+	add_button(options,"menu:text_editor","文本编辑",_ui("text_editor"))
+	add_button(options,"menu:test","测试房间",_ui("test_room"))
+	add_button(options,"menu:settings","设置与存档",_ui("settings"))
 	for uid in ["menu:continue","menu:new","menu:compendium","menu:text_editor","menu:test","menu:settings"]:
 		var option: Button = _buttons[uid]
 		option.alignment = HORIZONTAL_ALIGNMENT_LEFT
-		option.custom_minimum_size = Vector2(220,52)
+		option.custom_minimum_size = Vector2(108,UiStyle.MOBILE_TARGET if UiStyle.web_touch else 44) if compact else Vector2(220,52)
 		option.add_theme_font_override("font",UiStyle.title_font())
-		option.add_theme_font_size_override("font_size",roundi(25*UiStyle.text_scale))
+		option.add_theme_font_size_override("font_size",roundi((19 if compact else 25)*UiStyle.text_scale))
 		for state in ["normal","hover","pressed","focus","disabled"]:
 			option.add_theme_stylebox_override(state,StyleBoxEmpty.new())
 		option.add_theme_color_override("font_hover_color",Color("ffe6a0"))
@@ -356,7 +369,7 @@ func _map_preview_node(node: Dictionary, reachable: Array) -> void:
 	var scene_key := str({"normal":"BG_classroom","elite":"BG_classroom","boss":"BG_classroom","rest":"BG_dorm","shop":"BG_shop","event":"BG_campus"}.get(str(node.get("kind","")),"BG_study"))
 	var thumbnail := TextureRect.new()
 	thumbnail.texture = UiStyle.texture(scene_key)
-	thumbnail.custom_minimum_size.y = (48 if UiStyle.text_scale > 1.0 else 64) if size.y < 700 else 86
+	thumbnail.custom_minimum_size.y = 40 if UiStyle.short_web(size) else ((48 if UiStyle.text_scale > 1.0 else 64) if size.y < 700 else 86)
 	thumbnail.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	thumbnail.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 	thumbnail.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -376,8 +389,7 @@ func _map_preview_node(node: Dictionary, reachable: Array) -> void:
 	text.name = "ForecastFullText"
 	if not reachable.has(id):
 		add_text(_map_forecast_words,"这里只预览路线，确认可达节点后才会前进。",13,Color("665d48"))
-	var scroll := _map_forecast_words.get_parent() as ScrollContainer
-	scroll.scroll_vertical = 0
+	_map_preview_scroll.scroll_vertical = 0
 
 
 func _overview_locate(id: String) -> void:
@@ -773,7 +785,7 @@ func _render_map() -> void:
 		if str(node.get("node_id", "")) == current_id:
 			current_title = _map_node_title(node)
 			break
-	var compact_map := size.x < 1100 and UiStyle.text_scale >= 1.25
+	var compact_map := UiStyle.short_web(size) or (size.x < 1100 and UiStyle.text_scale >= 1.25)
 	reset_page("校园路线 · " + str(view.get("year_title", "")), "", compact_map)
 	var map_title: Label = header.get_child(0)
 	if compact_map:
@@ -851,21 +863,30 @@ func _render_map() -> void:
 	add_child(_map_preview)
 	var preview_column := VBoxContainer.new()
 	preview_column.add_theme_constant_override("separation",10)
-	_map_preview.add_child(preview_column)
+	var preview_scroll := ScrollContainer.new()
+	preview_scroll.name = "RouteForecast"
+	preview_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	preview_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_map_preview_scroll = preview_scroll
+	if UiStyle.short_web(size):
+		_map_preview.add_child(preview_scroll)
+		preview_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		preview_scroll.add_child(preview_column)
+	else:
+		_map_preview.add_child(preview_column)
 	_map_preview_words = VBoxContainer.new()
 	_map_preview_words.name = "MapNodeSummary"
 	_map_preview_words.add_theme_constant_override("separation",6)
 	preview_column.add_child(_map_preview_words)
 	preview_column.add_child(HSeparator.new())
-	var preview_scroll := ScrollContainer.new()
-	preview_scroll.name = "RouteForecast"
-	preview_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	preview_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	preview_column.add_child(preview_scroll)
 	_map_forecast_words = VBoxContainer.new()
 	_map_forecast_words.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_map_forecast_words.add_theme_constant_override("separation",10)
-	preview_scroll.add_child(_map_forecast_words)
+	if UiStyle.short_web(size):
+		preview_column.add_child(_map_forecast_words)
+	else:
+		preview_column.add_child(preview_scroll)
+		preview_scroll.add_child(_map_forecast_words)
 	var preview_id := selected if node_ids.has(selected) else (str(reachable[0]) if not reachable.is_empty() else current_id)
 	for node in nodes:
 		if str(node.node_id) == preview_id:
@@ -876,7 +897,7 @@ func _render_map() -> void:
 			node_button.focus_entered.connect(func(): _map_preview_node(node,reachable))
 	_layout_regions.call_deferred()
 
-	var row := _bottom(description + "  ·  再次点击已选节点进入 / 可双击")
+	var row := _bottom(description + ("  ·  再点已选节点可进入" if UiStyle.web_touch else "  ·  再次点击已选节点进入 / 可双击"))
 	_map_selection_hint = footer.get_child(0) as Label
 	# Selection text cannot resize the footer and shift the node under a second click.
 	_map_selection_hint.autowrap_mode = TextServer.AUTOWRAP_OFF
@@ -1246,6 +1267,7 @@ func _target_or_comparison(prefix: String, mode: String, key: String) -> void:
 
 func _render_setup() -> void:
 	# Use the existing configuration/old-run replacement semantics, with one hero in focus.
+	var compact := UiStyle.short_web(size)
 	var characters := _array(view.get("characters"))
 	var manifests := _array(view.get("manifests"))
 	if not manifests.is_empty():
@@ -1265,7 +1287,7 @@ func _render_setup() -> void:
 		button.expand_icon = true
 		button.add_theme_constant_override("icon_max_width",34)
 		button.autowrap_mode = TextServer.AUTOWRAP_OFF
-		button.custom_minimum_size.x = button.get_theme_font("font").get_string_size(button.text,HORIZONTAL_ALIGNMENT_LEFT,-1,button.get_theme_font_size("font_size")).x+78
+		button.custom_minimum_size.x = button.get_theme_font("font").get_string_size(button.text,HORIZONTAL_ALIGNMENT_LEFT,-1,button.get_theme_font_size("font_size")).x+(52 if compact else 78)
 		button.disabled = bool(character.get("locked", false))
 		button.tooltip_text = str(character.get("reason", ""))
 		UiStyle.button_skin(button,"primary" if _character == id else "secondary",true)
@@ -1274,8 +1296,9 @@ func _render_setup() -> void:
 			continue
 		var info := add_panel(body)
 		info.get_parent().add_theme_stylebox_override("panel",UiStyle.surface(Color(UiStyle.NIGHT,.78),Color(UiStyle.BRASS,.4)))
-		add_text(info,"人物  /  " + str(characters.find(character)+1).pad_zeros(2),12,UiStyle.MUTED)
-		add_text(info, UiStyle.label(_character), 32)
+		if not compact:
+			add_text(info,"人物  /  " + str(characters.find(character)+1).pad_zeros(2),12,UiStyle.MUTED)
+		add_text(info, UiStyle.label(_character), 27 if compact else 32)
 		add_text(info,str({"P01":"策略铺垫 → 工作连携 → 取回策略","P02":"开题 → 编排章节 → 发表论文","P03":"叠加不同负面 → 触发复合反应","P04":"伙伴协作 → 积攒协同 → 团队爆发"}.get(_character,"")),19,UiStyle.GREEN.darkened(.3))
 		add_text(info, UiContentText.describe_character_passive(str(character.get("passive_id", ""))), 17)
 		add_text(info, "开局无饰品 · 12张起始牌 · 沿四张学年地图前进", 16)
@@ -1285,20 +1308,34 @@ func _render_setup() -> void:
 		_seed_revision = int(view.get("seed_revision", 0))
 	var difficulty_row := add_row(footer)
 	difficulty_row.name = "SetupConfiguration"
-	add_text(difficulty_row,"冒险难度",14,UiStyle.MUTED)
+	if not compact:
+		add_text(difficulty_row,"冒险难度",14,UiStyle.MUTED)
 	for difficulty in difficulties:
 		var id := _option_id(difficulty)
 		var pick := add_button(difficulty_row, "setup:difficulty:" + id, ("✓ " if _difficulty == id else "") + _difficulty_name(id), {}, func(): _select_setup("difficulty", id))
+		if compact:
+			pick.autowrap_mode = TextServer.AUTOWRAP_OFF
+			pick.custom_minimum_size.x = roundi(float(pick.text.length()) * 18 * UiStyle.text_scale + 24) if UiStyle.web_touch else 74
 		pick.tooltip_text = DifficultyRules.description(_dict(view.get("difficulty_details",{}).get(id)))
 		UiStyle.button_skin(pick,"primary" if _difficulty == id else "secondary",true)
-	add_button(difficulty_row,"setup:advanced","高级设置",{},func(): _open_inspector("seed"))
+	var advanced := add_button(difficulty_row,"setup:advanced","高级设置",{},func(): _open_inspector("seed"))
+	if compact:
+		advanced.custom_minimum_size.x = 104 * minf(UiStyle.text_scale, 1.15) if UiStyle.web_touch else 88
 	add_text(footer,DifficultyRules.description(_dict(view.get("difficulty_details",{}).get(_difficulty))),14,UiStyle.MUTED).name = "DifficultyEffects"
 	var confirming := bool(view.get("confirm_restart", false))
-	var row := _bottom(("确认结束旧局并替换当前存档？" if confirming else "人物：" + UiStyle.label(_character) + " · " + _difficulty_name(_difficulty)))
+	var row := difficulty_row
+	if confirming:
+		row = _bottom("确认结束旧局并替换当前存档？")
+	elif not compact:
+		row = _bottom("人物：" + UiStyle.label(_character) + " · " + _difficulty_name(_difficulty))
+	elif UiStyle.web_touch and size.x < 620 * UiStyle.text_scale:
+		row = add_row(footer)
 	add_button(row, "setup:restart_confirm" if confirming else "setup:start", "结束旧局并开始" if confirming else "开始四年冒险", func(): return _ui("start_run", {"character_id": _character, "difficulty": _difficulty, "manifest_id": _manifest, "seed": _seed, "confirmed": confirming}))
 	if confirming:
 		add_button(row, "setup:restart_cancel", "取消重开", _ui("cancel_restart"))
-	add_button(row, "setup:back", "返回", _ui("menu"))
+	var back := add_button(row, "setup:back", "返回", _ui("menu"))
+	if compact:
+		back.custom_minimum_size.x = 56
 
 
 func _setup_deck(character: Dictionary) -> void:
@@ -1454,7 +1491,7 @@ func _open_seed_settings() -> void:
 	input.name = "RunSeedInput"
 	input.text = _seed
 	input.placeholder_text = "十进制整数种子"
-	input.custom_minimum_size.y = 48
+	input.custom_minimum_size.y = UiStyle.MOBILE_TARGET if UiStyle.web_touch else 48
 	input.add_theme_font_size_override("font_size",roundi(18*UiStyle.text_scale))
 	input.text_changed.connect(func(value): _seed = value)
 	words.add_child(input)
@@ -1491,7 +1528,7 @@ func _open_inspector(kind: String) -> void:
 		card.pressed.connect(func(): _preview_card = card; _show_card_preview(true))
 	var search := LineEdit.new()
 	search.placeholder_text = "查找名称 / 类型 / 费用1 / 已升级 / 未升级"
-	search.custom_minimum_size.y = 42
+	search.custom_minimum_size.y = UiStyle.MOBILE_TARGET if UiStyle.web_touch else 42
 	grid.get_parent().get_parent().add_child(search)
 	search.text_changed.connect(func(value):
 		for child in grid.get_children():

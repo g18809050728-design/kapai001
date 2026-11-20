@@ -66,7 +66,7 @@ func render(data: Dictionary) -> void:
 	var margin := MarginContainer.new()
 	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	for side in ["left", "right"]:
-		margin.add_theme_constant_override("margin_" + side, 28)
+		margin.add_theme_constant_override("margin_" + side, 14 if UiStyle.web_touch else 28)
 	for side in ["top", "bottom"]:
 		margin.add_theme_constant_override("margin_" + side, 14)
 	add_child(margin)
@@ -87,13 +87,15 @@ func render(data: Dictionary) -> void:
 	heading.add_child(tabs)
 	_tabs.clear()
 	for kind_name in TABS:
-		var caption := str(TABS[kind_name]) + "  ·  %s" % _order[kind_name].size()
+		var caption := str(TABS[kind_name])
+		if not UiStyle.web_touch:
+			caption += "  ·  %s" % _order[kind_name].size()
 		var button := add_button(tabs, "compendium:tab:" + kind_name, caption, {}, func(): show_tab(kind_name))
-		button.custom_minimum_size = Vector2(150 * minf(UiStyle.text_scale, 1.25), 44)
+		button.custom_minimum_size = Vector2((120 if UiStyle.web_touch else 150) * minf(UiStyle.text_scale, 1.25), UiStyle.MOBILE_TARGET if UiStyle.web_touch else 44)
 		button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 		_tabs[kind_name] = button
 	_filters = HFlowContainer.new()
-	_filters.add_theme_constant_override("h_separation", 10)
+	_filters.add_theme_constant_override("h_separation", 6 if UiStyle.web_touch else 10)
 	_filters.add_theme_constant_override("v_separation", 8)
 	column.add_child(_filters)
 	_count = add_text(column, "", 14, Color("c5b99f"))
@@ -160,8 +162,8 @@ func show_tab(value: String) -> void:
 	_search.placeholder_text = "搜索名称、ID、说明  /"
 	_search.text = _states[tab].query
 	_search.clear_button_enabled = true
-	_search.custom_minimum_size = Vector2(260 * minf(UiStyle.text_scale, 1.2), 44)
-	_search.add_theme_font_size_override("font_size", roundi(16 * UiStyle.text_scale))
+	_search.custom_minimum_size = Vector2((180 if UiStyle.web_touch else 260) * minf(UiStyle.text_scale, 1.2), UiStyle.MOBILE_TARGET if UiStyle.web_touch else 44)
+	_search.add_theme_font_size_override("font_size", roundi((18 if UiStyle.web_touch else 16) * UiStyle.text_scale))
 	_filters.add_child(_search)
 	_search.text_changed.connect(func(value_text):
 		_states[tab].query = value_text
@@ -180,7 +182,7 @@ func show_tab(value: String) -> void:
 		_filter("kind", "类别", ["", "normal", "elite", "boss", "auxiliary"], ["全部", "普通", "精英", "首领", "附属"])
 		_filter("year", "学年", ["", "1", "2", "3", "4"], ["全部", "大一", "大二", "大三", "大四"])
 	var clear := add_button(_filters, "compendium:filter:reset", "重置", {}, reset_filters)
-	clear.custom_minimum_size.x = 76 * UiStyle.text_scale
+	clear.custom_minimum_size.x = (64 if UiStyle.web_touch else 76) * UiStyle.text_scale
 	clear.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	UiStyle.button_skin(clear, "quiet", true)
 	_render_results(true)
@@ -190,8 +192,11 @@ func _filter(key: String, prefix: String, values: Array, captions: Array) -> voi
 	var option := OptionButton.new()
 	option.name = "CompendiumFilter_" + key
 	option.set_meta("uid", "compendium:filter:" + key)
-	option.custom_minimum_size = Vector2((166 if key == "rarity" else 146) * minf(UiStyle.text_scale, 1.25), 44)
-	option.add_theme_font_size_override("font_size", roundi(15 * UiStyle.text_scale))
+	option.custom_minimum_size = Vector2((104 if UiStyle.web_touch else (166 if key == "rarity" else 146)) * minf(UiStyle.text_scale, 1.25), UiStyle.MOBILE_TARGET if UiStyle.web_touch else 44)
+	option.add_theme_font_size_override("font_size", roundi((14 if UiStyle.web_touch else 15) * UiStyle.text_scale))
+	if UiStyle.web_touch:
+		option.fit_to_longest_item = false
+		option.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	UiStyle.button_skin(option, "secondary", true)
 	for caption in captions:
 		option.add_item(prefix + " · " + caption)

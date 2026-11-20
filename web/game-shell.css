@@ -1,0 +1,129 @@
+@font-face {
+    font-family: "Game Shell";
+    src: url("game-shell.woff2") format("woff2");
+    font-display: swap;
+}
+
+#game-workspace {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    box-sizing: border-box;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    background: #172731;
+    color: #fbf5e8;
+    font: 15px/1.5 "Game Shell", system-ui, sans-serif;
+}
+
+#game-frame {
+    position: relative;
+    flex: 1 1 auto;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+}
+
+#game-frame #canvas {
+    width: 100%;
+    height: 100%;
+    touch-action: none;
+}
+
+#game-frame #canvas.game-covered {
+    visibility: hidden;
+}
+
+#game-controls {
+    flex: 0 0 54px;
+    display: grid;
+    align-content: start;
+    justify-content: end;
+    padding-top: 4px;
+    background: #172731;
+}
+
+#game-controls[hidden], .game-portrait #game-controls, #game-rotate[hidden], #game-fullscreen-notice[hidden], #game-keyboard-done[hidden] {
+    display: none;
+}
+
+#game-workspace button {
+    min-width: 52px;
+    min-height: 52px;
+    padding: 4px 7px;
+    border: 1px solid #b7a077;
+    border-radius: 4px;
+    background: #283e4a;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+#game-frame .game-keyboard-field,
+#game-keyboard-done {
+    box-sizing: border-box;
+    position: absolute;
+    z-index: 4;
+    top: calc(var(--keyboard-top, 0px) + 4px);
+}
+
+#game-frame .game-keyboard-field {
+    left: 6px !important;
+    top: calc(var(--keyboard-top, 0px) + 4px) !important;
+    width: calc(100% - 75px) !important;
+    height: 52px !important;
+    z-index: 4 !important;
+    padding: 8px 12px !important;
+    border: 1px solid #b7a077 !important;
+    border-radius: 4px;
+    background: #20323f !important;
+    color: #fbf5e8;
+    font: 18px/1.35 system-ui, sans-serif;
+    overflow: auto !important;
+    touch-action: manipulation;
+}
+
+#game-keyboard-done {
+    right: 6px;
+}
+
+#game-workspace button:focus-visible {
+    outline: 2px solid #f3d38a;
+    outline-offset: -4px;
+}
+
+#game-rotate {
+    position: absolute;
+    z-index: 2;
+    inset: 0;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    padding: 18px;
+    background: #172731;
+    text-align: center;
+}
+
+#game-rotate h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+#game-rotate p {
+    margin: 8px 0 16px;
+    color: #d1d7d0;
+}
+
+#game-fullscreen-notice {
+    position: absolute;
+    z-index: 3;
+    inset: auto 12px 12px;
+    width: fit-content;
+    max-width: calc(100% - 48px);
+    margin: 0 auto;
+    padding: 8px 12px;
+    border: 1px solid #b7a077;
+    border-radius: 4px;
+    background: #283e4a;
+    pointer-events: none;
+}

@@ -150,6 +150,21 @@ godot --headless --path . --quit-after 2
 
 服务器的 `.godot/` 会自行重建；旧玩家进度和文本覆盖如需迁移，应单独备份/复制 Godot `user://`，不要上传到仓库。
 
+### 浏览器版
+
+安装 Godot 4.7.2 对应的官方导出模板。Web 预设使用单线程 GL Compatibility，需要支持 WebGL 2 的浏览器。使用同一访问地址继续游戏，进度保存在该地址的浏览器站点数据中。Godot 加载器接受公网 HTTPS 和本机回环地址。
+
+```sh
+godot --headless --path . --import
+sh tools/export_web.sh dist/web
+```
+
+将 `dist/web` 中的构建产物复制到 `/var/www/kapai001/releases/<版本>`，并将 `/var/www/kapai001/current` 链接到该版本。将 [Nginx 配置](tools/kapai001.nginx.conf) 安装到 `/etc/nginx/conf.d/`，执行 `nginx -t` 与 `systemctl enable --now nginx`。Nginx 已运行时执行 `systemctl reload nginx`。本机试玩地址为 `http://127.0.0.1:18080/`。公网部署需要在外网可达的 HTTPS 站点提供同一构建目录。
+
+随游戏包发布的简体中文字体采用 SIL OFL 1.1。字体来源见 [Noto Sans CJK 2.004](https://github.com/notofonts/noto-cjk/tree/Sans2.004/Sans) 和 [Noto Serif CJK 2.003](https://github.com/notofonts/noto-cjk/tree/Serif2.003/Serif)。
+
+手机上双指轻点两次或点「全屏」可进入全屏，浏览器支持时会锁定横屏。长按手牌可阅读完整效果，轻触可选牌或出牌。输入搜索关键词后，点输入条旁的「完成」收起键盘。Safari 无网页全屏时，可通过共享菜单添加到主屏幕，从图标进入独立窗口。
+
 数据与地图文档使用同一生成器。以下验证将 APPDATA/LOCALAPPDATA 隔离在证据目录，不加载实际玩家存档：
 
 ```powershell
