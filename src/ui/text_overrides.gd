@@ -1,0 +1,159 @@
+class_name TextOverrides
+extends RefCounted
+
+## User-editable display text layered over the original content files.
+##
+## Only presentation strings are stored here. Gameplay definitions, numbers,
+## commands, RNG, saves and schema never read this file. The original text is
+## always kept in the source JSON/GDScript data so an entry can be reset.
+
+const DEFAULT_PATH := "user://text_overrides.json"
+const SCHEMA_VERSION := 1
+const MAX_ENTRIES := 4000
+const MAX_UID_LENGTH := 256
+const MAX_TEXT_LENGTH := 20000
+
+static var _path := DEFAULT_PATH
+static var _values: Dictionary = {}
+static var _loaded := false
+static var _load_error := ""
+
+
+static func use_path(path: String) -> void:
+	_path = path if not path.strip_edges().is_empty() else DEFAULT_PATH
+	_values = {}
+	_loaded = false
+	_load_error = ""
+
+
+static func current_path() -> String:
+	return _path
+
+
+static func last_error() -> String:
+	ensure_loaded()
+	return _load_error
+
+
+static func ensure_loaded() -> void:
+	if _loaded:
+		return
+	_loaded = true
+	_values = {}
+	_load_error = ""
+	if not FileAccess.file_exists(_path):
+		return
+	var file := FileAccess.open(_path, FileAccess.READ)
+	if file == null:
+		_load_error = "无法读取文本覆盖文件（%s）。" % error_string(FileAccess.get_open_error())
+		return
+	var raw := file.get_as_text()
+	file.close()
+	var parser := JSON.new()
+	if parser.parse(raw) != OK:
+		_load_error = "文本覆盖文件格式无效，已按原始文本运行。"
+		return
+	var parsed: Variant = parser.data
+	if not parsed is Dictionary:
+		_load_error = "文本覆盖文件格式无效，已按原始文本运行。"
+		return
+	if int(parsed.get("schema_version", 0)) != SCHEMA_VERSION:
+		_load_error = "文本覆盖文件版本不支持，已按原始文本运行。"
+		return
+	var entries: Variant = parsed.get("entries", {})
+	if not entries is Dictionary:
+		_load_error = "文本覆盖条目格式无效，已按原始文本运行。"
+		return
+	for raw_key in entries:
+		var uid := str(raw_key)
+		var value: Variant = entries[raw_key]
+		if uid.is_empty() or uid.length() > MAX_UID_LENGTH:
+			continue
+		if not value is String or str(value).length() > MAX_TEXT_LENGTH:
+			continue
+		_values[uid] = str(value)
+		if _values.size() >= MAX_ENTRIES:
+			break
+
+
+static func reload_from_disk() -> void:
+	_loaded = false
+	ensure_loaded()
+
+
+static func get_optional(uid: String) -> Variant:
+	ensure_loaded()
+	return _values[uid] if _values.has(uid) else null
+
+
+static func has(uid: String) -> bool:
+	ensure_loaded()
+	return _values.has(uid)
+
+
+static func text(uid: String, fallback: String) -> String:
+	var value: Variant = get_optional(uid)
+	return fallback if value == null else str(value)
+
+
+static func snapshot() -> Dictionary:
+	ensure_loaded()
+	return _values.duplicate(true)
+
+
+static func count() -> int:
+	ensure_loaded()
+	return _values.size()
+
+
+static func save_values(values: Dictionary) -> String:
+	if values.size() > MAX_ENTRIES:
+		return "修改条目过多（最多 %d 条）。" % MAX_ENTRIES
+	var cleaned: Dictionary = {}
+	for raw_key in values:
+		var uid := str(raw_key)
+		var value: Variant = values[raw_key]
+		if uid.is_empty() or uid.length() > MAX_UID_LENGTH:
+			return "存在无法识别的文本条目。"
+		if not value is String:
+			return "文本条目必须是字符串。"
+		if str(value).length() > MAX_TEXT_LENGTH:
+			return "单条文本过长（最多 %d 字）。" % MAX_TEXT_LENGTH
+		cleaned[uid] = str(value)
+	var document := {
+		"schema_version": SCHEMA_VERSION,
+		"updated_at": Time.get_datetime_string_from_system(true),
+		"entries": cleaned,
+	}
+	var absolute := ProjectSettings.globalize_path(_path)
+	var directory := absolute.get_base_dir()
+	var dir_error := DirAccess.make_dir_recursive_absolute(directory)
+	if dir_error != OK and dir_error != ERR_ALREADY_EXISTS:
+		return "无法创建文本覆盖目录（%s）。" % error_string(dir_error)
+	var temporary := absolute + ".tmp"
+	var file := FileAccess.open(temporary, FileAccess.WRITE)
+	if file == null:
+		return "无法写入文本覆盖文件（%s）。" % error_string(FileAccess.get_open_error())
+	file.store_string(JSON.stringify(document, "\t"))
+	file.flush()
+	file.close()
+	var backup := absolute + ".bak"
+	if FileAccess.file_exists(backup):
+		DirAccess.remove_absolute(backup)
+	if FileAccess.file_exists(absolute):
+		var move_error := DirAccess.rename_absolute(absolute, backup)
+		if move_error != OK:
+			DirAccess.remove_absolute(temporary)
+			return "无法替换文本覆盖文件（%s）。" % error_string(move_error)
+	var rename_error := DirAccess.rename_absolute(temporary, absolute)
+	if rename_error != OK:
+		if FileAccess.file_exists(backup):
+			DirAccess.rename_absolute(backup, absolute)
+		DirAccess.remove_absolute(temporary)
+		return "无法保存文本覆盖文件（%s）。" % error_string(rename_error)
+	if FileAccess.file_exists(backup):
+		DirAccess.remove_absolute(backup)
+	_values = cleaned.duplicate(true)
+	_loaded = true
+	_load_error = ""
+	return ""

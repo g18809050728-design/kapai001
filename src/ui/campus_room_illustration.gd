@@ -42,7 +42,23 @@ func configure(kind: String, title: String, event_id: String = "") -> void:
 
 static func details(kind: String, event_id: String = "") -> Dictionary:
 	var group := "events" if not event_id.is_empty() else "rooms"
-	return STORIES.data.get(group, {}).get(event_id if not event_id.is_empty() else kind, {}).duplicate(true)
+	var story_id := event_id if not event_id.is_empty() else kind
+	var result: Dictionary = STORIES.data.get(group, {}).get(story_id, {}).duplicate(true)
+	if result.is_empty():
+		return result
+	var prefix := "story:%s.%s" % [group, story_id]
+	for field in ["title", "location", "narrative"]:
+		if result.has(field):
+			result[field] = TextOverrides.text(prefix + "." + field, str(result[field]))
+	var option_titles: Dictionary = result.get("option_titles", {})
+	if not option_titles.is_empty():
+		var updated: Dictionary = {}
+		for option in option_titles:
+			updated[option] = TextOverrides.text(
+				prefix + ".option_titles." + str(option), str(option_titles[option])
+			)
+		result["option_titles"] = updated
+	return result
 
 
 static func narrative(kind: String, event_id: String = "") -> String:

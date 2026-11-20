@@ -325,9 +325,10 @@ func _render_menu() -> void:
 		add_text(body,resume.tooltip_text,14,UiStyle.MUTED)
 	add_button(body,"menu:new","新的四年",_ui("new_run"))
 	add_button(body,"menu:compendium","图鉴",_ui("compendium"))
+	add_button(body,"menu:text_editor","文本编辑",_ui("text_editor"))
 	add_button(body,"menu:test","测试房间",_ui("test_room"))
 	add_button(body,"menu:settings","设置与存档",_ui("settings"))
-	for uid in ["menu:continue","menu:new","menu:compendium","menu:test","menu:settings"]:
+	for uid in ["menu:continue","menu:new","menu:compendium","menu:text_editor","menu:test","menu:settings"]:
 		var option: Button = _buttons[uid]
 		option.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		option.custom_minimum_size = Vector2(220,52)

@@ -3,6 +3,13 @@ extends RefCounted
 
 
 static func describe_character_passive(passive_id: String) -> String:
+	var value: Variant = TextOverrides.get_optional("passive:" + passive_id)
+	if value != null:
+		return str(value)
+	return describe_character_passive_default(passive_id)
+
+
+static func describe_character_passive_default(passive_id: String) -> String:
 	match passive_id:
 		"r3_p01_link_replay":
 			return "被动 · 步骤复用\n每回合首次合法的“策略→工作”连携后，可选择从弃牌堆取回前一张永久策略；放弃或直接确认不取回也会消耗本回合机会。费用与限次不变，满手时不提供取回。"
@@ -40,11 +47,37 @@ static func card_summary(detail: Dictionary) -> String:
 
 
 static func describe_card(detail: Dictionary) -> String:
+	var uid := card_description_uid(detail, "detail")
+	if not uid.is_empty():
+		var value: Variant = TextOverrides.get_optional(uid)
+		if value != null:
+			return str(value)
+	return describe_card_default(detail)
+
+
+static func describe_card_default(detail: Dictionary) -> String:
 	return _describe_card(detail, false)
 
 
 static func describe_battle_card(detail: Dictionary) -> String:
+	var uid := card_description_uid(detail, "battle")
+	if not uid.is_empty():
+		var value: Variant = TextOverrides.get_optional(uid)
+		if value != null:
+			return str(value)
+	return describe_battle_card_default(detail)
+
+
+static func describe_battle_card_default(detail: Dictionary) -> String:
 	return _describe_card(_normalize_battle_numbers(detail), true)
+
+
+static func card_description_uid(detail: Dictionary, surface: String = "detail") -> String:
+	var id := str(detail.get("id", detail.get("definition_id", "")))
+	if id.is_empty():
+		return ""
+	var level := 1 if int(detail.get("upgrade_level", 0)) > 0 else 0
+	return "card:%s:%d:%s" % [id, level, surface]
 
 
 static func _describe_card(detail: Dictionary, battle_explanation: bool) -> String:
@@ -548,6 +581,15 @@ static func describe_limit(limit: Dictionary) -> String:
 
 
 static func describe_relic(detail: Dictionary) -> String:
+	var id := str(detail.get("id", detail.get("definition_id", detail.get("relic_id", ""))))
+	if not id.is_empty():
+		var value: Variant = TextOverrides.get_optional("relic:" + id)
+		if value != null:
+			return str(value)
+	return describe_relic_default(detail)
+
+
+static func describe_relic_default(detail: Dictionary) -> String:
 	if detail.is_empty():
 		return "饰品详情暂不可用"
 	var lines: PackedStringArray = []
