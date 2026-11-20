@@ -33,6 +33,9 @@ var _save_status := "尚无本次会话的手动保存结果"
 var _ui_feedback: Label
 var _ui_feedback_generation := 0
 var _compendium_state: Dictionary = {}
+var _text_editor_state: Dictionary = {}
+var _text_library_cache: Dictionary = {}
+var _text_library_loaded := false
 
 
 func _ready() -> void:
@@ -162,6 +165,14 @@ func refresh() -> void:
 			var preferences := session.get_presentation_settings()
 			data.motion_enabled = int(preferences.animation_speed) > 0 and not preferences.reduced_motion
 			data.animation_speed = preferences.animation_speed
+		"text_editor":
+			if not _text_library_loaded:
+				var built := TextLibrary.build()
+				_text_library_cache = (
+					built.data if built.ok else {"error": UiStyle.error_text(built.error)}
+				)
+				_text_library_loaded = true
+			data = _text_library_cache
 		"settings":
 			data = _storage_view()
 			data.settings = {"autosave": session.get_profile().autosave}
@@ -228,6 +239,10 @@ func refresh() -> void:
 			if not _compendium_state.is_empty():
 				page.tab = str(_compendium_state.get("tab", "cards"))
 				page._states = _compendium_state.states.duplicate(true)
+		elif screen == "text_editor":
+			page = UiTextEditorPage.new()
+			if not _text_editor_state.is_empty():
+				page.initial_state = _text_editor_state.duplicate(true)
 		else:
 			page = UiExperiencePage.new()
 			page.screen = screen
@@ -389,7 +404,8 @@ func _regate() -> void:
 					"ui.cancel_restart",
 					"ui.continue",
 					"ui.back",
-					"ui.compendium", "ui.compendium_back"
+					"ui.compendium", "ui.compendium_back",
+					"ui.text_editor", "ui.text_editor_back"
 				]
 			)
 		):
@@ -844,6 +860,13 @@ func _navigate(type: String, payload: Dictionary) -> void:
 				page._states[page.tab].scroll = page._scroll.scroll_vertical
 				_compendium_state = {"tab": page.tab, "states": page._states.duplicate(true)}
 			_ui_screen = "menu"
+		"ui.text_editor":
+			_ui_screen = "text_editor"
+			notice = "文本编辑：只修改显示文案；规则、数值、命令与存档不变。"
+		"ui.text_editor_back":
+			if page is UiTextEditorPage:
+				_text_editor_state = page.export_state()
+			_ui_screen = "menu"
 		"ui.test_room":
 			_ui_screen = "test_room"
 			_restart_confirmation = false
@@ -966,6 +989,8 @@ func _navigate(type: String, payload: Dictionary) -> void:
 	refresh()
 	if type == "ui.compendium_back" and page != null and page._buttons.has("menu:compendium"):
 		page._buttons["menu:compendium"].grab_focus()
+	if type == "ui.text_editor_back" and page != null and page._buttons.has("menu:text_editor"):
+		page._buttons["menu:text_editor"].grab_focus()
 	if type == "ui.save_settings":
 		_show_ui_feedback(notice, last_error != null)
 

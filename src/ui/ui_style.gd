@@ -161,24 +161,33 @@ static func cut_surface(color: Color, border: Color = BRASS) -> StyleBoxTexture:
 
 
 static func label(id: String) -> String:
+	var labels: Dictionary = LABELS.data.get("labels", {})
+	var value := ""
+	var key := id
 	var rarities := {"basic": "初始", "common": "普通", "advanced": "进阶", "rare": "稀有", "uncommon": "少见", "starter": "初始"}
 	if rarities.has(id):
-		return rarities[id]
-	if id == "ability":
-		return "能力"
-	var labels: Dictionary = LABELS.data.get("labels", {})
-	if labels.has(id):
-		return str(labels[id])
-	if id.begins_with("run_"):
-		return "我方" if id.ends_with("|p1") else "当前战斗"
-	var key := id
-	if key.contains("."):
-		var parts := key.split(".")
-		if parts.size() >= 2:
-			key = parts[1]
-	if labels.has(key.to_upper()):
-		key = key.to_upper()
-	return str(labels.get(key, key))
+		value = str(rarities[id])
+	elif id == "ability":
+		value = "能力"
+	elif labels.has(id):
+		value = str(labels[id])
+	elif id.begins_with("run_"):
+		value = "我方" if id.ends_with("|p1") else "当前战斗"
+	else:
+		if key.contains("."):
+			var parts := key.split(".")
+			if parts.size() >= 2:
+				key = parts[1]
+		if labels.has(key.to_upper()):
+			key = key.to_upper()
+		value = str(labels.get(key, key))
+	value = TextOverrides.text("label:" + id, value)
+	# Dotted label keys (status.x.name / task.x.intent.y) may resolve to a
+	# shorter canonical key. Keep both lookup forms override-aware so an edit
+	# made from either display path is honoured everywhere.
+	if key != id and labels.has(key):
+		value = TextOverrides.text("label:" + key, value)
+	return value
 
 
 static func texture(id: String) -> Texture2D:

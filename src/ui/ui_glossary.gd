@@ -168,6 +168,9 @@ const ENTRIES := {
 
 
 static func label(key: String) -> String:
+	var override: Variant = TextOverrides.get_optional("glossary:" + key + ".name")
+	if override != null:
+		return str(override)
 	var existing := UiStyle.label(key)
 	if existing != key:
 		return existing
@@ -179,11 +182,12 @@ static func describe(key: String) -> String:
 	var entry: Dictionary = ENTRIES.get(key, {})
 	if entry.is_empty():
 		return "词条：%s\n当前版本暂无详细解释。" % UiStyle.label(key)
+	var type_text := TextOverrides.text("glossary:" + key + ".type", str(entry.get("type", "")))
 	var lines: PackedStringArray = [
-		"%s · %s" % [label(key), str(entry.get("type", ""))],
-		str(entry.get("short", "")),
+		"%s · %s" % [label(key), type_text],
+		TextOverrides.text("glossary:" + key + ".short", str(entry.get("short", ""))),
 	]
-	var body := str(entry.get("body", ""))
+	var body := TextOverrides.text("glossary:" + key + ".body", str(entry.get("body", "")))
 	if not body.is_empty():
 		lines.append(body)
 	lines.append("来源：卡牌名词与Buff效果说明；规则书。")
