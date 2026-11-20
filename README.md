@@ -1,5 +1,7 @@
 # 《交大四年：DDL战争》设计与实施入口
 
+2026-11-21：按用户要求清理局外HTML预览、评审页/模板及参考网页存档，并加入Git排除规则。后文HTML链接保留为历史记录，页面已删除；使用游戏或同批Markdown/JSON查看现有实现和验证结果。游戏素材、骨架和动作数据保留。后续不再生成或上传这些HTML，详见[实施计划](实施计划与验收基线.md)§0.20.38。
+
 2026-11-20 饰品池更新（§0.20.37）：**原有 16 件 FY 已从游戏移除，仅保留 104 件 RX**（40 件通用＋四角色各 16 件）。普通「新的四年」、学年奖励、测试房间、**「图鉴 → 饰品」**及文本编辑器都使用新池。原有 RX 图片不变。继续旧四学年档时移除已装备和待领取的 FY，不重抽 RX，不重置冒险。[实机图鉴](artifacts/verification/relic-removal-20261120/review/screens/gallery-all-1280-100.png) · [旧档处理与验证](docs/plans/2026-11-20-relic-removal-design.md)。
 
 历史首测（§0.20.35）：曾以 24 件 RX 验证触发规则并制作全部 104 张独立图标。`& .\tools\start_relic_pilot.ps1` 仍是单独存档的 24 件 RX 试点，不含 FY。[首测截图与记录](artifacts/verification/relic-pilot-20261120/review/README.md) · [全量接入与造型对照](docs/plans/2026-11-20-relic-roster-design.md)。

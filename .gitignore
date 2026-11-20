@@ -1,3 +1,7 @@
+# Offline HTML previews, reviews, templates and mirrored pages stay out of Git.
+*.[hH][tT][mM][lL]
+*.[hH][tT][mM]
+
 # Godot generated cache and translations.
 # Keep *.import settings and *.gd.uid files under version control.
 .godot/
