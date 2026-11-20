@@ -299,7 +299,9 @@
       "R3-AC",
       "R3-AC-INDEP",
       "R3-AC-FIXED",
-      "R3-AC-BOTH"
+      "R3-AC-BOTH",
+      "NR2",
+      "NR3"
     ],
     "unit": [
       "F01",

@@ -29,7 +29,15 @@ func run() -> Array[String]:
 			continue
 		var battle: BattleState = session._state.battle
 		var encounter: Dictionary = catalog.get_definition("encounter", battle.encounter_id).data
-		_check(battle.ddl == maxi(int(rules.battle.minimum_ddl), int(encounter.base_ddl) + int(settings.ddl_offset)), "DDL applies the selected difficulty " + difficulty)
+		var scaling: Dictionary = encounter.get("scaling", {})
+		_check(
+			battle.ddl
+			== maxi(
+				int(rules.battle.minimum_ddl),
+				int(encounter.base_ddl) + int(scaling.get("ddl_bonus", 0)) + int(settings.ddl_offset)
+			),
+			"DDL applies the selected difficulty " + difficulty
+		)
 		ddls.append(battle.ddl)
 		var expected_pressure := 0
 		for task in battle.tasks:
@@ -48,7 +56,8 @@ func run() -> Array[String]:
 		if session._state.battle != null:
 			_check(int(session._state.battle.player.vitality) == vitality_before - expected_pressure, "real vitality loss matches displayed pressure " + difficulty)
 		var before := SnapshotCodec.encode_session(session._state, catalog.get_info())
-		_check(before.ok and session.save_current().ok, "difficulty battle saves " + difficulty)
+		var saved := session.save_current()
+		_check(before.ok and saved.ok, "difficulty battle saves " + difficulty)
 		var restored := GameSession.new(store)
 		_check(restored.continue_run().ok, "difficulty battle resumes " + difficulty)
 		if restored._state != null:

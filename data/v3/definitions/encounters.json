@@ -760,5 +760,137 @@
       "independent_answer",
       "fixed_exam_room"
     ]
+  },
+{
+  "id": "NR2",
+  "name_key": "encounter.nr2.name",
+  "kind": "normal",
+  "members": [
+    "N01",
+    "N02",
+    "N03",
+    "N04",
+    "N13",
+    "N14",
+    "N15",
+    "N16",
+    "N17",
+    "N18",
+    "N19",
+    "N20",
+    "N21",
+    "N22",
+    "N23",
+    "N24",
+    "N25",
+    "N26",
+    "N27",
+    "N28",
+    "N29",
+    "N30",
+    "N31",
+    "N32",
+    "N33",
+    "N34",
+    "N35",
+    "N36",
+    "N37",
+    "N38"
+  ],
+  "base_ddl": 8,
+  "terms": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "exam_flags": [],
+  "spawn": {
+    "groups": [
+      {
+        "group": "priority",
+        "count": 1
+      },
+      {
+        "group": "other",
+        "count": 1
+      }
+    ]
+  },
+  "scaling": {
+    "work_percent": 75,
+    "pressure_percent": 75,
+    "ddl_bonus": 1
   }
+},
+{
+  "id": "NR3",
+  "name_key": "encounter.nr3.name",
+  "kind": "normal",
+  "members": [
+    "N01",
+    "N02",
+    "N03",
+    "N04",
+    "N13",
+    "N14",
+    "N15",
+    "N16",
+    "N17",
+    "N18",
+    "N19",
+    "N20",
+    "N21",
+    "N22",
+    "N23",
+    "N24",
+    "N25",
+    "N26",
+    "N27",
+    "N28",
+    "N29",
+    "N30",
+    "N31",
+    "N32",
+    "N33",
+    "N34",
+    "N35",
+    "N36",
+    "N37",
+    "N38"
+  ],
+  "base_ddl": 8,
+  "terms": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "exam_flags": [],
+  "spawn": {
+    "groups": [
+      {
+        "group": "priority",
+        "count": 1
+      },
+      {
+        "group": "other",
+        "count": 2
+      }
+    ]
+  },
+  "scaling": {
+    "work_percent": 67,
+    "pressure_percent": 67,
+    "ddl_bonus": 2
+  }
+}
 ]

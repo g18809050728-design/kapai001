@@ -88,6 +88,7 @@ const DEFINITION_FIELDS := {
 		"discard_on_first_card",
 		"max_vitality_reduction",
 		"self_copy_every_round",
+		"spawn_group",
 		"art_key"
 	],
 	"encounter":
@@ -101,6 +102,7 @@ const DEFINITION_FIELDS := {
 		"exam_flags",
 		"initial_members",
 		"absorb_cooperation",
+		"spawn",
 		"scaling",
 		"art_key"
 	],
@@ -452,8 +454,8 @@ var _enabled: Dictionary = {}
 var _info: ContentInfo
 var _legacy_four_year_hash := ""
 var _previous_four_year_hash := ""
-const PREVIOUS_FOUR_YEAR_HASH := "b972157fd0a90ab3321a9bdeab66a4815c44f80b78bf3233dec98734f7f30e90"
-const LEGACY_FOUR_YEAR_HASH := "9b046bed0dbc8cb40f48705d4a33a8d140a699eda2b6bf2b7400a1cbc5fd2e03"
+const PREVIOUS_FOUR_YEAR_HASH := "6ed6e9af7f0eae6154f40bfea6c53ef4ee18901201764e07e09d7ef43cc57b89"
+const LEGACY_FOUR_YEAR_HASH := "6b31fe923a9dfaced083339aaa874265545ba36b110eaf2e70bdd83708e66bd8"
 
 
 func _init(data_root: String = "res://data", allow_test_manifests: bool = false) -> void:
@@ -990,6 +992,28 @@ func _validate_definition(
 					"%s.scaling" % location,
 					issues
 				)
+				if _is_dictionary(definition.scaling):
+					for field in ["work_percent", "pressure_percent"]:
+						if definition.scaling.has(field):
+							_validate_int(
+								definition.scaling[field],
+								"%s.scaling.%s" % [location, field],
+								1,
+								issues
+							)
+							if int(definition.scaling[field]) > 100:
+								issues.append(
+									"%s.scaling.%s must be <= 100" % [location, field]
+								)
+					if definition.scaling.has("ddl_bonus"):
+						_validate_int(
+							definition.scaling.ddl_bonus,
+							"%s.scaling.ddl_bonus" % location,
+							0,
+							issues
+						)
+			if definition.has("spawn"):
+				_validate_spawn(definition.spawn, "%s.spawn" % location, issues)
 		"event":
 			_validate_int_array(definition.get("terms"), "%s.terms" % location, 1, issues)
 			if (
@@ -1416,7 +1440,10 @@ func _validate_effect_semantics(
 				issues
 			)
 	if effect.has("target"):
-		var targets := ["player", "self", "unit", "task", "all_tasks", "all", "default"]
+		var targets := [
+			"player", "self", "unit", "task", "all_tasks", "all", "default",
+			"other_tasks", "adjacent_tasks",
+		]
 		if not targets.has(effect.target):
 			issues.append("%s.target is invalid" % location)
 	if effect.has("status") and typeof(effect.status) != TYPE_STRING:
@@ -1585,6 +1612,27 @@ func _validate_passive(value: Variant, location: String, issues: Array[String]) 
 		)
 
 
+func _validate_spawn(value: Variant, location: String, issues: Array[String]) -> void:
+	if not _is_dictionary(value):
+		issues.append("%s must be an object" % location)
+		return
+	_validate_fields(value, ["groups"], ["groups"], location, issues)
+	var groups: Variant = value.get("groups")
+	if not _is_array(groups) or groups.is_empty():
+		issues.append("%s.groups must be a non-empty array" % location)
+		return
+	for index in groups.size():
+		var group_location := "%s.groups[%d]" % [location, index]
+		var group: Variant = groups[index]
+		if not _is_dictionary(group):
+			issues.append("%s must be an object" % group_location)
+			continue
+		_validate_fields(group, ["group", "count"], ["group", "count"], group_location, issues)
+		if not ["priority", "other"].has(str(group.get("group", ""))):
+			issues.append("%s.group is invalid" % group_location)
+		_validate_int(group.get("count"), "%s.count" % group_location, 1, issues)
+
+
 func _validate_task(value: Dictionary, location: String, issues: Array[String]) -> void:
 	if not ["normal", "elite", "boss"].has(value.get("kind")):
 		issues.append("%s.kind is invalid" % location)
@@ -1596,6 +1644,9 @@ func _validate_task(value: Dictionary, location: String, issues: Array[String]) 
 		_validate_bool(value.taunt, "%s.taunt" % location, issues)
 	if value.has("self_copy_every_round"):
 		_validate_bool(value.self_copy_every_round, "%s.self_copy_every_round" % location, issues)
+	if value.has("spawn_group"):
+		if not ["priority", "other"].has(str(value.spawn_group)):
+			issues.append("%s.spawn_group is invalid" % location)
 	for field in [
 		"draw_reduction", "first_card_cost_bonus", "discard_on_first_card", "max_vitality_reduction"
 	]:

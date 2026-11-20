@@ -161,6 +161,11 @@ func _check_battle_and_map(dimensions: Vector2i) -> void:
 		if str(card.definition_id) in ["R3-C-01", "R3-P01-02"]:
 			work_id = str(card.card_id)
 			break
+	if work_id.is_empty():
+		work_id = _inject_work_card(session)
+		shell.refresh()
+		await _frames(shell, 3)
+		battle = shell.page as BattleScreen
 	_check(not work_id.is_empty(), "production starting hand contains a real work card")
 	if not work_id.is_empty():
 		var original_card := battle._hand_card_control(work_id)
@@ -369,6 +374,11 @@ func _check_final_blow(dimensions: Vector2i) -> void:
 			if str(card.definition_id) in ["R3-C-01", "R3-P01-02"]:
 				work_id = str(card.card_id)
 				break
+		if work_id.is_empty():
+			work_id = _inject_work_card(session)
+			shell.refresh()
+			await _frames(shell, 3)
+			battle = shell.page as BattleScreen
 		shell.submit_action({"type": "play_card", "payload": {"card_instance_id": work_id, "target_ids": [str(battle.view.tasks[0].task_id)], "replace_unit_id": null}})
 		_check(shell.last_error == null and session.get_view().battle == null, "final blow publishes reward state through the session")
 		var stable: String = _helpers.fingerprint(session)
@@ -434,6 +444,21 @@ func _save(shell: GameShell, label: String) -> void:
 	var result := viewport.get_texture().get_image().save_png(OUT.path_join(label + ".png"))
 	_check(result == OK, "save rendered feedback capture")
 	_captures.append({"name": label, "width": viewport.size.x, "height": viewport.size.y, "save_error": result})
+
+
+func _inject_work_card(session: GameSession) -> String:
+	if session._state == null or session._state.battle == null:
+		return ""
+	for card_id in session._state.battle.card_by_id:
+		var definition := str(session._state.battle.card_by_id[card_id].definition_id)
+		if definition not in ["R3-C-01", "R3-P01-02"]:
+			continue
+		for zone in ["draw", "discard", "exhaust"]:
+			if session._state.battle.zones[zone].has(card_id):
+				session._state.battle.zones[zone].erase(card_id)
+				session._state.battle.zones.hand.append(card_id)
+				return str(card_id)
+	return ""
 
 
 func _frames(shell: GameShell, count: int) -> void:

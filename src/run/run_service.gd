@@ -399,23 +399,38 @@ func _enter_node(
 		node.context = {"used": false, "option_id": ""}
 		return GameResult.success(null)
 	var pool: Array[String] = []
+	var spawn_pool: Array[String] = []
 	for id in _catalog.get_candidates({"kind": "encounter", "terms": work.term}):
 		var definition: Dictionary = _catalog.get_definition("encounter", id).data
-		if definition.kind == node.kind:
+		if definition.kind != node.kind:
+			continue
+		if definition.has("spawn"):
+			spawn_pool.append(id)
+		else:
 			pool.append(id)
 	if CampaignProgression.enabled(work) and node.kind == "elite":
 		# Annual node roles select existing challenges explicitly, including year
 		# four, which has no historical term-filtered elite pool.
 		var subtype: String = CampaignProgression.metadata(work, node.node_id).subtype
 		pool.assign(["E02" if subtype == "K" else ["Q01", "E01", "E03", "E05"][work.term - 1]])
-	if pool.is_empty():
-		return _error(
-			GameConstants.ERROR_CONTENT_INVALID,
-			"run.encounter.pool.empty",
-			{"kind": node.kind, "term": work.term}
-		)
-	var chosen := rng.draw_int("map", 0, pool.size() - 1)
-	var encounter_id: String = pool[int(chosen.data)]
+	var encounter_id := ""
+	var member_ids: Array[String] = []
+	if node.kind == "normal" and not spawn_pool.is_empty():
+		var spawn_chosen := rng.draw_int("map", 0, spawn_pool.size() - 1)
+		if spawn_chosen.ok:
+			encounter_id = spawn_pool[int(spawn_chosen.data)]
+			member_ids = _compose_spawn_members(work, encounter_id, pool, rng)
+			if member_ids.is_empty():
+				encounter_id = ""
+	if encounter_id.is_empty():
+		if pool.is_empty():
+			return _error(
+				GameConstants.ERROR_CONTENT_INVALID,
+				"run.encounter.pool.empty",
+				{"kind": node.kind, "term": work.term}
+			)
+		var chosen := rng.draw_int("map", 0, pool.size() - 1)
+		encounter_id = pool[int(chosen.data)]
 	if CampaignService.enabled(work) and not CampaignProgression.enabled(work) and node.kind == "elite":
 		var title: String = CampaignProgression.metadata(work, node.node_id).title
 		var fixed: String = {"随堂小测": "Q01", "期中考试": "E01", "课程设计中期检查": "E02", "小组项目冲刺": "E03", "实习群面": "E06", "保研夏令营": "E05", "补考": "E07", "学科竞赛": "E02"}.get(title, "")
@@ -451,23 +466,80 @@ func _enter_node(
 				"upgrade_level": card.upgrade_level
 			}
 		)
-	return (
-		GameResult
-		. success(
-			{
-				"battle_id": node.node_id,
-				"node_id": node.node_id,
-				"encounter_id": encounter_id,
-				"character_id": work.character_id,
-				"difficulty": work.difficulty,
-				"vitality": work.vitality,
-				"max_vitality": work.max_vitality,
-				"cards": cards,
-				"relics": relic_ids,
-				"rng_state": rng.export_state().to_dictionary(),
-			}
-		)
-	)
+	var begin_input := {
+		"battle_id": node.node_id,
+		"node_id": node.node_id,
+		"encounter_id": encounter_id,
+		"character_id": work.character_id,
+		"difficulty": work.difficulty,
+		"vitality": work.vitality,
+		"max_vitality": work.max_vitality,
+		"cards": cards,
+		"relics": relic_ids,
+		"rng_state": rng.export_state().to_dictionary(),
+	}
+	if not member_ids.is_empty():
+		begin_input["member_ids"] = member_ids
+	return GameResult.success(begin_input)
+
+
+func _compose_spawn_members(
+	state: RunState, encounter_id: String, solo_pool: Array[String], rng: RandomSource
+) -> Array[String]:
+	var encounter_result := _catalog.get_definition("encounter", encounter_id)
+	if not encounter_result.ok:
+		return []
+	var groups: Array = encounter_result.data.get("spawn", {}).get("groups", [])
+	if groups.is_empty():
+		return []
+	var candidates := {"priority": [], "other": []}
+	var seen := {}
+	for id in solo_pool:
+		var definition_result := _catalog.get_definition("encounter", id)
+		if not definition_result.ok:
+			continue
+		for member: Variant in definition_result.data.get("members", []):
+			var member_id := str(member)
+			if seen.has(member_id):
+				continue
+			var task_result := _catalog.get_definition("task", member_id)
+			if not task_result.ok:
+				continue
+			var group := str(task_result.data.get("spawn_group", "other"))
+			if not candidates.has(group):
+				candidates[group] = []
+			candidates[group].append(member_id)
+			seen[member_id] = true
+	var priority_ids: Array[String] = []
+	var other_ids: Array[String] = []
+	for rule: Variant in groups:
+		if typeof(rule) != TYPE_DICTIONARY:
+			return []
+		var group := str(rule.get("group", ""))
+		var count := int(rule.get("count", 0))
+		if count < 1 or not candidates.has(group):
+			return []
+		var bucket: Array = candidates[group]
+		for _index in count:
+			if bucket.is_empty():
+				return []
+			var draw := rng.draw_int("map", 0, bucket.size() - 1)
+			if not draw.ok:
+				return []
+			var pick := int(draw.data)
+			if group == "priority":
+				priority_ids.append(str(bucket[pick]))
+			else:
+				other_ids.append(str(bucket[pick]))
+			bucket.remove_at(pick)
+	if priority_ids.size() == 1 and other_ids.size() == 1:
+		return [priority_ids[0], other_ids[0]]
+	if priority_ids.size() == 1 and other_ids.size() == 2:
+		return [other_ids[0], priority_ids[0], other_ids[1]]
+	var ordered: Array[String] = []
+	ordered.append_array(priority_ids)
+	ordered.append_array(other_ids)
+	return ordered
 
 
 func _can_leave(state: RunState, payload: Dictionary) -> GameResult:

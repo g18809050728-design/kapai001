@@ -3,6 +3,7 @@
     "id": "N01",
     "name_key": "task.n01.name",
     "kind": "normal",
+    "spawn_group": "other",
     "phases": [
       {
         "phase_key": "main",
@@ -27,6 +28,7 @@
     "id": "N02",
     "name_key": "task.n02.name",
     "kind": "normal",
+    "spawn_group": "other",
     "phases": [
       {
         "phase_key": "main",
@@ -51,6 +53,7 @@
     "id": "N03",
     "name_key": "task.n03.name",
     "kind": "normal",
+    "spawn_group": "other",
     "phases": [
       {
         "phase_key": "main",
@@ -80,6 +83,7 @@
     "id": "N04",
     "name_key": "task.n04.name",
     "kind": "normal",
+    "spawn_group": "other",
     "phases": [
       {
         "phase_key": "main",
@@ -943,6 +947,7 @@
     "id": "N13",
     "name_key": "task.n13.name",
     "kind": "normal",
+    "spawn_group": "other",
     "phases": [
       {
         "phase_key": "main",
@@ -966,15 +971,17 @@
     "id": "N14",
     "name_key": "task.n14.name",
     "kind": "normal",
+    "spawn_group": "priority",
     "on_complete_effects": [
       {
-        "op": "pressure",
+        "op": "complete",
         "amount": 4,
-        "target": "player"
+        "target": "other_tasks"
       },
       {
-        "op": "reduce_relax",
-        "amount": 4
+        "op": "reduce_shield",
+        "amount": 4,
+        "target": "other_tasks"
       }
     ],
     "phases": [
@@ -1005,6 +1012,7 @@
     "id": "N15",
     "name_key": "task.n15.name",
     "kind": "normal",
+    "spawn_group": "other",
     "phases": [
       {
         "phase_key": "code",
@@ -1044,6 +1052,7 @@
     "id": "N16",
     "name_key": "task.n16.name",
     "kind": "normal",
+    "spawn_group": "other",
     "phases": [
       {
         "phase_key": "main",
@@ -1068,6 +1077,7 @@
     "id": "N17",
     "name_key": "task.n17.name",
     "kind": "normal",
+    "spawn_group": "priority",
     "on_complete_effects": [
       {
         "op": "gain_focus",
@@ -1097,6 +1107,7 @@
     "id": "N18",
     "name_key": "task.n18.name",
     "kind": "normal",
+    "spawn_group": "other",
     "phases": [
       {
         "phase_key": "main",
@@ -1124,6 +1135,7 @@
     "id": "N19",
     "name_key": "task.n19.name",
     "kind": "normal",
+    "spawn_group": "other",
     "phases": [
       {
         "phase_key": "main",
@@ -1148,12 +1160,18 @@
     "id": "N20",
     "name_key": "task.n20.name",
     "kind": "normal",
+    "spawn_group": "priority",
     "self_copy_every_round": true,
     "on_complete_effects": [
       {
-        "op": "pressure",
+        "op": "complete",
         "amount": 4,
-        "target": "player"
+        "target": "adjacent_tasks"
+      },
+      {
+        "op": "reduce_shield",
+        "amount": 4,
+        "target": "adjacent_tasks"
       }
     ],
     "phases": [
@@ -1179,6 +1197,7 @@
     "id": "N21",
     "name_key": "task.n21.name",
     "kind": "normal",
+    "spawn_group": "other",
     "max_vitality_reduction": 1,
     "phases": [
       {
@@ -1203,6 +1222,7 @@
     "id": "N22",
     "name_key": "task.n22.name",
     "kind": "normal",
+    "spawn_group": "other",
     "taunt": true,
     "phases": [
       {
@@ -1227,6 +1247,7 @@
     "id": "N23",
     "name_key": "task.n23.name",
     "kind": "normal",
+    "spawn_group": "other",
     "on_complete_effects": [
       {
         "op": "summon_task",
@@ -1257,6 +1278,7 @@
     "id": "N24",
     "name_key": "task.n24.name",
     "kind": "normal",
+    "spawn_group": "priority",
     "phases": [
       {
         "phase_key": "main",
@@ -1291,6 +1313,7 @@
     "id": "N25",
     "name_key": "task.n25.name",
     "kind": "normal",
+    "spawn_group": "other",
     "on_complete_effects": [
       {
         "op": "gain_focus",
@@ -1320,6 +1343,7 @@
     "id": "N26",
     "name_key": "task.n26.name",
     "kind": "normal",
+    "spawn_group": "priority",
     "draw_reduction": 1,
     "phases": [
       {
@@ -1348,6 +1372,7 @@
     "id": "N27",
     "name_key": "task.n27.name",
     "kind": "normal",
+    "spawn_group": "other",
     "phases": [
       {
         "phase_key": "main",
@@ -1375,6 +1400,7 @@
     "id": "N28",
     "name_key": "task.n28.name",
     "kind": "normal",
+    "spawn_group": "other",
     "first_card_cost_bonus": 1,
     "phases": [
       {
@@ -1399,6 +1425,7 @@
     "id": "N29",
     "name_key": "task.n29.name",
     "kind": "normal",
+    "spawn_group": "priority",
     "draw_reduction": 1,
     "on_complete_effects": [
       {
@@ -1429,6 +1456,7 @@
     "id": "N30",
     "name_key": "task.n30.name",
     "kind": "normal",
+    "spawn_group": "priority",
     "phases": [
       {
         "phase_key": "main",
@@ -1454,6 +1482,7 @@
     "id": "N31",
     "name_key": "task.n31.name",
     "kind": "normal",
+    "spawn_group": "other",
     "max_vitality_reduction": 1,
     "on_complete_effects": [
       {
@@ -1494,6 +1523,7 @@
     "id": "N32",
     "name_key": "task.n32.name",
     "kind": "normal",
+    "spawn_group": "other",
     "phases": [
       {
         "phase_key": "main",
@@ -1521,6 +1551,7 @@
     "id": "N33",
     "name_key": "task.n33.name",
     "kind": "normal",
+    "spawn_group": "priority",
     "shield_persistent": true,
     "phases": [
       {
@@ -1545,6 +1576,7 @@
     "id": "N34",
     "name_key": "task.n34.name",
     "kind": "normal",
+    "spawn_group": "other",
     "discard_on_first_card": 1,
     "phases": [
       {
@@ -1569,6 +1601,7 @@
     "id": "N35",
     "name_key": "task.n35.name",
     "kind": "normal",
+    "spawn_group": "other",
     "on_complete_effects": [
       {
         "op": "pressure",
@@ -1599,6 +1632,7 @@
     "id": "N36",
     "name_key": "task.n36.name",
     "kind": "normal",
+    "spawn_group": "priority",
     "phases": [
       {
         "phase_key": "main",
@@ -1626,6 +1660,7 @@
     "id": "N37",
     "name_key": "task.n37.name",
     "kind": "normal",
+    "spawn_group": "priority",
     "phases": [
       {
         "phase_key": "main",
@@ -1653,6 +1688,7 @@
     "id": "N38",
     "name_key": "task.n38.name",
     "kind": "normal",
+    "spawn_group": "other",
     "phases": [
       {
         "phase_key": "main",

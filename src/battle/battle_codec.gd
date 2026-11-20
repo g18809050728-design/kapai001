@@ -54,6 +54,7 @@ const TASK_FIELDS := {
 	"intent_snapshot": TYPE_DICTIONARY,
 	"entered_order": TYPE_INT,
 	"eligible_round": TYPE_INT,
+	"power_percent": TYPE_INT,
 }
 const UNIT_FIELDS := {
 	"id": TYPE_STRING,
@@ -220,7 +221,7 @@ static func _validate_structure(data: Dictionary) -> Array[String]:
 			issues.append("battle.card_by_id key must be string")
 		RunCodec.shape(data.card_by_id[id], CARD_FIELDS, "battle.card_by_id[]", issues)
 	for task in data.tasks:
-		RunCodec.shape(task, TASK_FIELDS, "battle.tasks[]", issues)
+		RunCodec.shape(task, TASK_FIELDS, "battle.tasks[]", issues, ["power_percent"])
 	for unit in data.units:
 		RunCodec.shape(
 			unit,
@@ -283,7 +284,7 @@ static func _validate_task_content(
 	if phase.is_empty():
 		issues.append("battle task phase is unknown")
 		return
-	if task.work_max != phase.work_max:
+	if task.work_max < 1 or task.work_max > int(phase.work_max):
 		issues.append("battle task work_max disagrees with phase")
 	var intents: Array = phase.intents
 	if task.intent_cursor < 0 or task.intent_cursor >= intents.size():

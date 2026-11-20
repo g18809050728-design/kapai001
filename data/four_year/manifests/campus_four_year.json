@@ -322,7 +322,9 @@
       "FY_ROUTE_job",
       "FY_ROUTE_exam",
       "FY_ROUTE_research",
-      "FY_ROUTE_abroad"
+      "FY_ROUTE_abroad",
+      "NR2",
+      "NR3"
     ],
     "unit": [
       "F01",

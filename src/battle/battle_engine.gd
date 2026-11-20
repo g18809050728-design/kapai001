@@ -1156,6 +1156,9 @@ func intent_pressure(state: BattleState, task: Dictionary, rules: Dictionary = {
 		var has_unit_mult := int(intent.get("pressure_has_unit_mult", 100))
 		if has_unit_mult != 100:
 			pressure = int(ceil(pressure * has_unit_mult / 100.0))
+	var power_percent := int(task.get("power_percent", 100))
+	if power_percent != 100:
+		pressure = int(ceil(pressure * power_percent / 100.0))
 	pressure = DifficultyRules.scale_pressure(pressure, state.difficulty, rules)
 	var feeble := _status_stacks(state, "feebleness", task_id)
 	if feeble > 0:
@@ -1346,21 +1349,32 @@ func _summon_tasks(
 			"battle.task.intent_missing",
 			{"definition_id": definition_id}
 		)
+	var source_power := 100
+	var source_index := _task_index(state, source_id)
+	if source_index >= 0:
+		source_power = int(state.tasks[source_index].get("power_percent", 100))
 	for _index in maxi(1, int(spec.get("count", 1))):
 		var cursor := 0
 		var intent: Dictionary = intents[cursor].duplicate(true)
 		var task_id := _new_instance_id(state, "t")
+		var summoned_work := maxi(
+			1, int(ceil(int(phase.get("work_max", 1)) * source_power / 100.0))
+		)
+		var summoned_shield := maxi(
+			0, int(ceil(int(intent.get("shield", 0)) * source_power / 100.0))
+		)
 		var summoned := {
 			"task_id": task_id,
 			"definition_id": definition_id,
 			"phase_key": str(phase.get("phase_key", "")),
-			"work_remaining": int(phase.get("work_max", 1)),
-			"work_max": int(phase.get("work_max", 1)),
-			"shield": int(intent.get("shield", 0)),
+			"work_remaining": summoned_work,
+			"work_max": summoned_work,
+			"shield": summoned_shield,
 			"intent_cursor": cursor,
 			"intent_snapshot": intent,
 			"entered_order": state.next_creation_order,
 			"eligible_round": state.round_index + (1 if starts_next_round else 0),
+			"power_percent": source_power,
 		}
 		_register_source(state, task_id, "task", definition_id)
 		state.tasks.append(summoned)
@@ -1406,7 +1420,10 @@ func _transform_task(
 	var task: Dictionary = state.tasks[task_index]
 	var previous_definition := str(task.get("definition_id", ""))
 	var previous_phase := str(task.get("phase_key", ""))
-	var work_max := int(phase.get("work_max", 1))
+	var power_percent := int(task.get("power_percent", 100))
+	var work_max := maxi(
+		1, int(ceil(int(phase.get("work_max", 1)) * power_percent / 100.0))
+	)
 	var work_remaining := clampi(int(task.get("work_remaining", work_max)), 1, work_max)
 	var cursor := 0
 	var intent: Dictionary = intents[cursor].duplicate(true)
@@ -1417,7 +1434,10 @@ func _transform_task(
 	task.work_remaining = work_remaining
 	task.intent_cursor = cursor
 	task.intent_snapshot = intent
-	task.shield = int(intent.get("shield", 0))
+	task.shield = maxi(
+		0, int(ceil(int(intent.get("shield", 0)) * power_percent / 100.0))
+	)
+	task.power_percent = power_percent
 	task.eligible_round = state.round_index + 1
 	if state.source_registry.has(task_id):
 		state.source_registry[task_id]["definition_id"] = definition_id
@@ -2418,7 +2438,10 @@ func _execute_v3_card_effect(
 
 func _v3_effect_target_ids(state: BattleState, effect: Dictionary) -> Array[String]:
 	var result: Array[String] = []
-	if str(effect.get("target", "")) == "all_tasks":
+	var target_mode := str(effect.get("target", ""))
+	if target_mode in ["other_tasks", "adjacent_tasks"]:
+		return _relative_task_targets(state, target_mode)
+	if target_mode == "all_tasks":
 		for task: Dictionary in state.tasks:
 			result.append(str(task.get("task_id", "")))
 		return result
@@ -2443,6 +2466,27 @@ func _v3_effect_target_ids(state: BattleState, effect: Dictionary) -> Array[Stri
 		var fallback := _first_eligible_task(state)
 		if not fallback.is_empty():
 			result.append(fallback)
+	return result
+
+
+func _relative_task_targets(state: BattleState, mode: String) -> Array[String]:
+	var result: Array[String] = []
+	if typeof(state.resolution) != TYPE_DICTIONARY:
+		return result
+	var source_id := str(state.resolution.get("context_target_id", ""))
+	if source_id.is_empty():
+		return result
+	var source_index := _task_index(state, source_id)
+	if source_index < 0:
+		return result
+	if mode == "adjacent_tasks":
+		for index in [source_index - 1, source_index + 1]:
+			if index >= 0 and index < state.tasks.size():
+				result.append(str(state.tasks[index].get("task_id", "")))
+		return result
+	for index in state.tasks.size():
+		if index != source_index:
+			result.append(str(state.tasks[index].get("task_id", "")))
 	return result
 
 
@@ -2815,6 +2859,22 @@ func _execute_card_effect(
 		"pressure":
 			_apply_pressure(state, amount, str(effect.get("target", "player")) == "all", events, 0)
 			return GameResult.success(null)
+		"reduce_shield":
+			for target_id in _v3_effect_target_ids(state, effect):
+				var shield_index := _task_index(state, target_id)
+				if shield_index < 0:
+					continue
+				var shielded: Dictionary = state.tasks[shield_index]
+				var shield_before := int(shielded.get("shield", 0))
+				shielded.shield = maxi(0, shield_before - maxi(0, amount))
+				_add_event(
+					events,
+					"shield_changed",
+					str(state.resolution.get("card_instance_id", "")),
+					[target_id],
+					{"before": shield_before, "after": shielded.shield, "reason": "effect"}
+				)
+			return GameResult.success(null)
 		"reduce_relax":
 			var relax_before: int = int(state.player.get("relax", 0))
 			state.player.relax = maxi(0, relax_before - maxi(0, amount))
@@ -2967,7 +3027,12 @@ func _apply_completion(
 ) -> GameResult:
 	var resolution: Dictionary = state.resolution
 	var targets: Array = resolution.get("target_ids", [])
-	if bool(resolution.get("all_tasks", false)):
+	var effect_target := str(effect.get("target", ""))
+	if effect_target in ["other_tasks", "adjacent_tasks"]:
+		targets = _relative_task_targets(state, effect_target)
+		if targets.is_empty():
+			return GameResult.success(null)
+	elif bool(resolution.get("all_tasks", false)):
 		targets = resolution.get("locked_target_ids", []).duplicate()
 	elif targets.is_empty():
 		var fallback := _first_eligible_task(state)
@@ -3241,7 +3306,7 @@ func _run_on_complete_effects(
 		"choice_counts": {},
 		"discarded_in_resolution": [],
 		"all_tasks": false,
-		"context_target_id": "",
+		"context_target_id": task_id,
 	}
 	for effect: Dictionary in effects:
 		var result := _execute_card_effect(state, effect, rng, events)
@@ -3282,17 +3347,25 @@ func _advance_or_remove_task(
 		var intents: Array = next_phase.get("intents", [])
 		if not intents.is_empty():
 			intent = intents[0].duplicate(true)
+		var next_power := int(previous.get("power_percent", 100))
+		var next_work := maxi(
+			1, int(ceil(int(next_phase.work_max) * next_power / 100.0))
+		)
+		var next_shield := maxi(
+			0, int(ceil(int(intent.get("shield", 0)) * next_power / 100.0))
+		)
 		var next_task := {
 			"task_id": next_id,
 			"definition_id": previous.definition_id,
 			"phase_key": next_phase.phase_key,
-			"work_remaining": int(next_phase.work_max),
-			"work_max": int(next_phase.work_max),
-			"shield": int(intent.get("shield", 0)),
+			"work_remaining": next_work,
+			"work_max": next_work,
+			"shield": next_shield,
 			"intent_cursor": 0,
 			"intent_snapshot": intent,
 			"entered_order": state.next_creation_order,
 			"eligible_round": state.round_index,
+			"power_percent": next_power,
 		}
 		state.tasks.remove_at(task_index)
 		_register_source(state, next_id, "task", str(previous.definition_id))
@@ -5684,6 +5757,10 @@ func begin(input: Dictionary) -> GameResult:
 		return restored
 
 	var encounter: Dictionary = context.encounter
+	var member_ids: Array = context.member_ids
+	var work_percent := int(context.work_percent)
+	var pressure_percent := int(context.pressure_percent)
+	var ddl_bonus := int(context.ddl_bonus)
 	var ruleset: Dictionary = context.ruleset
 	var battle_rules: Dictionary = ruleset.battle
 	var difficulty_rules: Dictionary = ruleset.difficulty_overrides[input.get(
@@ -5704,7 +5781,7 @@ func begin(input: Dictionary) -> GameResult:
 				"ddl":
 				maxi(
 					int(battle_rules.minimum_ddl),
-					int(encounter.base_ddl) + int(difficulty_rules.ddl_offset)
+					int(encounter.base_ddl) + ddl_bonus + int(difficulty_rules.ddl_offset)
 				),
 				"player":
 				{
@@ -5751,22 +5828,29 @@ func begin(input: Dictionary) -> GameResult:
 		state.card_by_id[card_id] = card
 		card_ids.append(card_id)
 
-	for member_id in encounter.get("initial_members", encounter.members):
+	for member_id in member_ids:
 		var task_definition: Dictionary = context.tasks[member_id]
 		var initial_phase: Dictionary = task_definition.phases[0]
 		var intent: Dictionary = initial_phase.intents[0].duplicate(true)
 		var task_id := _new_instance_id(state, "t")
+		var scaled_work := maxi(
+			1, int(ceil(int(initial_phase.work_max) * work_percent / 100.0))
+		)
+		var scaled_shield := maxi(
+			0, int(ceil(int(intent.get("shield", 0)) * work_percent / 100.0))
+		)
 		var task_state := {
 			"task_id": task_id,
 			"definition_id": member_id,
 			"phase_key": initial_phase.phase_key,
-			"work_remaining": initial_phase.work_max,
-			"work_max": initial_phase.work_max,
-			"shield": intent.get("shield", 0),
+			"work_remaining": scaled_work,
+			"work_max": scaled_work,
+			"shield": scaled_shield,
 			"intent_cursor": 0,
 			"intent_snapshot": intent,
 			"entered_order": state.next_creation_order,
 			"eligible_round": 1,
+			"power_percent": pressure_percent,
 		}
 		_register_source(state, task_id, "task", member_id)
 		state.tasks.append(task_state)
@@ -5806,6 +5890,8 @@ func _validate_input(input: Dictionary) -> GameResult:
 		"cards",
 		"relics",
 		"rng_state",
+		"member_ids",
+		"power_percent",
 	]
 	for key in input:
 		if not allowed.has(key):
@@ -5861,11 +5947,43 @@ func _validate_input(input: Dictionary) -> GameResult:
 	if not encounter_result.ok:
 		return _content_reference_error("encounter", input.encounter_id, "input.encounter_id")
 	var encounter: Dictionary = encounter_result.data
-	if encounter.has("scaling"):
-		return _failure(
-			GameConstants.ERROR_ENGINE_NOT_READY,
-			"battle.encounter.scaling_not_supported",
-			{"path": "encounter.%s.scaling" % input.encounter_id}
+	var member_ids: Array = encounter.get("initial_members", encounter.members)
+	if input.has("member_ids"):
+		if typeof(input.member_ids) != TYPE_ARRAY or input.member_ids.is_empty():
+			return _invalid_input(
+				"input.member_ids must be a non-empty array", {"path": "input.member_ids"}
+			)
+		member_ids = []
+		for member: Variant in input.member_ids:
+			if typeof(member) != TYPE_STRING or not encounter.members.has(member):
+				return _content_reference_error(
+					"task", str(member), "input.member_ids"
+				)
+			if member_ids.has(member):
+				return _invalid_input(
+					"input.member_ids must not contain duplicates", {"path": "input.member_ids"}
+				)
+			member_ids.append(member)
+	var scaling: Dictionary = encounter.get("scaling", {})
+	var work_percent := int(scaling.get("work_percent", 100))
+	var pressure_percent := int(
+		input.get("power_percent", int(scaling.get("pressure_percent", 100)))
+	)
+	var ddl_bonus := int(scaling.get("ddl_bonus", 0))
+	if work_percent < 1 or work_percent > 100:
+		return _invalid_input(
+			"encounter scaling work_percent must be from 1 through 100",
+			{"path": "encounter.%s.scaling.work_percent" % input.encounter_id}
+		)
+	if pressure_percent < 1 or pressure_percent > 100:
+		return _invalid_input(
+			"encounter scaling pressure_percent must be from 1 through 100",
+			{"path": "encounter.%s.scaling.pressure_percent" % input.encounter_id}
+		)
+	if ddl_bonus < 0:
+		return _invalid_input(
+			"encounter scaling ddl_bonus must not be negative",
+			{"path": "encounter.%s.scaling.ddl_bonus" % input.encounter_id}
 		)
 	if encounter.members.is_empty():
 		return _content_reference_error("task", "", "encounter.%s.members" % input.encounter_id)
@@ -5981,6 +6099,10 @@ func _validate_input(input: Dictionary) -> GameResult:
 				"cards": cards,
 				"tasks": tasks,
 				"relics": relic_ids,
+				"member_ids": member_ids,
+				"work_percent": work_percent,
+				"pressure_percent": pressure_percent,
+				"ddl_bonus": ddl_bonus,
 			}
 		)
 	)
