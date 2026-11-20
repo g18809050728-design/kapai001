@@ -4,7 +4,7 @@ extends RefCounted
 ## Read-only inventory of display text used by the game. Entries never contain
 ## live run/session state; the editor stores only uid -> replacement strings.
 
-const MANIFEST := "campus_four_year"
+const MANIFEST := RelicPilot.ROSTER
 const ROOT := "res://data/four_year"
 const CATEGORY_ORDER := [
 	"人物", "卡牌", "任务 / 怪物", "饰品", "伙伴", "事件", "状态 / 术语",
@@ -22,7 +22,7 @@ static func build(catalog: ContentDB = null) -> GameResult:
 	if db.get_info() == null:
 		return GameResult.failure(ApiError.new(&"CONTENT_INVALID", "text.library.catalog.unavailable"))
 	var entries: Array[Dictionary] = []
-	_add_labels(entries)
+	_add_labels(entries, db)
 	_add_stories(entries)
 	_add_glossary(entries)
 	var catalogue := CompendiumView.build(db)
@@ -45,9 +45,11 @@ static func build(catalog: ContentDB = null) -> GameResult:
 	)
 
 
-static func _add_labels(entries: Array[Dictionary]) -> void:
+static func _add_labels(entries: Array[Dictionary], catalog: ContentDB) -> void:
 	var labels: Dictionary = UiStyle.LABELS.data.get("labels", {})
 	for key in labels:
+		if RelicPilot.is_retired(str(key)) and not catalog.get_definition("relic", str(key)).ok:
+			continue
 		var value := str(labels[key])
 		entries.append(
 			_entry(
@@ -61,6 +63,11 @@ static func _add_labels(entries: Array[Dictionary]) -> void:
 				"名称与术语；所有引用该 ID 的位置同步显示。"
 			)
 		)
+	for id in catalog.get_candidates({"kind": "relic"}):
+		if RelicPilot.is_rx(id) and not labels.has(id):
+			var definition: Dictionary = catalog.get_definition("relic", id).data
+			entries.append(_entry("label:" + id, "names", "饰品", id, definition.name_key,
+				definition.name_key, _relic_source(catalog, id), "饰品名称；只影响显示文字。"))
 	# UiStyle.label has a few built-in display words that never existed in the
 	# JSON label table. Expose them so "any label text" is editable too.
 	var builtins := {
@@ -201,12 +208,18 @@ static func _add_relic_descriptions(entries: Array[Dictionary], catalog: Content
 				"descriptions",
 				"饰品",
 				str(id),
-				_raw_label(str(id)) + " · 说明",
+				str(definition.name_key) + " · 说明",
 				UiContentText.describe_relic_default(definition),
-				"data/four_year/definitions/relics.json",
+				_relic_source(catalog, id),
 				"饰品详情与提示中的说明；只影响显示文字。"
 			)
 		)
+
+
+static func _relic_source(catalog: ContentDB, id: String) -> String:
+	if not RelicPilot.is_rx(id):
+		return "data/four_year/definitions/relics.json"
+	return "data/four_year/%s/definitions.json" % ("relic_pilot" if catalog.get_info().id == RelicPilot.MANIFEST else "relic_roster")
 
 
 static func _add_passive_descriptions(entries: Array[Dictionary], catalog: ContentDB) -> void:

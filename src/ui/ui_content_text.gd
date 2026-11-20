@@ -592,6 +592,11 @@ static func describe_relic(detail: Dictionary) -> String:
 static func describe_relic_default(detail: Dictionary) -> String:
 	if detail.is_empty():
 		return "饰品详情暂不可用"
+	if detail.has("rx"):
+		var text := str(detail.rx.text)
+		if detail.has("rx_remaining"):
+			text += "\n本局剩余 %d 次。" % int(detail.rx_remaining)
+		return text
 	var lines: PackedStringArray = []
 	var work_bonus := int(detail.get("modifiers", {}).get("work_flat_bonus", 0))
 	if detail.get("campaign") is Dictionary:

@@ -106,6 +106,7 @@ func apply(run: RunState, plan: Dictionary) -> GameResult:
 	work.money -= int(verified.price)
 	if verified.type == "remove_card":
 		work.cards.remove_at(_card_index(work, str(verified.card_id)))
+		RunRelicRoster.paid_removal(work,int(verified.price))
 		work.removals_used += 1
 		_write(shop, "removal_count", int(_read(shop, "removal_count", 0)) + 1)
 	else:
@@ -113,6 +114,9 @@ func apply(run: RunState, plan: Dictionary) -> GameResult:
 		match str(stock.kind):
 			"card":
 				add_card(work, str(stock.definition_id), "shop")
+				if RunRelicRoster.active(work,"RX-C29") and _read(shop,"stocks",[]).filter(func(item): return item.kind == "card" and item.sold).size() == 1:
+					work.money += 12
+					RelicPilot.consume(work,"RX-C29")
 			"relic":
 				add_relic(
 					work,
@@ -121,7 +125,9 @@ func apply(run: RunState, plan: Dictionary) -> GameResult:
 					int(verified.relic_slot)
 				)
 			"meal":
+				var before := work.vitality
 				work.vitality = mini(work.max_vitality, work.vitality + int(verified.heal))
+				RunRelicRoster.meal(work,str(node.node_id),before)
 		for entry in _read(shop, "stocks", []):
 			if str(entry.stock_id) == str(stock.stock_id):
 				entry.sold = true
@@ -165,6 +171,7 @@ func add_relic(
 ) -> Dictionary:
 	for index in range(run.relics.size() - 1, -1, -1):
 		if str(run.relics[index].relic_id) == replace_relic_id:
+			RunRelicRoster.replaced(run,str(run.relics[index].definition_id))
 			run.relics.remove_at(index)
 	var relic := {
 		"relic_id": run.next_instance_id("relic"),

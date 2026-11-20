@@ -27,7 +27,10 @@ func generate(source: Variant, run: RunState, rng: RandomSource) -> GameResult:
 	var count := int(rules.rewards.candidate_count)
 	if CampaignService.enabled(run) and kind == "elite" and int(run.campaign.resume) >= 4:
 		count += 1
-	var cards := card_candidates(run, count, rng, weights)
+	var review := kind == "elite" and count > 0 and RunRelicRoster.active(run,"RX-C30") and int(run.campaign.rx_state.review_year) != run.term
+	if kind == "normal" and count > 1 and RunRelicRoster.active(run,"RX-C38"):
+		count -= 1
+	var cards := card_candidates(run, count + (1 if review else 0), rng, weights)
 	if not cards.ok:
 		return cards
 	var items: Array[Dictionary] = []
@@ -94,7 +97,8 @@ func generate_shop(node: Variant, run: RunState, rng: RandomSource) -> GameResul
 					int(shop_rules.card_prices[rarity])
 				)
 			)
-	for rarity in ["white", "blue"]:
+	# Four-year RX relics are awarded at their map milestones, not sold in shops.
+	for rarity in ([] if RelicPilot.expanded(run.manifest_id) else ["white", "blue"]):
 		var pool := _catalog.get_candidates(
 			{
 				"kind": "relic",

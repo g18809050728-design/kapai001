@@ -127,10 +127,15 @@ func take_rest(state: RunState, payload: Dictionary) -> GameResult:
 	var option := str(payload.get("option_id", ""))
 	var rules := _rules(work)
 	if option == "heal":
+		var before := work.vitality
 		work.vitality = mini(
 			work.max_vitality,
 			work.vitality + int(floor(work.max_vitality * int(rules.run.rest_heal_percent) / 100.0))
 		)
+		var extra := RelicPilot.rest_bonus(work, node.node_id, before, work.vitality)
+		if extra > 0:
+			work.vitality += extra
+			RelicPilot.consume(work, "RX-C26")
 	elif option in ["upgrade", "train", "remove_burden"]:
 		var card_id := str(payload.get("card_instance_id", ""))
 		var card := _card(work, card_id)
@@ -232,12 +237,18 @@ func rest_view(state: RunState, node: RunNodeState) -> Dictionary:
 				"eligible_card_ids": eligible
 			}
 		)
-	return {
+	var heal_amount := int(floor(state.max_vitality * int(rules.run.rest_heal_percent) / 100.0))
+	var used := bool(node.context.get("used", false))
+	var extra := 0 if used else RelicPilot.rest_bonus(state, node.node_id, state.vitality, mini(state.max_vitality, state.vitality + heal_amount))
+	var view := {
 		"node_id": node.node_id,
-		"used": node.context.get("used", false),
+		"used": used,
 		"options": options,
-		"heal_amount": int(floor(state.max_vitality * int(rules.run.rest_heal_percent) / 100.0))
+		"heal_amount": heal_amount + extra
 	}
+	if extra > 0:
+		view.rx_heal_bonus = extra
+	return view
 
 
 func _apply_event_effect(
@@ -338,7 +349,7 @@ func _draw_candidates(
 					not definition.get("tags", []).has("basic")
 					and not definition.get("tags", []).has("special")
 				)
-			return definition.get("availability") != "starter"
+			return definition.get("availability") != "starter" and not definition.has("rx")
 	)
 	var result: Array[String] = []
 	for _index in range(mini(count, pool.size())):

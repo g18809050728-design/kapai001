@@ -155,7 +155,7 @@ func run() -> Array[String]:
 		for manifest in setup.data.manifests:
 			manifest_ids.append(str(manifest.id))
 		_check(
-			manifest_ids == ["campus_four_year"],
+			manifest_ids == ["campus_four_year_relics"],
 			"new-game setup exposes only the four-year campaign",
 			failures
 		)
@@ -216,7 +216,7 @@ func run() -> Array[String]:
 	_check(
 		(
 			ui_view.screen == &"map"
-			and str(ui_view.run.get("manifest_id", "")) == "campus_four_year"
+			and str(ui_view.run.get("manifest_id", "")) == "campus_four_year_relics"
 			and str(ui_view.run.get("character_id", "")) == "P02"
 		),
 		"UI start reaches the four-year map with P02",

@@ -1,5 +1,9 @@
 # 《交大四年：DDL战争》设计与实施入口
 
+2026-11-20 饰品池更新（§0.20.37）：**原有 16 件 FY 已从游戏移除，仅保留 104 件 RX**（40 件通用＋四角色各 16 件）。普通「新的四年」、学年奖励、测试房间、**「图鉴 → 饰品」**及文本编辑器都使用新池。原有 RX 图片不变。继续旧四学年档时移除已装备和待领取的 FY，不重抽 RX，不重置冒险。[实机图鉴](artifacts/verification/relic-removal-20261120/review/screens/gallery-all-1280-100.png) · [旧档处理与验证](docs/plans/2026-11-20-relic-removal-design.md)。
+
+历史首测（§0.20.35）：曾以 24 件 RX 验证触发规则并制作全部 104 张独立图标。`& .\tools\start_relic_pilot.ps1` 仍是单独存档的 24 件 RX 试点，不含 FY。[首测截图与记录](artifacts/verification/relic-pilot-20261120/review/README.md) · [全量接入与造型对照](docs/plans/2026-11-20-relic-roster-design.md)。
+
 2026-11-15当前§0.20.25已完成四角色正式接入：林序原V5、许知微V8、沈见章V10、唐以宁V11默认用于选角/战斗、保存继续及测试房间；原仅样板限制在四人范围内已取代。见[正式战斗四人图](artifacts/verification/actor-integration-20261115/review/battle.jpg)、[选角四人图](artifacts/verification/actor-integration-20261115/review/setup.jpg)及[实现/结果](docs/plans/2026-11-15-actor-integration-design.md)。490项实机、22条真实命令对照、61窗口图/300连续帧通过；完整规则63.653秒、完整UI289.659秒和默认入口烟测均退出0/错误0。916保护文件、17份改前快照与10个真实存档文件hash核对通过；API新增0、累计38/200。原G0/G6/G8出口、最终美术签收与慢放手部换面感另记。
 
 2026-11-15唐以宁动作已修正为V11（§0.20.24）：先看[出手前后](artifacts/verification/actor-motion-20261115/review/p04-action-before-after.jpg)，再打开[V8/V11连续动作与慢放](artifacts/verification/actor-motion-20261115/review/index.html)。肩袖保持连接、肩肘重新联动、减少双膝同时折弯，持板加入轻微缓冲；原形象和上下身比例保持。336项实机、5真实命令和53项浏览器检查通过，见[实际结果](docs/plans/2026-11-15-actor-motion-design.md)与[验证汇总](artifacts/verification/actor-motion-20261115/verification-summary.json)。[启动器](tools/start_actor_party.ps1)默认P04/V11；P03V10、P02V8、P01原V5及正式入口保持。API新增0，累计38/200。慢放手部换面仍有短暂切换感，最终动作观感待查看；以下按历史批次阅读。
@@ -63,6 +67,8 @@
 2026-11-02：第一学期精英池定为 `Q01`、`E01`、`E02`、`E03`、`Q0B`、`Q0C`（`Q0B`/`Q0C` 提前到第 1 学期）。用机器人对起始牌组做了难度下限试玩：`Q0B`/`Q0C` 两人物 100% 胜偏易，`E02`/`E03` 为 50–100%，`E01` 对 P04 仅 4%；`Q0A`/`Q0D` 近似必败，已明确排除出第一学期。数据与复现见实现记录 §7。
 
 2026-11-03：现有 v1 程序已加入 A25–A48 共 24 件通用饰品；规则、奖励/商店与存档集成、UI 套件及启动冒烟当时已在 Godot 4.7.2 实跑通过，范围与留存命令见[饰品实现记录](docs/饰品实现记录_20261103.md)。部分旧验证产物已不在当前工作区，不把历史路径作为现存证据链接。怪物和 A49–A52 留待后续。当前生产包没有能力牌，因此 A27 在生产局无法触发、A46 的能力分支不可达；隔离 fixture 测试不能证明生产可用。人工视觉、平衡与完整用户路径仍未验证，此项不代表 v3.1 已实现或通过新版阶段。
+
+> **Git 迁移说明（2026-11-21）**：当前检出保留 Godot 源工程、选定美术、兼容及试点资源、测试、工具和设计/溯源文档。AI 母图与制作过程、外部参考媒体、G6 离线母图/候选、截图和原始验收输出仅在本地档案保留（已淘汰的文件除外）。文中的历史审阅链接有些指向这些本地目录；重建美术或查看原始验收时需另行带上对应档案。它们不参与正常启动，也不随 Git 同步真实玩家存档。
 
 ## 本轮交付与阅读顺序
 
@@ -132,6 +138,15 @@ $env:GODOT_BIN = 'D:\chrome\godot\Godot_v4.7.2-stable_win64_console.exe'
 & $env:GODOT_BIN --headless --editor --path . --quit
 & $env:GODOT_BIN --path .
 ```
+
+从已更新的 GitHub `main` 迁移到 Linux 时，可用 `git clone --depth 1 --single-branch --branch main <仓库地址>` 只拉取最新源码。先安装项目指定的 Godot 4.7.2；在仓库根目录执行以下无头冒烟（有桌面的 Linux 可用 `godot --path .` 启动游戏）：
+
+```sh
+godot --headless --editor --path . --quit
+godot --headless --path . --quit-after 2
+```
+
+服务器的 `.godot/` 会自行重建；旧玩家进度和文本覆盖如需迁移，应单独备份/复制 Godot `user://`，不要上传到仓库。
 
 数据与地图文档使用同一生成器。以下验证将 APPDATA/LOCALAPPDATA 隔离在证据目录，不加载实际玩家存档：
 

@@ -314,7 +314,7 @@ func _render_menu() -> void:
 	_scroll.follow_focus = true
 	var title_label := header.get_child(0) as Label
 	title_label.add_theme_font_size_override("font_size",roundi(64*UiStyle.text_scale))
-	add_text(body,"四学年 · 校园卡牌冒险",16,UiStyle.BRASS)
+	add_text(body,"饰品试玩 · 24 件 · 独立存档" if view.get("relic_pilot", false) else "四学年 · 校园卡牌冒险",16,UiStyle.BRASS)
 
 	var resume := add_button(body,"menu:continue","继续冒险",_ui("continue"))
 	resume.disabled = not bool(view.get("has_active_session",false)) and not bool(view.get("can_continue",false))
@@ -469,10 +469,17 @@ func _render_reward() -> void:
 	if relic and _relics_full() and not selected.is_empty():
 		var replacement := str(_choices.get(id + ":replace", ""))
 		summary += " · 装备槽已满，请向下选择替换对象" if replacement.is_empty() else " · 将失去：" + _relic_name(replacement)
-	var row := _bottom("确认跳过这项奖励？" if skipping else summary)
+	var skip_bonus := int(item.get("rx_skip_bonus", 0))
+	var skip_summary := "确认跳过这项奖励？"
+	if skip_bonus > 0:
+		skip_summary += " · %s：+%d 金钱" % [UiStyle.label("RX-C28"), skip_bonus]
+	var row := _bottom(skip_summary if skipping else summary)
 	if skipping:
+		if skip_bonus > 0:
+			_cancel(row, id + ":skip", "继续选牌")
 		add_button(row, "reward:%s:skip_confirm" % id, "确认跳过", _action("skip_reward", {"offer_id": offer.get("offer_id", ""), "item_id": id}))
-		_cancel(row, id + ":skip", "继续选牌")
+		if skip_bonus <= 0:
+			_cancel(row, id + ":skip", "继续选牌")
 	else:
 		var payload := {"offer_id": offer.get("offer_id", ""), "item_id": id, "candidate_id": selected}
 		if not str(_choices.get(id + ":replace", "")).is_empty():
@@ -483,7 +490,7 @@ func _render_reward() -> void:
 			confirm.tooltip_text = "请先选择要替换的已装备饰品" if not selected.is_empty() else "请先预选奖励"
 		_cancel(row, id)
 		if item.get("skippable", true):
-			_local_button(row, "reward:%s:skip" % id, "跳过此项", id + ":skip", "yes")
+			_local_button(row, "reward:%s:skip" % id, "跳过 · +%d 金钱" % skip_bonus if skip_bonus > 0 else "跳过此项", id + ":skip", "yes")
 
 
 func _render_campaign() -> void:
@@ -494,6 +501,8 @@ func _render_campaign() -> void:
 	var story_room := kind in ["service", "familiar"]
 	reset_page("" if story_room else title, "" if story_room else "候选已固定 · 查看和返回不会消耗奖励")
 	_run_bar(header)
+	if kind == "relic" and RelicPilot.expanded(view.get("manifest_id")):
+		_scroll.follow_focus = true
 	if story_room:
 		var heading := add_text(body, title, 28, UiStyle.BRASS)
 		heading.name = "EventTitle"
@@ -536,6 +545,8 @@ func _render_campaign() -> void:
 		if meta.get("subtype", "") in ["L", "LAB", "T"]:
 			if not _room_expanded:
 				add_text(body,"服务费用：%d 金钱%s" % [int(offer.get("service_cost",0))," + 5 精力（至少保留1）" if meta.get("subtype") == "LAB" else ""],16,UiStyle.BRASS)
+				if int(offer.get("upgrade_discount",0)) > 0:
+					add_text(body,"二手教材封套：付费升级立减 %d，移除价格不变。" % int(offer.upgrade_discount),15,UiStyle.BRASS)
 			_campaign_deck(offer, meta.get("subtype", "") == "LAB")
 		else:
 			for option in ["heal", "money", "progress"]:
@@ -616,7 +627,10 @@ func _render_campaign() -> void:
 		if kind == "relic":
 			add_button(row, "selection:cancel", "返回饰品候选", {}, func(): _choices.erase("campaign:target"); _choices.erase("campaign:option"); _choices.erase("campaign:replace"); refresh_local())
 			if not target.is_empty() and _relics_full():
-				_local_button(row, "campaign:convert:" + target, "主动折算 · " + _quote(offer, "convert", target), "campaign:option", "convert")
+				var conversion := "主动折算 · " + _quote(offer, "convert", target)
+				if RelicPilot.expanded(view.get("manifest_id")):
+					conversion = "折算 · +%d 金钱" % int(_preview_quote(offer, "convert", target).get("money_delta", 0))
+				_local_button(row, "campaign:convert:" + target, conversion, "campaign:option", "convert")
 		else:
 			_cancel(row, "campaign:option")
 		if kind not in ["direction", "destination"]:
@@ -1181,6 +1195,8 @@ func _render_rest() -> void:
 	for option in _array(rest.get("options")):
 		var caption := _rest_name(str(option.option_id))+"\n"
 		caption += "实际回复 %s 精力" % rest.get("effective_heal_amount",rest.get("heal_amount",0)) if not option.get("needs_card",false) else "查看牌组，比较后确认一张实例"
+		if str(option.option_id) == "heal" and int(rest.get("rx_heal_bonus", 0)) > 0:
+			caption += "（含%s +%d）" % [UiStyle.label("RX-C26"), int(rest.rx_heal_bonus)]
 		var pick: Button
 		if option.get("needs_card",false):
 			pick = _local_button(options,"rest:option:"+str(option.option_id),caption,"rest:option",str(option.option_id))

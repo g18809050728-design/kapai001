@@ -146,19 +146,33 @@ static func decode(data: Dictionary, catalog: ContentDB) -> GameResult:
 		_reference(catalog, "card", card.definition_id, "run.cards", references)
 	for relic in record.relics:
 		_reference(catalog, "relic", relic.definition_id, "run.relics", references)
+		if not RelicPilot.owns_definition(relic.definition_id, record.character_id):
+			issues.append("equipped pilot relic is outside character pool")
 	if record.has("campaign") and not record.campaign.pending.is_empty():
 		var pending: Dictionary = record.campaign.pending
 		if pending.kind in ["relic", "grand"]:
-			if pending.candidates.size() != 3:
+			var pilot_relic: bool = RelicPilot.expanded(info.id) and pending.kind == "relic"
+			if (not pilot_relic and pending.candidates.size() != 3) or (pilot_relic and pending.candidates.size() > 3):
 				issues.append("campaign reward must have three frozen candidates")
+			var gold_count := 0
+			var seen := {}
 			for id in pending.candidates:
+				seen[id] = true
 				var kind := "relic" if pending.kind == "relic" else "card"
 				_reference(catalog, kind, id, "campaign.pending", references)
 				var definition := catalog.get_definition(kind, id)
-				if definition.ok and kind == "relic" and int(definition.data.get("campaign", {}).get("year", 0)) != record.term:
-					issues.append("campaign relic candidate is outside current year")
+				if definition.ok and kind == "relic":
+					if pilot_relic:
+						if not RelicPilot.is_candidate(definition.data, record.character_id, record.term, info.id == RelicPilot.ROSTER, info.content_version == RelicPilot.legacy_version(info.id)):
+							issues.append("pilot candidate is outside year/character pool")
+						if definition.data.rarity == "gold":
+							gold_count += 1
+					elif int(definition.data.get("campaign", {}).get("year", 0)) != record.term:
+						issues.append("campaign relic candidate is outside current year")
 				if definition.ok and kind == "card" and (str(definition.data.get("owner", "")) not in ["C", str(record.character_id)] or not definition.data.get("permanent", false) or definition.data.get("rarity") in ["basic", "token"]):
 					issues.append("campaign card candidate is outside character pool")
+			if pilot_relic and (gold_count > 1 or seen.size() != pending.candidates.size()):
+				issues.append("pilot candidate duplication or gold limit")
 	for id in record.seen_event_ids:
 		_reference(catalog, "event", id, "run.seen_event_ids", references)
 	if not record.active_encounter_id.is_empty():
@@ -228,7 +242,7 @@ static func _validate_structure(data: Dictionary) -> Array[String]:
 	var issues: Array[String] = []
 	shape(data, FIELDS, "run", issues, ["campaign"])
 	if data.has("campaign") and data.campaign is Dictionary:
-		CampaignService.validate(data.campaign, issues)
+		CampaignService.validate(data.campaign, issues, RelicPilot.expanded(data.get("manifest_id")), data.get("manifest_id") == RelicPilot.ROSTER)
 	if not issues.is_empty():
 		return issues
 	for key in ["node_path", "seen_event_ids", "settled_battle_ids"]:

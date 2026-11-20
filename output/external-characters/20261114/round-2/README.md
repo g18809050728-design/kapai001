@@ -2,4 +2,4 @@
 
 用户明确本作首先是大学校园游戏，资源必须基于学生、教师身份和四角色内容寻找。K2D战士/弓手路线停止，不作为当前人物候选或购买建议。
 
-此处仅保留官方公开展示、商品描述、失败取回及不完整视频片段。没有取得PSD/Spine源，没有验证完整动作，没有购买或接入。详细状态见[asset-manifest.json](asset-manifest.json)；当前工作见[校园实图对照](../campus-round-3/preview.html)。
+2026-11-21 转移清理已移除本轮公开展示图和不完整视频片段，保留商品摘录、失败状态和来源。没有取得PSD/Spine源，没有验证完整动作，没有购买或接入。详细状态见[asset-manifest.json](asset-manifest.json)；当前工作见[校园历史记录](../campus-round-3/README.md)。

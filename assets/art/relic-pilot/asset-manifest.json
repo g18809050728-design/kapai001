@@ -1,0 +1,2914 @@
+[
+  {
+    "asset_id": "RX-C01",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "晨课铃",
+    "wave": 1,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-01.png",
+    "sheet_cell": 1,
+    "source_sha256": "968a6cc49f987c5fa177b60c64770a6808d6b6fd938e49d5aa383d0ad8143a49",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "ac8311bfddbbfeb638f87ab8ae5e587a9214577364942cc0a1071fb5d31bb123",
+    "file": "assets/art/relic-pilot/RX-C01.webp",
+    "sha256": "3d2b524718a4f9feaeacefe41937d9e1e3e8f29684ed27e991aa2e58dc074794",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "pilot"
+  },
+  {
+    "asset_id": "RX-C02",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "定时插座",
+    "wave": 1,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-01.png",
+    "sheet_cell": 2,
+    "source_sha256": "968a6cc49f987c5fa177b60c64770a6808d6b6fd938e49d5aa383d0ad8143a49",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "ac8311bfddbbfeb638f87ab8ae5e587a9214577364942cc0a1071fb5d31bb123",
+    "file": "assets/art/relic-pilot/RX-C02.webp",
+    "sha256": "b77cadcec32edd6f4255e350509885a24ac67b566b2fd6d1585f315fe048a9dd",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "pilot"
+  },
+  {
+    "asset_id": "RX-C09",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "配重夹",
+    "wave": 1,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-fix-03.png",
+    "sheet_cell": 4,
+    "source_sha256": "1b0323d09872a8e14ad8505d3fd3cd54b6900212d8b8eb7066fa1fa93239ed31",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1024",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1024
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/corrections.jsonl",
+    "prompt_sha256": "6f159f21da1a213cb6ddb088165c6f11bfdab6955d356906c9d0278b617213f0",
+    "file": "assets/art/relic-pilot/RX-C09.webp",
+    "sha256": "dba91e352c174589750607bb82ab8879ada37bae2febb3a5f46bdacdc51d75a7",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 2,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "pilot"
+  },
+  {
+    "asset_id": "RX-P01-01",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "双色流程贴",
+    "wave": 1,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-01.png",
+    "sheet_cell": 4,
+    "source_sha256": "968a6cc49f987c5fa177b60c64770a6808d6b6fd938e49d5aa383d0ad8143a49",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "ac8311bfddbbfeb638f87ab8ae5e587a9214577364942cc0a1071fb5d31bb123",
+    "file": "assets/art/relic-pilot/RX-P01-01.webp",
+    "sha256": "a62df08bcdcf34c09f4757612218db0a56ad847587cc00217499ccc4dd7fe4f5",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "pilot"
+  },
+  {
+    "asset_id": "RX-P02-01",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "选题纸夹",
+    "wave": 1,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-01.png",
+    "sheet_cell": 5,
+    "source_sha256": "968a6cc49f987c5fa177b60c64770a6808d6b6fd938e49d5aa383d0ad8143a49",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "ac8311bfddbbfeb638f87ab8ae5e587a9214577364942cc0a1071fb5d31bb123",
+    "file": "assets/art/relic-pilot/RX-P02-01.webp",
+    "sha256": "e4b35cfd271249dc6ba9bf5f5a9d02c60888299a50baeac0ab003418c5b49333",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "pilot"
+  },
+  {
+    "asset_id": "RX-P03-01",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "刻线滤纸",
+    "wave": 1,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-01.png",
+    "sheet_cell": 6,
+    "source_sha256": "968a6cc49f987c5fa177b60c64770a6808d6b6fd938e49d5aa383d0ad8143a49",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "ac8311bfddbbfeb638f87ab8ae5e587a9214577364942cc0a1071fb5d31bb123",
+    "file": "assets/art/relic-pilot/RX-P03-01.webp",
+    "sha256": "3225ead1bc900a54d5595ce2de95d6f555d308d9b0e56232b949042498572d34",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "pilot"
+  },
+  {
+    "asset_id": "RX-P04-01",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "分工夹",
+    "wave": 1,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-01.png",
+    "sheet_cell": 7,
+    "source_sha256": "968a6cc49f987c5fa177b60c64770a6808d6b6fd938e49d5aa383d0ad8143a49",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "ac8311bfddbbfeb638f87ab8ae5e587a9214577364942cc0a1071fb5d31bb123",
+    "file": "assets/art/relic-pilot/RX-P04-01.webp",
+    "sha256": "d1201cb26fe82b3031aee89cfaab15dc1caa7d7b11d84ce9f8a06a5dfd5606d3",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "pilot"
+  },
+  {
+    "asset_id": "RX-C05",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "预习卡套",
+    "wave": 2,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-01.png",
+    "sheet_cell": 8,
+    "source_sha256": "968a6cc49f987c5fa177b60c64770a6808d6b6fd938e49d5aa383d0ad8143a49",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "ac8311bfddbbfeb638f87ab8ae5e587a9214577364942cc0a1071fb5d31bb123",
+    "file": "assets/art/relic-pilot/RX-C05.webp",
+    "sha256": "85bd09922bb4116a2719f959362158f7e1917e7774c8571da0f0fc938d502f60",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "pilot"
+  },
+  {
+    "asset_id": "RX-C17",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "折叠雨衣",
+    "wave": 2,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-02.png",
+    "sheet_cell": 1,
+    "source_sha256": "5eeaa320fba04ae73c56b4bd84683482ffe3984e11ac655d7ae228ec2b3c339f",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "56d32be6f1992f55817602e45ab1addb0d4da79e7094f0ec41a384d3f9fa7e62",
+    "file": "assets/art/relic-pilot/RX-C17.webp",
+    "sha256": "912a2bcbd1b875d481c855b9898dde1de4620a112c6c3dca983f1d478f09f1aa",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "pilot"
+  },
+  {
+    "asset_id": "RX-C23",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "闹钟电池",
+    "wave": 2,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-02.png",
+    "sheet_cell": 2,
+    "source_sha256": "5eeaa320fba04ae73c56b4bd84683482ffe3984e11ac655d7ae228ec2b3c339f",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "56d32be6f1992f55817602e45ab1addb0d4da79e7094f0ec41a384d3f9fa7e62",
+    "file": "assets/art/relic-pilot/RX-C23.webp",
+    "sha256": "03e0535363fb0d3bf0e5b0e0026e9b7a29407b53605c0dd766ce1443eaa6fc04",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "pilot"
+  },
+  {
+    "asset_id": "RX-C26",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "干饭补贴存根",
+    "wave": 2,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-fix-01.png",
+    "sheet_cell": 1,
+    "source_sha256": "e9f0056850534a5a7d349deb6ba14b0bb53df9b0071b6a69ac7407892a04f446",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1024",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1024
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/corrections.jsonl",
+    "prompt_sha256": "a21b912e0ebccb08ff7bacf9d6186c449b37d5f9b582e5f24a1595d9233b4e65",
+    "file": "assets/art/relic-pilot/RX-C26.webp",
+    "sha256": "c09cb026a2fb5327fec1df6e6cd7429fe4911ab03e574aa3484005395ae57876",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 2,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "pilot"
+  },
+  {
+    "asset_id": "RX-C28",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "失物招领牌",
+    "wave": 2,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-02.png",
+    "sheet_cell": 4,
+    "source_sha256": "5eeaa320fba04ae73c56b4bd84683482ffe3984e11ac655d7ae228ec2b3c339f",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "56d32be6f1992f55817602e45ab1addb0d4da79e7094f0ec41a384d3f9fa7e62",
+    "file": "assets/art/relic-pilot/RX-C28.webp",
+    "sha256": "3fc16277837e6e79c0a6923bca8f996e7cb702dbd5e5348a1d1650b16d30cbbc",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "pilot"
+  },
+  {
+    "asset_id": "RX-P01-05",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "复用回形扣",
+    "wave": 2,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-02.png",
+    "sheet_cell": 5,
+    "source_sha256": "5eeaa320fba04ae73c56b4bd84683482ffe3984e11ac655d7ae228ec2b3c339f",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "56d32be6f1992f55817602e45ab1addb0d4da79e7094f0ec41a384d3f9fa7e62",
+    "file": "assets/art/relic-pilot/RX-P01-05.webp",
+    "sha256": "311c69b9d14dacb20e460a099006d2f661d9c556d9f2e23a380992e02adbff0e",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "pilot"
+  },
+  {
+    "asset_id": "RX-P01-09",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "对齐游标",
+    "wave": 2,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-02.png",
+    "sheet_cell": 6,
+    "source_sha256": "5eeaa320fba04ae73c56b4bd84683482ffe3984e11ac655d7ae228ec2b3c339f",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "56d32be6f1992f55817602e45ab1addb0d4da79e7094f0ec41a384d3f9fa7e62",
+    "file": "assets/art/relic-pilot/RX-P01-09.webp",
+    "sha256": "bb81d52d9ea3d2c074a5223929c47aed68b68b739a8c57ca5beed202920a8bd8",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "pilot"
+  },
+  {
+    "asset_id": "RX-P01-15",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "斜纹工签",
+    "wave": 2,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-02.png",
+    "sheet_cell": 7,
+    "source_sha256": "5eeaa320fba04ae73c56b4bd84683482ffe3984e11ac655d7ae228ec2b3c339f",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "56d32be6f1992f55817602e45ab1addb0d4da79e7094f0ec41a384d3f9fa7e62",
+    "file": "assets/art/relic-pilot/RX-P01-15.webp",
+    "sha256": "69c41695b4e71cebd6d980f5feed981d3a7d00e9b58067083e82d05ecb2245b6",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "pilot"
+  },
+  {
+    "asset_id": "RX-P02-02",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "交稿封签",
+    "wave": 2,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-02.png",
+    "sheet_cell": 8,
+    "source_sha256": "5eeaa320fba04ae73c56b4bd84683482ffe3984e11ac655d7ae228ec2b3c339f",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "56d32be6f1992f55817602e45ab1addb0d4da79e7094f0ec41a384d3f9fa7e62",
+    "file": "assets/art/relic-pilot/RX-P02-02.webp",
+    "sha256": "b3b4e617f6d1c97e6b56b29edd7563fe8ae79f3976b03867a54f9685ddae2096",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "pilot"
+  },
+  {
+    "asset_id": "RX-P02-07",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "布面隔页",
+    "wave": 2,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-03.png",
+    "sheet_cell": 1,
+    "source_sha256": "a31ee872a1072764113ca14478a1605fad7d85937fe24b56e4d7cb45f3b61127",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "b19453cd3ff287349b71e05f9e71e0173fb2ed7361248a2f7fbb109263a5de5c",
+    "file": "assets/art/relic-pilot/RX-P02-07.webp",
+    "sha256": "564e2655bd72644b797ca29e595c5e55772f40281c124cbc9c080e4fe53ac785",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "pilot"
+  },
+  {
+    "asset_id": "RX-P02-15",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "交接批注页",
+    "wave": 2,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-03.png",
+    "sheet_cell": 2,
+    "source_sha256": "a31ee872a1072764113ca14478a1605fad7d85937fe24b56e4d7cb45f3b61127",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "b19453cd3ff287349b71e05f9e71e0173fb2ed7361248a2f7fbb109263a5de5c",
+    "file": "assets/art/relic-pilot/RX-P02-15.webp",
+    "sha256": "1b3e0e85394339e220cfea491d44c8391204e4ccd1dc615890aeef2e79afe659",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "pilot"
+  },
+  {
+    "asset_id": "RX-P03-05",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "先导试纸",
+    "wave": 2,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-03.png",
+    "sheet_cell": 3,
+    "source_sha256": "a31ee872a1072764113ca14478a1605fad7d85937fe24b56e4d7cb45f3b61127",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "b19453cd3ff287349b71e05f9e71e0173fb2ed7361248a2f7fbb109263a5de5c",
+    "file": "assets/art/relic-pilot/RX-P03-05.webp",
+    "sha256": "e5920ebe7ff6364dcb87a568db01e0eb5be5b88cb847c13a4d88fb48762a0411",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "pilot"
+  },
+  {
+    "asset_id": "RX-P03-09",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "六格批注尺",
+    "wave": 2,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-fix-01.png",
+    "sheet_cell": 2,
+    "source_sha256": "e9f0056850534a5a7d349deb6ba14b0bb53df9b0071b6a69ac7407892a04f446",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1024",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1024
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/corrections.jsonl",
+    "prompt_sha256": "a21b912e0ebccb08ff7bacf9d6186c449b37d5f9b582e5f24a1595d9233b4e65",
+    "file": "assets/art/relic-pilot/RX-P03-09.webp",
+    "sha256": "bba91fd631d4ad5148e946a1dc36da4c0654629e055b1a2ed4f1fa6d76c88715",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 2,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "pilot"
+  },
+  {
+    "asset_id": "RX-P03-16",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "无菌记录套",
+    "wave": 2,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-fix-01.png",
+    "sheet_cell": 3,
+    "source_sha256": "e9f0056850534a5a7d349deb6ba14b0bb53df9b0071b6a69ac7407892a04f446",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1024",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1024
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/corrections.jsonl",
+    "prompt_sha256": "a21b912e0ebccb08ff7bacf9d6186c449b37d5f9b582e5f24a1595d9233b4e65",
+    "file": "assets/art/relic-pilot/RX-P03-16.webp",
+    "sha256": "6f8ef415f4d0209d13e6b0429c2228c13471062c54e22d810b976c952e3a7d64",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 2,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "pilot"
+  },
+  {
+    "asset_id": "RX-P04-06",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "换班挂牌",
+    "wave": 2,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-03.png",
+    "sheet_cell": 6,
+    "source_sha256": "a31ee872a1072764113ca14478a1605fad7d85937fe24b56e4d7cb45f3b61127",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "b19453cd3ff287349b71e05f9e71e0173fb2ed7361248a2f7fbb109263a5de5c",
+    "file": "assets/art/relic-pilot/RX-P04-06.webp",
+    "sha256": "447beaf421f62f12a769cd5a162891b234244a2588373a9d153972d91ee53477",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "pilot"
+  },
+  {
+    "asset_id": "RX-P04-08",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "轮值秒表",
+    "wave": 2,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-03.png",
+    "sheet_cell": 7,
+    "source_sha256": "a31ee872a1072764113ca14478a1605fad7d85937fe24b56e4d7cb45f3b61127",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "b19453cd3ff287349b71e05f9e71e0173fb2ed7361248a2f7fbb109263a5de5c",
+    "file": "assets/art/relic-pilot/RX-P04-08.webp",
+    "sha256": "6af7c014ff4585226802549a41664c21ae91ef26b5ab31cf95b49c5baa3c627d",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "pilot"
+  },
+  {
+    "asset_id": "RX-P04-11",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "单桌桌牌",
+    "wave": 2,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-03.png",
+    "sheet_cell": 8,
+    "source_sha256": "a31ee872a1072764113ca14478a1605fad7d85937fe24b56e4d7cb45f3b61127",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "b19453cd3ff287349b71e05f9e71e0173fb2ed7361248a2f7fbb109263a5de5c",
+    "file": "assets/art/relic-pilot/RX-P04-11.webp",
+    "sha256": "18d2d725f361ea40f74dcffcae03d1fd0e3e25e74dc42df946c587073b981713",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "pilot"
+  },
+  {
+    "asset_id": "RX-C03",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "四色索引贴",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-04.png",
+    "sheet_cell": 1,
+    "source_sha256": "3d1bdaa073303173ed88da8a128f1a1080f85211f3655324640119044dcbbbc9",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "51d1ad77efd50c157d97476b46ce8b4abf77014155e84c728f85923c1081201d",
+    "file": "assets/art/relic-pilot/RX-C03.webp",
+    "sha256": "41de1849bad24155127fbdcc4595d0f76c804169cf17f23b83201aad028b4db5",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-C04",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "翻面计时器",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-04.png",
+    "sheet_cell": 2,
+    "source_sha256": "3d1bdaa073303173ed88da8a128f1a1080f85211f3655324640119044dcbbbc9",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "51d1ad77efd50c157d97476b46ce8b4abf77014155e84c728f85923c1081201d",
+    "file": "assets/art/relic-pilot/RX-C04.webp",
+    "sha256": "7f348aa64dd93e14636e6195272b4a317e952cc70db1aed7a697443050dd60d8",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-C06",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "半格充电宝",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-04.png",
+    "sheet_cell": 3,
+    "source_sha256": "3d1bdaa073303173ed88da8a128f1a1080f85211f3655324640119044dcbbbc9",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "51d1ad77efd50c157d97476b46ce8b4abf77014155e84c728f85923c1081201d",
+    "file": "assets/art/relic-pilot/RX-C06.webp",
+    "sha256": "b31d83d2bac235bf6acf762f40c5e5999522198101023b732256d7bd0dec8b5a",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-C07",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "响片书夹",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-04.png",
+    "sheet_cell": 4,
+    "source_sha256": "3d1bdaa073303173ed88da8a128f1a1080f85211f3655324640119044dcbbbc9",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "51d1ad77efd50c157d97476b46ce8b4abf77014155e84c728f85923c1081201d",
+    "file": "assets/art/relic-pilot/RX-C07.webp",
+    "sha256": "c83404e7bb04974e1722e6ad432ee4701991cf02f8a8e7351181f76a2d41910a",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-C08",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "抽查卷夹",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-04.png",
+    "sheet_cell": 5,
+    "source_sha256": "3d1bdaa073303173ed88da8a128f1a1080f85211f3655324640119044dcbbbc9",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "51d1ad77efd50c157d97476b46ce8b4abf77014155e84c728f85923c1081201d",
+    "file": "assets/art/relic-pilot/RX-C08.webp",
+    "sha256": "3ea81a916345cf5d6163bbb88ec94eb3613fa6f42774ee5c057028219437774d",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-C10",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "秒针笔",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-04.png",
+    "sheet_cell": 6,
+    "source_sha256": "3d1bdaa073303173ed88da8a128f1a1080f85211f3655324640119044dcbbbc9",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "51d1ad77efd50c157d97476b46ce8b4abf77014155e84c728f85923c1081201d",
+    "file": "assets/art/relic-pilot/RX-C10.webp",
+    "sha256": "7516f13b6573be8b395d6ad7428d9d6f660b3cd4ebbf8accec3c7b624c09fddd",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-C11",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "回形针盒",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-04.png",
+    "sheet_cell": 7,
+    "source_sha256": "3d1bdaa073303173ed88da8a128f1a1080f85211f3655324640119044dcbbbc9",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "51d1ad77efd50c157d97476b46ce8b4abf77014155e84c728f85923c1081201d",
+    "file": "assets/art/relic-pilot/RX-C11.webp",
+    "sha256": "06bc2cf06362910aa9b30b518200735ef8d0932c4fff00781117c7f258c40e0b",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-C12",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "余量便签",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-04.png",
+    "sheet_cell": 8,
+    "source_sha256": "3d1bdaa073303173ed88da8a128f1a1080f85211f3655324640119044dcbbbc9",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "51d1ad77efd50c157d97476b46ce8b4abf77014155e84c728f85923c1081201d",
+    "file": "assets/art/relic-pilot/RX-C12.webp",
+    "sha256": "4b695f38becde8b21fe11cd9646fcd550643c7405d587a6911b5ab4cf16f26bc",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-C13",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "旧键帽",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-05.png",
+    "sheet_cell": 1,
+    "source_sha256": "a598cb8f957e15e8d8c7c8a485dcee34ec671b1fcb407a280811d30d8da26472",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "e9a2a63ee773e149aff58efe883fab5f8dd0aa7c350482ede1ab97c5b722646c",
+    "file": "assets/art/relic-pilot/RX-C13.webp",
+    "sha256": "82ece4e5051464509a0a7300354bde16a869342b968b6ba348748ddea9648c42",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-C14",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "空页夹",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-05.png",
+    "sheet_cell": 2,
+    "source_sha256": "a598cb8f957e15e8d8c7c8a485dcee34ec671b1fcb407a280811d30d8da26472",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "e9a2a63ee773e149aff58efe883fab5f8dd0aa7c350482ede1ab97c5b722646c",
+    "file": "assets/art/relic-pilot/RX-C14.webp",
+    "sha256": "474657c980b8f2c081d6d5510007593a02f1a1fd587213a17cf3b0515ab3e3c5",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-C15",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "活动扳手",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-05.png",
+    "sheet_cell": 3,
+    "source_sha256": "a598cb8f957e15e8d8c7c8a485dcee34ec671b1fcb407a280811d30d8da26472",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "e9a2a63ee773e149aff58efe883fab5f8dd0aa7c350482ede1ab97c5b722646c",
+    "file": "assets/art/relic-pilot/RX-C15.webp",
+    "sha256": "d519c563c80cd87b07af3b47a9d26482c8ed7e8620e27ed51f0be428cc00c2e7",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-C16",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "负担隔层",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-05.png",
+    "sheet_cell": 4,
+    "source_sha256": "a598cb8f957e15e8d8c7c8a485dcee34ec671b1fcb407a280811d30d8da26472",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "e9a2a63ee773e149aff58efe883fab5f8dd0aa7c350482ede1ab97c5b722646c",
+    "file": "assets/art/relic-pilot/RX-C16.webp",
+    "sha256": "6edd24694b0a1b75059b89d63c1cdc22caacb5affbb1d9f47fb27602fc6e1c93",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-C18",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "护眼灯",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-05.png",
+    "sheet_cell": 5,
+    "source_sha256": "a598cb8f957e15e8d8c7c8a485dcee34ec671b1fcb407a280811d30d8da26472",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "e9a2a63ee773e149aff58efe883fab5f8dd0aa7c350482ede1ab97c5b722646c",
+    "file": "assets/art/relic-pilot/RX-C18.webp",
+    "sha256": "4a03c2e73c252155a8e057f42e18f349459d5a69391d7ee6093c3d87b6932c0b",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-C19",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "急救糖块",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-05.png",
+    "sheet_cell": 6,
+    "source_sha256": "a598cb8f957e15e8d8c7c8a485dcee34ec671b1fcb407a280811d30d8da26472",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "e9a2a63ee773e149aff58efe883fab5f8dd0aa7c350482ede1ab97c5b722646c",
+    "file": "assets/art/relic-pilot/RX-C19.webp",
+    "sha256": "d8661dce0b85fa8038bbe08967259bded433940f2293aebdae06baf8296e8d62",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-C20",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "护角贴",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-05.png",
+    "sheet_cell": 7,
+    "source_sha256": "a598cb8f957e15e8d8c7c8a485dcee34ec671b1fcb407a280811d30d8da26472",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "e9a2a63ee773e149aff58efe883fab5f8dd0aa7c350482ede1ab97c5b722646c",
+    "file": "assets/art/relic-pilot/RX-C20.webp",
+    "sha256": "7ac2f1232f745b230dd09739ee9e2122e701b3cc753b6b26c7b309ddea743c69",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-C21",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "错题订正簿",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-05.png",
+    "sheet_cell": 8,
+    "source_sha256": "a598cb8f957e15e8d8c7c8a485dcee34ec671b1fcb407a280811d30d8da26472",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "e9a2a63ee773e149aff58efe883fab5f8dd0aa7c350482ede1ab97c5b722646c",
+    "file": "assets/art/relic-pilot/RX-C21.webp",
+    "sha256": "d4667fe8ed04c9a38c595ee3893c116f1ee7450fbc1c558618177cd95623b594",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-C22",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "考场袖标",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-06.png",
+    "sheet_cell": 1,
+    "source_sha256": "16f819cc4282d6c808b609eef70aa78628a1183db87fea12d78691359f4959e7",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "b0cd55a20b8556ec3a35de7c40cdc9c50b2d6231696b14cb58f893a1891f065c",
+    "file": "assets/art/relic-pilot/RX-C22.webp",
+    "sha256": "9704a412ecde2aa94cacf904e8753a137fb323debea069f0f16a7489388d70a3",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-C24",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "接线备用头",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-06.png",
+    "sheet_cell": 2,
+    "source_sha256": "16f819cc4282d6c808b609eef70aa78628a1183db87fea12d78691359f4959e7",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "b0cd55a20b8556ec3a35de7c40cdc9c50b2d6231696b14cb58f893a1891f065c",
+    "file": "assets/art/relic-pilot/RX-C24.webp",
+    "sha256": "36335dde9a9320b2ba63772ff45cfe5f09753844b0a87dcd0dc6ef9ed191bf70",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-C25",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "二手教材封套",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-06.png",
+    "sheet_cell": 3,
+    "source_sha256": "16f819cc4282d6c808b609eef70aa78628a1183db87fea12d78691359f4959e7",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "b0cd55a20b8556ec3a35de7c40cdc9c50b2d6231696b14cb58f893a1891f065c",
+    "file": "assets/art/relic-pilot/RX-C25.webp",
+    "sha256": "d17793ded8a75d711beb5d910290ff349de6e7f2f7599b415f3dadf403d104df",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-C27",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "打孔记账册",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-06.png",
+    "sheet_cell": 4,
+    "source_sha256": "16f819cc4282d6c808b609eef70aa78628a1183db87fea12d78691359f4959e7",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "b0cd55a20b8556ec3a35de7c40cdc9c50b2d6231696b14cb58f893a1891f065c",
+    "file": "assets/art/relic-pilot/RX-C27.webp",
+    "sha256": "4f0d429991af572766fec63dfc303ac701ae7f7801a2457da3a2f9e5af510241",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-C29",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "双联发票",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-06.png",
+    "sheet_cell": 5,
+    "source_sha256": "16f819cc4282d6c808b609eef70aa78628a1183db87fea12d78691359f4959e7",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "b0cd55a20b8556ec3a35de7c40cdc9c50b2d6231696b14cb58f893a1891f065c",
+    "file": "assets/art/relic-pilot/RX-C29.webp",
+    "sha256": "66d3fb14a31e777862e16951248ceb20d8d7ada281d8dc34f3bc0dc8fb88ff36",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-C30",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "竞赛讲评单",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-06.png",
+    "sheet_cell": 6,
+    "source_sha256": "16f819cc4282d6c808b609eef70aa78628a1183db87fea12d78691359f4959e7",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "b0cd55a20b8556ec3a35de7c40cdc9c50b2d6231696b14cb58f893a1891f065c",
+    "file": "assets/art/relic-pilot/RX-C30.webp",
+    "sha256": "9de741843cc4d77a82e52a2b38ef1261db10d374c74cbbbb273094da027e3795",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-C31",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "选修试听券",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-06.png",
+    "sheet_cell": 7,
+    "source_sha256": "16f819cc4282d6c808b609eef70aa78628a1183db87fea12d78691359f4959e7",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "b0cd55a20b8556ec3a35de7c40cdc9c50b2d6231696b14cb58f893a1891f065c",
+    "file": "assets/art/relic-pilot/RX-C31.webp",
+    "sha256": "4307305db46162e4abc1f76e92ad6d8ac29189040b5429f6d24d119ab47f6cd9",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-C32",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "饭后散步券",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-06.png",
+    "sheet_cell": 8,
+    "source_sha256": "16f819cc4282d6c808b609eef70aa78628a1183db87fea12d78691359f4959e7",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "b0cd55a20b8556ec3a35de7c40cdc9c50b2d6231696b14cb58f893a1891f065c",
+    "file": "assets/art/relic-pilot/RX-C32.webp",
+    "sha256": "321c7e67289f2fc868395f121956b244da945707e4907c18903c040ac25eed73",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-C33",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "通宵座位牌",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-07.png",
+    "sheet_cell": 1,
+    "source_sha256": "31e4a77ad5f6c36a3ede730461016049a72a7660601dcec8894e32378d6a0f47",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "dda90a6cb32b6adb7809fe02d5fdf5077fdc61b6aeb8cec0875d3827055146e2",
+    "file": "assets/art/relic-pilot/RX-C33.webp",
+    "sha256": "79065190a67f7f31f23df7ef5616f0a2f052e5c5d42020da59788e24dfbf72b4",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-C34",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "限页作业簿",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-07.png",
+    "sheet_cell": 2,
+    "source_sha256": "31e4a77ad5f6c36a3ede730461016049a72a7660601dcec8894e32378d6a0f47",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "dda90a6cb32b6adb7809fe02d5fdf5077fdc61b6aeb8cec0875d3827055146e2",
+    "file": "assets/art/relic-pilot/RX-C34.webp",
+    "sha256": "37cb1dcea85ff588fe188424f86153ffa52e845bc109870f52b918ca8e9e0561",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-C35",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "空白答题钟",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-07.png",
+    "sheet_cell": 3,
+    "source_sha256": "31e4a77ad5f6c36a3ede730461016049a72a7660601dcec8894e32378d6a0f47",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "dda90a6cb32b6adb7809fe02d5fdf5077fdc61b6aeb8cec0875d3827055146e2",
+    "file": "assets/art/relic-pilot/RX-C35.webp",
+    "sha256": "e9236610c4ba77de3e75770d51d5e2db260fe535344ea934b4c2c0eeccc883d6",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-C36",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "密封草稿袋",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-07.png",
+    "sheet_cell": 4,
+    "source_sha256": "31e4a77ad5f6c36a3ede730461016049a72a7660601dcec8894e32378d6a0f47",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "dda90a6cb32b6adb7809fe02d5fdf5077fdc61b6aeb8cec0875d3827055146e2",
+    "file": "assets/art/relic-pilot/RX-C36.webp",
+    "sha256": "9201d8df78c0029fb5586fd8e6cd0fe1ae3565d6832b97ee5930059c93a34745",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-C37",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "提纲夹板",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-07.png",
+    "sheet_cell": 5,
+    "source_sha256": "31e4a77ad5f6c36a3ede730461016049a72a7660601dcec8894e32378d6a0f47",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "dda90a6cb32b6adb7809fe02d5fdf5077fdc61b6aeb8cec0875d3827055146e2",
+    "file": "assets/art/relic-pilot/RX-C37.webp",
+    "sha256": "8c4f77c6688f46ef288c50987b95ef0b248329b59581777b4e92226e48000edb",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-C38",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "封榜登记册",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-07.png",
+    "sheet_cell": 6,
+    "source_sha256": "31e4a77ad5f6c36a3ede730461016049a72a7660601dcec8894e32378d6a0f47",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "dda90a6cb32b6adb7809fe02d5fdf5077fdc61b6aeb8cec0875d3827055146e2",
+    "file": "assets/art/relic-pilot/RX-C38.webp",
+    "sha256": "087c6302048596144d2ee0ead147b4a35a72dd1823e8217b7dfbb01179633d0f",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-C39",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "备用交卷章",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-fix-02.png",
+    "sheet_cell": 4,
+    "source_sha256": "e63e40777777d420475e1cd36ab0cd0f6d396c011edbf138821c62790a23be72",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1024",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1024
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/corrections.jsonl",
+    "prompt_sha256": "ac0164d60c2d2a843253cb5a98610a9f48b48c1a2d274a0d1bc86cc65bc9833f",
+    "file": "assets/art/relic-pilot/RX-C39.webp",
+    "sha256": "c7e7df342e2d14a56edb1fc81794766764273f48dcc8aa49b6c59d8ae33c4ffd",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 2,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-C40",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "导师签字页",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-fix-03.png",
+    "sheet_cell": 3,
+    "source_sha256": "1b0323d09872a8e14ad8505d3fd3cd54b6900212d8b8eb7066fa1fa93239ed31",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1024",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1024
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/corrections.jsonl",
+    "prompt_sha256": "6f159f21da1a213cb6ddb088165c6f11bfdab6955d356906c9d0278b617213f0",
+    "file": "assets/art/relic-pilot/RX-C40.webp",
+    "sha256": "4041342b1aefd94c79ec96244526caa62a24b2841d7bb813d70d2f2d2a11c4a8",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 2,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-P01-02",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "逆向箭头牌",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-08.png",
+    "sheet_cell": 1,
+    "source_sha256": "fcedd060922aab0727014c0d5182baf2655f8d821a4f25c7666c893f7d168146",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "8394fcc27bd459a0667a576a07c0422438dada3bd97aa6f24452f9067256e162",
+    "file": "assets/art/relic-pilot/RX-P01-02.webp",
+    "sha256": "4dbb88310da712113a79ea09fdb0a57a159d9b6f678eb894e6854bffeda72824",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-P01-03",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "三步测试板",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-08.png",
+    "sheet_cell": 2,
+    "source_sha256": "fcedd060922aab0727014c0d5182baf2655f8d821a4f25c7666c893f7d168146",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "8394fcc27bd459a0667a576a07c0422438dada3bd97aa6f24452f9067256e162",
+    "file": "assets/art/relic-pilot/RX-P01-03.webp",
+    "sha256": "e9b2b6851981e8a06a8a5336f182797518bb0f86a5fb93561df3ea6995e3b74e",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-P01-04",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "断点灯",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-08.png",
+    "sheet_cell": 3,
+    "source_sha256": "fcedd060922aab0727014c0d5182baf2655f8d821a4f25c7666c893f7d168146",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "8394fcc27bd459a0667a576a07c0422438dada3bd97aa6f24452f9067256e162",
+    "file": "assets/art/relic-pilot/RX-P01-04.webp",
+    "sha256": "65a7830bada125e8cb33915c7470435a2dfcf70115f20153b4ad9f835c0c6871",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-P01-06",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "版本回滚扣",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-08.png",
+    "sheet_cell": 4,
+    "source_sha256": "fcedd060922aab0727014c0d5182baf2655f8d821a4f25c7666c893f7d168146",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "8394fcc27bd459a0667a576a07c0422438dada3bd97aa6f24452f9067256e162",
+    "file": "assets/art/relic-pilot/RX-P01-06.webp",
+    "sha256": "19a2ad540add4c162bd7744eaf5732d361e0cf610784f62dad644ca8f823e111",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-P01-07",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "复测软尺",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-fix-03.png",
+    "sheet_cell": 1,
+    "source_sha256": "1b0323d09872a8e14ad8505d3fd3cd54b6900212d8b8eb7066fa1fa93239ed31",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1024",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1024
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/corrections.jsonl",
+    "prompt_sha256": "6f159f21da1a213cb6ddb088165c6f11bfdab6955d356906c9d0278b617213f0",
+    "file": "assets/art/relic-pilot/RX-P01-07.webp",
+    "sha256": "76b7591bb9e40ba433116817e9b6c6e1224c3ba53c28e7d0ade0c512b0adeba6",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 2,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-P01-08",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "胶装复盘册",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-08.png",
+    "sheet_cell": 6,
+    "source_sha256": "fcedd060922aab0727014c0d5182baf2655f8d821a4f25c7666c893f7d168146",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "8394fcc27bd459a0667a576a07c0422438dada3bd97aa6f24452f9067256e162",
+    "file": "assets/art/relic-pilot/RX-P01-08.webp",
+    "sha256": "0135db002da0e7794ca96c3df1150b095bd55393aa767b6c017c5e3f219e3047",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-P01-10",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "工位挂签",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-fix-01.png",
+    "sheet_cell": 4,
+    "source_sha256": "e9f0056850534a5a7d349deb6ba14b0bb53df9b0071b6a69ac7407892a04f446",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1024",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1024
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/corrections.jsonl",
+    "prompt_sha256": "a21b912e0ebccb08ff7bacf9d6186c449b37d5f9b582e5f24a1595d9233b4e65",
+    "file": "assets/art/relic-pilot/RX-P01-10.webp",
+    "sha256": "9b2f1bf7eb54388039b8555f7a6372e699f801e7e841a2761a175fcd88616c89",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 2,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-P01-11",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "复验标尺",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-08.png",
+    "sheet_cell": 8,
+    "source_sha256": "fcedd060922aab0727014c0d5182baf2655f8d821a4f25c7666c893f7d168146",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "8394fcc27bd459a0667a576a07c0422438dada3bd97aa6f24452f9067256e162",
+    "file": "assets/art/relic-pilot/RX-P01-11.webp",
+    "sha256": "82103d12cf5c422fdf15143c710bd1375d97a863f75cc25cd519a2a335bcab39",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-P01-12",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "双面施工牌",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-09.png",
+    "sheet_cell": 1,
+    "source_sha256": "30a59cfbb11622035fc91439c4ff504171b0d1003e67b46b20a07aeed76ab588",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "5df0b58f7686b09cc9091579afde52481a908d6a461b7961d2808be01b32438b",
+    "file": "assets/art/relic-pilot/RX-P01-12.webp",
+    "sha256": "95c4c93fc80386183e8cabe23118b4b8247d15824ff3baa083e1dbbdd35e5eda",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-P01-13",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "动作分解图",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-09.png",
+    "sheet_cell": 2,
+    "source_sha256": "30a59cfbb11622035fc91439c4ff504171b0d1003e67b46b20a07aeed76ab588",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "5df0b58f7686b09cc9091579afde52481a908d6a461b7961d2808be01b32438b",
+    "file": "assets/art/relic-pilot/RX-P01-13.webp",
+    "sha256": "361a40d8dd5382574e55e8a62cdd60c409611cb491164fa2f53fc0294b965901",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-P01-14",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "缺页速记",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-09.png",
+    "sheet_cell": 3,
+    "source_sha256": "30a59cfbb11622035fc91439c4ff504171b0d1003e67b46b20a07aeed76ab588",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "5df0b58f7686b09cc9091579afde52481a908d6a461b7961d2808be01b32438b",
+    "file": "assets/art/relic-pilot/RX-P01-14.webp",
+    "sha256": "bc0d90f2a92ea3e87551ec790b9359e7ba3a7d02776c53042a9036d03cf03782",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-P01-16",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "逆排施工卡",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-09.png",
+    "sheet_cell": 4,
+    "source_sha256": "30a59cfbb11622035fc91439c4ff504171b0d1003e67b46b20a07aeed76ab588",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "5df0b58f7686b09cc9091579afde52481a908d6a461b7961d2808be01b32438b",
+    "file": "assets/art/relic-pilot/RX-P01-16.webp",
+    "sha256": "75548dbc8ae80c94942baa91ad32ad69882f3631a279fb11930387b0d17ebdbf",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-P02-03",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "免胶引文签",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-09.png",
+    "sheet_cell": 5,
+    "source_sha256": "30a59cfbb11622035fc91439c4ff504171b0d1003e67b46b20a07aeed76ab588",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "5df0b58f7686b09cc9091579afde52481a908d6a461b7961d2808be01b32438b",
+    "file": "assets/art/relic-pilot/RX-P02-03.webp",
+    "sha256": "5e8ea5cc9d1d000cf53710b06f55bd30651771b0dc1d0f2c858a5779a3e39ab6",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-P02-04",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "校样灯",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-09.png",
+    "sheet_cell": 6,
+    "source_sha256": "30a59cfbb11622035fc91439c4ff504171b0d1003e67b46b20a07aeed76ab588",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "5df0b58f7686b09cc9091579afde52481a908d6a461b7961d2808be01b32438b",
+    "file": "assets/art/relic-pilot/RX-P02-04.webp",
+    "sha256": "2805bd3d7915aee6fbe71764fcfbb14e7eecdf54e905e6b70a38bcd6353cfca0",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-P02-05",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "彩边终审函",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-09.png",
+    "sheet_cell": 7,
+    "source_sha256": "30a59cfbb11622035fc91439c4ff504171b0d1003e67b46b20a07aeed76ab588",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "5df0b58f7686b09cc9091579afde52481a908d6a461b7961d2808be01b32438b",
+    "file": "assets/art/relic-pilot/RX-P02-05.webp",
+    "sha256": "994e5973f4febb9ee5eb9c251add96ce20110d989e1b3984f9afa65340217c13",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-P02-06",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "短审通道",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-09.png",
+    "sheet_cell": 8,
+    "source_sha256": "30a59cfbb11622035fc91439c4ff504171b0d1003e67b46b20a07aeed76ab588",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "5df0b58f7686b09cc9091579afde52481a908d6a461b7961d2808be01b32438b",
+    "file": "assets/art/relic-pilot/RX-P02-06.webp",
+    "sha256": "ce3a7aa318a00f2bb006029d526577c520c373f240f5d1ac088819725b2bffa5",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-P02-08",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "双槽书托",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-10.png",
+    "sheet_cell": 1,
+    "source_sha256": "afda70e931adcb9c40c5f780d3a6289dc788f64962e836a81c1c20a8f018669e",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "baed54e848b5fed8fcaa99831747c775274abaf004590f69b3ab68a5f1d52709",
+    "file": "assets/art/relic-pilot/RX-P02-08.webp",
+    "sha256": "56da6827a4c7507fa4f43609a9358900841be0eb650d481536999fc65d1bf9b2",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-P02-09",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "窄脊活页夹",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-10.png",
+    "sheet_cell": 2,
+    "source_sha256": "afda70e931adcb9c40c5f780d3a6289dc788f64962e836a81c1c20a8f018669e",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "baed54e848b5fed8fcaa99831747c775274abaf004590f69b3ab68a5f1d52709",
+    "file": "assets/art/relic-pilot/RX-P02-09.webp",
+    "sha256": "7aebf013e92d586a19e4502829d95f24fea75503cbbb0804551cb6e4ba7f1e42",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-P02-10",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "章序定位栓",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-10.png",
+    "sheet_cell": 3,
+    "source_sha256": "afda70e931adcb9c40c5f780d3a6289dc788f64962e836a81c1c20a8f018669e",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "baed54e848b5fed8fcaa99831747c775274abaf004590f69b3ab68a5f1d52709",
+    "file": "assets/art/relic-pilot/RX-P02-10.webp",
+    "sha256": "be8a644c3318ed24f5fa36c78f81d490610232d1a8f331d3a11c52d15f410139",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-P02-11",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "旁注刻刀",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-10.png",
+    "sheet_cell": 4,
+    "source_sha256": "afda70e931adcb9c40c5f780d3a6289dc788f64962e836a81c1c20a8f018669e",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "baed54e848b5fed8fcaa99831747c775274abaf004590f69b3ab68a5f1d52709",
+    "file": "assets/art/relic-pilot/RX-P02-11.webp",
+    "sha256": "b5ce84891dfaff5e83ab6e413dd60729e7a2d52e76015bd903857c37b45e83df",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-P02-12",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "合订书脊",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-10.png",
+    "sheet_cell": 5,
+    "source_sha256": "afda70e931adcb9c40c5f780d3a6289dc788f64962e836a81c1c20a8f018669e",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "baed54e848b5fed8fcaa99831747c775274abaf004590f69b3ab68a5f1d52709",
+    "file": "assets/art/relic-pilot/RX-P02-12.webp",
+    "sha256": "9b3787baeb463faa84f53308c5f0b31f927cf451629d2c0c6a6bfc1d3fe27e09",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-P02-13",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "手稿回条",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-10.png",
+    "sheet_cell": 6,
+    "source_sha256": "afda70e931adcb9c40c5f780d3a6289dc788f64962e836a81c1c20a8f018669e",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "baed54e848b5fed8fcaa99831747c775274abaf004590f69b3ab68a5f1d52709",
+    "file": "assets/art/relic-pilot/RX-P02-13.webp",
+    "sha256": "0ab18f8bd05ba70ad08a06fd449d0a6492c4eddc145cc5478ba349d1a2f511b2",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-P02-14",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "转题夹",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-10.png",
+    "sheet_cell": 7,
+    "source_sha256": "afda70e931adcb9c40c5f780d3a6289dc788f64962e836a81c1c20a8f018669e",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "baed54e848b5fed8fcaa99831747c775274abaf004590f69b3ab68a5f1d52709",
+    "file": "assets/art/relic-pilot/RX-P02-14.webp",
+    "sha256": "04182d0fdca6c833f1cff2b13b9e2a5d852e329494b31b8990683b3d7eaed4dd",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-P02-16",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "空架提醒牌",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-10.png",
+    "sheet_cell": 8,
+    "source_sha256": "afda70e931adcb9c40c5f780d3a6289dc788f64962e836a81c1c20a8f018669e",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "baed54e848b5fed8fcaa99831747c775274abaf004590f69b3ab68a5f1d52709",
+    "file": "assets/art/relic-pilot/RX-P02-16.webp",
+    "sha256": "b8a47f064b0b5f403988fe4e230403c33ee9bdd4b319798b1c98748220fe8017",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-P03-02",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "缓释纸包",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-11.png",
+    "sheet_cell": 1,
+    "source_sha256": "34fb09a2268fe7b70cbe431b6b5dc47480f8411aa1c1ae29bfeaf302e8513b05",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "64066204d13fa30d4b3db488aa833a0124f822bad54fce2a0adf44becc66945f",
+    "file": "assets/art/relic-pilot/RX-P03-02.webp",
+    "sha256": "b6cb7611a667672723b9a2f9f1000f903b2f1fc2e6d18fbc53c51efb207e916f",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-P03-03",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "沉降量尺",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-11.png",
+    "sheet_cell": 2,
+    "source_sha256": "34fb09a2268fe7b70cbe431b6b5dc47480f8411aa1c1ae29bfeaf302e8513b05",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "64066204d13fa30d4b3db488aa833a0124f822bad54fce2a0adf44becc66945f",
+    "file": "assets/art/relic-pilot/RX-P03-03.webp",
+    "sha256": "f919db162bab8be89f33547281e9cfcb81b7f3c21db59f06c9a367953fff47f7",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-P03-04",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "保温样本盒",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-11.png",
+    "sheet_cell": 3,
+    "source_sha256": "34fb09a2268fe7b70cbe431b6b5dc47480f8411aa1c1ae29bfeaf302e8513b05",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "64066204d13fa30d4b3db488aa833a0124f822bad54fce2a0adf44becc66945f",
+    "file": "assets/art/relic-pilot/RX-P03-04.webp",
+    "sha256": "7f815932c7639cb9547d84b56c8c49797284d3a572e8fbda12f3aaf08af66010",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-P03-06",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "并联滴管",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-11.png",
+    "sheet_cell": 4,
+    "source_sha256": "34fb09a2268fe7b70cbe431b6b5dc47480f8411aa1c1ae29bfeaf302e8513b05",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "64066204d13fa30d4b3db488aa833a0124f822bad54fce2a0adf44becc66945f",
+    "file": "assets/art/relic-pilot/RX-P03-06.webp",
+    "sha256": "26b4c1783beb4c1b7c7621e12fe14ff07a7affb529f7e5e45fd4fce480b0ce0e",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-P03-07",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "反问节拍器",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-fix-02.png",
+    "sheet_cell": 1,
+    "source_sha256": "e63e40777777d420475e1cd36ab0cd0f6d396c011edbf138821c62790a23be72",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1024",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1024
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/corrections.jsonl",
+    "prompt_sha256": "ac0164d60c2d2a843253cb5a98610a9f48b48c1a2d274a0d1bc86cc65bc9833f",
+    "file": "assets/art/relic-pilot/RX-P03-07.webp",
+    "sha256": "4dfe1c6441e8708990fcb31e27cae4d7e9c83e5a5889352ea63a2455249bbc54",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 2,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-P03-08",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "对照尺",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-11.png",
+    "sheet_cell": 6,
+    "source_sha256": "34fb09a2268fe7b70cbe431b6b5dc47480f8411aa1c1ae29bfeaf302e8513b05",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "64066204d13fa30d4b3db488aa833a0124f822bad54fce2a0adf44becc66945f",
+    "file": "assets/art/relic-pilot/RX-P03-08.webp",
+    "sha256": "ee2da01a3b178a2dc66f93182a3d39550883021b2c10674784e05c669faf85b6",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-P03-10",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "低噪隔板",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-11.png",
+    "sheet_cell": 7,
+    "source_sha256": "34fb09a2268fe7b70cbe431b6b5dc47480f8411aa1c1ae29bfeaf302e8513b05",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "64066204d13fa30d4b3db488aa833a0124f822bad54fce2a0adf44becc66945f",
+    "file": "assets/art/relic-pilot/RX-P03-10.webp",
+    "sha256": "bd04ef8b820f25259487e54068c34d12fef6ffa910e01076347703aa43b5499a",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-P03-11",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "三色校准夹",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-11.png",
+    "sheet_cell": 8,
+    "source_sha256": "34fb09a2268fe7b70cbe431b6b5dc47480f8411aa1c1ae29bfeaf302e8513b05",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "64066204d13fa30d4b3db488aa833a0124f822bad54fce2a0adf44becc66945f",
+    "file": "assets/art/relic-pilot/RX-P03-11.webp",
+    "sha256": "11f17bae4477aed63e65d78e490812929900271a62b6d8df5cae23d703a742d4",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-P03-12",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "争点封条",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-12.png",
+    "sheet_cell": 1,
+    "source_sha256": "e2948ea748f727369dd255c0cfc79ec000d96f3c5cdf8edde122d734f30272fb",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "4c1e4154ef9fbdb315cc2ffa80ddd9662a0755efb94368604731ce8190ef99e4",
+    "file": "assets/art/relic-pilot/RX-P03-12.webp",
+    "sha256": "ed80a7ab8f9cd2df4f2d63d44156d245830c9ceeeffc47834a989ed5c6797ff7",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-P03-13",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "整理袖套",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-12.png",
+    "sheet_cell": 2,
+    "source_sha256": "e2948ea748f727369dd255c0cfc79ec000d96f3c5cdf8edde122d734f30272fb",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "4c1e4154ef9fbdb315cc2ffa80ddd9662a0755efb94368604731ce8190ef99e4",
+    "file": "assets/art/relic-pilot/RX-P03-13.webp",
+    "sha256": "99ddb2f634fc49c60aafa4b68445d9c7c8ee168c19f4774ee3340d58f28149a7",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-P03-14",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "重配标签",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-12.png",
+    "sheet_cell": 3,
+    "source_sha256": "e2948ea748f727369dd255c0cfc79ec000d96f3c5cdf8edde122d734f30272fb",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "4c1e4154ef9fbdb315cc2ffa80ddd9662a0755efb94368604731ce8190ef99e4",
+    "file": "assets/art/relic-pilot/RX-P03-14.webp",
+    "sha256": "e0b6ed8fb6fd453b266f6e0915bf477a398ac8aa28f91cbb52e03d35675dbdcc",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-P03-15",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "防潮样本袋",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-12.png",
+    "sheet_cell": 4,
+    "source_sha256": "e2948ea748f727369dd255c0cfc79ec000d96f3c5cdf8edde122d734f30272fb",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "4c1e4154ef9fbdb315cc2ffa80ddd9662a0755efb94368604731ce8190ef99e4",
+    "file": "assets/art/relic-pilot/RX-P03-15.webp",
+    "sha256": "a2425f71f8f9680507f611f2fb1e1039312cd7dfdbfe46b162e2469f49a1118a",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-P04-02",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "接驳手环",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-fix-02.png",
+    "sheet_cell": 2,
+    "source_sha256": "e63e40777777d420475e1cd36ab0cd0f6d396c011edbf138821c62790a23be72",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1024",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1024
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/corrections.jsonl",
+    "prompt_sha256": "ac0164d60c2d2a843253cb5a98610a9f48b48c1a2d274a0d1bc86cc65bc9833f",
+    "file": "assets/art/relic-pilot/RX-P04-02.webp",
+    "sha256": "b1290526e85a5474572a6321ef4fa3cb5542a43e42b65d3c597f76a92923173f",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 2,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-P04-03",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "值勤哨片",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-12.png",
+    "sheet_cell": 6,
+    "source_sha256": "e2948ea748f727369dd255c0cfc79ec000d96f3c5cdf8edde122d734f30272fb",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "4c1e4154ef9fbdb315cc2ffa80ddd9662a0755efb94368604731ce8190ef99e4",
+    "file": "assets/art/relic-pilot/RX-P04-03.webp",
+    "sha256": "79265349f9bf4ba115fc5bfa4672df0901cec5d092877dfb46fcb5fe38f1869e",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-P04-04",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "双人工作证",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-12.png",
+    "sheet_cell": 7,
+    "source_sha256": "e2948ea748f727369dd255c0cfc79ec000d96f3c5cdf8edde122d734f30272fb",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "4c1e4154ef9fbdb315cc2ffa80ddd9662a0755efb94368604731ce8190ef99e4",
+    "file": "assets/art/relic-pilot/RX-P04-04.webp",
+    "sha256": "29c647c2d7c869855ab85d458b527996facbdae60d14d24199c8cb1e6e9ce8a0",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-P04-05",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "加长工位牌",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-12.png",
+    "sheet_cell": 8,
+    "source_sha256": "e2948ea748f727369dd255c0cfc79ec000d96f3c5cdf8edde122d734f30272fb",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "4c1e4154ef9fbdb315cc2ffa80ddd9662a0755efb94368604731ce8190ef99e4",
+    "file": "assets/art/relic-pilot/RX-P04-05.webp",
+    "sha256": "2abdb8b49fe55d00acdbff6f2e443d34b63e656fe30ee3be58d5edc80b786dff",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-P04-07",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "补水瓶盖",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-13.png",
+    "sheet_cell": 1,
+    "source_sha256": "5f9d2775538455de43590ad8f14f689726fb94c52c4ae6d03e6d0865f38a044c",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "5c82ec214fbd6f6973480e7176469a95ace3341e4566d8c3f9852d6d4566bf44",
+    "file": "assets/art/relic-pilot/RX-P04-07.webp",
+    "sha256": "4c603e2f7a72ba9ad7c0aa3279c2cacb410b56f75e5b01693ddfe9065e780e67",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-P04-09",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "待补座牌",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-13.png",
+    "sheet_cell": 2,
+    "source_sha256": "5f9d2775538455de43590ad8f14f689726fb94c52c4ae6d03e6d0865f38a044c",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "5c82ec214fbd6f6973480e7176469a95ace3341e4566d8c3f9852d6d4566bf44",
+    "file": "assets/art/relic-pilot/RX-P04-09.webp",
+    "sha256": "4bca75b1132aaf435d3877119257608b81fe0933d1c7423a04c4a47bf7e7fb62",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-P04-10",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "交接钥匙扣",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-13.png",
+    "sheet_cell": 3,
+    "source_sha256": "5f9d2775538455de43590ad8f14f689726fb94c52c4ae6d03e6d0865f38a044c",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "5c82ec214fbd6f6973480e7176469a95ace3341e4566d8c3f9852d6d4566bf44",
+    "file": "assets/art/relic-pilot/RX-P04-10.webp",
+    "sha256": "f2375b6e3a87d85f6a69e1f645bfed5ec4c13d5e4ea9e095f2bdaee496b622b8",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-P04-12",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "考场装订线",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-fix-03.png",
+    "sheet_cell": 2,
+    "source_sha256": "1b0323d09872a8e14ad8505d3fd3cd54b6900212d8b8eb7066fa1fa93239ed31",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1024",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1024
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/corrections.jsonl",
+    "prompt_sha256": "6f159f21da1a213cb6ddb088165c6f11bfdab6955d356906c9d0278b617213f0",
+    "file": "assets/art/relic-pilot/RX-P04-12.webp",
+    "sha256": "2865e0bba096548c0872c1f54f96ace342bdc18f01ffbec73530bac77f094cf0",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 2,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-P04-13",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "无声提词卡",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-13.png",
+    "sheet_cell": 5,
+    "source_sha256": "5f9d2775538455de43590ad8f14f689726fb94c52c4ae6d03e6d0865f38a044c",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "5c82ec214fbd6f6973480e7176469a95ace3341e4566d8c3f9852d6d4566bf44",
+    "file": "assets/art/relic-pilot/RX-P04-13.webp",
+    "sha256": "f4adcdedf76d491156a51d5b34ecfbc58b5a72535804bfa032a1b15f961a5893",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-P04-14",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "速记答题条",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-13.png",
+    "sheet_cell": 6,
+    "source_sha256": "5f9d2775538455de43590ad8f14f689726fb94c52c4ae6d03e6d0865f38a044c",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "5c82ec214fbd6f6973480e7176469a95ace3341e4566d8c3f9852d6d4566bf44",
+    "file": "assets/art/relic-pilot/RX-P04-14.webp",
+    "sha256": "a21491f042b19f233b5dbf5e50d8cc0dd1f52c3cc6db7e8535f8829687aa57e7",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-P04-15",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "静默练习册",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-13.png",
+    "sheet_cell": 7,
+    "source_sha256": "5f9d2775538455de43590ad8f14f689726fb94c52c4ae6d03e6d0865f38a044c",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "5c82ec214fbd6f6973480e7176469a95ace3341e4566d8c3f9852d6d4566bf44",
+    "file": "assets/art/relic-pilot/RX-P04-15.webp",
+    "sha256": "fd24a42532249c0231c7d0bbf71cc458ca1da62f374493f7b039d80ce22b1088",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  },
+  {
+    "asset_id": "RX-P04-16",
+    "requirement_id": "FY-RELIC-ART-001",
+    "name": "双面排班表",
+    "wave": 0,
+    "source": "output/imagegen/relic-pilot-20261120/raw/RX-sheet-13.png",
+    "sheet_cell": 8,
+    "source_sha256": "5f9d2775538455de43590ad8f14f689726fb94c52c4ae6d03e6d0865f38a044c",
+    "service": "api-slb.jiji.cc",
+    "model": "gpt-image-2.5-sunburst",
+    "request_size": "1024x1536",
+    "quality": "medium",
+    "source_dimensions": [
+      1024,
+      1536
+    ],
+    "prompt_file": "output/imagegen/relic-pilot-20261120/jobs.jsonl",
+    "prompt_sha256": "5c82ec214fbd6f6973480e7176469a95ace3341e4566d8c3f9852d6d4566bf44",
+    "file": "assets/art/relic-pilot/RX-P04-16.webp",
+    "sha256": "114f9eb470d1f44ec8f7d710002c237c3e5079f43c725adaec41e31fc2dcad1a",
+    "dimensions": [
+      256,
+      256
+    ],
+    "version": 1,
+    "processing": "cut calibrated atlas cell; trim blank paper; preserve aspect; paper pad + lossless WebP",
+    "status": "art_only"
+  }
+]

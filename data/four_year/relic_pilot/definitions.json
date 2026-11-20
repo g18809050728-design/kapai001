@@ -1,0 +1,314 @@
+[
+  {
+    "id": "RX-C01",
+    "name_key": "晨课铃",
+    "rarity": "white",
+    "availability": "drop",
+    "tags": [
+      "rx_pilot"
+    ],
+    "rx": {
+      "owner": "C",
+      "text": "第 1 回合恢复自然专注后，获得 4 放松。"
+    }
+  },
+  {
+    "id": "RX-C02",
+    "name_key": "定时插座",
+    "rarity": "blue",
+    "availability": "drop",
+    "tags": [
+      "rx_pilot"
+    ],
+    "rx": {
+      "owner": "C",
+      "text": "仅第 2 回合恢复自然专注后，额外获得 1 专注。"
+    }
+  },
+  {
+    "id": "RX-C05",
+    "name_key": "预习卡套",
+    "rarity": "blue",
+    "availability": "drop",
+    "tags": [
+      "rx_pilot"
+    ],
+    "rx": {
+      "owner": "C",
+      "text": "第 1 回合基础抽完后，从抽牌堆移入最靠近堆顶的 1 张非基础永久策略；没有则不补。"
+    }
+  },
+  {
+    "id": "RX-C09",
+    "name_key": "配重夹",
+    "rarity": "blue",
+    "availability": "drop",
+    "tags": [
+      "rx_pilot"
+    ],
+    "rx": {
+      "owner": "C",
+      "text": "每战最先符合条件的 2 张基础费用≥2、实付≥1的工作牌，主目标首段 +4；每回合最多一次。"
+    }
+  },
+  {
+    "id": "RX-C17",
+    "name_key": "折叠雨衣",
+    "rarity": "white",
+    "availability": "drop",
+    "tags": [
+      "rx_pilot"
+    ],
+    "rx": {
+      "owner": "C",
+      "text": "每战首段实际分配给主角的正任务压力，在抵扣主角放松前，先给主角 5 放松。"
+    }
+  },
+  {
+    "id": "RX-C23",
+    "name_key": "闹钟电池",
+    "rarity": "blue",
+    "availability": "drop",
+    "tags": [
+      "rx_pilot"
+    ],
+    "rx": {
+      "owner": "C",
+      "text": "每战首次在玩家准备开始时 DDL≤2，恢复自然专注后额外获得 1 专注，基础抽完再抽 1。"
+    }
+  },
+  {
+    "id": "RX-C26",
+    "name_key": "干饭补贴存根",
+    "rarity": "white",
+    "availability": "drop",
+    "tags": [
+      "rx_pilot"
+    ],
+    "rx": {
+      "owner": "C",
+      "text": "本局前两次通过普通休息实际恢复精力时，各额外恢复至多 4 精力；满精力不计，整体不超上限。"
+    }
+  },
+  {
+    "id": "RX-C28",
+    "name_key": "失物招领牌",
+    "rarity": "blue",
+    "availability": "drop",
+    "tags": [
+      "rx_pilot"
+    ],
+    "rx": {
+      "owner": "C",
+      "text": "本局前 3 次主动放弃胜利后的独立卡牌奖励时，各获 8 金钱；无卡可选、跳过饰品或大奖励不计。"
+    }
+  },
+  {
+    "id": "RX-P01-01",
+    "name_key": "双色流程贴",
+    "rarity": "white",
+    "availability": "drop",
+    "tags": [
+      "rx_pilot"
+    ],
+    "rx": {
+      "owner": "P01",
+      "text": "每回合首张连携工作牌主目标首段 +3；每战最多 3 次。"
+    }
+  },
+  {
+    "id": "RX-P01-05",
+    "name_key": "复用回形扣",
+    "rarity": "blue",
+    "availability": "drop",
+    "tags": [
+      "rx_pilot"
+    ],
+    "rx": {
+      "owner": "P01",
+      "text": "「步骤复用」确认后，若策略确实回到手牌，获得 4 放松。每回合最多一次、每战前 2 次。"
+    }
+  },
+  {
+    "id": "RX-P01-09",
+    "name_key": "对齐游标",
+    "rarity": "blue",
+    "availability": "drop",
+    "tags": [
+      "rx_pilot"
+    ],
+    "rx": {
+      "owner": "P01",
+      "text": "本战首张基础费用≥2且实付≥1、同回合此前至少打出 1 张策略的工作牌，主目标首段 +5。"
+    }
+  },
+  {
+    "id": "RX-P01-15",
+    "name_key": "斜纹工签",
+    "rarity": "white",
+    "availability": "drop",
+    "tags": [
+      "rx_pilot"
+    ],
+    "rx": {
+      "owner": "P01",
+      "text": "本战首次打出策略且出牌前手中没有工作牌时，结算后从抽牌堆移入最靠近堆顶的 1 张永久工作；无合法牌或满手不补偿。"
+    }
+  },
+  {
+    "id": "RX-P02-01",
+    "name_key": "选题纸夹",
+    "rarity": "white",
+    "availability": "drop",
+    "tags": [
+      "rx_pilot"
+    ],
+    "rx": {
+      "owner": "P02",
+      "text": "每战第一篇论文成功开题时，给本篇完成度修正 +4。"
+    }
+  },
+  {
+    "id": "RX-P02-02",
+    "name_key": "交稿封签",
+    "rarity": "blue",
+    "availability": "drop",
+    "tags": [
+      "rx_pilot"
+    ],
+    "rx": {
+      "owner": "P02",
+      "text": "每战首次发表，若发表自身起算时 C 在 50–79，主目标首段额外 +8；C、满分判定及其他目标不变。"
+    }
+  },
+  {
+    "id": "RX-P02-07",
+    "name_key": "布面隔页",
+    "rarity": "white",
+    "availability": "drop",
+    "tags": [
+      "rx_pilot"
+    ],
+    "rx": {
+      "owner": "P02",
+      "text": "每战前 2 个至少实际运行一章的自然章节窗口结束后，各获得 3 放松；额外运行窗口不计。"
+    }
+  },
+  {
+    "id": "RX-P02-15",
+    "name_key": "交接批注页",
+    "rarity": "white",
+    "availability": "drop",
+    "tags": [
+      "rx_pilot"
+    ],
+    "rx": {
+      "owner": "P02",
+      "text": "每战首次从论文区合法付费手动重用章节后，若该章曾在本回合自然运行，获得 4 放松。"
+    }
+  },
+  {
+    "id": "RX-P03-01",
+    "name_key": "刻线滤纸",
+    "rarity": "white",
+    "availability": "drop",
+    "tags": [
+      "rx_pilot"
+    ],
+    "rx": {
+      "owner": "P03",
+      "text": "每回合首次由牌面正文直接有效施加侵蚀，向该批最早生成、仍在原阶段且尚有容量的实际增层目标再加 1 侵蚀。每战最多 3 次；本次额外层不新增施加计数。"
+    }
+  },
+  {
+    "id": "RX-P03-05",
+    "name_key": "先导试纸",
+    "rarity": "white",
+    "availability": "drop",
+    "tags": [
+      "rx_pilot"
+    ],
+    "rx": {
+      "owner": "P03",
+      "text": "每战前 2 个有自然出牌诱发结算的玩家回合，各自第一次合格结算的同段状态完成量 +2，全场只取按生成顺序最早的合格目标；不增加触发次数。"
+    }
+  },
+  {
+    "id": "RX-P03-09",
+    "name_key": "六格批注尺",
+    "rarity": "white",
+    "availability": "drop",
+    "tags": [
+      "rx_pilot"
+    ],
+    "rx": {
+      "owner": "P03",
+      "text": "每战首次成功打出时主目标在出牌快照中已具至少 3 种任务负面的工作牌，主目标首段 +4。"
+    }
+  },
+  {
+    "id": "RX-P03-16",
+    "name_key": "无菌记录套",
+    "rarity": "white",
+    "availability": "drop",
+    "tags": [
+      "rx_pilot"
+    ],
+    "rx": {
+      "owner": "P03",
+      "text": "每战首次「复合反应」确实为新负面增加 1 层后，获得 2 放松；本回合下一张牌结算完再抽 1，未打下一张则过期。"
+    }
+  },
+  {
+    "id": "RX-P04-01",
+    "name_key": "分工夹",
+    "rarity": "white",
+    "availability": "drop",
+    "tags": [
+      "rx_pilot"
+    ],
+    "rx": {
+      "owner": "P04",
+      "text": "普通战：每战首张合作牌确实召入伙伴后，主角获得 4 放松。独立作答：每战首张以替代面成功打出的合作牌结算后获得 3 放松。"
+    }
+  },
+  {
+    "id": "RX-P04-06",
+    "name_key": "换班挂牌",
+    "rarity": "blue",
+    "availability": "drop",
+    "tags": [
+      "rx_pilot"
+    ],
+    "rx": {
+      "owner": "P04",
+      "text": "普通战：每战首次主动撤回伙伴，或满槽召入时实际换下旧伙伴后，抽 1、获得 3 放松。独立作答：每战首次合法打出「让同学休息」的替代面后，获得 3 放松。"
+    }
+  },
+  {
+    "id": "RX-P04-08",
+    "name_key": "轮值秒表",
+    "rarity": "purple",
+    "availability": "drop",
+    "tags": [
+      "rx_pilot"
+    ],
+    "rx": {
+      "owner": "P04",
+      "text": "普通战：每战首次由卡牌实际发起的额外协作结束后，若该伙伴仍在场，恢复它 1 精力，不超本实例上限。独立作答：每战首次实付协同的「协调推进」替代面结束后，获得 4 放松。"
+    }
+  },
+  {
+    "id": "RX-P04-11",
+    "name_key": "单桌桌牌",
+    "rarity": "white",
+    "availability": "drop",
+    "tags": [
+      "rx_pilot"
+    ],
+    "rx": {
+      "owner": "P04",
+      "text": "若无伙伴，首张有主目标且正直接完成量的工作牌主目标首段 +3。每回合一次、每战最多 3 次，普通独行与独立作答都可。"
+    }
+  }
+]

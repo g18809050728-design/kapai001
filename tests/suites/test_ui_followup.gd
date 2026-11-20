@@ -215,6 +215,7 @@ func _production_shop(suffix: String) -> void:
 	# Annual-map navigation is covered by test_ui_adaptive_maps.
 	var run := session._state.run
 	run.campaign = CampaignService.initial()
+	RunRelicRoster.upgrade_base_campaign(run)
 	run.nodes = CampaignMap.build(run.run_id)
 	var shop_id := ""
 	for node in run.nodes:
@@ -268,7 +269,7 @@ func _production_reward(suffix: String) -> void:
 	var session := _production_session()
 	# Isolated display checkpoint: real card definitions, including the reported
 	# continuous ability. Rule behavior is exercised by the P03 rule suite.
-	var run := _runner._checkpoints["grand"].copy_for_write() as RunState
+	var run := _runner.active_checkpoint("grand", session._catalog) as RunState
 	var candidates := ["R3-P03-19", "R3-P03-10", "R3-P03-27"]
 	run.campaign.pending = {}
 	run.pending_reward = RewardOffer.new({"offer_id": "followup-real-cards", "source_node_id": run.current_node_id, "items": [{"item_id": "cards", "kind": "card", "status": "pending", "candidates": candidates, "skippable": true}], "meta": {"money": 15}})
@@ -291,7 +292,7 @@ func _production_reward(suffix: String) -> void:
 func _campaign(suffix: String) -> void:
 	for kind in ["direction", "destination", "relic_full", "grand"]:
 		var session := _production_session()
-		session._state.run = _runner._checkpoints[kind].copy_for_write()
+		session._state.run = _runner.active_checkpoint(kind, session._catalog)
 		session._state.random_snapshot = _runner._rng.duplicate(true)
 		var shell := _helpers.attach_shell(session) as GameShell
 		shell.show_screen("")

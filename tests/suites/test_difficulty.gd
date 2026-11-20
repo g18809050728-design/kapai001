@@ -55,16 +55,21 @@ func run() -> Array[String]:
 		_check(ended.accepted, "real end turn resolves " + difficulty)
 		if session._state.battle != null:
 			_check(int(session._state.battle.player.vitality) == vitality_before - expected_pressure, "real vitality loss matches displayed pressure " + difficulty)
-		var before := SnapshotCodec.encode_session(session._state, catalog.get_info())
+		var before := SnapshotCodec.encode_session(session._state, session._catalog.get_info())
 		var saved := session.save_current()
 		_check(before.ok and saved.ok, "difficulty battle saves " + difficulty)
 		var restored := GameSession.new(store)
 		_check(restored.continue_run().ok, "difficulty battle resumes " + difficulty)
 		if restored._state != null:
-			var after := SnapshotCodec.encode_session(restored._state, catalog.get_info())
+			var after := SnapshotCodec.encode_session(restored._state, restored._catalog.get_info())
 			_check(after.ok and after.data == before.data and restored._state.run.difficulty == difficulty, "save restores exact state, difficulty, revision and all RNG " + difficulty)
 		if before.ok:
 			var old: Dictionary = before.data.duplicate(true)
+			old.manifest_id = RelicPilot.BASE
+			old.content_version = catalog.get_info().content_version
+			old.payload.run.manifest_id = RelicPilot.BASE
+			old.payload.run.campaign.erase("rx_uses")
+			old.payload.run.campaign.erase("rx_state")
 			old.content_hash = ContentDB.PREVIOUS_FOUR_YEAR_HASH
 			old.checksum = SnapshotCodec.compute_checksum(old)
 			_check(SnapshotCodec.decode_session(old, catalog).ok == (difficulty == "normal"), "previous content hash accepts only historical normal difficulty")

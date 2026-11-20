@@ -1,1 +1,0 @@
-Godot 4.7.2 is required. Set GODOT_BIN or pass -GodotPath.

@@ -2,15 +2,17 @@ class_name UiCompendiumPage
 extends UiPage
 
 const PAGE_SIZE := 8
+const TABS := {"cards": "卡牌", "monsters": "怪物", "relics": "饰品"}
 
 var tab := "cards"
 var filtered_ids: Array[String] = []
 var visible_ids: Array[String] = []
 var detail: UiCompendiumDetail
-var _entries: Dictionary = {"cards": {}, "monsters": {}}
-var _order: Dictionary = {"cards": [], "monsters": []}
+var _entries: Dictionary = {"cards": {}, "monsters": {}, "relics": {}}
+var _order: Dictionary = {"cards": [], "monsters": [], "relics": []}
 var _states := {
 	"cards": {"query": "", "owner": "", "type": "", "rarity": "", "loaded": PAGE_SIZE, "scroll": 0},
+	"relics": {"query": "", "owner": "", "rarity": "", "year": "", "loaded": PAGE_SIZE, "scroll": 0},
 	"monsters": {"query": "", "kind": "", "year": "", "loaded": PAGE_SIZE, "scroll": 0},
 }
 var _filters: HFlowContainer
@@ -36,9 +38,9 @@ func render(data: Dictionary) -> void:
 		child.queue_free()
 	_buttons.clear()
 	_drafts.clear()
-	_entries = {"cards": {}, "monsters": {}}
-	_order = {"cards": [], "monsters": []}
-	for kind_name in ["cards", "monsters"]:
+	_entries = {"cards": {}, "monsters": {}, "relics": {}}
+	_order = {"cards": [], "monsters": [], "relics": []}
+	for kind_name in TABS:
 		for entry in view.get(kind_name, []):
 			_entries[kind_name][entry.id] = entry
 			_order[kind_name].append(str(entry.id))
@@ -46,6 +48,8 @@ func render(data: Dictionary) -> void:
 			if kind_name == "cards":
 				for variant in entry.variants:
 					search_parts.append(CompendiumText.card_text(variant))
+			elif kind_name == "relics":
+				search_parts.append(UiContentText.describe_relic(entry.definition) + " " + CompendiumText.relic_group_text(entry) + " " + CompendiumText.relic_source(entry))
 			else:
 				for section in CompendiumText.monster_sections(entry):
 					search_parts.append(section.title + " " + section.text)
@@ -82,10 +86,10 @@ func render(data: Dictionary) -> void:
 	tabs.add_theme_constant_override("separation", 14)
 	heading.add_child(tabs)
 	_tabs.clear()
-	for kind_name in ["cards", "monsters"]:
-		var caption := ("卡牌" if kind_name == "cards" else "怪物") + "  ·  %s" % _order[kind_name].size()
+	for kind_name in TABS:
+		var caption := str(TABS[kind_name]) + "  ·  %s" % _order[kind_name].size()
 		var button := add_button(tabs, "compendium:tab:" + kind_name, caption, {}, func(): show_tab(kind_name))
-		button.custom_minimum_size = Vector2(200 * UiStyle.text_scale, 44)
+		button.custom_minimum_size = Vector2(150 * minf(UiStyle.text_scale, 1.25), 44)
 		button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 		_tabs[kind_name] = button
 	_filters = HFlowContainer.new()
@@ -144,7 +148,7 @@ func show_tab(value: String) -> void:
 	tab = value
 	for kind_name in _tabs:
 		UiStyle.button_skin(_tabs[kind_name], "primary" if kind_name == tab else "quiet", true)
-		_tabs[kind_name].tooltip_text = "当前分类" if kind_name == tab else "查看全部" + ("卡牌" if kind_name == "cards" else "怪物")
+		_tabs[kind_name].tooltip_text = "当前分类" if kind_name == tab else "查看全部" + str(TABS[kind_name])
 	for key in _buttons.keys():
 		if str(key).begins_with("compendium:filter:"):
 			_buttons.erase(key)
@@ -168,6 +172,10 @@ func show_tab(value: String) -> void:
 		_filter("owner", "人物", ["", "C", "P01", "P02", "P03", "P04", "T"], ["全部", "公共", "林序", "许知微", "沈见章", "唐以宁", "衍生"])
 		_filter("type", "类型", ["", "work", "strategy", "cooperation", "scene", "ability", "burden"], ["全部", "作业", "策略", "合作", "场景", "能力", "负担"])
 		_filter("rarity", "稀有度", ["", "basic", "common", "advanced", "rare", "token"], ["全部", "初始", "普通", "进阶", "稀有", "衍生"])
+	elif tab == "relics":
+		_filter("owner", "归属", ["", "C", "P01", "P02", "P03", "P04"], ["全部", "通用", "林序", "许知微", "沈见章", "唐以宁"])
+		_filter("rarity", "品质", ["", "white", "blue", "purple", "gold"], ["全部", "白色", "蓝色", "紫色", "金色"])
+		_filter("year", "学年", ["", "1", "2", "3", "4"], ["全部", "大一", "大二", "大三", "大四"])
 	else:
 		_filter("kind", "类别", ["", "normal", "elite", "boss", "auxiliary"], ["全部", "普通", "精英", "首领", "附属"])
 		_filter("year", "学年", ["", "1", "2", "3", "4"], ["全部", "大一", "大二", "大三", "大四"])
@@ -225,6 +233,8 @@ func _matches(entry: Dictionary) -> bool:
 			var actual := CompendiumText.owner(entry) if key == "owner" else str(definition.get(key, ""))
 			if not str(state[key]).is_empty() and actual != state[key]:
 				return false
+	elif tab == "relics":
+		return (str(state.owner).is_empty() or state.owner == CompendiumText.relic_group(entry)) and (str(state.rarity).is_empty() or state.rarity == definition.rarity) and (str(state.year).is_empty() or entry.terms.has(int(state.year)))
 	else:
 		if not str(state.kind).is_empty():
 			if state.kind == "auxiliary":
@@ -254,7 +264,7 @@ func _render_results(restore: bool = false) -> void:
 	for id in _order[tab]:
 		if _matches(_entries[tab][id]):
 			filtered_ids.append(id)
-	_count.text = "四学年全集 · 全部开放    %s / %s 种%s    点击查看详情" % [filtered_ids.size(), _order[tab].size(), "卡牌" if tab == "cards" else "怪物"]
+	_count.text = "四学年全集 · 全部开放    %s / %s 种%s    点击查看详情" % [filtered_ids.size(), _order[tab].size(), str(TABS[tab])]
 	if not str(view.get("error", "")).is_empty():
 		_count.text = "图鉴加载失败：" + str(view.error)
 	_grid = GridContainer.new()
@@ -294,7 +304,7 @@ func _append_batch(count: int = PAGE_SIZE) -> void:
 			_buttons["compendium:item:" + id] = card
 			card.pressed.connect(func(): open_detail(id))
 		else:
-			_monster_tile(entry)
+			_art_tile(entry, tab == "relics")
 		_buttons["compendium:item:" + id].focus_entered.connect(func(): _prefetch_for_focus(id))
 	_states[tab].loaded = visible_ids.size()
 	_page_count.text = ("已显示全部 %s 项" % visible_ids.size()) if visible_ids.size() == filtered_ids.size() else ("已显示 %s / %s · 每批 8 项 · 继续下滑" % [visible_ids.size(), filtered_ids.size()])
@@ -341,12 +351,12 @@ func _update_item_focus() -> void:
 		button.focus_neighbor_bottom = _buttons["compendium:item:" + visible_ids[index + _layout_columns]].get_path() if index + _layout_columns < visible_ids.size() else button.get_path()
 
 
-func _monster_tile(entry: Dictionary) -> void:
+func _art_tile(entry: Dictionary, relic: bool) -> void:
 	var button := Button.new()
-	button.custom_minimum_size = Vector2(194, 260) * UiStyle.text_scale
+	button.custom_minimum_size = (Vector2(194, 216) if relic else Vector2(194, 260)) * UiStyle.text_scale
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.set_meta("uid", "compendium:item:" + str(entry.id))
-	button.tooltip_text = CompendiumText.title(entry, true) + " · 点击查看形象与详情"
+	button.tooltip_text = CompendiumText.title(entry, not relic) + " · 点击查看形象与详情"
 	UiStyle.button_skin(button, "quiet", true)
 	_grid.add_child(button)
 	_buttons["compendium:item:" + str(entry.id)] = button
@@ -366,10 +376,10 @@ func _monster_tile(entry: Dictionary) -> void:
 	art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	art.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	column.add_child(art)
-	var name_label := add_text(column, CompendiumText.title(entry, true), 18, UiStyle.CREAM)
+	var name_label := add_text(column, CompendiumText.title(entry, not relic), 18, UiStyle.CREAM)
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var meta := add_text(column, CompendiumText.kind(entry), 13, UiStyle.BRASS)
+	var meta := add_text(column, CompendiumText.relic_group_text(entry) + " · " + CompendiumText.rarity(entry) if relic else CompendiumText.kind(entry), 13, Color(str({"white":"ddd4b7","blue":"94c6eb","purple":"c9a4ed","gold":"eac775"}.get(entry.definition.rarity,"ddd4b7"))) if relic else UiStyle.BRASS)
 	meta.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	meta.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	button.pressed.connect(func(): open_detail(str(entry.id)))
@@ -386,8 +396,10 @@ func change_page(delta: int) -> void:
 
 
 func _move_gallery_scroll(target: int, generation: int) -> void:
-	await get_tree().process_frame
-	await get_tree().process_frame
+	if not is_inside_tree(): return
+	var tree := get_tree()
+	await tree.process_frame
+	await tree.process_frame
 	if is_inside_tree() and generation == _render_generation and not is_instance_valid(detail):
 		_scroll.scroll_vertical = target
 
@@ -427,8 +439,10 @@ func _ensure_item_loaded(id: String) -> void:
 
 
 func _reveal_item(uid: String, generation: int) -> void:
-	await get_tree().process_frame
-	await get_tree().process_frame
+	if not is_inside_tree(): return
+	var tree := get_tree()
+	await tree.process_frame
+	await tree.process_frame
 	if is_inside_tree() and generation == _render_generation and _buttons.has(uid):
 		var bounds := _scroll.get_global_rect()
 		var target: Rect2 = _buttons[uid].get_global_rect()

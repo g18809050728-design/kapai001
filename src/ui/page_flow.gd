@@ -52,7 +52,7 @@ func render(data: Dictionary) -> void:
 func _render_menu() -> void:
 	reset_page("DDL 战争", "把校园日常，打成自己的牌。")
 	add_art(body, "BG_home", Vector2(760, 250))
-	add_text(body, "四学年 · 校园卡牌冒险", 24)
+	add_text(body, "饰品试玩 · 24 件 · 独立存档" if view.get("relic_pilot", false) else "四学年 · 校园卡牌冒险", 24)
 	add_text(body, "选择角色，规划四年路线，在作业与休息之间迎接学年挑战。")
 	var row: HBoxContainer = add_row(body)
 	add_button(row, "menu:new", "开始新一局", _ui("new_run"))
@@ -117,7 +117,7 @@ func _render_setup() -> void:
 		if not passive.is_empty():
 			add_text(panel, passive, 16)
 		var relic_id: String = str(entry.get("starter_relic_id", ""))
-		if _manifest == "campus_four_year":
+		if _manifest in [RelicPilot.BASE, RelicPilot.MANIFEST, RelicPilot.ROSTER]:
 			add_text(panel, "四学年模式：沿途领取饰品，开局无饰品。", 16)
 		elif not relic_id.is_empty():
 			add_text(panel, "初始饰品：" + UiStyle.label(relic_id), 16)

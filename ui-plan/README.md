@@ -44,7 +44,7 @@
 
 更新：2026-11-14。用户暂停人物UI，所有人物方向（含校园8项）不接受，停止搜索、生成和接入。按[根计划§0.20.5](../实施计划与验收基线.md)继续其余任务，已完成非人物特效原型：压力、恢复、资源获得/支付、状态和阶段变化，并验证真实事件、轻重、作用点及收尾。完整规则/四年、最终UI回归通过，175项定向检查和双尺寸18组160帧留证，见[非人物特效实施记录](../docs/非人物特效实施记录_20261114.md)。紧凑任务浮字及最终观感待核对；人物暂停不等于完成，整版G6/G8出口保留。
 
-[原生特效独立设计](../docs/plans/2026-11-14-non-character-vfx-design.md)定义本批形态与事件映射。旧[特效材料交互检查](../output/imagegen/layered-v3/VFX-study-v1/preview.html)仍是未选用的纹理候选；[校园人物对照](../output/external-characters/20261114/campus-round-3/preview.html)、[人物分层检查](../output/imagegen/layered-v3/P01-parts-v1/preview.html)及[首轮外部对比](../output/external-characters/20261114/preview.html)均只留已否决历史。
+[原生特效独立设计](../docs/plans/2026-11-14-non-character-vfx-design.md)定义本批形态与事件映射。[旧特效纹理](../output/imagegen/layered-v3/VFX-study-v1/README.md)、[校园人物](../output/external-characters/20261114/campus-round-3/README.md)、[旧人物分层](../output/imagegen/layered-v3/P01-parts-v1/README.md)及[首轮外部对比](../output/external-characters/20261114/README.md)均未采用；2026-11-21 转移清理删除原图和对照页，只留结论和来源。
 
 当前目标与边界统一见[整体表现重制文字需求 v6](../动作或者图片描述/整体表现重制需求_20261113.md)：§4 参考方向、§5 角色与敌怪分层、§6 全流程统一性、§7 参考证据与动作节奏、§8 验收和未决项、§9 本轮实际UI直接目标。旧“校园水彩／手绘戏剧感／纸墨手册”方向保留为上一轮背景，不再优先约束新一轮设计。
 

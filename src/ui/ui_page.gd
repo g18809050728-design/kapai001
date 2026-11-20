@@ -277,7 +277,7 @@ func _show_card_preview(pinned: bool) -> void:
 
 
 func _card_preview_text(detail: Dictionary) -> String:
-	if detail.has("campaign") or detail.has("hooks"):
+	if detail.has("rx") or detail.has("campaign") or detail.has("hooks"):
 		return UiContentText.describe_relic(detail)
 	return UiContentText.describe_card(detail)
 

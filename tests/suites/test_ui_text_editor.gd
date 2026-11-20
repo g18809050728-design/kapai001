@@ -16,7 +16,7 @@ func run() -> Array[String]:
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(_path))
 	TextOverrides.use_path(_path)
 	_catalog = ContentDB.new("res://data/four_year")
-	_check(_catalog.load("campus_four_year").ok, "real production catalogue loads")
+	_check(_catalog.load(RelicPilot.ROSTER).ok, "real production catalogue loads")
 	var built := TextLibrary.build(_catalog)
 	_check(built.ok, "text library builds from production data")
 	if built.ok:
@@ -43,8 +43,11 @@ func _check_library(data: Dictionary) -> void:
 	var entries: Array = data.get("entries", [])
 	var counts: Dictionary = data.get("counts", {})
 	_check(entries.size() == int(counts.get("all", -1)), "counts cover every entry")
-	var label_total: int = UiStyle.LABELS.data.get("labels", {}).size() + 6
-	_check(int(counts.get("names", 0)) == label_total, "all JSON labels plus six built-in words are present")
+	var labels: Dictionary = UiStyle.LABELS.data.get("labels", {})
+	var rx_ids := _catalog.get_candidates({"kind": "relic"})
+	var label_total := labels.keys().filter(func(id): return not RelicPilot.is_retired(id)).size() + 6
+	label_total += rx_ids.filter(func(id): return not labels.has(id)).size()
+	_check(int(counts.get("names", 0)) == label_total, "active labels include RX names and omit retired FY")
 	_check(int(counts.get("story", 0)) == 34, "all story title/location/narrative/option fields are present")
 	_check(int(counts.get("glossary", 0)) == UiGlossary.ENTRIES.size() * 4, "all glossary fields are present")
 	var compendium := CompendiumView.build(_catalog)
@@ -74,7 +77,8 @@ func _check_library(data: Dictionary) -> void:
 		_check(seen.has("card:%s:0:detail" % id), "card base detail exists: " + str(id))
 		_check(seen.has("card:%s:0:battle" % id), "card base battle detail exists: " + str(id))
 	for id in _catalog.get_candidates({"kind": "relic"}):
-		_check(seen.has("relic:" + str(id)), "relic description exists: " + str(id))
+		_check(seen.has("relic:" + str(id)) and seen.has("label:" + str(id)), "relic name and description exist: " + str(id))
+	_check(not seen.has("relic:FY_Y1_1") and not seen.has("label:FY_Y1_1"), "retired relic text is not editable")
 	for id in _catalog.get_candidates({"kind": "character"}):
 		var definition: Dictionary = _catalog.get_definition("character", id).data
 		var passive_id := str(definition.get("passive", {}).get("id", ""))
@@ -258,10 +262,10 @@ func _edit_checks(page: UiTextEditorPage, session: GameSession, before: String) 
 			UiContentText.describe_battle_card(face.data) == "测试战斗说明",
 			"battle detail override applies without touching the face"
 		)
-	_check(page.select_entry("relic:FY_Y1_1"), "relic description is selectable")
+	_check(page.select_entry("relic:RX-C01"), "relic description is selectable")
 	page.set_editor_text("测试饰品说明")
 	page.save_changes()
-	var relic: Dictionary = _catalog.get_definition("relic", "FY_Y1_1").data
+	var relic: Dictionary = _catalog.get_definition("relic", "RX-C01").data
 	_check(UiContentText.describe_relic(relic) == "测试饰品说明", "relic override applies")
 	_check(page.select_entry("passive:r3_p01_link_replay"), "passive description is selectable")
 	page.set_editor_text("测试被动说明")

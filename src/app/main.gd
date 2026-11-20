@@ -6,7 +6,11 @@ var _shell: GameShell
 
 func _ready() -> void:
 	get_window().min_size = Vector2i(960, 640)
-	_session = GameSession.new()
+	var relic_pilot := "--relic-pilot" in OS.get_cmdline_user_args()
+	_session = GameSession.new(null, Callable(), relic_pilot)
+	if relic_pilot:
+		TextOverrides.use_path("user://relic_pilot/text_overrides.json")
+		get_window().title = "DDL 战争 · 饰品试玩（独立存档）"
 	_session.name = "GameSession"
 	add_child(_session)
 	_shell = GameShell.new()

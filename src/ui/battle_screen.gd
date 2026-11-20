@@ -1588,6 +1588,13 @@ func _render_from_local() -> void:
 
 func _on_event_presented(event: Dictionary, text: String) -> void:
 	_present_event_visual(event)
+	if str(event.get("type", "")) == "relic_triggered":
+		var data := _dict(event.get("data"))
+		var id := str(data.get("relic_id", ""))
+		if RelicPilot.is_rx(id):
+			if is_instance_valid(_toolbar) and animation_enabled:
+				_toolbar.flash_relic(id)
+			text = _rx_trigger_text(id, data)
 	if str(event.get("type", "")) == "card_drawn":
 		var queued := _animator.pending_type_count("card_drawn")
 		text += " · 正在抽牌 · 排队中：%d 张" % queued
@@ -1631,6 +1638,29 @@ func _clear_event_visuals() -> void:
 		if child.has_meta("battle_event_effect"):
 			_stage.remove_child(child)
 			child.queue_free()
+
+
+func _rx_trigger_text(id: String, data: Dictionary) -> String:
+	var resource := str(data.get("resource",""))
+	if not resource.is_empty():
+		return "%s触发 · %s %d · 剩余 %d 次" % [UiStyle.label(id),resource,int(data.get("amount",0)),int(data.get("remaining",0))]
+	resource = "放松"
+	match str(data.get("at", "")):
+		"natural_focus":
+			resource = "放松" if id == "RX-C01" else "专注"
+		"base_draw", "strategy_without_work":
+			resource = "张牌入手"
+		"alarm_draw", "next_card_resolved", "partner_switched_draw":
+			resource = "抽牌"
+		"work_primary_segment", "paper_publish", "natural_induced":
+			resource = "完成量"
+		"paper_open":
+			resource = "论文修正"
+		"direct_erosion":
+			resource = "侵蚀"
+		"extra_cooperation":
+			resource = "伙伴精力"
+	return "%s触发 · %s +%d · 剩余 %d 次" % [UiStyle.label(id), resource, int(data.get("amount", 0)), int(data.get("remaining", 0))]
 
 
 func _present_event_visual(event: Dictionary) -> void:

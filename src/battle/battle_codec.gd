@@ -124,6 +124,8 @@ static func decode(data: Dictionary, catalog: ContentDB) -> GameResult:
 	)
 	for id in record.relics:
 		RunCodec._reference(catalog, "relic", id, "battle.relics", references)
+		if not RelicPilot.owns_definition(id, record.character_id):
+			issues.append("pilot battle relic is outside character pool")
 	for card in record.card_by_id.values():
 		RunCodec._reference(catalog, "card", card.definition_id, "battle.card_by_id", references)
 	for unit in record.units:

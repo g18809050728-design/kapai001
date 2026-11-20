@@ -165,7 +165,9 @@ static func label(id: String) -> String:
 	var value := ""
 	var key := id
 	var rarities := {"basic": "初始", "common": "普通", "advanced": "进阶", "rare": "稀有", "uncommon": "少见", "starter": "初始"}
-	if rarities.has(id):
+	if RelicPilot.is_rx(id):
+		value = RelicPilot.display_name(id)
+	elif rarities.has(id):
 		value = str(rarities[id])
 	elif id == "ability":
 		value = "能力"
@@ -202,6 +204,9 @@ static func texture(id: String) -> Texture2D:
 	if _textures.has(key):
 		return _textures[key]
 	var path := str(LABELS.data.get("textures", {}).get(key, ""))
+	if RelicPilot.is_rx(id):
+		var v2 := "res://assets/art/relic-roster-v2/%s.webp" % id
+		path = v2 if ResourceLoader.exists(v2) else "res://assets/art/relic-pilot/%s.webp" % id
 	var character_file := CharacterArt.texture_path(key)
 	if not character_file.is_empty() and ResourceLoader.exists(character_file):
 		path = character_file
@@ -518,13 +523,16 @@ static func error_text(error: ApiError) -> String:
 		"error.play.same_name_once_per_turn": "本回合此牌名已使用，不能再次打出",
 		"error.play.requirement_invalid": "未满足使用条件",
 		"error.play.citation_insufficient": "引用不足",
+		"error.play.relic_primary_required": "选一个任务承接饰品加成 · 卡牌仍作用于全体",
+		"error.play.replacement_required": "选择要换下的伙伴",
 		"error.play.no_chapter_replace": "无法选择撤下的章节",
 		"error.play.no_recall_target": "弃牌堆没有可取回的卡牌",
 		"error.play.no_exhaust_target": "没有可消耗的卡牌",
 		"error.battle.v3_card_limit": "本回合使用次数已达上限",
 		"error.battle.choice_pending": "请先完成当前选择",
 		"error.battle.no_pending_choice": "当前没有待选效果",
-		"error.battle.choice_id_invalid": "选择已失效，请重新操作"
+		"error.battle.choice_id_invalid": "选择已失效，请重新操作",
+		"test.file.retired_relic": "该测试记录含已移除的旧饰品，请新建测试"
 	}
 	var detail := str(details.get(str(error.message_key), ""))
 	return detail if not detail.is_empty() else reason

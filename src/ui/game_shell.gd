@@ -138,6 +138,7 @@ func refresh() -> void:
 		"menu":
 			data = _storage_view()
 			data.profile = _profile_view()
+			data.relic_pilot = session.is_relic_pilot()
 		"setup":
 			var options := session.get_setup_options()
 			if not options.ok:
@@ -167,7 +168,7 @@ func refresh() -> void:
 			data.animation_speed = preferences.animation_speed
 		"text_editor":
 			if not _text_library_loaded:
-				var built := TextLibrary.build()
+				var built := session.get_text_library()
 				_text_library_cache = (
 					built.data if built.ok else {"error": UiStyle.error_text(built.error)}
 				)
@@ -507,6 +508,7 @@ func _refresh_test_home() -> void:
 	if options.ok:
 		data = {
 			"options": options.data,
+			"relic_pilot": true,
 			"files": {
 				"presets": session.list_test_files("preset"),
 				"snapshots": session.list_test_files("snapshot"),
@@ -547,8 +549,16 @@ func _refresh_test_room() -> void:
 	if page == null or not (page is BattleScreen) or _page_key != "test_battle":
 		_replace_page("test_battle", BattleScreen.new())
 		page.preview_callback = Callable(self, "_test_preview")
-	page.render(battle_data)
-	_set_battle_frame(true)
+	if session.is_relic_pilot():
+		_set_battle_frame(true)
+		page.offset_top = TestHud.bar_height()
+		var preferences := session.get_presentation_settings()
+		page.animation_enabled = int(preferences.animation_speed) > 0 and not preferences.reduced_motion
+		page.speed_scale = maxf(1, int(preferences.animation_speed))
+		page.render(battle_data)
+	else:
+		page.render(battle_data)
+		_set_battle_frame(true)
 	_ensure_test_hud()
 	_test_hud.render(test_view)
 	var test_state: Dictionary = test_view.get("test", {})
@@ -641,6 +651,14 @@ func _submit_test_battle_action(draft: Dictionary) -> void:
 		return
 	notice = "已提交测试命令"
 	refresh()
+	_present_test_relics(result)
+
+
+func _present_test_relics(result: ActionResult) -> void:
+	if page is BattleScreen:
+		var relic_events := result.events.filter(func(event): return event.type == &"relic_triggered" and RelicPilot.is_rx(event.source_id))
+		if not relic_events.is_empty():
+			page.consume_events(relic_events, str(page.view.run_id), result.revision)
 
 
 func _test_preview(draft: Dictionary) -> ActionPreview:
@@ -671,6 +689,7 @@ func _handle_test_command(command: String, payload: Dictionary) -> void:
 			_ui_screen = ""
 			notice = "实验开始；可随时打开编辑器。"
 			refresh()
+			_present_test_relics(started)
 		"test.patch":
 			var patch := {
 				"schema_version": 1,

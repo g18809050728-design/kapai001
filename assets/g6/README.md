@@ -2,6 +2,8 @@
 
 状态：2026-10-15，用户提供的 **6 张 3840×2160 图集已全部切分，46 个素材已完成 AI 视觉核对并选定为 G7 原型资源**。这不是人工签字或最终 UI 验收；G6/G7 的阶段状态以根实施计划为准。
 
+Git 迁移说明（2026-11-21）：`assets/g6/sources/` 的母图及 `assets/g6/candidates/` 的候选 PNG 留在本地制作档案，Git 保留来源、切分记录和实际运行用的 `assets/art/g6-v1/`。下文的重新切图和原始图审阅需要相应本地档案。
+
 ## G7 接入入口
 
 以 [selection.json](selection.json) 中每项 `selected_file` 为实际资源路径，选定图片位于 `assets/art/g6-v1/`。`catalog.json` 是制作规划，不能代替实际选定清单。
