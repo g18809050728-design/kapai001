@@ -93,6 +93,26 @@ static func merge(profile: Dictionary, summary: RunSummary) -> GameResult:
 	return GameResult.success(work)
 
 
+static func combine(left: Dictionary, right: Dictionary) -> GameResult:
+	var issues := validate(left)
+	issues.append_array(validate(right))
+	if not issues.is_empty():
+		return _corrupt(issues)
+	var combined := left.duplicate(true)
+	for run_id in right.summaries_by_run_id:
+		var existing: Variant = combined.summaries_by_run_id.get(run_id)
+		var incoming: Dictionary = right.summaries_by_run_id[run_id]
+		if existing != null and SnapshotCodec.canonical_json(existing) != SnapshotCodec.canonical_json(incoming):
+			return _corrupt(PackedStringArray(["run_id already has a different finalized summary"]))
+		combined.summaries_by_run_id[run_id] = incoming.duplicate(true)
+	combined.unlocked_ids = _union_ids(left.unlocked_ids, right.unlocked_ids)
+	combined.seen_content_ids = _union_ids(left.seen_content_ids, right.seen_content_ids)
+	for key in right.tutorial_flags:
+		combined.tutorial_flags[key] = bool(combined.tutorial_flags.get(key, false)) or bool(right.tutorial_flags[key])
+	combined.completed_runs = combined.summaries_by_run_id.size()
+	return GameResult.success(combined)
+
+
 static func _validate_summary(summary: Dictionary, path: String, issues: PackedStringArray) -> void:
 	for field in SUMMARY_FIELDS:
 		if not summary.has(field):

@@ -1,0 +1,1019 @@
+[
+  {
+    "id": "RX-C05",
+    "version": 2,
+    "file": "assets/art/relic-roster-v2/RX-C05.webp",
+    "sha256": "a32412c8d9496778c22058106e4844fac6696d16020977e3e44cc6910ee290a5",
+    "source": "output/imagegen/relic-roster-20261120/raw/RX-V2-sheet-01.png",
+    "source_sha256": "fc49836f4596096c50cb98f6cc27348791dd87c80837b456a6014ef554e1ba08",
+    "cell": 1,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "api-slb.jiji.cc",
+    "prompt_sha256": "e95d02bac82804b3f0438ba583402e830e0079a04bd01961d1b467315338e274",
+    "size": [
+      256,
+      256
+    ],
+    "processing": "Extract reviewed atlas cell; 256px lossless WebP"
+  },
+  {
+    "id": "RX-C08",
+    "version": 2,
+    "file": "assets/art/relic-roster-v2/RX-C08.webp",
+    "sha256": "839d3f6af0654d445d5306fb83b96d2e23ec6086cd196b32c0a2ce231dc20405",
+    "source": "output/imagegen/relic-roster-20261120/raw/RX-V2-sheet-01.png",
+    "source_sha256": "fc49836f4596096c50cb98f6cc27348791dd87c80837b456a6014ef554e1ba08",
+    "cell": 2,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "api-slb.jiji.cc",
+    "prompt_sha256": "e95d02bac82804b3f0438ba583402e830e0079a04bd01961d1b467315338e274",
+    "size": [
+      256,
+      256
+    ],
+    "processing": "Extract reviewed atlas cell; 256px lossless WebP"
+  },
+  {
+    "id": "RX-C14",
+    "version": 2,
+    "file": "assets/art/relic-roster-v2/RX-C14.webp",
+    "sha256": "acd39eb8a008fe216aff9f91c3015152e2723e9f8248c37704a32c332cdc8b5a",
+    "source": "output/imagegen/relic-roster-20261120/raw/RX-V2-sheet-01.png",
+    "source_sha256": "fc49836f4596096c50cb98f6cc27348791dd87c80837b456a6014ef554e1ba08",
+    "cell": 3,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "api-slb.jiji.cc",
+    "prompt_sha256": "e95d02bac82804b3f0438ba583402e830e0079a04bd01961d1b467315338e274",
+    "size": [
+      256,
+      256
+    ],
+    "processing": "Extract reviewed atlas cell; 256px lossless WebP"
+  },
+  {
+    "id": "RX-C16",
+    "version": 2,
+    "file": "assets/art/relic-roster-v2/RX-C16.webp",
+    "sha256": "fa9b67831b567c4fce916b2b8410233a8b2c05dd7a35da98d9c4fc2bb37eeed9",
+    "source": "output/imagegen/relic-roster-20261120/raw/RX-V2-sheet-01.png",
+    "source_sha256": "fc49836f4596096c50cb98f6cc27348791dd87c80837b456a6014ef554e1ba08",
+    "cell": 4,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "api-slb.jiji.cc",
+    "prompt_sha256": "e95d02bac82804b3f0438ba583402e830e0079a04bd01961d1b467315338e274",
+    "size": [
+      256,
+      256
+    ],
+    "processing": "Extract reviewed atlas cell; 256px lossless WebP"
+  },
+  {
+    "id": "RX-C12",
+    "version": 2,
+    "file": "assets/art/relic-roster-v2/RX-C12.webp",
+    "sha256": "2366d79080c0ae91f0e0b432567ebce2cf32e07dada4f35816c6162da7afb5d0",
+    "source": "output/imagegen/relic-roster-20261120/raw/RX-V2-sheet-02.png",
+    "source_sha256": "7c81937588b3e2f112d9ac30dfa78b011ffcda235274d112c84369b7627dba16",
+    "cell": 1,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "api-slb.jiji.cc",
+    "prompt_sha256": "a1bb4943e8e1ae57a4a930901dd8c34687d7aed91a9a743227b8b2d6389b24c9",
+    "size": [
+      256,
+      256
+    ],
+    "processing": "Extract reviewed atlas cell; 256px lossless WebP",
+    "paper_cleanup": {
+      "region": [
+        126,
+        226,
+        192,
+        255
+      ],
+      "donor_xy": [
+        187,
+        225
+      ],
+      "feather_px": 6
+    }
+  },
+  {
+    "id": "RX-C20",
+    "version": 2,
+    "file": "assets/art/relic-roster-v2/RX-C20.webp",
+    "sha256": "977ab7c23559ae8ad8cf8be13a1865ed4636532e68f6ef791f28509d432cb0c1",
+    "source": "output/imagegen/relic-roster-20261120/raw/RX-V2-sheet-02.png",
+    "source_sha256": "7c81937588b3e2f112d9ac30dfa78b011ffcda235274d112c84369b7627dba16",
+    "cell": 2,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "api-slb.jiji.cc",
+    "prompt_sha256": "a1bb4943e8e1ae57a4a930901dd8c34687d7aed91a9a743227b8b2d6389b24c9",
+    "size": [
+      256,
+      256
+    ],
+    "processing": "Extract reviewed atlas cell; 256px lossless WebP"
+  },
+  {
+    "id": "RX-C21",
+    "version": 2,
+    "file": "assets/art/relic-roster-v2/RX-C21.webp",
+    "sha256": "8576391ac6ea49c39942050664b1383123e4844a97907313b910977f7f0d7fdd",
+    "source": "output/imagegen/relic-roster-20261120/raw/RX-V2-sheet-02.png",
+    "source_sha256": "7c81937588b3e2f112d9ac30dfa78b011ffcda235274d112c84369b7627dba16",
+    "cell": 3,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "api-slb.jiji.cc",
+    "prompt_sha256": "a1bb4943e8e1ae57a4a930901dd8c34687d7aed91a9a743227b8b2d6389b24c9",
+    "size": [
+      256,
+      256
+    ],
+    "processing": "Extract reviewed atlas cell; 256px lossless WebP"
+  },
+  {
+    "id": "RX-C25",
+    "version": 2,
+    "file": "assets/art/relic-roster-v2/RX-C25.webp",
+    "sha256": "3f725ea9fadc312e1dc44e2be27990540b282b72b496c44808bd6bc6ee92ad24",
+    "source": "output/imagegen/relic-roster-20261120/raw/RX-V2-sheet-02.png",
+    "source_sha256": "7c81937588b3e2f112d9ac30dfa78b011ffcda235274d112c84369b7627dba16",
+    "cell": 4,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "api-slb.jiji.cc",
+    "prompt_sha256": "a1bb4943e8e1ae57a4a930901dd8c34687d7aed91a9a743227b8b2d6389b24c9",
+    "size": [
+      256,
+      256
+    ],
+    "processing": "Extract reviewed atlas cell; 256px lossless WebP"
+  },
+  {
+    "id": "RX-C26",
+    "version": 2,
+    "file": "assets/art/relic-roster-v2/RX-C26.webp",
+    "sha256": "8f38b7cdb466fc8c89c183cea9cc25d32681fee48ac1349fa7e74d99097c1467",
+    "source": "output/imagegen/relic-roster-20261120/raw/RX-V2-sheet-03.png",
+    "source_sha256": "0a558845a08aec2f036d09e72b1aa3e3d8567d3affb961059c2bb64244760851",
+    "cell": 1,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "api-slb.jiji.cc",
+    "prompt_sha256": "529f0e144de1d8c8a09357c41c8f43d9356ca32be06f47f58e6998541caf7a7a",
+    "size": [
+      256,
+      256
+    ],
+    "processing": "Extract reviewed atlas cell; 256px lossless WebP"
+  },
+  {
+    "id": "RX-C29",
+    "version": 2,
+    "file": "assets/art/relic-roster-v2/RX-C29.webp",
+    "sha256": "09de7bcbb00cdfdf99cb0cc9d198dba656de9bb883b25f8a92e1f5d4de93c083",
+    "source": "output/imagegen/relic-roster-20261120/raw/RX-V2-sheet-03.png",
+    "source_sha256": "0a558845a08aec2f036d09e72b1aa3e3d8567d3affb961059c2bb64244760851",
+    "cell": 2,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "api-slb.jiji.cc",
+    "prompt_sha256": "529f0e144de1d8c8a09357c41c8f43d9356ca32be06f47f58e6998541caf7a7a",
+    "size": [
+      256,
+      256
+    ],
+    "processing": "Extract reviewed atlas cell; 256px lossless WebP"
+  },
+  {
+    "id": "RX-C31",
+    "version": 2,
+    "file": "assets/art/relic-roster-v2/RX-C31.webp",
+    "sha256": "eb1365ab191f601014c96b61f5654e717227991ddf11d40c214321ac41673799",
+    "source": "output/imagegen/relic-roster-20261120/raw/RX-V2-sheet-03.png",
+    "source_sha256": "0a558845a08aec2f036d09e72b1aa3e3d8567d3affb961059c2bb64244760851",
+    "cell": 3,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "api-slb.jiji.cc",
+    "prompt_sha256": "529f0e144de1d8c8a09357c41c8f43d9356ca32be06f47f58e6998541caf7a7a",
+    "size": [
+      256,
+      256
+    ],
+    "processing": "Extract reviewed atlas cell; 256px lossless WebP"
+  },
+  {
+    "id": "RX-C32",
+    "version": 2,
+    "file": "assets/art/relic-roster-v2/RX-C32.webp",
+    "sha256": "08f0b70b11e19f1dc9ab75a975cc6f60b874779ca83e74c16d7e6906015f067a",
+    "source": "output/imagegen/relic-roster-20261120/raw/RX-V2-sheet-03.png",
+    "source_sha256": "0a558845a08aec2f036d09e72b1aa3e3d8567d3affb961059c2bb64244760851",
+    "cell": 4,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "api-slb.jiji.cc",
+    "prompt_sha256": "529f0e144de1d8c8a09357c41c8f43d9356ca32be06f47f58e6998541caf7a7a",
+    "size": [
+      256,
+      256
+    ],
+    "processing": "Extract reviewed atlas cell; 256px lossless WebP",
+    "paper_cleanup": {
+      "region": [
+        0,
+        72,
+        16,
+        109
+      ],
+      "donor_xy": [
+        1,
+        35
+      ],
+      "feather_px": 6
+    }
+  },
+  {
+    "id": "RX-C30",
+    "version": 2,
+    "file": "assets/art/relic-roster-v2/RX-C30.webp",
+    "sha256": "45d2c41dd5094429819e9ff88e1db4a85839f77dbfb329617f99ddc5bba5bf19",
+    "source": "output/imagegen/relic-roster-20261120/raw/RX-V2-sheet-04.png",
+    "source_sha256": "3b1512435071c5702ad697f17c70ff7de13e8d1dd2dbc9ec7213781d51640ff3",
+    "cell": 1,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "api-slb.jiji.cc",
+    "prompt_sha256": "1e7a0fab07b53426eacaf0dfbf4db01e630bacdbed5213a9db48738c49264d69",
+    "size": [
+      256,
+      256
+    ],
+    "processing": "Extract reviewed atlas cell; 256px lossless WebP"
+  },
+  {
+    "id": "RX-C34",
+    "version": 2,
+    "file": "assets/art/relic-roster-v2/RX-C34.webp",
+    "sha256": "c0619db5b993496e2666ded557cf13a57e2a73c9075608741865c6d7bdf22413",
+    "source": "output/imagegen/relic-roster-20261120/raw/RX-V2-sheet-04.png",
+    "source_sha256": "3b1512435071c5702ad697f17c70ff7de13e8d1dd2dbc9ec7213781d51640ff3",
+    "cell": 2,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "api-slb.jiji.cc",
+    "prompt_sha256": "1e7a0fab07b53426eacaf0dfbf4db01e630bacdbed5213a9db48738c49264d69",
+    "size": [
+      256,
+      256
+    ],
+    "processing": "Extract reviewed atlas cell; 256px lossless WebP"
+  },
+  {
+    "id": "RX-C37",
+    "version": 2,
+    "file": "assets/art/relic-roster-v2/RX-C37.webp",
+    "sha256": "e14ed1375b1fc74b9649d962a10ea6c8dea551a8ddcab9f8edc438faf6b435a9",
+    "source": "output/imagegen/relic-roster-20261120/raw/RX-V2-sheet-04.png",
+    "source_sha256": "3b1512435071c5702ad697f17c70ff7de13e8d1dd2dbc9ec7213781d51640ff3",
+    "cell": 3,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "api-slb.jiji.cc",
+    "prompt_sha256": "1e7a0fab07b53426eacaf0dfbf4db01e630bacdbed5213a9db48738c49264d69",
+    "size": [
+      256,
+      256
+    ],
+    "processing": "Extract reviewed atlas cell; 256px lossless WebP"
+  },
+  {
+    "id": "RX-C40",
+    "version": 2,
+    "file": "assets/art/relic-roster-v2/RX-C40.webp",
+    "sha256": "9b2a31a12edc776b6479c565cc97a6e2defaf8e817e3e04975e60fb8619d01d6",
+    "source": "output/imagegen/relic-roster-20261120/raw/RX-V2-sheet-04.png",
+    "source_sha256": "3b1512435071c5702ad697f17c70ff7de13e8d1dd2dbc9ec7213781d51640ff3",
+    "cell": 4,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "api-slb.jiji.cc",
+    "prompt_sha256": "1e7a0fab07b53426eacaf0dfbf4db01e630bacdbed5213a9db48738c49264d69",
+    "size": [
+      256,
+      256
+    ],
+    "processing": "Extract reviewed atlas cell; 256px lossless WebP"
+  },
+  {
+    "id": "RX-P01-01",
+    "version": 2,
+    "file": "assets/art/relic-roster-v2/RX-P01-01.webp",
+    "sha256": "e2fa25d3647ae20a5858fa65a87fbb11b23bee12b963dcb6290da9a79ad0ca7a",
+    "source": "output/imagegen/relic-roster-20261120/raw/RX-V2-sheet-05.png",
+    "source_sha256": "514bd721f8a96d4829df46f704e63319074c14c52f41590f1ef36ee4afeed26c",
+    "cell": 1,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "api-slb.jiji.cc",
+    "prompt_sha256": "df4d1894935557999c91639ce88496c612d1cb09a4ec9569b88b6b9be64076df",
+    "size": [
+      256,
+      256
+    ],
+    "processing": "Extract reviewed atlas cell; 256px lossless WebP",
+    "paper_cleanup": {
+      "region": [
+        46,
+        224,
+        111,
+        251
+      ],
+      "donor_xy": [
+        46,
+        190
+      ],
+      "feather_px": 6
+    }
+  },
+  {
+    "id": "RX-P01-03",
+    "version": 2,
+    "file": "assets/art/relic-roster-v2/RX-P01-03.webp",
+    "sha256": "7feb78666eaec45a1602647b9e59c9d1c753603a8c5c8086ba809d1d4deb3b1b",
+    "source": "output/imagegen/relic-roster-20261120/raw/RX-V2-sheet-05.png",
+    "source_sha256": "514bd721f8a96d4829df46f704e63319074c14c52f41590f1ef36ee4afeed26c",
+    "cell": 2,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "api-slb.jiji.cc",
+    "prompt_sha256": "df4d1894935557999c91639ce88496c612d1cb09a4ec9569b88b6b9be64076df",
+    "size": [
+      256,
+      256
+    ],
+    "processing": "Extract reviewed atlas cell; 256px lossless WebP"
+  },
+  {
+    "id": "RX-P01-10",
+    "version": 2,
+    "file": "assets/art/relic-roster-v2/RX-P01-10.webp",
+    "sha256": "9f74ef1bad083b3cfc4cb3ae75027074e9d3c02c3d1e5684001c24b8937f4cb9",
+    "source": "output/imagegen/relic-roster-20261120/raw/RX-V2-sheet-05.png",
+    "source_sha256": "514bd721f8a96d4829df46f704e63319074c14c52f41590f1ef36ee4afeed26c",
+    "cell": 3,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "api-slb.jiji.cc",
+    "prompt_sha256": "df4d1894935557999c91639ce88496c612d1cb09a4ec9569b88b6b9be64076df",
+    "size": [
+      256,
+      256
+    ],
+    "processing": "Extract reviewed atlas cell; 256px lossless WebP"
+  },
+  {
+    "id": "RX-P01-15",
+    "version": 2,
+    "file": "assets/art/relic-roster-v2/RX-P01-15.webp",
+    "sha256": "472ee6d7c1f43e63c02dcc9f2fc66a9aa03e77f81bb9885dc12a3d8e798e0a9d",
+    "source": "output/imagegen/relic-roster-20261120/raw/RX-V2-sheet-05.png",
+    "source_sha256": "514bd721f8a96d4829df46f704e63319074c14c52f41590f1ef36ee4afeed26c",
+    "cell": 4,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "api-slb.jiji.cc",
+    "prompt_sha256": "df4d1894935557999c91639ce88496c612d1cb09a4ec9569b88b6b9be64076df",
+    "size": [
+      256,
+      256
+    ],
+    "processing": "Extract reviewed atlas cell; 256px lossless WebP"
+  },
+  {
+    "id": "RX-P01-07",
+    "version": 2,
+    "file": "assets/art/relic-roster-v2/RX-P01-07.webp",
+    "sha256": "a881dc82e660d25024c9e497a139b91084a80bad268ca0e5693cf2243fa3a505",
+    "source": "output/imagegen/relic-roster-20261120/raw/RX-V2-sheet-06.png",
+    "source_sha256": "20a816bf01c654fda86644ff7f6b4f94ca738527605b990b2c22d6364e6306ab",
+    "cell": 1,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "api-slb.jiji.cc",
+    "prompt_sha256": "2163173cdc558f278979468dd4214ee693e04ec82a4274352b7ac9fc07797ad0",
+    "size": [
+      256,
+      256
+    ],
+    "processing": "Extract reviewed atlas cell; 256px lossless WebP"
+  },
+  {
+    "id": "RX-P01-09",
+    "version": 2,
+    "file": "assets/art/relic-roster-v2/RX-P01-09.webp",
+    "sha256": "8cf17260cf15075cf05d2afde28f5cfbeac9828cd59b9f75139c72c5d5e0160d",
+    "source": "output/imagegen/relic-roster-20261120/raw/RX-V2-sheet-06.png",
+    "source_sha256": "20a816bf01c654fda86644ff7f6b4f94ca738527605b990b2c22d6364e6306ab",
+    "cell": 2,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "api-slb.jiji.cc",
+    "prompt_sha256": "2163173cdc558f278979468dd4214ee693e04ec82a4274352b7ac9fc07797ad0",
+    "size": [
+      256,
+      256
+    ],
+    "processing": "Extract reviewed atlas cell; 256px lossless WebP"
+  },
+  {
+    "id": "RX-P01-11",
+    "version": 2,
+    "file": "assets/art/relic-roster-v2/RX-P01-11.webp",
+    "sha256": "ec67764eb1760b7d6f9de0391c6c11d088388f9f04553021b8d88ff815ccdc15",
+    "source": "output/imagegen/relic-roster-20261120/raw/RX-V2-sheet-06.png",
+    "source_sha256": "20a816bf01c654fda86644ff7f6b4f94ca738527605b990b2c22d6364e6306ab",
+    "cell": 3,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "api-slb.jiji.cc",
+    "prompt_sha256": "2163173cdc558f278979468dd4214ee693e04ec82a4274352b7ac9fc07797ad0",
+    "size": [
+      256,
+      256
+    ],
+    "processing": "Extract reviewed atlas cell; 256px lossless WebP"
+  },
+  {
+    "id": "RX-P03-09",
+    "version": 2,
+    "file": "assets/art/relic-roster-v2/RX-P03-09.webp",
+    "sha256": "50dcae5c7deb9e3230daf76ad2104715caeefc9289c96e0582b6eb1fe6450c98",
+    "source": "output/imagegen/relic-roster-20261120/raw/RX-V2-sheet-06.png",
+    "source_sha256": "20a816bf01c654fda86644ff7f6b4f94ca738527605b990b2c22d6364e6306ab",
+    "cell": 4,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "api-slb.jiji.cc",
+    "prompt_sha256": "2163173cdc558f278979468dd4214ee693e04ec82a4274352b7ac9fc07797ad0",
+    "size": [
+      256,
+      256
+    ],
+    "processing": "Extract reviewed atlas cell; 256px lossless WebP"
+  },
+  {
+    "id": "RX-P01-08",
+    "version": 2,
+    "file": "assets/art/relic-roster-v2/RX-P01-08.webp",
+    "sha256": "8d57a02262d3154c0070488e280c8bd7689e33d4548e1ebe632675fe7a17dd92",
+    "source": "output/imagegen/relic-roster-20261120/raw/RX-V2-sheet-07.png",
+    "source_sha256": "b89a829ece188417543c1d1e1825a5ef6e7634eb710747ea5d8b23f40bdef677",
+    "cell": 1,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "api-slb.jiji.cc",
+    "prompt_sha256": "66909bfb886a7b4febee59a30361a614e561dcdf72818f2f3082519199771733",
+    "size": [
+      256,
+      256
+    ],
+    "processing": "Extract reviewed atlas cell; 256px lossless WebP"
+  },
+  {
+    "id": "RX-P01-13",
+    "version": 2,
+    "file": "assets/art/relic-roster-v2/RX-P01-13.webp",
+    "sha256": "a69bf205f644d1331e1aec89b2c93025b8e527b390f2825b696ffc1c6d5fac09",
+    "source": "output/imagegen/relic-roster-20261120/raw/RX-V2-sheet-07.png",
+    "source_sha256": "b89a829ece188417543c1d1e1825a5ef6e7634eb710747ea5d8b23f40bdef677",
+    "cell": 2,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "api-slb.jiji.cc",
+    "prompt_sha256": "66909bfb886a7b4febee59a30361a614e561dcdf72818f2f3082519199771733",
+    "size": [
+      256,
+      256
+    ],
+    "processing": "Extract reviewed atlas cell; 256px lossless WebP"
+  },
+  {
+    "id": "RX-P01-14",
+    "version": 2,
+    "file": "assets/art/relic-roster-v2/RX-P01-14.webp",
+    "sha256": "7ee624daea7d95b48e6df8fc3043cf5e01d604b61c54ee3b81185effb800c020",
+    "source": "output/imagegen/relic-roster-20261120/raw/RX-V2-sheet-07.png",
+    "source_sha256": "b89a829ece188417543c1d1e1825a5ef6e7634eb710747ea5d8b23f40bdef677",
+    "cell": 3,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "api-slb.jiji.cc",
+    "prompt_sha256": "66909bfb886a7b4febee59a30361a614e561dcdf72818f2f3082519199771733",
+    "size": [
+      256,
+      256
+    ],
+    "processing": "Extract reviewed atlas cell; 256px lossless WebP"
+  },
+  {
+    "id": "RX-P01-16",
+    "version": 2,
+    "file": "assets/art/relic-roster-v2/RX-P01-16.webp",
+    "sha256": "dc2866584008a7d84edc091218d842e4beb64b3be874af64b2c772bd2a44b656",
+    "source": "output/imagegen/relic-roster-20261120/raw/RX-V2-sheet-07.png",
+    "source_sha256": "b89a829ece188417543c1d1e1825a5ef6e7634eb710747ea5d8b23f40bdef677",
+    "cell": 4,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "api-slb.jiji.cc",
+    "prompt_sha256": "66909bfb886a7b4febee59a30361a614e561dcdf72818f2f3082519199771733",
+    "size": [
+      256,
+      256
+    ],
+    "processing": "Extract reviewed atlas cell; 256px lossless WebP"
+  },
+  {
+    "id": "RX-P02-02",
+    "version": 2,
+    "file": "assets/art/relic-roster-v2/RX-P02-02.webp",
+    "sha256": "8795ab8cc73625295a864f4535a6a275b97e4686280dcdccf510c82fe35188fd",
+    "source": "output/imagegen/relic-roster-20261120/raw/RX-V2-sheet-08.png",
+    "source_sha256": "bf7a5c2d1ae27c475394c64c7d225f670594fc077066d7a42ac79b6b191d8ec1",
+    "cell": 1,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "api-slb.jiji.cc",
+    "prompt_sha256": "3f5f402aafba446a2b8909d171bd6332bc4457f2b33597b72d27a4c131e65450",
+    "size": [
+      256,
+      256
+    ],
+    "processing": "Extract reviewed atlas cell; 256px lossless WebP"
+  },
+  {
+    "id": "RX-P02-03",
+    "version": 2,
+    "file": "assets/art/relic-roster-v2/RX-P02-03.webp",
+    "sha256": "98621b82a442d2a9b0dadd907c826a49172038c41eb110eb320cd80ea7ab7a46",
+    "source": "output/imagegen/relic-roster-20261120/raw/RX-V2-sheet-08.png",
+    "source_sha256": "bf7a5c2d1ae27c475394c64c7d225f670594fc077066d7a42ac79b6b191d8ec1",
+    "cell": 2,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "api-slb.jiji.cc",
+    "prompt_sha256": "3f5f402aafba446a2b8909d171bd6332bc4457f2b33597b72d27a4c131e65450",
+    "size": [
+      256,
+      256
+    ],
+    "processing": "Extract reviewed atlas cell; 256px lossless WebP",
+    "paper_cleanup": {
+      "region": [
+        12,
+        126,
+        54,
+        195
+      ],
+      "donor_xy": [
+        13,
+        42
+      ],
+      "feather_px": 6
+    }
+  },
+  {
+    "id": "RX-P02-05",
+    "version": 2,
+    "file": "assets/art/relic-roster-v2/RX-P02-05.webp",
+    "sha256": "e8bb4bce7e80c27997da7aeb06fda8df77aef897fa949cf80c90efd5c0683296",
+    "source": "output/imagegen/relic-roster-20261120/raw/RX-V2-sheet-08.png",
+    "source_sha256": "bf7a5c2d1ae27c475394c64c7d225f670594fc077066d7a42ac79b6b191d8ec1",
+    "cell": 3,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "api-slb.jiji.cc",
+    "prompt_sha256": "3f5f402aafba446a2b8909d171bd6332bc4457f2b33597b72d27a4c131e65450",
+    "size": [
+      256,
+      256
+    ],
+    "processing": "Extract reviewed atlas cell; 256px lossless WebP"
+  },
+  {
+    "id": "RX-P02-13",
+    "version": 2,
+    "file": "assets/art/relic-roster-v2/RX-P02-13.webp",
+    "sha256": "a36fe9ce026b0685ef7cfa45cea7baa776cc63330926d702ba4ac133ee534c6e",
+    "source": "output/imagegen/relic-roster-20261120/raw/RX-V2-sheet-08.png",
+    "source_sha256": "bf7a5c2d1ae27c475394c64c7d225f670594fc077066d7a42ac79b6b191d8ec1",
+    "cell": 4,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "api-slb.jiji.cc",
+    "prompt_sha256": "3f5f402aafba446a2b8909d171bd6332bc4457f2b33597b72d27a4c131e65450",
+    "size": [
+      256,
+      256
+    ],
+    "processing": "Extract reviewed atlas cell; 256px lossless WebP",
+    "paper_cleanup": {
+      "region": [
+        0,
+        117,
+        23,
+        185
+      ],
+      "donor_xy": [
+        0,
+        28
+      ],
+      "feather_px": 6
+    }
+  },
+  {
+    "id": "RX-P02-07",
+    "version": 2,
+    "file": "assets/art/relic-roster-v2/RX-P02-07.webp",
+    "sha256": "4b578a9952d1c7d6199c39e359871733e62d22bf6371d48b0baa38b4b9f793e0",
+    "source": "output/imagegen/relic-roster-20261120/raw/RX-V2-sheet-09.png",
+    "source_sha256": "8750b90e9ec09a9b14bc4d7af2b4bcff50ad8b03a836a0bad7b339f5633ec05e",
+    "cell": 1,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "api-slb.jiji.cc",
+    "prompt_sha256": "5c546013a1a0dbfd3d580c4d8e2f78be1e041454fb16f3a5721c2a691e5af734",
+    "size": [
+      256,
+      256
+    ],
+    "processing": "Extract reviewed atlas cell; 256px lossless WebP"
+  },
+  {
+    "id": "RX-P02-09",
+    "version": 2,
+    "file": "assets/art/relic-roster-v2/RX-P02-09.webp",
+    "sha256": "c32646af96daa5da56f16766b4b7567cbf8a13682fd588247f309eac2f18d9e7",
+    "source": "output/imagegen/relic-roster-20261120/raw/RX-V2-sheet-09.png",
+    "source_sha256": "8750b90e9ec09a9b14bc4d7af2b4bcff50ad8b03a836a0bad7b339f5633ec05e",
+    "cell": 2,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "api-slb.jiji.cc",
+    "prompt_sha256": "5c546013a1a0dbfd3d580c4d8e2f78be1e041454fb16f3a5721c2a691e5af734",
+    "size": [
+      256,
+      256
+    ],
+    "processing": "Extract reviewed atlas cell; 256px lossless WebP"
+  },
+  {
+    "id": "RX-P02-12",
+    "version": 2,
+    "file": "assets/art/relic-roster-v2/RX-P02-12.webp",
+    "sha256": "4d70ff28f0f2ed56551c347ec6120dd3e9fc0a4f28dc0e74aaff7318af8cdf3f",
+    "source": "output/imagegen/relic-roster-20261120/raw/RX-V2-sheet-09.png",
+    "source_sha256": "8750b90e9ec09a9b14bc4d7af2b4bcff50ad8b03a836a0bad7b339f5633ec05e",
+    "cell": 3,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "api-slb.jiji.cc",
+    "prompt_sha256": "5c546013a1a0dbfd3d580c4d8e2f78be1e041454fb16f3a5721c2a691e5af734",
+    "size": [
+      256,
+      256
+    ],
+    "processing": "Extract reviewed atlas cell; 256px lossless WebP"
+  },
+  {
+    "id": "RX-P02-15",
+    "version": 2,
+    "file": "assets/art/relic-roster-v2/RX-P02-15.webp",
+    "sha256": "4ad74fac6ec2d0b7991181054f9abf876dc03baa728f471d719008c13371ac3b",
+    "source": "output/imagegen/relic-roster-20261120/raw/RX-V2-sheet-09.png",
+    "source_sha256": "8750b90e9ec09a9b14bc4d7af2b4bcff50ad8b03a836a0bad7b339f5633ec05e",
+    "cell": 4,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "api-slb.jiji.cc",
+    "prompt_sha256": "5c546013a1a0dbfd3d580c4d8e2f78be1e041454fb16f3a5721c2a691e5af734",
+    "size": [
+      256,
+      256
+    ],
+    "processing": "Extract reviewed atlas cell; 256px lossless WebP"
+  },
+  {
+    "id": "RX-P02-14",
+    "version": 2,
+    "file": "assets/art/relic-roster-v2/RX-P02-14.webp",
+    "sha256": "da9c61e5644b6ade5febc5e3d959064173186e2967baf5e622db99a397a37b72",
+    "source": "output/imagegen/relic-roster-20261120/raw/RX-V2-sheet-10.png",
+    "source_sha256": "93fa88904e0cfe5918a9c856121b844082c4b62fc126e5b54cb305768da218cb",
+    "cell": 1,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "api-slb.jiji.cc",
+    "prompt_sha256": "3b72322df46398e771ec5bd8c5848f17ee8a72079307329a145c312c734c108c",
+    "size": [
+      256,
+      256
+    ],
+    "processing": "Extract reviewed atlas cell; 256px lossless WebP"
+  },
+  {
+    "id": "RX-P02-16",
+    "version": 2,
+    "file": "assets/art/relic-roster-v2/RX-P02-16.webp",
+    "sha256": "ea517832b5ec1bb35dd3ae66ecaa246caaf403956232c4ab3b288eececac2858",
+    "source": "output/imagegen/relic-roster-20261120/raw/RX-V2-sheet-10.png",
+    "source_sha256": "93fa88904e0cfe5918a9c856121b844082c4b62fc126e5b54cb305768da218cb",
+    "cell": 2,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "api-slb.jiji.cc",
+    "prompt_sha256": "3b72322df46398e771ec5bd8c5848f17ee8a72079307329a145c312c734c108c",
+    "size": [
+      256,
+      256
+    ],
+    "processing": "Extract reviewed atlas cell; 256px lossless WebP"
+  },
+  {
+    "id": "RX-P03-12",
+    "version": 2,
+    "file": "assets/art/relic-roster-v2/RX-P03-12.webp",
+    "sha256": "40078745a7bd3ff8137c6ad082e50b1ca48ddf6d26b1f1cde9675c74a83ad6b2",
+    "source": "output/imagegen/relic-roster-20261120/raw/RX-V2-sheet-10.png",
+    "source_sha256": "93fa88904e0cfe5918a9c856121b844082c4b62fc126e5b54cb305768da218cb",
+    "cell": 3,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "api-slb.jiji.cc",
+    "prompt_sha256": "3b72322df46398e771ec5bd8c5848f17ee8a72079307329a145c312c734c108c",
+    "size": [
+      256,
+      256
+    ],
+    "processing": "Extract reviewed atlas cell; 256px lossless WebP"
+  },
+  {
+    "id": "RX-P03-14",
+    "version": 2,
+    "file": "assets/art/relic-roster-v2/RX-P03-14.webp",
+    "sha256": "0bd94bb499ca401c0817b7c5bef64342d96193edb3bf59c55bbe06e4874a6702",
+    "source": "output/imagegen/relic-roster-20261120/raw/RX-V2-sheet-10.png",
+    "source_sha256": "93fa88904e0cfe5918a9c856121b844082c4b62fc126e5b54cb305768da218cb",
+    "cell": 4,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "api-slb.jiji.cc",
+    "prompt_sha256": "3b72322df46398e771ec5bd8c5848f17ee8a72079307329a145c312c734c108c",
+    "size": [
+      256,
+      256
+    ],
+    "processing": "Extract reviewed atlas cell; 256px lossless WebP"
+  },
+  {
+    "id": "RX-P03-01",
+    "version": 2,
+    "file": "assets/art/relic-roster-v2/RX-P03-01.webp",
+    "sha256": "85f5d2811a2777c41bdb224be4cfe4fe3d87ca29c1e1e9f3e58ed0ca89e55e50",
+    "source": "output/imagegen/relic-roster-20261120/raw/RX-V2-sheet-11.png",
+    "source_sha256": "eabae72f3055fe0e8be8871d76a00c8dab32c62c4dce9e3ee9ce3bb5122412f2",
+    "cell": 1,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "api-slb.jiji.cc",
+    "prompt_sha256": "bbb1db9dae85d1446984a1eff235d5c073837ffeb9ef3e98a06fc8c9741f9abf",
+    "size": [
+      256,
+      256
+    ],
+    "processing": "Extract reviewed atlas cell; 256px lossless WebP"
+  },
+  {
+    "id": "RX-P03-02",
+    "version": 2,
+    "file": "assets/art/relic-roster-v2/RX-P03-02.webp",
+    "sha256": "8870a7d21bec103ffcf0f6bcae77e79917af9bd2ca947a2bf9888b1a85b4b795",
+    "source": "output/imagegen/relic-roster-20261120/raw/RX-V2-sheet-11.png",
+    "source_sha256": "eabae72f3055fe0e8be8871d76a00c8dab32c62c4dce9e3ee9ce3bb5122412f2",
+    "cell": 2,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "api-slb.jiji.cc",
+    "prompt_sha256": "bbb1db9dae85d1446984a1eff235d5c073837ffeb9ef3e98a06fc8c9741f9abf",
+    "size": [
+      256,
+      256
+    ],
+    "processing": "Extract reviewed atlas cell; 256px lossless WebP"
+  },
+  {
+    "id": "RX-P03-05",
+    "version": 2,
+    "file": "assets/art/relic-roster-v2/RX-P03-05.webp",
+    "sha256": "a4f45b91b20d62dafe32018ae4f10775727c524904053175d7af4d1e9e910c7b",
+    "source": "output/imagegen/relic-roster-20261120/raw/RX-V2-sheet-11.png",
+    "source_sha256": "eabae72f3055fe0e8be8871d76a00c8dab32c62c4dce9e3ee9ce3bb5122412f2",
+    "cell": 3,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "api-slb.jiji.cc",
+    "prompt_sha256": "bbb1db9dae85d1446984a1eff235d5c073837ffeb9ef3e98a06fc8c9741f9abf",
+    "size": [
+      256,
+      256
+    ],
+    "processing": "Extract reviewed atlas cell; 256px lossless WebP"
+  },
+  {
+    "id": "RX-P03-13",
+    "version": 2,
+    "file": "assets/art/relic-roster-v2/RX-P03-13.webp",
+    "sha256": "2db6abe668f810847f6c40140515365e9371336c8c59ecf59c0a2c55bb94a154",
+    "source": "output/imagegen/relic-roster-20261120/raw/RX-V2-sheet-11.png",
+    "source_sha256": "eabae72f3055fe0e8be8871d76a00c8dab32c62c4dce9e3ee9ce3bb5122412f2",
+    "cell": 4,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "api-slb.jiji.cc",
+    "prompt_sha256": "bbb1db9dae85d1446984a1eff235d5c073837ffeb9ef3e98a06fc8c9741f9abf",
+    "size": [
+      256,
+      256
+    ],
+    "processing": "Extract reviewed atlas cell; 256px lossless WebP"
+  },
+  {
+    "id": "RX-P03-08",
+    "version": 2,
+    "file": "assets/art/relic-roster-v2/RX-P03-08.webp",
+    "sha256": "7e0712023ecb5b9dfd30c637ce39ee4b1358f7a62ce3e58d6ecc0d28040b5bb1",
+    "source": "output/imagegen/relic-roster-20261120/raw/RX-V2-sheet-12.png",
+    "source_sha256": "0b5f60e2cd12b163b4380e69f87276915496e554c46a8105965f2c62482a7f9b",
+    "cell": 1,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "api-slb.jiji.cc",
+    "prompt_sha256": "9ca30ffddc0f8aa35ad8f4986f82eb55b11093c445b3ee72a13c16d64274c9e9",
+    "size": [
+      256,
+      256
+    ],
+    "processing": "Extract reviewed atlas cell; 256px lossless WebP"
+  },
+  {
+    "id": "RX-P03-10",
+    "version": 2,
+    "file": "assets/art/relic-roster-v2/RX-P03-10.webp",
+    "sha256": "d1317cd4d5cb097f2cfaf8e87b1df1655be41be5f280353b7dbed91b1decf076",
+    "source": "output/imagegen/relic-roster-20261120/raw/RX-V2-sheet-12.png",
+    "source_sha256": "0b5f60e2cd12b163b4380e69f87276915496e554c46a8105965f2c62482a7f9b",
+    "cell": 2,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "api-slb.jiji.cc",
+    "prompt_sha256": "9ca30ffddc0f8aa35ad8f4986f82eb55b11093c445b3ee72a13c16d64274c9e9",
+    "size": [
+      256,
+      256
+    ],
+    "processing": "Extract reviewed atlas cell; 256px lossless WebP"
+  },
+  {
+    "id": "RX-P03-15",
+    "version": 2,
+    "file": "assets/art/relic-roster-v2/RX-P03-15.webp",
+    "sha256": "fe994a2e682a437888a777d7ce5cc58e220f076e6c7732efdddeb5a4644cdd04",
+    "source": "output/imagegen/relic-roster-20261120/raw/RX-V2-sheet-12.png",
+    "source_sha256": "0b5f60e2cd12b163b4380e69f87276915496e554c46a8105965f2c62482a7f9b",
+    "cell": 3,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "api-slb.jiji.cc",
+    "prompt_sha256": "9ca30ffddc0f8aa35ad8f4986f82eb55b11093c445b3ee72a13c16d64274c9e9",
+    "size": [
+      256,
+      256
+    ],
+    "processing": "Extract reviewed atlas cell; 256px lossless WebP"
+  },
+  {
+    "id": "RX-P03-16",
+    "version": 2,
+    "file": "assets/art/relic-roster-v2/RX-P03-16.webp",
+    "sha256": "3bb2d01bb3b33ca450c01efd663cebaf72dd54e5de3bde098c762521bc7ba215",
+    "source": "output/imagegen/relic-roster-20261120/raw/RX-V2-sheet-12.png",
+    "source_sha256": "0b5f60e2cd12b163b4380e69f87276915496e554c46a8105965f2c62482a7f9b",
+    "cell": 4,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "api-slb.jiji.cc",
+    "prompt_sha256": "9ca30ffddc0f8aa35ad8f4986f82eb55b11093c445b3ee72a13c16d64274c9e9",
+    "size": [
+      256,
+      256
+    ],
+    "processing": "Extract reviewed atlas cell; 256px lossless WebP"
+  },
+  {
+    "id": "RX-P04-04",
+    "version": 2,
+    "file": "assets/art/relic-roster-v2/RX-P04-04.webp",
+    "sha256": "33f77f04b51486aefbdc118e73f6d80188c9dc9437e16df229fda947e64028d7",
+    "source": "output/imagegen/relic-roster-20261120/raw/RX-V2-sheet-13.png",
+    "source_sha256": "100af23205ff746dc65e295244d7b4e8589d25552fccfcfcbabe5ccf381ccce5",
+    "cell": 1,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "api-slb.jiji.cc",
+    "prompt_sha256": "12f8d62608227d5a1f79a01e80014935dfa41a8059634fc356745a5c955b72a4",
+    "size": [
+      256,
+      256
+    ],
+    "processing": "Extract reviewed atlas cell; 256px lossless WebP"
+  },
+  {
+    "id": "RX-P04-05",
+    "version": 2,
+    "file": "assets/art/relic-roster-v2/RX-P04-05.webp",
+    "sha256": "bb1c3a114219587f483e5df3e6f62f3d67aac994fd2225bf50ac1aaaa7556178",
+    "source": "output/imagegen/relic-roster-20261120/raw/RX-V2-sheet-13.png",
+    "source_sha256": "100af23205ff746dc65e295244d7b4e8589d25552fccfcfcbabe5ccf381ccce5",
+    "cell": 2,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "api-slb.jiji.cc",
+    "prompt_sha256": "12f8d62608227d5a1f79a01e80014935dfa41a8059634fc356745a5c955b72a4",
+    "size": [
+      256,
+      256
+    ],
+    "processing": "Extract reviewed atlas cell; 256px lossless WebP"
+  },
+  {
+    "id": "RX-P04-09",
+    "version": 2,
+    "file": "assets/art/relic-roster-v2/RX-P04-09.webp",
+    "sha256": "9568213f397fbbda820debdda5d68ba596a4d9aba3ac0317d235081133e31173",
+    "source": "output/imagegen/relic-roster-20261120/raw/RX-V2-sheet-13.png",
+    "source_sha256": "100af23205ff746dc65e295244d7b4e8589d25552fccfcfcbabe5ccf381ccce5",
+    "cell": 3,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "api-slb.jiji.cc",
+    "prompt_sha256": "12f8d62608227d5a1f79a01e80014935dfa41a8059634fc356745a5c955b72a4",
+    "size": [
+      256,
+      256
+    ],
+    "processing": "Extract reviewed atlas cell; 256px lossless WebP"
+  },
+  {
+    "id": "RX-P04-11",
+    "version": 2,
+    "file": "assets/art/relic-roster-v2/RX-P04-11.webp",
+    "sha256": "b7b0392e55bcc8f24b9137bd4c3748a016e02168f6905a9bcf29e3bacb1fea62",
+    "source": "output/imagegen/relic-roster-20261120/raw/RX-V2-sheet-13.png",
+    "source_sha256": "100af23205ff746dc65e295244d7b4e8589d25552fccfcfcbabe5ccf381ccce5",
+    "cell": 4,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "api-slb.jiji.cc",
+    "prompt_sha256": "12f8d62608227d5a1f79a01e80014935dfa41a8059634fc356745a5c955b72a4",
+    "size": [
+      256,
+      256
+    ],
+    "processing": "Extract reviewed atlas cell; 256px lossless WebP"
+  },
+  {
+    "id": "RX-P04-12",
+    "version": 2,
+    "file": "assets/art/relic-roster-v2/RX-P04-12.webp",
+    "sha256": "49b645844be00d2fd6dcdd223d5aa10123f2313d16e47507779190f24efda12b",
+    "source": "output/imagegen/relic-roster-20261120/raw/RX-V2-sheet-14.png",
+    "source_sha256": "dee79b38608137d711a35038f114fdc2e05b9c9643e817f6eaab865aa9c369a4",
+    "cell": 1,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "api-slb.jiji.cc",
+    "prompt_sha256": "1c747a25471f66b143e6eb8748019a544cd5fcb649476cd5fd32a6e3a8f92616",
+    "size": [
+      256,
+      256
+    ],
+    "processing": "Extract reviewed atlas cell; 256px lossless WebP"
+  },
+  {
+    "id": "RX-P04-13",
+    "version": 2,
+    "file": "assets/art/relic-roster-v2/RX-P04-13.webp",
+    "sha256": "dcf9703b579fdbabc8f33bc715059d45bb45fcbad9e661000412590408601766",
+    "source": "output/imagegen/relic-roster-20261120/raw/RX-V2-sheet-14.png",
+    "source_sha256": "dee79b38608137d711a35038f114fdc2e05b9c9643e817f6eaab865aa9c369a4",
+    "cell": 2,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "api-slb.jiji.cc",
+    "prompt_sha256": "1c747a25471f66b143e6eb8748019a544cd5fcb649476cd5fd32a6e3a8f92616",
+    "size": [
+      256,
+      256
+    ],
+    "processing": "Extract reviewed atlas cell; 256px lossless WebP"
+  },
+  {
+    "id": "RX-P04-14",
+    "version": 2,
+    "file": "assets/art/relic-roster-v2/RX-P04-14.webp",
+    "sha256": "e0dbfbd4a33a061e3a8dbbce550c8bf54fe18c8f7f8f5dbdbae3d37679588051",
+    "source": "output/imagegen/relic-roster-20261120/raw/RX-V2-sheet-14.png",
+    "source_sha256": "dee79b38608137d711a35038f114fdc2e05b9c9643e817f6eaab865aa9c369a4",
+    "cell": 3,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "api-slb.jiji.cc",
+    "prompt_sha256": "1c747a25471f66b143e6eb8748019a544cd5fcb649476cd5fd32a6e3a8f92616",
+    "size": [
+      256,
+      256
+    ],
+    "processing": "Extract reviewed atlas cell; 256px lossless WebP"
+  },
+  {
+    "id": "RX-P04-16",
+    "version": 2,
+    "file": "assets/art/relic-roster-v2/RX-P04-16.webp",
+    "sha256": "a2b1c06302e90a201ac2451d8159e79ca8072c1d3f066304e0de19b078dadb05",
+    "source": "output/imagegen/relic-roster-20261120/raw/RX-V2-sheet-14.png",
+    "source_sha256": "dee79b38608137d711a35038f114fdc2e05b9c9643e817f6eaab865aa9c369a4",
+    "cell": 4,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "api-slb.jiji.cc",
+    "prompt_sha256": "1c747a25471f66b143e6eb8748019a544cd5fcb649476cd5fd32a6e3a8f92616",
+    "size": [
+      256,
+      256
+    ],
+    "processing": "Extract reviewed atlas cell; 256px lossless WebP"
+  }
+]

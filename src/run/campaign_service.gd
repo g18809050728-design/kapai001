@@ -14,22 +14,37 @@ func _init(catalog: ContentDB = null) -> void:
 	_catalog = catalog
 
 static func enabled(run: RunState) -> bool:
-	return run.manifest_id == "campus_four_year"
+	return run.manifest_id in [RelicPilot.BASE, RelicPilot.MANIFEST, RelicPilot.ROSTER]
 
 static func initial() -> Dictionary:
 	return {"version": 1, "exploration": 0, "visited_types": [], "direction": "",
 		"direction_changed": false, "resume": 0, "thesis": 0, "destination": "",
 		"pending": {}, "triggered": [], "history": []}
 
-static func validate(data: Dictionary, issues: Array[String]) -> void:
+static func validate(data: Dictionary, issues: Array[String], pilot: bool = false, roster: bool = false) -> void:
 	var start := issues.size()
 	var initial_issues := start
 	var fields := FIELDS.duplicate()
 	if data.get("version") == 2:
 		fields.merge(CampaignProgression.MAP_FIELDS)
-	RunCodec.shape(data, fields, "run.campaign", issues)
+	if pilot:
+		fields["rx_uses"] = TYPE_DICTIONARY
+	if roster:
+		fields["rx_state"] = TYPE_DICTIONARY
+		fields["legacy_relic_layers"] = TYPE_BOOL
+	RunCodec.shape(data, fields, "run.campaign", issues, ["legacy_relic_layers"])
 	if issues.size() != start:
 		return
+	if pilot:
+		if data.version != 2 and not data.get("legacy_relic_layers", false):
+			issues.append("pilot campaign requires annual maps")
+		for id in data.rx_uses:
+			var count: Variant = data.rx_uses[id]
+			var max_uses := int(RelicPilot.RUN_LIMITS.get(id, RunRelicRoster.LIMITS.get(id,0) if roster else 0))
+			if max_uses == 0 or not count is int or count < 1 or count > max_uses:
+				issues.append("campaign pilot relic counter invalid")
+	if roster:
+		RunRelicRoster.validate(data.rx_state,issues)
 	if data.version not in [1, 2] or data.exploration < 0 or data.exploration > 6 or data.resume < 0 or data.resume > 6 or data.thesis < 0 or data.thesis > 5:
 		issues.append("campaign version/counter invalid")
 	if data.direction not in [""] + DIRECTIONS or data.destination not in [""] + DESTINATIONS:
@@ -101,10 +116,16 @@ func completed(run: RunState, node: RunNodeState, rng: RandomSource) -> GameResu
 		run.money += bonus(run, "event_money")
 		if run.term == 1 and int(run.campaign.exploration) >= 4:
 			_set_pending(run, "familiar", node.node_id + "|familiar", node.node_id, [])
-	var map: Dictionary = CampaignProgression.year_info(run, run.term)
-	if map.relic_layers.has(node.layer):
-		var key := "%s|y%d|relic%d" % [run.run_id, run.term, map.relic_layers.find(node.layer)]
+	var layers := relic_layers(run)
+	if layers.has(node.layer):
+		var key := "%s|y%d|relic%d" % [run.run_id, run.term, layers.find(node.layer)]
 		if not run.campaign.triggered.has(key):
+			if RelicPilot.expanded(run.manifest_id):
+				var offered := RelicPilot.candidates(run, _catalog, rng)
+				if not offered.ok:
+					return offered
+				_set_pending(run, "relic", key, node.node_id, offered.data)
+				return GameResult.success(true)
 			var pool: Array = []
 			for id in _catalog.get_candidates({"kind": "relic"}):
 				var d: Dictionary = _catalog.get_definition("relic", id).data
@@ -113,6 +134,11 @@ func completed(run: RunState, node: RunNodeState, rng: RandomSource) -> GameResu
 			var chosen := _sample(pool, 3, rng)
 			_set_pending(run, "relic", key, node.node_id, chosen)
 	return GameResult.success(true)
+
+static func relic_layers(run: RunState) -> Array:
+	if RelicPilot.expanded(run.manifest_id) and not run.campaign.get("legacy_relic_layers", false):
+		return [3, 9] if run.term <= 2 else [4, 11]
+	return CampaignProgression.year_info(run, run.term).get("relic_layers", [])
 
 func grand(run: RunState, node: RunNodeState, rng: RandomSource) -> GameResult:
 	var generated := RewardGenerator.new(_catalog).card_candidates(run, 3, rng, {"white": 0, "blue": 30, "purple": 50, "gold": 20})
@@ -211,7 +237,9 @@ func _grand_choice(run: RunState, pending: Dictionary, option: String, candidate
 				return _error("run.campaign.candidate.invalid")
 			TransactionResolver.new(_catalog).add_card(run, candidate, "year_grand")
 		"upgrade", "remove":
-			return _change_card(run, option, candidate)
+			var changed := _change_card(run,option,candidate)
+			if changed.ok and option == "upgrade": RunRelicRoster.bonus_upgrade(run,_catalog,candidate)
+			return changed
 		"resources":
 			run.money += 60
 			if (run.term == 1 and int(run.campaign.exploration) >= 6) or (run.term == 4 and int(run.campaign.thesis) >= 4):
@@ -257,17 +285,23 @@ func _service(run: RunState, pending: Dictionary, option: String, candidate: Str
 		if option not in (["upgrade"] if subtype == "LAB" else ["upgrade", "remove"]):
 			return _error("run.campaign.option.invalid")
 		var cost := service_cost(run, subtype)
+		var discount := RunRelicRoster.upgrade_discount(run,cost) if option == "upgrade" else 0
+		cost -= discount
 		if run.money < cost or (subtype == "LAB" and run.vitality <= 5):
 			return _error("run.campaign.resources.insufficient")
 		var changed := _change_card(run, option, candidate)
 		if not changed.ok:
 			return changed
 		run.money -= cost
+		if discount > 0: RelicPilot.consume(run,"RX-C25")
+		if option == "remove": RunRelicRoster.paid_removal(run,cost)
 		if subtype == "LAB":
 			run.vitality -= 5
 	elif subtype == "C" and option in ["heal", "money"]:
 		if option == "heal":
+			var before := run.vitality
 			run.vitality = mini(run.max_vitality, run.vitality + 8)
+			RunRelicRoster.meal(run,pending.source_node_id,before)
 		else:
 			run.money += 15 + bonus(run, "service_money") + (10 if run.campaign.direction == "practice" else 0)
 	elif subtype == "I" and option == "money":

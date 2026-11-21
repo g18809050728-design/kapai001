@@ -1,5 +1,11 @@
 # 《交大四年：DDL战争》设计与实施入口
 
+2026-11-21：按用户要求清理局外HTML预览、评审页/模板及参考网页存档，并加入Git排除规则。后文HTML链接保留为历史记录，页面已删除；使用游戏或同批Markdown/JSON查看现有实现和验证结果。游戏素材、骨架和动作数据保留。后续不再生成或上传这些HTML，详见[实施计划](实施计划与验收基线.md)§0.20.38。
+
+2026-11-20 饰品池更新（§0.20.37）：**原有 16 件 FY 已从游戏移除，仅保留 104 件 RX**（40 件通用＋四角色各 16 件）。普通「新的四年」、学年奖励、测试房间、**「图鉴 → 饰品」**及文本编辑器都使用新池。原有 RX 图片不变。继续旧四学年档时移除已装备和待领取的 FY，不重抽 RX，不重置冒险。[实机图鉴](artifacts/verification/relic-removal-20261120/review/screens/gallery-all-1280-100.png) · [旧档处理与验证](docs/plans/2026-11-20-relic-removal-design.md)。
+
+历史首测（§0.20.35）：曾以 24 件 RX 验证触发规则并制作全部 104 张独立图标。`& .\tools\start_relic_pilot.ps1` 仍是单独存档的 24 件 RX 试点，不含 FY。[首测截图与记录](artifacts/verification/relic-pilot-20261120/review/README.md) · [全量接入与造型对照](docs/plans/2026-11-20-relic-roster-design.md)。
+
 2026-11-15当前§0.20.25已完成四角色正式接入：林序原V5、许知微V8、沈见章V10、唐以宁V11默认用于选角/战斗、保存继续及测试房间；原仅样板限制在四人范围内已取代。见[正式战斗四人图](artifacts/verification/actor-integration-20261115/review/battle.jpg)、[选角四人图](artifacts/verification/actor-integration-20261115/review/setup.jpg)及[实现/结果](docs/plans/2026-11-15-actor-integration-design.md)。490项实机、22条真实命令对照、61窗口图/300连续帧通过；完整规则63.653秒、完整UI289.659秒和默认入口烟测均退出0/错误0。916保护文件、17份改前快照与10个真实存档文件hash核对通过；API新增0、累计38/200。原G0/G6/G8出口、最终美术签收与慢放手部换面感另记。
 
 2026-11-15唐以宁动作已修正为V11（§0.20.24）：先看[出手前后](artifacts/verification/actor-motion-20261115/review/p04-action-before-after.jpg)，再打开[V8/V11连续动作与慢放](artifacts/verification/actor-motion-20261115/review/index.html)。肩袖保持连接、肩肘重新联动、减少双膝同时折弯，持板加入轻微缓冲；原形象和上下身比例保持。336项实机、5真实命令和53项浏览器检查通过，见[实际结果](docs/plans/2026-11-15-actor-motion-design.md)与[验证汇总](artifacts/verification/actor-motion-20261115/verification-summary.json)。[启动器](tools/start_actor_party.ps1)默认P04/V11；P03V10、P02V8、P01原V5及正式入口保持。API新增0，累计38/200。慢放手部换面仍有短暂切换感，最终动作观感待查看；以下按历史批次阅读。
@@ -64,10 +70,14 @@
 
 2026-11-03：现有 v1 程序已加入 A25–A48 共 24 件通用饰品；规则、奖励/商店与存档集成、UI 套件及启动冒烟当时已在 Godot 4.7.2 实跑通过，范围与留存命令见[饰品实现记录](docs/饰品实现记录_20261103.md)。部分旧验证产物已不在当前工作区，不把历史路径作为现存证据链接。怪物和 A49–A52 留待后续。当前生产包没有能力牌，因此 A27 在生产局无法触发、A46 的能力分支不可达；隔离 fixture 测试不能证明生产可用。人工视觉、平衡与完整用户路径仍未验证，此项不代表 v3.1 已实现或通过新版阶段。
 
+> **Git 迁移说明（2026-11-21）**：当前检出保留 Godot 源工程、选定美术、兼容及试点资源、测试、工具和设计/溯源文档。AI 母图与制作过程、外部参考媒体、G6 离线母图/候选、截图和原始验收输出仅在本地档案保留（已淘汰的文件除外）。文中的历史审阅链接有些指向这些本地目录；重建美术或查看原始验收时需另行带上对应档案。它们不参与正常启动，也不随 Git 同步真实玩家存档。
+
 ## 本轮交付与阅读顺序
 
 | 阅读入口 | 内容与状态 |
 |---|---|
+| [程序启动指南](docs/程序启动指南.md) | Windows 开发、Linux 正式服务启动、MySQL 连接实查及管理员创建与登录 |
+| [账号、MySQL 与云存档实施计划](docs/plans/2026-11-21-account-cloud-save-plan.md) | 当前版已发布为公网主程序，见[发布记录](docs/plans/2026-11-21-production-accounts-release.md)及[账号服务部署说明](server/README.md) |
 | [整体表现重制需求 v7](动作或者图片描述/整体表现重制需求_20261113.md) / [ui-plan阅读入口](ui-plan/README.md) | 唯一维护UIR-001～067；当前创建/操作追加见§9.2，人物仍暂停。旧01～05方案先按历史适用范围阅读 |
 | [上一轮表现原型实现与证据](docs/UI表现重制实现记录_20261113.md) | UIR-001～048对应的卡框、事件、地图/房间及战斗实体原型，含完整UI/规则回归、376有效面检查、60正常命令双闭环；不代表新方向和正式分层动画已验收 |
 | [测试房间功能设计](docs/测试房间功能设计.md) | 统一文档（设计定稿 v1.0）：开始界面直接进入、随时更改一切的完整沙盒，含冻结接口/DTO、容量与单步、覆盖层 schema、G7 级界面、检查点/重放与 TR-AC；首版战斗沙盒已实施，剩余能力见实现记录 |
@@ -120,6 +130,8 @@
 
 ## 启动与核验
 
+主程序已发布到 `https://47.93.245.237/`，提供账号与游客登录。启动方式及管理员信息见[程序启动指南](docs/程序启动指南.md)。
+
 使用 Godot `4.7.2.stable`（本机版本串 `4.7.2.stable.official.ed1daf0bf`）。2026-11-01 的实测记录使用 `D:\Godot\Godot_v4.7.2-stable_win64_console.exe`；2026-11-03 本机当前可运行路径为 `D:\chrome\godot\Godot_v4.7.2-stable_win64_console.exe`。`tools/verify_*.ps1` 的内置搜索路径仍为 `F:\GoDot`、`D:\Godot`、`C:\Godot` 与 `godot` 命令；在本机用 `GODOT_BIN` 或 `-GodotPath` 显式指定当前路径。
 
 本轮文档核对已重新执行导入、规则/UI、主入口与预期失败探针，见[本次验证](artifacts/verification/docs-refresh-20261104/runtime-review.json)。
@@ -132,6 +144,30 @@ $env:GODOT_BIN = 'D:\chrome\godot\Godot_v4.7.2-stable_win64_console.exe'
 & $env:GODOT_BIN --headless --editor --path . --quit
 & $env:GODOT_BIN --path .
 ```
+
+从已更新的 GitHub `main` 迁移到 Linux 时，可用 `git clone --depth 1 --single-branch --branch main <仓库地址>` 只拉取最新源码。先安装项目指定的 Godot 4.7.2；在仓库根目录执行以下无头冒烟（有桌面的 Linux 可用 `godot --path .` 启动游戏）：
+
+```sh
+godot --headless --editor --path . --quit
+godot --headless --path . --quit-after 2
+```
+
+服务器的 `.godot/` 会自行重建；旧玩家进度和文本覆盖如需迁移，应单独备份/复制 Godot `user://`，不要上传到仓库。
+
+### 浏览器版
+
+安装 Godot 4.7.2 对应的官方导出模板。Web 预设使用单线程 GL Compatibility，需要支持 WebGL 2 的浏览器。使用同一访问地址继续游戏，进度保存在该地址的浏览器站点数据中。Godot 加载器接受公网 HTTPS 和本机回环地址。
+
+```sh
+godot --headless --path . --import
+sh tools/export_web.sh dist/web
+```
+
+将构建产物放入 `/var/www/kapai001/releases/<版本>`，并将 `/var/www/kapai001/current` 原子切换到已验证版本。当前公网通过 [HTTPS 与 API 网关配置](server/deploy/kapai-production.nginx.conf) 提供游戏和同源账号服务，地址为 `https://47.93.245.237/`。生产服务配置和发布步骤见[启动指南](docs/程序启动指南.md)与[发布记录](docs/plans/2026-11-21-production-accounts-release.md)。 当前主菜单将登录状态置于右上角，游戏记录与管理统计单列，云同步在设置与存档中；退出游戏与退出登录分开。[入口与行为](docs/plans/2026-11-21-menu-account-layout.md)；右上角紧凑身份和游戏记录的当前视觉见[修订与实渲](docs/plans/2026-11-21-account-records-polish.md)
+
+随游戏包发布的简体中文字体采用 SIL OFL 1.1。字体来源见 [Noto Sans CJK 2.004](https://github.com/notofonts/noto-cjk/tree/Sans2.004/Sans) 和 [Noto Serif CJK 2.003](https://github.com/notofonts/noto-cjk/tree/Serif2.003/Serif)。
+
+手机上双指轻点两次或点「全屏」可进入全屏，浏览器支持时会锁定横屏。长按手牌可阅读完整效果，轻触可选牌或出牌。输入搜索关键词后，点输入条旁的「完成」收起键盘。Safari 无网页全屏时，可通过共享菜单添加到主屏幕，从图标进入独立窗口。
 
 数据与地图文档使用同一生成器。以下验证将 APPDATA/LOCALAPPDATA 隔离在证据目录，不加载实际玩家存档：
 

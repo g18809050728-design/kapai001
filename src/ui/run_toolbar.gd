@@ -14,6 +14,7 @@ var _focus: Dictionary = {}
 var _main_buttons: Array[Button] = []
 var _menu_buttons: Array[Button] = []
 var _shortcut_uids: Dictionary = {}
+var _relic_buttons: Dictionary = {}
 
 
 func configure(owner: UiPage, options: Dictionary) -> void:
@@ -61,6 +62,8 @@ func configure(owner: UiPage, options: Dictionary) -> void:
 			page.call("_open_reference", "relics", str(entry.get("relic_id", entry.get("definition_id", "")))))
 		button.set_script(UiRelicSlotButton)
 		button.call("configure", entry, slot)
+		if not entry.is_empty():
+			_relic_buttons[str(entry.get("definition_id", ""))] = button
 	var journey := _label(row, str(options.get("journey", "")), 15, Color("d0d6c8"))
 	journey.name = "TopJourney"
 	journey.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -79,6 +82,11 @@ func configure(owner: UiPage, options: Dictionary) -> void:
 	resized.connect(_fit_menu)
 	_fit_menu.call_deferred()
 	tree_exiting.connect(func(): close_menu(false))
+
+
+func flash_relic(id: String) -> void:
+	if _relic_buttons.has(id) and is_instance_valid(_relic_buttons[id]):
+		_relic_buttons[id].call("flash")
 
 
 func _main(parent: Node, kind: String, uid: String, title: String, count: int, callback: Callable, hint: String, pile: bool = false) -> Button:

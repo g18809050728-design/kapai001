@@ -98,7 +98,15 @@ func _check_content_contract(catalog: ContentDB, failures: Array[String]) -> voi
 	var n22 := _task(catalog, "N22")
 	_check(bool(n22.get("taunt", false)), "N22 is a taunt task", failures)
 	var n20 := _task(catalog, "N20")
-	_check(bool(n20.get("self_copy_every_round", false)), "N20 copies itself every round", failures)
+	_check(
+		(
+			bool(n20.get("self_copy_every_round", false))
+			and int(n20.get("self_copy_interval", 0)) == 2
+			and int(n20.get("self_copy_work_percent", 0)) == 50
+		),
+		"N20 copies a half-work self every two rounds",
+		failures
+	)
 	var n33 := _task(catalog, "N33")
 	_check(bool(n33.get("shield_persistent", false)), "N33 keeps its shield", failures)
 	var n18 := _task(catalog, "N18")
@@ -128,12 +136,16 @@ func _check_content_contract(catalog: ContentDB, failures: Array[String]) -> voi
 		failures
 	)
 	var n24 := _task(catalog, "N24")
+	var n24_pressures: Array = _first_phase(n24).get("intents", []).map(
+		func(intent): return int(intent.get("pressure", 0))
+	)
 	_check(
 		(
 			_first_phase(n24).get("intent_loop", "") == "clamp"
 			and _first_phase(n24).get("intents", []).size() == 4
+			and n24_pressures == [4, 8, 12, 16]
 		),
-		"N24 escalates pressure and clamps",
+		"N24 escalates 4/8/12/16 and clamps",
 		failures
 	)
 	var n32 := _task(catalog, "N32")

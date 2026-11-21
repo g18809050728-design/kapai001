@@ -4,7 +4,7 @@
 
 采集日期：2026-11-13。来源为 Mega Crit 官方网站及其 Steam 商店媒体。Steam API 的名称与开发者已核对为 Slay the Spire 2 / Mega Crit；[原始元数据](steam-appdetails.json)记录抢先体验发布日期为 2026-03-05。这里研究的是注明日期的材料，不声称掌握当前构建的全部 UI 细节。
 
-web 搜索工具本轮未返回可用正文；通过 HTTPS 直接取得官方原文和媒体。原始地址、采集 UTC 时间、SHA256 见[下载记录](downloads.json)、[官方动图记录](official-media.json)、[文章索引](articles-index.json)和[视频来源](video-sources.json)。首版 `../slay-the-spire/` 是一代材料，不计入本轮二代证据。
+web 搜索工具本轮未返回可用正文；通过 HTTPS 直接取得官方原文和媒体。原始地址、采集 UTC 时间、SHA256 见[下载记录](downloads.json)、[官方动图记录](official-media.json)、[文章索引](articles-index.json)和[视频来源](video-sources.json)。首版 `../slay-the-spire/` 是一代材料，不计入二代证据；2026-11-21 已移除一代截图，仅留采集来源。
 
 ## 来源与用途
 
@@ -19,7 +19,7 @@ web 搜索工具本轮未返回可用正文；通过 HTTPS 直接取得官方原
 | R2-07 | Neowsletter，2026-07-17 | [动画师说明](2026-7-17-neowsletter-issue-24.txt)、[Aeonglass 连续采样](final_aeonglass-sequence.jpg) | 开发者明确说明环与主体分开时间线、引擎着色器替换动画占位；不能据此推断所有角色用同一技术 |
 | R2-08 | Steam Early Access Trailer / Gameplay Trailer，采集时商店版本 | [视频0](trailer-0-720p.mp4)、[视频1](trailer-1-720p.mp4)、[元数据](video-sources.json) | 已剪辑宣传材料；视频0前段大量宣传动画，不当作实机；采集视频轨不含音轨，未据此分析混音 |
 
-文章原始发布路径及媒体 URL 保存在 JSON 中；页面原始 HTML 与正文归档并存。文章索引包含检索过程中下载的其他月刊，未列入上表的社区绘画、同人动画等不作为官方实机设计证据。未把文章中的所有陈述都当作已检验实现。
+文章原始发布路径及媒体 URL 保存在 JSON 中；2026-11-21 移除已有相邻正文摘录的原始 HTML 网页缓存，二代截图、动图、视频、正文摘录与采样记录仍保留。文章索引包含检索过程中下载的其他月刊，未列入上表的社区绘画、同人动画等不作为官方实机设计证据。未把文章中的所有陈述都当作已检验实现。
 
 ## 时间采样与观察
 

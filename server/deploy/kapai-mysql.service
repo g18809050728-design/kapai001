@@ -1,0 +1,13 @@
+[Unit]
+Description=Kapai isolated MySQL instance
+After=network.target
+
+[Service]
+User=mysql
+Group=mysql
+RuntimeDirectory=kapai-mysql
+ExecStart=/usr/sbin/mysqld --no-defaults --datadir=/var/lib/kapai-mysql --socket=/run/kapai-mysql/mysql.sock --skip-networking --mysqlx=OFF --pid-file=/run/kapai-mysql/server.pid --innodb-buffer-pool-size=128M
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

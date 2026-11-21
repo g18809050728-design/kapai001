@@ -128,10 +128,10 @@ func add_button(
 ) -> Button:
 	var button := Button.new()
 	button.text = caption
-	button.custom_minimum_size = Vector2(120, 44)
+	button.custom_minimum_size = Vector2(120, UiStyle.MOBILE_TARGET if UiStyle.web_touch else 44)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	button.add_theme_font_size_override("font_size", roundi(16 * UiStyle.text_scale))
+	button.add_theme_font_size_override("font_size", roundi((18 if UiStyle.web_touch else 16) * UiStyle.text_scale))
 	button.set_meta("uid", uid)
 	var source_run := str(view.get("run_id", ""))
 	var source_revision := int(view.get("revision", -1))
@@ -277,7 +277,7 @@ func _show_card_preview(pinned: bool) -> void:
 
 
 func _card_preview_text(detail: Dictionary) -> String:
-	if detail.has("campaign") or detail.has("hooks"):
+	if detail.has("rx") or detail.has("campaign") or detail.has("hooks"):
 		return UiContentText.describe_relic(detail)
 	return UiContentText.describe_card(detail)
 

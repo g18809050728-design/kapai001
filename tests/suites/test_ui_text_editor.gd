@@ -16,7 +16,7 @@ func run() -> Array[String]:
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(_path))
 	TextOverrides.use_path(_path)
 	_catalog = ContentDB.new("res://data/four_year")
-	_check(_catalog.load("campus_four_year").ok, "real production catalogue loads")
+	_check(_catalog.load(RelicPilot.ROSTER).ok, "real production catalogue loads")
 	var built := TextEntityLibrary.build(_catalog)
 	_check(built.ok, "entity library builds from production data")
 	if built.ok:
@@ -43,17 +43,17 @@ func run() -> Array[String]:
 func _check_library(data: Dictionary) -> void:
 	var entities: Array = data.get("entities", [])
 	var counts: Dictionary = data.get("counts", {})
-	_check(entities.size() == 506, "entity count is exact")
+	_check(entities.size() == 595, "entity count is exact for the RX roster")
 	_check(int(counts.get("cards", 0)) == 174, "174 card entities")
-	_check(int(counts.get("relics", 0)) == 16, "16 relic entities")
+	_check(int(counts.get("relics", 0)) == 104, "104 RX relic entities")
 	_check(int(counts.get("characters", 0)) == 4, "4 character entities")
 	_check(int(counts.get("stories", 0)) == 11, "11 story entities")
 	_check(int(counts.get("glossary", 0)) == 44, "44 glossary entities")
 	_check(int(counts.get("monsters", 0)) == 60, "60 monster entities")
-	_check(int(counts.get("terms", 0)) == 197, "197 fallback name entities")
-	_check(int(data.get("field_count", 0)) == 1513, "1513 logical fields")
-	_check(int(data.get("uid_count", 0)) == 1534, "1534 backing UIDs")
-	_check(int(data.get("source_uid_count", 0)) == 1522, "1522 original library UIDs are retained")
+	_check(int(counts.get("terms", 0)) == 198, "198 fallback name entities")
+	_check(int(data.get("field_count", 0)) == 1690, "1690 logical fields")
+	_check(int(data.get("uid_count", 0)) == 1711, "1711 backing UIDs")
+	_check(int(data.get("source_uid_count", 0)) == 1699, "1699 original library UIDs are retained")
 	var by_id: Dictionary = {}
 	var by_uid: Dictionary = {}
 	for entity in entities:
@@ -87,6 +87,9 @@ func _check_library(data: Dictionary) -> void:
 	_check(_field_for_uid(monster, "label:N03").uids.has("label:N03"), "monster name maps to its label")
 	_check(by_id.has("term:N03") == false, "monster name is no longer in the other bucket")
 	_check(by_id.has("term:K01"), "unmapped legacy labels are preserved as fallback entities")
+	_check(not by_id.has("relic:FY_Y1_1"), "retired FY relic text is not editable")
+	_check(UiStyle.label("status.inspiration.name") == "灵感", "dotted status keys keep their canonical fallback")
+	_check(UiStyle.label("task.n01.intent.pressure5") == "施加压力", "dotted task intent keys still resolve")
 
 
 func _field_for_uid(entity: Dictionary, uid: String) -> Dictionary:
@@ -195,7 +198,7 @@ func _search_checks(page: UiTextEditorPage) -> void:
 	page.set_filter("")
 	page.show_tab("terms")
 	page.search("")
-	_check(page.filtered.size() == 197, "other tab keeps remaining legacy and shared label entities")
+	_check(page.filtered.size() == 198, "other tab keeps remaining legacy and shared label entities")
 	page.show_tab("all")
 	page.search("")
 
@@ -257,11 +260,11 @@ func _edit_checks(page: UiTextEditorPage, session: GameSession, before: String) 
 	)
 	page.show_tab("relics")
 	page.search("")
-	_check(page.select_entity("relic:FY_Y1_1"), "relic entity is selectable")
-	page.set_field_text("relic:FY_Y1_1:description", "测试饰品说明")
+	_check(page.select_entity("relic:RX-C01"), "relic entity is selectable")
+	page.set_field_text("relic:RX-C01:description", "测试饰品说明")
 	page.save_entity()
 	_check(
-		UiContentText.describe_relic(_catalog.get_definition("relic", "FY_Y1_1").data) == "测试饰品说明",
+		UiContentText.describe_relic(_catalog.get_definition("relic", "RX-C01").data) == "测试饰品说明",
 		"relic entity description applies"
 	)
 	page.show_tab("characters")

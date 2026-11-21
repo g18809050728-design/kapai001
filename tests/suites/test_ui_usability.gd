@@ -104,6 +104,7 @@ func _shop() -> void:
 	# Controlled route checkpoint; entry and stock creation still use public commands.
 	var run := session._state.run
 	run.campaign = CampaignService.initial()
+	RunRelicRoster.upgrade_base_campaign(run)
 	run.nodes = CampaignMap.build(run.run_id)
 	var destination: RunNodeState = run.nodes.filter(func(node): return node.term == 1 and node.kind == "shop")[0]
 	for node in run.nodes:

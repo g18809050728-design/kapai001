@@ -9,6 +9,7 @@ var _character_id := "P01"
 var _encounter_id := "N01"
 var _seed := "42"
 var _prepared := false
+var _starting_relics: Array[String] = []
 
 
 func add_button(parent: Node, uid: String, caption: String, draft: Variant = {}, local_callback: Callable = Callable()) -> Button:
@@ -76,6 +77,9 @@ func _render_home() -> void:
 			{},
 			func():
 				_character_id = id
+				for index in _starting_relics.size():
+					if not RelicPilot.owns_definition(_starting_relics[index], id):
+						_starting_relics[index] = ""
 				render(view)
 		)
 	var config_panel: VBoxContainer = add_panel(body)
@@ -93,22 +97,48 @@ func _render_home() -> void:
 	seed_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	seed_input.text_changed.connect(func(value: String): _seed = value.strip_edges())
 	config_panel.add_child(seed_input)
+	if view.get("relic_pilot", false):
+		add_text(config_panel, "为本场实验佩戴至多三件，按槽位顺序结算。", 14, UiStyle.MUTED)
+		var slots := add_row(config_panel)
+		var pickers: Array[OptionButton] = []
+		var legal: Array = options.get("relics", []).filter(func(relic): return str(relic.id).begins_with("RX-") and RelicPilot.owns_definition(relic.id, _character_id))
+		_starting_relics.resize(3)
+		for index in 3:
+			var picker := OptionButton.new()
+			picker.name = "PilotRelicSlot%d" % (index + 1)
+			picker.tooltip_text = "实验饰品槽 %d" % (index + 1)
+			pickers.append(picker)
+			picker.custom_minimum_size = Vector2(0, 44)
+			picker.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			picker.add_item("饰品槽 %d · 空" % (index + 1))
+			picker.set_item_metadata(0, "")
+			for relic in legal:
+				var relic_id := str(relic.id)
+				picker.add_item(UiStyle.label(relic_id))
+				var item := picker.item_count - 1
+				picker.set_item_metadata(item, relic_id)
+				if _starting_relics[index] == relic_id:
+					picker.select(item)
+			picker.item_selected.connect(func(item: int):
+				var chosen := str(picker.get_item_metadata(item))
+				if not chosen.is_empty():
+					for other in 3:
+						if other != index and _starting_relics[other] == chosen:
+							_starting_relics[other] = ""
+							pickers[other].select(0)
+				_starting_relics[index] = chosen)
+			slots.add_child(picker)
 	var start_row: HBoxContainer = add_row(footer)
 	add_button(start_row, "test:back", "返回主菜单", {"type": "ui.menu"})
 	add_button(
 		start_row,
 		"test:start",
 		"开始实验",
-		{
-			"type": "test.start",
-			"payload": {
-				"config": {
-					"character_id": _character_id,
-					"encounter_id": _encounter_id,
-					"seed": _seed,
-				}
-			},
-		}
+		func():
+			return {"type": "test.start", "payload": {"config": {
+				"character_id": _character_id, "encounter_id": _encounter_id, "seed": _seed,
+				"relics": _starting_relics.filter(func(id): return not id.is_empty()),
+			}}}
 	)
 	var files: Dictionary = view.get("files", {})
 	var presets: Array = files.get("presets", [])

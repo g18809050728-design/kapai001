@@ -1,6 +1,8 @@
 # 特效材料候选
 
-离线打开[preview.html](preview.html)可切换12种材料、3种底色、人物前后叠放、透明度/旋转/尺寸，并比较3种材料组合。所有图像内嵌，无网络或游戏状态读写；默认叠放尺寸不是运行规格。
+> 本批未接入运行时；2026-11-21 转移清理移除了原母图、裁片和内嵌预览。以下是历史检查步骤，仅保留记录、提示词与参数。
+
+离线打开`preview.html`可切换12种材料、3种底色、人物前后叠放、透明度/旋转/尺寸，并比较3种材料组合。所有图像内嵌，无网络或游戏状态读写；默认叠放尺寸不是运行规格。
 
 `VFX-material-atlas-v1.png`为原始不透明图集，`materials/`是保留的首版提取，`materials-v2/`是按实际底色修正后的透明候选。原提示词与修正提示词、`extraction.json`/`extraction-v2.json`及脚本均保留。深浅底查看`materials-v2-contact-dark.jpg`和`materials-v2-contact-light.jpg`；`material-transform-check.gif`只是离线旋转检查，12种材料不等于12段已完成动画。
 

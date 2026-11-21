@@ -55,6 +55,8 @@ var _detail_terms: Array[String] = []
 var _inspect_open: bool = false
 var _pointer_card: BattleCard
 var _pointer_start := Vector2.ZERO
+var _touch_pointer := false
+var _held_for := 0.0
 var _dragging: bool = false
 var _drag_ghost: BattleCard
 var _pointer_position := Vector2.ZERO
@@ -64,6 +66,7 @@ var _card_hover_uid := ""
 var _card_hover_elapsed := 0.0
 var _pinned_card_detail: Dictionary = {}
 var _compact_layout := false
+var _short_web := false
 var _battle_layout_size := Vector2.ZERO
 var _battle_resize_pending := false
 var _previous_card_centers: Dictionary = {}
@@ -126,6 +129,12 @@ func _process(delta: float) -> void:
 	if not is_inside_tree():
 		return
 	_update_pointer(delta)
+	if _touch_pointer and is_instance_valid(_pointer_card) and not _dragging:
+		_held_for += delta
+		if _held_for >= 0.5 and not is_locked():
+			var detail := _card_hover_target(_pointer_card)
+			_pointer_card = null
+			_open_detail(detail)
 
 
 func render(data: Dictionary) -> void:
@@ -294,8 +303,8 @@ func action_draft(uid: String) -> Dictionary:
 
 
 func _render_battle() -> void:
-	# One battlefield composition at every supported window size.
 	_compact_layout = false
+	_short_web = UiStyle.short_web(size)
 	set_meta("compact_cards", false)
 	_battle_layout_size = size
 	BattleLayout.new().build(self)
@@ -347,6 +356,8 @@ func _reset_stage() -> void:
 		child.queue_free()
 	_stage = Control.new()
 	_stage.size = Vector2(1280, 800)
+	if _short_web:
+		_stage.size.y = clampf(size.y * 1280.0 / maxf(size.x, 1.0), 560.0, 800.0)
 	_stage.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_stage)
 	if not resized.is_connected(_fit_stage):
@@ -359,9 +370,9 @@ func _fit_stage() -> void:
 	if size != _battle_layout_size and not _battle_resize_pending:
 		_battle_resize_pending = true
 		_rebuild_for_size.call_deferred()
-	var factor := minf(size.x/1280.0,size.y/800.0)
+	var factor := minf(size.x / _stage.size.x, size.y / _stage.size.y)
 	_stage.scale = Vector2.ONE*factor
-	_stage.position = (size-Vector2(1280,800)*factor)*.5
+	_stage.position = (size-_stage.size*factor)*.5
 
 
 func _rebuild_for_size() -> void:
@@ -381,6 +392,11 @@ func _input(event: InputEvent) -> void:
 		return
 	if is_instance_valid(_full_map) and _full_map.visible:
 		return
+	if event is InputEventScreenTouch and event.canceled:
+		if _dragging:
+			_render_from_local()
+		_pointer_card = null
+		return
 	if is_instance_valid(_toolbar) and _toolbar.route_input(event):
 		return
 	if is_instance_valid(_card_preview) and event is InputEventKey and event.pressed and event.keycode == KEY_ESCAPE:
@@ -392,6 +408,7 @@ func _input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 		return
 	if event is InputEventMouse:
+		_touch_pointer = event.device == InputEvent.DEVICE_ID_EMULATION
 		_pointer_position = event.position
 		_update_pointer(0.0)
 		if not _pinned_card_detail.is_empty() and _hover_panel.visible and _hover_panel.get_global_rect().has_point(event.position):
@@ -495,11 +512,12 @@ func _input(event: InputEvent) -> void:
 						return
 			var card := _card_at(event.position)
 			if card != null:
-				if card.disabled:
+				if card.disabled and not _touch_pointer:
 					_show_disabled_card_feedback(card)
 				else:
 					_pointer_card = card
 					_pointer_start = event.position
+					_held_for = 0.0
 				get_viewport().set_input_as_handled()
 		elif is_instance_valid(_pointer_card):
 			get_viewport().set_input_as_handled()
@@ -507,11 +525,18 @@ func _input(event: InputEvent) -> void:
 			if _dragging:
 				_finish_drag(event.position)
 			else:
+				var card := _pointer_card
 				_pointer_card = null
-				_on_card_pressed(card_id)
+				if card.disabled:
+					_show_disabled_card_feedback(card)
+				elif not _touch_pointer or event.position.distance_to(_pointer_start) < 14:
+					_on_card_pressed(card_id)
 	elif event is InputEventMouseMotion and is_instance_valid(_pointer_card):
-		if not _dragging and event.position.distance_to(_pointer_start) > 10:
-			_begin_drag()
+		if not _dragging and event.position.distance_to(_pointer_start) > (14 if _touch_pointer else 10):
+			if not _pointer_card.disabled:
+				_begin_drag()
+			else:
+				_pointer_card = null
 		if _dragging:
 			_move_drag(event.position)
 		get_viewport().set_input_as_handled()
@@ -540,9 +565,9 @@ func _update_pointer(delta: float) -> void:
 		return
 	var reading_pinned := not _pinned_card_detail.is_empty() and _hover_panel.visible and _hover_panel.get_global_rect().has_point(_pointer_position)
 	if not is_locked() and _panel_text.is_empty() and not is_instance_valid(_card_preview):
-		_hovered_card = null if _dragging or reading_pinned else _card_at(_pointer_position)
+		_hovered_card = null if _touch_pointer or _dragging or reading_pinned else _card_at(_pointer_position)
 		if not _hover_pinned:
-			_hover_target = {} if _dragging or reading_pinned else _hover_target_at(_pointer_position)
+			_hover_target = {} if _touch_pointer or _dragging or reading_pinned else _hover_target_at(_pointer_position)
 			if _hover_target.is_empty():
 				var focus := get_viewport().gui_get_focus_owner()
 				if focus is BattlePileButton and not focus.disabled:
@@ -559,12 +584,12 @@ func _update_pointer(delta: float) -> void:
 		if card.get_meta("card_in_flight", false) or card.get_meta("draw_pending", false):
 			continue
 		var raised := card == _hovered_card or card.selected
-		var destination := card.home_position + (Vector2(0, -60) if raised else Vector2.ZERO)
+		var destination := card.home_position + (Vector2(0, -34 if _short_web else -60) if raised else Vector2.ZERO)
 		card.position = card.position.lerp(destination, minf(1, delta * 18))
 		card.rotation = lerp_angle(
 			card.rotation, 0.0 if raised else card.home_rotation, minf(1, delta * 18)
 		)
-		card.scale = card.scale.lerp(Vector2.ONE * (1.16 if raised else 1.0), minf(1, delta * 18))
+		card.scale = card.scale.lerp(Vector2.ONE * card.home_scale * (1.16 if raised else 1.0), minf(1, delta * 18))
 		card.z_index = 60 if raised else card.home_order
 		card.highlighted = raised
 		card.queue_redraw()
@@ -582,7 +607,7 @@ func _update_pointer(delta: float) -> void:
 			not _selected_card_id.is_empty() and not is_locked() and _panel_text.is_empty()
 		)
 		if _aim.visible:
-			_aim.origin = Vector2(640, 573)
+			_aim.origin = Vector2(640, _stage.size.y - (175 if _short_web else 227))
 			_aim.destination = (
 				_stage.get_global_transform_with_canvas().affine_inverse() * _pointer_position
 			)
@@ -1306,6 +1331,8 @@ func _on_task_pressed(task_id: String) -> void:
 				"payload": {"unit_instance_id": _selected_unit_id, "task_instance_id": task_id}
 			}
 		)
+	elif _touch_pointer:
+		_open_detail_for_uid("task:" + task_id)
 
 
 func _on_unit_pressed(unit_id: String) -> void:
@@ -1501,7 +1528,7 @@ func _apply_preview_gating() -> void:
 	for value in _array(view.get("tasks")):
 		var task := _dict(value)
 		var id := str(task.get("task_id", ""))
-		var allowed := false
+		var allowed := UiStyle.web_touch
 		var reason := "请先选择需要目标的卡牌或协作单位"
 		if not _selected_card_id.is_empty():
 			allowed = selection_field == "target_ids" and candidates.has(id)
@@ -1588,6 +1615,13 @@ func _render_from_local() -> void:
 
 func _on_event_presented(event: Dictionary, text: String) -> void:
 	_present_event_visual(event)
+	if str(event.get("type", "")) == "relic_triggered":
+		var data := _dict(event.get("data"))
+		var id := str(data.get("relic_id", ""))
+		if RelicPilot.is_rx(id):
+			if is_instance_valid(_toolbar) and animation_enabled:
+				_toolbar.flash_relic(id)
+			text = _rx_trigger_text(id, data)
 	if str(event.get("type", "")) == "card_drawn":
 		var queued := _animator.pending_type_count("card_drawn")
 		text += " · 正在抽牌 · 排队中：%d 张" % queued
@@ -1631,6 +1665,29 @@ func _clear_event_visuals() -> void:
 		if child.has_meta("battle_event_effect"):
 			_stage.remove_child(child)
 			child.queue_free()
+
+
+func _rx_trigger_text(id: String, data: Dictionary) -> String:
+	var resource := str(data.get("resource",""))
+	if not resource.is_empty():
+		return "%s触发 · %s %d · 剩余 %d 次" % [UiStyle.label(id),resource,int(data.get("amount",0)),int(data.get("remaining",0))]
+	resource = "放松"
+	match str(data.get("at", "")):
+		"natural_focus":
+			resource = "放松" if id == "RX-C01" else "专注"
+		"base_draw", "strategy_without_work":
+			resource = "张牌入手"
+		"alarm_draw", "next_card_resolved", "partner_switched_draw":
+			resource = "抽牌"
+		"work_primary_segment", "paper_publish", "natural_induced":
+			resource = "完成量"
+		"paper_open":
+			resource = "论文修正"
+		"direct_erosion":
+			resource = "侵蚀"
+		"extra_cooperation":
+			resource = "伙伴精力"
+	return "%s触发 · %s +%d · 剩余 %d 次" % [UiStyle.label(id), resource, int(data.get("amount", 0)), int(data.get("remaining", 0))]
 
 
 func _present_event_visual(event: Dictionary) -> void:

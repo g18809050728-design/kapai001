@@ -177,13 +177,13 @@ func run() -> Array[String]:
 		{"ops": [{"op": "set_switch", "key": "ignore_relic_slots", "value": false}]}
 	)
 	_check(enforce_slots.accepted, "relic-slot enforcement can be enabled: " + _error_text(enforce_slots.error))
-	for relic_id in ["FY_Y1_1", "FY_Y1_2", "FY_Y1_3"]:
+	for relic_id in ["RX-C01", "RX-C02", "RX-C03"]:
 		var added_relic := session.apply_test_patch(
 			_context(session), {"ops": [{"op": "add_relic", "relic_id": relic_id}]}
 		)
 		_check(added_relic.accepted, "relic adds: " + _error_text(added_relic.error))
 	var fourth_relic := session.apply_test_patch(
-		_context(session), {"ops": [{"op": "add_relic", "relic_id": "FY_Y1_4"}]}
+		_context(session), {"ops": [{"op": "add_relic", "relic_id": "RX-C04"}]}
 	)
 	_check(not fourth_relic.accepted, "fourth relic is blocked while slots are enforced")
 	var relic_switch := session.apply_test_patch(
@@ -192,7 +192,7 @@ func run() -> Array[String]:
 	)
 	_check(relic_switch.accepted, "relic-slot switch applies: " + _error_text(relic_switch.error))
 	fourth_relic = session.apply_test_patch(
-		_context(session), {"ops": [{"op": "add_relic", "relic_id": "FY_Y1_4"}]}
+		_context(session), {"ops": [{"op": "add_relic", "relic_id": "RX-C04"}]}
 	)
 	_check(fourth_relic.accepted, "fourth relic applies after the switch: " + _error_text(fourth_relic.error))
 	var focus_set := session.apply_test_patch(

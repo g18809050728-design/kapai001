@@ -31,6 +31,7 @@ var _map_press_selected := false
 var _map_press_double := false
 var _map_press_dragged := false
 var _map_entry_generation := -1
+var _map_preview_scroll: ScrollContainer
 
 
 func _notification(what: int) -> void:
@@ -143,7 +144,7 @@ func add_button(parent: Node, uid: String, caption: String, draft: Variant = {},
 		if _in_region(parent,footer):
 			button.size_flags_horizontal = Control.SIZE_SHRINK_END
 	if _in_region(parent,header):
-		button.custom_minimum_size = Vector2(58,44)
+		button.custom_minimum_size.x = 58
 	if _in_region(parent,footer):
 		button.size_flags_horizontal = Control.SIZE_SHRINK_END
 		var text_width := button.get_theme_font("font").get_string_size(caption,HORIZONTAL_ALIGNMENT_LEFT,-1,button.get_theme_font_size("font_size")).x
@@ -216,12 +217,12 @@ func _layout_regions() -> void:
 	_scroll.offset_right = -12
 	if screen == "menu":
 		header.offset_left = size.x*.065
-		header.offset_top = size.y*.12
+		header.offset_top = size.y*(.06 if UiStyle.short_web(size) else .12)
 		header.offset_right = -size.x*.54
 		header.offset_bottom = header.offset_top+header.get_combined_minimum_size().y
-		_scroll.offset_top = header.offset_bottom+26
+		_scroll.offset_top = header.offset_bottom+(10 if UiStyle.short_web(size) else 26)
 		_scroll.offset_left = size.x*.065-12
-		_scroll.offset_right = -size.x*.59
+		_scroll.offset_right = -size.x*(.45 if UiStyle.short_web(size) else .59)
 		_scroll.offset_bottom = -20
 	if (screen in ["event", "rest"] or is_instance_valid(_room_illustration)) and not _room_expanded:
 		_scroll.offset_left = size.x*.45
@@ -235,9 +236,9 @@ func _layout_regions() -> void:
 		_room_figure.size = Vector2(size.x*.36,maxf(100,size.y+_scroll.offset_bottom-_scroll.offset_top-24))
 	if screen == "setup":
 		_scroll.offset_left = size.x*.07
-		_scroll.offset_right = -size.x*.55
+		_scroll.offset_right = -size.x*(.44 if UiStyle.short_web(size) else .55)
 		if is_instance_valid(_room_figure):
-			_room_figure.position.x = size.x*.5
+			_room_figure.position.x = size.x*(.57 if UiStyle.short_web(size) else .5)
 			_room_figure.size.x = size.x*.36
 	if screen == "reward" or (screen == "campaign" and (not is_instance_valid(_room_illustration) or _room_expanded)):
 		_scroll.offset_left = size.x*.06
@@ -245,6 +246,8 @@ func _layout_regions() -> void:
 		_fit_reward_cards()
 	if screen == "map" and is_instance_valid(_map_preview) and not _map_preview.is_queued_for_deletion():
 		var width := 272.0 if size.x < 1100 else 300.0
+		if UiStyle.short_web(size):
+			width = clampf(size.x * .29, 184.0, 250.0)
 		_scroll.offset_right = -width-16
 		_map_preview.position = Vector2(size.x-width-10,_scroll.offset_top)
 		_map_preview.size = Vector2(width,maxf(100,size.y+_scroll.offset_bottom-_scroll.offset_top))
@@ -312,35 +315,149 @@ func _event_needs_confirmation(option: Dictionary) -> bool:
 func _render_menu() -> void:
 	reset_page("DDL 战争", "把校园日常，打成自己的牌。")
 	_scroll.follow_focus = true
+	body.add_theme_constant_override("separation", 8)
+	var compact := UiStyle.short_web(size)
 	var title_label := header.get_child(0) as Label
-	title_label.add_theme_font_size_override("font_size",roundi(64*UiStyle.text_scale))
-	add_text(body,"四学年 · 校园卡牌冒险",16,UiStyle.BRASS)
+	title_label.add_theme_font_size_override("font_size",roundi((40 if compact else 64)*UiStyle.text_scale))
+	var account_state := str(view.get("account_state", ""))
+	if not account_state.is_empty():
+		_add_menu_identity(account_state)
+	var description := "四学年 · 校园卡牌冒险"
+	if view.get("relic_pilot", false):
+		description = "饰品试玩 · 24 件 · 独立存档"
+	elif account_state == "guest":
+		description = "游客 · 进度保存在此浏览器"
+	add_text(body, description, 16, UiStyle.BRASS)
+	var options: Control = body
+	if compact:
+		var grid := GridContainer.new()
+		grid.columns = 2
+		grid.add_theme_constant_override("h_separation", 12)
+		grid.add_theme_constant_override("v_separation", 6)
+		body.add_child(grid)
+		options = grid
 
-	var resume := add_button(body,"menu:continue","继续冒险",_ui("continue"))
-	resume.disabled = not bool(view.get("has_active_session",false)) and not bool(view.get("can_continue",false))
-	if resume.disabled:
-		resume.tooltip_text = str(view.get("save_error",""))
-		if resume.tooltip_text.is_empty():
-			resume.tooltip_text = "还没有可以继续的冒险。"
-		add_text(body,resume.tooltip_text,14,UiStyle.MUTED)
-	add_button(body,"menu:new","新的四年",_ui("new_run"))
-	add_button(body,"menu:compendium","图鉴",_ui("compendium"))
-	add_button(body,"menu:text_editor","文本编辑",_ui("text_editor"))
-	add_button(body,"menu:test","测试房间",_ui("test_room"))
-	add_button(body,"menu:settings","设置与存档",_ui("settings"))
-	for uid in ["menu:continue","menu:new","menu:compendium","menu:text_editor","menu:test","menu:settings"]:
+	if account_state in ["", "ready", "guest"]:
+		var resume := add_button(options,"menu:continue","继续冒险",_ui("continue"))
+		resume.disabled = not bool(view.get("has_active_session",false)) and not bool(view.get("can_continue",false))
+		if resume.disabled:
+			resume.tooltip_text = str(view.get("save_error",""))
+			if resume.tooltip_text.is_empty():
+				resume.tooltip_text = "还没有可以继续的冒险。"
+		add_button(options,"menu:new","新的四年",_ui("new_run"))
+		add_button(options,"menu:compendium","图鉴",_ui("compendium"))
+		add_button(options,"menu:records","游戏记录",_ui("records"))
+		if account_state == "ready" and bool(view.get("team_tools_available", false)):
+			add_button(options,"menu:admin","管理统计",_ui("web_stats"))
+		if bool(view.get("team_tools_available", true)):
+			add_button(options,"menu:text_editor","文本编辑",_ui("text_editor"))
+			add_button(options,"menu:test","测试房间",_ui("test_room"))
+	elif account_state in ["login", "unavailable"]:
+		add_button(options, "menu:account", "重新连接" if account_state == "unavailable" else "登录", _ui("web_account"))
+		if account_state == "login" and bool(view.get("registration_available", false)):
+			add_button(options, "menu:register", "创建账号", _ui("web_register"))
+		add_button(options, "menu:guest", "游客登录", _ui("web_guest"))
+	add_button(options,"menu:settings","设置与存档",_ui("settings"))
+	add_button(options,"menu:quit","退出游戏",_ui("quit"))
+	for uid in ["menu:continue","menu:new","menu:compendium","menu:records","menu:admin","menu:text_editor","menu:test","menu:settings","menu:account","menu:register","menu:guest","menu:quit"]:
+		if not _buttons.has(uid):
+			continue
 		var option: Button = _buttons[uid]
 		option.alignment = HORIZONTAL_ALIGNMENT_LEFT
-		option.custom_minimum_size = Vector2(220,52)
+		option.custom_minimum_size = Vector2(108,UiStyle.MOBILE_TARGET if UiStyle.web_touch else 44) if compact else Vector2(220,44)
 		option.add_theme_font_override("font",UiStyle.title_font())
-		option.add_theme_font_size_override("font_size",roundi(25*UiStyle.text_scale))
+		option.add_theme_font_size_override("font_size",roundi((19 if compact else 25)*UiStyle.text_scale))
 		for state in ["normal","hover","pressed","focus","disabled"]:
 			option.add_theme_stylebox_override(state,StyleBoxEmpty.new())
 		option.add_theme_color_override("font_hover_color",Color("ffe6a0"))
+	if account_state == "checking":
+		add_text(body, "正在确认登录状态…", 16, UiStyle.MUTED)
+	elif not str(view.get("account_message", "")).is_empty():
+		add_text(body, str(view.account_message), 16, UiStyle.MUTED)
 	if bool(view.get("has_active_session",false)):
 		add_text(body,"当前冒险已保留。",14,UiStyle.MUTED)
 	if not str(view.get("save_error","")).is_empty():
 		add_text(body,"存档暂时不可用："+str(view.save_error),14,UiStyle.RED)
+
+
+func _add_menu_identity(state: String) -> void:
+	var nickname := str(view.get("account_name", "")) if state == "ready" else str({"guest": "游客", "checking": "正在连接", "unavailable": "重新连接", "bundle_unavailable": "账号暂不可用"}.get(state, "登录账号"))
+	var status := str({"ready": "已登录", "guest": "本机存档", "checking": "确认登录状态", "unavailable": "账号服务暂不可用", "bundle_unavailable": "请刷新页面"}.get(state, "同步你的冒险"))
+	var account := add_button(self, "menu:identity", nickname + " · " + status, _ui("web_account"))
+	account.tooltip_text = nickname + " · " + status + "\n账号与退出登录" if state in ["ready", "guest"] else nickname
+	account.clip_text = true
+	account.autowrap_mode = TextServer.AUTOWRAP_OFF
+	account.disabled = state in ["checking", "bundle_unavailable"]
+	var height := maxf(52, 34 * UiStyle.text_scale + 12)
+	var text_width := account.get_theme_font("font").get_string_size(nickname, HORIZONTAL_ALIGNMENT_LEFT, -1, roundi(15 * UiStyle.text_scale)).x
+	var width := minf(size.x * .39, clampf(text_width + 100, 174, 280))
+	account.custom_minimum_size = Vector2(0, height)
+	account.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
+	account.offset_left = -width - 24
+	account.offset_right = -24
+	account.offset_top = 16
+	account.offset_bottom = 16 + height
+	for key in ["normal", "hover", "pressed", "hover_pressed", "focus", "disabled"]:
+		var skin := UiStyle.surface(Color("13252b", .86), Color("c9b58e", .26), 9)
+		skin.shadow_size = 6
+		skin.shadow_color = Color(0, 0, 0, .16)
+		if key in ["hover", "hover_pressed", "pressed"]:
+			skin.bg_color = Color("243a40", .96)
+			skin.border_color = Color("d5bd91", .65)
+		if key == "focus":
+			skin.bg_color = Color.TRANSPARENT
+			skin.border_color = Color("f2d69d")
+		account.add_theme_stylebox_override(key, skin)
+	for key in ["font_color", "font_hover_color", "font_pressed_color", "font_focus_color", "font_disabled_color", "font_shadow_color"]:
+		account.add_theme_color_override(key, Color.TRANSPARENT)
+	var inset := MarginContainer.new()
+	inset.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	account.add_child(inset)
+	inset.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	for side in ["left", "right"]:
+		inset.add_theme_constant_override("margin_" + side, 12)
+	var row := HBoxContainer.new()
+	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_theme_constant_override("separation", 10)
+	inset.add_child(row)
+	var avatar := PanelContainer.new()
+	avatar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	avatar.custom_minimum_size = Vector2(32, 32)
+	avatar.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	var avatar_skin := UiStyle.surface(Color("31454a"), Color("718075", .3), 16)
+	avatar_skin.set_content_margin_all(6)
+	avatar_skin.shadow_size = 0
+	avatar.add_theme_stylebox_override("panel", avatar_skin)
+	row.add_child(avatar)
+	var icon := TextureRect.new()
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon.texture = UiNavIcon.texture("account")
+	icon.custom_minimum_size = Vector2(20, 20)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	avatar.add_child(icon)
+	var words := VBoxContainer.new()
+	words.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	words.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	words.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	words.add_theme_constant_override("separation", 1)
+	row.add_child(words)
+	var name_label := add_text(words, nickname, 15, UiStyle.CREAM)
+	name_label.autowrap_mode = TextServer.AUTOWRAP_OFF
+	name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	name_label.clip_text = true
+	name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var state_label := add_text(words, ("●  " if state == "ready" else "") + status, 11, Color("a6bda8") if state == "ready" else Color("9daeb0"))
+	state_label.autowrap_mode = TextServer.AUTOWRAP_OFF
+	state_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	state_label.clip_text = true
+	state_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var chevron := add_text(row, "›", 20, Color("b5ad9b"))
+	chevron.size_flags_horizontal = Control.SIZE_SHRINK_END
+	chevron.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	chevron.autowrap_mode = TextServer.AUTOWRAP_OFF
+	chevron.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	chevron.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 
 func _map_preview_node(node: Dictionary, reachable: Array) -> void:
@@ -356,7 +473,7 @@ func _map_preview_node(node: Dictionary, reachable: Array) -> void:
 	var scene_key := str({"normal":"BG_classroom","elite":"BG_classroom","boss":"BG_classroom","rest":"BG_dorm","shop":"BG_shop","event":"BG_campus"}.get(str(node.get("kind","")),"BG_study"))
 	var thumbnail := TextureRect.new()
 	thumbnail.texture = UiStyle.texture(scene_key)
-	thumbnail.custom_minimum_size.y = (48 if UiStyle.text_scale > 1.0 else 64) if size.y < 700 else 86
+	thumbnail.custom_minimum_size.y = 40 if UiStyle.short_web(size) else ((48 if UiStyle.text_scale > 1.0 else 64) if size.y < 700 else 86)
 	thumbnail.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	thumbnail.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 	thumbnail.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -376,8 +493,7 @@ func _map_preview_node(node: Dictionary, reachable: Array) -> void:
 	text.name = "ForecastFullText"
 	if not reachable.has(id):
 		add_text(_map_forecast_words,"这里只预览路线，确认可达节点后才会前进。",13,Color("665d48"))
-	var scroll := _map_forecast_words.get_parent() as ScrollContainer
-	scroll.scroll_vertical = 0
+	_map_preview_scroll.scroll_vertical = 0
 
 
 func _overview_locate(id: String) -> void:
@@ -469,10 +585,17 @@ func _render_reward() -> void:
 	if relic and _relics_full() and not selected.is_empty():
 		var replacement := str(_choices.get(id + ":replace", ""))
 		summary += " · 装备槽已满，请向下选择替换对象" if replacement.is_empty() else " · 将失去：" + _relic_name(replacement)
-	var row := _bottom("确认跳过这项奖励？" if skipping else summary)
+	var skip_bonus := int(item.get("rx_skip_bonus", 0))
+	var skip_summary := "确认跳过这项奖励？"
+	if skip_bonus > 0:
+		skip_summary += " · %s：+%d 金钱" % [UiStyle.label("RX-C28"), skip_bonus]
+	var row := _bottom(skip_summary if skipping else summary)
 	if skipping:
+		if skip_bonus > 0:
+			_cancel(row, id + ":skip", "继续选牌")
 		add_button(row, "reward:%s:skip_confirm" % id, "确认跳过", _action("skip_reward", {"offer_id": offer.get("offer_id", ""), "item_id": id}))
-		_cancel(row, id + ":skip", "继续选牌")
+		if skip_bonus <= 0:
+			_cancel(row, id + ":skip", "继续选牌")
 	else:
 		var payload := {"offer_id": offer.get("offer_id", ""), "item_id": id, "candidate_id": selected}
 		if not str(_choices.get(id + ":replace", "")).is_empty():
@@ -483,7 +606,7 @@ func _render_reward() -> void:
 			confirm.tooltip_text = "请先选择要替换的已装备饰品" if not selected.is_empty() else "请先预选奖励"
 		_cancel(row, id)
 		if item.get("skippable", true):
-			_local_button(row, "reward:%s:skip" % id, "跳过此项", id + ":skip", "yes")
+			_local_button(row, "reward:%s:skip" % id, "跳过 · +%d 金钱" % skip_bonus if skip_bonus > 0 else "跳过此项", id + ":skip", "yes")
 
 
 func _render_campaign() -> void:
@@ -494,6 +617,8 @@ func _render_campaign() -> void:
 	var story_room := kind in ["service", "familiar"]
 	reset_page("" if story_room else title, "" if story_room else "候选已固定 · 查看和返回不会消耗奖励")
 	_run_bar(header)
+	if kind == "relic" and RelicPilot.expanded(view.get("manifest_id")):
+		_scroll.follow_focus = true
 	if story_room:
 		var heading := add_text(body, title, 28, UiStyle.BRASS)
 		heading.name = "EventTitle"
@@ -536,6 +661,8 @@ func _render_campaign() -> void:
 		if meta.get("subtype", "") in ["L", "LAB", "T"]:
 			if not _room_expanded:
 				add_text(body,"服务费用：%d 金钱%s" % [int(offer.get("service_cost",0))," + 5 精力（至少保留1）" if meta.get("subtype") == "LAB" else ""],16,UiStyle.BRASS)
+				if int(offer.get("upgrade_discount",0)) > 0:
+					add_text(body,"二手教材封套：付费升级立减 %d，移除价格不变。" % int(offer.upgrade_discount),15,UiStyle.BRASS)
 			_campaign_deck(offer, meta.get("subtype", "") == "LAB")
 		else:
 			for option in ["heal", "money", "progress"]:
@@ -616,7 +743,10 @@ func _render_campaign() -> void:
 		if kind == "relic":
 			add_button(row, "selection:cancel", "返回饰品候选", {}, func(): _choices.erase("campaign:target"); _choices.erase("campaign:option"); _choices.erase("campaign:replace"); refresh_local())
 			if not target.is_empty() and _relics_full():
-				_local_button(row, "campaign:convert:" + target, "主动折算 · " + _quote(offer, "convert", target), "campaign:option", "convert")
+				var conversion := "主动折算 · " + _quote(offer, "convert", target)
+				if RelicPilot.expanded(view.get("manifest_id")):
+					conversion = "折算 · +%d 金钱" % int(_preview_quote(offer, "convert", target).get("money_delta", 0))
+				_local_button(row, "campaign:convert:" + target, conversion, "campaign:option", "convert")
 		else:
 			_cancel(row, "campaign:option")
 		if kind not in ["direction", "destination"]:
@@ -759,7 +889,7 @@ func _render_map() -> void:
 		if str(node.get("node_id", "")) == current_id:
 			current_title = _map_node_title(node)
 			break
-	var compact_map := size.x < 1100 and UiStyle.text_scale >= 1.25
+	var compact_map := UiStyle.short_web(size) or (size.x < 1100 and UiStyle.text_scale >= 1.25)
 	reset_page("校园路线 · " + str(view.get("year_title", "")), "", compact_map)
 	var map_title: Label = header.get_child(0)
 	if compact_map:
@@ -837,21 +967,30 @@ func _render_map() -> void:
 	add_child(_map_preview)
 	var preview_column := VBoxContainer.new()
 	preview_column.add_theme_constant_override("separation",10)
-	_map_preview.add_child(preview_column)
+	var preview_scroll := ScrollContainer.new()
+	preview_scroll.name = "RouteForecast"
+	preview_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	preview_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_map_preview_scroll = preview_scroll
+	if UiStyle.short_web(size):
+		_map_preview.add_child(preview_scroll)
+		preview_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		preview_scroll.add_child(preview_column)
+	else:
+		_map_preview.add_child(preview_column)
 	_map_preview_words = VBoxContainer.new()
 	_map_preview_words.name = "MapNodeSummary"
 	_map_preview_words.add_theme_constant_override("separation",6)
 	preview_column.add_child(_map_preview_words)
 	preview_column.add_child(HSeparator.new())
-	var preview_scroll := ScrollContainer.new()
-	preview_scroll.name = "RouteForecast"
-	preview_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	preview_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	preview_column.add_child(preview_scroll)
 	_map_forecast_words = VBoxContainer.new()
 	_map_forecast_words.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_map_forecast_words.add_theme_constant_override("separation",10)
-	preview_scroll.add_child(_map_forecast_words)
+	if UiStyle.short_web(size):
+		preview_column.add_child(_map_forecast_words)
+	else:
+		preview_column.add_child(preview_scroll)
+		preview_scroll.add_child(_map_forecast_words)
 	var preview_id := selected if node_ids.has(selected) else (str(reachable[0]) if not reachable.is_empty() else current_id)
 	for node in nodes:
 		if str(node.node_id) == preview_id:
@@ -862,7 +1001,7 @@ func _render_map() -> void:
 			node_button.focus_entered.connect(func(): _map_preview_node(node,reachable))
 	_layout_regions.call_deferred()
 
-	var row := _bottom(description + "  ·  再次点击已选节点进入 / 可双击")
+	var row := _bottom(description + ("  ·  再点已选节点可进入" if UiStyle.web_touch else "  ·  再次点击已选节点进入 / 可双击"))
 	_map_selection_hint = footer.get_child(0) as Label
 	# Selection text cannot resize the footer and shift the node under a second click.
 	_map_selection_hint.autowrap_mode = TextServer.AUTOWRAP_OFF
@@ -1181,6 +1320,8 @@ func _render_rest() -> void:
 	for option in _array(rest.get("options")):
 		var caption := _rest_name(str(option.option_id))+"\n"
 		caption += "实际回复 %s 精力" % rest.get("effective_heal_amount",rest.get("heal_amount",0)) if not option.get("needs_card",false) else "查看牌组，比较后确认一张实例"
+		if str(option.option_id) == "heal" and int(rest.get("rx_heal_bonus", 0)) > 0:
+			caption += "（含%s +%d）" % [UiStyle.label("RX-C26"), int(rest.rx_heal_bonus)]
 		var pick: Button
 		if option.get("needs_card",false):
 			pick = _local_button(options,"rest:option:"+str(option.option_id),caption,"rest:option",str(option.option_id))
@@ -1230,6 +1371,7 @@ func _target_or_comparison(prefix: String, mode: String, key: String) -> void:
 
 func _render_setup() -> void:
 	# Use the existing configuration/old-run replacement semantics, with one hero in focus.
+	var compact := UiStyle.short_web(size)
 	var characters := _array(view.get("characters"))
 	var manifests := _array(view.get("manifests"))
 	if not manifests.is_empty():
@@ -1249,7 +1391,7 @@ func _render_setup() -> void:
 		button.expand_icon = true
 		button.add_theme_constant_override("icon_max_width",34)
 		button.autowrap_mode = TextServer.AUTOWRAP_OFF
-		button.custom_minimum_size.x = button.get_theme_font("font").get_string_size(button.text,HORIZONTAL_ALIGNMENT_LEFT,-1,button.get_theme_font_size("font_size")).x+78
+		button.custom_minimum_size.x = button.get_theme_font("font").get_string_size(button.text,HORIZONTAL_ALIGNMENT_LEFT,-1,button.get_theme_font_size("font_size")).x+(52 if compact else 78)
 		button.disabled = bool(character.get("locked", false))
 		button.tooltip_text = str(character.get("reason", ""))
 		UiStyle.button_skin(button,"primary" if _character == id else "secondary",true)
@@ -1258,8 +1400,9 @@ func _render_setup() -> void:
 			continue
 		var info := add_panel(body)
 		info.get_parent().add_theme_stylebox_override("panel",UiStyle.surface(Color(UiStyle.NIGHT,.78),Color(UiStyle.BRASS,.4)))
-		add_text(info,"人物  /  " + str(characters.find(character)+1).pad_zeros(2),12,UiStyle.MUTED)
-		add_text(info, UiStyle.label(_character), 32)
+		if not compact:
+			add_text(info,"人物  /  " + str(characters.find(character)+1).pad_zeros(2),12,UiStyle.MUTED)
+		add_text(info, UiStyle.label(_character), 27 if compact else 32)
 		add_text(info,str({"P01":"策略铺垫 → 工作连携 → 取回策略","P02":"开题 → 编排章节 → 发表论文","P03":"叠加不同负面 → 触发复合反应","P04":"伙伴协作 → 积攒协同 → 团队爆发"}.get(_character,"")),19,UiStyle.GREEN.darkened(.3))
 		add_text(info, UiContentText.describe_character_passive(str(character.get("passive_id", ""))), 17)
 		add_text(info, "开局无饰品 · 12张起始牌 · 沿四张学年地图前进", 16)
@@ -1269,20 +1412,34 @@ func _render_setup() -> void:
 		_seed_revision = int(view.get("seed_revision", 0))
 	var difficulty_row := add_row(footer)
 	difficulty_row.name = "SetupConfiguration"
-	add_text(difficulty_row,"冒险难度",14,UiStyle.MUTED)
+	if not compact:
+		add_text(difficulty_row,"冒险难度",14,UiStyle.MUTED)
 	for difficulty in difficulties:
 		var id := _option_id(difficulty)
 		var pick := add_button(difficulty_row, "setup:difficulty:" + id, ("✓ " if _difficulty == id else "") + _difficulty_name(id), {}, func(): _select_setup("difficulty", id))
+		if compact:
+			pick.autowrap_mode = TextServer.AUTOWRAP_OFF
+			pick.custom_minimum_size.x = roundi(float(pick.text.length()) * 18 * UiStyle.text_scale + 24) if UiStyle.web_touch else 74
 		pick.tooltip_text = DifficultyRules.description(_dict(view.get("difficulty_details",{}).get(id)))
 		UiStyle.button_skin(pick,"primary" if _difficulty == id else "secondary",true)
-	add_button(difficulty_row,"setup:advanced","高级设置",{},func(): _open_inspector("seed"))
+	var advanced := add_button(difficulty_row,"setup:advanced","高级设置",{},func(): _open_inspector("seed"))
+	if compact:
+		advanced.custom_minimum_size.x = 104 * minf(UiStyle.text_scale, 1.15) if UiStyle.web_touch else 88
 	add_text(footer,DifficultyRules.description(_dict(view.get("difficulty_details",{}).get(_difficulty))),14,UiStyle.MUTED).name = "DifficultyEffects"
 	var confirming := bool(view.get("confirm_restart", false))
-	var row := _bottom(("确认结束旧局并替换当前存档？" if confirming else "人物：" + UiStyle.label(_character) + " · " + _difficulty_name(_difficulty)))
+	var row := difficulty_row
+	if confirming:
+		row = _bottom("确认结束旧局并替换当前存档？")
+	elif not compact:
+		row = _bottom("人物：" + UiStyle.label(_character) + " · " + _difficulty_name(_difficulty))
+	elif UiStyle.web_touch and size.x < 620 * UiStyle.text_scale:
+		row = add_row(footer)
 	add_button(row, "setup:restart_confirm" if confirming else "setup:start", "结束旧局并开始" if confirming else "开始四年冒险", func(): return _ui("start_run", {"character_id": _character, "difficulty": _difficulty, "manifest_id": _manifest, "seed": _seed, "confirmed": confirming}))
 	if confirming:
 		add_button(row, "setup:restart_cancel", "取消重开", _ui("cancel_restart"))
-	add_button(row, "setup:back", "返回", _ui("menu"))
+	var back := add_button(row, "setup:back", "返回", _ui("menu"))
+	if compact:
+		back.custom_minimum_size.x = 56
 
 
 func _setup_deck(character: Dictionary) -> void:
@@ -1301,6 +1458,14 @@ func _render_settings() -> void:
 		button.reparent(actions)
 	_buttons["settings:restore_backup"].get_parent().get_parent().visible = _diagnostics
 	add_button(header, "settings:diagnostics", "收起存档诊断" if _diagnostics else "查看存档诊断 / 恢复备份", {}, func(): _diagnostics = not _diagnostics; refresh_local())
+	if bool(view.get("web_privacy_available", false)):
+		add_button(body, "settings:web_privacy", "隐私设置", _ui("web_privacy"))
+	if view.get("account_state", "") == "ready":
+		var cloud := add_panel(body)
+		add_text(cloud, "云存档", 23)
+		add_text(cloud, "同步当前冒险和个人进度，处理设备冲突或恢复上一份云端备份。", 17)
+		add_button(cloud, "settings:cloud", "云存档 · 同步与恢复", _ui("web_saves"))
+		body.move_child(cloud.get_parent(), 0)
 	_presentation = _dict(view.get("settings")).get("presentation", {"text_scale": 100, "reduced_motion": false, "animation_speed": 1}).duplicate(true) if _presentation.is_empty() else _presentation
 	var panel := add_panel(body)
 	body.move_child(panel.get_parent(), 0)
@@ -1438,7 +1603,7 @@ func _open_seed_settings() -> void:
 	input.name = "RunSeedInput"
 	input.text = _seed
 	input.placeholder_text = "十进制整数种子"
-	input.custom_minimum_size.y = 48
+	input.custom_minimum_size.y = UiStyle.MOBILE_TARGET if UiStyle.web_touch else 48
 	input.add_theme_font_size_override("font_size",roundi(18*UiStyle.text_scale))
 	input.text_changed.connect(func(value): _seed = value)
 	words.add_child(input)
@@ -1475,7 +1640,7 @@ func _open_inspector(kind: String) -> void:
 		card.pressed.connect(func(): _preview_card = card; _show_card_preview(true))
 	var search := LineEdit.new()
 	search.placeholder_text = "查找名称 / 类型 / 费用1 / 已升级 / 未升级"
-	search.custom_minimum_size.y = 42
+	search.custom_minimum_size.y = UiStyle.MOBILE_TARGET if UiStyle.web_touch else 42
 	grid.get_parent().get_parent().add_child(search)
 	search.text_changed.connect(func(value):
 		for child in grid.get_children():

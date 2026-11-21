@@ -43,8 +43,8 @@ func _equip(session: GameSession) -> void:
 	var second := run.next_instance_seq
 	var guide := run.next_instance_id("relic")
 	run.relics.assign([
-		{"relic_id": bookmark, "definition_id": "FY_Y1_3", "slot": 2, "acquired_order": first},
-		{"relic_id": guide, "definition_id": "FY_Y1_1", "slot": 0, "acquired_order": second}])
+		{"relic_id": bookmark, "definition_id": "RX-C04", "slot": 2, "acquired_order": first},
+		{"relic_id": guide, "definition_id": "RX-C01", "slot": 0, "acquired_order": second}])
 
 
 func _present(shell: GameShell, dimensions: Vector2i, scale: int) -> void:
@@ -124,7 +124,7 @@ func _map_and_menu() -> void:
 			slot.grab_focus()
 			_click(slot.get_global_rect().get_center())
 			await _frames()
-			_check(page._reference.selected_relic == str(session.get_view().run.relics[0].relic_id) and _text(page._reference).contains("服务费用 -5"), "physical slot opens the corresponding real relic effect")
+			_check(page._reference.selected_relic == str(session.get_view().run.relics[0].relic_id) and _text(page._reference).contains("第 3、5 回合"), "physical slot opens the corresponding real relic effect")
 			_check(page._reference.data.relics == page.view.relics, "reference uses exact public relic data")
 			await _capture("map-relics-%d-%d" % [dimensions.x, scale])
 			_click(page._reference._tabs.info.get_global_rect().get_center())
@@ -186,8 +186,8 @@ func _battle_and_relics() -> void:
 			await _capture("battle-focus-%d-%d" % [dimensions.x, scale])
 			page.press("battle:relics")
 			await _frames()
-			_check(page._reference.section == "relics" and _text(page._reference).contains("校园导览册"), "battle relic button displays actual equipment instead of deck")
-			_check(_text(page._reference).contains("金钱 +5"), "battle shows actual map relic effect")
+			_check(page._reference.section == "relics" and _text(page._reference).contains(UiStyle.label("RX-C01")), "battle relic button displays actual equipment instead of deck")
+			_check(_text(page._reference).contains("获得 4 放松"), "battle shows actual relic effect")
 			await _capture("battle-relics-%d-%d" % [dimensions.x, scale])
 			_key(KEY_ESCAPE)
 			await _frames()
@@ -230,15 +230,15 @@ func _battle_and_relics() -> void:
 
 func _reward_and_legacy() -> void:
 	var catalog := ContentDB.new("res://data/four_year")
-	_check(catalog.load("campus_four_year").ok, "relic reward catalog loads")
+	_check(catalog.load(RelicPilot.ROSTER).ok, "relic reward catalog loads")
 	var service := RunService.new(catalog)
-	var created := service.create(StartRunRequest.new("P03", &"normal", "campus_four_year", "42"))
+	var created := service.create(StartRunRequest.new("P03", &"normal", RelicPilot.ROSTER, "42"))
 	var run: RunState = created.data.state
 	run.relics.assign([
-		{"relic_id": "guide", "definition_id": "FY_Y1_1", "slot": 0},
-		{"relic_id": "card", "definition_id": "FY_Y1_2", "slot": 1},
-		{"relic_id": "bookmark", "definition_id": "FY_Y1_3", "slot": 2}])
-	run.pending_reward = RewardOffer.new({"offer_id": "controlled-relic-reward", "source_node_id": "controlled", "items": [{"item_id": "relic", "kind": "relic", "status": "pending", "candidates": ["FY_Y2_1", "FY_Y2_2", "FY_Y2_3"], "skippable": true}]})
+		{"relic_id": "guide", "definition_id": "RX-C01", "slot": 0},
+		{"relic_id": "card", "definition_id": "RX-C02", "slot": 1},
+		{"relic_id": "bookmark", "definition_id": "RX-C04", "slot": 2}])
+	run.pending_reward = RewardOffer.new({"offer_id": "controlled-relic-reward", "source_node_id": "controlled", "items": [{"item_id": "relic", "kind": "relic", "status": "pending", "candidates": ["RX-C03", "RX-C05", "RX-C06"], "skippable": true}]})
 	var page := UiExperiencePage.new()
 	page.screen = "reward"
 	page.theme = UiStyle.make_theme()
@@ -250,7 +250,7 @@ func _reward_and_legacy() -> void:
 			UiStyle.text_scale = scale / 100.0
 			page.size = dimensions
 			page.render(service.make_view(run))
-			page.press("reward:relic:pick:FY_Y2_1")
+			page.press("reward:relic:pick:RX-C03")
 			await _frames()
 			_check(_text(page).contains("将失去的旧效果") or _text(page).contains("失去的旧效果"), "replacement describes lost effects before confirm")
 			_check(page.find_children("*", "TextureRect", true, false).size() >= 6, "reward and replacement share actual relic images")
@@ -280,7 +280,7 @@ func _reward_and_legacy() -> void:
 
 func _test_room_details() -> void:
 	var session := _session()
-	var opened := session.start_test_room({"character_id": "P03", "encounter_id": "N01", "seed": "42", "relics": ["FY_Y1_1"]})
+	var opened := session.start_test_room({"character_id": "P03", "encounter_id": "N01", "seed": "42", "relics": ["RX-C01"]})
 	_check(opened.accepted, "independent test battle starts with selected equipment")
 	if not opened.accepted:
 		print("REFERENCE_TEST_ROOM_DIAGNOSTIC=", opened.error.to_dictionary())
@@ -290,10 +290,10 @@ func _test_room_details() -> void:
 	await _frames()
 	_check(shell.page is BattleScreen, "test room uses same equipment display")
 	_check(shell.page.button_disabled("battle:save"), "test room cannot save the underlying formal adventure through menu")
-	_check(shell.page.view.relics[0].detail.campaign.amount == 5, "test room publishes actual read-only relic definition")
+	_check(shell.page.view.relics[0].detail.id == "RX-C01", "test room publishes actual read-only relic definition")
 	shell.press("battle:relics")
 	await _frames()
-	_check(_text(shell.page._reference).contains("金钱 +5"), "test room relic full effect is inspectable")
+	_check(_text(shell.page._reference).contains("获得 4 放松"), "test room relic full effect is inspectable")
 	shell.free()
 	await _frames()
 

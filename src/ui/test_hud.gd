@@ -123,12 +123,16 @@ func _short_id(test_id: String) -> String:
 	return test_id.substr(test_id.length() - 18)
 
 
+static func bar_height() -> float:
+	return maxf(48, TestUiTokens.height(BAR_HEIGHT))
+
+
 func _build_bar() -> void:
 	_bar = PanelContainer.new()
 	_bar.mouse_filter = Control.MOUSE_FILTER_STOP
 	_bar.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
 	_bar.offset_top = 0
-	_bar.offset_bottom = maxf(48, TestUiTokens.height(BAR_HEIGHT))
+	_bar.offset_bottom = bar_height()
 	var skin := UiStyle.surface(UiStyle.NIGHT, Color("657c85"), 0)
 	skin.shadow_size = 0
 	skin.content_margin_top = 2

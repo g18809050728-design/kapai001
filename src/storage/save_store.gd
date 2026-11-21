@@ -5,10 +5,12 @@ const SLOTS := ["current_run", "profile", "settings"]
 
 var debug_hooks: Dictionary = {}
 var _base_path: String
+var _reuse_identical: bool
 
 
-func _init(base_path: String = "user://saves") -> void:
+func _init(base_path: String = "user://saves", reuse_identical: bool = false) -> void:
 	_base_path = ProjectSettings.globalize_path(base_path).simplify_path()
+	_reuse_identical = reuse_identical
 
 
 func inspect(slot: String) -> GameResult:
@@ -66,10 +68,14 @@ func save(slot: String, snapshot: Dictionary) -> GameResult:
 	var validated := _integrity(snapshot, _path(slot))
 	if not validated.ok:
 		return validated
+	var path := _path(slot)
+	if _reuse_identical and debug_hooks.is_empty() and FileAccess.file_exists(path):
+		var current := _read_snapshot(path)
+		if current.ok and current.data.checksum == snapshot.checksum:
+			return GameResult.success(_receipt(slot, snapshot))
 	var make_error := DirAccess.make_dir_recursive_absolute(_base_path)
 	if make_error != OK:
 		return _io_error("save.directory.failed", _base_path, make_error)
-	var path := _path(slot)
 	var temporary := path + ".tmp"
 	var backup := path + ".bak"
 	var backup_temporary := backup + ".tmp"
@@ -126,12 +132,16 @@ func save(slot: String, snapshot: Dictionary) -> GameResult:
 	if not published.ok:
 		_restore_backup(path, backup)
 		return published
+	return GameResult.success(_receipt(slot, snapshot))
+
+
+func _receipt(slot: String, snapshot: Dictionary) -> SaveReceipt:
 	var receipt := SaveReceipt.new()
 	receipt.slot = StringName(slot)
 	receipt.revision = int(snapshot.get("revision", 0)) if snapshot.get("revision") != null else 0
 	receipt.checksum = snapshot.checksum
 	receipt.written_at = Time.get_datetime_string_from_system(true)
-	return GameResult.success(receipt)
+	return receipt
 
 
 func _inspect(slot: String, backup: bool) -> GameResult:

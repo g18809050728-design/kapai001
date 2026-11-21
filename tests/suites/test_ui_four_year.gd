@@ -15,7 +15,7 @@ func run() -> Array[String]:
 		var session := GameSession.new(store)
 		session.update_settings({"autosave": false})
 		session.start_run(StartRunRequest.new("P02", &"normal", "campus_four_year", "42"))
-		session._state.run = runner._checkpoints[kind].copy_for_write()
+		session._state.run = runner.active_checkpoint(kind, session._catalog)
 		session._state.random_snapshot = runner._rng.duplicate(true)
 		var shell := _helpers.attach_shell(session) as GameShell
 		shell.show_screen("")
@@ -78,7 +78,7 @@ func _test_setup() -> void:
 			_check(str(session.get_view().run_id) == legacy_run_id, "restart confirmation preserves the old run")
 			_check(shell.press("setup:restart_confirm"), "historical run confirms replacement")
 		var view := session.get_view()
-		_check(view.screen == &"map" and view.run.manifest_id == "campus_four_year", "new/replacement run uses only four-year content")
+		_check(view.screen == &"map" and view.run.manifest_id == "campus_four_year_relics", "new/replacement run uses full four-year relic content")
 		_check(view.run.character_id == character_id, "setup preserves selected character")
 		await shell.get_tree().create_timer(0.08).timeout
 		shell.free()

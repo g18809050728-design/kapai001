@@ -1,0 +1,16 @@
+[Unit]
+Description=Expire Kapai production stats and sessions
+After=kapai-mysql.service
+Wants=kapai-mysql.service
+
+[Service]
+Type=oneshot
+DynamicUser=yes
+WorkingDirectory=/opt/kapai-api/releases/20261121-admin-developer-tools
+EnvironmentFile=/etc/kapai001/prod-app.env
+EnvironmentFile=/etc/kapai001/prod-api.env
+ExecStart=/opt/kapai-api-venv/bin/python -m kapai.manage prune
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+NoNewPrivileges=yes

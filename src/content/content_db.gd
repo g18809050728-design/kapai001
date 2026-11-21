@@ -70,6 +70,7 @@ const DEFINITION_FIELDS := {
 		"hooks",
 		"modifiers",
 		"campaign",
+		"rx",
 		"limit",
 		"art_key"
 	],
@@ -88,6 +89,8 @@ const DEFINITION_FIELDS := {
 		"discard_on_first_card",
 		"max_vitality_reduction",
 		"self_copy_every_round",
+		"self_copy_interval",
+		"self_copy_work_percent",
 		"spawn_group",
 		"art_key"
 	],
@@ -454,8 +457,8 @@ var _enabled: Dictionary = {}
 var _info: ContentInfo
 var _legacy_four_year_hash := ""
 var _previous_four_year_hash := ""
-const PREVIOUS_FOUR_YEAR_HASH := "6ed6e9af7f0eae6154f40bfea6c53ef4ee18901201764e07e09d7ef43cc57b89"
-const LEGACY_FOUR_YEAR_HASH := "6b31fe923a9dfaced083339aaa874265545ba36b110eaf2e70bdd83708e66bd8"
+const PREVIOUS_FOUR_YEAR_HASH := "193dc115715361a2b7c1102dba8a11aa246f7efcc878d498c7a4395db741075c"
+const LEGACY_FOUR_YEAR_HASH := "e0b81d55004ee304472cfefd4785262dd144159f65a7d9d3adacb44f4b08df72"
 
 
 func _init(data_root: String = "res://data", allow_test_manifests: bool = false) -> void:
@@ -464,12 +467,27 @@ func _init(data_root: String = "res://data", allow_test_manifests: bool = false)
 
 
 func load(manifest_id: String) -> GameResult:
+	return _load_manifest(manifest_id, false)
+
+
+## Reconstruct the original catalog only to validate snapshots before conversion.
+func load_legacy_relic_catalog(manifest_id: String) -> GameResult:
+	if not RelicPilot.expanded(manifest_id):
+		return _content_error("content.manifest.invalid_id", {"id": manifest_id})
+	return _load_manifest(manifest_id, true)
+
+
+func _load_manifest(manifest_id: String, legacy_relic_pool: bool) -> GameResult:
 	if (
 		not _is_safe_id(manifest_id)
 		or (manifest_id.begins_with("test_") and not _allow_test_manifests)
 	):
 		return _content_error("content.manifest.invalid_id", {"id": manifest_id})
-	var manifest_result := _read_json("manifests/%s.json" % manifest_id)
+	var pilot := manifest_id == RelicPilot.MANIFEST
+	var roster := manifest_id == RelicPilot.ROSTER
+	var expanded := pilot or roster
+	var rx_only := expanded and not legacy_relic_pool
+	var manifest_result := _read_json("manifests/%s.json" % (RelicPilot.BASE if expanded else manifest_id))
 	if not manifest_result.ok:
 		return manifest_result
 	var manifest: Variant = manifest_result.data
@@ -477,6 +495,16 @@ func load(manifest_id: String) -> GameResult:
 	if not _is_dictionary(manifest):
 		issues.append("manifest must be an object")
 		return _invalid_package(issues)
+	if expanded:
+		if manifest.get("id") != RelicPilot.BASE or manifest.get("content_version") != "campus_four_year.v1" or manifest.get("overrides") != [] or not manifest.get("enabled") is Dictionary or not manifest.enabled.get("relic") is Array:
+			return _invalid_package(["RX pilot requires the unmodified four-year manifest contract"])
+		manifest.id = manifest_id
+		manifest.content_version = RelicPilot.legacy_version(manifest_id) if legacy_relic_pool else (RelicPilot.VERSION if pilot else RelicPilot.ROSTER_VERSION)
+		var rx_ids: Array = RelicPilot.IDS if pilot else RelicPilot.FULL_DEFINITIONS.data.map(func(row): return row.id)
+		if rx_only:
+			manifest.enabled.relic = rx_ids.duplicate()
+		else:
+			manifest.enabled.relic.append_array(rx_ids)
 	_validate_fields(manifest, MANIFEST_FIELDS, MANIFEST_REQUIRED, "manifest", issues)
 	if (
 		manifest.get("id") != manifest_id
@@ -502,7 +530,7 @@ func load(manifest_id: String) -> GameResult:
 	var enabled := _validate_enabled(manifest.get("enabled"), issues)
 	var definitions: Dictionary = {}
 	for kind in CONTENT_KINDS:
-		var loaded := _read_json("definitions/%s.json" % FILE_NAMES[kind])
+		var loaded := GameResult.success([]) if kind == "relic" and rx_only else _read_json("definitions/%s.json" % FILE_NAMES[kind])
 		if not loaded.ok:
 			issues.append("definitions/%s.json could not be loaded" % FILE_NAMES[kind])
 			definitions[kind] = {}
@@ -511,7 +539,20 @@ func load(manifest_id: String) -> GameResult:
 			issues.append("definitions/%s.json must contain an array" % FILE_NAMES[kind])
 			definitions[kind] = {}
 			continue
-		definitions[kind] = _validate_definition_file(kind, loaded.data, issues)
+		if kind == "relic":
+			if loaded.data.any(func(row): return row is Dictionary and row.has("rx")):
+				issues.append("RX definitions must not be added to the base relic file")
+			if expanded:
+				var expected: Array = RelicPilot.IDS if pilot else RelicPilot.FULL_DEFINITIONS.data.map(func(row): return row.id)
+				var extra := _read_json("relic_pilot/definitions.json" if pilot else "relic_roster/definitions.json")
+				if not extra.ok or not extra.data is Array or extra.data.size() != expected.size() or extra.data.any(func(row): return not row is Dictionary or not row.has("rx") or row.get("id") not in expected):
+					return _invalid_package(["RX pilot definitions missing or invalid"])
+				loaded.data.append_array(extra.data)
+		if kind == "character" and rx_only:
+			for character in loaded.data:
+				if character is Dictionary:
+					character["starter_relic_id"] = null
+		definitions[kind] = _validate_definition_file(kind, loaded.data, issues, rx_only)
 	if not issues.is_empty():
 		return _invalid_package(issues)
 	var ruleset_id := str(manifest.get("ruleset_id", ""))
@@ -628,6 +669,11 @@ func get_candidates(query: Dictionary) -> Array[String]:
 		var tags: Array = query.get("tags_all", [])
 		var definition_tags: Array = definition.get("tags", [])
 		if tags.any(func(tag): return not definition_tags.has(tag)):
+			continue
+		if (
+			kind == "card"
+			and (definition_tags.has("special") or definition_tags.has("temporary"))
+		):
 			continue
 		if query.get("exclude_ids", []).has(id):
 			continue
@@ -748,7 +794,7 @@ func _validate_enabled(raw: Variant, issues: Array[String]) -> Dictionary:
 	return raw.duplicate(true)
 
 
-func _validate_definition_file(kind: String, rows: Array, issues: Array[String]) -> Dictionary:
+func _validate_definition_file(kind: String, rows: Array, issues: Array[String], no_starter_relic: bool = false) -> Dictionary:
 	var by_id := {}
 	for index in rows.size():
 		var definition: Variant = rows[index]
@@ -767,7 +813,7 @@ func _validate_definition_file(kind: String, rows: Array, issues: Array[String])
 			issues.append("%s duplicates id %s" % [location, id])
 			continue
 		by_id[id] = definition.duplicate(true)
-		_validate_definition(kind, by_id[id], location, issues)
+		_validate_definition(kind, by_id[id], location, issues, no_starter_relic)
 		if kind == "card" and by_id[id].has("upgrade"):
 			var upgraded := _merge_card_upgrade(by_id[id], location, issues)
 			if not upgraded.is_empty():
@@ -777,7 +823,7 @@ func _validate_definition_file(kind: String, rows: Array, issues: Array[String])
 
 
 func _validate_definition(
-	kind: String, definition: Dictionary, location: String, issues: Array[String]
+	kind: String, definition: Dictionary, location: String, issues: Array[String], no_starter_relic: bool = false
 ) -> void:
 	if (
 		kind != "ruleset"
@@ -849,7 +895,7 @@ func _validate_definition(
 			)
 			if _is_array(definition.get("starter_cards")) and definition.starter_cards.size() != 2:
 				issues.append("%s.starter_cards must contain two card ids" % location)
-			if not _is_safe_id(str(definition.get("starter_relic_id", ""))):
+			if not (no_starter_relic and definition.get("starter_relic_id") == null) and not _is_safe_id(str(definition.get("starter_relic_id", ""))):
 				issues.append("%s.starter_relic_id must be a safe id" % location)
 			_validate_passive(definition.get("passive"), location, issues)
 		"unit":
@@ -894,6 +940,13 @@ func _validate_definition(
 			):
 				issues.append("%s must have a behavior" % location)
 		"relic":
+			if definition.has("rx"):
+				var id := str(definition.get("id", ""))
+				var rx: Variant = definition.rx
+				_validate_fields(rx, ["owner", "text"], ["owner", "text"], location + ".rx", issues)
+				var owner := "C" if id.begins_with("RX-C") else id.get_slice("-", 1)
+				if not rx is Dictionary or rx.get("owner") != owner or not rx.get("text") is String or str(rx.get("text", "")).is_empty() or not RelicPilot.is_rx(id) or definition.has("campaign") or definition.has("hooks") or definition.has("effects") or definition.has("modifiers") or definition.get("availability") != "drop":
+					issues.append(location + ".rx invalid RX behavior")
 			if definition.has("campaign"):
 				var before := issues.size()
 				_validate_fields(definition.campaign, ["year", "effect", "amount"], ["year", "effect", "amount"], location + ".campaign", issues)
@@ -927,6 +980,7 @@ func _validate_definition(
 				(not (definition.get("effects") is Array and not definition.effects.is_empty()))
 				and not (definition.get("hooks") is Array and not definition.hooks.is_empty())
 				and not definition.has("campaign")
+				and not definition.has("rx")
 				and not (
 					definition.get("modifiers") is Dictionary
 					and not definition.modifiers.is_empty()
@@ -1644,6 +1698,18 @@ func _validate_task(value: Dictionary, location: String, issues: Array[String]) 
 		_validate_bool(value.taunt, "%s.taunt" % location, issues)
 	if value.has("self_copy_every_round"):
 		_validate_bool(value.self_copy_every_round, "%s.self_copy_every_round" % location, issues)
+	if value.has("self_copy_interval"):
+		_validate_int(value.self_copy_interval, "%s.self_copy_interval" % location, 1, issues)
+		if not bool(value.get("self_copy_every_round", false)):
+			issues.append("%s.self_copy_interval requires self_copy_every_round" % location)
+	if value.has("self_copy_work_percent"):
+		_validate_int(
+			value.self_copy_work_percent, "%s.self_copy_work_percent" % location, 1, issues
+		)
+		if int(value.self_copy_work_percent) > 100:
+			issues.append("%s.self_copy_work_percent must be at most 100" % location)
+		if not bool(value.get("self_copy_every_round", false)):
+			issues.append("%s.self_copy_work_percent requires self_copy_every_round" % location)
 	if value.has("spawn_group"):
 		if not ["priority", "other"].has(str(value.spawn_group)):
 			issues.append("%s.spawn_group is invalid" % location)
@@ -1730,6 +1796,7 @@ func _validate_intent(value: Variant, location: String, issues: Array[String]) -
 		"pressure_per_card_type",
 		"player_gain_focus",
 		"player_reduce_focus",
+		"player_reduce_max_vitality",
 		"shield",
 		"work_restore",
 		"extra_requirements",
@@ -1780,7 +1847,7 @@ func _validate_intent(value: Variant, location: String, issues: Array[String]) -
 	for field in ["pressure_has_unit_mult", "pressure_no_unit_mult", "pressure_when_shield"]:
 		if value.has(field):
 			_validate_int(value[field], "%s.%s" % [location, field], 1, issues)
-	for field in ["player_gain_focus", "player_reduce_focus"]:
+	for field in ["player_gain_focus", "player_reduce_focus", "player_reduce_max_vitality"]:
 		if value.has(field):
 			_validate_int(value[field], "%s.%s" % [location, field], 1, issues)
 	if value.has("pressure_per_card_type"):
@@ -1806,7 +1873,7 @@ func _validate_intent(value: Variant, location: String, issues: Array[String]) -
 			for spec in value.summon_tasks:
 				_validate_fields(
 					spec,
-					["task", "count"],
+					["task", "count", "taunt", "work_percent"],
 					["task", "count"],
 					"%s.summon_tasks[]" % location,
 					issues
@@ -1818,6 +1885,21 @@ func _validate_intent(value: Variant, location: String, issues: Array[String]) -
 					_validate_int(
 						spec.get("count"), "%s.summon_tasks[].count" % location, 1, issues
 					)
+					if spec.has("taunt"):
+						_validate_bool(
+							spec.taunt, "%s.summon_tasks[].taunt" % location, issues
+						)
+					if spec.has("work_percent"):
+						_validate_int(
+							spec.work_percent,
+							"%s.summon_tasks[].work_percent" % location,
+							1,
+							issues
+						)
+						if int(spec.work_percent) > 100:
+							issues.append(
+								"%s.summon_tasks[].work_percent must be at most 100" % location
+							)
 	if value.has("transform_task"):
 		_validate_fields(
 			value.transform_task, ["task"], ["task"], "%s.transform_task" % location, issues

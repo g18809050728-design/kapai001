@@ -3,6 +3,8 @@ extends Button
 
 var entry: Dictionary = {}
 var slot := 0
+var _flash := false
+var _flash_generation := 0
 
 
 func configure(relic: Dictionary, position_index: int) -> void:
@@ -22,16 +24,33 @@ func configure(relic: Dictionary, position_index: int) -> void:
 		signal_value.connect(queue_redraw)
 
 
+func flash() -> void:
+	_flash_generation += 1
+	var generation := _flash_generation
+	_flash = true
+	queue_redraw()
+	await get_tree().create_timer(0.55).timeout
+	if is_inside_tree() and generation == _flash_generation:
+		_flash = false
+		queue_redraw()
+
+
 func _draw() -> void:
 	var active := (is_hovered() or has_focus()) and not disabled
-	var border := Color("dfc48b") if active else Color("78847e")
+	var border := Color("ffdd91") if _flash else Color("dfc48b") if active else Color("78847e")
 	var skin := UiStyle.surface(Color("23323a"), border, 3)
 	skin.shadow_size = 0
 	draw_style_box(skin, Rect2(1, 5, size.x - 2, size.y - 10))
 	var texture := UiStyle.texture(str(entry.get("definition_id", ""))) if not entry.is_empty() else null
 	if texture != null:
-		draw_texture_rect(texture, Rect2(4, 9, size.x - 8, size.y - 18), false, Color("9bada9") if disabled else Color.WHITE)
+		var bounds := Rect2(4, 9, size.x - 8, size.y - 18)
+		if str(entry.definition_id).begins_with("RX-"):
+			var side := minf(size.x - 8, size.y - 10)
+			bounds = Rect2((size - Vector2.ONE * side) * .5, Vector2.ONE * side)
+		draw_texture_rect(texture, bounds, false, Color("9bada9") if disabled else Color.WHITE)
 	else:
 		draw_texture_rect(UiNavIcon.texture("relics"), Rect2(size.x * .5 - 10, size.y * .5 - 10, 20, 20), false, Color("697770"))
+	if _flash:
+		draw_rect(Rect2(3, 7, size.x - 6, size.y - 14), Color("ffdd91"), false, 2)
 	if has_focus() and not disabled:
 		draw_line(Vector2(4, size.y - 3), Vector2(size.x - 4, size.y - 3), Color("f1d59f"), 2, true)

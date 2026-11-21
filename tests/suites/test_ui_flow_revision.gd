@@ -169,6 +169,7 @@ func _controlled_room(subtype: String) -> GameShell:
 	session.start_run(StartRunRequest.new("P01",&"normal","campus_four_year","42"))
 	var run := session._state.run
 	run.campaign = CampaignService.initial()
+	RunRelicRoster.upgrade_base_campaign(run)
 	run.nodes = CampaignMap.build(run.run_id)
 	run.money = 200
 	run.vitality = 40

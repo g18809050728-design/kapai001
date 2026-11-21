@@ -67,7 +67,14 @@ static func build(catalog: ContentDB) -> GameResult:
 			break
 	for entry in monsters:
 		entry.terms.sort()
-	return GameResult.success({"manifest_id": info.id, "content_hash": info.content_hash, "cards": cards, "monsters": monsters})
+	var relics: Array[Dictionary] = []
+	for id in catalog.get_candidates({"kind": "relic"}):
+		var definition: Dictionary = catalog.get_definition("relic", id).data
+		var year := int(definition.get("campaign", {}).get("year", 0))
+		var terms := [year] if year > 0 else ([3, 4] if definition.rarity == "gold" else [1, 2, 3, 4])
+		relics.append({"id": id, "definition": definition, "terms": terms})
+	relics.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return a.id < b.id)
+	return GameResult.success({"relics": relics, "manifest_id": info.id, "content_hash": info.content_hash, "cards": cards, "monsters": monsters})
 
 
 static func _attach_related(catalog: ContentDB, value: Variant, face: Dictionary) -> void:

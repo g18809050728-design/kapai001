@@ -13,6 +13,10 @@ static func enabled(run: RunState) -> bool:
 
 static func initialize(run: RunState, seed: String) -> GameResult:
 	run.campaign = CampaignService.initial()
+	if RelicPilot.expanded(run.manifest_id):
+		run.campaign["rx_uses"] = {}
+	if RunRelicRoster.enabled(run):
+		RunRelicRoster.initialize(run)
 	run.campaign.merge({"version": 2, "root_seed": seed, "map_version": MAP_VERSION, "years": [], "summaries": []}, true)
 	return ensure_year(run)
 

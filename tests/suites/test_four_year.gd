@@ -247,6 +247,21 @@ func _test_public_session() -> void:
 	_check(continued.ok, "public campaign resumes: " + str(continued.error.to_dictionary() if continued.error != null else null))
 	restored.free()
 
+## Keep the old fixed-map checkpoints for legacy rules, but stage the UI
+## checks with RX gear and a real current-catalog offer.
+func active_checkpoint(kind: String, catalog: ContentDB) -> RunState:
+	var run: RunState = _checkpoints[kind].copy_for_write()
+	run.manifest_id = RelicPilot.ROSTER
+	RunRelicRoster.upgrade_base_campaign(run)
+	for slot in run.relics:
+		slot.definition_id = ["RX-C01", "RX-C02", "RX-C04"][int(slot.slot)]
+	if run.campaign.pending.get("kind") == "relic":
+		var offered := RelicPilot.candidates(run, catalog, RandomSource.new("42"))
+		assert(offered.ok)
+		run.campaign.pending.candidates = offered.data
+	return run
+
+
 func _check(condition: bool, message: String) -> void:
 	if not condition:
 		_failures.append(message)

@@ -1,13 +1,19 @@
 class_name GameSession
 extends Node
 
+signal checkpoint_saved(slot: String, snapshot: Dictionary)
+signal checkpoint_priority
+signal run_recorded(kind: String, run: Dictionary, detail: Dictionary)
+
 const BATTLE_ACTIONS := [&"play_card", &"end_turn", &"confirm_choice", &"set_ally_target"]
-const NEW_RUN_MANIFEST := "campus_four_year"
-const PRODUCTION_MANIFESTS := ["campus_mvp", "campus_v3", "campus_four_year"]
+const NEW_RUN_MANIFEST := RelicPilot.ROSTER
+const PRODUCTION_MANIFESTS := ["campus_mvp", "campus_v3", "campus_four_year", RelicPilot.ROSTER]
 const MANIFEST_ROOTS := {
 	"campus_mvp": "res://data",
 	"campus_v3": "res://data/v3",
 	"campus_four_year": "res://data/four_year",
+	RelicPilot.MANIFEST: "res://data/four_year",
+	RelicPilot.ROSTER: "res://data/four_year",
 }
 const EVENT_LOG_LIMIT := 1000
 
@@ -16,6 +22,7 @@ var _run_service: RunService
 var _battle_engine: BattleEngine
 var _state: SessionState
 var _store: SaveStore
+var _device_store: SaveStore
 var _catalog_factory: Callable
 var _autosave: bool = true
 var _audio_settings := {"Master": 100, "Music": 70, "Ambience": 50, "SFX": 80, "UI": 70, "muted": false}
@@ -23,10 +30,13 @@ var _presentation := {"text_scale": 100, "reduced_motion": false, "animation_spe
 var _settings_error: ApiError
 var _last_receipt: SaveReceipt
 var _profile_status: Dictionary = {}
+var _relic_pilot := false
 
 
-func _init(store: SaveStore = null, catalog_factory: Callable = Callable()) -> void:
-	_store = store if store != null else SaveStore.new()
+func _init(store: SaveStore = null, catalog_factory: Callable = Callable(), relic_pilot: bool = false) -> void:
+	_relic_pilot = relic_pilot
+	_store = store if store != null else SaveStore.new("user://relic_pilot/saves" if relic_pilot else "user://saves")
+	_device_store = _store
 	_catalog_factory = catalog_factory
 	var settings := _store.load("settings")
 	if settings.ok:
@@ -53,11 +63,15 @@ func _init(store: SaveStore = null, catalog_factory: Callable = Callable()) -> v
 			_settings_error = backup.error
 
 
+func is_relic_pilot() -> bool:
+	return _relic_pilot
+
+
 func _is_manifest_allowed(manifest_id: String) -> bool:
-	return PRODUCTION_MANIFESTS.has(manifest_id)
+	return manifest_id == RelicPilot.MANIFEST if _relic_pilot else PRODUCTION_MANIFESTS.has(manifest_id)
 
 
-func _load_catalog(manifest_id: String) -> GameResult:
+func _load_catalog(manifest_id: String, legacy_relic_pool: bool = false) -> GameResult:
 	if not _is_manifest_allowed(manifest_id):
 		return _failure(GameConstants.ERROR_VERSION_MISMATCH, "error.run.manifest")
 	var candidate: ContentDB = (
@@ -65,8 +79,18 @@ func _load_catalog(manifest_id: String) -> GameResult:
 		if _catalog_factory.is_valid()
 		else ContentDB.new(str(MANIFEST_ROOTS.get(manifest_id, "res://data")))
 	)
-	var loaded := candidate.load(manifest_id)
+	var loaded := candidate.load_legacy_relic_catalog(manifest_id) if legacy_relic_pool else candidate.load(manifest_id)
 	return GameResult.success(candidate) if loaded.ok else loaded
+
+
+func _decode_saved_run(snapshot: Dictionary) -> GameResult:
+	var id: String = snapshot.manifest_id
+	var version := RelicPilot.legacy_version(id)
+	var loaded := _load_catalog(id, not version.is_empty() and snapshot.content_version == version)
+	if not loaded.ok:
+		return loaded
+	var decoded := SnapshotCodec.decode_session(snapshot, loaded.data)
+	return GameResult.success({"catalog": loaded.data, "state": decoded.data}) if decoded.ok else decoded
 
 
 func start_run(request: StartRunRequest) -> ActionResult:
@@ -80,15 +104,12 @@ func start_run(request: StartRunRequest) -> ActionResult:
 		return _reject(GameConstants.ERROR_INVALID_ARGUMENT, "error.run.manifest")
 	var previous := _store.load("current_run")
 	if previous.ok:
-		var previous_catalog := _load_catalog(previous.data.manifest_id)
-		if not previous_catalog.ok:
-			return ActionResult.rejected(previous_catalog.error, get_view())
-		var previous_session := SnapshotCodec.decode_session(previous.data, previous_catalog.data)
+		var previous_session := _decode_saved_run(previous.data)
 		if not previous_session.ok:
 			return ActionResult.rejected(previous_session.error, get_view())
 		if (
-			previous_session.data.terminal_summary == null
-			or previous_session.data.profile_merge_pending
+			previous_session.data.state.terminal_summary == null
+			or previous_session.data.state.profile_merge_pending
 		):
 			return _reject(GameConstants.ERROR_RUN_ACTIVE, "error.run.saved_active")
 	elif previous.error.code != GameConstants.ERROR_SAVE_NOT_FOUND:
@@ -103,7 +124,7 @@ func start_run(request: StartRunRequest) -> ActionResult:
 	if not prepared.ok:
 		return ActionResult.rejected(prepared.error, get_view())
 	_activate_run(prepared.data)
-	return _accepted(prepared.data.events)
+	return _accepted(prepared.data.events, {}, true)
 
 
 func restart_run(request: StartRunRequest, confirmed: bool = false) -> ActionResult:
@@ -127,6 +148,7 @@ func restart_run(request: StartRunRequest, confirmed: bool = false) -> ActionRes
 	result.events.assign(prepared.data.events)
 	result.persistence = GameConstants.PERSISTENCE_SAVED
 	result.archived_save_path = merged.data if merged.data is String else ""
+	_record_run_events(result.events, true)
 	return result
 
 
@@ -137,7 +159,9 @@ func _prepare_run(request: StartRunRequest) -> GameResult:
 		or request.difficulty not in [&"relaxed", &"normal", &"hard"]
 	):
 		return _failure(GameConstants.ERROR_INVALID_ARGUMENT, "error.run.manifest")
-	var loaded := _load_catalog(request.manifest_id)
+	# The old four-year ID remains readable but never starts a legacy pool.
+	var manifest_id := NEW_RUN_MANIFEST if request.manifest_id == RelicPilot.BASE else request.manifest_id
+	var loaded := _load_catalog(manifest_id)
 	if not loaded.ok:
 		return loaded
 	var candidate: ContentDB = loaded.data
@@ -148,7 +172,7 @@ func _prepare_run(request: StartRunRequest) -> GameResult:
 			{
 				"character_id": request.character_id,
 				"difficulty": String(request.difficulty),
-				"manifest_id": request.manifest_id,
+				"manifest_id": manifest_id,
 				"seed": request.seed,
 			},
 			{"unlocked_ids": []}
@@ -184,13 +208,10 @@ func _merge_previous_summary() -> GameResult:
 				if loaded.error.code == GameConstants.ERROR_SAVE_NOT_FOUND
 				else _archive_unreadable_run(loaded)
 			)
-		var catalog := _load_catalog(loaded.data.manifest_id)
-		if not catalog.ok:
-			return _archive_unreadable_run(catalog)
-		var decoded := SnapshotCodec.decode_session(loaded.data, catalog.data)
+		var decoded := _decode_saved_run(loaded.data)
 		if not decoded.ok:
 			return _archive_unreadable_run(decoded)
-		previous = decoded.data
+		previous = decoded.data.state
 	if not previous.profile_merge_pending:
 		return GameResult.success(true)
 	var profile := _read_profile()
@@ -200,7 +221,7 @@ func _merge_previous_summary() -> GameResult:
 	if not merged.ok:
 		return merged
 	var encoded := SnapshotCodec.encode_document("profile", merged.data)
-	return _store.save("profile", encoded.data) if encoded.ok else encoded
+	return _write_checkpoint("profile", encoded.data) if encoded.ok else encoded
 
 
 func _archive_unreadable_run(result: GameResult) -> GameResult:
@@ -320,7 +341,7 @@ func submit(context: CommandContext, action: GameAction) -> ActionResult:
 	return _accepted(events, labels)
 
 
-func save_current() -> GameResult:
+func save_current(immediate: bool = true) -> GameResult:
 	if _state == null:
 		return _failure(GameConstants.ERROR_RUN_NOT_FOUND, "error.run.not_found")
 	if _state != null and _state.pending_choice != null:
@@ -338,7 +359,26 @@ func save_current() -> GameResult:
 	result.profile_cleanup = StringName(committed.data.profile_cleanup)
 	result.profile_error = committed.data.profile_error
 	result.cleanup_error = committed.data.cleanup_error
+	if immediate:
+		checkpoint_priority.emit()
 	return GameResult.success(result)
+
+
+func has_unsaved_progress() -> bool:
+	if _state == null:
+		return false
+	if _state.pending_choice != null or _state.profile_merge_pending:
+		return true
+	var encoded := SnapshotCodec.encode_session(_state, _catalog.get_info())
+	var saved := _store.load("current_run")
+	return not encoded.ok or not saved.ok or not SnapshotCodec.checksum_matches(saved.data) or encoded.data.checksum != saved.data.checksum
+
+
+func get_game_records() -> GameResult:
+	var profile := _read_profile()
+	if not profile.ok:
+		return profile
+	return GameResult.success(profile.data.summaries_by_run_id.values().duplicate(true))
 
 
 func save_and_exit() -> GameResult:
@@ -392,7 +432,7 @@ func update_settings(settings: Variant) -> GameResult:
 	var encoded := SnapshotCodec.encode_document("settings", candidate)
 	if not encoded.ok:
 		return encoded
-	var saved := _store.save("settings", encoded.data)
+	var saved := _device_store.save("settings", encoded.data)
 	if not saved.ok:
 		return saved
 	_autosave = candidate.autosave
@@ -410,17 +450,10 @@ func inspect_saves() -> GameResult:
 		view.save_meta = formal.data.duplicate(true)
 		if formal.data.valid:
 			var loaded := _store.load("current_run")
-			var decoded := loaded
-			if loaded.ok:
-				var catalog := _load_catalog(loaded.data.manifest_id)
-				decoded = (
-					SnapshotCodec.decode_session(loaded.data, catalog.data)
-					if catalog.ok
-					else catalog
-				)
-			view.can_continue = decoded.ok and decoded.data.terminal_summary == null
+			var decoded := _decode_saved_run(loaded.data) if loaded.ok else loaded
+			view.can_continue = decoded.ok and decoded.data.state.terminal_summary == null
 			if decoded.ok:
-				view.save_meta["unfinished"] = decoded.data.terminal_summary == null
+				view.save_meta["unfinished"] = decoded.data.state.terminal_summary == null
 			if not decoded.ok:
 				view.save_error = decoded.error
 		else:
@@ -456,16 +489,22 @@ func generate_run_seed() -> GameResult:
 
 func get_compendium() -> GameResult:
 	# Use a separate production catalogue; viewing never switches an active run.
-	var loaded := _load_catalog(NEW_RUN_MANIFEST)
+	var loaded := _load_catalog(RelicPilot.MANIFEST if _relic_pilot else NEW_RUN_MANIFEST)
 	if not loaded.ok:
 		return loaded
 	return CompendiumView.build(loaded.data)
 
 
+func get_text_library() -> GameResult:
+	var loaded := _load_catalog(RelicPilot.MANIFEST if _relic_pilot else NEW_RUN_MANIFEST)
+	return TextEntityLibrary.build(loaded.data) if loaded.ok else loaded
+
+
 func get_setup_options() -> GameResult:
 	var options := SetupOptions.new()
-	var catalog := ContentDB.new(str(MANIFEST_ROOTS[NEW_RUN_MANIFEST]))
-	var loaded := catalog.load(NEW_RUN_MANIFEST)
+	var manifest_id := RelicPilot.MANIFEST if _relic_pilot else NEW_RUN_MANIFEST
+	var catalog := ContentDB.new(str(MANIFEST_ROOTS[manifest_id]))
+	var loaded := catalog.load(manifest_id)
 	if not loaded.ok:
 		return loaded
 	var info := catalog.get_info()
@@ -508,16 +547,25 @@ func _restore(backup: bool) -> GameResult:
 	var loaded := _store.load_backup("current_run") if backup else _store.load("current_run")
 	if not loaded.ok:
 		return loaded
-	var catalog_result := _load_catalog(loaded.data.manifest_id)
-	if not catalog_result.ok:
-		return catalog_result
-	var decoded := SnapshotCodec.decode_session(loaded.data, catalog_result.data)
+	var decoded := _decode_saved_run(loaded.data)
 	if not decoded.ok:
 		return decoded
-	_catalog = catalog_result.data
+	var active_catalog: ContentDB = decoded.data.catalog
+	var restored: SessionState = decoded.data.state
+	var id := restored.run.manifest_id
+	if id == RelicPilot.BASE or (RelicPilot.expanded(id) and loaded.data.content_version == RelicPilot.legacy_version(id)):
+		var current := _load_catalog(NEW_RUN_MANIFEST if id == RelicPilot.BASE else id)
+		if not current.ok:
+			return current
+		var upgraded := SnapshotCodec.upgrade_relic_catalog(restored, current.data)
+		if not upgraded.ok:
+			return upgraded
+		active_catalog = current.data
+		restored = upgraded.data
+	_catalog = active_catalog
 	_run_service = RunService.new(_catalog)
 	_battle_engine = BattleEngine.new(_catalog)
-	_state = decoded.data
+	_state = restored
 	_last_receipt = null
 	# A backup is already durable, so merging is safe. Its marker stays pending
 	# until an explicit save; restoring never replaces the formal current_run.
@@ -535,7 +583,82 @@ func _save_state(state: SessionState, catalog: ContentDB = null) -> GameResult:
 	var checked := SnapshotCodec.decode_session(encoded.data, catalog)
 	if not checked.ok:
 		return checked
-	return _store.save("current_run", encoded.data)
+	return _write_checkpoint("current_run", encoded.data)
+
+
+func _write_checkpoint(slot: String, snapshot: Dictionary) -> GameResult:
+	var result := _store.save(slot, snapshot)
+	if result.ok and checkpoint_saved.has_connections():
+		checkpoint_saved.emit(slot, snapshot)
+	return result
+
+
+func _record_run_events(events: Array[RuleEvent], starting: bool = false) -> void:
+	if _relic_pilot or not run_recorded.has_connections():
+		return
+	var info := _catalog.get_info()
+	var run := {
+		"run_id": _state.run.run_id,
+		"character_id": _state.run.character_id,
+		"difficulty": _state.run.difficulty,
+		"manifest_id": info.id,
+		"game_version": info.content_version,
+	}
+	if starting:
+		run_recorded.emit("start", run, {})
+	for event in events:
+		match event.type:
+			&"battle_finished":
+				if _state.run.settled_battle_ids.size() == 1:
+					run_recorded.emit("first_battle", run, {"result": event.data.result})
+			&"run_finished":
+				if _state.terminal_summary != null:
+					run_recorded.emit("finish", run, {
+						"result": _state.terminal_summary.result,
+						"reason": _state.terminal_summary.reason,
+						"ending_id": _state.terminal_summary.ending_id,
+						"term": _state.terminal_summary.term,
+					})
+			&"node_completed", &"year_reward_created", &"year_advanced":
+				run_recorded.emit("checkpoint", run, {})
+
+
+func use_account_storage(account_id: String) -> bool:
+	if _state != null or has_test_room() or _relic_pilot:
+		return false
+	_store = _device_store if account_id.is_empty() else SaveStore.new("user://accounts/%s/saves" % account_id, true)
+	_last_receipt = null
+	_profile_status = {}
+	return true
+
+
+func cloud_snapshot(slot: String, guest: bool = false, backup: bool = false) -> GameResult:
+	var store := _device_store if guest else _store
+	return store.load_backup(slot) if backup else store.load(slot)
+
+
+func restore_cloud_snapshot(slot: String, snapshot: Dictionary) -> GameResult:
+	if _state != null or _store == _device_store or _relic_pilot:
+		return _failure(GameConstants.ERROR_INVALID_ARGUMENT, "error.save.cloud_session_active")
+	if slot == "current_run":
+		var check := _decode_saved_run(snapshot)
+		if not check.ok:
+			return check
+	elif slot == "profile":
+		var check := SnapshotCodec.decode_document(snapshot, "profile")
+		if not check.ok:
+			return check
+		if not ProfileMerge.validate(check.data.payload).is_empty():
+			return _failure(GameConstants.ERROR_SAVE_CORRUPT, "error.profile.invalid")
+	else:
+		return _failure(GameConstants.ERROR_INVALID_ARGUMENT, "error.save.cloud_slot")
+	var original := _store.load(slot)
+	if not original.ok and original.error.code != GameConstants.ERROR_SAVE_NOT_FOUND:
+		return original
+	var saved := _store.save(slot, snapshot)
+	if saved.ok:
+		_last_receipt = null
+	return saved
 
 
 func _read_profile() -> GameResult:
@@ -582,7 +705,7 @@ func _commit_pending_profile(defer_cleanup: bool = false) -> GameResult:
 	)
 	if merged.ok:
 		var encoded := SnapshotCodec.encode_document("profile", merged.data)
-		merged = _store.save("profile", encoded.data) if encoded.ok else encoded
+		merged = _write_checkpoint("profile", encoded.data) if encoded.ok else encoded
 	if not merged.ok:
 		status.profile_error = merged.error
 		_set_profile_status(status)
@@ -646,7 +769,7 @@ func _publish_run_step(working: SessionState, step: RunStep) -> void:
 		working.profile_merge_pending = true
 
 
-func _accepted(events: Array[RuleEvent], labels: Dictionary = {}) -> ActionResult:
+func _accepted(events: Array[RuleEvent], labels: Dictionary = {}, starting: bool = false) -> ActionResult:
 	for index in events.size():
 		var event := events[index]
 		event.index = index
@@ -672,7 +795,7 @@ func _accepted(events: Array[RuleEvent], labels: Dictionary = {}) -> ActionResul
 	result.profile_merge = &"pending" if _state.profile_merge_pending else &"not_pending"
 	result.profile_cleanup = &"pending" if _state.profile_merge_pending else &"not_needed"
 	if result.stable and _autosave:
-		var saved := save_current()
+		var saved := save_current(false)
 		if saved.ok:
 			result.persistence = GameConstants.PERSISTENCE_SAVED
 			result.profile_merge = saved.data.profile_merge
@@ -683,6 +806,7 @@ func _accepted(events: Array[RuleEvent], labels: Dictionary = {}) -> ActionResul
 			result.persistence = GameConstants.PERSISTENCE_FAILED
 			result.save_error = saved.error
 		result.view = get_view()
+	_record_run_events(events, starting)
 	return result
 
 
@@ -866,7 +990,7 @@ var _test_service: TestRoomService
 
 func test_service() -> TestRoomService:
 	if _test_service == null:
-		_test_service = TestRoomService.new(TestStore.new(), Callable(self, "_test_battle_view"))
+		_test_service = TestRoomService.new(TestStore.new("user://relic_pilot/test_room" if _relic_pilot else "user://test_room"), Callable(self, "_test_battle_view"), RelicPilot.MANIFEST if _relic_pilot else NEW_RUN_MANIFEST)
 	return _test_service
 
 
@@ -885,10 +1009,13 @@ func get_test_view() -> Dictionary:
 
 
 func start_test_room(config: Variant) -> ActionResult:
-	var started := test_service().start(config)
+	var pilot_events: Array[RuleEvent] = []
+	var started := test_service().start(config, pilot_events)
 	if not started.ok:
 		return ActionResult.rejected(started.error, get_view())
-	return _test_accepted()
+	var result := _test_accepted()
+	result.events.assign(pilot_events)
+	return result
 
 
 func begin_test_edit(context: Variant) -> ActionResult:

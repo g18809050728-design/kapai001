@@ -1,3 +1,7 @@
+# Offline HTML previews, reviews, templates and mirrored pages stay out of Git.
+*.[hH][tT][mM][lL]
+*.[hH][tT][mM]
+
 # Godot generated cache and translations.
 # Keep *.import settings and *.gd.uid files under version control.
 .godot/
@@ -77,8 +81,15 @@ artifacts/**/tmp/
 artifacts/**/temp/
 artifacts/**/working/
 
-# Local verification runs and downloaded research-page snapshots.
-/artifacts/verification/*/
+# Raw test evidence stays local; versioned stage documents are under docs/.
+/artifacts/verification/
+/artifacts/g2-build/
+/artifacts/g4-build/
+/artifacts/g5-build/
+/artifacts/g6-preparation/
+/artifacts/g6-review/
+/artifacts/g7-build/
+/artifacts/g7-card-redesign-preview/
 
 # AI authoring workspaces stay local; retain only final design deliverables.
 /artifacts/cardpool40-20261029/
@@ -89,8 +100,33 @@ artifacts/**/working/
 !/artifacts/redesign-20261029/校园角色与专属卡池_v2.xlsx
 !/artifacts/redesign-20261029/杀戮尖塔2_卡牌参考与流派分析.xlsx
 
-# Project assets and existing historical verification evidence are deliverables.
-agent.md
-AGENTS.md
+# Local authoring inputs and temporary exports, not deployed game assets.
+/tmp/
+/output/**
+!/output/**/
+!/output/.gdignore
+!/output/**/README.md
+!/output/**/asset-manifest.json
+!/output/external-characters/**/source.txt
+!/output/external-characters/**/[Ll]icense.txt
+
+# Keep original reference URLs, checksums, and review notes; not media mirrors.
+/ui-plan/references/**
+!/ui-plan/references/**/
+!/ui-plan/references/**/*.md
+!/ui-plan/references/**/sources.json
+!/ui-plan/references/**/downloads.json
+!/ui-plan/references/**/articles-index.json
+!/ui-plan/references/**/official-media.json
+!/ui-plan/references/**/*-sources.json
+!/ui-plan/references/**/*-sampling.json
+
+# Offline G6 atlases and duplicate crops; keep metadata and assets/art/g6-v1/.
+/assets/g6/sources/
+/assets/g6/candidates/**
+!/assets/g6/candidates/**/
+!/assets/g6/candidates/**/slicing.json
+
+# Keep agent instructions and selected resources tracked.
 /.vs/kapai001/FileContentIndex
 /.vs

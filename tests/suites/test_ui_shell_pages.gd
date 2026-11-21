@@ -372,8 +372,8 @@ func _check_production_start() -> void:
 	_check(view.screen == &"map", "production start reaches map")
 	if view.run is Dictionary:
 		_check(
-			view.run.manifest_id == "campus_four_year" and view.run.character_id == "P01",
-			"production start defaults to four-year manifest and selected character"
+			view.run.manifest_id == "campus_four_year_relics" and view.run.character_id == "P01",
+			"production start defaults to full relic roster and selected character"
 		)
 		for card in view.run.cards:
 			_check(

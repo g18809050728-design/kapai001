@@ -4,7 +4,8 @@ extends RefCounted
 ## Isolated battle-sandbox service used by GameSession. It never writes formal
 ## saves, never mutates the base catalog, and never executes unregistered ops.
 
-const MANIFEST_ID := "campus_four_year"
+const MANIFEST_ID := RelicPilot.ROSTER
+var _manifest_id := MANIFEST_ID
 const MANIFEST_ROOT := "res://data/four_year"
 const ZONES := ["hand", "draw", "discard", "exhaust"]
 const PLAYER_FIELDS := ["vitality", "max_vitality", "max_vitality_base", "focus", "relax"]
@@ -128,7 +129,8 @@ var view_builder: Callable
 var notice: String = ""
 
 
-func _init(p_store: TestStore = null, p_view_builder: Callable = Callable()) -> void:
+func _init(p_store: TestStore = null, p_view_builder: Callable = Callable(), manifest_id: String = MANIFEST_ID) -> void:
+	_manifest_id = manifest_id
 	store = p_store if p_store != null else TestStore.new()
 	view_builder = p_view_builder
 
@@ -141,7 +143,7 @@ func get_error() -> ApiError:
 	return null
 
 
-func start(config_value: Variant) -> GameResult:
+func start(config_value: Variant, pilot_events: Array[RuleEvent] = []) -> GameResult:
 	if state != null:
 		return _failure(
 			GameConstants.ERROR_TEST_CONTEXT_MISMATCH,
@@ -158,7 +160,7 @@ func start(config_value: Variant) -> GameResult:
 			)
 	var character_id := str(config.get("character_id", "P01"))
 	var loaded := ContentDB.new(MANIFEST_ROOT)
-	var loaded_result := loaded.load(MANIFEST_ID)
+	var loaded_result := loaded.load(_manifest_id)
 	if not loaded_result.ok:
 		return loaded_result
 	var overlay := TestOverlay.from_dictionary(config.get("overlay", {}))
@@ -182,7 +184,7 @@ func start(config_value: Variant) -> GameResult:
 	var cards := _starter_cards(wrapped, character, config.get("cards", []))
 	if not cards.ok:
 		return cards
-	var relics := _starting_relics(wrapped, config.get("relics", []))
+	var relics := _starting_relics(wrapped, config.get("relics", []), character_id)
 	if not relics.ok:
 		return relics
 	var seed := str(config.get("seed", "42"))
@@ -232,6 +234,10 @@ func start(config_value: Variant) -> GameResult:
 	catalog = wrapped
 	engine = local_engine
 	_adopt_state(new_state)
+	if RelicPilot.expanded(_manifest_id):
+		for event in step.events:
+			if event.type == &"relic_triggered" and RelicPilot.is_rx(event.source_id):
+				pilot_events.append(event)
 	notice = ""
 	return GameResult.success(state.core_snapshot())
 
@@ -321,7 +327,7 @@ func view() -> Dictionary:
 
 func options() -> Dictionary:
 	var loaded := ContentDB.new(MANIFEST_ROOT)
-	if not loaded.load(MANIFEST_ID).ok:
+	if not loaded.load(_manifest_id).ok:
 		return {"error": "content.load"}
 	var info := loaded.get_info()
 	var characters: Array[Dictionary] = []
@@ -1010,10 +1016,13 @@ func load_snapshot(snapshot_id: String) -> ActionResult:
 	if typeof(core) != TYPE_DICTIONARY:
 		return _reject(ApiError.new(GameConstants.ERROR_TEST_FILE_INVALID, "test.file.payload"))
 	var loaded_catalog := ContentDB.new(MANIFEST_ROOT)
-	var loaded_ok := loaded_catalog.load(MANIFEST_ID)
+	var loaded_ok := loaded_catalog.load(_manifest_id)
 	if not loaded_ok.ok:
 		return _reject(loaded_ok.error)
 	var restored := TestRoomState.from_core(core)
+	var relic_error := _restored_relic_error(restored)
+	if relic_error != null:
+		return _reject(relic_error)
 	restored.branch_id = int(core.get("branch_id", 0)) + 1
 	restored.revision = 0
 	restored.journal = []
@@ -1049,10 +1058,13 @@ func load_record(record_id: String) -> ActionResult:
 	if typeof(core) != TYPE_DICTIONARY:
 		return _reject(ApiError.new(GameConstants.ERROR_TEST_FILE_INVALID, "test.file.payload"))
 	var loaded_catalog := ContentDB.new(MANIFEST_ROOT)
-	var loaded_ok := loaded_catalog.load(MANIFEST_ID)
+	var loaded_ok := loaded_catalog.load(_manifest_id)
 	if not loaded_ok.ok:
 		return _reject(loaded_ok.error)
 	var restored := TestRoomState.from_core(core)
+	var relic_error := _restored_relic_error(restored)
+	if relic_error != null:
+		return _reject(relic_error)
 	restored.branch_id = 0
 	restored.revision = 0
 	restored.journal = []
@@ -1073,6 +1085,23 @@ func load_record(record_id: String) -> ActionResult:
 	engine = BattleEngine.new(catalog)
 	_adopt_state(restored)
 	return _accepted_result([], true)
+
+
+func _restored_relic_error(restored: TestRoomState) -> ApiError:
+	if not RelicPilot.expanded(_manifest_id):
+		return null
+	var ids: Array = restored.overlay.definitions.get("relic", {}).keys()
+	if restored.config.get("relics") is Array:
+		ids.append_array(restored.config.relics)
+	if restored.battle != null:
+		ids.append_array(restored.battle.relics)
+		for source in restored.battle.source_registry.values():
+			if source is Dictionary and source.get("kind") == "relic":
+				ids.append(source.get("definition_id"))
+	for id in ids:
+		if RelicPilot.is_retired(str(id)):
+			return ApiError.new(GameConstants.ERROR_TEST_FILE_INVALID, "test.file.retired_relic")
+	return null
 
 
 func _adopt_state(value: TestRoomState) -> void:
@@ -1597,8 +1626,10 @@ func _op_set_card_field(working: TestRoomState, op: Dictionary, summary: Array[D
 
 func _op_add_relic(working: TestRoomState, op: Dictionary, summary: Array[Dictionary]) -> ApiError:
 	var relic_id := str(op.get("relic_id", ""))
-	if _definition(catalog, "relic", relic_id) == null:
+	if _definition(catalog, "relic", relic_id).is_empty() or not RelicPilot.owns_definition(relic_id, working.battle.character_id):
 		return _invalid_patch("test.patch.definition_missing", {"relic_id": relic_id})
+	if RelicPilot.expanded(_manifest_id) and relic_id in working.battle.relics and not bool(working.switches.get("ignore_relic_unique", false)):
+		return _switch_required("ignore_relic_unique")
 	if working.battle.relics.size() >= LIMITS.relics:
 		return _limit("relics")
 	var position := int(op.get("position", -1))
@@ -2423,14 +2454,16 @@ func _starter_cards(wrapped: TestContent, character: Dictionary, raw: Variant) -
 	return GameResult.success(cards)
 
 
-func _starting_relics(wrapped: TestContent, raw: Variant) -> GameResult:
+func _starting_relics(wrapped: TestContent, raw: Variant, character_id: String) -> GameResult:
 	var relics: Array[String] = []
 	if typeof(raw) != TYPE_ARRAY:
 		return GameResult.success(relics)
 	for item in raw:
 		if typeof(item) != TYPE_STRING:
 			return _failure(GameConstants.ERROR_INVALID_ARGUMENT, "test.config.relic")
-		if _definition(wrapped, "relic", str(item)) == null:
+		if not RelicPilot.owns_definition(str(item), character_id) or (RelicPilot.expanded(_manifest_id) and (relics.has(str(item)) or relics.size() >= 3)):
+			return _failure(GameConstants.ERROR_INVALID_ARGUMENT, "test.config.relic", {"relic_id": str(item)})
+		if _definition(wrapped, "relic", str(item)).is_empty():
 			return _failure(
 				GameConstants.ERROR_CONTENT_INVALID, "test.config.relic", {"relic_id": str(item)}
 			)

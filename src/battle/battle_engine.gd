@@ -3,11 +3,13 @@ extends RefCounted
 
 var _catalog: ContentDB
 var _card_rules: BattleCardRules
+var _rx_roster: BattleRelicRoster
 
 
 func _init(catalog: ContentDB = null) -> void:
 	_catalog = catalog
 	_card_rules = BattleCardRules.new(catalog)
+	_rx_roster = BattleRelicRoster.new(self)
 
 
 func set_catalog(catalog: ContentDB) -> void:
@@ -284,6 +286,13 @@ func _validate_preview_targets(
 	replace_unit_id: String
 ) -> void:
 	var target := str(face.get("target", ""))
+	var area_primary := target == "all_tasks" and not _rx_area_primary_rule(state, face, result.costs.quote).is_empty()
+	if area_primary:
+		# The selected target only designates the relic bonus; the card still hits all tasks.
+		target = "task"
+	if target == "self" and _catalog.get_info().id == RelicPilot.ROSTER and _has_effect(face, "summon_partner"):
+		_validate_summon_replacement(result, state, face, target_ids, replace_unit_id)
+		return
 	if target in ["self", "all_tasks"]:
 		if not target_ids.is_empty() or not replace_unit_id.is_empty():
 			_add_preview_error(
@@ -312,7 +321,7 @@ func _validate_preview_targets(
 			"error.play.unexpected_replacement",
 			{"replace_unit_id": replace_unit_id}
 		)
-	var candidates := _target_candidates(state, target)
+	var candidates := _target_candidates(state, target, not area_primary)
 	if target_ids.is_empty():
 		if candidates.is_empty():
 			_add_preview_error(
@@ -338,7 +347,7 @@ func _validate_preview_targets(
 			_add_preview_error(
 				result,
 				GameConstants.ERROR_INVALID_TARGET,
-				"error.play.target_required",
+				"error.play.relic_primary_required" if area_primary else "error.play.target_required",
 				{"field": "target_ids", "target": target}
 			)
 		return
@@ -417,10 +426,10 @@ func _has_effect(face: Dictionary, op: String) -> bool:
 	return false
 
 
-func _target_candidates(state: BattleState, target: String) -> Array[Dictionary]:
+func _target_candidates(state: BattleState, target: String, respect_taunt: bool = true) -> Array[Dictionary]:
 	var candidates: Array[Dictionary] = []
 	if target == "task":
-		var has_taunt := _has_taunting_task(state)
+		var has_taunt := respect_taunt and _has_taunting_task(state)
 		for task: Dictionary in state.tasks:
 			if int(task.get("work_remaining", 0)) <= 0:
 				continue
@@ -628,6 +637,33 @@ func _start_card_resolution(
 				"reason": "payment",
 			}
 		)
+	var rx := {}
+	if BattleRelicPilot.has_any(state):
+		var declared: Array = payload.get("target_ids", [])
+		var main := str(declared.front()) if not declared.is_empty() else ""
+		var main_index := _task_index(state, main) if not main.is_empty() else -1
+		var origin := str(card.get("origin_card_id", ""))
+		rx = {
+			"main": main if main_index >= 0 else "",
+			"main_phase": _rx_task_phase(state, main),
+			"main_order": int(state.tasks[main_index].entered_order) if main_index >= 0 else 0,
+			"weak_at_play": _status_stacks(state,"weakness",main) > 0 if main_index >= 0 else false,
+			"is_chapter": not face.get("chapter",{}).is_empty(),
+			"main_debuff_kinds": _v3_debuff_kinds(state, main).size() if main_index >= 0 else 0,
+			"base_cost": int(quote.base), "paid": int(quote.cost),
+			"exam": face.get("exam", {}).get("condition") == "independent_answer" and state.exam_flags.has("independent_answer"),
+			"paid_chapter_reuse": state.character_id == "P02" and int(quote.cost) > 0 and not origin.is_empty()
+				and _v3_paper(state).chapters.any(func(entry): return entry is Dictionary and entry.get("card_id") == origin),
+			"chapter_ran_naturally": int(state.counters.get(BattleState.counter_key(&"round", origin, &"rx_chapter_ran"), 0)) > 0,
+			"check_work_search": face.get("type") == "strategy" and BattleRelicPilot.eligible(state, "RX-P01-15", 1)
+				and not state.zones.hand.any(func(id): return _rx_card_type(state, str(id)) == "work"),
+		}
+		rx["area_primary_relic"] = _rx_area_primary_rule(state, face, quote)
+		var phases := {}
+		if state.character_id == "P03":
+			for task in state.tasks:
+				phases[str(task.task_id)] = _rx_task_phase(state, str(task.task_id))
+		rx["phases"] = phases
 	state.zones.hand.erase(card_id)
 	state.zones.resolving.append(card_id)
 	var owner_key := str(card.get("origin_card_id", ""))
@@ -664,6 +700,8 @@ func _start_card_resolution(
 		state.counters[work_played_key] = int(state.counters.get(work_played_key, 0)) + 1
 	for source: Dictionary in quote.get("sources", []):
 		var counter_key := str(source.get("counter_key", ""))
+		if counter_key.is_empty():
+			continue # RX adjustments have their own committed receipt and counters.
 		state.counters[counter_key] = int(state.counters.get(counter_key, 0)) + 1
 		_add_event(
 			events,
@@ -677,8 +715,9 @@ func _start_card_resolution(
 			},
 		)
 	var target_ids: Array[String] = []
-	for target_id in payload.get("target_ids", []):
-		target_ids.append(str(target_id))
+	if face.get("target") != "all_tasks":
+		for target_id in payload.get("target_ids", []):
+			target_ids.append(str(target_id))
 	if face.get("target") == "all_tasks":
 		for task: Dictionary in state.tasks:
 			var task_id := str(task.get("task_id", ""))
@@ -772,6 +811,9 @@ func _start_card_resolution(
 			"vitality_cost": int(quote.vitality_cost),
 		}
 	)
+	if not rx.is_empty():
+		state.resolution["rx"] = rx
+		_rx_roster.charge_quote(state,quote,rx,events)
 	if bool(face.get("v3", false)) and face.has("ability"):
 		var ability_result := _register_v3_ability(state, face, events)
 		if not ability_result.ok:
@@ -821,6 +863,11 @@ func _end_turn(
 	if selected_retained.size() > int(ruleset_result.data.battle.get("base_retention_count", 0)):
 		return _failure(GameConstants.ERROR_INVALID_TARGET, "error.battle.retention_limit", {})
 	retained.append_array(selected_retained)
+	var rx_enabled := BattleRelicPilot.has_any(state)
+	if rx_enabled:
+		var bonus := _rx_roster.action_end(state,rng,events)
+		if not bonus.ok or state.phase == "finished": return bonus
+	var cooperating := 0
 	var phase_result := _set_phase(state, events, "ally_action")
 	if not phase_result.ok:
 		return phase_result
@@ -831,6 +878,7 @@ func _end_turn(
 		if unit_index < 0:
 			continue
 		var unit: Dictionary = state.units[unit_index]
+		var extra_partner_cost := 0
 		var support_result := _apply_unit_support(state, unit, events)
 		if not support_result.ok:
 			return support_result
@@ -848,6 +896,11 @@ func _end_turn(
 				var before := int(task.work_remaining)
 				var shield_before := int(task.get("shield", 0))
 				var cooperation := int(unit.get("cooperation", 0))
+				if rx_enabled and cooperation > 0:
+					cooperating += 1
+					var adjusted := _rx_roster.cooperation(state,unit,task_id,cooperation,events)
+					cooperation = adjusted[0]
+					extra_partner_cost = adjusted[1]
 				var shield_loss := mini(shield_before, cooperation)
 				task.shield = shield_before - shield_loss
 				task.work_remaining = maxi(0, before - (cooperation - shield_loss))
@@ -891,8 +944,9 @@ func _end_turn(
 		var unit_vitality_cost := int(
 			ruleset_result.data.battle.get("unit_action_vitality_cost", 1)
 		)
-		unit.vitality = maxi(0, vitality_before - unit_vitality_cost)
+		unit.vitality = maxi(0, vitality_before - unit_vitality_cost - extra_partner_cost)
 		if unit.vitality == 0:
+			if rx_enabled: _rx_roster.partner_departed(state)
 			state.units.remove_at(unit_index)
 			_remove_holder_statuses(state, unit_id)
 			_add_event(
@@ -908,6 +962,9 @@ func _end_turn(
 		_check_battle_outcome(state, events)
 		if state.phase == "finished":
 			return GameResult.success(null)
+	if cooperating >= 2 and BattleRelicRoster.available(state,"RX-P04-04",2,1) and not state.exam_flags.has("independent_answer"):
+		_v3_gain_synergy(state,1,events,"RX-P04-04")
+		_rx_relax(state,"RX-P04-04","two_partners",3,2,events)
 	phase_result = _set_phase(state, events, "discard")
 	if not phase_result.ok:
 		return phase_result
@@ -1021,8 +1078,11 @@ func _end_turn(
 		if state.phase == "finished":
 			return GameResult.success(null)
 	var ddl_before := state.ddl
-	state.ddl = maxi(0, state.ddl - 1)
-	_add_event(events, "ddl_ticked", "", [], {"before": ddl_before, "after": state.ddl})
+	if ddl_before == 1 and BattleRelicRoster.available(state,"RX-C35") and BattleRelicRoster.value(state,"RX-C35","paid_strategy","round") > 0 and int(state.counters.get("round|played:work|played",0)) == 0:
+		_rx_roster.pulse(state,"RX-C35","pause_ddl",1,1,events,[],true,"保留 DDL")
+	else:
+		state.ddl = maxi(0, state.ddl - 1)
+		_add_event(events, "ddl_ticked", "", [], {"before": ddl_before, "after": state.ddl})
 	if state.ddl == 0 and not state.tasks.is_empty():
 		_finish_battle(state, "lost", "deadline_expired", events)
 		return GameResult.success(null)
@@ -1057,10 +1117,17 @@ func _end_turn(
 	for task: Dictionary in state.tasks.duplicate(true):
 		var self_copy_def := _catalog.get_definition("task", str(task.get("definition_id", "")))
 		if self_copy_def.ok and bool(self_copy_def.data.get("self_copy_every_round", false)):
+			var copy_interval := maxi(1, int(self_copy_def.data.get("self_copy_interval", 1)))
+			if state.round_index % copy_interval != 0:
+				continue
+			var copy_percent := clampi(
+				int(self_copy_def.data.get("self_copy_work_percent", 100)), 1, 100
+			)
 			self_copy_pending.append(
 				{
 					"source_id": str(task.get("task_id", "")),
-					"spec": {"task": str(task.get("definition_id", "")), "count": 1}
+					"spec":
+					{"task": str(task.get("definition_id", "")), "count": 1, "work_percent": copy_percent}
 				}
 			)
 	for pending: Dictionary in self_copy_pending:
@@ -1226,6 +1293,12 @@ func _execute_intent_skill(
 					"reason": "intent",
 				}
 			)
+	if intent.has("player_reduce_max_vitality"):
+		var max_before := int(state.player.get("max_vitality", 0))
+		var max_after := maxi(1, max_before - maxi(0, int(intent.player_reduce_max_vitality)))
+		if max_after != max_before:
+			state.player.max_vitality = max_after
+			state.player.vitality = mini(int(state.player.get("vitality", 0)), max_after)
 	if intent.has("extra_requirements"):
 		var extra := _gain_status_on_target(
 			state,
@@ -1353,15 +1426,19 @@ func _summon_tasks(
 	var source_index := _task_index(state, source_id)
 	if source_index >= 0:
 		source_power = int(state.tasks[source_index].get("power_percent", 100))
+	var work_percent := clampi(int(spec.get("work_percent", 100)), 1, 100)
+	var summon_taunt := bool(spec.get("taunt", false))
 	for _index in maxi(1, int(spec.get("count", 1))):
 		var cursor := 0
 		var intent: Dictionary = intents[cursor].duplicate(true)
 		var task_id := _new_instance_id(state, "t")
 		var summoned_work := maxi(
-			1, int(ceil(int(phase.get("work_max", 1)) * source_power / 100.0))
+			1,
+			int(ceil(int(phase.get("work_max", 1)) * source_power * work_percent / 10000.0))
 		)
 		var summoned_shield := maxi(
-			0, int(ceil(int(intent.get("shield", 0)) * source_power / 100.0))
+			0,
+			int(ceil(int(intent.get("shield", 0)) * source_power * work_percent / 10000.0))
 		)
 		var summoned := {
 			"task_id": task_id,
@@ -1376,6 +1453,8 @@ func _summon_tasks(
 			"eligible_round": state.round_index + (1 if starts_next_round else 0),
 			"power_percent": source_power,
 		}
+		if summon_taunt:
+			summoned["taunt"] = true
 		_register_source(state, task_id, "task", definition_id)
 		state.tasks.append(summoned)
 		_add_event(
@@ -1549,6 +1628,8 @@ func _run_player_prepare(
 			"reason": "player_prepare"
 		},
 	)
+	if BattleRelicPilot.has_any(state):
+		_rx_roster.prepare(state, anxiety, int(ruleset.battle.focus_per_round), events)
 	_clear_expiring_statuses(state, "prepare", events)
 	var chapter_window := _v3_run_chapter_window(state, rng, events)
 	if not chapter_window.ok:
@@ -1589,6 +1670,9 @@ func _run_player_prepare(
 	)
 	_clear_expiring_statuses(state, "draw", events)
 	_draw_cards(state, draw_amount, rng, events)
+	if BattleRelicPilot.has_any(state):
+		_rx_roster.base_draw(state,rng,events)
+	if state.phase == "finished": return GameResult.success(null)
 	relic_result = _run_relic_hooks(state, "draw", {}, rng, events)
 	if not relic_result.ok:
 		return relic_result
@@ -1862,6 +1946,7 @@ func _apply_pressure(
 				var before := int(state.units[index].vitality)
 				state.units[index].vitality = maxi(0, before - amount)
 				if int(state.units[index].vitality) == 0:
+					_rx_roster.partner_departed(state)
 					var unit_id := str(state.units[index].unit_id)
 					var definition_id := str(state.units[index].definition_id)
 					state.units.remove_at(index)
@@ -1893,6 +1978,7 @@ func _apply_pressure(
 			}
 		)
 		if state.units[index].vitality == 0:
+			_rx_roster.partner_departed(state)
 			_remove_holder_statuses(state, target)
 			state.units.remove_at(index)
 			_add_event(
@@ -1909,12 +1995,20 @@ func _apply_pressure(
 func _apply_pressure_to_player(
 	state: BattleState, amount: int, events: Array[RuleEvent], segment_index: int, source: String = ""
 ) -> void:
+	if amount > 0 and _task_index(state, source) >= 0 and BattleRelicPilot.eligible(state, "RX-C17", 1):
+		_rx_relax(state, "RX-C17", "player_pressure", 5, 1, events)
+	var task_pressure := amount > 0 and _task_index(state, source) >= 0
+	if task_pressure and BattleRelicRoster.available(state,"RX-P03-10",2,1) and _status_stacks(state,"weakness",source) > 0 and _status_stacks(state,"feebleness",source) > 0:
+		_rx_relax(state,"RX-P03-10","mixed_pressure",3,2,events)
 	var relax_before := int(state.player.get("relax", 0))
 	var absorbed := mini(relax_before, amount)
 	state.player.relax = relax_before - absorbed
 	_resource_event(state, events, "relax", relax_before, state.player.relax, "pressure_absorbed", source)
 	var vitality_before := int(state.player.get("vitality", 0))
 	state.player.vitality = maxi(0, vitality_before - (amount - absorbed))
+	if task_pressure and int(state.player.vitality) == 0 and vitality_before > 0 and BattleRelicRoster.available(state,"RX-C39") and BattleRelicRoster.value(state,"RX-C39","from_run") == 0:
+		state.player.vitality = 1
+		_rx_roster.pulse(state,"RX-C39","lethal_pressure_saved",1,1,events,[],true,"保留精力")
 	_add_event(
 		events,
 		"pressure_applied",
@@ -1929,6 +2023,8 @@ func _apply_pressure_to_player(
 			"segment_index": segment_index
 		}
 	)
+	if task_pressure:
+		_rx_roster.after_pressure(state, vitality_before - int(state.player.vitality),events)
 	_check_battle_outcome(state, events)
 
 
@@ -2133,7 +2229,8 @@ func _execute_v3_card_effect(
 				_v3_effect_target_ids(state, effect),
 				true,
 				true,
-				events
+				events,
+				not BattleRelicPilot.card_context(state).is_empty()
 			)
 		"trigger_erosion":
 			for target_id in _v3_effect_target_ids(state, effect):
@@ -2157,7 +2254,10 @@ func _execute_v3_card_effect(
 						status.stacks = before - 1
 			return GameResult.success(null)
 		"trigger_induced":
-			for target_id in _v3_effect_target_ids(state, effect):
+			var induced_targets := _v3_effect_target_ids(state, effect)
+			if state.relics.has("RX-P03-07"):
+				induced_targets.sort_custom(func(a: String, b: String) -> bool: return _rx_task_order(state, a) < _rx_task_order(state, b))
+			for target_id in induced_targets:
 				var induced_stacks := _status_stacks(state, "induced", target_id)
 				if induced_stacks <= 0:
 					continue
@@ -2219,6 +2319,8 @@ func _execute_v3_card_effect(
 				var removed := mini(before, remaining)
 				task.shield = before - removed
 				remaining -= removed
+				if removed > 0 and not BattleRelicPilot.card_context(state).is_empty():
+					state.resolution.rx["shield_removed"] = true
 				_add_event(
 					events,
 					"shield_changed",
@@ -2279,6 +2381,8 @@ func _execute_v3_card_effect(
 				var before := int(paper_change.modifier)
 				paper_change.modifier = before + int(effect.get("modifier", -1))
 				_resource_event(state, events, "modifier", before, paper_change.modifier, "change_topic")
+				if BattleRelicRoster.available(state,"RX-P02-14"):
+					_rx_relax(state,"RX-P02-14","topic_reset",5,1,events)
 			return GameResult.success(null)
 		"chapter_deploy":
 			var deployed := _v3_chapter_deploy(
@@ -2393,6 +2497,7 @@ func _execute_v3_card_effect(
 				return GameResult.success(null)
 			if typeof(state.resolution) == TYPE_DICTIONARY:
 				state.resolution["v3_last_synergy_spent"] = spent
+				_rx_record_synergy(state,spent)
 			if effect.has("then"):
 				var then_result := _v3_execute_effects(state, effect.then, rng, events)
 				if not then_result.ok or typeof(then_result.data) == TYPE_DICTIONARY:
@@ -2406,6 +2511,7 @@ func _execute_v3_card_effect(
 			_v3_spend_synergy(state, spend_up_to, false, events)
 			if typeof(state.resolution) == TYPE_DICTIONARY:
 				state.resolution["v3_last_synergy_spent"] = spend_up_to
+				_rx_record_synergy(state,spend_up_to)
 			if effect.has("then"):
 				var up_result := _v3_execute_effects(state, effect.then, rng, events)
 				if not up_result.ok or typeof(up_result.data) == TYPE_DICTIONARY:
@@ -2418,6 +2524,7 @@ func _execute_v3_card_effect(
 			_v3_spend_synergy(state, all_spent, false, events)
 			if typeof(state.resolution) == TYPE_DICTIONARY:
 				state.resolution["v3_last_synergy_spent"] = all_spent
+				_rx_record_synergy(state,all_spent)
 			if effect.has("then"):
 				return _v3_execute_effects(state, effect.then, rng, events)
 			return GameResult.success(null)
@@ -3016,6 +3123,8 @@ func _task_has_taunt(state: BattleState, task_id: String) -> bool:
 	var task_index := _task_index(state, task_id)
 	if task_index < 0:
 		return false
+	if bool(state.tasks[task_index].get("taunt", false)):
+		return true
 	var definition := _catalog.get_definition(
 		"task", str(state.tasks[task_index].get("definition_id", ""))
 	)
@@ -3130,6 +3239,10 @@ func _apply_completion(
 		if task_index < 0:
 			continue
 		var task: Dictionary = state.tasks[task_index]
+		var rx_base := int(effect.get("amount", 0))
+		if bool(effect.get("per_target", false)) and int(effect.get("per_debuff_kind", 0)) > 0:
+			rx_base += int(effect.per_debuff_kind) * mini(int(effect.per_debuff_cap), _v3_debuff_kinds(state, str(task_id)).size())
+		var rx_bonus := _rx_work_bonus(state, str(task_id), rx_base, events) if effect_target not in ["other_tasks", "adjacent_tasks"] else 0
 		if str(resolution.get("card_type", "")) == "work":
 			var immunized: Array = resolution.get("immunized_task_ids", [])
 			if not immunized.has(str(task_id)):
@@ -3157,7 +3270,7 @@ func _apply_completion(
 				continue
 		var before_shield: int = int(task.get("shield", 0))
 		var before_work: int = int(task.get("work_remaining", 0))
-		var requested_for_target := requested
+		var requested_for_target := requested + rx_bonus
 		if (
 			bool(resolution.get("v3", false))
 			and int(effect.get("per_debuff_kind", 0)) > 0
@@ -3381,6 +3494,7 @@ func _advance_or_remove_task(
 				"phase_key": next_phase.phase_key
 			}
 		)
+		_rx_roster.stage(state)
 		return _run_relic_hooks(state, "stage_entered", {}, rng, events)
 	var on_complete: Array = definition_result.data.get("on_complete_effects", [])
 	if not on_complete.is_empty() and rng != null:
@@ -3430,8 +3544,9 @@ func _summon_unit(
 	if not ruleset.ok:
 		return ruleset
 	var limit := int(ruleset.data.battle.get("unit_slots", 0))
+	var rx_replacement_vitality := 0
+	var replacement := str(state.resolution.get("replace_unit_id", ""))
 	if state.units.size() >= limit:
-		var replacement := str(state.resolution.get("replace_unit_id", ""))
 		if replacement.is_empty():
 			return _failure(
 				GameConstants.ERROR_INVALID_TARGET,
@@ -3446,6 +3561,10 @@ func _summon_unit(
 				{"replace_unit_id": replacement},
 			)
 		var old_unit: Dictionary = state.units[old_index]
+		rx_replacement_vitality = int(old_unit.get("vitality",0))
+		var rx := BattleRelicPilot.card_context(state)
+		if not rx.is_empty():
+			rx["partner_switched"] = true
 		state.units.remove_at(old_index)
 		_remove_holder_statuses(state, replacement)
 		_add_event(
@@ -3474,6 +3593,13 @@ func _summon_unit(
 	unit["actions_taken"] = 0
 	unit["target_id"] = ""
 	state.units.append(unit)
+	if rx_replacement_vitality >= 2 and BattleRelicRoster.available(state,"RX-P04-10") and BattleRelicRoster.value(state,"RX-P04-10","first_switch") == 0:
+		BattleRelicRoster.mark(state,"RX-P04-10","replacement",int(unit.entered_order),"round")
+	if not replacement.is_empty() and rx_replacement_vitality > 0 and state.relics.has("RX-P04-10"):
+		BattleRelicRoster.mark(state,"RX-P04-10","first_switch")
+	var summon_context := BattleRelicPilot.card_context(state)
+	if not summon_context.is_empty() and state.resolution.get("card_type") == "cooperation":
+		summon_context["partner_entered"] = true
 	_register_source(state, unit_id, "unit", definition_id)
 	_add_event(
 		events,
@@ -3555,12 +3681,15 @@ func _remove_holder_statuses(state: BattleState, holder_id: String) -> void:
 func _finish_battle(
 	state: BattleState, result: String, reason: String, events: Array[RuleEvent]
 ) -> void:
+	if result == "won" and BattleRelicRoster.available(state,"RX-C19") and int(state.player.vitality) * 2 <= int(state.player.max_vitality):
+		var gain := _rx_roster.resource(state,"vitality",3,"RX-C19",events)
+		if gain > 0: _rx_roster.pulse(state,"RX-C19","won_low_vitality",gain,1,events,[],true,"恢复精力")
 	var outcome := {
 		"battle_id": state.battle_id,
 		"result": result,
 		"reason": reason,
 		"remaining_vitality": int(state.player.get("vitality", 0)),
-		"summary": {},
+		"summary": {"rx_rescue": true} if BattleRelicPilot.used(state,"RX-C39") > 0 else {},
 	}
 	state.outcome = outcome
 	state.phase = "finished"
@@ -3574,16 +3703,17 @@ func _finish_battle(
 
 
 func _draw_cards(
-	state: BattleState, amount: int, rng: RandomSource, events: Array[RuleEvent]
+	state: BattleState, amount: int, rng: RandomSource, events: Array[RuleEvent], source: String = ""
 ) -> void:
 	var ruleset := _loaded_ruleset()
 	if not ruleset.ok:
 		return
 	var hand_limit: int = int(ruleset.data.battle.hand_limit)
+	var recycled := false
 	while amount > 0 and state.zones.hand.size() < hand_limit:
 		if state.zones.draw.is_empty():
 			if state.zones.discard.is_empty():
-				return
+				break
 			var discarded: Array[String] = []
 			for card_id in state.zones.discard:
 				discarded.append(str(card_id))
@@ -3592,16 +3722,21 @@ func _draw_cards(
 				return
 			state.zones.draw = shuffled.data
 			state.zones.discard.clear()
+			recycled = true
 		var card_id: String = state.zones.draw.pop_front()
 		state.zones.hand.append(card_id)
 		var card: Dictionary = state.card_by_id[card_id]
 		_add_event(
 			events,
 			"card_drawn",
-			"",
+			source,
 			[card_id],
 			{"definition_id": str(card.definition_id), "from_zone": "draw", "to_zone": "hand"}
 		)
+		if BattleRelicRoster.available(state,"RX-C16",2):
+			var definition := _catalog.get_definition("card",str(card.definition_id))
+			if definition.ok and (definition.data.type == "burden" or definition.data.get("tags", []).has("burden") or (bool(definition.data.get("unplayable", false)) and definition.data.get("tags", []).has("temporary"))):
+				_rx_relax(state,"RX-C16","burden_drawn",2,2,events)
 		if not state.v3.is_empty():
 			var turn := _v3_turn(state)
 			if int(turn.get("erosion_draws", 0)) > 0:
@@ -3618,6 +3753,8 @@ func _draw_cards(
 				if not settled.ok or state.phase == "finished":
 					return
 		amount -= 1
+	if recycled and BattleRelicRoster.available(state,"RX-C07"):
+		_rx_relax(state,"RX-C07","reshuffle_done",4,1,events)
 
 
 func _v3_retrieve_allowed(state: BattleState, card_id: String, effect: Dictionary) -> bool:
@@ -3835,6 +3972,8 @@ func _confirm_effect_choice(
 					state.zones.discard.erase(retrieved_id)
 					state.zones.hand.append(retrieved_id)
 					resolution.v3_passive_retrieve_confirmed = true
+					if BattleRelicRoster.available(state,"RX-P01-07"):
+						BattleRelicRoster.mark(state,"RX-P01-07","retrieved_"+retrieved_id,1,"round")
 					_add_event(
 						events,
 						"card_retrieved",
@@ -3842,7 +3981,11 @@ func _confirm_effect_choice(
 						[retrieved_id],
 						{"definition_id": retrieved_definition, "reason": "P01_passive"}
 					)
+					if BattleRelicPilot.eligible(state, "RX-P01-05", 2, 1):
+						_rx_relax(state, "RX-P01-05", "passive_retrieve", 4, 2, events)
 			else:
+				if BattleRelicRoster.available(state,"RX-P01-06") and state.zones.hand.size() < int(_loaded_ruleset().data.battle.hand_limit) and choice.get("candidates",[]).any(func(item): return state.zones.discard.has(str(item.get("id",item.get("card_id",""))))):
+					resolution.rx["retrieve_declined"] = true
 				_add_event(
 					events,
 					"passive_retrieve_declined",
@@ -3960,7 +4103,7 @@ func _gain_status(state: BattleState, effect: Dictionary, events: Array[RuleEven
 
 
 func _gain_status_on_target(
-	state: BattleState, effect: Dictionary, target_id: String, events: Array[RuleEvent]
+	state: BattleState, effect: Dictionary, target_id: String, events: Array[RuleEvent], source_id: String = ""
 ) -> GameResult:
 	var status_id := str(effect.get("status", ""))
 	var target := str(effect.get("target", "player"))
@@ -3990,6 +4133,7 @@ func _gain_status_on_target(
 		after = before + int(prevention.data)
 		if incoming > 0 and after == before:
 			return GameResult.success(false)
+	var source := source_id if not source_id.is_empty() else str(state.resolution.get("card_instance_id", "")) if state.resolution is Dictionary else ""
 	if index >= 0:
 		state.statuses[index].stacks = after
 	else:
@@ -4001,12 +4145,7 @@ func _gain_status_on_target(
 				{
 					"status_id": status_id,
 					"instance_id": instance_id,
-					"source_id":
-					(
-						str(state.resolution.get("card_instance_id", ""))
-						if typeof(state.resolution) == TYPE_DICTIONARY
-						else ""
-					),
+					"source_id": source,
 					"target_id": target_id,
 					"stacks": after,
 					"expiry": str(status_rule.get("duration_policy", "battle")),
@@ -4017,11 +4156,7 @@ func _gain_status_on_target(
 	_add_event(
 		events,
 		"status_gained",
-		(
-			str(state.resolution.get("card_instance_id", ""))
-			if typeof(state.resolution) == TYPE_DICTIONARY
-			else ""
-		),
+		source,
 		[target_id],
 		{
 			"status_definition_id": status_id,
@@ -4196,6 +4331,9 @@ func _finalize_card_resolution(
 				state.v3["pending_cost_discount"] = {"amount": 0, "min_base_cost": 0}
 			if definition_id == "R3-T201":
 				state.v3["publication_discount"] = 0
+		_rx_roster.resolved(state,rng,events)
+		if BattleRelicRoster.available(state,"RX-C35") and resolution.card_type == "strategy" and int(resolution.get("rx",{}).get("paid",0)) > 0:
+			BattleRelicRoster.mark(state,"RX-C35","paid_strategy",1,"round")
 		resolution.v3_finalized = true
 		if state.phase != "finished":
 			var pending_retrieve := str(resolution.get("v3_passive_retrieve_pending", ""))
@@ -4224,6 +4362,10 @@ func _finalize_card_resolution(
 		)
 		if not passive_trigger.ok:
 			return passive_trigger
+	if resolution.get("rx",{}).get("retrieve_declined",false):
+		_rx_roster.draw(state,"RX-P01-06",2,1,rng,events)
+	if not resolution.get("rx",{}).is_empty():
+		_rx_roster.choice_closed(state,rng,events)
 	state.resolution = null
 	if state.phase != "finished":
 		state.phase = "player_action"
@@ -4234,6 +4376,107 @@ func _finalize_card_resolution(
 	if not passive_result.ok:
 		return passive_result
 	return GameResult.success(null)
+
+
+func _rx_record_synergy(state: BattleState, amount: int) -> void:
+	var rx := BattleRelicPilot.card_context(state)
+	if not rx.is_empty():
+		rx["synergy_paid"] = int(rx.get("synergy_paid",0)) + amount
+
+
+func _rx_area_primary_rule(state: BattleState, face: Dictionary, quote: Dictionary) -> String:
+	# Both cards are otherwise area-only; make their planned main-target
+	# relics usable without silently assigning a target or changing other hits.
+	if face.id == "R3-P03-29" and int(quote.base) >= 2 and int(quote.cost) > 0 and BattleRelicRoster.available(state, "RX-P03-12"):
+		for task: Dictionary in state.tasks:
+			var id := str(task.task_id)
+			if int(task.eligible_round) <= state.round_index and _status_stacks(state, "weakness", id) > 0 and _v3_debuff_kinds(state, id).size() >= 3:
+				return "RX-P03-12"
+	if face.id == "R3-P04-40" and BattleRelicRoster.available(state, "RX-P04-14") and state.units.is_empty() and _v3_synergy(state) >= 2:
+		return "RX-P04-14"
+	return ""
+
+
+func _rx_task_order(state: BattleState, task_id: String) -> int:
+	var index := _task_index(state, task_id)
+	return int(state.tasks[index].entered_order) if index >= 0 else BattleRelicRoster.FULL_LIMIT
+
+
+func _rx_task_phase(state: BattleState, task_id: String) -> String:
+	var index := _task_index(state, task_id)
+	if index < 0:
+		return ""
+	var task: Dictionary = state.tasks[index]
+	return "%s:%s" % [task.get("definition_id", ""), task.get("phase_key", "")]
+
+
+func _rx_card_type(state: BattleState, card_id: String) -> String:
+	var found := _catalog.get_definition("card", str(state.card_by_id.get(card_id, {}).get("definition_id", "")))
+	return str(found.data.get("type", "")) if found.ok else ""
+
+
+func _rx_trigger(state: BattleState, id: String, at: String, amount: int, limit: int, events: Array[RuleEvent], targets: Array = [], consume: bool = true, resource: String = "") -> void:
+	if consume:
+		BattleRelicPilot.consume(state, id)
+	_add_event(events, "relic_triggered", id, targets, {
+		"relic_id": id, "at": at, "resource": resource, "amount": amount,
+		"used": BattleRelicPilot.used(state, id),
+		"remaining": maxi(0, limit - BattleRelicPilot.used(state, id)),
+	})
+
+
+func _rx_relax(state: BattleState, id: String, at: String, amount: int, limit: int, events: Array[RuleEvent], consume: bool = true) -> void:
+	if state.phase == "finished":
+		return
+	var before := int(state.player.get("relax", 0))
+	state.player.relax = before + amount
+	_resource_event(state, events, "relax", before, int(state.player.relax), "relic_effect", id)
+	_rx_trigger(state, id, at, amount, limit, events, [str(state.player.entity_id)], consume)
+
+
+func _rx_draw(state: BattleState, id: String, at: String, limit: int, consume: bool, rng: RandomSource, events: Array[RuleEvent]) -> void:
+	if state.phase == "finished":
+		return
+	var start := events.size()
+	_draw_cards(state, 1, rng, events, id)
+	for index in range(start, events.size()):
+		if String(events[index].type) == "card_drawn" and events[index].source_id == id:
+			_rx_trigger(state, id, at, 1, limit, events, [], consume)
+			break
+
+
+func _rx_search_draw(state: BattleState, id: String, card_type: String, exclude_basic: bool, at: String, events: Array[RuleEvent]) -> void:
+	if state.phase == "finished" or state.zones.hand.size() >= int(_loaded_ruleset().data.battle.hand_limit):
+		return
+	for index in state.zones.draw.size():
+		var instance: String = state.zones.draw[index]
+		var card: Dictionary = state.card_by_id[instance]
+		var definition_id := str(card.definition_id)
+		var found := _catalog.get_definition("card", definition_id)
+		var origin := str(card.get("origin_card_id", ""))
+		if not found.ok or found.data.get("type") != card_type or not bool(found.data.get("permanent", true)) or origin.is_empty() or state.card_by_id.has(origin):
+			continue
+		if exclude_basic and (found.data.get("rarity") == "basic" or found.data.get("tags", []).has("basic")):
+			continue
+		state.zones.draw.remove_at(index)
+		state.zones.hand.append(instance)
+		_add_event(events, "card_moved", id, [instance], {"definition_id": definition_id, "from_zone": "draw", "to_zone": "hand"})
+		_rx_trigger(state, id, at, 1, 1, events, [instance])
+		return
+
+
+func _rx_work_bonus(state: BattleState, task_id: String, base: int, events: Array[RuleEvent]) -> int:
+	var rx := BattleRelicPilot.card_context(state)
+	if rx.is_empty() or rx.get("direct_written", false) or base <= 0 or state.resolution.get("card_type") != "work":
+		return 0
+	if not _rx_roster.main_is_current(state, task_id, rx):
+		return 0
+	# Legacy area attacks still have no primary. The roster variants that
+	# explicitly request one share the usual slot-ordered primary budget.
+	if state.resolution.get("all_tasks", false) and str(rx.get("area_primary_relic", "")).is_empty():
+		return 0
+	rx["direct_written"] = true
+	return _rx_roster.work(state, task_id, rx, events)
 
 
 func _run_relic_hooks(
@@ -4733,6 +4976,9 @@ func _v3_gain_citation(
 		paper.citations = layer
 		_resource_event(state, events, "citations", layer - 1, layer, "citation_gained")
 		gained += 1
+		if cost > 0 and BattleRelicRoster.available(state,"RX-P02-03"):
+			var refund := _rx_roster.resource(state,"focus",1,"RX-P02-03",events)
+			if refund > 0: _rx_roster.pulse(state,"RX-P02-03","paid_citation",refund,1,events,[],true,"返还专注")
 	return gained
 
 
@@ -4761,6 +5007,19 @@ func _v3_paper_record(
 	var was_used := used.has(name_key)
 	if not was_used:
 		used.append(name_key)
+		if state.relics.has("RX-P02-04"):
+			var serial := BattleRelicRoster.value(state,"P02","paper_serial") + 1
+			if not state.counters.has(BattleRelicRoster.key("RX-P02-04",str(serial) + ":" + name_key,"round")):
+				BattleRelicRoster.mark(state,"RX-P02-04",str(serial)+":"+name_key,1,"round")
+				var field := "new_names_" + str(serial)
+				var seen := BattleRelicRoster.value(state,"RX-P02-04",field,"round") + 1
+				BattleRelicRoster.mark(state,"RX-P02-04",field, seen,"round")
+				if seen == 3 and BattleRelicRoster.available(state,"RX-P02-04",2) and BattleRelicRoster.value(state,"RX-P02-04","paper") != serial:
+					var before := int(paper.modifier)
+					paper.modifier += 5
+					_resource_event(state,events,"modifier",before,paper.modifier,"relic_effect","RX-P02-04")
+					BattleRelicRoster.mark(state,"RX-P02-04","paper",serial)
+					_rx_roster.pulse(state,"RX-P02-04","three_names",5,2,events,[],true,"论文修正")
 		if int(paper.progress) < 10:
 			paper.progress = int(paper.progress) + 1
 			_resource_event(state, events, "progress", int(paper.progress) - 1, paper.progress, "paper_record")
@@ -4790,6 +5049,8 @@ func _v3_paper_record(
 func _v3_open_paper(state: BattleState, events: Array[RuleEvent]) -> void:
 	var paper := _v3_paper(state)
 	var previous := paper.duplicate(true)
+	if BattleRelicPilot.has_any(state):
+		BattleRelicRoster.mark(state,"P02","paper_serial",BattleRelicRoster.value(state,"P02","paper_serial")+1)
 	paper.open = true
 	paper.progress = 0
 	paper.citations = 0
@@ -4797,6 +5058,10 @@ func _v3_open_paper(state: BattleState, events: Array[RuleEvent]) -> void:
 	paper.amplify = 0
 	paper.used_names = []
 	_paper_reset_events(state, events, previous, paper, "paper_open")
+	if not bool(previous.open) and not BattleRelicPilot.card_context(state).is_empty() and BattleRelicPilot.eligible(state, "RX-P02-01", 1):
+		paper.modifier += 4
+		_resource_event(state, events, "modifier", 0, int(paper.modifier), "relic_effect", "RX-P02-01")
+		_rx_trigger(state, "RX-P02-01", "paper_open", 4, 1, events)
 	var publication := ""
 	for card_id in state.card_by_id:
 		if str(state.card_by_id[card_id].get("definition_id", "")) == "R3-T201":
@@ -4830,6 +5095,11 @@ func _v3_paper_publish(
 	var paper := _v3_paper(state)
 	var progress := int(paper.progress) * 7 + int(paper.citations) * 6 + int(paper.modifier)
 	var completion := clampi(progress, 0, 100)
+	var rx := BattleRelicPilot.card_context(state)
+	var chapters_before := _v3_chapter_count(state)
+	var first_rx_publication := not rx.is_empty() and BattleRelicPilot.eligible(state, "RX-P02-02", 1) and not state.counters.has("battle|RX-P02-02|rx_first_publish")
+	if first_rx_publication:
+		state.counters["battle|RX-P02-02|rx_first_publish"] = 1
 	var targets: Array = resolution.get("locked_target_ids", [])
 	if targets.is_empty():
 		targets = resolution.get("target_ids", [])
@@ -4843,8 +5113,14 @@ func _v3_paper_publish(
 		var amount := completion + 10 if index == 0 else int(floor(completion / 2.0))
 		if completion >= 100:
 			amount += 20
+		amount = maxi(0,amount-int(rx.get("publish_penalty",0)))
 		if index == 0:
 			amount += main_bonus
+		# Publication itself assigns an unequal main segment (C+10) to index 0.
+		# Do not pick a new main task, and do not let other area work borrow it.
+		if index == 0 and first_rx_publication and completion >= 50 and completion <= 79 and _task_index(state, task_id) >= 0:
+			amount += 8
+			_rx_trigger(state, "RX-P02-02", "paper_publish", 8, 1, events, [task_id])
 		if (
 			bool(resolution.get("v3", false))
 			and ruleset.ok
@@ -4881,6 +5157,8 @@ func _v3_paper_publish(
 				)
 	paper.chapters = []
 	_add_event(events, "paper_published", "", [], {"completion": completion})
+	if chapters_before >= 2 and BattleRelicRoster.available(state,"RX-P02-13"):
+		_rx_roster.draw(state,"RX-P02-13",2,1,rng,events)
 	return GameResult.success(null)
 
 
@@ -4978,6 +5256,8 @@ func _v3_run_chapter_entry(
 	if result.ok and state.phase != "finished":
 		ran.append(str(card.get("definition_id", "")))
 		turn["chapter_window_ran"] = ran
+		if not extra and state.relics.has("RX-P02-15"):
+			state.counters[BattleState.counter_key(&"round", card_id, &"rx_chapter_ran")] = 1
 		_add_event(
 			events,
 			"chapter_ran",
@@ -4994,24 +5274,35 @@ func _v3_run_chapter_window(
 	var paper := _v3_paper(state)
 	if paper.chapters.is_empty():
 		return GameResult.success(null)
+	var ready := 0
+	var slots := []
+	var c := BattleRelicRoster.paper_value(state)
+	var index := -1
 	var turn := _v3_turn(state)
 	turn["chapter_window_ran"] = []
 	for entry: Variant in paper.chapters:
+		index += 1
 		if typeof(entry) != TYPE_DICTIONARY:
 			continue
 		if int(entry.get("deployed_round", 0)) >= state.round_index:
 			continue
+		ready += 1
+		var prior: int = turn.chapter_window_ran.size()
 		var ran := _v3_run_chapter_entry(state, entry, false, rng, events)
 		if not ran.ok:
 			return ran
+		if turn.chapter_window_ran.size() > prior: slots.append(index)
 		if state.phase == "finished":
 			return GameResult.success(null)
+	var natural_ran: bool = not turn.get("chapter_window_ran", []).is_empty()
 	var end_trigger := _v3_run_ability_trigger(
 		state, "chapter_window_end", {"chapter_count": paper.chapters.size()}, rng, events
 	)
 	if not end_trigger.ok:
 		return end_trigger
-	return GameResult.success(null)
+	if natural_ran and BattleRelicPilot.eligible(state, "RX-P02-07", 2):
+		_rx_relax(state, "RX-P02-07", "natural_chapter_window", 3, 2, events)
+	return _rx_roster.chapters(state,slots,ready,c,rng,events)
 
 
 func _v3_chapter_run(
@@ -5021,6 +5312,7 @@ func _v3_chapter_run(
 	var turn := _v3_turn(state)
 	var used: Dictionary = turn.get("chapter_extra_used", {})
 	var count := 0
+	var ran_before: int = turn.chapter_window_ran.size()
 	for entry: Variant in paper.chapters:
 		if count >= maxi(0, amount):
 			break
@@ -5037,6 +5329,9 @@ func _v3_chapter_run(
 		if state.phase == "finished":
 			break
 	turn["chapter_extra_used"] = used
+	if turn.chapter_window_ran.size() > ran_before and state.resolution is Dictionary and state.resolution.get("definition_id") == "R3-P02-20" and BattleRelicRoster.available(state,"RX-P02-11"):
+		_rx_relax(state,"RX-P02-11","extra_chapter",4,1,events)
+		_rx_roster.draw(state,"RX-P02-11",1,1,rng,events,false)
 	return GameResult.success(null)
 
 
@@ -5141,6 +5436,15 @@ func _v3_partner_extra_action(
 			return action
 		used[unit_id] = true
 		acted = true
+		if not BattleRelicPilot.card_context(state).is_empty() and BattleRelicPilot.eligible(state, "RX-P04-08", 1) and not state.exam_flags.has("independent_answer"):
+			var survivor := _unit_index(state, unit_id)
+			if survivor >= 0:
+				var unit: Dictionary = state.units[survivor]
+				var before := int(unit.vitality)
+				if before < int(unit.max_vitality):
+					unit.vitality = before + 1
+					_add_event(events, "unit_healed", "RX-P04-08", [unit_id], {"before": before, "after": unit.vitality, "amount": 1})
+					_rx_trigger(state, "RX-P04-08", "extra_cooperation", 1, 1, events, [unit_id])
 		if state.phase == "finished":
 			return GameResult.success(null)
 		if str(effect.get("target", "one")) != "all_eligible":
@@ -5209,6 +5513,7 @@ func _v3_unit_action(
 		0, vitality_before - int(ruleset.data.battle.get("unit_action_vitality_cost", 1))
 	)
 	if unit.vitality == 0:
+		_rx_roster.partner_departed(state)
 		state.units.remove_at(unit_index)
 		_remove_holder_statuses(state, unit_id)
 		_add_event(
@@ -5276,6 +5581,8 @@ func _v3_partner_heal(
 			)
 	if healed:
 		_v3_turn(state).healed_partner = true
+		if not state.exam_flags.has("independent_answer") and BattleRelicRoster.available(state,"RX-P04-07",3,1):
+			_rx_relax(state,"RX-P04-07","actual_partner_heal",2,3,events)
 	return GameResult.success(null)
 
 
@@ -5304,6 +5611,9 @@ func _v3_partner_retreat(
 		[target],
 		{"definition_id": str(unit.get("definition_id", "")), "reason": "retreat"}
 	)
+	var rx := BattleRelicPilot.card_context(state)
+	if not rx.is_empty():
+		rx["partner_switched"] = true
 	return GameResult.success(null)
 
 
@@ -5323,8 +5633,14 @@ func _v3_apply_status_batch(
 	count_event: bool,
 	allow_compound: bool,
 	events: Array[RuleEvent],
+	direct_card_body: bool = false,
 ) -> GameResult:
 	var gained_any := false
+	var first := ""
+	var first_order := 2147483647
+	var cap := 0
+	if direct_card_body and status_id == "erosion" and BattleRelicPilot.eligible(state, "RX-P03-01", 3, 1):
+		cap = int(_loaded_ruleset().data.statuses.erosion.cap)
 	for target_id in target_ids:
 		var before := _status_stacks(state, status_id, target_id)
 		var other_kinds := _v3_debuff_kinds(state, target_id)
@@ -5340,7 +5656,16 @@ func _v3_apply_status_batch(
 		var after := _status_stacks(state, status_id, target_id)
 		if after <= before:
 			continue
+		if direct_card_body:
+			var before_kinds := other_kinds.duplicate()
+			if before > 0: before_kinds.append(status_id)
+			_rx_roster.status_delta(state,target_id,status_id,before,after,before_kinds)
 		gained_any = true
+		if after < cap:
+			var target_index := _task_index(state, target_id)
+			if target_index >= 0 and int(state.tasks[target_index].entered_order) < first_order:
+				first = target_id
+				first_order = int(state.tasks[target_index].entered_order)
 		if allow_compound and before == 0 and not other_kinds.is_empty():
 			var task_index := _task_index(state, target_id)
 			if task_index >= 0 and typeof(state.resolution) == TYPE_DICTIONARY:
@@ -5357,6 +5682,11 @@ func _v3_apply_status_batch(
 					)
 				)
 				state.resolution.v3_compound_candidates = candidates
+	if not first.is_empty() and state.phase != "finished":
+		var added := _gain_status_on_target(state, {"status": "erosion", "stacks": 1, "target": "task"}, first, events, "RX-P03-01")
+		if not added.ok:
+			return added
+		_rx_trigger(state, "RX-P03-01", "direct_erosion", 1, 3, events, [first])
 	if count_event and status_id == "erosion" and gained_any:
 		var turn := _v3_turn(state)
 		turn.erosion_events = int(turn.erosion_events) + 1
@@ -5420,6 +5750,11 @@ func _v3_apply_compound_reaction(
 			[task_id],
 			{"status_id": status_id, "before": before, "after": after}
 		)
+		var rx := BattleRelicPilot.card_context(state)
+		if not rx.is_empty() and BattleRelicPilot.eligible(state, "RX-P03-16", 1):
+			state.counters["round|RX-P03-16|rx_next_card"] = 1
+			rx["compound_armed"] = true
+			_rx_relax(state, "RX-P03-16", "compound_reaction", 2, 1, events)
 		return _v3_run_ability_trigger(
 			state, "compound_reaction_success", {"compound_reaction_success": true}, rng, events
 		)
@@ -5439,7 +5774,7 @@ func _v3_settle_erosion_events(
 
 
 func _v3_status_complete_task(
-	state: BattleState, task_id: String, amount: int, rng: RandomSource, events: Array[RuleEvent]
+	state: BattleState, task_id: String, amount: int, rng: RandomSource, events: Array[RuleEvent], source: String = ""
 ) -> GameResult:
 	var task_index := _task_index(state, task_id)
 	if task_index < 0:
@@ -5454,7 +5789,7 @@ func _v3_status_complete_task(
 	_add_event(
 		events,
 		"completion_applied",
-		"",
+		source,
 		[task_id],
 		{
 			"amount": amount,
@@ -5474,7 +5809,7 @@ func _v3_status_complete_task(
 
 
 func _v3_induced_trigger_target(
-	state: BattleState, task_id: String, stacks: int, rng: RandomSource, events: Array[RuleEvent]
+	state: BattleState, task_id: String, stacks: int, rng: RandomSource, events: Array[RuleEvent], rx_bonus: int = 0, natural: bool = false
 ) -> GameResult:
 	var turn := _v3_turn(state)
 	var triggers: Dictionary = turn.induced_triggers
@@ -5482,7 +5817,18 @@ func _v3_induced_trigger_target(
 	if used >= 4:
 		return GameResult.success(null)
 	triggers[task_id] = used + 1
-	var completed := _v3_status_complete_task(state, task_id, maxi(0, stacks), rng, events)
+	var rx := BattleRelicPilot.card_context(state)
+	var original_target: bool = not natural or (not rx.is_empty() and rx.get("phases", {}).get(task_id, "") == _rx_task_phase(state, task_id))
+	if original_target and used == 3 and BattleRelicRoster.available(state,"RX-P03-07"):
+		rx_bonus += 4
+		_rx_roster.pulse(state,"RX-P03-07","fourth_induced",4,1,events,[task_id],true,"完成量")
+	if not rx.is_empty() and original_target:
+		if used == 2: rx["induced_third"] = true
+		if natural:
+			var actual: Array = rx.get("induced_natural",[])
+			if not actual.has(task_id): actual.append(task_id)
+			rx["induced_natural"] = actual
+	var completed := _v3_status_complete_task(state, task_id, maxi(0, stacks) + rx_bonus, rng, events)
 	if not completed.ok:
 		return completed
 	if state.phase == "finished":
@@ -5506,13 +5852,30 @@ func _v3_induced_window(
 	if typeof(state.resolution) != TYPE_DICTIONARY:
 		return GameResult.success(null)
 	var snapshot: Array = state.resolution.get("v3_induced_snapshot", [])
+	var rx := BattleRelicPilot.card_context(state)
+	if not rx.is_empty() and state.relics.has("RX-P03-07"):
+		snapshot = snapshot.duplicate()
+		snapshot.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return _rx_task_order(state, a.task_id) < _rx_task_order(state, b.task_id))
+	var earliest := ""
+	var order := 2147483647
+	if not rx.is_empty() and BattleRelicPilot.eligible(state, "RX-P03-05", 2, 1):
+		for entry in snapshot:
+			var id := str(entry.task_id)
+			var index := _task_index(state, id)
+			if index >= 0 and rx.phases.get(id, "") == _rx_task_phase(state, id) and int(_v3_turn(state).induced_triggers.get(id, 0)) < 4 and int(state.tasks[index].entered_order) < order:
+				earliest = id
+				order = int(state.tasks[index].entered_order)
 	for entry: Variant in snapshot:
 		if typeof(entry) != TYPE_DICTIONARY:
 			continue
 		var task_id := str(entry.get("task_id", ""))
 		if _task_index(state, task_id) >= 0:
+			var bonus := 0
+			if task_id == earliest and rx.phases.get(task_id, "") == _rx_task_phase(state, task_id) and int(_v3_turn(state).induced_triggers.get(task_id, 0)) < 4:
+				bonus = 2
+				_rx_trigger(state, "RX-P03-05", "natural_induced", bonus, 2, events, [task_id])
 			var triggered := _v3_induced_trigger_target(
-				state, task_id, int(entry.get("stacks", 0)), rng, events
+				state, task_id, int(entry.get("stacks", 0)), rng, events, bonus, true
 			)
 			if not triggered.ok:
 				return triggered
@@ -5538,6 +5901,7 @@ func _v3_erosion_window(
 				):
 					times = maxi(times, int(effect.get("times", 1)))
 	var snapshot: Array[String] = []
+	var rx_bonus_used := false
 	for task: Dictionary in state.tasks:
 		if _status_stacks(state, "erosion", str(task.get("task_id", ""))) > 0:
 			snapshot.append(str(task.get("task_id", "")))
@@ -5549,7 +5913,12 @@ func _v3_erosion_window(
 			var stacks := _status_stacks(state, "erosion", task_id)
 			if stacks <= 0:
 				break
-			var completed := _v3_status_complete_task(state, task_id, stacks, rng, events)
+			var bonus := 0
+			if stacks >= 4 and not rx_bonus_used and BattleRelicRoster.available(state,"RX-P03-02",3):
+				rx_bonus_used = true
+				bonus = 2
+				_rx_roster.pulse(state,"RX-P03-02","natural_erosion",bonus,3,events,[task_id],true,"完成量")
+			var completed := _v3_status_complete_task(state, task_id, stacks + bonus, rng, events)
 			if not completed.ok:
 				return completed
 			if state.phase == "finished":
@@ -5564,6 +5933,8 @@ func _v3_erosion_window(
 			var before := int(status.get("stacks", 0))
 			var after := before - 1
 			if after <= 0:
+				if BattleRelicRoster.available(state,"RX-P03-03",2):
+					BattleRelicRoster.mark(state,"RX-P03-03","next",state.round_index+1)
 				state.statuses.remove_at(status_index)
 				_add_event(
 					events,
@@ -5807,6 +6178,8 @@ func begin(input: Dictionary) -> GameResult:
 			}
 		)
 	)
+	for id in input.get("rx_run",{}):
+		BattleRelicRoster.mark(state,id,"from_run",int(input.rx_run[id]))
 	var player_id := _new_instance_id(state, "p")
 	state.player.entity_id = player_id
 	_register_source(state, player_id, "character", input.character_id)
@@ -5892,6 +6265,7 @@ func _validate_input(input: Dictionary) -> GameResult:
 		"rng_state",
 		"member_ids",
 		"power_percent",
+		"rx_run",
 	]
 	for key in input:
 		if not allowed.has(key):
@@ -5899,6 +6273,12 @@ func _validate_input(input: Dictionary) -> GameResult:
 	for key in ["battle_id", "encounter_id", "character_id", "cards", "relics", "rng_state"]:
 		if not input.has(key):
 			return _invalid_input("input.%s is required" % key, {"path": "input.%s" % key})
+	if input.has("rx_run"):
+		if _catalog.get_info().id != RelicPilot.ROSTER or not input.rx_run is Dictionary:
+			return _invalid_input("rx_run requires roster content", {"path":"input.rx_run"})
+		for id in input.rx_run:
+			if id not in ["RX-C31","RX-C39"] or not input.rx_run[id] is int or input.rx_run[id] != 1:
+				return _invalid_input("invalid RX run marker", {"path":"input.rx_run"})
 	for key in ["battle_id", "encounter_id", "character_id"]:
 		if typeof(input[key]) != TYPE_STRING or not _is_safe_id(input[key]):
 			return _invalid_input(
@@ -6066,7 +6446,7 @@ func _validate_input(input: Dictionary) -> GameResult:
 				"input.relics contains a duplicate id", {"path": "input.relics[%d]" % index}
 			)
 		var relic_result := _catalog.get_definition("relic", relic_id)
-		if not relic_result.ok:
+		if not relic_result.ok or not RelicPilot.owns_definition(str(relic_id), str(input.character_id)):
 			return _content_reference_error("relic", relic_id, "input.relics[%d]" % index)
 		relic_ids.append(relic_id)
 	for relic_id in relic_ids:

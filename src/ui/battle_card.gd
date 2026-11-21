@@ -7,6 +7,7 @@ var selected: bool = false
 var highlighted: bool = false
 var home_position := Vector2.ZERO
 var home_rotation: float = 0.0
+var home_scale: float = 1.0
 var home_order: int = 0
 var shortcut_index: int = 0
 var accent := Color("739d95")
@@ -45,5 +46,5 @@ func contains_global(point: Vector2) -> bool:
 
 func contains_home(point: Vector2) -> bool:
 	var local: Vector2 = get_parent().get_global_transform_with_canvas().affine_inverse() * point
-	var transform := Transform2D(home_rotation, home_position + pivot_offset)
+	var transform := Transform2D(home_rotation, Vector2.ONE * home_scale, 0.0, home_position + pivot_offset)
 	return Rect2(-pivot_offset, size).has_point(transform.affine_inverse() * local)

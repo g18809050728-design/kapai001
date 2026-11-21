@@ -211,7 +211,7 @@ func validate(relic_slots: int = 2147483647) -> Array[String]:
 		return issues
 	if CampaignService.enabled(self):
 		var campaign_start := issues.size()
-		CampaignService.validate(campaign, issues)
+		CampaignService.validate(campaign, issues, RelicPilot.expanded(manifest_id), manifest_id == RelicPilot.ROSTER)
 		if issues.size() != campaign_start:
 			return issues
 	var legacy_map := CampaignService.enabled(self) and CampaignMap.matches_legacy(nodes, run_id)

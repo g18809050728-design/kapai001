@@ -22,6 +22,7 @@ var _variants: OptionButton
 var _variant_row: HBoxContainer
 var _counter: Label
 var _actor: BattleActorView
+var _relic_art: TextureRect
 var _face: CardFaceView
 var _motion: HBoxContainer
 
@@ -142,6 +143,8 @@ func show_entry(id: String) -> void:
 	var entry: Dictionary = _entries[id]
 	_title.text = CompendiumText.title(entry, _kind == "monsters")
 	_meta.text = id + "   ·   " + (CompendiumText.kind(entry) if _kind == "monsters" else str(CompendiumText.OWNER_NAMES.get(CompendiumText.owner(entry), "衍生")) + " · " + CompendiumText.rarity(entry))
+	if _kind == "relics":
+		_meta.text = id + "   ·   " + CompendiumText.relic_group_text(entry) + " · " + CompendiumText.rarity(entry)
 	_counter.text = "%s / %s" % [_ids.find(id) + 1, _ids.size()]
 	_buttons["compendium:detail:previous"].disabled = _ids.find(id) <= 0
 	_buttons["compendium:detail:next"].disabled = _ids.find(id) >= _ids.size() - 1
@@ -150,6 +153,7 @@ func show_entry(id: String) -> void:
 		child.queue_free()
 	_actor = null
 	_face = null
+	_relic_art = null
 	_variant_row.visible = _kind == "cards"
 	_motion.visible = _kind == "monsters"
 	if _kind == "cards":
@@ -160,6 +164,19 @@ func show_entry(id: String) -> void:
 		_face.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		_visual.add_child(_face)
 		select_variant(0)
+	elif _kind == "relics":
+		_relic_art = TextureRect.new()
+		_relic_art.texture = UiStyle.texture(id)
+		_relic_art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		_relic_art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		_relic_art.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_visual.add_child(_relic_art)
+		_clear_words()
+		add_text(_words, "装备效果", 20, UiStyle.BRASS)
+		add_text(_words, UiContentText.describe_relic(entry.definition), 17, UiStyle.CREAM)
+		add_text(_words, "获取方式", 20, UiStyle.BRASS)
+		add_text(_words, CompendiumText.relic_source(entry), 16, UiStyle.CREAM)
+		add_text(_words, "只在佩戴时生效 · 同时最多装备三件", 14, Color("aebcc2"))
 	else:
 		_actor = BattleActorView.new()
 		_visual.add_child(_actor)
@@ -196,6 +213,9 @@ func _clear_words() -> void:
 
 
 func _fit_visual() -> void:
+	if is_instance_valid(_relic_art):
+		_relic_art.size = _visual.size - Vector2(20, 20)
+		_relic_art.position = Vector2(10, 10)
 	if is_instance_valid(_face):
 		var width := minf(_visual.size.x - 12, _visual.size.y * 168.0 / 244.0)
 		_face.size = Vector2(width, width * 244.0 / 168.0)

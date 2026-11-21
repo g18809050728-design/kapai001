@@ -25,6 +25,7 @@ func _v04_event_loop() -> void:
 	# Historical V04 UI fixture places the event directly after the starter.
 	# Annual-map progression and saved paths have their own integration suite.
 	state.campaign = CampaignService.initial()
+	RunRelicRoster.upgrade_base_campaign(state)
 	state.nodes = CampaignMap.build(state.run_id)
 	var nodes: Array = state.nodes.filter(func(value): return value.kind == "event" and value.term == 1)
 	_check(not nodes.is_empty(), "V04 UI has an event node")
@@ -154,7 +155,7 @@ func _campaign_loop() -> void:
 		var session := GameSession.new(SaveStore.new("user://fy-ux-%s-%d" % [kind, Time.get_ticks_usec()]))
 		session.update_settings({"autosave": false})
 		session.start_run(StartRunRequest.new("P02", &"normal", "campus_four_year", "42"))
-		session._state.run = runner._checkpoints[kind].copy_for_write()
+		session._state.run = runner.active_checkpoint(kind, session._catalog)
 		session._state.random_snapshot = runner._rng.duplicate(true)
 		var shell := _helpers.attach_shell(session) as GameShell
 		shell.show_screen("")

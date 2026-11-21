@@ -331,7 +331,9 @@ static func event_text(event: Dictionary) -> String:
 		if values.has(pair[0] + "_before") and values.has(pair[0] + "_after"):
 			changes.append("%s %s→%s" % [pair[1], values[pair[0] + "_before"], values[pair[0] + "_after"]])
 	if values.has("before") and values.has("after"):
-		changes.append("%s %s→%s" % [UiStyle.label(str(values.get("resource", "DDL" if kind == "ddl_ticked" else ("阶段" if kind == "phase_changed" else "数值")))), UiStyle.label(str(values.before)), UiStyle.label(str(values.after))])
+		var resource := str(values.get("resource", "DDL" if kind == "ddl_ticked" else ("阶段" if kind == "phase_changed" else "数值")))
+		var name := str({"relax": "放松", "focus": "专注", "synergy": "协同"}.get(resource, UiStyle.label(resource)))
+		changes.append("%s %s→%s" % [name, UiStyle.label(str(values.before)), UiStyle.label(str(values.after))])
 	if values.has("definition_id") and kind != "card_played":
 		changes.append(UiStyle.label(str(values.definition_id)))
 	if values.has("focus_cost"):

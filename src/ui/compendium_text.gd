@@ -1,6 +1,7 @@
 class_name CompendiumText
 extends RefCounted
 
+const RELIC_RARITY_NAMES := {"white": "白色", "blue": "蓝色", "purple": "紫色", "gold": "金色"}
 const KIND_NAMES := {"normal": "普通", "elite": "精英", "boss": "首领", "auxiliary": "附属"}
 const OWNER_NAMES := {"C": "公共", "P01": "林序", "P02": "许知微", "P03": "沈见章", "P04": "唐以宁", "T": "衍生"}
 const TYPE_NAMES := {"work": "作业", "strategy": "策略", "cooperation": "合作", "scene": "场景", "ability": "能力", "burden": "负担"}
@@ -28,6 +29,8 @@ static func kind(entry: Dictionary) -> String:
 
 static func rarity(entry: Dictionary) -> String:
 	var value := str(entry.definition.get("rarity", "common"))
+	if RELIC_RARITY_NAMES.has(value):
+		return RELIC_RARITY_NAMES[value]
 	return "衍生" if value == "token" else UiStyle.label(value)
 
 
@@ -55,6 +58,26 @@ static func card_text(variant: Dictionary) -> String:
 
 static func variant_name(variant: Dictionary) -> String:
 	return ("考试 · " if variant.get("exam", false) else "") + ("升级" if int(variant.level) > 0 else "基础")
+
+
+static func relic_group(entry: Dictionary) -> String:
+	return str(entry.definition.get("rx", {}).get("owner", "C"))
+
+
+static func relic_group_text(entry: Dictionary) -> String:
+	var group := relic_group(entry)
+	return "通用" if group == "C" else str(OWNER_NAMES.get(group, group)) + "专属"
+
+
+static func relic_source(entry: Dictionary) -> String:
+	var result := "地图学年饰品奖励 · " + years(entry.terms)
+	if entry.id == "RX-C22":
+		result += "。仅当前学年仍可到达独立作答或固定考场时出现。"
+	elif entry.id == "RX-P04-12":
+		result += "。仅唐以宁且本学年仍可到达独立作答时出现。"
+	elif relic_group(entry) != "C":
+		result += "。只进入对应角色的奖励池。"
+	return result
 
 
 static func monster_sections(entry: Dictionary) -> Array[Dictionary]:

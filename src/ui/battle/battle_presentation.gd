@@ -268,7 +268,8 @@ func set_meter(id: String, remaining: float, shield: int) -> void:
 		fill.value = remaining
 	else:
 		fill.size.x = float(meter.width) * clampf(remaining / maxi(1, maximum), 0, 1)
-	meter.label.text = "剩余 %s/%s · 屏障 %s" % [ceili(remaining), maximum, shield]
+	var caption := "%s/%s · 盾%s" if meter.label.get_meta("compact_work", false) else "剩余 %s/%s · 屏障 %s"
+	meter.label.text = caption % [ceili(remaining), maximum, shield]
 	meter.label.set_meta("displayed_work", remaining)
 
 

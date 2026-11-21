@@ -229,6 +229,14 @@ func apply(state: RunState, action: Variant, rng_states: Dictionary) -> GameResu
 	if work.vitality <= 0 and work.outcome.is_empty():
 		summary = _finalize(work, "lost", "vitality_depleted")
 	_action_events(state, work, type, payload, events)
+	if RunRelicRoster.enabled(work):
+		for id in ["RX-C25","RX-C29","RX-C31","RX-C40"]:
+			if RunRelicRoster.remaining(work,id) < RunRelicRoster.remaining(state,id):
+				var amount := 12 if id == "RX-C29" else 1
+				if id == "RX-C25":
+					var subtype: String = CampaignProgression.metadata(state,state.current_node_id).subtype
+					amount = RunRelicRoster.upgrade_discount(state,CampaignService.new(_catalog).service_cost(state,subtype))
+				RunRelicRoster.award_event(work,events,id,type,amount,str({"RX-C25":"折扣","RX-C29":"返还金钱","RX-C31":"下场备抽","RX-C40":"额外升级"}[id]))
 	if summary != null:
 		_event(
 			events,
@@ -273,6 +281,7 @@ func settle_battle(state: RunState, outcome: Dictionary, rng_states: Dictionary)
 	node.context.settled = true
 	var events: Array[RuleEvent] = []
 	var summary: RunSummary = null
+	RunRelicRoster.settle(work,node,outcome,events)
 	if outcome.result == "lost" or vitality == 0:
 		summary = _finalize(work, "lost", str(outcome.get("reason", "battle_lost")))
 	elif CampaignService.enabled(work) and node.kind == "boss":
@@ -295,6 +304,17 @@ func settle_battle(state: RunState, outcome: Dictionary, rng_states: Dictionary)
 		if not generated.ok:
 			return generated
 		work.pending_reward = generated.data
+		if node.kind == "elite" and RunRelicRoster.active(work,"RX-C30") and int(work.campaign.rx_state.review_year) != work.term:
+			var base_count := int(_rules(work).rewards.candidate_count) + (1 if int(work.campaign.resume) >= 4 else 0)
+			var candidates: Array = work.pending_reward.get_item("card").get("candidates",[])
+			if not candidates.is_empty():
+				work.campaign.rx_state.review_year = work.term
+			if candidates.size() > base_count:
+				RunRelicRoster.award_event(work,events,"RX-C30","extra_elite_candidate",1,"候选")
+		if node.kind == "elite" and RunRelicRoster.active(work,"RX-C38"):
+			work.money += 16
+			RelicPilot.consume(work,"RX-C38")
+			RunRelicRoster.award_event(work,events,"RX-C38","elite_payday",16,"金钱")
 		work.money += int(work.pending_reward.meta.get("money", 0))
 		if CampaignService.enabled(work):
 			var campaign_service := CampaignService.new(_catalog)
@@ -377,6 +397,7 @@ func _enter_node(
 	work.current_node_id = node.node_id
 	work.pending_reward = null
 	node.status = "active"
+	RunRelicRoster.entered(work,node)
 	if CampaignService.enabled(work):
 		CampaignService.new(_catalog).enter(work, node)
 	var fallback := false
@@ -478,6 +499,8 @@ func _enter_node(
 		"relics": relic_ids,
 		"rng_state": rng.export_state().to_dictionary(),
 	}
+	var new_relic_state := RunRelicRoster.battle_input(work)
+	if not new_relic_state.is_empty(): begin_input["rx_run"] = new_relic_state
 	if not member_ids.is_empty():
 		begin_input["member_ids"] = member_ids
 	return GameResult.success(begin_input)
@@ -626,6 +649,10 @@ func _claim_reward(work: RunState, type: String, payload: Dictionary) -> GameRes
 		if not item.get("skippable", false):
 			return _error(GameConstants.ERROR_INVALID_ARGUMENT, "run.reward.skip.forbidden")
 		item.status = "skipped"
+		var bonus := _rx_skip_bonus(work, offer.meta, item)
+		if bonus > 0:
+			work.money += bonus
+			RelicPilot.consume(work, "RX-C28")
 		return GameResult.success(true)
 	var candidates: Array = item.get("candidates", [])
 	var chosen := str(payload.get("candidate_id", ""))
@@ -648,6 +675,11 @@ func _claim_reward(work: RunState, type: String, payload: Dictionary) -> GameRes
 	item.status = "claimed"
 	item.chosen_id = chosen
 	return GameResult.success(true)
+
+
+func _rx_skip_bonus(run: RunState, meta: Dictionary, item: Dictionary) -> int:
+	return 8 if (item.get("kind") == "card" and meta.get("kind") in ["normal", "elite"]
+		and not item.get("candidates", []).is_empty() and RelicPilot.can_trigger(run, "RX-C28")) else 0
 
 
 func _choose_term(work: RunState, payload: Dictionary) -> GameResult:
@@ -734,7 +766,7 @@ func make_view(state: RunState) -> Dictionary:
 		view.nodes_per_term = year_map.get("nodes", []).size()
 		view.year_layers = int(year_map.get("layers", [12, 12, 14, 14][state.term - 1]))
 		view.year_title = str(year_map.get("title", ["适应与基础", "分流与专业", "冲刺与选择", "收束与毕业"][state.term - 1]))
-		view.relic_layers = year_map.get("relic_layers", [3, 9] if state.term < 3 else [4, 11])
+		view.relic_layers = CampaignService.relic_layers(state)
 		view.map_influence = CampaignProgression.influence(state)
 	view.relic_slots = int(rules.run.relic_slots)
 	view.deck_size = state.cards.size()
@@ -756,8 +788,16 @@ func make_view(state: RunState) -> Dictionary:
 			)
 	for relic in view.relics:
 		relic.detail = _reward_candidate_view("relic", str(relic.definition_id), rules)
+		if RelicPilot.expanded(state.manifest_id) and RelicPilot.RUN_LIMITS.has(relic.definition_id):
+			relic.detail.rx_remaining = RelicPilot.remaining(state, str(relic.definition_id))
+		elif RunRelicRoster.enabled(state) and RunRelicRoster.LIMITS.has(relic.definition_id):
+			relic.detail.rx_remaining = RunRelicRoster.remaining(state,str(relic.definition_id))
 	if view.pending_reward is Dictionary:
 		for item in view.pending_reward.items:
+			if RelicPilot.expanded(state.manifest_id) and item.get("status") == "pending" and item.get("skippable", false):
+				var bonus := _rx_skip_bonus(state, view.pending_reward.meta, item)
+				if bonus > 0:
+					item.rx_skip_bonus = bonus
 			item.candidate_details = {}
 			for id in item.candidates:
 				item.candidate_details[str(id)] = _reward_candidate_view(
@@ -858,9 +898,14 @@ func make_view(state: RunState) -> Dictionary:
 		view.campaign_offer.details = {}
 		for id in view.campaign_offer.candidates:
 			view.campaign_offer.details[id] = _reward_candidate_view("relic" if view.campaign_offer.kind == "relic" else "card", id, rules)
+			if RelicPilot.expanded(state.manifest_id) and view.campaign_offer.kind == "relic" and RelicPilot.RUN_LIMITS.has(id):
+				view.campaign_offer.details[id].rx_remaining = RelicPilot.remaining(state, str(id))
+			elif RunRelicRoster.enabled(state) and view.campaign_offer.kind == "relic" and RunRelicRoster.LIMITS.has(id):
+				view.campaign_offer.details[id].rx_remaining = RunRelicRoster.remaining(state,str(id))
 		var meta := CampaignProgression.metadata(state, str(view.campaign_offer.source_node_id))
 		view.campaign_offer.node_meta = meta
 		view.campaign_offer.service_cost = CampaignService.new(_catalog).service_cost(state, str(meta.get("subtype", "")))
+		view.campaign_offer.upgrade_discount = RunRelicRoster.upgrade_discount(state,int(view.campaign_offer.service_cost))
 		view.campaign_offer.previews = _campaign_previews(state)
 	if CampaignService.enabled(state):
 		for item in view.nodes:
@@ -1045,6 +1090,8 @@ func _action_events(
 					"candidate_id": item.get("chosen_id")
 				}
 			)
+			if RelicPilot.remaining(before, "RX-C28") > RelicPilot.remaining(after, "RX-C28"):
+				_rx_run_event(events, after, "RX-C28", "skip_card_reward", after.money - before.money)
 		"buy_item":
 			_event(
 				events,
@@ -1074,6 +1121,9 @@ func _action_events(
 					"card_id": payload.get("card_instance_id")
 				}
 			)
+			if RelicPilot.remaining(before, "RX-C26") > RelicPilot.remaining(after, "RX-C26"):
+				var base := int(floor(before.max_vitality * int(_rules(before).run.rest_heal_percent) / 100.0))
+				_rx_run_event(events, after, "RX-C26", "rest_heal", after.vitality - before.vitality - base)
 		"choose_campaign":
 			_event(events, "campaign_reward_claimed", before.current_node_id, {"offer_id": payload.offer_id, "option_id": payload.option_id})
 			if after.term != before.term:
@@ -1219,6 +1269,11 @@ func _selection(
 			"index": index
 		}
 	)
+
+
+func _rx_run_event(events: Array[RuleEvent], run: RunState, id: String, at: String, amount: int) -> void:
+	_event(events, "relic_triggered", id, {"relic_id": id, "at": at, "amount": amount,
+		"remaining": RelicPilot.remaining(run, id)})
 
 
 func _event(events: Array[RuleEvent], type: String, source: String, data: Dictionary) -> void:

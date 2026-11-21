@@ -13,12 +13,12 @@
           {
             "index": 0,
             "text_key": "task.n01.intent.pressure5",
-            "pressure": 5
+            "pressure": 4
           },
           {
             "index": 1,
             "text_key": "task.n01.intent.pressure7",
-            "pressure": 7
+            "pressure": 6
           }
         ]
       }
@@ -43,7 +43,7 @@
           {
             "index": 1,
             "text_key": "task.n02.intent.pressure8",
-            "pressure": 8
+            "pressure": 6
           }
         ]
       }
@@ -102,7 +102,7 @@
           {
             "index": 1,
             "text_key": "task.n04.intent.pressure9",
-            "pressure": 9
+            "pressure": 7
           }
         ]
       }
@@ -1149,7 +1149,7 @@
           {
             "index": 1,
             "text_key": "task.n19.intent.b",
-            "pressure": 10,
+            "pressure": 8,
             "pressure_all": true
           }
         ]
@@ -1166,12 +1166,12 @@
       {
         "op": "complete",
         "amount": 4,
-        "target": "adjacent_tasks"
+        "target": "other_tasks"
       },
       {
         "op": "reduce_shield",
         "amount": 4,
-        "target": "adjacent_tasks"
+        "target": "other_tasks"
       }
     ],
     "phases": [
@@ -1191,7 +1191,9 @@
           }
         ]
       }
-    ]
+    ],
+    "self_copy_interval": 2,
+    "self_copy_work_percent": 50
   },
   {
     "id": "N21",
@@ -1298,12 +1300,12 @@
           {
             "index": 2,
             "text_key": "task.n24.intent.c",
-            "pressure": 16
+            "pressure": 12
           },
           {
             "index": 3,
             "text_key": "task.n24.intent.d",
-            "pressure": 32
+            "pressure": 16
           }
         ]
       }
@@ -1354,7 +1356,7 @@
             "index": 0,
             "text_key": "task.n26.intent.a",
             "add_card": {
-              "card": "R3-C-07",
+              "card": "X03",
               "count": 1,
               "zone": "hand"
             }

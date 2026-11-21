@@ -169,7 +169,7 @@ func _field_has_conflict(overrides: Dictionary, field: Dictionary) -> bool:
 
 
 func _focus_search() -> void:
-	if is_inside_tree() and is_instance_valid(_search):
+	if not UiStyle.web_touch and is_inside_tree() and is_instance_valid(_search):
 		_search.grab_focus()
 
 
@@ -235,7 +235,7 @@ func _build_ui() -> void:
 	_search.placeholder_text = "搜索实体、ID、字段正文  /"
 	_search.text = query
 	_search.clear_button_enabled = true
-	_search.custom_minimum_size = Vector2(300 * minf(UiStyle.text_scale, 1.2), 44)
+	_search.custom_minimum_size = Vector2((220 if UiStyle.web_touch else 300) * minf(UiStyle.text_scale, 1.2), UiStyle.MOBILE_TARGET if UiStyle.web_touch else 44)
 	_search.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_search.add_theme_font_size_override("font_size", roundi(16 * UiStyle.text_scale))
 	_search.add_theme_color_override("font_color", UiStyle.CREAM)
@@ -245,10 +245,10 @@ func _build_ui() -> void:
 	)
 	_search.text_changed.connect(_on_search_changed)
 	tools.add_child(_search)
-	_filter = _make_filter()
+	_filter = _make_filter("TextEditorFilter")
 	_filter.item_selected.connect(_on_filter_selected)
 	tools.add_child(_filter)
-	_filter2 = _make_filter()
+	_filter2 = _make_filter("TextEditorFilter2")
 	_filter2.item_selected.connect(_on_filter2_selected)
 	tools.add_child(_filter2)
 	var tab_row := HFlowContainer.new()
@@ -266,7 +266,11 @@ func _build_ui() -> void:
 			func(): show_tab(key)
 		)
 		button.tooltip_text = "%s · %d 个实体" % [str(spec[1]), int(counts.get(key, 0))]
-		button.custom_minimum_size = Vector2((100 if not compact_tab else 88) * minf(UiStyle.text_scale, 1.2), 44)
+		var tab_width := 88 if compact_tab else (72 if UiStyle.web_touch else 100)
+		button.custom_minimum_size = Vector2(
+			tab_width * minf(UiStyle.text_scale, 1.2),
+			UiStyle.MOBILE_TARGET if UiStyle.web_touch else 44
+		)
 		button.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 		button.add_theme_font_size_override("font_size", roundi(15 * UiStyle.text_scale))
 		_tabs[key] = button
@@ -338,9 +342,13 @@ func _apply_compact_header() -> void:
 		_subtitle.visible = not compact
 
 
-func _make_filter() -> OptionButton:
+func _make_filter(filter_name: String = "TextEditorFilter") -> OptionButton:
 	var filter := OptionButton.new()
-	filter.custom_minimum_size = Vector2(190 * minf(UiStyle.text_scale, 1.2), 44)
+	filter.name = filter_name
+	filter.custom_minimum_size = Vector2(
+		(148 if UiStyle.web_touch else 190) * minf(UiStyle.text_scale, 1.2),
+		UiStyle.MOBILE_TARGET if UiStyle.web_touch else 44
+	)
 	filter.add_theme_font_size_override("font_size", roundi(15 * UiStyle.text_scale))
 	filter.add_theme_color_override("font_color", UiStyle.CREAM)
 	filter.add_theme_stylebox_override("normal", UiStyle.surface(Color("20353d"), Color("657c85"), 4))
@@ -352,7 +360,7 @@ func _make_filter() -> OptionButton:
 func _build_list_pane(parent: Node) -> void:
 	var panel := PanelContainer.new()
 	var page_width := size.x if size.x > 0 else 1280.0
-	panel.custom_minimum_size.x = clampf(page_width * 0.34, 320 * minf(UiStyle.text_scale, 1.1), 440)
+	panel.custom_minimum_size.x = clampf(page_width * 0.34, (188 if UiStyle.web_touch else 320) * minf(UiStyle.text_scale, 1.1), 440)
 	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	var skin := UiStyle.surface(Color("111f28"), Color("3c525d"), 6)
 	skin.set_content_margin_all(10)

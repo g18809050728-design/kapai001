@@ -173,6 +173,7 @@ func calculate_cost(state: BattleState, card_id: String) -> GameResult:
 			focus_discount += source_discount
 			if skip_vitality:
 				vitality_discount = vitality_base
+	var legacy_work_discount := 0
 	var v3_discount: Variant = state.v3.get("pending_cost_discount", {})
 	if typeof(v3_discount) == TYPE_DICTIONARY:
 		var discount_amount := int(v3_discount.get("amount", 0))
@@ -183,15 +184,23 @@ func calculate_cost(state: BattleState, card_id: String) -> GameResult:
 			and int(face.get("cost", 0)) >= discount_min
 		):
 			focus_discount += discount_amount
+			legacy_work_discount = discount_amount
 	if str(face.get("id", "")) == "R3-T201":
 		var publication_discount := int(state.v3.get("publication_discount", 0))
 		if publication_discount > 0:
 			focus_discount += publication_discount
+	var rx_adjustments := BattleRelicRoster.price(state,face,maxi(0,focus_base+focus_added-focus_discount),legacy_work_discount) if BattleRelicPilot.has_any(state) else {}
+	for id in rx_adjustments:
+		var diff := int(rx_adjustments[id])
+		if diff > 0: focus_added += diff
+		else: focus_discount -= diff
+		sources.append({"source_id":id,"amount":diff})
 	return (
 		GameResult
 		. success(
 			{
 				"base": focus_base,
+				"rx_adjustments": rx_adjustments,
 				"added": focus_added,
 				"discount": focus_discount,
 				"cost": maxi(0, focus_base + focus_added - focus_discount),

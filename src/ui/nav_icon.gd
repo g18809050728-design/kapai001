@@ -9,6 +9,7 @@ const PRIMARY := {
 	"relics": '<path fill="#c7a35f" d="m24 3 8 11 11 10-11 8-8 13-8-13L3 24l13-10Z"/><path fill="#f1d794" d="m24 9 10 15-10 15-10-15Z"/><path fill="#487d81" d="m24 15 6 9-6 9-6-9Z"/>'
 }
 const PATHS := {
+	"account": '<circle cx="12" cy="8" r="3.5"/><path d="M5 21v-2a7 7 0 0 1 14 0v2"/>',
 	"info": '<path d="M12 3 3 8v8l9 5 9-5V8Z"/><path d="M12 11v6M12 7v.2"/>',
 	"focus": '<circle cx="12" cy="12" r="9"/><path d="m13 5-6 8h5l-1 6 6-9h-5Z"/>',
 	"map": '<path d="m3 5 6-2 6 2 6-2v16l-6 2-6-2-6 2Zm6-2v16m6-14v16"/>',

@@ -289,6 +289,37 @@ static func decode_session(snapshot: Variant, catalog: ContentDB) -> GameResult:
 	return GameResult.success(session)
 
 
+## Called only after the original checksum, catalog hash and domain state pass validation.
+## Drop retired relics in memory; no new draws, automatic replacements or save writes.
+static func upgrade_relic_catalog(session: SessionState, catalog: ContentDB) -> GameResult:
+	var working := session.copy_for_write()
+	var run := working.run
+	var info := catalog.get_info()
+	if run.manifest_id == RelicPilot.BASE:
+		run.manifest_id = info.id
+		RunRelicRoster.upgrade_base_campaign(run)
+		if working.terminal_summary != null:
+			working.terminal_summary.manifest_id = info.id
+	run.relics.assign(run.relics.filter(func(slot): return not RelicPilot.is_retired(slot.definition_id)))
+	var offer: Dictionary = run.campaign.pending
+	if offer.get("kind", "") == "relic":
+		offer.candidates = offer.candidates.filter(func(id): return not RelicPilot.is_retired(id))
+		if offer.candidates.is_empty():
+			run.campaign.history.append({"offer_id": offer.offer_id, "option_id": "skip", "candidate_id": ""})
+			run.campaign.pending = {}
+	if working.battle != null:
+		var battle := working.battle
+		battle.relics.assign(battle.relics.filter(func(id): return not RelicPilot.is_retired(id)))
+		for key in battle.source_registry.keys():
+			var source: Dictionary = battle.source_registry[key]
+			if source.kind == "relic" and RelicPilot.is_retired(source.definition_id):
+				battle.source_registry.erase(key)
+	var checked := encode_session(working, info)
+	if not checked.ok:
+		return checked
+	return decode_session(checked.data, catalog)
+
+
 static func migrate(snapshot: Variant, migrations: Dictionary = {}) -> GameResult:
 	var issues := validate_structure(normalize_numbers(snapshot))
 	if not issues.is_empty() or not checksum_matches(snapshot):
