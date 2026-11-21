@@ -1,9 +1,30 @@
 class_name GameShell
 extends Control
 
+signal web_menu_visible(visible: bool)
+signal web_privacy_requested
+signal web_account_requested(registering: bool)
+signal web_guest_requested
+signal web_guest_logout_requested
+signal web_play_requested(developer_tools: bool)
+signal web_section_requested(section: String)
+
 const BattleDamagePopup = preload("res://src/ui/battle/battle_damage_popup_layer.gd")
+const DEVELOPER_TOOL_ACTIONS := ["ui.test_room", "ui.text_editor"]
+const WEB_PLAY_ACTIONS := ["ui.new_run", "ui.start_run", "ui.retry", "ui.continue", "ui.start_battle", "ui.resume_battle", "ui.test_room", "ui.text_editor"]
+const PLAYABLE_ACCOUNT_STATES := ["", "ready", "guest"]
+const LOCKED_WEB_ACTIONS := ["ui.web_account", "ui.web_register", "ui.web_guest", "ui.settings", "ui.web_privacy", "ui.back", "ui.save_settings", "ui.close_account_run", "ui.quit"]
 
 var session: GameSession
+var web_team_tools_available := true
+var web_privacy_available := false
+var web_account_state := ""
+var web_registration_available := false
+var web_account_name := ""
+var web_account_message := ""
+var _web_play_draft: Dictionary = {}
+var _web_play_page_id := 0
+var _web_play_screen := ""
 var page: UiPage
 var audio: AudioManager
 var last_error: ApiError
@@ -36,6 +57,7 @@ var _compendium_state: Dictionary = {}
 var _text_editor_state: Dictionary = {}
 var _text_library_cache: Dictionary = {}
 var _text_library_loaded := false
+var _quit_dialog: ConfirmationDialog
 
 
 func _ready() -> void:
@@ -123,9 +145,11 @@ func refresh() -> void:
 	if is_instance_valid(_ui_feedback):
 		_ui_feedback.hide()
 	if session.has_test_room():
+		web_menu_visible.emit(false)
 		_refresh_test_room()
 		return
 	if _ui_screen == "test_room":
+		web_menu_visible.emit(false)
 		_refresh_test_home()
 		return
 	_clear_test_hud()
@@ -133,12 +157,24 @@ func refresh() -> void:
 		_advance_completed_nodes()
 	var current := session.get_view()
 	var screen := _ui_screen if not _ui_screen.is_empty() else String(current.screen)
+	web_menu_visible.emit(screen in ["menu", "settings", "records"])
 	var data: Dictionary = {}
 	match screen:
 		"menu":
-			data = _storage_view()
-			data.profile = _profile_view()
+			if web_account_state in PLAYABLE_ACCOUNT_STATES:
+				data = _storage_view()
+				data.profile = _profile_view()
 			data.relic_pilot = session.is_relic_pilot()
+			data.team_tools_available = _developer_tools_allowed()
+			data.account_state = web_account_state
+			data.account_name = web_account_name
+			data.account_message = web_account_message
+			data.registration_available = web_registration_available
+		"records":
+			var records := session.get_game_records()
+			data.records = records.data if records.ok else []
+			data.records_error = "" if records.ok else UiStyle.error_text(records.error)
+			data.account_state = web_account_state
 		"setup":
 			var options := session.get_setup_options()
 			if not options.ok:
@@ -175,18 +211,22 @@ func refresh() -> void:
 				_text_library_loaded = true
 			data = _text_library_cache
 		"settings":
-			data = _storage_view()
+			if web_account_state in PLAYABLE_ACCOUNT_STATES:
+				data = _storage_view()
+			data.web_privacy_available = web_privacy_available
+			data.account_state = web_account_state
 			data.settings = {"autosave": session.get_profile().autosave}
 			data.settings.audio = session.get_audio_settings()
 			data.settings.presentation = session.get_presentation_settings()
+			var backup: Variant = data.get("backup_meta")
 			data.can_restore = (
 				current.run_id == null
-				and data.backup_meta is Dictionary
-				and data.backup_meta.get("valid", false)
+				and backup is Dictionary
+				and backup.get("valid", false)
 			)
-			data.can_save = current.can_save
-			data.difficulty = current.run.get("difficulty", "") if current.run is Dictionary else ""
-			if current.run is Dictionary:
+			data.can_save = current.can_save and web_account_state in PLAYABLE_ACCOUNT_STATES
+			data.difficulty = current.run.get("difficulty", "") if current.run is Dictionary and web_account_state in PLAYABLE_ACCOUNT_STATES else ""
+			if current.run is Dictionary and web_account_state in PLAYABLE_ACCOUNT_STATES:
 				data.seed = _active_seed if not _active_seed.is_empty() else "旧存档未记录初始种子"
 		"battle":
 			if current.battle is Dictionary:
@@ -222,7 +262,7 @@ func refresh() -> void:
 	data.save_reason = "可保存当前完整进度" if current.can_save else ("请先完成卡牌效果中的选择" if current.pending_choice != null else "尚未开始冒险")
 	data.save_status = _save_status
 	data.autosave = session.get_profile().autosave
-	if current.run is Dictionary:
+	if current.run is Dictionary and web_account_state in PLAYABLE_ACCOUNT_STATES:
 		data.difficulty = current.run.get("difficulty", "normal")
 		data.character_id = current.run.get("character_id", "")
 		data.relic_slots = current.run.get("relic_slots", 3)
@@ -240,6 +280,8 @@ func refresh() -> void:
 			if not _compendium_state.is_empty():
 				page.tab = str(_compendium_state.get("tab", "cards"))
 				page._states = _compendium_state.states.duplicate(true)
+		elif screen == "records":
+			page = preload("res://src/ui/records_page.gd").new()
 		elif screen == "text_editor":
 			page = UiTextEditorPage.new()
 			if not _text_editor_state.is_empty():
@@ -294,6 +336,33 @@ func refresh() -> void:
 	if screen == "battle" and last_error != null:
 		_notice_label.visible = true
 		_notice_label.custom_minimum_size.y = 28
+
+
+func set_web_account_state(state: String, registration: bool, nickname: String, message: String, role: String = "") -> void:
+	web_account_state = state
+	web_team_tools_available = state == "ready" and role == "admin"
+	web_registration_available = registration
+	web_account_name = nickname
+	web_account_message = message
+	if state not in PLAYABLE_ACCOUNT_STATES:
+		_back_screen = "menu"
+		if _ui_screen != "settings":
+			_ui_screen = "menu"
+	refresh()
+
+
+func _developer_tools_allowed() -> bool:
+	return web_team_tools_available and web_account_state in ["", "ready"]
+
+
+func resolve_web_play(allowed: bool) -> void:
+	var draft := _web_play_draft
+	var requested_page_id := _web_play_page_id
+	_web_play_draft = {}
+	_web_play_page_id = 0
+	if allowed and web_account_state in PLAYABLE_ACCOUNT_STATES and _ui_screen == _web_play_screen and is_instance_valid(page) and page.get_instance_id() == requested_page_id and not draft.is_empty():
+		last_error = null
+		_navigate(str(draft.type), draft.get("payload", {}))
 
 
 func _set_battle_frame(battle: bool) -> void:
@@ -405,6 +474,10 @@ func _regate() -> void:
 					"ui.cancel_restart",
 					"ui.continue",
 					"ui.back",
+					"ui.web_account",
+					"ui.web_register",
+					"ui.web_guest",
+					"ui.web_guest_logout", "ui.records", "ui.records_back", "ui.web_history", "ui.web_stats", "ui.quit",
 					"ui.compendium", "ui.compendium_back",
 					"ui.text_editor", "ui.text_editor_back"
 				]
@@ -430,6 +503,18 @@ func submit_action(draft: Dictionary) -> void:
 		return
 	var type := str(draft.get("type", ""))
 	var payload: Dictionary = draft.get("payload", {})
+	if (type.begins_with("test.") or type in DEVELOPER_TOOL_ACTIONS) and not _developer_tools_allowed():
+		return
+	if not web_account_state.is_empty():
+		if web_account_state not in PLAYABLE_ACCOUNT_STATES and type not in LOCKED_WEB_ACTIONS:
+			return
+		if type in WEB_PLAY_ACTIONS:
+			if _web_play_draft.is_empty() and is_instance_valid(page):
+				_web_play_draft = draft.duplicate(true)
+				_web_play_page_id = page.get_instance_id()
+				_web_play_screen = _ui_screen
+				web_play_requested.emit(type in DEVELOPER_TOOL_ACTIONS)
+			return
 	last_error = null
 	if session.has_test_room() and not type.begins_with("test.") and not type.begins_with("ui."):
 		_submit_test_battle_action(draft)
@@ -868,10 +953,21 @@ func _action_notice(result: ActionResult) -> void:
 
 
 func _navigate(type: String, payload: Dictionary) -> void:
+	if type in DEVELOPER_TOOL_ACTIONS and not _developer_tools_allowed():
+		return
 	if session.has_test_room() and type == "ui.menu":
 		_close_test_room()
 		return
 	match type:
+		"ui.records":
+			_ui_screen = "records"
+		"ui.records_back":
+			_ui_screen = "menu"
+		"ui.web_saves", "ui.web_history", "ui.web_stats":
+			var section := type.trim_prefix("ui.web_")
+			if web_account_state == "ready" and (section != "stats" or _developer_tools_allowed()):
+				web_section_requested.emit(section)
+			return
 		"ui.compendium":
 			_ui_screen = "compendium"
 		"ui.compendium_back":
@@ -974,6 +1070,22 @@ func _navigate(type: String, payload: Dictionary) -> void:
 		"ui.settings":
 			_back_screen = _ui_screen
 			_ui_screen = "settings"
+		"ui.web_account", "ui.web_register":
+			if _ui_screen == "menu":
+				web_account_requested.emit(type == "ui.web_register")
+			return
+		"ui.web_guest":
+			if _ui_screen == "menu" and web_account_state in ["login", "unavailable"]:
+				web_guest_requested.emit()
+			return
+		"ui.web_guest_logout":
+			if _ui_screen == "menu" and web_account_state == "guest":
+				web_guest_logout_requested.emit()
+			return
+		"ui.web_privacy":
+			if web_privacy_available and _ui_screen == "settings":
+				web_privacy_requested.emit()
+			return
 		"ui.back":
 			_ui_screen = _back_screen
 		"ui.save":
@@ -999,12 +1111,14 @@ func _navigate(type: String, payload: Dictionary) -> void:
 				notice = "已从备份恢复。正式档未被替换，手动保存后更新正式档。"
 			else:
 				_report_error(restored.error)
+		"ui.close_account_run":
+			if session.get_view().run_id != null and not _handle_save(session.save_and_exit()):
+				refresh()
+				return
+			_ui_screen = "settings" if payload.get("return_to", "") == "settings" else "menu"
 		"ui.quit":
-			if session.get_view().run_id != null:
-				if not _handle_save(session.save_and_exit()) or session.get_view().run_id != null:
-					refresh()
-					return
-			get_tree().quit()
+			_request_quit()
+			return
 	refresh()
 	if type == "ui.compendium_back" and page != null and page._buttons.has("menu:compendium"):
 		page._buttons["menu:compendium"].grab_focus()
@@ -1105,6 +1219,43 @@ func _present_card_gain(before: SessionView, after: SessionView) -> void:
 		tween.tween_property(image, "modulate:a", 0.0, duration)
 		tween.chain().tween_callback(image.queue_free)
 		return
+
+
+func _request_quit() -> void:
+	if is_instance_valid(_quit_dialog):
+		_quit_dialog.popup_centered()
+		return
+	var dirty_text: bool = page is UiTextEditorPage and page.dirty_count() > 0
+	var dirty_test := session.has_test_room() and bool(session.get_test_view().get("test", {}).get("dirty", false))
+	if not session.has_unsaved_progress() and not dirty_text and not dirty_test:
+		_finish_quit(false)
+		return
+	_quit_dialog = ConfirmationDialog.new()
+	_quit_dialog.title = "有未保存的进度"
+	_quit_dialog.dialog_text = "当前进度尚未保存。保存后退出游戏？"
+	_quit_dialog.ok_button_text = "保存并退出"
+	_quit_dialog.cancel_button_text = "取消"
+	if dirty_text or dirty_test or not session.get_view().can_save:
+		_quit_dialog.dialog_text = "有未保存的编辑或尚未完成的选择。返回完成并保存，或放弃这些修改后退出。"
+		_quit_dialog.ok_button_text = "返回游戏"
+		_quit_dialog.confirmed.connect(func(): _quit_dialog.queue_free(); _quit_dialog = null)
+	else:
+		_quit_dialog.confirmed.connect(func(): _quit_dialog.queue_free(); _quit_dialog = null; _finish_quit(true))
+	_quit_dialog.add_button("不保存退出", false, "discard")
+	_quit_dialog.custom_action.connect(func(_action): _finish_quit(false))
+	_quit_dialog.canceled.connect(func(): _quit_dialog.queue_free(); _quit_dialog = null)
+	add_child(_quit_dialog)
+	_quit_dialog.popup_centered(Vector2i(mini(520, int(size.x) - 32), 180))
+	_quit_dialog.get_cancel_button().grab_focus()
+
+
+func _finish_quit(save: bool) -> void:
+	if save and not _handle_save(session.save_current()):
+		refresh()
+		return
+	if not web_account_state.is_empty():
+		web_section_requested.emit("quit")
+	get_tree().quit()
 
 
 func _handle_save(result: GameResult) -> bool:

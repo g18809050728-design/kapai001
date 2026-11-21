@@ -20,7 +20,15 @@ func _ready() -> void:
 	_shell = GameShell.new()
 	_shell.session = _session
 	_shell.name = "GameShell"
+	if OS.has_feature("web") and not relic_pilot:
+		_shell.web_account_state = "checking"
+		_shell.web_team_tools_available = false
 	add_child(_shell)
+	if OS.has_feature("web") and not relic_pilot:
+		var accounts := preload("res://src/app/web_accounts.gd").new()
+		accounts.session = _session
+		accounts.shell = _shell
+		add_child(accounts)
 	get_tree().auto_accept_quit = false
 	get_tree().root.close_requested.connect(
 		func(): _shell.submit_action({"type": "ui.quit", "payload": {}})

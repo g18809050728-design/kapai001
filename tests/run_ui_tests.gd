@@ -25,6 +25,8 @@ func _run_suites() -> Array[String]:
 	for path in [
 		"test_ui_compendium",
 		"test_ui_text_editor",
+		"test_web_account_permissions",
+		"test_ui_account_navigation",
 		"test_ui_character_art",
 		"test_ui_enemy_art",
 		"test_run_content_views",

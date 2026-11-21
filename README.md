@@ -76,6 +76,8 @@
 
 | 阅读入口 | 内容与状态 |
 |---|---|
+| [程序启动指南](docs/程序启动指南.md) | Windows 开发、Linux 正式服务启动、MySQL 连接实查及管理员创建与登录 |
+| [账号、MySQL 与云存档实施计划](docs/plans/2026-11-21-account-cloud-save-plan.md) | 当前版已发布为公网主程序，见[发布记录](docs/plans/2026-11-21-production-accounts-release.md)及[账号服务部署说明](server/README.md) |
 | [整体表现重制需求 v7](动作或者图片描述/整体表现重制需求_20261113.md) / [ui-plan阅读入口](ui-plan/README.md) | 唯一维护UIR-001～067；当前创建/操作追加见§9.2，人物仍暂停。旧01～05方案先按历史适用范围阅读 |
 | [上一轮表现原型实现与证据](docs/UI表现重制实现记录_20261113.md) | UIR-001～048对应的卡框、事件、地图/房间及战斗实体原型，含完整UI/规则回归、376有效面检查、60正常命令双闭环；不代表新方向和正式分层动画已验收 |
 | [测试房间功能设计](docs/测试房间功能设计.md) | 统一文档（设计定稿 v1.0）：开始界面直接进入、随时更改一切的完整沙盒，含冻结接口/DTO、容量与单步、覆盖层 schema、G7 级界面、检查点/重放与 TR-AC；首版战斗沙盒已实施，剩余能力见实现记录 |
@@ -128,6 +130,8 @@
 
 ## 启动与核验
 
+主程序已发布到 `https://47.93.245.237/`，提供账号与游客登录。启动方式及管理员信息见[程序启动指南](docs/程序启动指南.md)。
+
 使用 Godot `4.7.2.stable`（本机版本串 `4.7.2.stable.official.ed1daf0bf`）。2026-11-01 的实测记录使用 `D:\Godot\Godot_v4.7.2-stable_win64_console.exe`；2026-11-03 本机当前可运行路径为 `D:\chrome\godot\Godot_v4.7.2-stable_win64_console.exe`。`tools/verify_*.ps1` 的内置搜索路径仍为 `F:\GoDot`、`D:\Godot`、`C:\Godot` 与 `godot` 命令；在本机用 `GODOT_BIN` 或 `-GodotPath` 显式指定当前路径。
 
 本轮文档核对已重新执行导入、规则/UI、主入口与预期失败探针，见[本次验证](artifacts/verification/docs-refresh-20261104/runtime-review.json)。
@@ -159,7 +163,7 @@ godot --headless --path . --import
 sh tools/export_web.sh dist/web
 ```
 
-将 `dist/web` 中的构建产物复制到 `/var/www/kapai001/releases/<版本>`，并将 `/var/www/kapai001/current` 链接到该版本。将 [Nginx 配置](tools/kapai001.nginx.conf) 安装到 `/etc/nginx/conf.d/`，执行 `nginx -t` 与 `systemctl enable --now nginx`。Nginx 已运行时执行 `systemctl reload nginx`。本机试玩地址为 `http://127.0.0.1:18080/`。公网部署需要在外网可达的 HTTPS 站点提供同一构建目录。
+将构建产物放入 `/var/www/kapai001/releases/<版本>`，并将 `/var/www/kapai001/current` 原子切换到已验证版本。当前公网通过 [HTTPS 与 API 网关配置](server/deploy/kapai-production.nginx.conf) 提供游戏和同源账号服务，地址为 `https://47.93.245.237/`。生产服务配置和发布步骤见[启动指南](docs/程序启动指南.md)与[发布记录](docs/plans/2026-11-21-production-accounts-release.md)。 当前主菜单将登录状态置于右上角，游戏记录与管理统计单列，云同步在设置与存档中；退出游戏与退出登录分开。[入口与行为](docs/plans/2026-11-21-menu-account-layout.md)；右上角紧凑身份和游戏记录的当前视觉见[修订与实渲](docs/plans/2026-11-21-account-records-polish.md)
 
 随游戏包发布的简体中文字体采用 SIL OFL 1.1。字体来源见 [Noto Sans CJK 2.004](https://github.com/notofonts/noto-cjk/tree/Sans2.004/Sans) 和 [Noto Serif CJK 2.003](https://github.com/notofonts/noto-cjk/tree/Serif2.003/Serif)。
 

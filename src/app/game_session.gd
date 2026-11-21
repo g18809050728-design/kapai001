@@ -1,6 +1,10 @@
 class_name GameSession
 extends Node
 
+signal checkpoint_saved(slot: String, snapshot: Dictionary)
+signal checkpoint_priority
+signal run_recorded(kind: String, run: Dictionary, detail: Dictionary)
+
 const BATTLE_ACTIONS := [&"play_card", &"end_turn", &"confirm_choice", &"set_ally_target"]
 const NEW_RUN_MANIFEST := RelicPilot.ROSTER
 const PRODUCTION_MANIFESTS := ["campus_mvp", "campus_v3", "campus_four_year", RelicPilot.ROSTER]
@@ -18,6 +22,7 @@ var _run_service: RunService
 var _battle_engine: BattleEngine
 var _state: SessionState
 var _store: SaveStore
+var _device_store: SaveStore
 var _catalog_factory: Callable
 var _autosave: bool = true
 var _audio_settings := {"Master": 100, "Music": 70, "Ambience": 50, "SFX": 80, "UI": 70, "muted": false}
@@ -31,6 +36,7 @@ var _relic_pilot := false
 func _init(store: SaveStore = null, catalog_factory: Callable = Callable(), relic_pilot: bool = false) -> void:
 	_relic_pilot = relic_pilot
 	_store = store if store != null else SaveStore.new("user://relic_pilot/saves" if relic_pilot else "user://saves")
+	_device_store = _store
 	_catalog_factory = catalog_factory
 	var settings := _store.load("settings")
 	if settings.ok:
@@ -118,7 +124,7 @@ func start_run(request: StartRunRequest) -> ActionResult:
 	if not prepared.ok:
 		return ActionResult.rejected(prepared.error, get_view())
 	_activate_run(prepared.data)
-	return _accepted(prepared.data.events)
+	return _accepted(prepared.data.events, {}, true)
 
 
 func restart_run(request: StartRunRequest, confirmed: bool = false) -> ActionResult:
@@ -142,6 +148,7 @@ func restart_run(request: StartRunRequest, confirmed: bool = false) -> ActionRes
 	result.events.assign(prepared.data.events)
 	result.persistence = GameConstants.PERSISTENCE_SAVED
 	result.archived_save_path = merged.data if merged.data is String else ""
+	_record_run_events(result.events, true)
 	return result
 
 
@@ -214,7 +221,7 @@ func _merge_previous_summary() -> GameResult:
 	if not merged.ok:
 		return merged
 	var encoded := SnapshotCodec.encode_document("profile", merged.data)
-	return _store.save("profile", encoded.data) if encoded.ok else encoded
+	return _write_checkpoint("profile", encoded.data) if encoded.ok else encoded
 
 
 func _archive_unreadable_run(result: GameResult) -> GameResult:
@@ -334,7 +341,7 @@ func submit(context: CommandContext, action: GameAction) -> ActionResult:
 	return _accepted(events, labels)
 
 
-func save_current() -> GameResult:
+func save_current(immediate: bool = true) -> GameResult:
 	if _state == null:
 		return _failure(GameConstants.ERROR_RUN_NOT_FOUND, "error.run.not_found")
 	if _state != null and _state.pending_choice != null:
@@ -352,7 +359,26 @@ func save_current() -> GameResult:
 	result.profile_cleanup = StringName(committed.data.profile_cleanup)
 	result.profile_error = committed.data.profile_error
 	result.cleanup_error = committed.data.cleanup_error
+	if immediate:
+		checkpoint_priority.emit()
 	return GameResult.success(result)
+
+
+func has_unsaved_progress() -> bool:
+	if _state == null:
+		return false
+	if _state.pending_choice != null or _state.profile_merge_pending:
+		return true
+	var encoded := SnapshotCodec.encode_session(_state, _catalog.get_info())
+	var saved := _store.load("current_run")
+	return not encoded.ok or not saved.ok or not SnapshotCodec.checksum_matches(saved.data) or encoded.data.checksum != saved.data.checksum
+
+
+func get_game_records() -> GameResult:
+	var profile := _read_profile()
+	if not profile.ok:
+		return profile
+	return GameResult.success(profile.data.summaries_by_run_id.values().duplicate(true))
 
 
 func save_and_exit() -> GameResult:
@@ -406,7 +432,7 @@ func update_settings(settings: Variant) -> GameResult:
 	var encoded := SnapshotCodec.encode_document("settings", candidate)
 	if not encoded.ok:
 		return encoded
-	var saved := _store.save("settings", encoded.data)
+	var saved := _device_store.save("settings", encoded.data)
 	if not saved.ok:
 		return saved
 	_autosave = candidate.autosave
@@ -557,7 +583,82 @@ func _save_state(state: SessionState, catalog: ContentDB = null) -> GameResult:
 	var checked := SnapshotCodec.decode_session(encoded.data, catalog)
 	if not checked.ok:
 		return checked
-	return _store.save("current_run", encoded.data)
+	return _write_checkpoint("current_run", encoded.data)
+
+
+func _write_checkpoint(slot: String, snapshot: Dictionary) -> GameResult:
+	var result := _store.save(slot, snapshot)
+	if result.ok and checkpoint_saved.has_connections():
+		checkpoint_saved.emit(slot, snapshot)
+	return result
+
+
+func _record_run_events(events: Array[RuleEvent], starting: bool = false) -> void:
+	if _relic_pilot or not run_recorded.has_connections():
+		return
+	var info := _catalog.get_info()
+	var run := {
+		"run_id": _state.run.run_id,
+		"character_id": _state.run.character_id,
+		"difficulty": _state.run.difficulty,
+		"manifest_id": info.id,
+		"game_version": info.content_version,
+	}
+	if starting:
+		run_recorded.emit("start", run, {})
+	for event in events:
+		match event.type:
+			&"battle_finished":
+				if _state.run.settled_battle_ids.size() == 1:
+					run_recorded.emit("first_battle", run, {"result": event.data.result})
+			&"run_finished":
+				if _state.terminal_summary != null:
+					run_recorded.emit("finish", run, {
+						"result": _state.terminal_summary.result,
+						"reason": _state.terminal_summary.reason,
+						"ending_id": _state.terminal_summary.ending_id,
+						"term": _state.terminal_summary.term,
+					})
+			&"node_completed", &"year_reward_created", &"year_advanced":
+				run_recorded.emit("checkpoint", run, {})
+
+
+func use_account_storage(account_id: String) -> bool:
+	if _state != null or has_test_room() or _relic_pilot:
+		return false
+	_store = _device_store if account_id.is_empty() else SaveStore.new("user://accounts/%s/saves" % account_id, true)
+	_last_receipt = null
+	_profile_status = {}
+	return true
+
+
+func cloud_snapshot(slot: String, guest: bool = false, backup: bool = false) -> GameResult:
+	var store := _device_store if guest else _store
+	return store.load_backup(slot) if backup else store.load(slot)
+
+
+func restore_cloud_snapshot(slot: String, snapshot: Dictionary) -> GameResult:
+	if _state != null or _store == _device_store or _relic_pilot:
+		return _failure(GameConstants.ERROR_INVALID_ARGUMENT, "error.save.cloud_session_active")
+	if slot == "current_run":
+		var check := _decode_saved_run(snapshot)
+		if not check.ok:
+			return check
+	elif slot == "profile":
+		var check := SnapshotCodec.decode_document(snapshot, "profile")
+		if not check.ok:
+			return check
+		if not ProfileMerge.validate(check.data.payload).is_empty():
+			return _failure(GameConstants.ERROR_SAVE_CORRUPT, "error.profile.invalid")
+	else:
+		return _failure(GameConstants.ERROR_INVALID_ARGUMENT, "error.save.cloud_slot")
+	var original := _store.load(slot)
+	if not original.ok and original.error.code != GameConstants.ERROR_SAVE_NOT_FOUND:
+		return original
+	var saved := _store.save(slot, snapshot)
+	if saved.ok:
+		_last_receipt = null
+	return saved
 
 
 func _read_profile() -> GameResult:
@@ -604,7 +705,7 @@ func _commit_pending_profile(defer_cleanup: bool = false) -> GameResult:
 	)
 	if merged.ok:
 		var encoded := SnapshotCodec.encode_document("profile", merged.data)
-		merged = _store.save("profile", encoded.data) if encoded.ok else encoded
+		merged = _write_checkpoint("profile", encoded.data) if encoded.ok else encoded
 	if not merged.ok:
 		status.profile_error = merged.error
 		_set_profile_status(status)
@@ -668,7 +769,7 @@ func _publish_run_step(working: SessionState, step: RunStep) -> void:
 		working.profile_merge_pending = true
 
 
-func _accepted(events: Array[RuleEvent], labels: Dictionary = {}) -> ActionResult:
+func _accepted(events: Array[RuleEvent], labels: Dictionary = {}, starting: bool = false) -> ActionResult:
 	for index in events.size():
 		var event := events[index]
 		event.index = index
@@ -694,7 +795,7 @@ func _accepted(events: Array[RuleEvent], labels: Dictionary = {}) -> ActionResul
 	result.profile_merge = &"pending" if _state.profile_merge_pending else &"not_pending"
 	result.profile_cleanup = &"pending" if _state.profile_merge_pending else &"not_needed"
 	if result.stable and _autosave:
-		var saved := save_current()
+		var saved := save_current(false)
 		if saved.ok:
 			result.persistence = GameConstants.PERSISTENCE_SAVED
 			result.profile_merge = saved.data.profile_merge
@@ -705,6 +806,7 @@ func _accepted(events: Array[RuleEvent], labels: Dictionary = {}) -> ActionResul
 			result.persistence = GameConstants.PERSISTENCE_FAILED
 			result.save_error = saved.error
 		result.view = get_view()
+	_record_run_events(events, starting)
 	return result
 
 

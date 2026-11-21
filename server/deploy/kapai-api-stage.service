@@ -1,0 +1,22 @@
+[Unit]
+Description=Kapai staging account and cloud API
+After=kapai-mysql.service
+Wants=kapai-mysql.service
+
+[Service]
+Type=simple
+DynamicUser=yes
+StateDirectory=kapai-account-stage
+StateDirectoryMode=0700
+WorkingDirectory=/opt/kapai001/server
+EnvironmentFile=/etc/kapai001/stage-app.env
+EnvironmentFile=/etc/kapai001/stage-api.env
+ExecStart=/opt/kapai-api-venv/bin/uvicorn kapai.main:api --host 127.0.0.1 --port 18444 --proxy-headers --forwarded-allow-ips=127.0.0.1 --no-access-log
+Restart=on-failure
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+NoNewPrivileges=yes
+
+[Install]
+WantedBy=multi-user.target

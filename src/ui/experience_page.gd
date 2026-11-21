@@ -315,10 +315,19 @@ func _event_needs_confirmation(option: Dictionary) -> bool:
 func _render_menu() -> void:
 	reset_page("DDL 战争", "把校园日常，打成自己的牌。")
 	_scroll.follow_focus = true
+	body.add_theme_constant_override("separation", 8)
 	var compact := UiStyle.short_web(size)
 	var title_label := header.get_child(0) as Label
 	title_label.add_theme_font_size_override("font_size",roundi((40 if compact else 64)*UiStyle.text_scale))
-	add_text(body,"饰品试玩 · 24 件 · 独立存档" if view.get("relic_pilot", false) else "四学年 · 校园卡牌冒险",16,UiStyle.BRASS)
+	var account_state := str(view.get("account_state", ""))
+	if not account_state.is_empty():
+		_add_menu_identity(account_state)
+	var description := "四学年 · 校园卡牌冒险"
+	if view.get("relic_pilot", false):
+		description = "饰品试玩 · 24 件 · 独立存档"
+	elif account_state == "guest":
+		description = "游客 · 进度保存在此浏览器"
+	add_text(body, description, 16, UiStyle.BRASS)
 	var options: Control = body
 	if compact:
 		var grid := GridContainer.new()
@@ -328,32 +337,127 @@ func _render_menu() -> void:
 		body.add_child(grid)
 		options = grid
 
-	var resume := add_button(options,"menu:continue","继续冒险",_ui("continue"))
-	resume.disabled = not bool(view.get("has_active_session",false)) and not bool(view.get("can_continue",false))
-	if resume.disabled:
-		resume.tooltip_text = str(view.get("save_error",""))
-		if resume.tooltip_text.is_empty():
-			resume.tooltip_text = "还没有可以继续的冒险。"
-		if not compact:
-			add_text(body,resume.tooltip_text,14,UiStyle.MUTED)
-	add_button(options,"menu:new","新的四年",_ui("new_run"))
-	add_button(options,"menu:compendium","图鉴",_ui("compendium"))
-	add_button(options,"menu:text_editor","文本编辑",_ui("text_editor"))
-	add_button(options,"menu:test","测试房间",_ui("test_room"))
+	if account_state in ["", "ready", "guest"]:
+		var resume := add_button(options,"menu:continue","继续冒险",_ui("continue"))
+		resume.disabled = not bool(view.get("has_active_session",false)) and not bool(view.get("can_continue",false))
+		if resume.disabled:
+			resume.tooltip_text = str(view.get("save_error",""))
+			if resume.tooltip_text.is_empty():
+				resume.tooltip_text = "还没有可以继续的冒险。"
+		add_button(options,"menu:new","新的四年",_ui("new_run"))
+		add_button(options,"menu:compendium","图鉴",_ui("compendium"))
+		add_button(options,"menu:records","游戏记录",_ui("records"))
+		if account_state == "ready" and bool(view.get("team_tools_available", false)):
+			add_button(options,"menu:admin","管理统计",_ui("web_stats"))
+		if bool(view.get("team_tools_available", true)):
+			add_button(options,"menu:text_editor","文本编辑",_ui("text_editor"))
+			add_button(options,"menu:test","测试房间",_ui("test_room"))
+	elif account_state in ["login", "unavailable"]:
+		add_button(options, "menu:account", "重新连接" if account_state == "unavailable" else "登录", _ui("web_account"))
+		if account_state == "login" and bool(view.get("registration_available", false)):
+			add_button(options, "menu:register", "创建账号", _ui("web_register"))
+		add_button(options, "menu:guest", "游客登录", _ui("web_guest"))
 	add_button(options,"menu:settings","设置与存档",_ui("settings"))
-	for uid in ["menu:continue","menu:new","menu:compendium","menu:text_editor","menu:test","menu:settings"]:
+	add_button(options,"menu:quit","退出游戏",_ui("quit"))
+	for uid in ["menu:continue","menu:new","menu:compendium","menu:records","menu:admin","menu:text_editor","menu:test","menu:settings","menu:account","menu:register","menu:guest","menu:quit"]:
+		if not _buttons.has(uid):
+			continue
 		var option: Button = _buttons[uid]
 		option.alignment = HORIZONTAL_ALIGNMENT_LEFT
-		option.custom_minimum_size = Vector2(108,UiStyle.MOBILE_TARGET if UiStyle.web_touch else 44) if compact else Vector2(220,52)
+		option.custom_minimum_size = Vector2(108,UiStyle.MOBILE_TARGET if UiStyle.web_touch else 44) if compact else Vector2(220,44)
 		option.add_theme_font_override("font",UiStyle.title_font())
 		option.add_theme_font_size_override("font_size",roundi((19 if compact else 25)*UiStyle.text_scale))
 		for state in ["normal","hover","pressed","focus","disabled"]:
 			option.add_theme_stylebox_override(state,StyleBoxEmpty.new())
 		option.add_theme_color_override("font_hover_color",Color("ffe6a0"))
+	if account_state == "checking":
+		add_text(body, "正在确认登录状态…", 16, UiStyle.MUTED)
+	elif not str(view.get("account_message", "")).is_empty():
+		add_text(body, str(view.account_message), 16, UiStyle.MUTED)
 	if bool(view.get("has_active_session",false)):
 		add_text(body,"当前冒险已保留。",14,UiStyle.MUTED)
 	if not str(view.get("save_error","")).is_empty():
 		add_text(body,"存档暂时不可用："+str(view.save_error),14,UiStyle.RED)
+
+
+func _add_menu_identity(state: String) -> void:
+	var nickname := str(view.get("account_name", "")) if state == "ready" else str({"guest": "游客", "checking": "正在连接", "unavailable": "重新连接", "bundle_unavailable": "账号暂不可用"}.get(state, "登录账号"))
+	var status := str({"ready": "已登录", "guest": "本机存档", "checking": "确认登录状态", "unavailable": "账号服务暂不可用", "bundle_unavailable": "请刷新页面"}.get(state, "同步你的冒险"))
+	var account := add_button(self, "menu:identity", nickname + " · " + status, _ui("web_account"))
+	account.tooltip_text = nickname + " · " + status + "\n账号与退出登录" if state in ["ready", "guest"] else nickname
+	account.clip_text = true
+	account.autowrap_mode = TextServer.AUTOWRAP_OFF
+	account.disabled = state in ["checking", "bundle_unavailable"]
+	var height := maxf(52, 34 * UiStyle.text_scale + 12)
+	var text_width := account.get_theme_font("font").get_string_size(nickname, HORIZONTAL_ALIGNMENT_LEFT, -1, roundi(15 * UiStyle.text_scale)).x
+	var width := minf(size.x * .39, clampf(text_width + 100, 174, 280))
+	account.custom_minimum_size = Vector2(0, height)
+	account.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
+	account.offset_left = -width - 24
+	account.offset_right = -24
+	account.offset_top = 16
+	account.offset_bottom = 16 + height
+	for key in ["normal", "hover", "pressed", "hover_pressed", "focus", "disabled"]:
+		var skin := UiStyle.surface(Color("13252b", .86), Color("c9b58e", .26), 9)
+		skin.shadow_size = 6
+		skin.shadow_color = Color(0, 0, 0, .16)
+		if key in ["hover", "hover_pressed", "pressed"]:
+			skin.bg_color = Color("243a40", .96)
+			skin.border_color = Color("d5bd91", .65)
+		if key == "focus":
+			skin.bg_color = Color.TRANSPARENT
+			skin.border_color = Color("f2d69d")
+		account.add_theme_stylebox_override(key, skin)
+	for key in ["font_color", "font_hover_color", "font_pressed_color", "font_focus_color", "font_disabled_color", "font_shadow_color"]:
+		account.add_theme_color_override(key, Color.TRANSPARENT)
+	var inset := MarginContainer.new()
+	inset.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	account.add_child(inset)
+	inset.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	for side in ["left", "right"]:
+		inset.add_theme_constant_override("margin_" + side, 12)
+	var row := HBoxContainer.new()
+	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_theme_constant_override("separation", 10)
+	inset.add_child(row)
+	var avatar := PanelContainer.new()
+	avatar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	avatar.custom_minimum_size = Vector2(32, 32)
+	avatar.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	var avatar_skin := UiStyle.surface(Color("31454a"), Color("718075", .3), 16)
+	avatar_skin.set_content_margin_all(6)
+	avatar_skin.shadow_size = 0
+	avatar.add_theme_stylebox_override("panel", avatar_skin)
+	row.add_child(avatar)
+	var icon := TextureRect.new()
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon.texture = UiNavIcon.texture("account")
+	icon.custom_minimum_size = Vector2(20, 20)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	avatar.add_child(icon)
+	var words := VBoxContainer.new()
+	words.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	words.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	words.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	words.add_theme_constant_override("separation", 1)
+	row.add_child(words)
+	var name_label := add_text(words, nickname, 15, UiStyle.CREAM)
+	name_label.autowrap_mode = TextServer.AUTOWRAP_OFF
+	name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	name_label.clip_text = true
+	name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var state_label := add_text(words, ("●  " if state == "ready" else "") + status, 11, Color("a6bda8") if state == "ready" else Color("9daeb0"))
+	state_label.autowrap_mode = TextServer.AUTOWRAP_OFF
+	state_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	state_label.clip_text = true
+	state_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var chevron := add_text(row, "›", 20, Color("b5ad9b"))
+	chevron.size_flags_horizontal = Control.SIZE_SHRINK_END
+	chevron.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	chevron.autowrap_mode = TextServer.AUTOWRAP_OFF
+	chevron.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	chevron.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 
 func _map_preview_node(node: Dictionary, reachable: Array) -> void:
@@ -1354,6 +1458,14 @@ func _render_settings() -> void:
 		button.reparent(actions)
 	_buttons["settings:restore_backup"].get_parent().get_parent().visible = _diagnostics
 	add_button(header, "settings:diagnostics", "收起存档诊断" if _diagnostics else "查看存档诊断 / 恢复备份", {}, func(): _diagnostics = not _diagnostics; refresh_local())
+	if bool(view.get("web_privacy_available", false)):
+		add_button(body, "settings:web_privacy", "隐私设置", _ui("web_privacy"))
+	if view.get("account_state", "") == "ready":
+		var cloud := add_panel(body)
+		add_text(cloud, "云存档", 23)
+		add_text(cloud, "同步当前冒险和个人进度，处理设备冲突或恢复上一份云端备份。", 17)
+		add_button(cloud, "settings:cloud", "云存档 · 同步与恢复", _ui("web_saves"))
+		body.move_child(cloud.get_parent(), 0)
 	_presentation = _dict(view.get("settings")).get("presentation", {"text_scale": 100, "reduced_motion": false, "animation_speed": 1}).duplicate(true) if _presentation.is_empty() else _presentation
 	var panel := add_panel(body)
 	body.move_child(panel.get_parent(), 0)

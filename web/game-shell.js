@@ -1,6 +1,22 @@
 'use strict';
 
 const canvas = document.getElementById('canvas');
+window.kapaiExitGame = () => {
+  canvas.inert = true;
+  const exit = document.createElement('section');
+  exit.id = 'game-exit';
+  const heading = document.createElement('h1');
+  heading.textContent = '已退出游戏';
+  const message = document.createElement('p');
+  message.textContent = '可以关闭此页面，或重新进入游戏。';
+  const restart = document.createElement('button');
+  restart.type = 'button';
+  restart.textContent = '重新进入游戏';
+  restart.addEventListener('click', () => location.reload());
+  exit.append(heading, message, restart);
+  document.getElementById('game-frame').append(exit);
+  restart.focus();
+};
 const viewport = document.querySelector('meta[name="viewport"]');
 viewport.content = 'width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no, interactive-widget=resizes-visual';
 document.documentElement.lang = 'zh-CN';
