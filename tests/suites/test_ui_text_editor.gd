@@ -12,13 +12,13 @@ func run() -> Array[String]:
 	var tree := Engine.get_main_loop() as SceneTree
 	var old_size := tree.root.size
 	_previous_path = TextOverrides.current_path()
-	_path = "user://text-editor-test-%s-%s.json" % [OS.get_process_id(), Time.get_ticks_usec()]
+	_path = "user://text-entity-test-%s-%s.json" % [OS.get_process_id(), Time.get_ticks_usec()]
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(_path))
 	TextOverrides.use_path(_path)
 	_catalog = ContentDB.new("res://data/four_year")
 	_check(_catalog.load("campus_four_year").ok, "real production catalogue loads")
-	var built := TextLibrary.build(_catalog)
-	_check(built.ok, "text library builds from production data")
+	var built := TextEntityLibrary.build(_catalog)
+	_check(built.ok, "entity library builds from production data")
 	if built.ok:
 		_check_library(built.data)
 		await _exercise_ui(built.data)
@@ -32,64 +32,73 @@ func run() -> Array[String]:
 	var report := {
 		"checks": _checks,
 		"failures": _failures,
-		"entries": built.data.counts if built.ok else {},
-		"scope": "actual main menu, production definitions, isolated text override file; no real save or player override file touched",
+		"entities": built.data.counts if built.ok else {},
+		"fields": built.data.field_count if built.ok else 0,
+		"scope": "entity-first main menu/editor, production definitions, isolated override file; no real save or player override file",
 	}
 	print("TEXT_EDITOR_CHECKS=", JSON.stringify(report))
 	return _failures
 
 
 func _check_library(data: Dictionary) -> void:
-	var entries: Array = data.get("entries", [])
+	var entities: Array = data.get("entities", [])
 	var counts: Dictionary = data.get("counts", {})
-	_check(entries.size() == int(counts.get("all", -1)), "counts cover every entry")
-	var label_total: int = UiStyle.LABELS.data.get("labels", {}).size() + 6
-	_check(int(counts.get("names", 0)) == label_total, "all JSON labels plus six built-in words are present")
-	_check(int(counts.get("story", 0)) == 34, "all story title/location/narrative/option fields are present")
-	_check(int(counts.get("glossary", 0)) == UiGlossary.ENTRIES.size() * 4, "all glossary fields are present")
-	var compendium := CompendiumView.build(_catalog)
-	_check(compendium.ok, "production card faces resolve for description defaults")
-	if compendium.ok:
-		var variants := 0
-		for card in compendium.data.cards:
-			for variant in card.variants:
-				if not bool(variant.get("exam", false)):
-					variants += 1
-		var relic_count := _catalog.get_candidates({"kind": "relic"}).size()
-		var passive_count := _catalog.get_candidates({"kind": "character"}).size()
-		_check(
-			int(counts.get("descriptions", 0)) == variants * 2 + relic_count + passive_count,
-			"every base/upgraded card detail, battle detail, relic and passive description exists"
-		)
-	var seen: Dictionary = {}
-	for entry in entries:
-		var uid := str(entry.get("uid", ""))
-		_check(not uid.is_empty(), "entry uid is non-empty")
-		_check(not seen.has(uid), "entry uid is unique: " + uid)
-		seen[uid] = true
-		_check(entry.get("default") is String, "entry default is a string: " + uid)
-		_check(not str(entry.get("default", "")).is_empty(), "entry default is readable: " + uid)
-		_check(not str(entry.get("title", "")).is_empty(), "entry has a browsing title: " + uid)
-	for id in _catalog.get_candidates({"kind": "card"}):
-		_check(seen.has("card:%s:0:detail" % id), "card base detail exists: " + str(id))
-		_check(seen.has("card:%s:0:battle" % id), "card base battle detail exists: " + str(id))
-	for id in _catalog.get_candidates({"kind": "relic"}):
-		_check(seen.has("relic:" + str(id)), "relic description exists: " + str(id))
-	for id in _catalog.get_candidates({"kind": "character"}):
-		var definition: Dictionary = _catalog.get_definition("character", id).data
-		var passive_id := str(definition.get("passive", {}).get("id", ""))
-		_check(seen.has("passive:" + passive_id), "passive description exists: " + passive_id)
-	_check(seen.has("label:P01") and seen.has("label:R3-C-01"), "label entries use stable definition IDs")
-	_check(seen.has("story:events.V01.narrative"), "event narrative entry exists")
-	_check(seen.has("glossary:focus.body"), "glossary body entry exists")
-	_check(UiStyle.label("P01") == "林序", "clean library does not change normal labels")
-	_check(UiStyle.label("status.inspiration.name") == "灵感", "dotted status keys keep their canonical fallback")
-	_check(UiStyle.label("task.n01.intent.pressure5") == "施加压力", "dotted task intent keys still resolve")
+	_check(entities.size() == 506, "entity count is exact")
+	_check(int(counts.get("cards", 0)) == 174, "174 card entities")
+	_check(int(counts.get("relics", 0)) == 16, "16 relic entities")
+	_check(int(counts.get("characters", 0)) == 4, "4 character entities")
+	_check(int(counts.get("stories", 0)) == 11, "11 story entities")
+	_check(int(counts.get("glossary", 0)) == 44, "44 glossary entities")
+	_check(int(counts.get("monsters", 0)) == 60, "60 monster entities")
+	_check(int(counts.get("terms", 0)) == 197, "197 fallback name entities")
+	_check(int(data.get("field_count", 0)) == 1513, "1513 logical fields")
+	_check(int(data.get("uid_count", 0)) == 1534, "1534 backing UIDs")
+	_check(int(data.get("source_uid_count", 0)) == 1522, "1522 original library UIDs are retained")
+	var by_id: Dictionary = {}
+	var by_uid: Dictionary = {}
+	for entity in entities:
+		var id := str(entity.id)
+		_check(not id.is_empty(), "entity id is non-empty")
+		_check(not by_id.has(id), "entity id is unique: " + id)
+		by_id[id] = entity
+		_check(not entity.fields.is_empty(), "entity has fields: " + id)
+		for field in entity.fields:
+			_check(not str(field.key).is_empty(), "field key is set: " + id)
+			_check(not field.uids.is_empty(), "field has UIDs: " + id)
+			_check(field.default is String, "field default is a string: " + id)
+			for uid in field.uids:
+				by_uid[uid] = field
+	for uid in TextLibrary.build(_catalog).data.entries:
+		_check(by_uid.has(uid.uid), "every original UID belongs to a field: " + uid.uid)
+	var card: Dictionary = by_id["card:R3-C-01"]
+	_check(card.fields.size() == 5, "card entity exposes name, detail/battle base/upgrade")
+	_check(str(card.meta.owner) == "C", "card metadata keeps owner for filtering")
+	var story: Dictionary = by_id["story:events.V01"]
+	_check(story.fields.size() >= 6, "event entity exposes title/location/narrative/options")
+	var title_field: Dictionary = _field_for_uid(story, "label:V01")
+	_check(not title_field.is_empty() and title_field.uids.has("story:events.V01.title"), "event title aliases label and story title")
+	var glossary: Dictionary = by_id["glossary:focus"]
+	var name_field: Dictionary = _field_for_uid(glossary, "glossary:focus.name")
+	_check(not name_field.is_empty() and name_field.uids.has("label:focus"), "glossary name aliases shared label")
+	var option_field: Dictionary = _field_for_uid(story, "story:events.V01.option_titles.leave")
+	_check(not option_field.is_empty(), "all event options have editable fields")
+	var monster: Dictionary = by_id["monster:N03"]
+	_check(monster.fields.size() >= 2, "monster entity exposes name and intent labels")
+	_check(_field_for_uid(monster, "label:N03").uids.has("label:N03"), "monster name maps to its label")
+	_check(by_id.has("term:N03") == false, "monster name is no longer in the other bucket")
+	_check(by_id.has("term:K01"), "unmapped legacy labels are preserved as fallback entities")
+
+
+func _field_for_uid(entity: Dictionary, uid: String) -> Dictionary:
+	for field in entity.fields:
+		if field.uids.has(uid):
+			return field
+	return {}
 
 
 func _session() -> GameSession:
 	var session := GameSession.new(
-		SaveStore.new("user://text-editor-saves-%s-%s" % [OS.get_process_id(), Time.get_ticks_usec()])
+		SaveStore.new("user://text-entity-saves-%s-%s" % [OS.get_process_id(), Time.get_ticks_usec()])
 	)
 	_check(
 		session.update_settings(
@@ -110,30 +119,30 @@ func _exercise_ui(data: Dictionary) -> void:
 	var shell: GameShell = _helpers.attach_shell(session)
 	await _frames()
 	var before := SnapshotCodec.canonical_json(session.get_view().to_dictionary())
-	_check(shell.page._buttons.has("menu:text_editor"), "main menu exposes the text editor entry")
-	_check(shell.press("menu:text_editor"), "main menu entry opens through the real button")
+	_check(shell.press("menu:text_editor"), "main menu opens the entity editor")
 	await _frames()
-	_check(shell.page is UiTextEditorPage, "installed page is the text editor")
+	_check(shell.page is UiTextEditorPage, "entity editor page is installed")
 	var page: UiTextEditorPage = shell.page
-	_check(page.library.size() == data.entries.size(), "page receives the complete library")
-	_check(page.filtered.size() == data.entries.size(), "unfiltered view exposes every entry")
-	_check(page.visible_entries.size() == UiTextEditorPage.BATCH_SIZE, "continuous list starts with one batch")
-	_check(page._buttons.has("text_editor:save"), "save action is visible")
-	_check(page._buttons.has("text_editor:back"), "back action is visible")
-	_check(page._buttons["text_editor:save"].size.y >= 44, "save target is at least 44 pixels")
+	_check(page.library.size() == data.entities.size(), "page receives all entities")
+	_check(page.counts == data.counts, "page counts are entity counts")
+	_check(page.filtered.size() == data.entities.size(), "all entities are initially browsable")
+	_check(page.selected_id == "card:R3-P01-09", "first entity is selected for immediate editing")
+	_check(page._field_blocks.size() == 5, "selected card exposes five field blocks")
+	_check(page._buttons.has("text_editor:save_entity"), "entity-level save is visible")
+	_check(page._buttons.has("text_editor:save"), "global save is visible")
 	_search_checks(page)
 	await _edit_checks(page, session, before)
 	await _reset_checks(page)
-	await _persistence_checks(page)
+	await _compat_checks(page)
 	await _guard_and_state_checks(shell, page)
 	await _layout_checks(shell, data)
 	await _frames()
 	var view := session.get_view()
-	_check(str(view.run_id) == "null" or view.run_id == null, "editor never starts a run")
-	_check(view.revision == 0, "editor never changes the domain revision")
+	_check(view.run_id == null, "editor does not start a run")
+	_check(view.revision == 0, "editor does not change the domain revision")
 	_check(
 		SnapshotCodec.canonical_json(view.to_dictionary()) == before,
-		"text edits do not mutate the session view"
+		"entity edits do not mutate the session view"
 	)
 	if shell.page is UiTextEditorPage:
 		shell.page._request_back()
@@ -142,260 +151,298 @@ func _exercise_ui(data: Dictionary) -> void:
 	await _frames()
 
 
-func _active_run_check() -> void:
-	var session := _session()
-	var started := session.start_run(StartRunRequest.new("P01", &"normal", "campus_four_year", "42"))
-	_check(started.accepted, "isolated active run starts for editor isolation")
-	if not started.accepted:
-		return
-	var before := SnapshotCodec.canonical_json(session.get_view().to_dictionary())
-	var shell: GameShell = _helpers.attach_shell(session)
-	await _frames()
-	_check(shell.press("menu:text_editor"), "editor opens while a run is active")
-	await _frames()
-	var page: UiTextEditorPage = shell.page
-	_check(page != null and page.select_entry("label:P01"), "active-run editor can select text")
-	page.set_editor_text("运行中测试")
-	page.save_changes()
-	_check(UiStyle.label("P01") == "运行中测试", "active-run edit updates display text")
-	_check(
-		SnapshotCodec.canonical_json(session.get_view().to_dictionary()) == before,
-		"editing with an active run preserves run, battle, RNG, revision and event log"
-	)
-	page._request_back()
-	await _frames()
-	shell.free()
-	await _frames()
-
-
 func _search_checks(page: UiTextEditorPage) -> void:
+	page.show_tab("cards")
 	page.search("R3-C-01")
-	_check(_has_uid(page, "label:R3-C-01"), "search finds a definition label by ID")
-	_check(_has_uid(page, "card:R3-C-01:0:detail"), "search finds card detail text by ID")
-	page.search("写作业")
-	_check(_has_uid(page, "label:R3-C-01"), "search finds a label by Chinese title")
+	_check(page.filtered.size() == 1, "exact card ID returns one entity")
+	_check(page.selected_id == "card:R3-C-01", "exact card search selects the entity")
+	_check(page._entity_modified_count(page._selected) == 0, "clean entity has no modified fields")
+	page.search("打出后按顺序")
+	_check(not page.filtered.is_empty(), "battle phrase returns owning card entities")
+	page.select_entity_matching("card:R3-P01-09")
+	_check(page.selected_id == "card:R3-P01-09", "field-matched entity is selected")
+	_check(str(page._expanded_field).ends_with(":battle_0"), "matched battle field is expanded")
+	page.search("")
+	page.set_filter("P01")
+	_check(not page.filtered.is_empty(), "owner filter returns cards")
+	for entity in page.filtered:
+		_check(str(entity.meta.owner) == "P01", "owner filter only returns Lin Xu cards")
+	page.set_filter("")
+	page.set_filter2("work")
+	for entity in page.filtered:
+		_check(str(entity.meta.card_type) == "work", "card type filter only returns work cards")
+	page.set_filter2("")
+	page.show_tab("stories")
+	page.search("")
+	_check(page.filtered.size() == 11, "story tab has event and room entities")
 	page.search("宿舍断电")
-	_check(_has_uid(page, "story:events.V04.narrative"), "search finds story text by title")
-	page.show_tab("story")
-	page.search("")
-	_check(page.filtered.size() == 34, "story tab contains all story fields")
-	_check(page.selected_uid.begins_with("story:"), "tab switch selects the first visible story entry")
-	page.search("断电")
-	_check(not page.filtered.is_empty(), "story tab intersects the query")
-	page.show_tab("names")
-	page.search("")
-	page.set_filter("人物")
-	_check(not page.filtered.is_empty(), "name category filter has character labels")
-	for entry in page.filtered:
-		_check(entry.category == "人物", "name filter only returns the chosen category")
-	page.set_filter("")
-	page.show_tab("descriptions")
-	page.set_filter("卡牌")
-	_check(not page.filtered.is_empty(), "description tab has card texts")
-	for entry in page.filtered:
-		_check(entry.category == "卡牌", "description filter only returns cards")
-	page.set_filter("")
+	_check(page.filtered.size() == 1 and str(page.selected_id).begins_with("story:events.V04"), "story search selects the event entity")
 	page.show_tab("glossary")
-	_check(page.filtered.size() == UiGlossary.ENTRIES.size() * 4, "glossary tab has every editable field")
-	page.search("definitely-no-text-editor-result")
-	_check(page.filtered.is_empty(), "empty search produces no entries")
-	_check(page.selected_uid.is_empty() and page.editor_text().is_empty(), "empty search clears the editor state")
-	_check(page._buttons.has("text_editor:back"), "empty results keep navigation")
 	page.search("")
-	page.show_tab("all")
-	page.select_entry("label:P03")
-	page.set_editor_text("独特检索测试")
-	page.search("独特检索测试")
-	_check(_has_uid(page, "label:P03"), "search also covers the current draft text")
-	page._undo_entry()
+	_check(page.filtered.size() == 44, "glossary tab has term entities")
+	page.search("专注")
+	_check(page.filtered.size() >= 1, "glossary search finds term entities")
+	page.show_tab("monsters")
 	page.search("")
+	_check(page.filtered.size() == 60, "monster tab has all monster entities")
+	page.search("C语言练习")
+	_check(page.filtered.size() == 1 and page.selected_id == "monster:N03", "monster name search selects its entity")
+	page.search("")
+	page.set_filter("boss")
+	_check(not page.filtered.is_empty(), "monster kind filter returns bosses")
+	for entity in page.filtered:
+		_check(str(entity.meta.kind) == "boss", "monster filter only returns bosses")
+	page.set_filter("")
+	page.show_tab("terms")
+	page.search("")
+	_check(page.filtered.size() == 197, "other tab keeps remaining legacy and shared label entities")
 	page.show_tab("all")
+	page.search("")
 
 
 func _edit_checks(page: UiTextEditorPage, session: GameSession, before: String) -> void:
-	_check(page.select_entry("label:P01"), "label entry is selectable")
-	_check(page.editor_text() == "林序", "real label text reaches the editor")
-	page.set_editor_text("林序·测试")
-	_check(page.dirty_count() == 1, "label edit is marked dirty")
-	page.save_changes()
-	_check(TextOverrides.text("label:P01", "") == "林序·测试", "label override is stored")
-	_check(UiStyle.label("P01") == "林序·测试", "label override applies to the live UI")
-	_check(page.dirty_count() == 0, "save clears the dirty state")
-	_check(FileAccess.file_exists(_path), "override file exists on disk")
+	page.show_tab("cards")
+	page.search("")
+	_check(page.select_entity("card:R3-C-01"), "card entity is selectable")
+	var keys: Array = page.entity_field_keys("card:R3-C-01")
+	_check(keys.size() == 5, "card field keys are complete")
+	var detail_key := "card:R3-C-01:detail_0"
+	var name_key := "card:R3-C-01:name"
+	var battle_key := "card:R3-C-01:battle_0"
+	page.expand_field(detail_key)
+	page.set_field_text(detail_key, "测试基础说明")
+	_check(page.dirty_count() == 1, "one field edit is one dirty field")
+	_check(page._entity_modified_count(page._selected) == 1, "entity shows one modified field")
+	_check(page.field_text(name_key) == "写作业", "editing a field leaves the name unchanged")
+	_check(not page.field_text(battle_key).is_empty(), "other card fields remain readable")
+	page.save_entity()
+	_check(TextOverrides.text("card:R3-C-01:0:detail", "") == "测试基础说明", "entity save writes the edited UID")
+	_check(page.dirty_count() == 0, "entity save clears its dirty state")
+	_check(TextOverrides.text("card:R3-C-01:1:detail", "") == "", "entity save does not write untouched variants")
+	var face := _resolve_card("R3-C-01")
+	_check(face.ok, "card face resolves")
+	if face.ok:
+		_check(UiContentText.describe_card(face.data) == "测试基础说明", "card override applies to the live description")
 	_check(
 		SnapshotCodec.canonical_json(session.get_view().to_dictionary()) == before,
-		"label edit leaves the session untouched"
+		"card entity edit leaves the session untouched"
 	)
-	page.show_tab("story")
-	_check(page.select_entry("story:events.V01.narrative"), "story entry is selectable")
-	page.set_editor_text("测试叙述\n第二段")
-	page.save_changes()
-	_check(
-		CampusRoomIllustration.narrative("E", "V01") == "测试叙述\n第二段",
-		"story override keeps line breaks and applies to the event narrative"
-	)
+	page.set_field_text(name_key, "测试卡牌名")
+	page.save_entity()
+	_check(UiStyle.label("R3-C-01") == "测试卡牌名", "card name field applies to labels")
 	page.show_tab("glossary")
-	_check(page.select_entry("glossary:focus.body"), "glossary entry is selectable")
-	page.set_editor_text("测试专注说明")
-	page.save_changes()
-	_check(UiGlossary.describe("focus").contains("测试专注说明"), "glossary override applies")
-	page.show_tab("descriptions")
-	_check(page.select_entry("card:R3-C-01:0:detail"), "card detail is selectable")
-	page.set_editor_text("测试卡牌说明")
-	page.save_changes()
-	var face := BattleCardRules.new(_catalog).resolve_face(
-		BattleState.new({"card_by_id": {"R3-C-01": {"definition_id": "R3-C-01", "upgrade_level": 0}}}),
-		"R3-C-01"
+	page.search("")
+	_check(page.select_entity("glossary:focus"), "glossary entity is selectable")
+	var glossary_name := "glossary:focus:name"
+	page.set_field_text(glossary_name, "测试专注")
+	page.save_entity()
+	_check(UiStyle.label("focus") == "测试专注", "glossary alias writes shared label")
+	_check(UiGlossary.label("focus") == "测试专注", "glossary alias writes glossary name")
+	_check(UiGlossary.describe("focus").begins_with("测试专注"), "glossary description uses the edited name")
+	page.show_tab("stories")
+	page.search("")
+	_check(page.select_entity("story:events.V01"), "event entity is selectable")
+	var story_title := "story:events.V01:title"
+	page.set_field_text(story_title, "测试事件标题")
+	page.save_entity()
+	_check(UiStyle.label("V01") == "测试事件标题", "event title alias writes label")
+	_check(CampusRoomIllustration.details("events", "V01").title == "测试事件标题", "event title alias writes story title")
+	var option_key := "story:events.V01:option_leave"
+	_check(page._field_blocks.has(option_key), "event option field exists")
+	page.set_field_text(option_key, "测试离开")
+	page.save_entity()
+	_check(
+		CampusRoomIllustration.option_title("V01", "leave", "fallback") == "测试离开",
+		"event option override applies to the event page caption"
 	)
-	_check(face.ok, "card face resolves for the override check")
-	if face.ok:
-		_check(UiContentText.describe_card(face.data) == "测试卡牌说明", "card detail override applies")
-	_check(page.select_entry("card:R3-C-01:0:battle"), "card battle detail is selectable")
-	page.set_editor_text("测试战斗说明")
-	page.save_changes()
-	if face.ok:
-		_check(
-			UiContentText.describe_battle_card(face.data) == "测试战斗说明",
-			"battle detail override applies without touching the face"
-		)
-	_check(page.select_entry("relic:FY_Y1_1"), "relic description is selectable")
-	page.set_editor_text("测试饰品说明")
-	page.save_changes()
-	var relic: Dictionary = _catalog.get_definition("relic", "FY_Y1_1").data
-	_check(UiContentText.describe_relic(relic) == "测试饰品说明", "relic override applies")
-	_check(page.select_entry("passive:r3_p01_link_replay"), "passive description is selectable")
-	page.set_editor_text("测试被动说明")
-	page.save_changes()
+	page.show_tab("relics")
+	page.search("")
+	_check(page.select_entity("relic:FY_Y1_1"), "relic entity is selectable")
+	page.set_field_text("relic:FY_Y1_1:description", "测试饰品说明")
+	page.save_entity()
+	_check(
+		UiContentText.describe_relic(_catalog.get_definition("relic", "FY_Y1_1").data) == "测试饰品说明",
+		"relic entity description applies"
+	)
+	page.show_tab("characters")
+	page.search("")
+	_check(page.select_entity("character:P01"), "character entity is selectable")
+	page.set_field_text("character:P01:passive", "测试被动说明")
+	page.save_entity()
 	_check(
 		UiContentText.describe_character_passive("r3_p01_link_replay") == "测试被动说明",
-		"passive override applies"
+		"character passive applies"
 	)
-	_check(TextOverrides.count() == 7, "seven independent overrides coexist")
+	page.show_tab("monsters")
+	page.search("")
+	_check(page.select_entity("monster:N03"), "monster entity is selectable")
+	page.set_field_text("monster:N03:name", "测试怪物名")
+	page.save_entity()
+	_check(UiStyle.label("N03") == "测试怪物名", "monster name applies to labels")
+	var intent_key := ""
+	for key in page.entity_field_keys("monster:N03"):
+		if str(key).ends_with(":intent_0"):
+			intent_key = str(key)
+			break
+	_check(not intent_key.is_empty(), "monster entity has intent fields")
+	if not intent_key.is_empty():
+		var intent_uid := str(page._field_blocks[intent_key].field.uids[0])
+		page.set_field_text(intent_key, "测试意图名")
+		page.save_entity()
+		_check(
+			UiStyle.label(intent_uid.trim_prefix("label:")) == "测试意图名",
+			"monster intent label applies to the shared intent text"
+		)
+
+
+func _resolve_card(id: String) -> GameResult:
+	return BattleCardRules.new(_catalog).resolve_face(
+		BattleState.new({"card_by_id": {id: {"definition_id": id, "upgrade_level": 0}}}),
+		id
+	)
 
 
 func _reset_checks(page: UiTextEditorPage) -> void:
-	page.show_tab("names")
-	page.select_entry("label:P01")
-	page._reset_entry()
-	page.save_changes()
-	_check(UiStyle.label("P01") == "林序", "single-entry reset restores the original label")
-	_check(TextOverrides.count() == 6, "single reset removes only one override")
+	page.show_tab("cards")
+	page.search("")
+	page.select_entity("card:R3-C-01")
+	page._reset_entity()
+	page.save_entity()
+	_check(UiStyle.label("R3-C-01") == "写作业", "entity reset restores card name")
+	_check(TextOverrides.text("card:R3-C-01:0:detail", "") == "", "entity reset clears card detail override")
+	page.show_tab("glossary")
+	page.search("")
+	page.select_entity("glossary:focus")
+	page._reset_entity()
+	page.save_entity()
+	_check(UiStyle.label("focus") == "专注" and UiGlossary.label("focus") == "专注", "glossary alias reset clears both UIDs")
 	page._request_reset_all()
 	page._request_reset_all()
-	page.save_changes()
-	_check(TextOverrides.count() == 0, "reset-all clears every override")
-	_check(CampusRoomIllustration.narrative("E", "V01").begins_with("最后一节课"), "story reset restores original text")
-	_check(UiGlossary.describe("focus").contains("每回合出牌的主要成本"), "glossary reset restores original text")
-	var face := BattleCardRules.new(_catalog).resolve_face(
-		BattleState.new({"card_by_id": {"R3-C-01": {"definition_id": "R3-C-01", "upgrade_level": 0}}}),
-		"R3-C-01"
-	)
-	if face.ok:
-		_check(
-			UiContentText.describe_card(face.data).begins_with("作业 · 专注"),
-			"card reset restores generated text"
-		)
+	page._save()
+	_check(TextOverrides.count() == 0, "global reset clears every override")
+	_check(CampusRoomIllustration.narrative("E", "V01").begins_with("最后一节课"), "global reset restores story")
+	_check(UiGlossary.describe("focus").contains("每回合出牌的主要成本"), "global reset restores glossary")
 
 
-func _persistence_checks(page: UiTextEditorPage) -> void:
-	page.show_tab("names")
-	page.select_entry("label:P01")
-	page.set_editor_text("持久化测试")
-	page.save_changes()
-	TextOverrides.use_path(_path)
-	TextOverrides.reload_from_disk()
-	_check(UiStyle.label("P01") == "持久化测试", "saved text survives a fresh load")
-	_check(TextOverrides.last_error().is_empty(), "valid override file loads without an error")
+func _compat_checks(page: UiTextEditorPage) -> void:
+	var original := {"label:P01": "旧档林序", "label:V01": "旧档事件"}
+	var error := TextOverrides.save_values(original)
+	_check(error.is_empty(), "legacy override file writes")
+	page.initial_state = {}
+	page.render(TextEntityLibrary.build(_catalog).data)
+	page.select_entity("character:P01")
+	_check(page.field_text("character:P01:name") == "旧档林序", "existing label override maps into character field")
+	_check(page._entity_modified_count(page._selected) == 1, "existing override is marked modified")
+	page._reset_entity()
+	page.save_entity()
+	_check(UiStyle.label("P01") == "林序", "migrated entity reset restores default")
 	var bad := _path + ".bad"
 	var file := FileAccess.open(bad, FileAccess.WRITE)
-	file.store_string("{not-json")
+	file.store_string("{bad")
 	file.close()
 	TextOverrides.use_path(bad)
-	_check(UiStyle.label("P01") == "林序", "corrupt override file falls back to original text")
+	_check(UiStyle.label("P01") == "林序", "corrupt override file falls back to default")
 	_check(not TextOverrides.last_error().is_empty(), "corrupt override file is reported")
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(bad))
 	TextOverrides.use_path(_path)
-	_check(UiStyle.label("P01") == "持久化测试", "valid file still loads after rejecting a corrupt one")
+	TextOverrides.reload_from_disk()
 
 
 func _guard_and_state_checks(shell: GameShell, page: UiTextEditorPage) -> void:
-	page.show_tab("names")
-	page.search("P01")
-	page.select_entry("label:P01")
-	page.set_editor_text("未保存内容")
+	page.show_tab("cards")
+	page.search("R3-C-01")
+	page.select_entity("card:R3-C-01")
+	page.set_field_text("card:R3-C-01:name", "未保存名称")
 	page._request_back()
-	_check(shell._ui_screen == "text_editor", "unsaved edit requires a second back action")
-	_check(page._exit_armed, "first back arms the discard warning")
+	_check(shell._ui_screen == "text_editor", "unsaved entity requires a second back action")
+	_check(page._exit_armed, "first back arms discard warning")
 	page._request_back()
 	await _frames()
-	_check(shell._ui_screen == "menu", "second back returns to the main menu")
-	_check(UiStyle.label("P01") == "持久化测试", "discarded draft did not change saved text")
-	_check(shell.press("menu:text_editor"), "editor reopens from the menu")
+	_check(shell._ui_screen == "menu", "second back returns to menu")
+	_check(UiStyle.label("R3-C-01") == "写作业", "discarding a draft does not save it")
+	_check(shell.press("menu:text_editor"), "entity editor reopens")
 	await _frames()
 	page = shell.page
-	_check(page.tab == "names" and page.query == "P01" and page.selected_uid == "label:P01", "tab, query and selection are restored")
-	page.show_tab("all")
+	_check(page.tab == "cards" and page.query == "R3-C-01" and page.selected_id == "card:R3-C-01", "tab/query/selection restore")
+	page.show_tab("stories")
 	page.search("")
-	await _frames()
-	page._left_scroll.scroll_vertical = 600
-	await _frames()
+	page.select_entity("story:events.V04")
+	page.expand_field("story:events.V04:narrative")
 	page._request_back()
 	await _frames()
-	_check(shell.press("menu:text_editor"), "editor reopens for scroll restore")
+	_check(shell.press("menu:text_editor"), "editor reopens for field state restore")
 	await _frames()
 	page = shell.page
-	_check(page.tab == "all" and page._left_scroll.scroll_vertical > 0, "list scroll position is restored")
-	page.show_tab("names")
+	_check(page.tab == "stories" and page.selected_id == "story:events.V04", "story selection restores")
+	_check(page._expanded_field == "story:events.V04:narrative", "expanded field restores")
+	page.show_tab("cards")
 	page.search("")
-	page.select_entry("label:P02")
-	page.set_editor_text("许知微·测试")
+	page.select_entity("card:R3-C-01")
+	page.set_field_text("card:R3-C-01:name", "CtrlS 名称")
 	var event := InputEventKey.new()
 	event.pressed = true
 	event.ctrl_pressed = true
 	event.keycode = KEY_S
 	page._input(event)
-	_check(TextOverrides.text("label:P02", "") == "许知微·测试", "Ctrl+S saves without a visible button press")
-	# Return to a clean editor state for the layout checks.
+	_check(UiStyle.label("R3-C-01") == "CtrlS 名称", "Ctrl+S saves the entity draft")
 	page._request_back()
 	await _frames()
 
 
 func _layout_checks(shell: GameShell, data: Dictionary) -> void:
 	var tree := Engine.get_main_loop() as SceneTree
+	var page := shell.page as UiTextEditorPage
 	for dimensions in [Vector2i(1280, 800), Vector2i(960, 600)]:
 		tree.root.size = dimensions
 		for scale in [100, 125, 150]:
 			UiStyle.text_scale = float(scale) / 100.0
 			if not (shell.page is UiTextEditorPage):
-				_check(shell.press("menu:text_editor"), "editor opens for layout check")
+				_check(shell.press("menu:text_editor"), "editor opens for layout")
 				await _frames()
-			var page: UiTextEditorPage = shell.page
+			page = shell.page
 			page.initial_state = {}
 			page.render(data)
+			page.show_tab("cards")
+			page.search("R3-C-01")
+			page.select_entity("card:R3-C-01")
+			page.expand_field("card:R3-C-01:detail_0")
 			await _frames()
 			_check(page.size.x > 0 and page.size.y > 0, "page lays out at %s / %d%%" % [str(dimensions), scale])
-			_check(
-				page._left_scroll.size.x > 0 and page._left_scroll.size.y > 0,
-				"list pane is visible at %s / %d%%" % [str(dimensions), scale]
-			)
-			_check(page._text_edit.size.y >= 140, "editor field is usable at %s / %d%%" % [str(dimensions), scale])
-			_check(page._buttons["text_editor:save"].size.y >= 44, "save remains at least 44px at %s / %d%%" % [str(dimensions), scale])
-			_check(page._buttons["text_editor:back"].size.y >= 44, "back remains at least 44px at %s / %d%%" % [str(dimensions), scale])
-			_check(page._buttons.has("text_editor:save"), "save action survives relayout")
-			page.search("")
-			page.show_tab("all")
-			_check(page.filtered.size() == data.entries.size(), "relayout keeps the full library searchable")
+			_check(page._left_scroll.size.x > 0 and page._left_scroll.size.y > 0, "entity list visible at %s / %d%%" % [str(dimensions), scale])
+			_check(page._field_blocks.size() == 5, "card fields exist at %s / %d%%" % [str(dimensions), scale])
+			_check(page._buttons["text_editor:save"].size.y >= 44, "global save target at %s / %d%%" % [str(dimensions), scale])
+			_check(page._buttons["text_editor:save_entity"].size.y >= 44, "entity save target at %s / %d%%" % [str(dimensions), scale])
+			_check(page._buttons["text_editor:back"].size.y >= 44, "back target at %s / %d%%" % [str(dimensions), scale])
 			if shell.page is UiTextEditorPage:
 				shell.page._request_back()
 				await _frames()
 	UiStyle.text_scale = 1.0
 
 
-func _has_uid(page: UiTextEditorPage, uid: String) -> bool:
-	for entry in page.filtered:
-		if str(entry.get("uid", "")) == uid:
-			return true
-	return false
+func _active_run_check() -> void:
+	var session := _session()
+	var started := session.start_run(StartRunRequest.new("P01", &"normal", "campus_four_year", "42"))
+	_check(started.accepted, "isolated active run starts")
+	if not started.accepted:
+		return
+	var before := SnapshotCodec.canonical_json(session.get_view().to_dictionary())
+	var shell: GameShell = _helpers.attach_shell(session)
+	await _frames()
+	_check(shell.press("menu:text_editor"), "entity editor opens while a run is active")
+	await _frames()
+	var page: UiTextEditorPage = shell.page
+	_check(page.select_entity("card:R3-C-01"), "active-run editor selects a card entity")
+	page.set_field_text("card:R3-C-01:name", "运行中卡名")
+	page.save_entity()
+	_check(UiStyle.label("R3-C-01") == "运行中卡名", "active-run entity edit applies display text")
+	_check(
+		SnapshotCodec.canonical_json(session.get_view().to_dictionary()) == before,
+		"entity editing preserves run, battle, RNG, revision and event log"
+	)
+	page._request_back()
+	await _frames()
+	shell.free()
+	await _frames()
 
 
 func _frames() -> void:

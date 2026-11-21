@@ -167,7 +167,7 @@ func refresh() -> void:
 			data.animation_speed = preferences.animation_speed
 		"text_editor":
 			if not _text_library_loaded:
-				var built := TextLibrary.build()
+				var built := TextEntityLibrary.build()
 				_text_library_cache = (
 					built.data if built.ok else {"error": UiStyle.error_text(built.error)}
 				)

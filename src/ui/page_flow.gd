@@ -1170,23 +1170,7 @@ func _rest_name(id: String) -> String:
 
 
 func _event_option_name(id: String, label_key: String) -> String:
-	return str(
-		(
-			{
-				"return_home": "回家看看",
-				"travel": "出去旅行",
-				"play_games": "打会儿游戏",
-				"leave": "暂时离开",
-				"consult": "向学长请教",
-				"drop": "放下一点基础负担",
-				"rest": "好好休息",
-				"upgrade_work": "认真复习",
-				"return_card": "归还校园卡",
-				"service_desk": "前往服务台"
-			}
-			. get(id, UiStyle.label(label_key if not label_key.is_empty() else id))
-		)
-	)
+	return EventText.option_name(id, label_key)
 
 
 func _cost_text(cost: Dictionary) -> String:

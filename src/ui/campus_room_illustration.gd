@@ -66,6 +66,10 @@ static func narrative(kind: String, event_id: String = "") -> String:
 
 
 static func option_title(event_id: String, option: String, fallback: String) -> String:
+	var uid := "story:events.%s.option_titles.%s" % [event_id, option]
+	var value: Variant = TextOverrides.get_optional(uid)
+	if value != null:
+		return str(value)
 	return str(details("E", event_id).get("option_titles", {}).get(option, fallback))
 
 
