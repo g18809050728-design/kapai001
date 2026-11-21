@@ -1,0 +1,128 @@
+{
+  "requirement_id": "UIR-CARD-X03-X04",
+  "count": 2,
+  "cli_invocations": 1,
+  "successful_atlas_outputs": 1,
+  "assets": [
+    {
+      "asset_id": "X03",
+      "name": "签到表",
+      "requirement_id": "UIR-CARD-X03-X04",
+      "version": 1,
+      "status": "selected_for_game",
+      "generated": true,
+      "selected": true,
+      "prompt_file": "output/imagegen/special-card-art-20261121/prompt.txt",
+      "prompt_file_sha256": "3e86c703eeea8c8e3abf664bb702e503529cb307b1c04fec1d36ed38af0dc084",
+      "sent_prompt_sha256": "9a5f245088809b75f27c9534350b40a5111a0bbb4449d8824d0230b87326ff0c",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit; two existing card images actually uploaded as style references; n=1",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "quality": "medium",
+      "source_file": "output/imagegen/special-card-art-20261121/X03-X04-atlas-v1.png",
+      "source_sha256": "7f84de812e321d2ada799be35a34e9a5c388a298b485e10a2b46e6a4a587a0a6",
+      "crop": [
+        16,
+        12,
+        496,
+        372
+      ],
+      "processing": "Pillow integer crop to RGB PNG; no resampling or recoloring",
+      "atlas_layout_note": "Model rendered first occupied row approximately 512px tall rather than requested 384px and added extra blank-row divisions. Exact recorded 480x360 crops remain wholly within independent scenes; actual viewed crops retain register clip/signatures/blank rows and red editorial marks/pencil. Remaining atlas layout is unused; no exact eight-grid compliance claimed.",
+      "size": [
+        480,
+        360
+      ],
+      "output": "assets/cards/v3/X03.png",
+      "sha256": "888b12c73a2ec04880b01323dd79956836b17c620da3418a83aa373ec92a678e",
+      "references": [
+        {
+          "file": "assets/cards/v3/R3-C-01.png",
+          "sha256": "de0114be8c9496378ff2839743b66fe72001dc3b3a9b68e0fcfdf7eac2a75102",
+          "role": "actually uploaded painted style reference"
+        },
+        {
+          "file": "assets/cards/v3/R3-P02-08.png",
+          "sha256": "57686b4258e6c874fb10e912e8b3c26abae7a134b20cd2972c784d6526a4de1c",
+          "role": "actually uploaded painted style reference"
+        }
+      ],
+      "ai_visual_review": {
+        "viewed": true,
+        "notes": "已实际查看原图与480×360裁片；青蓝夹板、表格、签名笔迹、空行和黑金钢笔清楚。",
+        "reviewer": "assistant actual image inspection; not human final acceptance"
+      },
+      "human_acceptance": "pending user review",
+      "cost": "not returned",
+      "recorded_utc": "2026-11-21T10:48:10.533127+00:00"
+    },
+    {
+      "asset_id": "X04",
+      "name": "修改意见",
+      "requirement_id": "UIR-CARD-X03-X04",
+      "version": 1,
+      "status": "selected_for_game",
+      "generated": true,
+      "selected": true,
+      "prompt_file": "output/imagegen/special-card-art-20261121/prompt.txt",
+      "prompt_file_sha256": "3e86c703eeea8c8e3abf664bb702e503529cb307b1c04fec1d36ed38af0dc084",
+      "sent_prompt_sha256": "9a5f245088809b75f27c9534350b40a5111a0bbb4449d8824d0230b87326ff0c",
+      "provider": "https://api-slb.jiji.cc/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_mode": "bundled imagegen CLI edit; two existing card images actually uploaded as style references; n=1",
+      "requested_size": [
+        1024,
+        1536
+      ],
+      "actual_atlas_size": [
+        1024,
+        1536
+      ],
+      "quality": "medium",
+      "source_file": "output/imagegen/special-card-art-20261121/X03-X04-atlas-v1.png",
+      "source_sha256": "7f84de812e321d2ada799be35a34e9a5c388a298b485e10a2b46e6a4a587a0a6",
+      "crop": [
+        528,
+        12,
+        1008,
+        372
+      ],
+      "processing": "Pillow integer crop to RGB PNG; no resampling or recoloring",
+      "atlas_layout_note": "Model rendered first occupied row approximately 512px tall rather than requested 384px and added extra blank-row divisions. Exact recorded 480x360 crops remain wholly within independent scenes; actual viewed crops retain register clip/signatures/blank rows and red editorial marks/pencil. Remaining atlas layout is unused; no exact eight-grid compliance claimed.",
+      "size": [
+        480,
+        360
+      ],
+      "output": "assets/cards/v3/X04.png",
+      "sha256": "724050b1e20ad9fb24b9aab5468c8426ec063cbf13f89a983dbda8c8e995a7f0",
+      "references": [
+        {
+          "file": "assets/cards/v3/R3-C-01.png",
+          "sha256": "de0114be8c9496378ff2839743b66fe72001dc3b3a9b68e0fcfdf7eac2a75102",
+          "role": "actually uploaded painted style reference"
+        },
+        {
+          "file": "assets/cards/v3/R3-P02-08.png",
+          "sha256": "57686b4258e6c874fb10e912e8b3c26abae7a134b20cd2972c784d6526a4de1c",
+          "role": "actually uploaded painted style reference"
+        }
+      ],
+      "ai_visual_review": {
+        "viewed": true,
+        "notes": "已实际查看原图与480×360裁片；论文稿、红圈、删改线、指向边注的箭头与红铅笔清楚。",
+        "reviewer": "assistant actual image inspection; not human final acceptance"
+      },
+      "human_acceptance": "pending user review",
+      "cost": "not returned",
+      "recorded_utc": "2026-11-21T10:48:10.542028+00:00"
+    }
+  ]
+}
