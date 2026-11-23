@@ -1002,6 +1002,10 @@ func get_test_room_options() -> GameResult:
 	return GameResult.success(test_service().options())
 
 
+func get_test_node_options(seed: String) -> Array[Dictionary]:
+	return test_service().node_options(seed)
+
+
 func get_test_view() -> Dictionary:
 	if _test_service == null or not _test_service.active():
 		return {"screen": "closed"}
@@ -1081,6 +1085,10 @@ func save_test_snapshot(name: String) -> GameResult:
 	return test_service().save_snapshot(name)
 
 
+func save_test_snapshot_with_patch(context: Variant, patch: Variant, name: String) -> GameResult:
+	return test_service().save_snapshot_with_patch(context, patch, name)
+
+
 func save_test_record(name: String) -> GameResult:
 	return test_service().save_record(name)
 
@@ -1095,6 +1103,10 @@ func load_test_preset(preset_id: String) -> ActionResult:
 
 func load_test_snapshot(snapshot_id: String) -> ActionResult:
 	return test_service().load_snapshot(snapshot_id)
+
+
+func delete_test_snapshot(snapshot_id: String) -> GameResult:
+	return test_service().delete_snapshot(snapshot_id)
 
 
 func load_test_record(record_id: String) -> ActionResult:

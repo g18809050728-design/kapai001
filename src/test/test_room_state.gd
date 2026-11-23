@@ -11,9 +11,14 @@ var attempt: int = 1
 var seed: String = "0"
 var config: Dictionary = {}
 var battle: BattleState
+var run: RunState
+var run_rng: Dictionary = {}
 var pending_choice: ChoiceRequest
 var rng: Dictionary = {}
 var switches: Dictionary = {}
+var player_locks: Dictionary = {}
+var pending_turn: Dictionary = {}
+var relic_origins: Array[String] = []
 var overlay: TestOverlay
 var result: Dictionary = {"source": "none", "outcome": "", "editable": true}
 var paused: bool = false
@@ -22,6 +27,7 @@ var interventions: int = 0
 var dirty: bool = false
 var journal: Array[Dictionary] = []
 var checkpoints: Array[Dictionary] = []
+var emitted_events: Array[RuleEvent] = [] # Transient transaction receipts, never serialized.
 var undo_stack: Array[Dictionary] = []
 var redo_stack: Array[Dictionary] = []
 
@@ -35,9 +41,14 @@ func core_snapshot() -> Dictionary:
 		"seed": seed,
 		"config": config.duplicate(true),
 		"battle": battle.to_dictionary() if battle != null else null,
+		"run": run.to_dictionary() if run != null else null,
+		"run_rng": run_rng.duplicate(true),
 		"pending_choice": choice_to_dictionary(pending_choice),
 		"rng": rng.duplicate(true),
 		"switches": switches.duplicate(true),
+		"player_locks": player_locks.duplicate(true),
+		"pending_turn": pending_turn.duplicate(true),
+		"relic_origins": relic_origins.duplicate(),
 		"overlay": overlay.to_dictionary() if overlay != null else {},
 		"result": result.duplicate(true),
 		"paused": paused,
@@ -47,6 +58,8 @@ func core_snapshot() -> Dictionary:
 
 
 static func from_core(snapshot: Dictionary) -> TestRoomState:
+	# JSON parses integers as floats; runtime card validation requires integer levels.
+	snapshot = SnapshotCodec.normalize_numbers(snapshot)
 	var state := TestRoomState.new()
 	state.test_id = str(snapshot.get("test_id", ""))
 	state.branch_id = int(snapshot.get("branch_id", 0))
@@ -59,6 +72,18 @@ static func from_core(snapshot: Dictionary) -> TestRoomState:
 	var battle_value: Variant = snapshot.get("battle")
 	if typeof(battle_value) == TYPE_DICTIONARY:
 		state.battle = BattleState.new(battle_value)
+	if snapshot.get("run") is Dictionary:
+		state.run = RunState.new(RunCodec.normalize_numbers(snapshot.run))
+		for node in state.run.nodes:
+			if node.context.get("event") is Dictionary:
+				node.context.event = EventState.create(node.context.event)
+			if node.context.get("shop") is Dictionary:
+				node.context.shop = ShopState.create(node.context.shop)
+		if state.run.pending_reward is Dictionary:
+			state.run.pending_reward = RewardOffer.create(state.run.pending_reward)
+		if state.run.settlement is Dictionary:
+			state.run.settlement = TermSettlement.create(state.run.settlement)
+		state.run_rng = RunCodec.normalize_numbers(snapshot.get("run_rng", {}))
 	state.pending_choice = choice_from_dictionary(snapshot.get("pending_choice"))
 	var rng_value: Variant = snapshot.get("rng", {})
 	if typeof(rng_value) == TYPE_DICTIONARY:
@@ -68,6 +93,14 @@ static func from_core(snapshot: Dictionary) -> TestRoomState:
 	var switches_value: Variant = snapshot.get("switches", {})
 	if typeof(switches_value) == TYPE_DICTIONARY:
 		state.switches = switches_value.duplicate(true)
+	state.player_locks = snapshot.get("player_locks", {}).duplicate(true)
+	state.pending_turn = snapshot.get("pending_turn", {}).duplicate(true)
+	if snapshot.has("relic_origins"):
+		state.relic_origins.assign(snapshot.relic_origins)
+	elif state.battle != null:
+		# Historical files do not establish permanent ownership for battle relics.
+		for _id in state.battle.relics:
+			state.relic_origins.append("")
 	state.overlay = TestOverlay.from_dictionary(snapshot.get("overlay", {}))
 	var result_value: Variant = snapshot.get("result", {})
 	if typeof(result_value) == TYPE_DICTIONARY:
@@ -89,8 +122,11 @@ func copy() -> TestRoomState:
 
 
 func make_checkpoint(label: String, kind: String = "auto") -> Dictionary:
+	var sequence := 1
+	for existing in checkpoints:
+		sequence = maxi(sequence, int(str(existing.get("id", "cp-0")).trim_prefix("cp-")) + 1)
 	var checkpoint := {
-		"id": "cp-%d" % (checkpoints.size() + 1),
+		"id": "cp-%d" % sequence,
 		"label": label,
 		"kind": kind,
 		"revision": revision,
@@ -120,11 +156,12 @@ func append_journal(kind: String, summary: Dictionary, before_hash: String, afte
 		journal.pop_front()
 
 
-func state_hash() -> String:
-	return SnapshotCodec.canonical_json(
-		{
+func state_hash(hash_version: int = 3) -> String:
+	var value := {
 			"battle": battle.to_dictionary() if battle != null else null,
 			"pending_choice": choice_to_dictionary(pending_choice),
+			"run": run.to_dictionary() if run != null else null,
+			"run_rng": run_rng,
 			"rng": rng,
 			"switches": switches,
 			"overlay": {
@@ -133,7 +170,12 @@ func state_hash() -> String:
 			},
 			"result": result,
 		}
-	).sha256_text()
+	if hash_version >= 2:
+		value["player_locks"] = player_locks
+		value["pending_turn"] = pending_turn
+	if hash_version >= 3:
+		value["relic_origins"] = relic_origins
+	return SnapshotCodec.canonical_json(value).sha256_text()
 
 
 func battle_hash() -> String:

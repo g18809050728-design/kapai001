@@ -1,7 +1,7 @@
 extends RefCounted
 
 ## End-to-end UI smoke: real shell, real buttons, all editor tabs, draft apply,
-## pending-choice rollback, result page, snapshot round-trip and isolation.
+## pending-choice rollback, campus rewards, snapshot round-trip and isolation.
 
 var _failures: Array[String] = []
 var _root := ""
@@ -20,6 +20,15 @@ func run() -> Array[String]:
 	_check(shell.press("test:start"), "start test room")
 	await _frame()
 	_check(session.has_test_room(), "test context active")
+	var map: Dictionary = session.get_test_view().run
+	_check(map.screen == "map" and not map.reachable_node_ids.is_empty(), "default start opens the campus map")
+	if map.screen != "map" or map.reachable_node_ids.is_empty():
+		shell.queue_free()
+		return _failures
+	_check(shell.press("node:" + str(map.reachable_node_ids[0])) and shell.press("map:enter"),
+		"enter the opening battle through the map")
+	await _frame()
+	_check(shell.page is BattleScreen, "map opens a real battle before combat editing")
 	var hud: TestHud = shell._test_hud
 	var panel: TestEditorPanel = hud.editor
 	_check(hud.press("test:open_editor"), "open editor")
@@ -254,21 +263,17 @@ func run() -> Array[String]:
 	_check(panel.press("test:editor:close"), "close after rollback")
 	await _frame()
 
-	# Result page and continue.
+	# Save the edited battle, then resolve through the campus reward flow.
+	var snapshot := session.save_test_snapshot("e2e")
+	_check(snapshot.ok, "snapshot saved")
 	view = session.get_test_view()
 	var won := session.set_test_outcome(_context(session), "won")
 	_check(won.accepted, "manual outcome")
 	shell.refresh()
 	await _frame()
-	_check(shell.page is TestRoomPage, "result page")
-	if shell.page is TestRoomPage:
-		_check(shell.press("test:result:continue"), "continue from result")
-	await _frame()
-	_check(shell.page is BattleScreen, "back to battle")
+	_check(shell.page is UiExperiencePage and shell.page.screen == "reward", "battle opens normal campus rewards")
 
 	# Snapshot round-trip.
-	var snapshot := session.save_test_snapshot("e2e")
-	_check(snapshot.ok, "snapshot saved")
 	var snapshot_id := str(snapshot.data.id)
 	session.close_test_room()
 	shell.refresh()

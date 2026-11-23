@@ -8,6 +8,7 @@ signal command(command_type: String, payload: Dictionary)
 signal close_requested
 
 const TABS := [
+	["nodes", "节点"],
 	["character", "角色"],
 	["cards", "牌区"],
 	["resources", "资源"],
@@ -19,13 +20,21 @@ const TABS := [
 	["history", "检查点"],
 ]
 const DRAWER_WIDTH := 520.0
+const MapPicker = preload("res://src/ui/test_map_picker.gd")
 
 var session: GameSession
 var _view: Dictionary = {}
 var _options: Dictionary = {}
 var _open := false
 var _tab := "character"
+var _keep_character_deck := false
 var _zone := "hand"
+var _card_persistence := "battle"
+var _relic_persistence := "battle"
+var _definition_kind := 0
+var _definition_id := ""
+var _definition_json := ""
+var map_picker: Control
 var _search := ""
 var _status_target := ""
 var _status_text := ""
@@ -68,6 +77,13 @@ func _ready() -> void:
 	margin.add_child(column)
 	_column = column
 	_panel.visible = false
+	map_picker = MapPicker.new()
+	add_child(map_picker)
+	map_picker.connect("cancelled", _close_node_map)
+	map_picker.connect("node_confirmed", func(key: String):
+		_panel.visible = true
+		_set_draft("node", {"op": "enter_node", "node_key": key})
+		_begin_apply())
 	notification(NOTIFICATION_RESIZED)
 
 
@@ -104,6 +120,14 @@ func draft_count() -> int:
 	return _draft.size()
 
 
+func draft_operations() -> Array:
+	return _draft_ops()
+
+
+func request_close() -> void:
+	_request_close()
+
+
 func clear_feedback() -> void:
 	_status_text = ""
 	if _open:
@@ -119,6 +143,7 @@ func open() -> void:
 func close() -> void:
 	_open = false
 	_panel.visible = false
+	map_picker.hide()
 
 
 func render(view: Dictionary) -> void:
@@ -131,6 +156,8 @@ func render(view: Dictionary) -> void:
 		_status_target = str(_player().get("entity_id", ""))
 	if not _open:
 		_panel.visible = false
+		return
+	if map_picker.visible:
 		return
 	_panel.visible = true
 	_render_all()
@@ -193,6 +220,14 @@ func _render_all() -> void:
 	var column := _column
 	if column == null:
 		return
+	# Read controls before rebuilding too: setting a LineEdit.text property does
+	# not emit text_changed, and validation must retain the actual input.
+	var definition_id := column.find_child("DefinitionId", true, false) as LineEdit
+	var definition_json := column.find_child("DefinitionJson", true, false) as TextEdit
+	if definition_id != null:
+		_definition_id = definition_id.text
+	if definition_json != null:
+		_definition_json = definition_json.text
 	for child in column.get_children():
 		column.remove_child(child)
 		child.queue_free()
@@ -201,6 +236,7 @@ func _render_all() -> void:
 	_build_tabs(column)
 	_build_content(column)
 	_build_footer(column)
+	_style_input_tree(column)
 	call_deferred("_restore_scroll", scroll_value)
 
 
@@ -252,11 +288,15 @@ func _build_tabs(parent: VBoxContainer) -> void:
 			grid,
 			"test:editor:tab:" + tab_id,
 			entry[1],
-			func(): _tab = tab_id; _render_all(),
+			func():
+				_tab = tab_id
+				_render_all()
+				if tab_id == "nodes":
+					open_node_map(),
 			"tab_active" if active else "tab"
 		)
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		button.custom_minimum_size = Vector2(84, TestUiTokens.height(32))
+		button.custom_minimum_size = Vector2(84, maxf(44, TestUiTokens.height(32)))
 		button.add_theme_color_override(
 			"font_color", TestUiTokens.INK if active else TestUiTokens.INK_SOFT
 		)
@@ -272,6 +312,8 @@ func _build_content(parent: VBoxContainer) -> void:
 	_content.add_theme_constant_override("separation", 6)
 	_scroll.add_child(_content)
 	match _tab:
+		"nodes":
+			_build_nodes()
 		"character":
 			_build_character()
 		"cards":
@@ -292,26 +334,69 @@ func _build_content(parent: VBoxContainer) -> void:
 			_build_history()
 
 
+func _build_nodes() -> void:
+	_section("在地图上选择任意节点")
+	var button := _button(_content, "test:editor:open_map", "打开地图自由选点", open_node_map, "primary")
+	button.custom_minimum_size.y = maxf(44, TestUiTokens.height(36))
+	_hint("先查看四学年节点位置，确认后进入。跳转保留整局牌组和饰品；仅限当前战斗的临时牌与饰品不带入下一场。可任意跳转并撤销。")
+
+
+func open_node_map(selected_key: String = "", confirm_start: bool = false) -> void:
+	_tab = "nodes"
+	_panel.visible = false
+	var key := selected_key if not selected_key.is_empty() else str(_draft.get("node", {}).get("node_key", ""))
+	map_picker.call("open", _view, key, _draft.size(), false, key if confirm_start else "")
+
+
+func _close_node_map() -> void:
+	_panel.visible = true
+	_render_all()
+	_focus_map_entry.call_deferred()
+
+
+func _focus_map_entry() -> void:
+	var button: Button = _buttons.get("test:editor:open_map")
+	if is_inside_tree() and is_instance_valid(button) and button.is_inside_tree() and _open and not map_picker.visible:
+		button.grab_focus()
+
+
 func _build_character() -> void:
 	_label(_content, "当前角色：%s" % UiStyle.label(str(_config().get("character_id", ""))), 16)
+	var keep := CheckBox.new()
+	keep.name = "TestKeepCharacterDeck"
+	keep.text = "保留牌组和专属状态（混牌测试）"
+	keep.button_pressed = _keep_character_deck
+	keep.custom_minimum_size.y = 44
+	keep.add_theme_font_size_override("font_size", TestUiTokens.font(14))
+	keep.toggled.connect(func(value: bool):
+		_keep_character_deck = value
+		if _draft.has("character"):
+			var op: Dictionary = _draft.character.duplicate(true)
+			op["keep_deck"] = value
+			_set_draft("character", op)
+	)
+	_buttons["test:editor:character:keep_deck"] = keep
+	_content.add_child(keep)
 	for character in _options.get("characters", []):
 		var row := _row(_content)
 		var id := str(character.get("id", ""))
 		_label(row, "%s · 被动 %s" % [UiStyle.label(id), str(character.get("passive_id", ""))], 14)
-		_button(
+		var switch := _button(
 			row,
 			"test:editor:character:" + id,
 			"切换",
 			func():
 				_set_draft(
 					"character",
-					{"op": "set_character", "character_id": id, "keep_deck": true, "keep_relics": true}
+					{"op": "set_character", "character_id": id, "keep_deck": _keep_character_deck, "keep_relics": true}
 				)
 		)
-	_hint("切换默认保留牌与通用状态；目标角色专属状态按默认建立，旧状态进入撤销快照。")
+		switch.custom_minimum_size.y = maxf(44.0, switch.custom_minimum_size.y)
+	_hint("默认换用新角色初始牌组，同步手牌、抽牌堆和整局牌组，清除旧能力、论文、章节、协同、伙伴与场景。敌人、回合和通用资源保留；饰品仅保留新角色可用的部分。勾选上方选项可保留混牌和专属状态。")
 
 
 func _build_cards() -> void:
+	_persistence_selector(_content, "cards", _card_persistence)
 	var zone_row := _row(_content)
 	for zone in ["hand", "draw", "discard", "exhaust", "chapter"]:
 		var counts: Dictionary = _battle().get("zone_counts", {})
@@ -325,21 +410,53 @@ func _build_cards() -> void:
 	_label(_content, "%s · %d 张" % [_zone_name(_zone), cards.size()], 13, TestUiTokens.INK_SOFT)
 	if cards.is_empty():
 		_empty("该牌区为空；可在下方按 ID 或搜索加入一张卡牌。")
-	for entry in cards:
-		var row := _row(_content)
+	for index in cards.size():
+		var entry: Dictionary = cards[index]
+		var card_box := VBoxContainer.new()
+		_content.add_child(card_box)
+		var identity := _row(card_box)
 		var name := UiStyle.label(str(entry.get("definition_id", "")))
 		if int(entry.get("upgrade_level", 0)) > 0:
 			name += " +%s" % entry.get("upgrade_level", 0)
-		_label(row, name, 15)
+		_label(identity, name, 15)
+		var origin := str(entry.get("origin_card_id", ""))
+		_label(card_box, "整局来源：" + origin if not origin.is_empty() else "当前战斗临时牌（无整局来源）", 11, TestUiTokens.INK_SOFT)
+		var row := GridContainer.new()
+		row.columns = 4
+		row.add_theme_constant_override("h_separation", TestUiTokens.SPACE_XS)
+		row.add_theme_constant_override("v_separation", TestUiTokens.SPACE_XS)
+		card_box.add_child(row)
 		var card_id := str(entry.get("card_id", ""))
+		if _zone != "chapter":
+			var zone := _zone
+			var order: Array = cards.map(func(card): return str(card.get("card_id", "")))
+			var earlier := _button(row, "test:editor:order:%s:earlier" % card_id, "↑", func():
+				_queue_card_order(zone, card_id, order, -1))
+			earlier.tooltip_text = "前移一位"
+			var later := _button(row, "test:editor:order:%s:later" % card_id, "↓", func():
+				_queue_card_order(zone, card_id, order, 1))
+			later.tooltip_text = "后移一位"
+			if _zone == "hand":
+				_button(row, "test:editor:card:%s:discard" % card_id, "弃牌", func():
+					_set_draft("card.%s.move" % card_id, {"op": "move_instance", "instance_id": card_id, "zone": "discard"}))
 		if _zone != "hand":
 			_button(row, "test:editor:card:%s:move" % card_id, "移手", func():
 				_set_draft("card.%s.move" % card_id, {"op": "move_instance", "instance_id": card_id, "zone": "hand"})
 			)
+		var destination := OptionButton.new()
+		destination.name = "MoveCard_" + card_id.validate_node_name()
+		destination.add_item("移至…")
+		_style_option(destination)
+		for target_zone in ["hand", "draw", "discard", "exhaust", "chapter"]:
+			if target_zone != _zone:
+				destination.add_item(_zone_name(target_zone))
+				destination.set_item_metadata(destination.item_count - 1, target_zone)
+		row.add_child(destination)
+		destination.item_selected.connect(func(item: int):
+			if item > 0:
+				var target_zone := str(destination.get_item_metadata(item))
+				_set_draft("card.%s.move" % card_id, {"op": "move_instance", "instance_id": card_id, "zone": target_zone}))
 		if _zone != "chapter":
-			_button(row, "test:editor:card:%s:chapter" % card_id, "入章", func():
-				_set_draft("card.%s.chapter" % card_id, {"op": "move_instance", "instance_id": card_id, "zone": "chapter"})
-			)
 			_button(row, "test:editor:card:%s:dup" % card_id, "复制", func():
 				_set_draft("card.%s.dup" % card_id, {"op": "duplicate_instance", "instance_id": card_id, "zone": _zone, "count": 1})
 			)
@@ -383,8 +500,31 @@ func _build_cards() -> void:
 	)
 
 
+func _queue_card_order(zone: String, card_id: String, base_order: Array, direction: int) -> void:
+	var key := "cards.order." + zone
+	var order: Array = _draft.get(key, {}).get("instance_ids", base_order).duplicate()
+	var index := order.find(card_id)
+	if index < 0 or index + direction < 0 or index + direction >= order.size():
+		return
+	order.remove_at(index)
+	order.insert(index + direction, card_id)
+	_set_draft(key, {"op": "set_zone_order", "zone": zone, "instance_ids": order})
+
+
 func _build_resources() -> void:
 	var player := _player()
+	var run: Dictionary = _view.get("run", {})
+	if not run.is_empty():
+		_section("校园资源")
+		var money_row := _row(_content)
+		_label(money_row, "金钱", 14)
+		var amount := SpinBox.new()
+		amount.max_value = 9999
+		amount.value = int(_draft.get("money", {}).get("value", run.get("money", 0)))
+		amount.custom_minimum_size = Vector2(140, 40)
+		money_row.add_child(amount)
+		amount.value_changed.connect(func(value: float):
+			_set_draft("money", {"op": "set_money", "value": int(value)}))
 	_section("战斗资源")
 	_player_row("精力", "player.vitality", int(player.get("vitality", 0)), 1, 0, 9999, "vitality")
 	_player_row("精力上限", "player.max_vitality", int(player.get("max_vitality", 0)), 1, 1, 9999, "max_vitality")
@@ -423,10 +563,10 @@ func _build_enemies() -> void:
 	var ddl_row := _row(_content)
 	_label(ddl_row, "DDL", 14)
 	_button(ddl_row, "test:editor:ddl:minus", "-1", func():
-		_set_draft("ddl", {"op": "set_ddl", "ddl": maxi(0, int(battle.get("ddl", 0)) - 1)})
+		_set_draft("time.ddl", {"op": "set_ddl", "ddl": maxi(0, int(_draft_value("time.ddl", battle.get("ddl", 0))) - 1)})
 	)
 	_button(ddl_row, "test:editor:ddl:plus", "+1", func():
-		_set_draft("ddl", {"op": "set_ddl", "ddl": mini(99, int(battle.get("ddl", 0)) + 1)})
+		_set_draft("time.ddl", {"op": "set_ddl", "ddl": mini(99, int(_draft_value("time.ddl", battle.get("ddl", 0))) + 1)})
 	)
 	if battle.get("tasks", []).is_empty():
 		_empty("没有敌方任务；可在下方加入任务或替换遭遇。")
@@ -648,6 +788,7 @@ func _build_allies() -> void:
 			_seq += 1
 	)
 	_section("饰品")
+	_persistence_selector(_content, "relics", _relic_persistence)
 	if _battle().get("relics", []).is_empty():
 		_empty("当前没有饰品。")
 	for relic_id in _battle().get("relics", []):
@@ -660,6 +801,7 @@ func _build_allies() -> void:
 	var raw_relic_row := _row(_content)
 	_label(raw_relic_row, "按饰品 ID 加入", 13, TestUiTokens.INK_SOFT)
 	var raw_relic_input := LineEdit.new()
+	raw_relic_input.name = "RawRelicId"
 	raw_relic_input.placeholder_text = "任意饰品 ID"
 	raw_relic_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	raw_relic_row.add_child(raw_relic_input)
@@ -764,7 +906,7 @@ func _build_time() -> void:
 	var round_row := _row(_content)
 	_row_label(round_row, "回合")
 	_button(round_row, "test:editor:round:minus", "-1", func():
-		_set_draft("round", {"op": "set_round", "round_index": maxi(1, int(battle.get("round_index", 1)) - 1)})
+		_set_draft("round", {"op": "set_round", "round_index": maxi(1, int(_draft_value("round", battle.get("round_index", 1))) - 1)})
 	)
 	var round_input := LineEdit.new()
 	round_input.name = "RoundInput"
@@ -774,7 +916,7 @@ func _build_time() -> void:
 	round_input.add_theme_stylebox_override("normal", TestUiTokens.field_style())
 	round_row.add_child(round_input)
 	_button(round_row, "test:editor:round:plus", "+1", func():
-		_set_draft("round", {"op": "set_round", "round_index": int(battle.get("round_index", 1)) + 1})
+		_set_draft("round", {"op": "set_round", "round_index": mini(999, int(_draft_value("round", battle.get("round_index", 1))) + 1)})
 	)
 	_button(round_row, "test:editor:time:round:set", "设为", func():
 		var raw := round_input.text.strip_edges()
@@ -787,7 +929,7 @@ func _build_time() -> void:
 	var ddl_row := _row(_content)
 	_row_label(ddl_row, "DDL")
 	_button(ddl_row, "test:editor:time:ddl_minus", "-1", func():
-		_set_draft("time.ddl", {"op": "set_ddl", "ddl": maxi(0, int(battle.get("ddl", 0)) - 1)})
+		_set_draft("time.ddl", {"op": "set_ddl", "ddl": maxi(0, int(_draft_value("time.ddl", battle.get("ddl", 0))) - 1)})
 	)
 	var ddl_input := LineEdit.new()
 	ddl_input.name = "DdlInput"
@@ -797,7 +939,7 @@ func _build_time() -> void:
 	ddl_input.add_theme_stylebox_override("normal", TestUiTokens.field_style())
 	ddl_row.add_child(ddl_input)
 	_button(ddl_row, "test:editor:time:ddl_plus", "+1", func():
-		_set_draft("time.ddl", {"op": "set_ddl", "ddl": mini(99, int(battle.get("ddl", 0)) + 1)})
+		_set_draft("time.ddl", {"op": "set_ddl", "ddl": mini(99, int(_draft_value("time.ddl", battle.get("ddl", 0))) + 1)})
 	)
 	_button(ddl_row, "test:editor:time:ddl:set", "设为", func():
 		var raw := ddl_input.text.strip_edges()
@@ -835,6 +977,10 @@ func _build_time() -> void:
 	_button(_content, "test:editor:time:end_turn", "结束回合（真实规则）", func():
 		command.emit("test.end_turn", {})
 	)
+	_button(_content, "test:editor:time:step", "手动推进回合（真实规则）", func():
+		_set_draft("time.step", {"op": "run_rule_op", "rule": "end_turn", "args": {}}, "已加入手动回合推进草稿")
+	)
+	_hint("手动单步以完整回合命令推进到下一个稳定边界，应用草稿后执行；不逐条暂停回合内事件。")
 	_section("随机")
 	var seed_row := _row(_content)
 	var seed_input := LineEdit.new()
@@ -865,7 +1011,7 @@ func _build_rules() -> void:
 	_section("自由调用")
 	_label(
 		_content,
-		"自由模式默认开启：槽位、唯一、空牌组/空敌人、精力归零等限制不拦实验。可一键切换。",
+		"新实验默认使用正式规则。可在这里调整专注、费用、限次等实验开关。",
 		12,
 		TestUiTokens.INK_SOFT
 	)
@@ -883,7 +1029,7 @@ func _build_rules() -> void:
 		var key := str(entry.get("key", ""))
 		var check := CheckBox.new()
 		check.text = str(entry.get("description", key))
-		check.button_pressed = bool(_view.get("switches", {}).get(key, false))
+		check.button_pressed = bool(_draft.get("switch." + key, {}).get("value", _view.get("switches", {}).get(key, false)))
 		check.add_theme_font_size_override("font_size", TestUiTokens.font(14))
 		check.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 		check.flat = true
@@ -916,18 +1062,24 @@ func _build_rules() -> void:
 	var def_kinds := ["card", "task", "relic", "status", "unit", "encounter", "scene"]
 	for index in def_kinds.size():
 		def_kind.add_item(def_kinds[index], index)
+	def_kind.selected = _definition_kind
+	def_kind.item_selected.connect(func(index: int): _definition_kind = index)
 	def_kind.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	def_kind_row.add_child(def_kind)
 	var def_id_row := _row(_content)
 	_row_label(def_id_row, "ID")
 	var def_id := LineEdit.new()
 	def_id.name = "DefinitionId"
+	def_id.text = _definition_id
+	def_id.text_changed.connect(func(value: String): _definition_id = value)
 	def_id.placeholder_text = "TEST.card.demo"
 	def_id.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	def_id.add_theme_font_size_override("font_size", TestUiTokens.font(13))
 	def_id_row.add_child(def_id)
 	var def_edit := TextEdit.new()
 	def_edit.name = "DefinitionJson"
+	def_edit.text = _definition_json
+	def_edit.text_changed.connect(func(): _definition_json = def_edit.text)
 	def_edit.custom_minimum_size = Vector2(0, TestUiTokens.height(220))
 	def_edit.placeholder_text = "在此粘贴定义 JSON…"
 	def_edit.add_theme_font_size_override("font_size", TestUiTokens.font(12))
@@ -940,8 +1092,10 @@ func _build_rules() -> void:
 			_status_text = "错误：定义 ID 必须以 TEST. 开头"
 			_render_all()
 			return
-		var parsed: Variant = JSON.parse_string(def_edit.text)
-		if typeof(parsed) != TYPE_DICTIONARY:
+		var parser := JSON.new()
+		var parse_error := parser.parse(def_edit.text)
+		var parsed: Variant = parser.data
+		if parse_error != OK or typeof(parsed) != TYPE_DICTIONARY:
 			_status_text = "错误：定义必须是 JSON 对象"
 			_render_all()
 			return
@@ -1102,6 +1256,7 @@ func _build_footer(parent: VBoxContainer) -> void:
 	var discard := _button(line, "test:editor:discard", "丢弃草稿", func(): _request_discard(), "ghost")
 	discard.disabled = _draft.is_empty()
 	for button in [preview, apply, discard]:
+		button.custom_minimum_size.y = maxf(44.0, button.custom_minimum_size.y)
 		button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 
 
@@ -1132,15 +1287,27 @@ func _begin_apply() -> void:
 	_send_apply("rollback")
 
 
+func _draft_ops() -> Array:
+	var ops: Array = []
+	# Order the currently visible cards before applying additions or removals.
+	for op in _draft.values():
+		if op.op == "set_zone_order":
+			ops.append(op.duplicate(true))
+	for op in _draft.values():
+		if op.op not in ["set_zone_order", "enter_node"]:
+			ops.append(op.duplicate(true))
+	if _draft.has("node"):
+		ops.append(_draft.node.duplicate(true))
+	return ops
+
+
 func _send_apply(policy: String) -> void:
 	_show_policy = false
 	_confirm_close = false
 	_confirm_discard = false
 	_applying = true
 	_status_text = "应用中…"
-	var ops: Array = []
-	for key in _draft:
-		ops.append((_draft[key] as Dictionary).duplicate(true))
+	var ops := _draft_ops()
 	command.emit("test.patch", {"ops": ops, "policy": policy})
 	_render_all()
 
@@ -1150,9 +1317,7 @@ func _preview_draft() -> void:
 		_status_text = "没有待应用修改"
 		_render_all()
 		return
-	var ops: Array = []
-	for key in _draft:
-		ops.append((_draft[key] as Dictionary).duplicate(true))
+	var ops := _draft_ops()
 	var result := session.preview_test_patch(_context(), {"schema_version": 1, "ops": ops})
 	if not result.ok:
 		_status_text = "错误：" + result.error.message_key
@@ -1167,6 +1332,13 @@ func _preview_draft() -> void:
 
 
 func _set_draft(key: String, op: Dictionary, message: String = "已加入草稿") -> void:
+	var operation := str(op.get("op", ""))
+	if operation in ["add_card", "remove_instance", "duplicate_instance", "clear_zone"] or (operation == "set_card_field" and op.get("scope") == "instance"):
+		op["persistence_scope"] = _card_persistence
+	elif operation in ["add_relic", "remove_relic"]:
+		op["persistence_scope"] = _relic_persistence
+	if op.has("persistence_scope"):
+		message += "（整局）" if op.persistence_scope == "run" else "（当前战斗）"
 	_draft[key] = op
 	_draft_revision = int(_test().get("revision", 0))
 	_status_text = message
@@ -1189,6 +1361,18 @@ func _draft_value(key: String, actual: Variant) -> Variant:
 
 
 func _player_row(caption: String, key: String, actual: int, step: int, minimum: int, maximum: int, field: String) -> void:
+	var lock_row := _row(_content)
+	var lock := CheckBox.new()
+	lock.text = "锁定%s数值" % caption
+	lock.add_theme_color_override("font_color", TestUiTokens.INK)
+	lock.add_theme_font_size_override("font_size", TestUiTokens.font(13))
+	var locks: Dictionary = _test().get("player_locks", {})
+	lock.button_pressed = bool(_draft.get("lock." + field, {}).get("locked", locks.get(field, false)))
+	lock.tooltip_text = "应用后保留该数值；解除锁定后恢复正常变化。"
+	lock.toggled.connect(func(locked: bool):
+		_set_draft("lock." + field, {"op": "set_player_lock", "field": field, "locked": locked}))
+	_buttons["test:editor:lock:" + field] = lock
+	lock_row.add_child(lock)
 	var row := _row(_content)
 	_row_label(row, "%s %s" % [caption, _draft_value(key, actual)])
 	_spacer(row)
@@ -1622,7 +1806,7 @@ func _button(
 ) -> Button:
 	var button := Button.new()
 	button.text = text
-	button.custom_minimum_size = Vector2(0, TestUiTokens.height(34))
+	button.custom_minimum_size = Vector2(44, maxf(44, TestUiTokens.height(34)))
 	button.add_theme_font_size_override("font_size", TestUiTokens.font(13))
 	button.focus_mode = Control.FOCUS_ALL
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
@@ -1653,12 +1837,39 @@ func _style_button(button: Button, kind: String) -> void:
 
 
 func _style_option(select: OptionButton) -> void:
+	select.custom_minimum_size = Vector2(maxf(44, select.custom_minimum_size.x), maxf(44, select.custom_minimum_size.y))
 	select.add_theme_font_size_override("font_size", TestUiTokens.font(13))
 	for key in ["font_color", "font_hover_color", "font_pressed_color", "font_focus_color"]:
 		select.add_theme_color_override(key, TestUiTokens.INK)
 	for state in ["normal", "hover", "pressed", "disabled"]:
 		select.add_theme_stylebox_override(state, TestUiTokens.field_style())
 	select.add_theme_stylebox_override("focus", TestUiTokens.focus_style())
+
+
+func _style_input_tree(node: Node) -> void:
+	if node is LineEdit or node is TextEdit:
+		TestUiTokens.style_input(node)
+	elif node is CheckBox:
+		node.custom_minimum_size.y = maxf(44, node.custom_minimum_size.y)
+		for key in ["font_color", "font_hover_color", "font_pressed_color", "font_focus_color"]:
+			node.add_theme_color_override(key, TestUiTokens.INK)
+	for child in node.get_children():
+		_style_input_tree(child)
+
+
+func _persistence_selector(parent: Node, kind: String, current: String) -> void:
+	var row := _row(parent)
+	_label(row, "修改范围", 13, TestUiTokens.INK_SOFT)
+	for scope in ["battle", "run"]:
+		var caption := "当前战斗" if scope == "battle" else "整局（含当前战斗）"
+		_button(row, "test:editor:scope:%s:%s" % [kind, scope], caption, func():
+			if kind == "cards":
+				_card_persistence = scope
+			else:
+				_relic_persistence = scope
+			_render_all()
+		, "tab_active" if current == scope else "tab")
+	_hint("仅当前战斗：下场恢复整局配置。整局：后续新增、复制、移除和升级同步整局牌组；临时牌无整局来源时会提示。移动、排序、抽牌仍仅当前战斗。" if kind == "cards" else "仅当前战斗的饰品下场不保留；选择整局后，后续增删同步当前战斗及整局饰品。已有草稿保留操作时所选范围。")
 
 
 func _label(parent: Node, text: String, size: int = 14, color: Color = TestUiTokens.INK) -> Label:
@@ -1754,6 +1965,8 @@ func _context() -> Dictionary:
 
 func _input(event: InputEvent) -> void:
 	if not _open or not visible:
+		return
+	if is_instance_valid(map_picker) and map_picker.visible:
 		return
 	if not (event is InputEventKey) or not event.pressed or event.echo:
 		return

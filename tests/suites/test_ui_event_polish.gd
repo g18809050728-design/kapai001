@@ -210,8 +210,14 @@ func _settings_and_test_buttons() -> void:
 			for uid in hud.button_uids():
 				var button: Button = hud._buttons[uid]
 				_check(button.size.y >= 44 and button.size.x >= 44 and hud.get_global_rect().encloses(button.get_global_rect()), "test HUD visible physical hit target " + str(uid))
-	_check(session.set_test_outcome(shell._test_context(), "won").accepted, "public manual result opens result page")
+	_check(session.get_test_view().run.screen == "map", "public test entry opens the campus map")
+	# Result styling remains covered with a legacy standalone fixture.
+	session.close_test_room()
+	_check(session.start_test_room({"character_id": "P01", "encounter_id": "N01", "seed": "42"}).accepted,
+		"legacy fixture starts for result styling")
+	_check(session.set_test_outcome(shell._test_context(), "won").accepted, "legacy manual result opens result page")
 	shell.refresh()
+	_check(shell.page is TestRoomPage and shell.page.screen == "test_room_result", "legacy result page is present")
 	for dimensions in [Vector2i(1280, 800), Vector2i(960, 600)]:
 		for scale in [100, 125, 150]:
 			await _present(shell, dimensions, scale)

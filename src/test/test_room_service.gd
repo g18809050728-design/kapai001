@@ -4,13 +4,20 @@ extends RefCounted
 ## Isolated battle-sandbox service used by GameSession. It never writes formal
 ## saves, never mutates the base catalog, and never executes unregistered ops.
 
+const ROOM_VALIDATOR = preload("res://src/test/test_room_validator.gd")
 const MANIFEST_ID := RelicPilot.ROSTER
 var _manifest_id := MANIFEST_ID
 const MANIFEST_ROOT := "res://data/four_year"
 const ZONES := ["hand", "draw", "discard", "exhaust"]
 const PLAYER_FIELDS := ["vitality", "max_vitality", "max_vitality_base", "focus", "relax"]
 const BATTLE_ACTIONS := [&"play_card", &"end_turn", &"confirm_choice", &"set_ally_target"]
+const ROOM_ACTIONS := [
+	&"enter_node", &"buy_item", &"remove_card", &"choose_event", &"take_rest", &"leave_node",
+	&"choose_campaign", &"claim_reward", &"skip_reward", &"choose_term_option", &"choose_ending",
+]
 const CONFIG_KEYS := [
+	"node_key",
+	"start_year",
 	"template_id",
 	"character_id",
 	"encounter_id",
@@ -49,7 +56,7 @@ const SWITCHES := {
 	"allow_empty_tasks": "允许没有敌方任务",
 	"freeze_outcome": "不自动判胜/判负",
 	"freeze_ddl": "DDL 不随回合递减",
-	"freeze_enemy": "跳过敌方自动行动（仍需手动单步）",
+	"freeze_enemy": "跳过敌方技能与压力",
 	"infinite_focus": "费用支付不改专注",
 	"no_cost": "出牌不检查/不支付费用",
 	"ignore_limits": "忽略每回合/每实例限次",
@@ -60,33 +67,37 @@ const SWITCHES := {
 	"manual_rule_steps": "敌方/回合结算只在手动单步时推进",
 	"keep_hand": "回合结束不强制弃手牌",
 }
+# Historical defaults used only to interpret old map snapshots.
 const FREE_SWITCHES := [
 	"allow_zero_vitality",
 	"allow_empty_tasks",
-	"infinite_focus",
-	"no_cost",
 	"ignore_limits",
 	"ignore_relic_unique",
 	"ignore_relic_slots",
 	"ignore_unit_slots",
 	"ignore_chapter_slots",
 	"keep_hand",
+	"infinite_focus",
+	"no_cost",
 ]
 const OP_KEYS := {
+	"enter_node": ["op", "node_key"],
+	"set_money": ["op", "value"],
+	"set_character": ["op", "character_id", "keep_deck", "keep_relics"],
 	"set_switch": ["op", "key", "value"],
 	"set_player_field": ["op", "field", "value"],
 	"adjust_player_field": ["op", "field", "delta"],
 	"set_player_lock": ["op", "field", "locked"],
-	"add_card": ["op", "definition_id", "zone", "count", "position"],
-	"remove_instance": ["op", "instance_id"],
-	"duplicate_instance": ["op", "instance_id", "count", "zone"],
+	"add_card": ["op", "definition_id", "zone", "count", "position", "persistence_scope"],
+	"remove_instance": ["op", "instance_id", "persistence_scope"],
+	"duplicate_instance": ["op", "instance_id", "count", "zone", "persistence_scope"],
 	"move_instance": ["op", "instance_id", "zone", "position"],
 	"set_zone_order": ["op", "zone", "instance_ids"],
 	"shuffle_zone": ["op", "zone"],
-	"clear_zone": ["op", "zone"],
-	"set_card_field": ["op", "scope", "target", "field", "value"],
-	"add_relic": ["op", "relic_id", "position"],
-	"remove_relic": ["op", "relic_id", "position"],
+	"clear_zone": ["op", "zone", "persistence_scope"],
+	"set_card_field": ["op", "scope", "target", "field", "value", "persistence_scope"],
+	"add_relic": ["op", "relic_id", "position", "persistence_scope"],
+	"remove_relic": ["op", "relic_id", "position", "persistence_scope"],
 	"add_status": ["op", "status_id", "target_id", "stacks", "expiry"],
 	"remove_status": ["op", "instance_id", "status_id", "target_id"],
 	"set_status_field": ["op", "instance_id", "field", "value"],
@@ -127,6 +138,13 @@ var engine: BattleEngine
 var store: TestStore
 var view_builder: Callable
 var notice: String = ""
+# File-management binding stays outside rule snapshots and undo/checkpoint state.
+var _snapshot_id: String = ""
+var _snapshot_name: String = ""
+var _node_cache_seed := ""
+var _node_cache: Array[Dictionary] = []
+var _projected_map_key := ""
+var _projected_nodes: Array[Dictionary] = []
 
 
 func _init(p_store: TestStore = null, p_view_builder: Callable = Callable(), manifest_id: String = MANIFEST_ID) -> void:
@@ -158,15 +176,23 @@ func start(config_value: Variant, pilot_events: Array[RuleEvent] = []) -> GameRe
 			return _failure(
 				GameConstants.ERROR_INVALID_ARGUMENT, "test.config.unknown", {"key": str(key)}
 			)
+	if config.has("start_year"):
+		var year_value: Variant = config.start_year
+		# JSON decodes integer-valued config numbers as floats.
+		if not (year_value is int or year_value is float) or float(year_value) < 1.0 or float(year_value) > 4.0 or floor(float(year_value)) != float(year_value):
+			return _failure(GameConstants.ERROR_INVALID_ARGUMENT, "test.config.start_year")
 	var character_id := str(config.get("character_id", "P01"))
 	var loaded := ContentDB.new(MANIFEST_ROOT)
 	var loaded_result := loaded.load(_manifest_id)
 	if not loaded_result.ok:
 		return loaded_result
+	var overlay_issues := ROOM_VALIDATOR.validate_overlay_value(config.get("overlay", {}), loaded)
+	if not overlay_issues.is_empty():
+		return _failure(GameConstants.ERROR_CONTENT_INVALID, "test.config.overlay", {"issues": overlay_issues})
 	var overlay := TestOverlay.from_dictionary(config.get("overlay", {}))
 	var wrapped := TestContent.new(loaded, overlay)
 	var character := _definition(wrapped, "character", character_id)
-	if character == null:
+	if character.is_empty():
 		return _failure(
 			GameConstants.ERROR_CONTENT_INVALID,
 			"test.config.character",
@@ -175,7 +201,7 @@ func start(config_value: Variant, pilot_events: Array[RuleEvent] = []) -> GameRe
 	var encounter_id := str(config.get("encounter_id", ""))
 	if encounter_id.is_empty():
 		encounter_id = _default_encounter(loaded)
-	if _definition(wrapped, "encounter", encounter_id) == null:
+	if _definition(wrapped, "encounter", encounter_id).is_empty():
 		return _failure(
 			GameConstants.ERROR_CONTENT_INVALID,
 			"test.config.encounter",
@@ -202,6 +228,9 @@ func start(config_value: Variant, pilot_events: Array[RuleEvent] = []) -> GameRe
 		"relics": relics.data,
 		"rng_state": rng.export_state().to_dictionary(),
 	}
+	var node_key := str(config.get("node_key", ""))
+	var switches := _default_switches(config.get("switches", {}))
+	wrapped.battle_switches = switches
 	var local_engine := BattleEngine.new(wrapped)
 	var begun := local_engine.begin(begin_input)
 	if not begun.ok:
@@ -222,18 +251,33 @@ func start(config_value: Variant, pilot_events: Array[RuleEvent] = []) -> GameRe
 		"cards": cards.data.duplicate(true),
 		"relics": relics.data.duplicate(true),
 	}
+	if config.has("start_year"):
+		new_state.config["start_year"] = int(config.start_year)
 	new_state.battle = step.state
+	for _id in new_state.battle.relics:
+		new_state.relic_origins.append("")
 	new_state.rng = step.rng_state.duplicate(true)
 	new_state.pending_choice = TestRoomState.choice_from_dictionary(step.pending_choice)
 	new_state.overlay = overlay
-	new_state.switches = _default_switches(config.get("switches", {}))
+	new_state.switches = switches
+	new_state.config["switches"] = _explicit_switches(config.get("switches", {}))
 	new_state.result = {"source": "none", "outcome": "", "editable": true}
 	new_state.checkpoints = []
-	new_state.make_checkpoint("起点", "initial")
 	base_catalog = loaded
 	catalog = wrapped
 	engine = local_engine
+	if not node_key.is_empty():
+		var moved := _enter_test_node(new_state, node_key)
+		if not moved.ok:
+			return moved
+	elif config.has("start_year"):
+		var opened := _start_test_map(new_state, int(config.start_year))
+		if not opened.ok:
+			return opened
+	new_state.make_checkpoint("起点", "initial")
 	_adopt_state(new_state)
+	_snapshot_id = ""
+	_snapshot_name = ""
 	if RelicPilot.expanded(_manifest_id):
 		for event in step.events:
 			if event.type == &"relic_triggered" and RelicPilot.is_rx(event.source_id):
@@ -290,8 +334,19 @@ func view() -> Dictionary:
 				"round_index": int(checkpoint.get("round_index", 0)),
 			}
 		)
+	var run_view := RunService.new(catalog).make_view(state.run) if state.run != null else {}
+	var screen := "test_room_battle"
+	if state.run != null and not state.run.outcome.is_empty():
+		run_view["terminal_summary"] = state.result.get("run_summary", {})
+		screen = "test_room_campus"
+	elif not str(state.result.get("outcome", "")).is_empty():
+		screen = "test_room_result"
+	elif _in_campus_room(state):
+		screen = "test_room_campus"
 	return {
-		"screen": "test_room_result" if not str(state.result.get("outcome", "")).is_empty() else "test_room_battle",
+		"run": run_view,
+		"nodes": _jump_options(),
+		"screen": screen,
 		"test": {
 			"test_id": state.test_id,
 			"branch_id": state.branch_id,
@@ -301,6 +356,8 @@ func view() -> Dictionary:
 			"editing": state.editing,
 			"interventions": state.interventions,
 			"dirty": state.dirty,
+			"player_locks": state.player_locks.duplicate(true),
+			"pending_turn": state.pending_turn.duplicate(true),
 		},
 		"config": state.config.duplicate(true),
 		"battle": battle_view,
@@ -323,6 +380,224 @@ func view() -> Dictionary:
 		},
 		"notice": notice,
 	}
+
+
+func _generate_map(source: ContentDB, seed: String, character_id: String) -> GameResult:
+	var created := RunService.new(source).create({"manifest_id": _manifest_id, "seed": seed, "character_id": character_id})
+	if not created.ok:
+		return created
+	var step: RunStep = created.data
+	var generated := _extend_maps(step.state, 4)
+	return created if generated.ok else generated
+
+
+func _extend_maps(run: RunState, last_year: int) -> GameResult:
+	var saved_term := run.term
+	var saved_pending: Dictionary = run.campaign.pending
+	run.campaign.pending = {}
+	for year in range(run.campaign.years.size() + 1, last_year + 1):
+		run.term = year
+		var generated := CampaignProgression.ensure_year(run)
+		if not generated.ok:
+			run.term = saved_term
+			run.campaign.pending = saved_pending
+			return generated
+	run.term = saved_term
+	run.campaign.pending = saved_pending
+	return GameResult.success(true)
+
+
+func node_options(seed: String) -> Array[Dictionary]:
+	if seed == _node_cache_seed and not _node_cache.is_empty():
+		return _node_cache.duplicate(true)
+	var source := base_catalog
+	if source == null:
+		source = ContentDB.new(MANIFEST_ROOT)
+		if not source.load(_manifest_id).ok:
+			return []
+	var generated := _generate_map(source, seed, "P01")
+	if not generated.ok:
+		return []
+	_node_cache_seed = seed
+	_node_cache = _map_nodes(generated.data.state)
+	return _node_cache.duplicate(true)
+
+
+func _jump_options() -> Array[Dictionary]:
+	if state.run == null:
+		return node_options(state.seed)
+	var rows := _map_nodes(state.run)
+	var campaign := state.run.campaign
+	var generated_years: int = campaign.years.size()
+	if generated_years == 4:
+		return rows
+	# The picker can preview future years without committing them to the run.
+	var key := JSON.stringify([campaign.root_seed, campaign.map_version, generated_years,
+		campaign.summaries, campaign.history])
+	if _projected_map_key != key:
+		var probe := state.run.copy_for_write()
+		var projected := _extend_maps(probe, 4)
+		if not projected.ok:
+			return rows
+		_projected_nodes = _map_nodes(probe).filter(func(node): return node.year > generated_years)
+		_projected_map_key = key
+	rows.append_array(_projected_nodes.duplicate(true))
+	return rows
+
+
+func _map_nodes(run: RunState) -> Array[Dictionary]:
+	var rows: Array[Dictionary] = []
+	for node in run.nodes:
+		var meta := CampaignProgression.metadata(run, node.node_id)
+		var key := node.node_id.get_slice("|", 1)
+		rows.append({
+			"key": key, "node_id": key, "year": node.term, "term": node.term,
+			"layer": node.layer, "kind": node.kind,
+			"column": int(meta.get("column", 3)), "status": node.status,
+			"next_ids": node.next_ids.map(func(id): return str(id).get_slice("|", 1)),
+			"title": str(meta.get("title", node.kind)),
+			"subtype": str(meta.get("subtype", "")),
+		})
+	return rows
+
+
+func _in_campus_room(working: TestRoomState) -> bool:
+	return working.run != null and working.run.active_battle_id.is_empty()
+
+
+func _ensure_test_run(working: TestRoomState, wrapped: TestContent) -> GameResult:
+	if working.run == null:
+		var generated := _generate_map(wrapped, working.seed, working.battle.character_id)
+		if not generated.ok:
+			return generated
+		var initial: RunStep = generated.data
+		working.run = initial.state
+		working.run_rng = initial.rng_states
+		working.run.cards.clear()
+		var service := RunService.new(wrapped)
+		for card in working.config.cards:
+			var added := service.transactions().add_card(working.run, str(card.definition_id), "starter")
+			added.upgrade_level = int(card.get("upgrade_level", 0))
+		for index in working.battle.relics.size():
+			var added := service.transactions().add_relic(working.run, working.battle.relics[index], "", working.run.relics.size())
+			working.relic_origins[index] = str(added.relic_id)
+		working.run.vitality = int(working.battle.player.vitality)
+		working.run.max_vitality = int(working.battle.player.max_vitality)
+	return GameResult.success(true)
+
+
+func _start_test_map(working: TestRoomState, year: int) -> GameResult:
+	var wrapped := TestContent.new(base_catalog, working.overlay)
+	wrapped.battle_switches = working.switches
+	var initialized := _ensure_test_run(working, wrapped)
+	if not initialized.ok:
+		return initialized
+	working.run.term = year
+	working.config["node_key"] = ""
+	working.pending_choice = null
+	return GameResult.success(true)
+
+
+func _enter_test_node(working: TestRoomState, node_key: String) -> GameResult:
+	var wrapped := TestContent.new(base_catalog, working.overlay)
+	if working.run == null:
+		working.switches = _default_switches(working.config.get("switches", {}))
+	wrapped.battle_switches = working.switches
+	if working.run != null and not _in_campus_room(working):
+		working.run.vitality = int(working.battle.player.vitality)
+		working.run_rng = working.rng.duplicate(true)
+	var initialized := _ensure_test_run(working, wrapped)
+	if not initialized.ok:
+		return initialized
+	var service := RunService.new(wrapped)
+	var generated := _extend_maps(working.run, 4)
+	if not generated.ok:
+		return generated
+	var entered := service.enter_test_node(working.run, working.run.run_id + "|" + node_key, working.run_rng)
+	if not entered.ok:
+		return entered
+	working.config["node_key"] = node_key
+	return _apply_run_step(working, entered.data, BattleEngine.new(wrapped))
+
+
+func _apply_run_step(working: TestRoomState, step: RunStep, battle_engine: BattleEngine) -> GameResult:
+	var events := step.events.duplicate()
+	working.run = step.state
+	working.run_rng = step.rng_states.duplicate(true)
+	working.pending_choice = null
+	working.pending_turn.clear()
+	working.result = {"source": "none", "outcome": "", "editable": true}
+	if step.battle_input is Dictionary:
+		var begun := battle_engine.begin(step.battle_input)
+		if not begun.ok:
+			return begun
+		var battle_step: BattleStep = begun.data
+		working.battle = battle_step.state
+		working.relic_origins.clear()
+		var equipped := working.run.relics.duplicate(true)
+		equipped.sort_custom(func(a, b): return int(a.slot) < int(b.slot))
+		for relic in equipped:
+			working.relic_origins.append(str(relic.relic_id))
+		working.rng = battle_step.rng_state.duplicate(true)
+		working.pending_choice = TestRoomState.choice_from_dictionary(battle_step.pending_choice)
+		events.append_array(battle_step.events)
+	else:
+		working.battle.player["vitality"] = step.state.vitality
+		working.battle.player["max_vitality"] = step.state.max_vitality
+		working.battle.player["max_vitality_base"] = step.state.max_vitality
+		# Campus rewards/services may replace permanent relics while the previous
+		# battle remains as the editor's historical placeholder.
+		for index in working.relic_origins.size():
+			var origin := working.relic_origins[index]
+			if not origin.is_empty() and not working.run.relics.any(func(relic): return str(relic.relic_id) == origin):
+				working.relic_origins[index] = ""
+	if step.run_summary != null:
+		working.result = {"source": "normal", "outcome": step.run_summary.result,
+			"editable": true, "run_summary": step.run_summary.to_dictionary()}
+	return GameResult.success(events)
+
+
+func _settle_map_battle(working: TestRoomState, outcome: Dictionary) -> GameResult:
+	var settled := RunService.new(TestContent.new(base_catalog, working.overlay)).settle_battle(
+		working.run, outcome, working.rng
+	)
+	if not settled.ok:
+		return settled
+	return _apply_run_step(working, settled.data, engine)
+
+
+func _preview_room_action(draft: Dictionary) -> GameResult:
+	if state.editing or state.paused:
+		return _failure(GameConstants.ERROR_TEST_CHOICE_CONFLICT, "test.action.editing")
+	return RunService.new(catalog).preview(state.run, draft)
+
+
+func _submit_room_action(draft: Dictionary) -> ActionResult:
+	if state.paused:
+		return _reject(ApiError.new(GameConstants.ERROR_TEST_CHOICE_CONFLICT, "test.action.paused"))
+	var working := state.copy()
+	if draft.type == "choose_campaign" and working.run.campaign.pending.get("kind") == "grand":
+		# Maps prepared for jumping used a projection. At a real year boundary,
+		# generate the next year from the completed route and actual choices.
+		var year := working.run.term
+		working.run.campaign.years.resize(year)
+		working.run.nodes = working.run.nodes.filter(func(node): return node.term <= year)
+	var applied := RunService.new(catalog).apply(working.run, draft, working.run_rng)
+	if not applied.ok:
+		return _reject(applied.error)
+	var published := _apply_run_step(working, applied.data, engine)
+	if not published.ok:
+		return _reject(published.error)
+	_push_undo(state)
+	working.undo_stack.assign(state.undo_stack.duplicate(true))
+	working.redo_stack.clear()
+	working.revision += 1
+	working.dirty = true
+	var before_hash := state.state_hash()
+	_adopt_state(working)
+	state.make_checkpoint("房间命令 %s" % str(draft.type), "command")
+	state.append_journal("command", {"type": str(draft.type)}, before_hash, state.state_hash())
+	return _accepted_result(published.data, state.pending_choice == null)
 
 
 func options() -> Dictionary:
@@ -424,7 +699,7 @@ func options() -> Dictionary:
 	var switches: Array[Dictionary] = []
 	for key in SWITCHES:
 		switches.append(
-			{"key": key, "description": SWITCHES[key], "default": FREE_SWITCHES.has(key)}
+			{"key": key, "description": SWITCHES[key], "default": false}
 		)
 	var scenes: Array[Dictionary] = []
 	for id in info.enabled.get("scene", []):
@@ -562,108 +837,101 @@ func pause(value: bool) -> bool:
 	return true
 
 
-func preview_patch(context: Variant, patch_value: Variant) -> GameResult:
-	var error := _check_context(context)
-	if error != null:
-		return GameResult.failure(error)
-	error = _validate_patch(patch_value)
-	if error != null:
-		return GameResult.failure(error)
-	var patch: Dictionary = patch_value
-	var preview := ActionPreview.new()
-	preview.revision = state.revision
+func _truncate_resolution(working: TestRoomState) -> void:
+	var resolution: Dictionary = working.battle.resolution if working.battle.resolution is Dictionary else {}
+	var destination := "exhaust" if bool(resolution.get("exhaust", false)) else "discard"
+	for id in working.battle.zones.get("resolving", []).duplicate():
+		if working.battle.card_by_id.has(id) and not working.battle.zones[destination].has(id):
+			working.battle.zones[destination].append(id)
+	working.battle.zones["resolving"] = []
+	working.battle.resolution = null
+	working.pending_choice = null
+	if working.battle.phase == "awaiting_choice":
+		working.battle.phase = "player_action"
+
+
+func _prepare_patch(patch: Dictionary) -> GameResult:
+	var policy := str(patch.get("resolution_policy", "rollback"))
+	var changes_node: bool = patch.ops.any(func(entry): return entry.op == "enter_node")
 	var working := state.copy()
+	if state.pending_choice != null:
+		if policy not in ["rollback", "truncate"]:
+			return GameResult.failure(ApiError.new(GameConstants.ERROR_TEST_CHOICE_CONFLICT, "test.choice.policy", {"policy": policy}))
+		if not changes_node and policy == "rollback":
+			if state.undo_stack.is_empty():
+				return GameResult.failure(ApiError.new(GameConstants.ERROR_TEST_CHECKPOINT_INVALID, "test.choice.no_checkpoint"))
+			var entry: Dictionary = state.undo_stack.back()
+			working = TestRoomState.from_core(entry.core)
+			working.journal.assign(entry.get("journal", state.journal.slice(0, int(entry.journal_size))))
+			working.switches = state.switches.duplicate(true)
+			working.overlay = state.overlay.copy()
+			working.checkpoints.assign(state.checkpoints.duplicate(true))
+		if not changes_node:
+			_truncate_resolution(working)
+			if policy == "truncate":
+				working.result = {"source": "truncated", "outcome": "", "editable": true}
 	var summary: Array[Dictionary] = []
 	for index in patch.ops.size():
 		var op_error := _apply_op(working, patch.ops[index], summary)
 		if op_error != null:
 			op_error.details["path"] = "ops[%d]" % index
-			preview.blocking_errors.append(op_error)
-			break
-	if preview.blocking_errors.is_empty():
-		var issues := _validate_structure(working)
-		if not issues.is_empty():
-			preview.blocking_errors.append(
-				ApiError.new(
-					GameConstants.ERROR_TEST_STRUCTURE_INVALID,
-					"test.patch.structure",
-					{"issues": issues}
-				)
-			)
-		else:
-			preview.can_submit = true
-	preview.known_effects = summary
+			return GameResult.failure(op_error)
+	var issues := _validate_structure(working)
+	issues.append_array(ROOM_VALIDATOR.validate_state(working, base_catalog))
+	if not issues.is_empty():
+		return GameResult.failure(ApiError.new(GameConstants.ERROR_TEST_STRUCTURE_INVALID, "test.patch.structure", {"issues": issues}))
+	if bool(state.switches.get("freeze_outcome", false)) and not bool(working.switches.get("freeze_outcome", false)):
+		var judge_error := _judge_now(working, working.emitted_events)
+		if judge_error != null:
+			return GameResult.failure(judge_error)
+	var only_switches: bool = patch.ops.all(func(entry): return str(entry.get("op", "")) == "set_switch")
+	if not only_switches:
+		var switch_error := _enforce_switches(working)
+		if switch_error != null:
+			return GameResult.failure(switch_error)
+	return GameResult.success({"working": working, "summary": summary})
+
+
+func preview_patch(context: Variant, patch_value: Variant) -> GameResult:
+	var error := _check_context(context)
+	if error == null:
+		error = _validate_patch(patch_value)
+	if error != null:
+		return GameResult.failure(error)
+	var preview := ActionPreview.new()
+	preview.revision = state.revision
+	var prepared := _prepare_patch(patch_value)
+	if prepared.ok:
+		preview.can_submit = true
+		preview.known_effects = prepared.data.summary
+	else:
+		preview.blocking_errors.append(prepared.error)
 	return GameResult.success(preview)
 
 
 func apply_patch(context: Variant, patch_value: Variant) -> ActionResult:
 	var error := _check_context(context)
-	if error != null:
-		return _reject(error)
-	error = _validate_patch(patch_value)
+	if error == null:
+		error = _validate_patch(patch_value)
 	if error != null:
 		return _reject(error)
 	var patch: Dictionary = patch_value
-	var policy := str(patch.get("resolution_policy", "rollback"))
-	if state.pending_choice != null:
-		if policy == "cancel" or not (policy in ["rollback", "truncate"]):
-			return _reject(
-				ApiError.new(
-					GameConstants.ERROR_TEST_CHOICE_CONFLICT,
-					"test.choice.policy",
-					{"policy": policy}
-				)
-			)
-	var base_core: Dictionary = state.core_snapshot()
-	var journal_size := state.journal.size()
-	if state.pending_choice != null and policy == "rollback":
-		if state.undo_stack.is_empty():
-			return _reject(
-				ApiError.new(
-					GameConstants.ERROR_TEST_CHECKPOINT_INVALID,
-					"test.choice.no_checkpoint",
-					{"test_id": state.test_id}
-				)
-			)
-		var entry: Dictionary = state.undo_stack[state.undo_stack.size() - 1]
-		base_core = entry.core
-		journal_size = int(entry.journal_size)
-	var working := TestRoomState.from_core(base_core)
-	working.journal.assign(state.journal.slice(0, journal_size))
-	working.switches = state.switches.duplicate(true)
-	working.overlay = state.overlay.copy()
-	working.undo_stack.assign(state.undo_stack.duplicate(true))
-	working.redo_stack.assign(state.redo_stack.duplicate(true))
-	working.checkpoints.assign(state.checkpoints.duplicate(true))
-	var summary: Array[Dictionary] = []
-	for index in patch.ops.size():
-		var op_error := _apply_op(working, patch.ops[index], summary)
-		if op_error != null:
-			op_error.details["path"] = "ops[%d]" % index
-			return _reject(op_error)
-	var issues := _validate_structure(working)
-	if not issues.is_empty():
-		return _reject(
-			ApiError.new(
-				GameConstants.ERROR_TEST_STRUCTURE_INVALID,
-				"test.patch.structure",
-				{"issues": issues}
-			)
-		)
-	var only_switches: bool = patch.ops.all(func(entry): return str(entry.get("op", "")) == "set_switch")
-	if not only_switches:
-		var switch_error := _enforce_switches(working)
-		if switch_error != null:
-			return _reject(switch_error)
+	var prepared := _prepare_patch(patch)
+	if not prepared.ok:
+		return _reject(prepared.error)
+	return _commit_patch(patch, prepared.data)
+
+
+func _commit_patch(patch: Dictionary, prepared: Dictionary) -> ActionResult:
+	var working: TestRoomState = prepared.working
+	var events := working.emitted_events.duplicate()
+	working.emitted_events.clear()
 	_push_undo(state)
 	working.undo_stack.assign(state.undo_stack.duplicate(true))
 	working.redo_stack = []
 	if state.pending_choice != null:
 		working.branch_id = state.branch_id + 1
 		working.revision = 0
-		working.pending_choice = null
-		if policy == "truncate":
-			working.result = {"source": "truncated", "outcome": "", "editable": true}
 	else:
 		working.branch_id = state.branch_id
 		working.revision = state.revision + 1
@@ -672,12 +940,10 @@ func apply_patch(context: Variant, patch_value: Variant) -> ActionResult:
 	working.interventions = state.interventions + patch.ops.size()
 	var before_hash := state.state_hash()
 	_adopt_state(working)
-	if catalog is TestContent:
-		(catalog as TestContent).overlay = state.overlay
 	state.make_checkpoint("编辑 %d 项" % patch.ops.size(), "edit")
-	state.append_journal("edit", {"ops": patch.ops.size(), "policy": policy}, before_hash, state.state_hash())
+	state.append_journal("edit", {"ops": patch.ops.duplicate(true), "policy": str(patch.get("resolution_policy", "rollback"))}, before_hash, state.state_hash())
 	notice = "已应用 %d 项" % patch.ops.size()
-	return _accepted_result([], state.pending_choice == null)
+	return _accepted_result(events, state.pending_choice == null)
 
 
 func preview_action(context: Variant, draft_value: Variant) -> GameResult:
@@ -688,7 +954,9 @@ func preview_action(context: Variant, draft_value: Variant) -> GameResult:
 		return _failure(GameConstants.ERROR_INVALID_ARGUMENT, "test.action.invalid")
 	var draft: Dictionary = draft_value
 	var action_type := StringName(draft.get("type", ""))
-	if not BATTLE_ACTIONS.has(action_type):
+	if _in_campus_room(state) and ROOM_ACTIONS.has(action_type):
+		return _preview_room_action(draft)
+	if _in_campus_room(state) or not BATTLE_ACTIONS.has(action_type):
 		return _failure(
 			GameConstants.ERROR_INVALID_ARGUMENT,
 			"test.action.unsupported",
@@ -727,7 +995,9 @@ func submit_action(context: Variant, draft_value: Variant) -> ActionResult:
 		return _reject(ApiError.new(GameConstants.ERROR_INVALID_ARGUMENT, "test.action.invalid"))
 	var draft: Dictionary = draft_value
 	var action_type := StringName(draft.get("type", ""))
-	if not BATTLE_ACTIONS.has(action_type):
+	if _in_campus_room(state) and ROOM_ACTIONS.has(action_type):
+		return _submit_room_action(draft)
+	if _in_campus_room(state) or not BATTLE_ACTIONS.has(action_type):
 		return _reject(
 			ApiError.new(
 				GameConstants.ERROR_INVALID_ARGUMENT,
@@ -741,43 +1011,57 @@ func submit_action(context: Variant, draft_value: Variant) -> ActionResult:
 	if typeof(payload) != TYPE_DICTIONARY:
 		return _reject(ApiError.new(GameConstants.ERROR_INVALID_ARGUMENT, "test.action.payload"))
 	var working := state.copy()
-	var ddl_before := int(working.battle.ddl)
-	var applied := engine.apply(
-		working.battle, ActionDraft.new(action_type, payload), working.rng
-	)
+	if action_type == &"end_turn" and bool(working.switches.get("manual_rule_steps", false)):
+		var checked := engine.apply(working.battle, ActionDraft.new(action_type, payload), working.rng)
+		if not checked.ok:
+			return _reject(checked.error)
+		working.pending_turn = payload.duplicate(true)
+		working.battle.phase = "enemy_turn"
+		working.revision += 1
+		working.dirty = true
+		_push_undo(state)
+		working.undo_stack.assign(state.undo_stack.duplicate(true))
+		working.redo_stack.clear()
+		var before := state.state_hash()
+		_adopt_state(working)
+		state.append_journal("deferred_turn", {"payload": payload.duplicate(true)}, before, state.state_hash())
+		notice = "回合已暂停，请在时间随机页执行一次真实规则步骤"
+		return _accepted_result([], true)
+	var applied := _execute_rule(working, "", {}, ActionDraft.new(action_type, payload))
 	if not applied.ok:
 		return _reject(applied.error)
 	var step: BattleStep = applied.data
-	if bool(state.switches.get("freeze_ddl", false)):
-		step.state.ddl = ddl_before
-	if step.outcome != null and bool(state.switches.get("freeze_outcome", false)):
-		step.state.outcome = null
-		step.state.phase = "player_action"
-		step.outcome = null
-	_push_undo(state)
-	working.undo_stack.assign(state.undo_stack.duplicate(true))
-	working.redo_stack = []
+	var events := step.events.duplicate()
 	working.battle = step.state
 	working.rng = step.rng_state.duplicate(true)
 	working.pending_choice = TestRoomState.choice_from_dictionary(step.pending_choice)
 	working.revision += 1
 	working.dirty = true
 	if step.outcome != null:
-		working.result = {
-			"source": "normal",
-			"outcome": str(step.outcome.get("result", "")),
-			"editable": true,
-		}
+		if working.run != null:
+			var settled := _settle_map_battle(working, step.outcome)
+			if not settled.ok:
+				return _reject(settled.error)
+			events.append_array(settled.data)
+		else:
+			working.result = {"source": "normal", "outcome": str(step.outcome.result), "editable": true}
+	if step.outcome == null and working.player_locks.has("vitality"):
+		var judge_error := _judge_now(working, events)
+		if judge_error != null:
+			return _reject(judge_error)
+	_push_undo(state)
+	working.undo_stack.assign(state.undo_stack.duplicate(true))
+	working.redo_stack.clear()
 	var before_hash := state.state_hash()
 	_adopt_state(working)
 	state.make_checkpoint("命令 %s" % String(action_type), "command")
 	state.append_journal(
 		"command",
-		{"type": String(action_type), "events": step.events.size()},
+		{"type": String(action_type), "payload": payload.duplicate(true), "events": events.size()},
 		before_hash,
 		state.state_hash()
 	)
-	return _accepted_result(step.events, state.pending_choice == null)
+	return _accepted_result(events, state.pending_choice == null)
 
 
 func restore_checkpoint(context: Variant, checkpoint_id: String) -> ActionResult:
@@ -826,10 +1110,10 @@ func step_history(context: Variant, direction: String) -> ActionResult:
 			)
 		var entry: Dictionary = state.undo_stack.pop_back()
 		state.redo_stack.append(
-			{"core": state.core_snapshot(), "journal_size": state.journal.size()}
+			{"core": state.core_snapshot(), "journal_size": state.journal.size(), "journal": state.journal.duplicate(true)}
 		)
 		var restored := TestRoomState.from_core(entry.core)
-		restored.journal.assign(state.journal.slice(0, int(entry.journal_size)))
+		restored.journal.assign(entry.get("journal", state.journal.slice(0, int(entry.journal_size))))
 		restored.checkpoints.assign(state.checkpoints.duplicate(true))
 		restored.undo_stack.assign(state.undo_stack.duplicate(true))
 		restored.redo_stack.assign(state.redo_stack.duplicate(true))
@@ -846,10 +1130,10 @@ func step_history(context: Variant, direction: String) -> ActionResult:
 			)
 		var entry: Dictionary = state.redo_stack.pop_back()
 		state.undo_stack.append(
-			{"core": state.core_snapshot(), "journal_size": state.journal.size()}
+			{"core": state.core_snapshot(), "journal_size": state.journal.size(), "journal": state.journal.duplicate(true)}
 		)
 		var restored := TestRoomState.from_core(entry.core)
-		restored.journal.assign(state.journal.slice(0, int(entry.journal_size)))
+		restored.journal.assign(entry.get("journal", state.journal.slice(0, int(entry.journal_size))))
 		restored.checkpoints.assign(state.checkpoints.duplicate(true))
 		restored.undo_stack.assign(state.undo_stack.duplicate(true))
 		restored.redo_stack.assign(state.redo_stack.duplicate(true))
@@ -881,26 +1165,44 @@ func restart(context: Variant, origin: String, seed_mode: String, seed: String =
 		return _reject(error)
 	if origin not in ["initial", "current"]:
 		return _reject(ApiError.new(GameConstants.ERROR_INVALID_ARGUMENT, "test.restart.origin"))
-	if origin == "initial":
+	if seed_mode not in ["same", "new"] or (seed_mode == "new" and seed.is_empty()):
+		return _reject(ApiError.new(GameConstants.ERROR_INVALID_ARGUMENT, "test.restart.seed"))
+	if origin == "initial" or (state.run != null and not state.run.outcome.is_empty()):
 		var config := state.config.duplicate(true)
 		if seed_mode == "new" and not seed.is_empty():
 			config["seed"] = seed
 		var overlay := state.overlay.to_dictionary()
 		config["overlay"] = overlay
 		config["switches"] = state.switches.duplicate(true)
+		var original := state
+		var original_catalog := catalog
+		var original_base := base_catalog
+		var original_engine := engine
+		var original_snapshot_id := _snapshot_id
+		var original_snapshot_name := _snapshot_name
 		state = null
 		var started := start(config)
 		if not started.ok:
+			state = original
+			catalog = original_catalog
+			base_catalog = original_base
+			engine = original_engine
 			return _reject(started.error)
+		_snapshot_id = original_snapshot_id
+		_snapshot_name = original_snapshot_name
 		return _accepted_result([], true)
 	var working := state.copy()
 	_push_undo(state)
 	working.undo_stack.assign(state.undo_stack.duplicate(true))
 	working.redo_stack = []
-	working.branch_id = 0
+	working.branch_id = state.branch_id + 1
 	working.revision = 0
 	working.attempt = state.attempt + 1
 	working.pending_choice = null
+	working.pending_turn.clear()
+	_truncate_resolution(working)
+	working.battle.outcome = null
+	working.battle.phase = "player_action"
 	working.result = {"source": "none", "outcome": "", "editable": true}
 	working.paused = false
 	working.editing = false
@@ -919,6 +1221,8 @@ func close() -> void:
 	base_catalog = null
 	engine = null
 	notice = ""
+	_snapshot_id = ""
+	_snapshot_name = ""
 
 
 func save_preset(name: String) -> GameResult:
@@ -945,22 +1249,31 @@ func save_snapshot(name: String) -> GameResult:
 		return _failure(GameConstants.ERROR_TEST_ROOM_NOT_ACTIVE, "test.room.inactive")
 	if state.pending_choice != null:
 		return _failure(GameConstants.ERROR_CHOICE_PENDING, "test.save.pending")
-	var id := "snapshot-%s" % _stamp()
-	return store.save(
+	var id := _snapshot_id if not _snapshot_id.is_empty() else "snapshot-%s" % _stamp()
+	var snapshot_name := _snapshot_name if not _snapshot_id.is_empty() else name
+	var saved := store.save(
 		"snapshot",
 		id,
-		name,
+		snapshot_name,
 		{
 			"core": state.core_snapshot(),
 			"journal": state.journal.duplicate(true),
 			"attempt": state.attempt,
+			"compatibility": _compatibility_metadata(),
 		}
 	)
+	if saved.ok:
+		_snapshot_id = id
+		_snapshot_name = snapshot_name
+		state.dirty = false
+	return saved
 
 
 func save_record(name: String) -> GameResult:
 	if state == null:
 		return _failure(GameConstants.ERROR_TEST_ROOM_NOT_ACTIVE, "test.room.inactive")
+	if state.pending_choice != null:
+		return _failure(GameConstants.ERROR_CHOICE_PENDING, "test.save.pending")
 	var id := "record-%s" % _stamp()
 	return store.save(
 		"record",
@@ -970,6 +1283,9 @@ func save_record(name: String) -> GameResult:
 			"core": state.core_snapshot(),
 			"journal": state.journal.duplicate(true),
 			"state_hash": state.state_hash(),
+			"hash_version": 3,
+			"journal_hash": SnapshotCodec.canonical_json(state.journal).sha256_text(),
+			"compatibility": _compatibility_metadata(),
 			"engine_version": GameConstants.GODOT_VERSION,
 			"overlay_hash": state.overlay.hash,
 		}
@@ -978,6 +1294,10 @@ func save_record(name: String) -> GameResult:
 
 func list_files(kind: String) -> Array[Dictionary]:
 	return store.list(kind)
+
+
+func delete_snapshot(snapshot_id: String) -> GameResult:
+	return store.remove("snapshot", snapshot_id)
 
 
 func load_preset(preset_id: String) -> ActionResult:
@@ -1003,6 +1323,31 @@ func load_preset(preset_id: String) -> ActionResult:
 	return _accepted_result([], true)
 
 
+func save_snapshot_with_patch(context: Variant, patch_value: Variant, name: String) -> GameResult:
+	var error := _check_context(context)
+	if error == null:
+		error = _validate_patch(patch_value, true)
+	if error != null:
+		return GameResult.failure(error)
+	var patch: Dictionary = patch_value
+	var original := state.copy()
+	var original_id := _snapshot_id
+	var original_name := _snapshot_name
+	var original_notice := notice
+	if not patch.ops.is_empty() or state.pending_choice != null:
+		var prepared := _prepare_patch(patch)
+		if not prepared.ok:
+			return prepared
+		_commit_patch(patch, prepared.data)
+	var saved := save_snapshot(name)
+	if not saved.ok:
+		_adopt_state(original)
+		_snapshot_id = original_id
+		_snapshot_name = original_name
+		notice = original_notice
+	return saved
+
+
 func load_snapshot(snapshot_id: String) -> ActionResult:
 	if state != null:
 		return _reject(
@@ -1019,14 +1364,24 @@ func load_snapshot(snapshot_id: String) -> ActionResult:
 	var loaded_ok := loaded_catalog.load(_manifest_id)
 	if not loaded_ok.ok:
 		return _reject(loaded_ok.error)
+	var core_issues := ROOM_VALIDATOR.validate_core(core, loaded_catalog)
+	if not core_issues.is_empty():
+		return _reject(ApiError.new(GameConstants.ERROR_TEST_FILE_INVALID, "test.file.payload", {"issues": core_issues}))
+	var file_error := _payload_error(payload, loaded_catalog, false)
+	if file_error != null:
+		return _reject(file_error)
 	var restored := TestRoomState.from_core(core)
+	restored.editing = false
 	var relic_error := _restored_relic_error(restored)
 	if relic_error != null:
 		return _reject(relic_error)
 	restored.branch_id = int(core.get("branch_id", 0)) + 1
 	restored.revision = 0
-	restored.journal = []
+	restored.journal.assign(payload.get("journal", []).duplicate(true))
 	restored.checkpoints = []
+	var upgraded := _recover_old_map_battle(restored, loaded_catalog)
+	if not upgraded.ok:
+		return _reject(upgraded.error)
 	restored.checkpoints.append(
 		{
 			"id": "cp-1",
@@ -1042,7 +1397,41 @@ func load_snapshot(snapshot_id: String) -> ActionResult:
 	catalog = TestContent.new(loaded_catalog, restored.overlay)
 	engine = BattleEngine.new(catalog)
 	_adopt_state(restored)
+	_snapshot_id = snapshot_id
+	_snapshot_name = str(loaded.data.name)
 	return _accepted_result([], true)
+
+
+func _compatibility_metadata(source: ContentDB = null) -> Dictionary:
+	var info := (base_catalog if source == null else source).get_info()
+	return {"manifest_id": info.id, "content_version": info.content_version,
+		"content_hash": info.content_hash, "ruleset_id": info.ruleset_id,
+		"rng_version": GameConstants.RANDOM_ALGORITHM_VERSION}
+
+
+func _payload_error(payload: Dictionary, source: ContentDB, record: bool) -> ApiError:
+	if payload.has("compatibility"):
+		if not payload.compatibility is Dictionary or SnapshotCodec.canonical_json(payload.compatibility) != SnapshotCodec.canonical_json(_compatibility_metadata(source)):
+			return ApiError.new(GameConstants.ERROR_VERSION_MISMATCH, "test.file.content_version")
+	var journal: Variant = payload.get("journal", [])
+	if not journal is Array:
+		return ApiError.new(GameConstants.ERROR_TEST_FILE_INVALID, "test.file.journal")
+	for entry in journal:
+		if not entry is Dictionary or not entry.get("summary") is Dictionary or not entry.get("kind") is String:
+			return ApiError.new(GameConstants.ERROR_TEST_FILE_INVALID, "test.file.journal")
+	if not record:
+		return null
+	if str(payload.get("engine_version", "")) != GameConstants.GODOT_VERSION:
+		return ApiError.new(GameConstants.ERROR_VERSION_MISMATCH, "test.record.engine_version")
+	var hash_version: Variant = payload.get("hash_version", 1)
+	if not (hash_version is int or hash_version is float) or floor(float(hash_version)) != float(hash_version) or int(hash_version) not in [1, 2, 3]:
+		return ApiError.new(GameConstants.ERROR_VERSION_MISMATCH, "test.record.hash_version")
+	var restored := TestRoomState.from_core(payload.core)
+	if str(payload.get("state_hash", "")) != restored.state_hash(int(hash_version)) or str(payload.get("overlay_hash", "")) != restored.overlay.hash:
+		return ApiError.new(GameConstants.ERROR_TEST_FILE_INVALID, "test.record.hash")
+	if int(hash_version) >= 2 and str(payload.get("journal_hash", "")) != SnapshotCodec.canonical_json(journal).sha256_text():
+		return ApiError.new(GameConstants.ERROR_TEST_FILE_INVALID, "test.record.journal_hash")
+	return null
 
 
 func load_record(record_id: String) -> ActionResult:
@@ -1061,14 +1450,24 @@ func load_record(record_id: String) -> ActionResult:
 	var loaded_ok := loaded_catalog.load(_manifest_id)
 	if not loaded_ok.ok:
 		return _reject(loaded_ok.error)
+	var core_issues := ROOM_VALIDATOR.validate_core(core, loaded_catalog)
+	if not core_issues.is_empty():
+		return _reject(ApiError.new(GameConstants.ERROR_TEST_FILE_INVALID, "test.file.payload", {"issues": core_issues}))
+	var file_error := _payload_error(payload, loaded_catalog, true)
+	if file_error != null:
+		return _reject(file_error)
 	var restored := TestRoomState.from_core(core)
+	restored.editing = false
 	var relic_error := _restored_relic_error(restored)
 	if relic_error != null:
 		return _reject(relic_error)
 	restored.branch_id = 0
 	restored.revision = 0
-	restored.journal = []
+	restored.journal.assign(payload.get("journal", []).duplicate(true))
 	restored.checkpoints = []
+	var upgraded := _recover_old_map_battle(restored, loaded_catalog)
+	if not upgraded.ok:
+		return _reject(upgraded.error)
 	restored.checkpoints.append(
 		{
 			"id": "cp-1",
@@ -1084,7 +1483,26 @@ func load_record(record_id: String) -> ActionResult:
 	catalog = TestContent.new(loaded_catalog, restored.overlay)
 	engine = BattleEngine.new(catalog)
 	_adopt_state(restored)
+	_snapshot_id = ""
+	_snapshot_name = ""
 	return _accepted_result([], true)
+
+
+func _recover_old_map_battle(restored: TestRoomState, source: ContentDB) -> GameResult:
+	if restored.run == null or restored.battle == null or restored.config.has("switches"):
+		return GameResult.success(true)
+	var overrides := {}
+	for key in SWITCHES:
+		if restored.switches.get(key, FREE_SWITCHES.has(key)) != FREE_SWITCHES.has(key):
+			overrides[key] = restored.switches[key]
+	restored.config["switches"] = overrides
+	restored.switches = _default_switches(overrides)
+	if restored.run.active_battle_id.is_empty() or not restored.battle.outcome is Dictionary:
+		return GameResult.success(true)
+	var wrapped := TestContent.new(source, restored.overlay)
+	var outcome: Dictionary = RunCodec.normalize_numbers(restored.battle.outcome)
+	var settled := RunService.new(wrapped).settle_battle(restored.run, outcome, restored.rng)
+	return _apply_run_step(restored, settled.data, null) if settled.ok else settled
 
 
 func _restored_relic_error(restored: TestRoomState) -> ApiError:
@@ -1108,6 +1526,7 @@ func _adopt_state(value: TestRoomState) -> void:
 	state = value
 	if catalog is TestContent:
 		(catalog as TestContent).overlay = state.overlay
+		(catalog as TestContent).battle_switches = state.switches.duplicate(true)
 
 
 func _check_context(context: Variant) -> ApiError:
@@ -1133,7 +1552,7 @@ func _check_context(context: Variant) -> ApiError:
 	return null
 
 
-func _validate_patch(value: Variant) -> ApiError:
+func _validate_patch(value: Variant, allow_empty: bool = false) -> ApiError:
 	if typeof(value) != TYPE_DICTIONARY:
 		return _invalid_patch("test.patch.invalid")
 	var patch: Dictionary = value
@@ -1143,7 +1562,7 @@ func _validate_patch(value: Variant) -> ApiError:
 	if int(patch.get("schema_version", 1)) != 1:
 		return _invalid_patch("test.patch.schema", {"schema_version": patch.get("schema_version")})
 	var ops: Variant = patch.get("ops", [])
-	if typeof(ops) != TYPE_ARRAY or ops.is_empty() or ops.size() > LIMITS.ops:
+	if typeof(ops) != TYPE_ARRAY or (ops.is_empty() and not allow_empty) or ops.size() > LIMITS.ops:
 		return _invalid_patch("test.patch.ops", {"size": 0 if typeof(ops) != TYPE_ARRAY else ops.size()})
 	for index in ops.size():
 		var op: Variant = ops[index]
@@ -1165,8 +1584,95 @@ func _validate_patch(value: Variant) -> ApiError:
 
 
 func _apply_op(working: TestRoomState, op: Dictionary, summary: Array[Dictionary]) -> ApiError:
+	var scope := str(op.get("persistence_scope", "battle"))
+	if scope not in ["battle", "run"]:
+		return _invalid_patch("test.patch.persistence_scope", {"scope": scope})
+	if scope == "battle":
+		return _apply_op_unscoped(working, op, summary)
+	if working.run == null:
+		return _invalid_patch("test.patch.run_required")
+	var before_cards := working.battle.card_by_id.duplicate(true)
+	var before_relics := working.battle.relics.duplicate()
+	var before_origins := working.relic_origins.duplicate()
+	var error := _apply_op_unscoped(working, op, summary)
+	if error != null:
+		return error
+	var transaction := TransactionResolver.new(TestContent.new(base_catalog, working.overlay))
+	for id in before_cards:
+		if working.battle.card_by_id.has(id):
+			continue
+		var origin := str(before_cards[id].get("origin_card_id", ""))
+		var found := false
+		for index in range(working.run.cards.size() - 1, -1, -1):
+			if not origin.is_empty() and str(working.run.cards[index].card_id) == origin:
+				working.run.cards.remove_at(index)
+				found = true
+				break
+		if not found:
+			return _invalid_patch("test.patch.run_card_unlinked", {"instance_id": str(id)})
+	for id in working.battle.card_by_id:
+		var card: Dictionary = working.battle.card_by_id[id]
+		if not before_cards.has(id):
+			var added := transaction.add_card(working.run, str(card.definition_id), "test_room")
+			added.upgrade_level = int(card.get("upgrade_level", 0))
+			card.origin_card_id = str(added.card_id)
+	if str(op.op) == "set_card_field" and str(op.get("scope", "definition")) == "instance":
+		var card: Dictionary = working.battle.card_by_id[str(op.target)]
+		var origin := str(card.get("origin_card_id", ""))
+		var found := false
+		for permanent in working.run.cards:
+			if not origin.is_empty() and str(permanent.card_id) == origin:
+				permanent.upgrade_level = int(card.get("upgrade_level", 0))
+				found = true
+				break
+		if not found:
+			return _invalid_patch("test.patch.run_card_unlinked", {"instance_id": str(op.target)})
+	if str(op.op) == "add_relic":
+		var slot := 0
+		var occupied := {}
+		for relic in working.run.relics:
+			occupied[int(relic.slot)] = true
+		while occupied.has(slot):
+			slot += 1
+		var added := transaction.add_relic(working.run, str(op.relic_id), "", slot)
+		var position := int(op.get("position", -1))
+		if position < 0 or position >= working.battle.relics.size():
+			position = working.battle.relics.size() - 1
+		working.relic_origins[position] = str(added.relic_id)
+	elif str(op.op) == "remove_relic":
+		var position := before_relics.find(str(op.get("relic_id", "")))
+		if position < 0:
+			position = int(op.get("position", -1))
+		var origin := str(before_origins[position])
+		var found := false
+		for index in working.run.relics.size():
+			if not origin.is_empty() and str(working.run.relics[index].relic_id) == origin:
+				working.run.relics.remove_at(index)
+				found = true
+				break
+		if not found:
+			return _invalid_patch("test.patch.run_relic_unlinked", {"relic_id": str(before_relics[position])})
+	return null
+
+
+func _apply_op_unscoped(working: TestRoomState, op: Dictionary, summary: Array[Dictionary]) -> ApiError:
 	var name := str(op.get("op", ""))
 	match name:
+		"enter_node":
+			var moved := _enter_test_node(working, str(op.get("node_key", "")))
+			if not moved.ok:
+				return moved.error
+			summary.append({"op": name, "node_key": working.config.node_key})
+			return null
+		"set_money":
+			var amount: Variant = op.get("value")
+			if working.run == null or not amount is int or amount < 0 or amount > LIMITS.value:
+				return _invalid_patch("test.patch.range", {"field": "money"})
+			working.run.money = amount
+			summary.append({"op": name, "value": amount})
+			return null
+		"set_character":
+			return _op_set_character(working, op, summary)
 		"set_switch":
 			return _op_set_switch(working, op)
 		"set_player_field":
@@ -1174,7 +1680,14 @@ func _apply_op(working: TestRoomState, op: Dictionary, summary: Array[Dictionary
 		"adjust_player_field":
 			return _op_adjust_player_field(working, op)
 		"set_player_lock":
-			summary.append({"op": name, "field": str(op.get("field", ""))})
+			var field := str(op.get("field", ""))
+			if not PLAYER_FIELDS.has(field) or typeof(op.get("locked")) != TYPE_BOOL:
+				return _invalid_patch("test.patch.lock", {"field": field})
+			if op.locked:
+				working.player_locks[field] = true
+			else:
+				working.player_locks.erase(field)
+			summary.append({"op": name, "field": field, "locked": op.locked})
 			return null
 		"add_card":
 			return _op_add_card(working, op, summary)
@@ -1261,6 +1774,129 @@ func _apply_op(working: TestRoomState, op: Dictionary, summary: Array[Dictionary
 	return _invalid_patch("test.patch.unknown_op", {"op": name})
 
 
+func _op_set_character(working: TestRoomState, op: Dictionary, summary: Array[Dictionary]) -> ApiError:
+	var character_id := str(op.get("character_id", ""))
+	var wrapped := TestContent.new(base_catalog, working.overlay)
+	var character := _definition(wrapped, "character", character_id)
+	if character.is_empty():
+		return _invalid_patch("test.config.character", {"character_id": character_id})
+	for field in ["keep_deck", "keep_relics"]:
+		if typeof(op.get(field, true)) != TYPE_BOOL:
+			return _invalid_patch("test.patch.type", {"field": field})
+	working.config["character_id"] = character_id
+	working.config["template_id"] = "character.%s" % character_id
+	working.battle.character_id = character_id
+	var player_id := str(working.battle.player.get("entity_id", ""))
+	if working.battle.source_registry.has(player_id):
+		working.battle.source_registry[player_id]["definition_id"] = character_id
+	if working.run != null:
+		working.run.character_id = character_id
+		working.run.relics = working.run.relics.filter(func(relic): return bool(op.get("keep_relics", true)) and RelicPilot.owns_definition(str(relic.definition_id), character_id))
+	if not bool(op.get("keep_deck", false)):
+		var deck_error := _replace_character_deck(working, wrapped, character)
+		if deck_error != null:
+			return deck_error
+	var relics: Array[String] = []
+	var origins: Array[String] = []
+	if bool(op.get("keep_relics", true)):
+		for index in working.battle.relics.size():
+			var relic_id := working.battle.relics[index]
+			if RelicPilot.owns_definition(relic_id, character_id):
+				relics.append(relic_id)
+				origins.append(working.relic_origins[index])
+	working.battle.relics.assign(relics)
+	working.relic_origins.assign(origins)
+	for source_id in working.battle.source_registry.keys():
+		var source: Dictionary = working.battle.source_registry[source_id]
+		if source.get("kind") == "relic" and not relics.has(str(source.get("definition_id", ""))):
+			working.battle.source_registry.erase(source_id)
+	for key in working.battle.counters.keys():
+		var owner := str(key).get_slice("|", 1)
+		if owner.begins_with("relic_hook:"):
+			owner = owner.get_slice(":", 1)
+		if owner.begins_with("RX-") and not relics.has(owner):
+			working.battle.counters.erase(key)
+	working.config["relics"] = relics.duplicate()
+	summary.append({"op": "set_character", "character_id": character_id, "keep_deck": bool(op.get("keep_deck", false))})
+	return null
+
+
+func _replace_character_deck(working: TestRoomState, wrapped: TestContent, character: Dictionary) -> ApiError:
+	var starter := _starter_cards(wrapped, character, [])
+	if not starter.ok:
+		return starter.error
+	var battle := working.battle
+	var hand_count: int = battle.zones.get("hand", []).size()
+	var removed := {}
+	for card in battle.card_by_id.values():
+		removed[str(card.card_id)] = true
+		removed[str(card.definition_id)] = true
+		var origin := str(card.get("origin_card_id", ""))
+		if not origin.is_empty():
+			removed[origin] = true
+	for id in wrapped.get_info().enabled.get("character", []):
+		var definition := _definition(wrapped, "character", str(id))
+		var passive_id := str(definition.get("passive", {}).get("id", ""))
+		if not passive_id.is_empty():
+			removed[passive_id] = true
+			removed["passive:" + passive_id] = true
+	for ability in battle.v3.get("abilities", []):
+		removed[str(ability.get("ability_id", ""))] = true
+		removed["ability:" + str(ability.get("definition_id", ""))] = true
+	for unit in battle.units:
+		removed[str(unit.unit_id)] = true
+	if battle.scene is Dictionary:
+		removed[str(battle.scene.scene_id)] = true
+	for id in battle.card_by_id.keys():
+		_remove_card(working, str(id))
+	# A truncated pending choice can also leave cards in the resolving zone.
+	for zone in battle.zones:
+		battle.zones[zone].clear()
+	battle.retained_card_ids.clear()
+	battle.units.clear()
+	battle.scene = null
+	battle.v3.clear()
+	battle.resolution = null
+	for status in battle.statuses.duplicate():
+		if removed.has(str(status.get("target_id", ""))) or removed.has(str(status.get("source_id", ""))):
+			removed[str(status.instance_id)] = true
+			battle.statuses.erase(status)
+	for id in removed:
+		battle.source_registry.erase(id)
+	for key in battle.counters.keys():
+		for id in removed:
+			if not str(id).is_empty() and str(key).contains("|" + str(id) + "|"):
+				battle.counters.erase(key)
+				break
+	# Keep the normal P02 opening card available immediately, without advancing
+	# RNG, rerunning prepare hooks or restarting the current enemy encounter.
+	var cards: Array = starter.data.duplicate(true)
+	if battle.character_id == "P02":
+		for index in cards.size():
+			if cards[index].definition_id == "R3-P02-01":
+				cards.push_front(cards.pop_at(index))
+				break
+	if working.run != null:
+		working.run.cards.clear()
+		var transactions := RunService.new(wrapped).transactions()
+		for card in cards:
+			transactions.add_card(working.run, str(card.definition_id), "starter")
+		cards = working.run.cards.duplicate(true)
+	for index in cards.size():
+		var card: Dictionary = cards[index]
+		var id := _new_instance_id(working, "c")
+		battle.card_by_id[id] = {
+			"card_id": id, "definition_id": str(card.definition_id),
+			"origin_card_id": str(card.card_id), "upgrade_level": int(card.get("upgrade_level", 0)),
+			"temporary_modifiers": {},
+		}
+		_register_source(working, id, "card", str(card.definition_id))
+		var zone := "hand" if index < hand_count else "draw"
+		battle.zones[zone].append(id)
+	working.config["cards"] = cards.duplicate(true)
+	return null
+
+
 func _op_set_switch(working: TestRoomState, op: Dictionary) -> ApiError:
 	var key := str(op.get("key", ""))
 	if not SWITCHES.has(key):
@@ -1268,6 +1904,9 @@ func _op_set_switch(working: TestRoomState, op: Dictionary) -> ApiError:
 	if typeof(op.get("value")) != TYPE_BOOL:
 		return _invalid_patch("test.patch.type", {"field": "value"})
 	working.switches[key] = op.value
+	if not working.config.has("switches"):
+		working.config["switches"] = {}
+	working.config.switches[key] = op.value
 	return null
 
 
@@ -1287,6 +1926,12 @@ func _op_set_player_field(working: TestRoomState, op: Dictionary) -> ApiError:
 	if field == "vitality" and int(value) > int(working.battle.player.get("max_vitality", LIMITS.value)):
 		return _invalid_patch("test.patch.range", {"field": field})
 	working.battle.player[field] = int(value)
+	if working.run != null:
+		if field == "max_vitality":
+			working.run.max_vitality = int(value)
+			working.run.vitality = mini(working.run.vitality, int(value))
+		elif field == "vitality":
+			working.run.vitality = int(value)
 	if field == "max_vitality":
 		working.battle.player["max_vitality_base"] = int(value)
 	return null
@@ -1313,9 +1958,11 @@ func _op_add_card(working: TestRoomState, op: Dictionary, summary: Array[Diction
 		return ApiError.new(
 			GameConstants.ERROR_TEST_UNSUPPORTED, "test.patch.zone_unsupported", {"zone": zone}
 		)
-	var definition := _definition(catalog, "card", definition_id)
-	if definition == null:
+	var definition := _definition(TestContent.new(base_catalog, working.overlay), "card", definition_id)
+	if definition.is_empty():
 		return _invalid_patch("test.patch.definition_missing", {"definition_id": definition_id})
+	if typeof(op.get("count", 1)) != TYPE_INT:
+		return _invalid_patch("test.patch.type", {"field": "count"})
 	var count := int(op.get("count", 1))
 	if count < 1 or count > 50:
 		return _invalid_patch("test.patch.count", {"count": count})
@@ -1348,8 +1995,10 @@ func _op_add_card(working: TestRoomState, op: Dictionary, summary: Array[Diction
 func _add_chapter_cards(
 	working: TestRoomState, definition_id: String, op: Dictionary, summary: Array[Dictionary]
 ) -> ApiError:
-	if _definition(catalog, "card", definition_id) == null:
+	if _definition(TestContent.new(base_catalog, working.overlay), "card", definition_id).is_empty():
 		return _invalid_patch("test.patch.definition_missing", {"definition_id": definition_id})
+	if typeof(op.get("count", 1)) != TYPE_INT:
+		return _invalid_patch("test.patch.type", {"field": "count"})
 	var count := int(op.get("count", 1))
 	if count < 1 or count > 50:
 		return _invalid_patch("test.patch.count", {"count": count})
@@ -1435,6 +2084,8 @@ func _op_duplicate_instance(working: TestRoomState, op: Dictionary, summary: Arr
 		return ApiError.new(
 			GameConstants.ERROR_TEST_UNSUPPORTED, "test.patch.zone_unsupported", {"zone": zone}
 		)
+	if typeof(op.get("count", 1)) != TYPE_INT:
+		return _invalid_patch("test.patch.type", {"field": "count"})
 	var count := int(op.get("count", 1))
 	if count < 1 or count > 50:
 		return _invalid_patch("test.patch.count", {"count": count})
@@ -1468,6 +2119,12 @@ func _op_move_instance(working: TestRoomState, op: Dictionary, summary: Array[Di
 		)
 	var source_zone := _zone_of(working, instance_id)
 	if source_zone == zone:
+		var position := int(op.get("position", -1))
+		if position >= 0 and ZONES.has(zone):
+			var cards: Array = working.battle.zones[zone]
+			cards.erase(instance_id)
+			cards.insert(mini(position, cards.size()), instance_id)
+			summary.append({"op": "move_instance", "instance_id": instance_id, "to": zone, "position": position})
 		return null
 	if source_zone.is_empty():
 		return _invalid_patch("test.patch.instance_unzoned", {"instance_id": instance_id})
@@ -1615,7 +2272,7 @@ func _op_set_card_field(working: TestRoomState, op: Dictionary, summary: Array[D
 		return null
 	if scope != "definition":
 		return _invalid_patch("test.patch.scope", {"scope": scope})
-	if _definition(catalog, "card", target) == null:
+	if _definition(TestContent.new(base_catalog, working.overlay), "card", target).is_empty():
 		return _invalid_patch("test.patch.definition_missing", {"definition_id": target})
 	var overlay_error := working.overlay.set_field("card", target, field, value)
 	if overlay_error != null:
@@ -1626,7 +2283,7 @@ func _op_set_card_field(working: TestRoomState, op: Dictionary, summary: Array[D
 
 func _op_add_relic(working: TestRoomState, op: Dictionary, summary: Array[Dictionary]) -> ApiError:
 	var relic_id := str(op.get("relic_id", ""))
-	if _definition(catalog, "relic", relic_id).is_empty() or not RelicPilot.owns_definition(relic_id, working.battle.character_id):
+	if _definition(TestContent.new(base_catalog, working.overlay), "relic", relic_id).is_empty() or not RelicPilot.owns_definition(relic_id, working.battle.character_id):
 		return _invalid_patch("test.patch.definition_missing", {"relic_id": relic_id})
 	if RelicPilot.expanded(_manifest_id) and relic_id in working.battle.relics and not bool(working.switches.get("ignore_relic_unique", false)):
 		return _switch_required("ignore_relic_unique")
@@ -1635,8 +2292,10 @@ func _op_add_relic(working: TestRoomState, op: Dictionary, summary: Array[Dictio
 	var position := int(op.get("position", -1))
 	if position >= 0 and position <= working.battle.relics.size():
 		working.battle.relics.insert(position, relic_id)
+		working.relic_origins.insert(position, "")
 	else:
 		working.battle.relics.append(relic_id)
+		working.relic_origins.append("")
 	summary.append({"op": "add_relic", "relic_id": relic_id})
 	return null
 
@@ -1646,11 +2305,11 @@ func _op_remove_relic(working: TestRoomState, op: Dictionary, summary: Array[Dic
 	var position := int(op.get("position", -1))
 	var removed := ""
 	if not relic_id.is_empty() and working.battle.relics.has(relic_id):
-		working.battle.relics.erase(relic_id)
-		removed = relic_id
-	elif position >= 0 and position < working.battle.relics.size():
+		position = working.battle.relics.find(relic_id)
+	if position >= 0 and position < working.battle.relics.size():
 		removed = working.battle.relics[position]
 		working.battle.relics.remove_at(position)
+		working.relic_origins.remove_at(position)
 	else:
 		return _invalid_patch("test.patch.relic_missing", {"relic_id": relic_id, "position": position})
 	summary.append({"op": "remove_relic", "relic_id": removed})
@@ -1660,7 +2319,7 @@ func _op_remove_relic(working: TestRoomState, op: Dictionary, summary: Array[Dic
 func _op_add_status(working: TestRoomState, op: Dictionary, summary: Array[Dictionary]) -> ApiError:
 	var status_id := str(op.get("status_id", ""))
 	var target_id := str(op.get("target_id", ""))
-	if _definition(catalog, "status", status_id) == null:
+	if _definition(TestContent.new(base_catalog, working.overlay), "status", status_id).is_empty():
 		return _invalid_patch("test.patch.definition_missing", {"status_id": status_id})
 	if not _holder_exists(working, target_id):
 		return _invalid_patch("test.patch.target_missing", {"target_id": target_id})
@@ -1675,7 +2334,7 @@ func _op_add_status(working: TestRoomState, op: Dictionary, summary: Array[Dicti
 			999, int(working.battle.statuses[existing].get("stacks", 0)) + stacks
 		)
 	else:
-		var definition := _definition(catalog, "status", status_id)
+		var definition := _definition(TestContent.new(base_catalog, working.overlay), "status", status_id)
 		var instance_id := _new_instance_id(working, "st")
 		working.battle.statuses.append(
 			{
@@ -1755,8 +2414,8 @@ func _op_clear_statuses(working: TestRoomState, op: Dictionary, summary: Array[D
 
 func _op_add_task(working: TestRoomState, op: Dictionary, summary: Array[Dictionary]) -> ApiError:
 	var definition_id := str(op.get("definition_id", ""))
-	var definition := _definition(catalog, "task", definition_id)
-	if definition == null:
+	var definition := _definition(TestContent.new(base_catalog, working.overlay), "task", definition_id)
+	if definition.is_empty():
 		return _invalid_patch("test.patch.definition_missing", {"definition_id": definition_id})
 	if working.battle.tasks.size() >= LIMITS.tasks:
 		return _limit("tasks")
@@ -1840,7 +2499,7 @@ func _op_set_task_field(working: TestRoomState, op: Dictionary, summary: Array[D
 			return _invalid_patch("test.patch.range", {"field": field})
 		working.battle.tasks[index][field] = int(value)
 	elif field == "phase_key":
-		working.battle.tasks[index][field] = str(value)
+		return _op_set_task_phase(working, {"task_id": task_id, "phase_key": str(value)}, summary)
 	else:
 		return _invalid_patch("test.patch.field_not_supported", {"field": field})
 	summary.append({"op": "set_task_field", "task_id": task_id, "field": field})
@@ -1868,7 +2527,7 @@ func _op_set_task_phase(working: TestRoomState, op: Dictionary, summary: Array[D
 	for task in working.battle.tasks:
 		if str(task.get("task_id", "")) != task_id:
 			continue
-		var definition := _definition(catalog, "task", str(task.get("definition_id", "")))
+		var definition := _definition(TestContent.new(base_catalog, working.overlay), "task", str(task.get("definition_id", "")))
 		var phases: Array = definition.get("phases", [])
 		for phase in phases:
 			if str(phase.get("phase_key", "")) != phase_key:
@@ -1888,8 +2547,8 @@ func _op_set_task_phase(working: TestRoomState, op: Dictionary, summary: Array[D
 
 func _op_add_unit(working: TestRoomState, op: Dictionary, summary: Array[Dictionary]) -> ApiError:
 	var definition_id := str(op.get("definition_id", ""))
-	var definition := _definition(catalog, "unit", definition_id)
-	if definition == null:
+	var definition := _definition(TestContent.new(base_catalog, working.overlay), "unit", definition_id)
+	if definition.is_empty():
 		return _invalid_patch("test.patch.definition_missing", {"definition_id": definition_id})
 	if working.battle.units.size() >= LIMITS.units:
 		return _limit("units")
@@ -1960,12 +2619,26 @@ func _op_set_unit_field(working: TestRoomState, op: Dictionary, summary: Array[D
 
 func _op_replace_encounter(working: TestRoomState, op: Dictionary, summary: Array[Dictionary]) -> ApiError:
 	var encounter_id := str(op.get("encounter_id", ""))
-	var encounter := _definition(catalog, "encounter", encounter_id)
-	if encounter == null:
+	var encounter := _definition(TestContent.new(base_catalog, working.overlay), "encounter", encounter_id)
+	if encounter.is_empty():
 		return _invalid_patch("test.patch.definition_missing", {"encounter_id": encounter_id})
-	var members: Array = encounter.get("members", [])
+	var members: Array = encounter.get("members", []).duplicate()
+	if encounter.has("spawn"):
+		var pool := members.duplicate()
+		members.clear()
+		for group in encounter.spawn.get("groups", []):
+			var used := 0
+			for id in pool:
+				var definition := _definition(TestContent.new(base_catalog, working.overlay), "task", str(id))
+				if str(definition.get("spawn_group", "other")) == str(group.get("group", "")):
+					members.append(id)
+					used += 1
+					if used >= int(group.get("count", 1)):
+						break
+			if used < int(group.get("count", 1)):
+				return _invalid_patch("test.patch.dynamic_encounter", {"encounter_id": encounter_id})
 	for member_id in members:
-		if _definition(catalog, "task", str(member_id)) == null:
+		if _definition(TestContent.new(base_catalog, working.overlay), "task", str(member_id)).is_empty():
 			return _invalid_patch("test.patch.task_missing", {"definition_id": str(member_id)})
 	var kept_statuses: Array[Dictionary] = []
 	for status in working.battle.statuses:
@@ -1981,6 +2654,7 @@ func _op_replace_encounter(working: TestRoomState, op: Dictionary, summary: Arra
 		if task_error != null:
 			return task_error
 	working.battle.encounter_id = encounter_id
+	working.config["encounter_id"] = encounter_id
 	working.battle.exam_flags.clear()
 	for flag in encounter.get("exam_flags", []):
 		working.battle.exam_flags.append(str(flag))
@@ -2015,6 +2689,8 @@ func _op_set_phase(working: TestRoomState, op: Dictionary) -> ApiError:
 	if phase == "finished" and working.battle.outcome == null:
 		return _invalid_patch("test.patch.phase_outcome", {"phase": phase})
 	working.battle.phase = phase
+	if phase != "enemy_turn":
+		working.pending_turn.clear()
 	return null
 
 
@@ -2131,7 +2807,7 @@ func _op_remove_definition(working: TestRoomState, op: Dictionary, summary: Arra
 func _op_set_definition_field(working: TestRoomState, op: Dictionary, summary: Array[Dictionary]) -> ApiError:
 	var kind := str(op.get("kind", ""))
 	var id := str(op.get("id", ""))
-	if _definition(catalog, kind, id) == null:
+	if _definition(TestContent.new(base_catalog, working.overlay), kind, id).is_empty():
 		return _invalid_patch("test.patch.definition_missing", {"kind": kind, "id": id})
 	var error := working.overlay.set_field(kind, id, str(op.get("path", "")), op.get("value"))
 	if error != null:
@@ -2201,36 +2877,101 @@ func _op_set_outcome(working: TestRoomState, op: Dictionary) -> ApiError:
 		"remaining_vitality": int(working.battle.player.get("vitality", 0)),
 	}
 	working.battle.phase = "finished"
+	if working.run != null and not _in_campus_room(working):
+		var settled := _settle_map_battle(working, working.battle.outcome)
+		if not settled.ok:
+			return settled.error
+		if working.result.source == "normal":
+			working.result.source = "manual"
+		return null
 	working.result = {"source": "manual", "outcome": value, "editable": true}
 	return null
 
 
+func _judge_now(working: TestRoomState, events: Array[RuleEvent]) -> ApiError:
+	if working.battle.phase == "finished" or bool(working.switches.get("freeze_outcome", false)) or _in_campus_room(working):
+		return null
+	var wrapped := TestContent.new(base_catalog, working.overlay)
+	wrapped.battle_switches = working.switches.duplicate(true)
+	var judge := BattleEngine.new(wrapped)
+	judge._check_battle_outcome(working.battle, events)
+	if working.battle.outcome == null and working.battle.ddl <= 0 and not bool(working.switches.get("freeze_ddl", false)):
+		judge._finish_battle(working.battle, "lost", "ddl_expired", events)
+	if working.battle.outcome != null:
+		working.pending_turn.clear()
+		if working.run != null:
+			var settled := _settle_map_battle(working, working.battle.outcome)
+			if not settled.ok:
+				return settled.error
+			events.append_array(settled.data)
+		else:
+			working.result = {"source": "normal", "outcome": str(working.battle.outcome.result), "editable": true}
+	return null
+
+
+func _execute_rule(working: TestRoomState, rule: String, args: Dictionary, action: ActionDraft = null) -> GameResult:
+	var wrapped := TestContent.new(base_catalog, working.overlay)
+	wrapped.battle_switches = working.switches.duplicate(true)
+	# Locked vitality must not cause a transient defeat within an atomic command.
+	if working.player_locks.has("vitality"):
+		wrapped.battle_switches["freeze_outcome"] = true
+	var rule_engine := BattleEngine.new(wrapped)
+	var before_player := working.battle.player.duplicate(true)
+	var applied := rule_engine.apply(working.battle, action, working.rng) if action != null else rule_engine.test_apply_rule_op(working.battle.copy(), rule, args, working.rng)
+	if not applied.ok:
+		return applied
+	var step: BattleStep = applied.data
+	working.battle = step.state
+	working.rng = step.rng_state.duplicate(true)
+	working.pending_choice = TestRoomState.choice_from_dictionary(step.pending_choice)
+	var restored_fields := {}
+	for field in working.player_locks:
+		if working.battle.player.get(field) != before_player.get(field, 0):
+			restored_fields[field] = {"before": working.battle.player.get(field), "after": before_player.get(field, 0)}
+		working.battle.player[field] = before_player.get(field, 0)
+	if int(working.battle.player.vitality) > int(working.battle.player.max_vitality):
+		return _failure(GameConstants.ERROR_TEST_LIMIT_REACHED, "test.lock.conflict", {
+			"locks": working.player_locks.keys(), "vitality": working.battle.player.vitality,
+			"max_vitality": working.battle.player.max_vitality,
+		})
+	if not restored_fields.is_empty():
+		var event_index: int = step.events.back().index + 1 if not step.events.is_empty() else 0
+		step.events.append(RuleEvent.new(event_index, &"test_resource_restored", working.test_id, [str(working.battle.player.entity_id)], {"fields": restored_fields}))
+	if working.run != null:
+		working.run.vitality = int(working.battle.player.vitality)
+		working.run.max_vitality = int(working.battle.player.max_vitality)
+	return GameResult.success(step)
+
+
 func _op_run_rule_op(working: TestRoomState, op: Dictionary, summary: Array[Dictionary]) -> ApiError:
 	var rule := str(op.get("rule", ""))
-	match rule:
-		"end_turn":
-			var applied := engine.apply(working.battle, ActionDraft.new(&"end_turn", {}), working.rng)
-			if not applied.ok:
-				return applied.error
-			var step: BattleStep = applied.data
-			working.battle = step.state
-			working.rng = step.rng_state.duplicate(true)
-			working.pending_choice = TestRoomState.choice_from_dictionary(step.pending_choice)
-			summary.append({"op": "run_rule_op", "rule": rule})
-			return null
-		"draw", "gain_status", "pressure":
-			var applied := engine.test_apply_rule_op(
-				working.battle, rule, op.get("args", {}), working.rng
-			)
-			if not applied.ok:
-				return applied.error
-			var step: BattleStep = applied.data
-			working.battle = step.state
-			working.rng = step.rng_state.duplicate(true)
-			working.pending_choice = TestRoomState.choice_from_dictionary(step.pending_choice)
-			summary.append({"op": "run_rule_op", "rule": rule})
-			return null
-	return _invalid_patch("test.patch.rule", {"rule": rule})
+	if rule not in ["end_turn", "draw", "gain_status", "pressure"] or not op.get("args", {}) is Dictionary:
+		return _invalid_patch("test.patch.rule", {"rule": rule})
+	var action: ActionDraft = null
+	if rule == "end_turn":
+		if working.battle.phase == "enemy_turn":
+			working.battle.phase = "player_action"
+		var payload: Dictionary = working.pending_turn.duplicate(true)
+		working.pending_turn.clear()
+		action = ActionDraft.new(&"end_turn", payload)
+	var applied := _execute_rule(working, rule, op.get("args", {}), action)
+	if not applied.ok:
+		return applied.error
+	var step: BattleStep = applied.data
+	working.emitted_events.append_array(step.events)
+	if step.outcome != null and working.run != null:
+		var settled := _settle_map_battle(working, step.outcome)
+		if not settled.ok:
+			return settled.error
+		working.emitted_events.append_array(settled.data)
+	elif step.outcome != null:
+		working.result = {"source": "normal", "outcome": str(step.outcome.result), "editable": true}
+	if step.outcome == null and working.player_locks.has("vitality"):
+		var judge_error := _judge_now(working, working.emitted_events)
+		if judge_error != null:
+			return judge_error
+	summary.append({"op": "run_rule_op", "rule": rule})
+	return null
 
 
 func _enforce_switches(working: TestRoomState) -> ApiError:
@@ -2244,7 +2985,7 @@ func _enforce_switches(working: TestRoomState) -> ApiError:
 		if not bool(working.switches.get("allow_empty_tasks", false)) and battle.tasks.is_empty():
 			return _switch_required("allow_empty_tasks")
 	var ruleset_id := "" if catalog == null else str(catalog.get_info().ruleset_id)
-	var ruleset := _definition(catalog, "ruleset", ruleset_id)
+	var ruleset := _definition(TestContent.new(base_catalog, working.overlay), "ruleset", ruleset_id)
 	var battle_rules: Dictionary = ruleset.get("battle", {})
 	if (
 		not bool(working.switches.get("ignore_unit_slots", false))
@@ -2273,7 +3014,7 @@ func _switch_required(key: String) -> ApiError:
 
 func _op_add_scene(working: TestRoomState, op: Dictionary, summary: Array[Dictionary]) -> ApiError:
 	var definition_id := str(op.get("scene_id", ""))
-	if _definition(catalog, "scene", definition_id).is_empty():
+	if _definition(TestContent.new(base_catalog, working.overlay), "scene", definition_id).is_empty():
 		return _invalid_patch("test.patch.definition_missing", {"definition_id": definition_id})
 	var scene_id := _new_instance_id(working, "s")
 	working.battle.scene = {
@@ -2414,7 +3155,7 @@ func _starter_cards(wrapped: TestContent, character: Dictionary, raw: Variant) -
 			elif typeof(item) == TYPE_DICTIONARY:
 				definition_id = str(item.get("definition_id", ""))
 				upgrade_level = int(item.get("upgrade_level", 0))
-			if definition_id.is_empty() or _definition(wrapped, "card", definition_id) == null:
+			if definition_id.is_empty() or _definition(wrapped, "card", definition_id).is_empty():
 				return _failure(
 					GameConstants.ERROR_CONTENT_INVALID,
 					"test.config.card",
@@ -2434,7 +3175,7 @@ func _starter_cards(wrapped: TestContent, character: Dictionary, raw: Variant) -
 		var starter: Array = common.duplicate()
 		starter.append_array(character.get("starter_cards", []))
 		for definition_id in starter:
-			if _definition(wrapped, "card", str(definition_id)) == null:
+			if _definition(wrapped, "card", str(definition_id)).is_empty():
 				return _failure(
 					GameConstants.ERROR_CONTENT_INVALID,
 					"test.config.starter_card",
@@ -2482,11 +3223,17 @@ func _default_encounter(catalog_db: ContentDB) -> String:
 func _default_switches(raw: Variant) -> Dictionary:
 	var switches := {}
 	for key in SWITCHES:
-		switches[key] = FREE_SWITCHES.has(key)
-	if typeof(raw) == TYPE_DICTIONARY:
+		switches[key] = false
+	switches.merge(_explicit_switches(raw), true)
+	return switches
+
+
+func _explicit_switches(raw: Variant) -> Dictionary:
+	var switches := {}
+	if raw is Dictionary:
 		for key in raw:
-			if SWITCHES.has(str(key)) and typeof(raw[key]) == TYPE_BOOL:
-				switches[str(key)] = bool(raw[key])
+			if SWITCHES.has(str(key)) and raw[key] is bool:
+				switches[str(key)] = raw[key]
 	return switches
 
 
@@ -2590,7 +3337,7 @@ func _referenced(working: TestRoomState, kind: String, id: String) -> bool:
 
 func _push_undo(current: TestRoomState) -> void:
 	current.undo_stack.append(
-		{"core": current.core_snapshot(), "journal_size": current.journal.size()}
+		{"core": current.core_snapshot(), "journal_size": current.journal.size(), "journal": current.journal.duplicate(true)}
 	)
 	while current.undo_stack.size() > TestRoomState.CHECKPOINT_LIMIT:
 		current.undo_stack.pop_front()

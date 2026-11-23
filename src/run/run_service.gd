@@ -387,12 +387,69 @@ func _can_enter(state: RunState, payload: Dictionary) -> GameResult:
 	return GameResult.success(true)
 
 
+## The developer sandbox supplies its own isolated run and may revisit any node.
+func enter_test_node(state: RunState, node_id: String, rng_states: Dictionary) -> GameResult:
+	var rng := RandomSource.new()
+	var restored := _restore_rng(rng, rng_states)
+	if not restored.ok:
+		return restored
+	var work := state.copy_for_write()
+	var selected := work.find_node(node_id)
+	if selected == null:
+		return _error(GameConstants.ERROR_INVALID_TARGET, "run.node.unknown")
+	if not work.current_node_id.is_empty():
+		var previous := work.find_node(work.current_node_id)
+		if previous != null and previous.status == "active":
+			previous.status = "pending"
+			previous.context = {}
+	# A jump back into the route can replay the selected stretch. The test
+	# workspace keeps the player's current inventory and resources.
+	var replayed := {}
+	for node in work.nodes:
+		if node.term < selected.term or (node.term == selected.term and node.layer < selected.layer):
+			continue
+		if node.status != "pending" or work.settled_battle_ids.has(node.node_id):
+			replayed[node.node_id] = true
+			node.status = "pending"
+			node.context = {}
+			var meta := CampaignProgression.metadata(work, node.node_id)
+			node.kind = str(meta.get("kind", node.kind))
+	work.node_path = work.node_path.filter(func(id): return not replayed.has(id))
+	work.settled_battle_ids = work.settled_battle_ids.filter(func(id): return not replayed.has(id))
+	if CampaignProgression.enabled(work):
+		var summaries: Array = work.campaign.summaries
+		summaries.resize(mini(summaries.size(), selected.term - 1))
+	work.term = selected.term
+	work.current_node_id = ""
+	work.active_battle_id = ""
+	work.active_encounter_id = ""
+	work.pending_reward = null
+	work.settlement = null
+	work.outcome = ""
+	work.awaiting_ending = false
+	work.campaign["pending"] = {}
+	work.seen_event_ids.clear()
+	# At year four the unqualified route naturally enters the deferred final.
+	# Keep existing direction and thesis decisions if the sandbox already has them.
+	var events: Array[RuleEvent] = []
+	var payload := {"node_id": node_id}
+	var entered := _enter_node(work, payload, rng, events, true)
+	if not entered.ok:
+		return entered
+	_action_events(state, work, "enter_node", payload, events)
+	var snapshot := rng.export_state().to_dictionary()
+	if entered.data is Dictionary:
+		entered.data.rng_state = snapshot.duplicate(true)
+	return GameResult.success(RunStep.new(work, events, entered.data, null, snapshot))
+
+
 func _enter_node(
-	work: RunState, payload: Dictionary, rng: RandomSource, events: Array[RuleEvent]
+	work: RunState, payload: Dictionary, rng: RandomSource, events: Array[RuleEvent], in_test_room: bool = false
 ) -> GameResult:
-	var checked := _can_enter(work, payload)
-	if not checked.ok:
-		return checked
+	if not in_test_room:
+		var checked := _can_enter(work, payload)
+		if not checked.ok:
+			return checked
 	var node := work.find_node(str(payload.node_id))
 	work.current_node_id = node.node_id
 	work.pending_reward = null

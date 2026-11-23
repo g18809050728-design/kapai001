@@ -98,9 +98,13 @@ func upsert(kind: String, id: String, definition: Dictionary) -> ApiError:
 		return _error("test.patch.invalid_definition", {"id": id})
 	if str(definition.get("id", "")) != id:
 		return _error("test.patch.definition_id_mismatch", {"id": id})
+	var validator: Script = load("res://src/test/test_room_validator.gd")
+	var issues: Array[String] = validator.validate_definition(kind, id, definition)
+	if not issues.is_empty():
+		return _error("test.patch.definition_schema", {"id": id, "issues": issues})
 	if not definitions.has(kind):
 		definitions[kind] = {}
-	definitions[kind][id] = definition.duplicate(true)
+	definitions[kind][id] = RunCodec.normalize_numbers(definition)
 	recompute_hash()
 	return null
 
@@ -118,11 +122,22 @@ func remove(kind: String, id: String) -> ApiError:
 
 
 func set_field(kind: String, id: String, path: String, value: Variant) -> ApiError:
+	value = RunCodec.normalize_numbers(value)
 	if not KINDS.has(kind):
 		return _error("test.patch.unknown_kind", {"kind": kind})
 	var root := path.get_slice(".", 0)
 	if not FIELDS[kind].has(root):
 		return _error("test.patch.field_not_supported", {"kind": kind, "field": root})
+	if not _is_safe_id(id) or path.is_empty() or path.begins_with(".") or path.ends_with(".") or path.contains(".."):
+		return _error("test.patch.invalid_field_path", {"id": id, "path": path})
+	for segment in path.split("."):
+		if not _is_safe_id(segment):
+			return _error("test.patch.invalid_field_path", {"path": path})
+	if kind == "ruleset":
+		var issues: Array[String] = []
+		ContentDB.new()._validate_integer_tree(value, path, issues)
+		if not issues.is_empty():
+			return _error("test.patch.rule_schema", {"path": path, "issues": issues})
 	if not fields.has(kind):
 		fields[kind] = {}
 	if not fields[kind].has(id):

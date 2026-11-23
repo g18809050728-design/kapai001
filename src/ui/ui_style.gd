@@ -542,7 +542,10 @@ static func error_text(error: ApiError) -> String:
 		"error.battle.choice_pending": "请先完成当前选择",
 		"error.battle.no_pending_choice": "当前没有待选效果",
 		"error.battle.choice_id_invalid": "选择已失效，请重新操作",
-		"test.file.retired_relic": "该测试记录含已移除的旧饰品，请新建测试"
+		"test.file.retired_relic": "该测试记录含已移除的旧饰品，请新建测试",
+		"test.file.not_found": "测试文件已不存在，请刷新列表后重试",
+		"test.file.id": "测试文件 ID 无效，请重新选择",
+		"test.file.remove": "删除失败：无法移除测试文件，请检查文件占用或写入权限后重试"
 	}
 	var detail := str(details.get(str(error.message_key), ""))
 	return detail if not detail.is_empty() else reason

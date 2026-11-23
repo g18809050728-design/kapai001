@@ -91,9 +91,16 @@ func _close_editor() -> void:
 	test_command.emit("test.cancel_edit", {})
 
 
+func open_node_map(node_key: String = "", confirm_start: bool = false) -> void:
+	open_editor()
+	if editor != null:
+		editor.open_node_map(node_key, confirm_start)
+
+
 func _toggle_editor() -> void:
 	if _open:
-		_close_editor()
+		if editor != null:
+			editor.request_close()
 	else:
 		open_editor()
 
@@ -101,6 +108,12 @@ func _toggle_editor() -> void:
 func editor_result(accepted: bool) -> void:
 	if editor != null:
 		editor.handle_result(accepted)
+
+
+func finish_node_jump() -> void:
+	_open = false
+	if editor != null:
+		editor.close()
 
 
 func button_uids() -> Array:
@@ -179,6 +192,8 @@ func _button(parent: Node, uid: String, text: String, callback: Callable) -> But
 
 
 func _input(event: InputEvent) -> void:
+	if editor != null and is_instance_valid(editor.map_picker) and editor.map_picker.visible:
+		return
 	if not (event is InputEventKey) or not event.pressed or event.echo:
 		return
 	var key := event as InputEventKey

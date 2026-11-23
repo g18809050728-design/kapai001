@@ -6,6 +6,7 @@ extends ContentDB
 
 var base_catalog: ContentDB
 var overlay: TestOverlay
+var battle_switches: Dictionary = {}
 
 
 func _init(p_base: ContentDB = null, p_overlay: TestOverlay = null) -> void:

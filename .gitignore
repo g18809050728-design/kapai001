@@ -82,6 +82,7 @@ artifacts/**/temp/
 artifacts/**/working/
 
 # Raw test evidence stays local; versioned stage documents are under docs/.
+# Includes test-room/test-snapshot screenshots, logs, probes and isolated data.
 /artifacts/verification/
 /artifacts/g2-build/
 /artifacts/g4-build/
@@ -90,6 +91,10 @@ artifacts/**/working/
 /artifacts/g6-review/
 /artifacts/g7-build/
 /artifacts/g7-card-redesign-preview/
+
+# Retired local screenshot probe; maintained regression suites stay versioned.
+/tools/capture_test_room_editor.gd
+/tools/capture_test_room_editor.gd.uid
 
 # AI authoring workspaces stay local; retain only final design deliverables.
 /artifacts/cardpool40-20261029/

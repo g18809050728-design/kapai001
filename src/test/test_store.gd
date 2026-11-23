@@ -130,9 +130,16 @@ func remove(kind: String, id: String) -> GameResult:
 	var meta: Dictionary = KINDS.get(kind, {})
 	if meta.is_empty():
 		return _failure(GameConstants.ERROR_TEST_FILE_INVALID, "test.file.kind", {"kind": kind})
+	if not _safe_id(id):
+		return _failure(GameConstants.ERROR_TEST_FILE_INVALID, "test.file.id", {"id": id})
 	var path := "%s/%s/%s.json" % [base_path, meta.folder, id]
-	if FileAccess.file_exists(path):
-		DirAccess.remove_absolute(path)
+	if DirAccess.dir_exists_absolute(path):
+		return _failure(GameConstants.ERROR_TEST_IO_ERROR, "test.file.remove", {"id": id, "error": ERR_FILE_CANT_WRITE})
+	if not FileAccess.file_exists(path):
+		return _failure(GameConstants.ERROR_SAVE_NOT_FOUND, "test.file.not_found", {"id": id})
+	var removed := DirAccess.remove_absolute(path)
+	if removed != OK:
+		return _failure(GameConstants.ERROR_TEST_IO_ERROR, "test.file.remove", {"id": id, "error": removed})
 	return GameResult.success(true)
 
 

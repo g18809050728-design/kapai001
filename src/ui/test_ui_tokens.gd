@@ -92,6 +92,19 @@ static func field_style() -> StyleBoxFlat:
 	return style
 
 
+static func style_input(control: Control) -> void:
+	# The global game theme uses pale text; editor fields have a white surface.
+	# Override text and caret together for every editable input, including JSON.
+	for key in ["font_color", "font_readonly_color", "font_uneditable_color", "caret_color"]:
+		control.add_theme_color_override(key, INK)
+	control.add_theme_color_override("font_placeholder_color", INK_SOFT)
+	control.add_theme_color_override("font_selected_color", ON_INK)
+	control.add_theme_color_override("selection_color", INK)
+	control.add_theme_stylebox_override("normal", field_style())
+	control.add_theme_stylebox_override("focus", focus_style())
+	control.custom_minimum_size.y = maxf(44, control.custom_minimum_size.y)
+
+
 static func button_style(kind: String, state: String) -> StyleBoxFlat:
 	var bg := SURFACE
 	var border := LINE

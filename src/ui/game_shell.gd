@@ -58,6 +58,8 @@ var _text_editor_state: Dictionary = {}
 var _text_library_cache: Dictionary = {}
 var _text_library_loaded := false
 var _quit_dialog: ConfirmationDialog
+var _test_exit_dialog: ConfirmationDialog
+var _test_exit_was_editing := false
 
 
 func _ready() -> void:
@@ -517,6 +519,9 @@ func submit_action(draft: Dictionary) -> void:
 			return
 	last_error = null
 	if session.has_test_room() and not type.begins_with("test.") and not type.begins_with("ui."):
+		if type == "abandon_run" and payload.get("confirmed") == true:
+			_close_test_room()
+			return
 		_submit_test_battle_action(draft)
 		return
 	if type.begins_with("test."):
@@ -603,7 +608,9 @@ func _refresh_test_home() -> void:
 	else:
 		_report_error(options.error)
 	if page == null or not (page is TestRoomPage) or _page_key != "test_home":
-		_replace_page("test_home", TestRoomPage.new())
+		var test_home := TestRoomPage.new()
+		test_home.node_options = Callable(session, "get_test_node_options")
+		_replace_page("test_home", test_home)
 	page.render(data)
 	_set_battle_frame(false)
 	_status_label.text = "测试房间  /  实时实验沙盒"
@@ -630,8 +637,35 @@ func _refresh_test_room() -> void:
 		_notice_label.add_theme_color_override("font_color", UiStyle.GOLD)
 		_background.texture = UiStyle.texture("BG_success")
 		return
+	if screen == "test_room_campus":
+		if last_error == null:
+			test_view = _advance_completed_test_node(test_view)
+		var data: Dictionary = test_view.get("run", {})
+		var room_screen := "campaign" if data.get("campaign_offer") is Dictionary else str(data.get("screen", "map"))
+		data["revision"] = test_view.test.revision
+		var key := "test_campus:" + room_screen
+		if page == null or _page_key != key:
+			var room_page := UiExperiencePage.new()
+			room_page.screen = room_screen
+			if bool(test_view.test.get("editing", false)):
+				session.cancel_test_edit(_test_context())
+				test_view = session.get_test_view()
+			_replace_page(key, room_page)
+		_set_battle_frame(false)
+		page.offset_top = TestHud.bar_height()
+		page.render(data)
+		_ensure_test_hud()
+		_test_hud.render(test_view)
+		page.set_process_input(not bool(test_view.test.get("editing", false)))
+		_notice_label.text = notice
+		_background.texture = UiStyle.texture({"shop": "BG_shop", "rest": "BG_dorm"}.get(room_screen, "BG_campus"))
+		_regate()
+		return
 	var battle_data := _test_battle_data(test_view)
 	if page == null or not (page is BattleScreen) or _page_key != "test_battle":
+		if bool(test_view.test.get("editing", false)):
+			session.cancel_test_edit(_test_context())
+			test_view = session.get_test_view()
 		_replace_page("test_battle", BattleScreen.new())
 		page.preview_callback = Callable(self, "_test_preview")
 	if session.is_relic_pilot():
@@ -659,6 +693,22 @@ func _refresh_test_room() -> void:
 	_regate()
 
 
+func _advance_completed_test_node(test_view: Dictionary) -> Dictionary:
+	var node: Variant = test_view.run.get("node")
+	if not node is Dictionary or node.status != "active" or node.kind == "shop":
+		return test_view
+	var context := _test_context_from(test_view)
+	var draft := {"type": "leave_node", "payload": {"node_id": node.node_id}}
+	var preview := session.preview_test_action(context, draft)
+	if not preview.ok or not preview.data.can_submit:
+		return test_view
+	var result := session.submit_test_action(context, draft)
+	if not result.accepted:
+		_report_error(result.error)
+		return test_view
+	return session.get_test_view()
+
+
 func _test_battle_data(test_view: Dictionary) -> Dictionary:
 	var battle: Dictionary = test_view.get("battle", {})
 	var data := battle.duplicate(true)
@@ -673,14 +723,19 @@ func _test_battle_data(test_view: Dictionary) -> Dictionary:
 	data["notice"] = notice
 	data["character_id"] = str(config.get("character_id", "P01"))
 	data["max_vitality"] = int((battle.get("player", {}) as Dictionary).get("max_vitality", 1))
-	data["money"] = 0
-	data["cards"] = config.get("cards", [])
+	data["money"] = int(test_view.get("run", {}).get("money", 0))
+	var run: Dictionary = test_view.get("run", {})
+	data["cards"] = run.get("cards", config.get("cards", []))
+	data["route_nodes"] = run.get("nodes", [])
+	data["route_current"] = run.get("current_node_id", "")
+	data["route_reachable"] = run.get("reachable_node_ids", [])
 	var relics: Array[Dictionary] = []
 	for relic_id in battle.get("relics", []):
 		relics.append({"definition_id": str(relic_id), "relic_id": str(relic_id), "slot": relics.size(), "detail": battle.get("relic_details", {}).get(str(relic_id), {}).duplicate(true)})
 	data["relics"] = relics
 	data["relic_slots"] = maxi(3, relics.size())
-	data["year_label"] = "测试实验"
+	var year := int(test_view.get("run", {}).get("term", 0))
+	data["year_label"] = "测试 · 第 %d 学年" % year if year > 0 else "测试实验"
 	return data
 
 
@@ -719,7 +774,10 @@ func _clear_test_hud() -> void:
 
 
 func _test_context() -> Dictionary:
-	var test_view := session.get_test_view()
+	return _test_context_from(session.get_test_view())
+
+
+func _test_context_from(test_view: Dictionary) -> Dictionary:
 	var test_state: Dictionary = test_view.get("test", {})
 	return {
 		"test_id": str(test_state.get("test_id", "")),
@@ -750,7 +808,7 @@ func _test_preview(draft: Dictionary) -> ActionPreview:
 	if not session.has_test_room() or draft.is_empty():
 		return null
 	var type := str(draft.get("type", ""))
-	if type not in ["play_card", "end_turn", "confirm_choice", "set_ally_target"]:
+	if type.begins_with("test.") or type.begins_with("ui.") or (type == "abandon_run" and draft.get("payload", {}).get("confirmed") == true):
 		var local := ActionPreview.new()
 		local.can_submit = true
 		return local
@@ -774,6 +832,9 @@ func _handle_test_command(command: String, payload: Dictionary) -> void:
 			_ui_screen = ""
 			notice = "实验开始；可随时打开编辑器。"
 			refresh()
+			var locate_key := str(payload.get("locate_node_key", ""))
+			if not locate_key.is_empty() and _test_hud != null:
+				_test_hud.open_node_map(locate_key, true)
 			_present_test_relics(started)
 		"test.patch":
 			var patch := {
@@ -788,6 +849,10 @@ func _handle_test_command(command: String, payload: Dictionary) -> void:
 				_report_error(applied.error)
 				refresh()
 				return
+			if payload.get("ops", []).any(func(op): return op.get("op") == "enter_node"):
+				session.cancel_test_edit(_test_context())
+				if _test_hud != null:
+					_test_hud.finish_node_jump()
 			notice = "已应用修改"
 			refresh()
 		"test.begin_edit":
@@ -811,10 +876,24 @@ func _handle_test_command(command: String, payload: Dictionary) -> void:
 			notice = "已继续" if paused else "已暂停"
 			refresh()
 		"test.end_turn":
-			var edit_view := session.get_test_view()
-			if bool(edit_view.get("test", {}).get("editing", false)):
+			if _test_draft_count() > 0:
+				notice = "请先应用或丢弃草稿，再执行真实规则操作。"
+				refresh()
+				_show_ui_feedback(notice, true)
+				return
+			var editor_open := is_instance_valid(_test_hud) and _test_hud.is_editor_open()
+			if bool(session.get_test_view().get("test", {}).get("editing", false)):
 				session.cancel_test_edit(_test_context())
-			_submit_test_battle_action({"type": "end_turn", "payload": {}})
+			var ended := session.submit_test_action(_test_context(), {"type": "end_turn", "payload": {}})
+			if editor_open and session.has_test_room():
+				session.begin_test_edit(_test_context())
+			if not ended.accepted:
+				_report_error(ended.error)
+			else:
+				notice = "已提交测试命令"
+			refresh()
+			if ended.accepted:
+				_present_test_relics(ended)
 		"test.restore_checkpoint":
 			var restored := session.restore_test_checkpoint(
 				_test_context(), str(payload.get("checkpoint_id", ""))
@@ -842,10 +921,20 @@ func _handle_test_command(command: String, payload: Dictionary) -> void:
 		"test.save_record":
 			_save_test_file("record")
 		"test.save_and_exit":
-			if _save_test_file("snapshot"):
-				_close_test_room()
+			_request_test_exit(true)
 		"test.close":
-			_close_test_room()
+			if str(session.get_test_view().get("screen", "")) == "test_room_result":
+				_close_test_room()
+			else:
+				_request_test_exit()
+		"test.delete_snapshot":
+			var deleted := session.delete_test_snapshot(str(payload.get("id", "")))
+			if deleted.ok:
+				notice = "已删除测试快照"
+			else:
+				_report_error(deleted.error)
+			refresh()
+			_show_ui_feedback(notice, last_error != null)
 		"test.load_preset", "test.load_snapshot", "test.load_record":
 			var id := str(payload.get("id", ""))
 			var loaded: ActionResult
@@ -895,10 +984,111 @@ func _save_test_file(kind: String) -> bool:
 	return true
 
 
+func _test_draft_count() -> int:
+	return _test_hud.editor.draft_count() if is_instance_valid(_test_hud) and is_instance_valid(_test_hud.editor) else 0
+
+
+func _request_test_exit(save_immediately: bool = false) -> void:
+	if not session.has_test_room():
+		return
+	if not is_instance_valid(_test_exit_dialog):
+		_test_exit_was_editing = bool(session.get_test_view().get("test", {}).get("editing", false))
+		session.begin_test_edit(_test_context())
+		refresh()
+		if is_instance_valid(_test_hud):
+			_test_hud.set_process_input(false)
+			_test_hud.editor.set_process_input(false)
+		_show_test_exit_dialog()
+	if save_immediately:
+		_save_and_close_test_room()
+	else:
+		_test_exit_dialog.popup_centered()
+
+
+func _show_test_exit_dialog(choose_policy: bool = false) -> void:
+	if is_instance_valid(_test_exit_dialog):
+		_test_exit_dialog.hide()
+		_test_exit_dialog.queue_free()
+	_test_exit_dialog = ConfirmationDialog.new()
+	_test_exit_dialog.name = "TestRoomExitDialog"
+	_test_exit_dialog.title = "退出测试房间" if not choose_policy else "保存前处理待选"
+	_test_exit_dialog.dialog_text = (
+		"保存当前实验及已编辑草稿，或丢弃本次未保存内容并返回主菜单。取消会保留实验和草稿。"
+		if not choose_policy else
+		"当前存在未完成选择。请选择回退到该操作前，或保留已生效部分并截断后续结算，再应用草稿并保存。取消保留原实验。"
+	)
+	_test_exit_dialog.ok_button_text = "保存并退出" if not choose_policy else "回退后保存退出"
+	_test_exit_dialog.cancel_button_text = "取消"
+	_test_exit_dialog.dialog_autowrap = true
+	_test_exit_dialog.dialog_hide_on_ok = false
+	_test_exit_dialog.add_theme_stylebox_override("panel", UiStyle.surface(UiStyle.CREAM, UiStyle.BRASS))
+	_test_exit_dialog.add_theme_constant_override("buttons_min_height", 44)
+	_test_exit_dialog.get_ok_button().set_meta("uid", "test:exit:save_snapshot" if not choose_policy else "test:exit:rollback")
+	_test_exit_dialog.get_cancel_button().set_meta("uid", "test:exit:cancel")
+	_test_exit_dialog.confirmed.connect(func(): _save_and_close_test_room("rollback" if choose_policy else ""))
+	var secondary := _test_exit_dialog.add_button("丢弃并退出" if not choose_policy else "截断后保存退出", false, "discard" if not choose_policy else "truncate")
+	secondary.set_meta("uid", "test:exit:discard" if not choose_policy else "test:exit:truncate")
+	_test_exit_dialog.custom_action.connect(func(action: StringName):
+		if action == &"truncate":
+			_save_and_close_test_room("truncate")
+		else:
+			_close_test_room())
+	_test_exit_dialog.canceled.connect(_cancel_test_exit)
+	add_child(_test_exit_dialog)
+	_test_exit_dialog.get_label().add_theme_font_size_override("font_size", TestUiTokens.font(16))
+	for button in [_test_exit_dialog.get_ok_button(), _test_exit_dialog.get_cancel_button(), secondary]:
+		button.add_theme_font_size_override("font_size", TestUiTokens.font(16))
+		UiStyle.button_skin(button, "primary" if button == _test_exit_dialog.get_ok_button() else "secondary")
+	_test_exit_dialog.popup_centered(Vector2i(mini(600, int(size.x) - 32), 210))
+	_test_exit_dialog.get_cancel_button().grab_focus()
+
+
+func _cancel_test_exit() -> void:
+	if is_instance_valid(_test_exit_dialog):
+		_test_exit_dialog.hide()
+		_test_exit_dialog.queue_free()
+	_test_exit_dialog = null
+	if session.has_test_room() and not _test_exit_was_editing:
+		session.cancel_test_edit(_test_context())
+	if is_instance_valid(_test_hud):
+		_test_hud.set_process_input(true)
+		_test_hud.editor.set_process_input(true)
+	refresh()
+
+
+func _save_and_close_test_room(policy: String = "") -> void:
+	if session.get_test_view().get("pending_choice") is Dictionary and policy.is_empty():
+		_show_test_exit_dialog(true)
+		return
+	var ops: Array = []
+	if _test_draft_count() > 0:
+		ops = _test_hud.editor.draft_operations()
+	var saved := session.save_test_snapshot_with_patch(_test_context(), {
+		"schema_version": 1, "resolution_policy": policy if not policy.is_empty() else "stable", "ops": ops,
+	}, "测试快照")
+	if not saved.ok:
+		_report_error(saved.error)
+		refresh()
+		if is_instance_valid(_test_exit_dialog):
+			var error_path := str(saved.error.details.get("path", ""))
+			_test_exit_dialog.dialog_text = "保存失败，实验与草稿已保留。可重试或取消。\n%s · %s%s" % [notice, str(saved.error.code), "\n" + error_path if not error_path.is_empty() else ""]
+			_test_exit_dialog.popup_centered()
+		return
+	if _test_draft_count() > 0:
+		_test_hud.editor_result(true)
+	_close_test_room()
+
+
 func _close_test_room() -> void:
 	var closed := session.close_test_room()
 	if not closed.accepted:
 		_report_error(closed.error)
+		refresh()
+		return
+	if is_instance_valid(_test_exit_dialog):
+		_test_exit_dialog.hide()
+		_test_exit_dialog.queue_free()
+	_test_exit_dialog = null
 	_ui_screen = "menu"
 	notice = "已退出测试房间；正式进度未改变。"
 	refresh()
@@ -955,8 +1145,13 @@ func _action_notice(result: ActionResult) -> void:
 func _navigate(type: String, payload: Dictionary) -> void:
 	if type in DEVELOPER_TOOL_ACTIONS and not _developer_tools_allowed():
 		return
-	if session.has_test_room() and type == "ui.menu":
-		_close_test_room()
+	if session.has_test_room():
+		if type == "ui.menu":
+			_request_test_exit()
+		elif type == "ui.retry":
+			_restart_test("initial", "same")
+		elif type == "ui.save":
+			_save_test_file("snapshot")
 		return
 	match type:
 		"ui.records":

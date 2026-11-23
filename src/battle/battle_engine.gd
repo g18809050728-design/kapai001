@@ -22,7 +22,17 @@ func resolve_face(state: BattleState, card_id: String) -> GameResult:
 
 
 func calculate_cost(state: BattleState, card_id: String) -> GameResult:
-	return _card_rules.calculate_cost(state, card_id)
+	var result := _card_rules.calculate_cost(state, card_id)
+	if result.ok and _test_switch("no_cost"):
+		var quote: Dictionary = result.data.duplicate(true)
+		quote["cost"] = 0
+		quote["vitality_cost"] = 0
+		return GameResult.success(quote)
+	return result
+
+
+func _test_switch(key: String) -> bool:
+	return _catalog is TestContent and bool((_catalog as TestContent).battle_switches.get(key, false))
 
 
 func preview(state: BattleState, draft: ActionDraft) -> GameResult:
@@ -113,7 +123,7 @@ func preview(state: BattleState, draft: ActionDraft) -> GameResult:
 					{"card_instance_id": card_id}
 				)
 		var per_turn := int(face.get("limits", {}).get("per_instance_per_turn", 0))
-		if per_turn > 0:
+		if per_turn > 0 and not _test_switch("ignore_limits"):
 			var limit_key := BattleState.counter_key(
 				GameConstants.COUNTER_SCOPE_INSTANCE_ROUND, card_id, &"v3_play"
 			)
@@ -126,7 +136,7 @@ func preview(state: BattleState, draft: ActionDraft) -> GameResult:
 				)
 		if state.character_id == "P02":
 			var preview_name := str(face.get("name_key", face.get("id", "")))
-			if _v3_paper(state).turn_names.has(preview_name):
+			if _v3_paper(state).turn_names.has(preview_name) and not _test_switch("ignore_limits"):
 				var preview_origin := str(
 					state.card_by_id.get(card_id, {}).get("origin_card_id", "")
 				)
@@ -145,7 +155,7 @@ func preview(state: BattleState, draft: ActionDraft) -> GameResult:
 						"error.play.paper_name_used_turn",
 						{"name": preview_name}
 					)
-		if bool(face.get("flags", {}).get("same_name_once_per_turn", false)):
+		if bool(face.get("flags", {}).get("same_name_once_per_turn", false)) and not _test_switch("ignore_limits"):
 			var played_name_key := BattleState.counter_key(
 				GameConstants.COUNTER_SCOPE_ROUND,
 				"played:" + str(face.get("id", "")),
@@ -186,7 +196,8 @@ func preview(state: BattleState, draft: ActionDraft) -> GameResult:
 			{"card_instance_id": card_id, "definition_id": face.id}
 		)
 
-	_validate_preview_limit(result, state, face)
+	if not _test_switch("ignore_limits"):
+		_validate_preview_limit(result, state, face)
 	_validate_preview_targets(result, state, face, target_ids, replace_unit_id)
 	_validate_preview_resources(result, state, card_id)
 	return _finish_preview(result)
@@ -214,7 +225,7 @@ func _visible_effects(face: Dictionary) -> Array[Dictionary]:
 
 
 func _preview_costs(state: BattleState, card_id: String) -> Dictionary:
-	var quote_result := _card_rules.calculate_cost(state, card_id)
+	var quote_result := calculate_cost(state, card_id)
 	if not quote_result.ok:
 		return {}
 	var quote: Dictionary = quote_result.data
@@ -228,12 +239,12 @@ func _preview_costs(state: BattleState, card_id: String) -> Dictionary:
 func _validate_preview_resources(
 	result: ActionPreview, state: BattleState, card_id: String
 ) -> void:
-	var quote_result := _card_rules.calculate_cost(state, card_id)
+	var quote_result := calculate_cost(state, card_id)
 	if not quote_result.ok:
 		return
 	var quote: Dictionary = quote_result.data
 	var available_focus: int = int(state.player.get("focus", 0))
-	if available_focus < int(quote.cost):
+	if not _test_switch("infinite_focus") and available_focus < int(quote.cost):
 		_add_preview_error(
 			result,
 			GameConstants.ERROR_INSUFFICIENT_RESOURCE,
@@ -247,7 +258,7 @@ func _validate_preview_resources(
 	if ruleset_result.ok:
 		minimum_vitality = int(ruleset_result.data.battle.get("minimum_vitality_after_payment", 1))
 	var payment: int = int(quote.vitality_cost)
-	if available_vitality - payment < minimum_vitality:
+	if not _test_switch("no_cost") and available_vitality - payment < minimum_vitality:
 		_add_preview_error(
 			result,
 			GameConstants.ERROR_INSUFFICIENT_RESOURCE,
@@ -578,7 +589,7 @@ func _start_card_resolution(
 	var preview_result := preview(state, ActionDraft.new(GameConstants.ACTION_PLAY_CARD, payload))
 	if not preview_result.ok or not preview_result.data.can_submit:
 		return preview_result
-	var quote_result := _card_rules.calculate_cost(state, card_id)
+	var quote_result := calculate_cost(state, card_id)
 	if not quote_result.ok:
 		return quote_result
 	var quote: Dictionary = quote_result.data
@@ -589,7 +600,7 @@ func _start_card_resolution(
 	var card: Dictionary = state.card_by_id[card_id]
 	if bool(face.get("v3", false)) and state.character_id == "P02":
 		var paper_turn_name := str(face.get("name_key", face.get("id", "")))
-		if _v3_paper(state).turn_names.has(paper_turn_name):
+		if _v3_paper(state).turn_names.has(paper_turn_name) and not _test_switch("ignore_limits"):
 			var reuse_origin := str(card.get("origin_card_id", ""))
 			var is_chapter_reuse := false
 			for entry: Variant in _v3_paper(state).chapters:
@@ -609,9 +620,9 @@ func _start_card_resolution(
 				)
 	var focus_before: int = int(state.player.get("focus", 0))
 	var vitality_before: int = int(state.player.get("vitality", 0))
-	state.player.focus = focus_before - int(quote.cost)
+	state.player.focus = focus_before if _test_switch("infinite_focus") else focus_before - int(quote.cost)
 	state.player.vitality = vitality_before - int(quote.vitality_cost)
-	if int(quote.cost) > 0:
+	if state.player.focus != focus_before:
 		_add_event(
 			events,
 			"focus_changed",
@@ -969,7 +980,7 @@ func _end_turn(
 	if not phase_result.ok:
 		return phase_result
 	for card_id in state.zones.hand.duplicate():
-		if retained.has(card_id):
+		if retained.has(card_id) or _test_switch("keep_hand"):
 			continue
 		state.zones.hand.erase(card_id)
 		state.zones.discard.append(card_id)
@@ -1003,7 +1014,8 @@ func _end_turn(
 		return phase_result
 	var pending_summons: Array[Dictionary] = []
 	var pending_transforms: Array[Dictionary] = []
-	for task_index in state.tasks.size():
+	var enemy_count := 0 if _test_switch("freeze_enemy") else state.tasks.size()
+	for task_index in enemy_count:
 		var task: Dictionary = state.tasks[task_index]
 		if int(task.get("eligible_round", 1)) > state.round_index:
 			continue
@@ -1021,7 +1033,7 @@ func _end_turn(
 	var pressure_rules: Dictionary = ruleset_result.data.statuses.get("extra_requirements", {})
 	var brainstorm_rules: Dictionary = ruleset_result.data.statuses.get("brainstorm", {})
 	var pressure_index := 0
-	while pressure_index < state.tasks.size():
+	while not _test_switch("freeze_enemy") and pressure_index < state.tasks.size():
 		var task: Dictionary = state.tasks[pressure_index]
 		if int(task.get("eligible_round", 1)) <= state.round_index:
 			var task_id := str(task.get("task_id", ""))
@@ -1080,10 +1092,10 @@ func _end_turn(
 	var ddl_before := state.ddl
 	if ddl_before == 1 and BattleRelicRoster.available(state,"RX-C35") and BattleRelicRoster.value(state,"RX-C35","paid_strategy","round") > 0 and int(state.counters.get("round|played:work|played",0)) == 0:
 		_rx_roster.pulse(state,"RX-C35","pause_ddl",1,1,events,[],true,"保留 DDL")
-	else:
+	elif not _test_switch("freeze_ddl"):
 		state.ddl = maxi(0, state.ddl - 1)
 		_add_event(events, "ddl_ticked", "", [], {"before": ddl_before, "after": state.ddl})
-	if state.ddl == 0 and not state.tasks.is_empty():
+	if state.ddl == 0 and not state.tasks.is_empty() and not _test_switch("freeze_outcome") and not _test_switch("freeze_ddl"):
 		_finish_battle(state, "lost", "deadline_expired", events)
 		return GameResult.success(null)
 	var previous_round := state.round_index
@@ -3515,7 +3527,7 @@ func _advance_or_remove_task(
 
 
 func _check_battle_outcome(state: BattleState, events: Array[RuleEvent]) -> void:
-	if state.phase == "finished":
+	if state.phase == "finished" or _test_switch("freeze_outcome"):
 		return
 	if int(state.player.get("vitality", 0)) <= 0:
 		_finish_battle(state, "lost", "vitality_depleted", events)
@@ -4643,7 +4655,7 @@ func _v3_record_card_played(
 	var definition := _catalog.get_definition("card", definition_id)
 	if definition.ok:
 		var per_turn := int(definition.data.get("limits", {}).get("per_instance_per_turn", 0))
-		if per_turn > 0:
+		if per_turn > 0 and not _test_switch("ignore_limits"):
 			var limit_key := BattleState.counter_key(
 				GameConstants.COUNTER_SCOPE_INSTANCE_ROUND, card_id, &"v3_play"
 			)

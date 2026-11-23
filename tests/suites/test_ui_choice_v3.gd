@@ -256,8 +256,8 @@ func _check_end_turn_while_editing(root: String) -> void:
 	_check(shell.last_error == null, "editor end-turn reports no error")
 	var after := shell.session.get_test_view()
 	_check(
-		not bool(after.get("test", {}).get("editing", false)),
-		"editor end-turn leaves edit mode"
+		editor.is_open() and bool(after.get("test", {}).get("editing", false)),
+		"editor end-turn preserves the visible editor input gate"
 	)
 	_check(
 		int(after.get("test", {}).get("revision", 0)) > 0,
