@@ -15,10 +15,12 @@ var animation_enabled: bool = true:
 var speed_scale: float = 1.0
 var use_shell_damage_popups := false
 const EFFECT_SPEED := 4.0
+const END_TURN_INTERVAL_MS := 600
 
 var _animator: BattleEventAnimator
 var _feedback_text: String = ""
 var _feedback_label: Label
+var _task_event_notices := PackedStringArray()
 var _panel_text: String = ""
 var _panel_zone := ""
 var _full_map: UiRouteOverlay
@@ -34,6 +36,11 @@ var _preview_draft: Dictionary = {}
 var _revision_seen: int = -1
 var _choice_id_seen: String = ""
 var _submitted_revision: int = -2
+var _end_turn_after_ms := 0
+var _choice_status: Label
+var _choice_scroll: ScrollContainer
+var _choice_scroll_x := 0
+var _choice_focus_uid := ""
 var _stage: Control
 var _hand_cards: Array[BattleCard] = []
 var _target_frames: Dictionary = {}
@@ -69,6 +76,7 @@ var _compact_layout := false
 var _short_web := false
 var _battle_layout_size := Vector2.ZERO
 var _battle_resize_pending := false
+var _hand_top := 548.0
 var _previous_card_centers: Dictionary = {}
 var _previous_target_centers: Dictionary = {}
 var _effect_zone_centers: Dictionary = {}
@@ -76,7 +84,7 @@ var _task_meters: Dictionary = {}
 var _presentation: BattlePresentation
 var _result_pending := false
 var _result_events_done := false
-var _status_return_uid := ""
+var _detail_return_uid := ""
 var _status_return_scroll := 0
 
 
@@ -130,6 +138,7 @@ func _process(delta: float) -> void:
 		return
 	if not is_inside_tree():
 		return
+	_refresh_end_turn()
 	_update_pointer(delta)
 	if _touch_pointer and is_instance_valid(_pointer_card) and not _dragging:
 		_held_for += delta
@@ -144,11 +153,17 @@ func render(data: Dictionary) -> void:
 		_reference.close()
 	_presentation.finish()
 	var next_view := data.duplicate(true)
+	if next_view.get("battle_id") != view.get("battle_id") or next_view.get("run_id") != view.get("run_id"):
+		_task_event_notices.clear()
+		_end_turn_after_ms = 0
 	var next_revision := int(next_view.get("revision", -1))
 	var next_choice := _choice_dict(next_view.get("pending_choice"))
 	var next_choice_id := str(next_choice.get("choice_id", ""))
 	if next_choice_id != _choice_id_seen:
 		_choice_selected_ids.clear()
+		_choice_scroll = null
+		_choice_scroll_x = 0
+		_choice_focus_uid = ""
 	_choice_id_seen = next_choice_id
 	if next_revision != _revision_seen and next_revision >= 0:
 		_remember_effect_origins()
@@ -185,6 +200,8 @@ func consume_events(events: Array, run_id: String, revision: int) -> void:
 		var index: int = int(event.get("index", ordinal)) if event is Dictionary else event.index
 		presented.append(snapshots.get(index, event))
 	presented = _animator.unseen_events(presented, run_id, revision)
+	if not presented.is_empty():
+		_task_event_notices.clear()
 	_presentation.prepare(presented)
 	_animator.play(presented, run_id, revision)
 
@@ -292,6 +309,7 @@ func display_snapshot() -> Dictionary:
 func apply_gating(results: Dictionary) -> void:
 	super.apply_gating(results)
 	_apply_lock_state()
+	_show_end_turn_lock()
 	_sync_card_visuals()
 
 
@@ -331,6 +349,12 @@ func _release_pilot_actor_cache() -> void:
 
 
 func _reset_stage() -> void:
+	if is_instance_valid(_choice_scroll):
+		_choice_scroll_x = _choice_scroll.scroll_horizontal
+		var focused := get_viewport().gui_get_focus_owner()
+		_choice_focus_uid = str(focused.get_meta("uid", "")) if is_instance_valid(focused) else ""
+	_choice_scroll = null
+	_choice_status = null
 	if is_instance_valid(_toolbar):
 		_toolbar.close_menu(false)
 	_toolbar = null
@@ -357,9 +381,9 @@ func _reset_stage() -> void:
 		remove_child(child)
 		child.queue_free()
 	_stage = Control.new()
-	_stage.size = Vector2(1280, 800)
-	if _short_web:
-		_stage.size.y = clampf(size.y * 1280.0 / maxf(size.x, 1.0), 560.0, 800.0)
+	var aspect := size.x / maxf(size.y, 1.0)
+	var height := clampf(1280.0 / maxf(aspect, 0.1), 560.0 if _short_web else 690.0, 800.0)
+	_stage.size = Vector2(maxf(1280.0, aspect * height), height)
 	_stage.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_stage)
 	if not resized.is_connected(_fit_stage):
@@ -400,6 +424,9 @@ func _input(event: InputEvent) -> void:
 		_pointer_card = null
 		return
 	if is_instance_valid(_toolbar) and _toolbar.route_input(event):
+		return
+	if _block_repeated_turn_input(event):
+		get_viewport().set_input_as_handled()
 		return
 	if is_instance_valid(_card_preview) and event is InputEventKey and event.pressed and event.keycode == KEY_ESCAPE:
 		close_card_preview()
@@ -458,6 +485,9 @@ func _input(event: InputEvent) -> void:
 			return
 		_hover_pinned = false
 		if is_locked():
+			if not _choice_selected_ids.is_empty():
+				_clear_choice_selection()
+				get_viewport().set_input_as_handled()
 			return
 		if not _panel_text.is_empty():
 			_close_panel()
@@ -576,6 +606,8 @@ func _update_pointer(delta: float) -> void:
 					_hover_target = focus.hover_content()
 				elif focus is BattleStatusSlot and not focus.disabled:
 					_hover_target = _buff_hover_target(str(focus.get_meta("uid", "")))
+				elif focus is Button and not focus.disabled and str(focus.get_meta("uid", "")).begins_with("detail:task:"):
+					_hover_target = _target_for_uid(str(focus.get_meta("uid")))
 	else:
 		_hovered_card = null
 		_hover_target = {} if reading_pinned or _dragging else _hover_card_at(_pointer_position)
@@ -588,7 +620,7 @@ func _update_pointer(delta: float) -> void:
 		if card.get_meta("card_in_flight", false) or card.get_meta("draw_pending", false):
 			continue
 		var raised := card == _hovered_card or card.selected
-		var destination := card.home_position + (Vector2(0, -34 if _short_web else -60) if raised else Vector2.ZERO)
+		var destination := card.home_position + (Vector2(0, -34 if _stage.size.y < 800.0 else -60) if raised else Vector2.ZERO)
 		card.position = card.position.lerp(destination, minf(1, delta * 18))
 		card.rotation = lerp_angle(
 			card.rotation, 0.0 if raised else card.home_rotation, minf(1, delta * 18)
@@ -611,7 +643,7 @@ func _update_pointer(delta: float) -> void:
 			not _selected_card_id.is_empty() and not is_locked() and _panel_text.is_empty()
 		)
 		if _aim.visible:
-			_aim.origin = Vector2(640, _stage.size.y - (175 if _short_web else 227))
+			_aim.origin = Vector2(_stage.size.x * 0.5, _hand_top + 26)
 			_aim.destination = (
 				_stage.get_global_transform_with_canvas().affine_inverse() * _pointer_position
 			)
@@ -766,6 +798,8 @@ func _hover_target_at(point: Vector2) -> Dictionary:
 		var key := str(uid)
 		if _buttons[uid] is BattlePileButton and not _buttons[uid].disabled and _button_hit(key, point):
 			return _buttons[uid].hover_content()
+		if key.begins_with("detail:task:") and _button_hit(key, point):
+			return _target_for_uid(key)
 		if key.begins_with("task:") and _button_hit(key, point):
 			return _task_hover_target(key.trim_prefix("task:"))
 		if key.begins_with("unit:") and _button_hit(key, point):
@@ -931,7 +965,9 @@ func _task_hover_target(task_id: String) -> Dictionary:
 		return {}
 	var phase_count := maxi(1, int(task.get("phase_count", 1)))
 	var phase_index := maxi(1, int(task.get("phase_index", 1)))
-	var intent := _task_intent_text(task)
+	var intent := _dict(task.get("intent_snapshot"))
+	var phase := _dict(task.get("intent_phase"))
+	var intent_summary := _task_intent_text(task)
 	var statuses := _statuses_for(task_id)
 	var summary := (
 		"%s · 第 %s/%s 阶段 · 剩余 %s/%s · 屏障 %s"
@@ -944,22 +980,38 @@ func _task_hover_target(task_id: String) -> Dictionary:
 			task.get("shield", 0)
 		]
 	)
-	summary += "\n下回合：" + _short_text(intent, 46)
+	summary += "\n结束回合后：" + intent_summary
+	var phase_name := str(phase.get("name_key", ""))
+	var task_name := UiStyle.label(str(task.get("definition_id", "")))
 	var lines: Array[String] = [
-		"任务：" + UiStyle.label(str(task.get("definition_id", ""))),
-		(
-			"阶段：第 %s/%s 阶段 · %s"
-			% [phase_index, phase_count, UiStyle.label(str(task.get("phase_key", "")))]
-		),
-		"未完成量：%s/%s" % [task.get("work_remaining", 0), task.get("work_max", 0)],
-		"屏障：%s" % task.get("shield", 0),
-		"下回合意图：" + intent,
+		"%s · 第 %s/%s 阶段%s" % [task_name, phase_index, phase_count, " · " + UiStyle.label(phase_name) if not phase_name.is_empty() else ""],
+		"未完成量 %s/%s · 屏障 %s" % [task.get("work_remaining", 0), task.get("work_max", 0), task.get("shield", 0)],
 	]
+	var action_name := str(intent.get("text_key", ""))
+	var timing := "\n结束回合后"
+	if not action_name.is_empty() and not task.get("intent_waiting", false):
+		timing += " · " + UiStyle.label(action_name)
+	lines.append(timing)
+	lines.append(TaskIntentText.describe(intent, task, _dict(view.get("status_rules"))))
 	if not statuses.is_empty():
-		lines.append("状态：" + _status_text(statuses))
-	if not bool(task.get("victory_required", true)):
-		lines.append("非胜利必需：该任务存活不阻止胜利。")
+		lines.append("\n当前状态：" + _status_text(statuses))
+	var traits := _dict(task.get("traits")).duplicate()
+	traits.taunt = task.get("taunting", false)
+	var trait_lines := TaskIntentText.traits(traits)
+	if not trait_lines.is_empty():
+		lines.append("\n特殊机制")
+		lines.append_array(trait_lines)
+	var intents := _array(phase.get("intents"))
+	if intents.size() > 1:
+		lines.append("\n本阶段意图顺序（基础效果）")
+		lines.append(TaskIntentText.sequence_rule(phase))
+		for index in intents.size():
+			var marker := "（当前）" if index == int(task.get("intent_cursor", 0)) else ""
+			lines.append("%d. %s%s" % [index + 1, TaskIntentText.summary(intents[index], {}, 3), marker])
 	var terms: Array[String] = ["pressure", "shield", "ddl"]
+	var predicted_status := str(_dict(intent.get("gain_status")).get("status", ""))
+	if UiGlossary.ENTRIES.has(predicted_status):
+		terms.append(predicted_status)
 	for value in statuses:
 		var key := str(_dict(value).get("status_id", ""))
 		if not key.is_empty() and not terms.has(key):
@@ -972,7 +1024,7 @@ func _task_hover_target(task_id: String) -> Dictionary:
 			"第 %s/%s 阶段 · 剩余 %s/%s"
 			% [phase_index, phase_count, task.get("work_remaining", 0), task.get("work_max", 0)]
 		),
-		"body": "屏障 %s\n下回合：%s" % [task.get("shield", 0), _short_text(intent, 42)],
+		"body": "屏障 %s\n结束回合后：%s" % [task.get("shield", 0), intent_summary],
 		"summary": summary,
 		"detail": "\n".join(lines),
 		"terms": terms,
@@ -1035,7 +1087,9 @@ func _buff_hover_target(uid: String) -> Dictionary:
 	var title := str(entry.title)
 	var count := str(entry.get("count", ""))
 	var meta := "负面状态" if entry.get("negative", false) else "增益 / 持续效果"
-	if not count.is_empty():
+	if entry.has("mechanic"):
+		meta = "特殊机制 · " + str(entry.mechanic)
+	elif not count.is_empty():
 		meta += " · " + ("下回合生效" if count == "待" else "当前 %s" % count)
 	return {"uid":uid, "title":title, "meta":meta, "body":str(entry.body), "detail":title + "\n" + meta + "\n\n" + str(entry.body), "terms":[], "rect":slot.get_global_rect().intersection((slot.get_meta("status_scroll") as Control).get_global_rect())}
 
@@ -1101,6 +1155,12 @@ func _target_for_uid(uid: String) -> Dictionary:
 				return _card_hover_target(focused_card)
 	if uid.begins_with("task:"):
 		return _task_hover_target(uid.trim_prefix("task:"))
+	if uid.begins_with("detail:task:"):
+		var target := _task_hover_target(uid.trim_prefix("detail:task:"))
+		if not target.is_empty():
+			target.uid = uid
+			target.rect = _button_rect(uid)
+		return target
 	if uid.begins_with("unit:"):
 		return _unit_hover_target(uid.trim_prefix("unit:"))
 	if uid == "battle:resources":
@@ -1173,16 +1233,19 @@ func _toggle_detail() -> void:
 		return
 	if not _panel_text.is_empty():
 		return
-	if str(target.get("uid", "")).begins_with("buff:"):
-		_open_detail_for_uid(str(target.uid))
+	var uid := str(target.get("uid", ""))
+	if uid.begins_with("buff:") or uid.begins_with("detail:task:"):
+		_open_detail_for_uid(uid)
 	else:
 		_open_detail(target)
 
 
 func _open_detail_for_uid(uid: String) -> void:
 	if uid.begins_with("buff:") and _buttons.has(uid):
-		_status_return_uid = uid
+		_detail_return_uid = uid
 		_status_return_scroll = (_buttons[uid].get_meta("status_scroll") as ScrollContainer).scroll_horizontal
+	elif uid.begins_with("detail:task:") and _buttons.has(uid):
+		_detail_return_uid = uid
 	_open_detail(_target_for_uid(uid))
 
 
@@ -1260,7 +1323,7 @@ func _finish_drag(point: Vector2) -> void:
 		_stage.remove_child(_drag_ghost)
 		_drag_ghost.queue_free()
 	_drag_ghost = null
-	if local.y >= 540 or not Rect2(0, 66, 1280, 474).has_point(local):
+	if target.is_empty() and not Rect2(0, 66, _stage.size.x, _hand_top - 66).has_point(local):
 		_cancel_selection()
 		return
 	if target.begins_with("task:"):
@@ -1365,6 +1428,9 @@ func _emit_draft(draft: Dictionary) -> void:
 		return
 	if _submitted_revision == int(view.get("revision", -1)):
 		return
+	var ending_turn: bool = draft.get("type") == "end_turn"
+	if ending_turn and _end_turn_blocked():
+		return
 	var quote: Variant = _preview(draft)
 	if not _preview_can_submit(quote):
 		_feedback_text = _preview_error(quote)
@@ -1373,7 +1439,56 @@ func _emit_draft(draft: Dictionary) -> void:
 	_feedback_text = ""
 	_last_action = draft.duplicate(true)
 	_submitted_revision = int(view.get("revision", -1))
+	if ending_turn:
+		_end_turn_after_ms = Time.get_ticks_msec() + END_TURN_INTERVAL_MS
+		_show_end_turn_lock()
 	action_requested.emit(draft.duplicate(true))
+
+
+func _end_turn_blocked() -> bool:
+	return _end_turn_after_ms > 0 and (
+		Time.get_ticks_msec() < _end_turn_after_ms or _animator.is_playing() or _presentation.is_animating()
+	)
+
+
+func _block_repeated_turn_input(event: InputEvent) -> bool:
+	var button := _buttons.get("battle:end_turn") as Button
+	if button == null or is_locked() or not _panel_text.is_empty():
+		return false
+	var repeat := false
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		repeat = _button_hit("battle:end_turn", event.position) and (event.double_click or _end_turn_blocked())
+	elif event is InputEventKey and event.pressed and _end_turn_blocked():
+		repeat = (event.keycode == KEY_E and not event.ctrl_pressed and not event.alt_pressed and not event.meta_pressed) or (button.has_focus() and event.is_action_pressed(&"ui_accept", true))
+	if repeat and _end_turn_after_ms > 0:
+		_end_turn_after_ms = Time.get_ticks_msec() + END_TURN_INTERVAL_MS
+		_show_end_turn_lock()
+	return repeat
+
+
+func _show_end_turn_lock() -> void:
+	if not _end_turn_blocked() or not _buttons.has("battle:end_turn"):
+		return
+	var button: Button = _buttons["battle:end_turn"]
+	button.disabled = true
+	var caption := "回合结算中" if _animator.is_playing() or _presentation.is_animating() else "请稍候"
+	if button.text != caption:
+		button.text = caption
+	button.tooltip_text = "本次结束回合已提交"
+
+
+func _refresh_end_turn() -> void:
+	if _end_turn_after_ms == 0 or is_locked() or not _panel_text.is_empty() or not _buttons.has("battle:end_turn"):
+		return
+	if (is_instance_valid(_full_map) and _full_map.visible) or (is_instance_valid(_toolbar) and _toolbar.is_menu_open()):
+		return
+	if _end_turn_blocked():
+		_show_end_turn_lock()
+		return
+	_end_turn_after_ms = 0
+	_buttons["battle:end_turn"].text = "结束回合"
+	var quote: Variant = _preview(action_draft("battle:end_turn"))
+	_set_enabled("battle:end_turn", _preview_can_submit(quote), _preview_error(quote))
 
 
 func _cancel_selection() -> void:
@@ -1397,10 +1512,82 @@ func _on_choice_pressed(id: String) -> void:
 	var max_count := int(choice.get("max_count", 0))
 	if _choice_selected_ids.has(id):
 		_choice_selected_ids.erase(id)
+	elif max_count == 1:
+		_choice_selected_ids.assign([id])
 	elif _choice_selected_ids.size() < max_count:
 		_choice_selected_ids.append(id)
-	_render_from_local()
+	else:
+		_sync_choice_controls(true)
+		return
+	_sync_choice_controls()
 	local_selection_changed.emit(selection_snapshot())
+
+
+func _clear_choice_selection() -> void:
+	_choice_selected_ids.clear()
+	_sync_choice_controls()
+	local_selection_changed.emit(selection_snapshot())
+
+
+func _sync_choice_arrows(bar: HScrollBar, previous: Button, next: Button) -> void:
+	if not is_instance_valid(bar) or not is_instance_valid(previous) or not is_instance_valid(next):
+		return
+	previous.disabled = bar.value <= 0
+	next.disabled = bar.value + bar.page >= bar.max_value - 1
+
+
+func _choice_labels(kind: String) -> Array:
+	return {
+		"discard": ["从手牌弃牌", "确认弃牌", "跳过弃牌"],
+		"recall": ["从弃牌堆取回", "取回所选牌", "不取回"],
+		"retrieve_strategy": ["取回上一张策略", "取回此牌", "不取回"],
+		"retain": ["保留到下一轮", "保留所选牌", "不保留"],
+		"exhaust": ["选择耗尽的牌", "确认耗尽", "跳过耗尽"],
+		"remove_status": ["选择要解除的状态", "解除所选状态", "跳过解除"],
+		"purify": ["选择要净化的状态", "净化所选状态", "跳过净化"],
+		"chapter_replace": ["选择要撤下的章节", "确认撤下", "跳过撤下"],
+		"change_topic": ["选择要重置的已用牌名", "重置牌名并抽牌", "仅抽牌"],
+	}.get(kind, ["完成卡牌效果", "确认选择", "跳过本次"])
+
+
+func _sync_choice_controls(at_limit: bool = false) -> void:
+	if not is_locked():
+		return
+	var choice := _choice_dict(view.get("pending_choice"))
+	var count := _choice_selected_ids.size()
+	var minimum := int(choice.get("min_count", 0))
+	var maximum := int(choice.get("max_count", 0))
+	var kind := str(choice.get("kind", ""))
+	if is_instance_valid(_choice_status):
+		var unit: String = {"change_topic": "个", "remove_status": "项", "purify": "项", "chapter_replace": "项"}.get(kind, "张")
+		var required := "须选 %d" % minimum if minimum == maximum else ("最多选 %d" % maximum if minimum == 0 else "可选 %d 至 %d" % [minimum, maximum])
+		var tip := " · 还需选 %d %s" % [minimum - count, unit] if count < minimum else ""
+		if at_limit:
+			tip = " · 已选满，可点已选项取消"
+		elif kind == "retrieve_strategy":
+			tip = " · 本轮取回机会已触发"
+		_choice_status.text = "%s %s · 已选 %d %s%s" % [required, unit, count, unit, tip]
+	for value in _array(choice.get("candidates")):
+		var uid := "choice:" + str(value.get("id", value.get("candidate_id", "")))
+		var button: Button = _buttons.get(uid)
+		var selected := _choice_selected_ids.has(uid.trim_prefix("choice:"))
+		if button is BattleCard or button is UiOfferCard:
+			button.selected = selected
+			button.accessibility_description = "已选" if selected else "可选"
+			button.queue_redraw()
+			var marker := button.get_meta("choice_marker", null) as Label
+			if is_instance_valid(marker):
+				marker.text = "✓ 已选" if selected else ""
+		elif is_instance_valid(button):
+			button.text = ("✓ " if selected else "") + button.text.trim_prefix("✓ ")
+			UiStyle.button_skin(button, "selected" if selected else "secondary", true)
+	if _buttons.has("choice:clear"):
+		_buttons["choice:clear"].disabled = count == 0
+	if _buttons.has("choice:confirm"):
+		var labels := _choice_labels(kind)
+		_buttons["choice:confirm"].text = labels[2] if count == 0 and minimum == 0 else labels[1]
+		_apply_preview_gating()
+		_apply_lock_state()
 
 
 func _choice_draft() -> Callable:
@@ -1522,6 +1709,7 @@ func _apply_preview_gating() -> void:
 		_set_enabled("card:" + id, _may_select(quote), _preview_error(quote))
 	var end_quote: Variant = _preview(action_draft("battle:end_turn"))
 	_set_enabled("battle:end_turn", _preview_can_submit(end_quote), _preview_error(end_quote))
+	_show_end_turn_lock()
 	var selection_field := _selection_kind()
 	var candidates := _selection_candidate_ids(selection_field)
 	for value in _array(view.get("tasks")):
@@ -1614,6 +1802,9 @@ func _render_from_local() -> void:
 
 func _on_event_presented(event: Dictionary, text: String) -> void:
 	_present_event_visual(event)
+	var notice := _task_event_notice(event)
+	if not notice.is_empty() and not _task_event_notices.has(notice):
+		_task_event_notices.append(notice)
 	if str(event.get("type", "")) == "relic_triggered":
 		var data := _dict(event.get("data"))
 		var id := str(data.get("relic_id", ""))
@@ -1630,18 +1821,44 @@ func _on_event_presented(event: Dictionary, text: String) -> void:
 		else:
 			audio.play_event(str(event.get("type", "")))
 	_feedback_text = text
+	_update_feedback_label()
+
+
+func _visible_feedback() -> String:
+	return _feedback_text if _task_event_notices.is_empty() else "  ·  ".join(_task_event_notices)
+
+
+func _update_feedback_label() -> void:
 	if is_instance_valid(_feedback_label):
-		_feedback_label.text = text
-		_feedback_label.visible = true
+		_feedback_label.text = _visible_feedback()
+		_feedback_label.visible = not _feedback_label.text.is_empty()
+
+
+func _task_event_notice(event: Dictionary) -> String:
+	var data := _dict(event.get("data"))
+	match str(event.get("type", "")):
+		"task_summoned":
+			var text := "召唤 " + UiStyle.label(str(data.get("definition_id", "")))
+			for task in _array(view.get("tasks")):
+				if task.get("task_id", "") in _array(event.get("target_ids")) and task.get("taunting", false):
+					return text + "（嘲讽）"
+			return text
+		"task_transformed":
+			return "%s 转化为 %s" % [
+				UiStyle.label(str(data.get("from_definition_id", ""))),
+				UiStyle.label(str(data.get("to_definition_id", "")))
+			]
+		"task_self_destructed":
+			return UiStyle.label(str(data.get("definition_id", ""))) + " 自爆退场"
+	return ""
 
 
 func _show_disabled_card_feedback(card: Button) -> void:
+	_task_event_notices.clear()
 	_feedback_text = str(card.get_meta("disabled_reason", "无法打出"))
 	if _feedback_text.is_empty():
 		_feedback_text = "当前无法打出这张牌"
-	if is_instance_valid(_feedback_label):
-		_feedback_label.text = _feedback_text
-		_feedback_label.visible = true
+	_update_feedback_label()
 
 
 func _active_visual_effect_count() -> int:
@@ -2033,16 +2250,17 @@ func _close_panel() -> void:
 	_detail_terms.clear()
 	_inspect_open = false
 	_render_from_local()
-	if not _status_return_uid.is_empty():
-		_restore_status_focus.call_deferred()
+	if not _detail_return_uid.is_empty():
+		_restore_detail_focus.call_deferred()
 
 
-func _restore_status_focus() -> void:
-	var slot: Button = _buttons.get(_status_return_uid)
-	_status_return_uid = ""
+func _restore_detail_focus() -> void:
+	var slot: Button = _buttons.get(_detail_return_uid)
+	_detail_return_uid = ""
 	if is_instance_valid(slot):
 		slot.grab_focus()
-		(slot.get_meta("status_scroll") as ScrollContainer).set_deferred("scroll_horizontal", _status_return_scroll)
+		if slot is BattleStatusSlot:
+			(slot.get_meta("status_scroll") as ScrollContainer).set_deferred("scroll_horizontal", _status_return_scroll)
 
 
 func _battle_subtitle() -> String:
@@ -2182,23 +2400,7 @@ func _unit_definition(unit_id: String) -> String:
 
 
 func _task_intent_text(task: Dictionary) -> String:
-	var intent := _dict(task.get("intent_snapshot")).duplicate(true)
-	if task.has("effective_pressure"):
-		intent.pressure = int(task.effective_pressure)
-	var text := _intent_text(intent)
-	var times := int(intent.get("pressure_times", 1))
-	return text + (" ×%d段" % times if times > 1 else "")
-
-
-func _intent_text(intent: Dictionary) -> String:
-	var parts: Array[String] = []
-	if int(intent.get("pressure", 0)) != 0:
-		parts.append("压力 %s" % intent.get("pressure"))
-	if int(intent.get("shield", 0)) != 0:
-		parts.append("屏障 %s" % intent.get("shield"))
-	if not str(intent.get("text_key", "")).is_empty():
-		parts.append(UiStyle.label(str(intent.get("text_key"))))
-	return "、".join(parts) if not parts.is_empty() else "待揭示"
+	return TaskIntentText.summary(_dict(task.get("intent_snapshot")), task)
 
 
 func _status_text(statuses: Array) -> String:

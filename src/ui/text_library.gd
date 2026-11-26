@@ -295,7 +295,7 @@ static func _label_category(key: String) -> String:
 	if key.begins_with("scene.") or key in ["L", "L01", "L02", "L03", "LAB", "T", "C", "I", "ST", "FAMILIAR"]:
 		return "场景 / 房间"
 	if key.begins_with("status.") or key in [
-		"inspiration", "anxiety", "procrastination", "drowsiness", "extra_requirements",
+		"inspiration", "anxiety", "procrastination", "drowsiness",
 		"guard", "erosion", "induced", "brittle", "feebleness", "weakness", "vulnerability",
 		"focus", "vitality", "relax", "ddl", "synergy", "paper_open", "paper_progress",
 		"paper_citation", "paper_modifier", "paper_amplify", "paper_publish", "retrieve",

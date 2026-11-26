@@ -256,6 +256,8 @@ func run() -> Array[String]:
 	_check(panel.press("test:editor:field:player.focus:plus"), "draft during choice")
 	_check(panel.press("test:editor:apply"), "apply shows policy row")
 	_check(panel.button_uids().has("test:editor:apply:rollback"), "policy row exists")
+	_check(panel.press("test:editor:apply") and session.get_test_view().pending_choice is Dictionary,
+		"repeating Apply keeps the choice pending until selecting a policy")
 	_check(panel.press("test:editor:apply:rollback"), "rollback edit")
 	await _frame()
 	view = session.get_test_view()

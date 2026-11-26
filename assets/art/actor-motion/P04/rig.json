@@ -5032,7 +5032,7 @@
   },
   "expression": {
     "part": "head",
-    "blink": "res://assets/art/actor-proportions/P04/head_hit.png",
+    "blink": "res://assets/art/actor-proportions/P04/head_blink.png",
     "intervals": [
       [
         1.12,

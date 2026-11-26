@@ -251,7 +251,7 @@ func _task_status_lifecycle(active: SessionState) -> void:
 			(
 				engine
 				. _gain_status_on_target(
-					state, {"status": "extra_requirements", "stacks": 1}, old_id, events
+					state, {"status": "brainstorm", "stacks": 1, "target": "task"}, old_id, events
 				)
 				. ok
 			),

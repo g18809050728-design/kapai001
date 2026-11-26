@@ -1000,10 +1000,8 @@ func _end_turn(
 	if not phase_result.ok:
 		return phase_result
 	for task: Dictionary in state.tasks:
-		var shield_def := _catalog.get_definition("task", str(task.get("definition_id", "")))
-		if shield_def.ok and bool(shield_def.data.get("shield_persistent", false)):
-			continue
-		task.shield = 0
+		if not _retains_shield(task):
+			task.shield = 0
 	var erosion_window := _v3_erosion_window(state, rng, events)
 	if not erosion_window.ok:
 		return erosion_window
@@ -1030,8 +1028,6 @@ func _end_turn(
 	phase_result = _set_phase(state, events, "enemy_pressure")
 	if not phase_result.ok:
 		return phase_result
-	var pressure_rules: Dictionary = ruleset_result.data.statuses.get("extra_requirements", {})
-	var brainstorm_rules: Dictionary = ruleset_result.data.statuses.get("brainstorm", {})
 	var pressure_index := 0
 	while not _test_switch("freeze_enemy") and pressure_index < state.tasks.size():
 		var task: Dictionary = state.tasks[pressure_index]
@@ -1192,7 +1188,50 @@ func _execute_effect_list(
 	return GameResult.success(null)
 
 
-func intent_pressure(state: BattleState, task: Dictionary, rules: Dictionary = {}) -> int:
+## Forecast from the public state and the skills already shown for this round.
+## Later pressure hits and reactions can still alter the board before a task acts.
+func preview_enemy_intents(state: BattleState) -> Dictionary:
+	var loaded := _loaded_ruleset()
+	if not loaded.ok:
+		return {}
+	var rules: Dictionary = loaded.data
+	var max_reduction := 0
+	for task in state.tasks:
+		if int(task.get("eligible_round", 1)) <= state.round_index:
+			max_reduction += maxi(0, int(task.get("intent_snapshot", {}).get("player_reduce_max_vitality", 0)))
+	var vitality := int(state.player.get("vitality", 0))
+	if max_reduction > 0:
+		vitality = mini(vitality, maxi(1, int(state.player.get("max_vitality", 0)) - max_reduction))
+	var previews := {}
+	for task in state.tasks:
+		if int(task.get("eligible_round", 1)) > state.round_index:
+			continue
+		var task_id := str(task.get("task_id", ""))
+		var intent: Dictionary = task.get("intent_snapshot", {})
+		var shield_gain := _scaled_shield(state, rules, task_id, int(intent.shield)) if intent.has("shield") else 0
+		var shield := 0
+		if intent.has("pressure_when_shield") and int(task.get("shield", 0)) > 0 and _retains_shield(task):
+			shield = int(task.shield)
+		var brainstorm := _status_stacks(state, "brainstorm", task_id)
+		var gain: Dictionary = intent.get("gain_status", {})
+		if gain.get("target") == "task" and gain.get("status") == "brainstorm":
+			brainstorm = _capped_status_stacks(rules.statuses.get("brainstorm", {}), brainstorm, int(gain.get("stacks", 1)))
+		previews[task_id] = {
+			"effective_pressure": intent_pressure(state, task, rules, {
+				"shield": shield + shield_gain, "vitality": vitality,
+				"brainstorm": brainstorm,
+			}),
+			"intent_shield_gain": shield_gain,
+		}
+	return previews
+
+
+func _retains_shield(task: Dictionary) -> bool:
+	var definition := _catalog.get_definition("task", str(task.get("definition_id", "")))
+	return definition.ok and bool(definition.data.get("shield_persistent", false))
+
+
+func intent_pressure(state: BattleState, task: Dictionary, rules: Dictionary = {}, projected: Dictionary = {}) -> int:
 	if rules.is_empty():
 		var loaded := _loaded_ruleset()
 		if not loaded.ok:
@@ -1200,12 +1239,9 @@ func intent_pressure(state: BattleState, task: Dictionary, rules: Dictionary = {
 		rules = loaded.data
 	var intent: Dictionary = task.get("intent_snapshot", {})
 	var task_id := str(task.get("task_id", ""))
-	var pressure_rules: Dictionary = rules.statuses.get("extra_requirements", {})
 	var brainstorm_rules: Dictionary = rules.statuses.get("brainstorm", {})
 	var pressure := int(intent.get("pressure", 0))
-	var extra := _status_stacks(state, "extra_requirements", task_id)
-	pressure += extra * int(pressure_rules.get("pressure_per_stack", 0))
-	var brainstorm := _status_stacks(state, "brainstorm", task_id)
+	var brainstorm := int(projected.get("brainstorm", _status_stacks(state, "brainstorm", task_id)))
 	pressure += brainstorm * int(brainstorm_rules.get("pressure_per_stack", 0))
 	var per_unit := int(intent.get("pressure_per_unit", 0))
 	if per_unit > 0:
@@ -1215,8 +1251,8 @@ func intent_pressure(state: BattleState, task: Dictionary, rules: Dictionary = {
 	var per_vitality := int(intent.get("pressure_per_vitality", 0))
 	if per_vitality > 0:
 		var step := int(intent.get("pressure_vitality_step", 10))
-		pressure += per_vitality * int(int(state.player.get("vitality", 0)) / maxi(1, step))
-	if int(task.get("shield", 0)) > 0:
+		pressure += per_vitality * int(int(projected.get("vitality", state.player.get("vitality", 0))) / maxi(1, step))
+	if int(projected.get("shield", task.get("shield", 0))) > 0:
 		pressure += int(intent.get("pressure_when_shield", 0))
 	var per_card_type: Variant = intent.get("pressure_per_card_type", {})
 	if per_card_type is Dictionary:
@@ -1311,19 +1347,6 @@ func _execute_intent_skill(
 		if max_after != max_before:
 			state.player.max_vitality = max_after
 			state.player.vitality = mini(int(state.player.get("vitality", 0)), max_after)
-	if intent.has("extra_requirements"):
-		var extra := _gain_status_on_target(
-			state,
-			{
-				"status": "extra_requirements",
-				"stacks": int(intent.extra_requirements),
-				"target": "task"
-			},
-			task_id,
-			events,
-		)
-		if not extra.ok:
-			return extra
 	if intent.has("work_restore"):
 		var before := int(task.get("work_remaining", 0))
 		task.work_remaining = mini(
@@ -2387,15 +2410,7 @@ func _execute_v3_card_effect(
 			_resource_event(state, events, "citations", before, paper_spend.citations, "citation_payment")
 			return GameResult.success(null)
 		"change_topic":
-			var paper_change := _v3_paper(state)
-			if not paper_change.used_names.is_empty():
-				paper_change.used_names.pop_front()
-				var before := int(paper_change.modifier)
-				paper_change.modifier = before + int(effect.get("modifier", -1))
-				_resource_event(state, events, "modifier", before, paper_change.modifier, "change_topic")
-				if BattleRelicRoster.available(state,"RX-P02-14"):
-					_rx_relax(state,"RX-P02-14","topic_reset",5,1,events)
-			return GameResult.success(null)
+			return _start_card_choice(state, effect, op)
 		"chapter_deploy":
 			var deployed := _v3_chapter_deploy(
 				state, str(state.resolution.get("card_instance_id", "")), events
@@ -3824,6 +3839,9 @@ func _start_card_choice(state: BattleState, effect: Dictionary, op: String) -> G
 			for card_id in state.zones.hand:
 				if str(card_id) != str(resolution.get("card_instance_id", "")):
 					candidates.append(_card_candidate(state, str(card_id)))
+		"change_topic":
+			for name_key: String in _v3_paper(state).used_names:
+				candidates.append({"id": name_key, "label_key": name_key})
 		"remove_status":
 			kind = "remove_status"
 			for status: Dictionary in state.statuses:
@@ -3865,7 +3883,8 @@ func _start_card_choice(state: BattleState, effect: Dictionary, op: String) -> G
 			"error.play.no_recall_target",
 			{"required": int(effect.get("amount", 1)), "available": candidates.size()}
 		)
-	var minimum := 0 if op == "discard" and bool(effect.get("up_to", false)) else maximum
+	var optional := (op == "discard" and bool(effect.get("up_to", false))) or op == "change_topic"
+	var minimum := 0 if optional else maximum
 	var choice_id := _new_instance_id(state, "ch")
 	return (
 		GameResult
@@ -3878,7 +3897,7 @@ func _start_card_choice(state: BattleState, effect: Dictionary, op: String) -> G
 				"min_count": minimum,
 				"max_count": maximum,
 				"source_card_id": str(resolution.get("card_instance_id", "")),
-				"effect_amount": int(effect.get("amount", 1)),
+				"effect_amount": int(effect.get("modifier", -1) if op == "change_topic" else effect.get("amount", 1)),
 			}
 		)
 	)
@@ -3969,6 +3988,17 @@ func _confirm_effect_choice(
 			var retained: Array = resolution.get("retained_card_ids", [])
 			retained.append_array(selected)
 			resolution.retained_card_ids = retained
+		"change_topic":
+			if not selected.is_empty():
+				var paper := _v3_paper(state)
+				if not paper.used_names.has(selected[0]):
+					return _failure(GameConstants.ERROR_INVALID_TARGET, "error.battle.choice_candidate_invalid", {"selected_id": selected[0]})
+				paper.used_names.erase(selected[0])
+				var before := int(paper.modifier)
+				paper.modifier = before + int(choice.effect_amount)
+				_resource_event(state, events, "modifier", before, paper.modifier, "change_topic")
+				if BattleRelicRoster.available(state, "RX-P02-14"):
+					_rx_relax(state, "RX-P02-14", "topic_reset", 5, 1, events)
 		"retrieve_strategy":
 			if not selected.is_empty():
 				var retrieved_id := str(selected[0])
@@ -4134,7 +4164,7 @@ func _gain_status_on_target(
 	var before := 0
 	if index >= 0:
 		before = int(state.statuses[index].get("stacks", 0))
-	var after := mini(int(status_rule.get("cap", before + stacks)), before + stacks)
+	var after := _capped_status_stacks(status_rule, before, stacks)
 	if status_id == "guard":
 		after = 1
 	if status_id == "drowsiness" and target_id == str(state.player.get("entity_id", "")):
@@ -4179,6 +4209,11 @@ func _gain_status_on_target(
 		}
 	)
 	return GameResult.success(true)
+
+
+func _capped_status_stacks(rule: Dictionary, before: int, incoming: int) -> int:
+	var total := before + maxi(1, incoming)
+	return mini(int(rule.get("cap", total)), total)
 
 
 func _prevent_status_gain(
@@ -5016,7 +5051,7 @@ func _v3_paper_record(
 	var paper := _v3_paper(state)
 	var name_key := str(definition.data.get("name_key", definition_id))
 	var used: Array = paper.used_names
-	var was_used := used.has(name_key)
+	var was_used := bool(resolution.get("v3_paper_name_was_used", false))
 	if not was_used:
 		used.append(name_key)
 		if state.relics.has("RX-P02-04"):

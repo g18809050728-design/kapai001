@@ -100,6 +100,13 @@ func _present_target(kind: String, data: Dictionary, source: String, target: Str
 		"unit_summoned":
 			_local(target,"partner",Color("99cbb2"))
 			_feedback(target,"伙伴加入",UiStyle.GREEN.lightened(.35))
+		"task_summoned":
+			_local(target,"phase",UiStyle.GOLD)
+			_feedback(target,"召唤入场",UiStyle.GOLD)
+		"task_self_destructed":
+			_local(target,"guard_break",Color("ec967e"))
+			_feedback(target,"自爆退场",Color("ffc2ad"))
+			_depart(target)
 		"unit_departed", "task_completed":
 			_depart(target)
 		"coop_target_set":
@@ -108,7 +115,7 @@ func _present_target(kind: String, data: Dictionary, source: String, target: Str
 		"task_transformed":
 			_pilot_cue(target, "phase")
 			_local(target,"phase",UiStyle.GOLD)
-			_feedback(target,UiStyle.label(kind),UiStyle.GOLD)
+			_feedback(target,"形态转化",UiStyle.GOLD)
 		"chapter_deployed", "chapter_ran", "chapter_returned", "chapter_slots_swapped", "paper_published", "v3_ability_registered":
 			cue(target,"guard")
 			_feedback(target,UiStyle.label(kind),UiStyle.GOLD)

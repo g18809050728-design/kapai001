@@ -54,6 +54,10 @@ var _save_status := "尚无本次会话的手动保存结果"
 var _ui_feedback: Label
 var _ui_feedback_generation := 0
 var _compendium_state: Dictionary = {}
+var _test_compendium: UiCompendiumPage
+var _test_compendium_state: Dictionary = {}
+var _test_compendium_focus: Control
+var _test_compendium_pages: Dictionary = {}
 var _text_editor_state: Dictionary = {}
 var _text_library_cache: Dictionary = {}
 var _text_library_loaded := false
@@ -152,6 +156,10 @@ func show_screen(screen: String) -> void:
 func refresh() -> void:
 	if _waiting_for_battle or not is_instance_valid(_host):
 		return
+	if is_instance_valid(_test_compendium):
+		if _developer_tools_allowed() and _is_test_workspace():
+			return
+		_close_test_compendium()
 	if is_instance_valid(_ui_feedback):
 		_ui_feedback.hide()
 	if session.has_test_room():
@@ -585,6 +593,8 @@ func draft_requires_selection(draft: Dictionary) -> bool:
 
 
 func press(uid: String) -> bool:
+	if is_instance_valid(_test_compendium):
+		return _test_compendium.press(uid)
 	if tutorial_visible():
 		if _tutorial.has_uid(uid):
 			return _tutorial.press(uid)
@@ -595,7 +605,7 @@ func press(uid: String) -> bool:
 
 
 func submit_action(draft: Dictionary) -> void:
-	if _waiting_for_battle or draft.is_empty():
+	if _waiting_for_battle or draft.is_empty() or is_instance_valid(_test_compendium):
 		return
 	var type := str(draft.get("type", ""))
 	if tutorial_visible():
@@ -711,7 +721,7 @@ func _refresh_test_home() -> void:
 		_replace_page("test_home", test_home)
 	page.render(data)
 	_set_battle_frame(false)
-	_status_label.text = "测试房间  /  实时实验沙盒"
+	_status_label.text = "测试房间"
 	_notice_label.text = notice
 	_notice_label.add_theme_color_override(
 		"font_color", UiStyle.RED if last_error != null else UiStyle.INK
@@ -766,16 +776,13 @@ func _refresh_test_room() -> void:
 			test_view = session.get_test_view()
 		_replace_page("test_battle", BattleScreen.new())
 		page.preview_callback = Callable(self, "_test_preview")
+	_set_battle_frame(true)
+	page.offset_top = TestHud.bar_height()
 	if session.is_relic_pilot():
-		_set_battle_frame(true)
-		page.offset_top = TestHud.bar_height()
 		var preferences := session.get_presentation_settings()
 		page.animation_enabled = int(preferences.animation_speed) > 0 and not preferences.reduced_motion
 		page.speed_scale = maxf(1, int(preferences.animation_speed))
-		page.render(battle_data)
-	else:
-		page.render(battle_data)
-		_set_battle_frame(true)
+	page.render(battle_data)
 	_ensure_test_hud()
 	_test_hud.render(test_view)
 	var test_state: Dictionary = test_view.get("test", {})
@@ -871,6 +878,59 @@ func _clear_test_hud() -> void:
 	_test_hud = null
 
 
+func _is_test_workspace() -> bool:
+	return session.has_test_room() or _ui_screen == "test_room"
+
+
+func _open_test_compendium() -> void:
+	if not _developer_tools_allowed() or not _is_test_workspace() or is_instance_valid(_test_compendium):
+		return
+	var catalogue := session.get_test_compendium()
+	var data: Dictionary = catalogue.data if catalogue.ok else {"error": UiStyle.error_text(catalogue.error)}
+	var preferences := session.get_presentation_settings()
+	data.motion_enabled = int(preferences.animation_speed) > 0 and not preferences.reduced_motion
+	data.animation_speed = preferences.animation_speed
+	_test_compendium_focus = get_viewport().gui_get_focus_owner()
+	for control in [page, _test_hud]:
+		if is_instance_valid(control):
+			_test_compendium_pages[control] = [control.visible, control.process_mode]
+			control.process_mode = Node.PROCESS_MODE_DISABLED
+			control.hide()
+	_test_compendium = UiCompendiumPage.new()
+	_test_compendium.test_context = true
+	_test_compendium.z_index = 550
+	_test_compendium.audio = audio
+	if not _test_compendium_state.is_empty():
+		_test_compendium.tab = _test_compendium_state.tab
+		_test_compendium._states = _test_compendium_state.states.duplicate(true)
+	_host.add_child(_test_compendium)
+	_test_compendium.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_test_compendium.action_requested.connect(func(draft: Dictionary):
+		if draft.get("type") == "ui.compendium_back":
+			_close_test_compendium())
+	_test_compendium.render(data)
+
+
+func _close_test_compendium() -> void:
+	if not is_instance_valid(_test_compendium):
+		return
+	var catalogue := _test_compendium
+	_test_compendium = null
+	catalogue._states[catalogue.tab].scroll = catalogue._scroll.scroll_vertical
+	_test_compendium_state = {"tab": catalogue.tab, "states": catalogue._states.duplicate(true)}
+	_host.remove_child(catalogue)
+	catalogue.queue_free()
+	for control in _test_compendium_pages:
+		if is_instance_valid(control):
+			var saved: Array = _test_compendium_pages[control]
+			control.process_mode = saved[1]
+			control.visible = saved[0]
+	_test_compendium_pages.clear()
+	if is_instance_valid(_test_compendium_focus) and _test_compendium_focus.is_visible_in_tree():
+		_test_compendium_focus.grab_focus()
+	_test_compendium_focus = null
+
+
 func _test_context() -> Dictionary:
 	return _test_context_from(session.get_test_view())
 
@@ -919,8 +979,12 @@ func _test_preview(draft: Dictionary) -> ActionPreview:
 
 
 func _handle_test_command(command: String, payload: Dictionary) -> void:
+	if is_instance_valid(_test_compendium):
+		return
 	last_error = null
 	match command:
+		"test.compendium":
+			_open_test_compendium()
 		"test.start":
 			var started := session.start_test_room(payload.get("config", {}))
 			if not started.accepted:
@@ -1076,9 +1140,11 @@ func _save_test_file(kind: String) -> bool:
 	if not result.ok:
 		_report_error(result.error)
 		refresh()
+		_show_ui_feedback(notice, true)
 		return false
-	notice = "已保存到 " + str(result.data.get("path", "测试目录"))
+	notice = "已保存" + str({"snapshot": "测试快照", "preset": "测试预设", "record": "测试记录"}.get(kind, "测试文件"))
 	refresh()
+	_show_ui_feedback(notice)
 	return true
 
 

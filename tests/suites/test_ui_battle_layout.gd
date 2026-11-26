@@ -110,6 +110,39 @@ func run() -> Array[String]:
 		_mouse_move(Vector2(20, 150))
 		await tree.create_timer(0.2).timeout
 	_check(_helpers.fingerprint(_shell.session) == original, "geometry fixtures leave session untouched")
+	for dimensions in [Vector2i(960, 600), Vector2i(1280, 800), Vector2i(2560, 1358), Vector2i(1920, 1080), Vector2i(3440, 1440)]:
+		tree.root.size = dimensions
+		await _frames()
+		var battle := _battle()
+		var fixed_geometry := {}
+		for amount in [5, 4, 3, 2, 1, 0, 6, 7, 8, 9, 10]:
+			var display := base.duplicate(true)
+			display.hand = []
+			for index in amount:
+				var card_data: Dictionary = base.hand[index % base.hand.size()].duplicate(true)
+				card_data.card_id = "fullscreen-card-%d" % index
+				display.hand.append(card_data)
+			battle.render(display)
+			await _frames()
+			var geometry := {"hand_top": battle._hand_top}
+			for id in battle._actors:
+				geometry[id] = battle._actors[id].get_global_rect()
+			for uid in battle._target_frames:
+				geometry[uid] = battle._buttons[uid].get_global_rect()
+			if amount == 5:
+				fixed_geometry = geometry
+			_check(geometry == fixed_geometry, "%d cards preserve actor and target geometry at %s" % [amount, dimensions])
+		var viewport := battle.get_global_rect()
+		var background := battle.get_node("BattleRoomBackground") as TextureRect
+		_check(background.get_global_rect().is_equal_approx(viewport), "background fills %s" % dimensions)
+		_check(is_equal_approx(battle._stage.get_global_rect().size.x, viewport.size.x), "stage uses the full width at %s" % dimensions)
+		for card in battle._hand_cards:
+			_check(viewport.encloses(_card_bounds(card, true)), "full rotated card stays visible at %s" % dimensions)
+		for uid in ["battle:end_turn", "battle:draw", "battle:discard", "battle:exhaust"]:
+			_check(viewport.encloses(battle._buttons[uid].get_global_rect()), "%s stays visible at %s" % [uid, dimensions])
+		_check(_helpers.fingerprint(_shell.session) == original, "viewport resize preserves battle state at %s" % dimensions)
+	tree.root.size = Vector2i(1280, 800)
+	await _frames()
 	for phases in [1, 2]:
 		var display := base.duplicate(true)
 		var task: Dictionary = display.tasks[0]
@@ -131,7 +164,7 @@ func run() -> Array[String]:
 	_shell.free()
 	tree.root.size = old_size
 	UiStyle.text_scale = 1.0
-	print("BATTLE_LAYOUT_CHECKS=", JSON.stringify({"sizes": ["1280x800", "960x600"], "text_scales": [100, 125, 150], "fan_counts": [5, 10], "real_mouse": true, "failures": _failures}))
+	print("BATTLE_LAYOUT_CHECKS=", JSON.stringify({"sizes": ["1280x800", "960x600", "2560x1358", "1920x1080", "3440x1440"], "text_scales": [100, 125, 150], "fan_counts": [5, 10], "real_mouse": true, "failures": _failures}))
 	return _failures
 
 

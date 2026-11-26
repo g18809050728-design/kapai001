@@ -261,11 +261,12 @@ func _fit_reward_cards() -> void:
 			continue
 		var columns := mini(3, grid.get_child_count())
 		grid.columns = maxi(1, columns)
-		var width := minf(220*UiStyle.text_scale, (available_width-16*(columns-1))/maxi(1,columns))
+		var card_scale := 1.0 if grid.get_meta("short_relic_cards", false) else UiStyle.text_scale
+		var width := minf(220 * card_scale, (available_width - 16 * (columns - 1)) / maxi(1, columns))
 		for card in grid.get_children():
 			if not card is UiOfferCard:
 				continue
-			var ratio := 1.05 if card._relic else 244.0/168
+			var ratio: float = card._face_ratio()
 			var fitted_width := maxf(120, minf(width,(available_height-36*UiStyle.text_scale)/ratio))
 			card.custom_minimum_size = Vector2(fitted_width, fitted_width*ratio+36*UiStyle.text_scale)
 			card._base_height = card.custom_minimum_size.y
@@ -580,54 +581,65 @@ func _cancel(parent: Node, key: String, title: String = "取消预选") -> void:
 func _render_reward() -> void:
 	var offer := _dict(view.get("pending_reward"))
 	_scope(str(offer.get("offer_id", "")))
-	reset_page("选择你的收获", "悬停或键盘聚焦查看卡文 · 点击预选 · 底部确认领取")
-	_run_bar(header)
 	var pending: Array = _array(offer.get("items")).filter(func(item): return item.get("status", "pending") == "pending")
+	var item: Dictionary = pending[0] if not pending.is_empty() else {}
+	var relic: bool = item.get("kind", "card") == "relic"
+	reset_page("选择你的收获", "点选饰品查看效果，再确认领取" if relic else "悬停或键盘聚焦查看卡文 · 点击预选 · 底部确认领取")
+	_run_bar(header)
 	var money := int(_dict(offer.get("meta")).get("money", 0))
 	if pending.is_empty():
 		add_text(body, "奖励已处理完成。", 22)
 		return
-	var item: Dictionary = pending[0]
 	var id := str(item.item_id)
-	var relic: bool = item.get("kind", "card") == "relic"
 	add_text(header, "已获得金钱 %d · 待处理 %d 项 · %s" % [money, pending.size(), "饰品奖励" if relic else "卡牌奖励"], 15)
 	var grid := _grid(body)
 	grid.set_meta("reward_cards", true)
-	body.alignment = BoxContainer.ALIGNMENT_CENTER
+	grid.set_meta("short_relic_cards", relic)
+	body.alignment = BoxContainer.ALIGNMENT_BEGIN if relic else BoxContainer.ALIGNMENT_CENTER
 	body.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	var details := _dict(item.get("candidate_details"))
 	for candidate in _array(item.get("candidates")):
 		var cid := _candidate_id(candidate)
-		add_card(grid, "reward:%s:pick:%s" % [id, cid], cid, _dict(details.get(cid)), UiStyle.label(cid), _choices.get(id, "") == cid, func(): _choose(id, cid), relic)
+		add_card(grid, "reward:%s:pick:%s" % [id, cid], cid, _dict(details.get(cid)), UiStyle.label(cid), _choices.get(id, "") == cid, func():
+			if relic:
+				_pick_reward_relic(id, cid, id + ":replace")
+			else:
+				_choose(id, cid), relic)
 	var selected := str(_choices.get(id, ""))
-	if relic and _relics_full():
-		_replacement_picker(body, "reward:" + id, id + ":replace")
 	var skipping: bool = _choices.get(id + ":skip", "") == "yes"
+	var replacement := str(_choices.get(id + ":replace", ""))
+	if relic and not selected.is_empty() and not skipping:
+		_relic_reward_comparison(selected, details, replacement)
+		if _relics_full():
+			_relic_reward_slots("reward:" + id, id + ":replace")
 	var summary := "已选：" + UiStyle.label(selected) if not selected.is_empty() else "请选择一个候选；查看说明不会领取奖励。"
 	if relic and _relics_full() and not selected.is_empty():
-		var replacement := str(_choices.get(id + ":replace", ""))
-		summary += " · 装备槽已满，请向下选择替换对象" if replacement.is_empty() else " · 将失去：" + _relic_name(replacement)
+		summary += " · 装备槽已满，请选择换下的饰品" if replacement.is_empty() else " · 换下 " + _relic_name(replacement)
 	var skip_bonus := int(item.get("rx_skip_bonus", 0))
 	var skip_summary := "确认跳过这项奖励？"
 	if skip_bonus > 0:
 		skip_summary += " · %s：+%d 金钱" % [UiStyle.label("RX-C28"), skip_bonus]
 	var row := _bottom(skip_summary if skipping else summary)
 	if skipping:
-		if skip_bonus > 0:
-			_cancel(row, id + ":skip", "继续选牌")
+		_cancel(row, id + ":skip", "继续选饰品" if relic else "继续选牌")
 		add_button(row, "reward:%s:skip_confirm" % id, "确认跳过", _action("skip_reward", {"offer_id": offer.get("offer_id", ""), "item_id": id}))
-		if skip_bonus <= 0:
-			_cancel(row, id + ":skip", "继续选牌")
 	else:
 		var payload := {"offer_id": offer.get("offer_id", ""), "item_id": id, "candidate_id": selected}
-		if not str(_choices.get(id + ":replace", "")).is_empty():
-			payload.replace_relic_id = _choices[id + ":replace"]
-		var confirm := add_button(row, "reward:%s:claim" % id, "领取这件饰品" if relic else "领取这张卡", _action("claim_reward", payload))
+		if not replacement.is_empty():
+			payload.replace_relic_id = replacement
+		if relic:
+			if not selected.is_empty():
+				add_button(row, "selection:cancel", "取消预选", {}, func(): _clear_reward_relic(id, id + ":replace"))
+			if item.get("skippable", true):
+				_local_button(row, "reward:%s:skip" % id, "跳过 · +%d 金钱" % skip_bonus if skip_bonus > 0 else "跳过此项", id + ":skip", "yes")
+		var primary := ("确认替换" if not replacement.is_empty() else "领取这件饰品") if relic else "领取这张卡"
+		var confirm := add_button(row, "reward:%s:claim" % id, primary, _action("claim_reward", payload))
 		if selected.is_empty() or (relic and _relics_full() and not payload.has("replace_relic_id")):
 			confirm.disabled = true
 			confirm.tooltip_text = "请先选择要替换的已装备饰品" if not selected.is_empty() else "请先预选奖励"
-		_cancel(row, id)
-		if item.get("skippable", true):
+		if not relic:
+			_cancel(row, id)
+		if not relic and item.get("skippable", true):
 			_local_button(row, "reward:%s:skip" % id, "跳过 · +%d 金钱" % skip_bonus if skip_bonus > 0 else "跳过此项", id + ":skip", "yes")
 
 
@@ -671,6 +683,8 @@ func _render_campaign() -> void:
 		_candidates(offer, false)
 	elif kind == "relic":
 		_candidates(offer, true)
+		_relic_campaign_footer(offer)
+		return
 	elif kind == "grand" and category == "deck":
 		_campaign_deck(offer, false)
 	elif kind == "service":
@@ -751,8 +765,6 @@ func _render_campaign() -> void:
 		option = category
 	var quote := _preview_quote(offer, option, target, str(_choices.get("campaign:replace", "")))
 	var summary := _quote(offer, option, target, str(_choices.get("campaign:replace", ""))) if not option.is_empty() else "请选择对象或行动"
-	if kind == "relic" and option == "claim" and quote.get("ok", false) and int(quote.get("money_delta", 0)) > 0:
-		summary = "重复饰品，将折算：" + summary
 	var row := _bottom(summary)
 	var action := _campaign_action(offer, option, target)
 	if _choices.has("campaign:replace"):
@@ -762,34 +774,112 @@ func _render_campaign() -> void:
 	if kind == "grand":
 		add_button(row, "campaign:back", "返回类别", {}, func(): _choices.clear(); refresh_local())
 	else:
-		if kind == "relic":
-			add_button(row, "selection:cancel", "返回饰品候选", {}, func(): _choices.erase("campaign:target"); _choices.erase("campaign:option"); _choices.erase("campaign:replace"); refresh_local())
-			if not target.is_empty() and _relics_full():
-				var conversion := "主动折算 · " + _quote(offer, "convert", target)
-				if RelicPilot.expanded(view.get("manifest_id")):
-					conversion = "折算 · +%d 金钱" % int(_preview_quote(offer, "convert", target).get("money_delta", 0))
-				_local_button(row, "campaign:convert:" + target, conversion, "campaign:option", "convert")
-		else:
-			_cancel(row, "campaign:option")
+		_cancel(row, "campaign:option")
 		if kind not in ["direction", "destination"]:
-			_local_button(row, "campaign:skip", "跳过 · %s金钱" % ("20" if kind == "relic" else "0"), "campaign:option", "skip")
+			_local_button(row, "campaign:skip", "跳过 · 0金钱", "campaign:option", "skip")
 
 
 func _candidates(offer: Dictionary, relic: bool) -> void:
-	var target := str(_choices.get("campaign:target", ""))
 	var grid := _grid(body)
 	grid.set_meta("reward_cards", true)
+	grid.set_meta("short_relic_cards", relic)
 	for value in _array(offer.get("candidates")):
 		var id := str(value)
 		add_card(grid, "campaign:claim:" + id, id, _dict(offer.get("details", {}).get(id)), UiStyle.label(id), _choices.get("campaign:target", "") == id, func():
 			_choices["campaign:option"] = "claim" if relic else "card"
-			_choices["campaign:target"] = id
-			_choices.erase("campaign:skip")
-			refresh_local(), relic)
-	if relic:
-		add_text(body, "携带 %d/%d 件饰品；预选后比较实际装备槽。" % [_array(view.get("relics")).size(), int(view.get("relic_slots", 3))], 15)
-		if not target.is_empty():
-			_replacement_picker(body, "campaign", "campaign:replace")
+			if relic:
+				_pick_reward_relic("campaign:target", id, "campaign:replace")
+			else:
+				_choose("campaign:target", id), relic)
+
+
+func _relic_campaign_footer(offer: Dictionary) -> void:
+	var option := str(_choices.get("campaign:option", ""))
+	var selected := str(_choices.get("campaign:target", ""))
+	var target := "" if option == "skip" else selected
+	var replacement := str(_choices.get("campaign:replace", "")) if option == "claim" else ""
+	var quote := _preview_quote(offer, option, target, replacement)
+	var gain := int(quote.get("money_delta", 0))
+	var summary := "点选候选饰品 · 装备 %d/%d" % [_array(view.get("relics")).size(), int(view.get("relic_slots", 3))]
+	var caption := "确认领取"
+	var converting: bool = option == "convert" or (option == "claim" and quote.get("ok", false) and gain > 0)
+	if option == "skip":
+		caption = "确认跳过"
+		summary = "跳过本次饰品奖励 · 获得 %d 金钱" % gain
+	elif converting:
+		caption = "确认折算"
+		summary = "%s · 折算为 %d 金钱" % [UiStyle.label(target), gain]
+	elif option == "claim":
+		_relic_reward_comparison(target, _dict(offer.get("details")), replacement)
+		summary = "获得 " + UiStyle.label(target)
+		if _relics_full():
+			_relic_reward_slots("campaign", "campaign:replace")
+			caption = "确认替换"
+			summary += " · 请先选择换下的饰品" if replacement.is_empty() else " · 换下 " + _relic_name(replacement)
+	var row := _bottom(summary)
+	if option in ["skip", "convert"]:
+		add_button(row, "selection:cancel", "继续选择", {}, func(): _choose("campaign:option", "claim" if not selected.is_empty() else ""))
+	else:
+		if not selected.is_empty():
+			add_button(row, "selection:cancel", "取消预选", {}, func():
+				_choices.erase("campaign:option")
+				_clear_reward_relic("campaign:target", "campaign:replace"))
+		var skip_quote := _preview_quote(offer, "skip")
+		_local_button(row, "campaign:skip", "跳过 · +%d 金钱" % int(skip_quote.get("money_delta", 0)), "campaign:option", "skip")
+		var convert_quote := _preview_quote(offer, "convert", selected)
+		if not selected.is_empty() and not converting and convert_quote.get("ok", false):
+			_local_button(row, "campaign:convert:" + selected, "折算 · +%d 金钱" % int(convert_quote.get("money_delta", 0)), "campaign:option", "convert")
+	var action := _campaign_action(offer, option, target)
+	if not replacement.is_empty():
+		action.payload.replace_relic_id = replacement
+	var confirm := add_button(row, "campaign:confirm", caption, action)
+	confirm.disabled = not quote.get("ok", false)
+
+
+func _pick_reward_relic(key: String, candidate: String, replace_key: String) -> void:
+	if str(_choices.get(key, "")) != candidate:
+		_choices.erase(replace_key)
+	_choices.erase(key + ":skip")
+	_choose(key, candidate)
+
+
+func _clear_reward_relic(key: String, replace_key: String) -> void:
+	_choices.erase(replace_key)
+	_choose(key, "")
+
+
+func _relic_reward_slots(prefix: String, choice_key: String) -> void:
+	var row := add_row(footer)
+	var relics := _array(view.get("relics")).duplicate()
+	relics.sort_custom(func(a, b): return int(a.get("slot", 0)) < int(b.get("slot", 0)))
+	for relic in relics:
+		var id := str(relic.relic_id)
+		var label := "槽 %d · %s" % [int(relic.get("slot", 0)) + 1, UiStyle.label(str(relic.definition_id))]
+		var button := _local_button(row, prefix + ":replace:" + id, label, choice_key, id)
+		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		button.custom_minimum_size.x = 0
+		button.tooltip_text = UiContentText.describe_relic(_dict(relic.get("detail")))
+
+
+func _relic_reward_comparison(candidate: String, definitions: Dictionary, replacement: String) -> void:
+	var row := add_row(body)
+	row.name = "RelicComparison"
+	_relic_effect_column(row, "候选 · " + UiStyle.label(candidate), _dict(definitions.get(candidate)))
+	for relic in _array(view.get("relics")):
+		if str(relic.get("relic_id", "")) == replacement:
+			_relic_effect_column(row, "将换下 · " + _relic_name(replacement), _dict(relic.get("detail")))
+			break
+
+
+func _relic_effect_column(parent: Node, title: String, detail: Dictionary) -> void:
+	var column := add_panel(parent)
+	var panel := column.get_parent() as PanelContainer
+	var style := panel.get_theme_stylebox("panel").duplicate() as StyleBoxFlat
+	style.set_content_margin_all(8)
+	panel.add_theme_stylebox_override("panel", style)
+	column.add_theme_constant_override("separation", 4)
+	add_text(column, title, 17, UiStyle.BRASS)
+	add_text(column, UiContentText.describe_relic(detail), 15, UiStyle.CREAM).name = "RelicEffect"
 
 
 func _replacement_picker(parent: Node, uid_prefix: String, choice_key: String) -> void:

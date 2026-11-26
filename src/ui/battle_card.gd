@@ -35,7 +35,7 @@ func configure(data: Dictionary, is_selected: bool = false) -> void:
 
 
 func _draw() -> void:
-	CardFaceView.paint(self, Rect2(Vector2.ZERO, FACE_SIZE), CardDisplayModel.from_card(card_data), selected or highlighted, disabled, shortcut_index)
+	CardFaceView.paint(self, Rect2(Vector2.ZERO, FACE_SIZE), CardDisplayModel.from_card(card_data), selected or highlighted, disabled, shortcut_index, true)
 
 
 func contains_global(point: Vector2) -> bool:

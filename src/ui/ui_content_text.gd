@@ -165,51 +165,9 @@ static func _describe_card(detail: Dictionary, battle_explanation: bool) -> Stri
 	if not limit.is_empty():
 		lines.append(limit)
 	for unit in detail.get("related_units", {}).values():
-		lines.append(
-			(
-				"%s：精力 %s · 合作值 %s%s"
-				% [
-					UiStyle.label(str(unit.id)),
-					unit.get("vitality", 0),
-					unit.get("cooperation", 0),
-					" · 护卫" if unit.get("guard", false) else ""
-				]
-			)
-		)
-		lines.append("正常合作：轮末对最早任务合作，随后自身精力 -1；精力耗尽退场。")
-		var support: Dictionary = unit.get("support", {})
-		match str(support.get("kind", "none")):
-			"cleanse_or_relax":
-				lines.append(
-					(
-						"支援：移除%s %s 层；没有时放松 %s"
-						% [
-							UiStyle.label(str(support.get("status", ""))),
-							support.get("amount", 0),
-							support.get("fallback_relax", 0)
-						]
-					)
-				)
-			"self_relax":
-				lines.append("支援：同学自身放松 %s" % support.get("amount", 0))
+		lines.append_array(unit_details(unit))
 	for scene in detail.get("related_scenes", {}).values():
-		if not scene.get("prepare_effects", []).is_empty():
-			if battle_explanation:
-				lines.append("场景每次准备阶段生效：")
-				lines.append_array(_battle_effect_steps(scene.prepare_effects))
-			else:
-				lines.append("每回合准备：" + UiStyle.describe_effects(scene.prepare_effects))
-		var options: Array = scene.get("prepare_random", {}).get("options", [])
-		if not options.is_empty():
-			var names: PackedStringArray = []
-			for effects in options:
-				names.append(UiStyle.describe_effects(effects))
-			lines.append("每回合准备时随机一项：" + "；".join(names))
-		var discount := int(scene.get("modifiers", {}).get("first_work_cost_discount", 0))
-		if discount > 0:
-			lines.append("每回合首张作业牌专注费用 -%s" % discount)
-		if scene.has("battle_limit"):
-			lines.append("每场战斗最多触发 %s 次" % scene.battle_limit)
+		lines.append_array(scene_details(scene, battle_explanation))
 	if detail.has("exam_effects"):
 		if not battle_explanation:
 			lines.append("考试替代效果：" + UiStyle.describe_effects(detail.exam_effects))
@@ -219,6 +177,65 @@ static func _describe_card(detail: Dictionary, battle_explanation: bool) -> Stri
 			lines.append("名词解释：")
 			lines.append_array(glossary)
 	return "\n".join(lines)
+
+
+static func unit_details(unit: Dictionary) -> PackedStringArray:
+	var lines := PackedStringArray()
+	lines.append(
+		(
+			"%s：精力 %s · 合作值 %s%s"
+			% [
+				UiStyle.label(str(unit.id)),
+				unit.get("vitality", 0),
+				unit.get("cooperation", 0),
+				" · 护卫" if unit.get("guard", false) else ""
+			]
+		)
+	)
+	lines.append("正常合作：轮末对最早任务合作，随后自身精力 -1；精力耗尽退场。")
+	var support: Dictionary = unit.get("support", {})
+	match str(support.get("kind", "none")):
+		"cleanse_or_relax":
+			lines.append(
+				(
+					"支援：清除主角的%s；没有时使主角放松 %s"
+					% [
+						UiStyle.label(str(support.get("status", ""))),
+						support.get("fallback_relax", 0)
+					]
+				)
+			)
+		"self_relax":
+			lines.append("支援：同学自身放松 %s" % support.get("amount", 0))
+		"relax":
+			lines.append("支援：主角放松 %s" % support.get("amount", 0))
+		"heal":
+			lines.append("支援：主角恢复 %s 点精力" % support.get("amount", 0))
+		"gain_status_on_actions":
+			lines.append("每行动 %s 次，自身获得 %s 层%s" % [support.get("every", 1), support.get("stacks", 0), UiStyle.label(str(support.get("status", "")))])
+	return lines
+
+
+static func scene_details(scene: Dictionary, battle_explanation: bool = false) -> PackedStringArray:
+	var lines := PackedStringArray()
+	if not scene.get("prepare_effects", []).is_empty():
+		if battle_explanation:
+			lines.append("场景每次准备阶段生效：")
+			lines.append_array(_battle_effect_steps(scene.prepare_effects))
+		else:
+			lines.append("每回合准备：" + UiStyle.describe_effects(scene.prepare_effects))
+	var options: Array = scene.get("prepare_random", {}).get("options", [])
+	if not options.is_empty():
+		var names: PackedStringArray = []
+		for effects in options:
+			names.append(UiStyle.describe_effects(effects))
+		lines.append("每回合准备时随机一项：" + "；".join(names))
+	var discount := int(scene.get("modifiers", {}).get("first_work_cost_discount", 0))
+	if discount > 0:
+		lines.append("每回合首张作业牌专注费用 -%s" % discount)
+	if scene.has("battle_limit"):
+		lines.append("每场战斗最多触发 %s 次" % scene.battle_limit)
+	return lines
 
 
 static func _battle_effect_steps(effects: Array, default_target: String = "task") -> PackedStringArray:

@@ -135,6 +135,8 @@
 
 主程序已发布到 `https://47.93.245.237/`，提供账号与游客登录。启动方式及管理员信息见[程序启动指南](docs/程序启动指南.md)。
 
+实训项目列表和详情页的文案、试玩链接与视觉提示词见[实训项目展示材料](docs/交大四年_DDL战争_实训项目展示材料.md)。
+
 使用 Godot `4.7.2.stable`（本机版本串 `4.7.2.stable.official.ed1daf0bf`）。2026-11-01 的实测记录使用 `D:\Godot\Godot_v4.7.2-stable_win64_console.exe`；2026-11-03 本机当前可运行路径为 `D:\chrome\godot\Godot_v4.7.2-stable_win64_console.exe`。`tools/verify_*.ps1` 的内置搜索路径仍为 `F:\GoDot`、`D:\Godot`、`C:\Godot` 与 `godot` 命令；在本机用 `GODOT_BIN` 或 `-GodotPath` 显式指定当前路径。
 
 本轮文档核对已重新执行导入、规则/UI、主入口与预期失败探针，见[本次验证](artifacts/verification/docs-refresh-20261104/runtime-review.json)。

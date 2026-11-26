@@ -8,18 +8,25 @@ var _root: String = ""
 
 func run() -> Array[String]:
 	_root = "user://test-room-ui-%s-%s" % [Time.get_ticks_usec(), OS.get_process_id()]
-	_check_home_map_selection()
-	_check_fixed_start_node()
-	_check_snapshot_deletion()
-	_check_legacy_result()
-	_check_default_battle_costs()
-	_check_default_battle_costs(true)
-	_check_default_end_turn()
-	_check_campus_editor()
-	_check_map_controls()
-	_check_map_abandon()
-	_check_free_map_navigation()
-	_check_same_room_map_jump()
+	var tree := Engine.get_main_loop() as SceneTree
+	for check: Callable in [
+		_check_home_map_selection,
+		_check_fixed_start_node,
+		_check_snapshot_deletion,
+		_check_toolbar_jump,
+		_check_editor_catalogue,
+		_check_legacy_result,
+		_check_default_battle_costs.bind(false),
+		_check_default_battle_costs.bind(true),
+		_check_default_end_turn,
+		_check_campus_editor,
+		_check_map_controls,
+		_check_map_abandon,
+		_check_free_map_navigation,
+		_check_same_room_map_jump,
+	]:
+		check.call()
+		await tree.process_frame
 	var session := GameSession.new(SaveStore.new(_root + "/saves"))
 	session.test_service().store = TestStore.new(_root + "/room")
 	var shell := GameShell.new()
@@ -310,7 +317,7 @@ func _check_legacy_result() -> void:
 	var shell := GameShell.new()
 	shell.session = session
 	(Engine.get_main_loop() as SceneTree).root.add_child(shell)
-	_check(shell.press("menu:test") and shell.press("test:load_snapshot:" + str(saved.data.id)),
+	_check(shell.press("menu:test") and shell.press("test:home:files") and shell.press("test:load_snapshot:" + str(saved.data.id)),
 		"old standalone snapshot loads through the unified home")
 	_check(shell.page is BattleScreen and session.get_test_view().run.is_empty(), "legacy battle is restored as saved")
 	_check(FileAccess.get_sha256(str(saved.data.path)) == before, "legacy load does not rewrite the file")
@@ -346,6 +353,7 @@ func _check_snapshot_deletion() -> void:
 	(Engine.get_main_loop() as SceneTree).root.add_child(shell)
 	_check(shell.press("menu:test"), "open snapshot management")
 	_check(shell.press("test:character:P02"), "choose character before deletion")
+	_check(shell.press("test:home:files") and not shell.press("test:start"), "archives have their own page")
 	var delete_uid := "test:delete_snapshot:" + first_id
 	_check(shell.page.button_uids().has(delete_uid), "each snapshot has a delete button")
 	if not shell.page.button_uids().has(delete_uid):
@@ -359,6 +367,7 @@ func _check_snapshot_deletion() -> void:
 	_check(shell.press("test:delete_snapshot:cancel"), "cancel deletion")
 	_check(FileAccess.file_exists(str(first.data.path)), "cancel preserves snapshot")
 	_check((shell.page as TestRoomPage)._character_id == "P02", "cancel preserves setup configuration")
+	_check(shell.press("test:home:setup") and shell.press("test:home:files"), "configuration can be revisited from archives")
 	_check(shell.press(delete_uid) and shell.press("test:delete_snapshot:confirm"), "confirm snapshot deletion")
 	_check(not FileAccess.file_exists(str(first.data.path)), "confirmation deletes the selected file")
 	_check(not shell.page.button_uids().has(delete_uid), "successful deletion refreshes list")
@@ -394,6 +403,90 @@ func _check_snapshot_deletion() -> void:
 	shell.refresh()
 	_check(shell.press("test:load_snapshot:" + str(remaining.data.id)) and session.has_test_room(),
 		"remaining snapshot still loads through the real UI")
+	session.close_test_room()
+	shell.queue_free()
+
+
+func _check_toolbar_jump() -> void:
+	var session := GameSession.new(SaveStore.new(_root + "/toolbar-jump"))
+	var shell := GameShell.new()
+	shell.session = session
+	(Engine.get_main_loop() as SceneTree).root.add_child(shell)
+	_check(shell.press("menu:test") and shell.press("test:start"), "start at the map for direct jump")
+	var hud := shell._test_hud
+	if hud == null:
+		shell.queue_free()
+		return
+	var revision := int(session.get_test_view().test.revision)
+	var map_page := shell.page
+	_check(hud.press("test:jump"), "toolbar opens the free map")
+	var picker: Variant = hud.editor.map_picker
+	_check(picker.visible and picker._buttons["test:map:cancel"].text == "返回当前房间", "map shows a direct return")
+	_check(picker.press("test:map:cancel") and not hud.is_editor_open() and shell.page == map_page, "cancel goes back to the same room")
+	_check(not session.get_test_view().test.editing and int(session.get_test_view().test.revision) == revision, "cancel releases edit lock without changing the revision")
+	_check(hud.press("test:jump"), "jump can reopen after cancellation")
+	var key: String = str(session.get_test_node_options("42").filter(func(node): return node.year == 1 and node.kind == "normal")[0].key)
+	_check(picker.press("test:map:node:" + key) and picker.press("test:map:enter"), "confirm direct jump to a battle")
+	_check(shell.page is BattleScreen and not session.get_test_view().test.editing, "direct jump enters battle and unlocks its controls")
+	session.close_test_room()
+	shell.queue_free()
+
+
+func _check_editor_catalogue() -> void:
+	var session := GameSession.new(SaveStore.new(_root + "/editor-catalogue"))
+	var shell := GameShell.new()
+	shell.session = session
+	(Engine.get_main_loop() as SceneTree).root.add_child(shell)
+	_check(shell.press("menu:test") and shell.press("test:compendium"), "test setup opens its own catalogue")
+	_check(is_instance_valid(shell._test_compendium) and not session.has_test_room(), "setup catalogue is read-only before start")
+	_check(shell.press("compendium:back") and shell.page is TestRoomPage, "catalogue closes to exact setup page")
+	var started := session.start_test_room({"character_id": "P01", "encounter_id": "N01", "seed": "42"})
+	_check(started.accepted, "start editor catalogue fixture")
+	if not started.accepted:
+		shell.queue_free()
+		return
+	shell.refresh()
+	var hud := shell._test_hud
+	hud.open_editor()
+	var editor := hud.editor
+	_check(editor.press("test:editor:tab:cards") and editor.set_search("修正 牌名"), "search indexes effects and multiple words")
+	var card := "R3-P02-21"
+	var inspect := "test:inspect:cards:" + card
+	_check(editor.button_uids().has(inspect), "topic change found by effect text")
+	var owner: OptionButton = editor._buttons.get("test:filter:cards:owner")
+	if owner == null:
+		shell.queue_free()
+		return
+	owner.item_selected.emit(2)
+	_check(not editor.button_uids().has(inspect), "owner filter combines with effect query")
+	owner.item_selected.emit(3)
+	_check(editor.set_search(card) and editor.press(inspect), "card preview expands with matching owner")
+	var art := editor.find_children("TestCatalogueArt", "TextureRect", true, false)
+	_check(art.any(func(value): return value.texture != null), "editor uses existing illustrations")
+	_check(editor.press("test:editor:add:%s:0" % card) and editor.draft_count() == 1, "adding from catalogue still only stages a draft")
+	var hash := session.test_service().state.state_hash()
+	var room := shell.page
+	_check(editor.press("test:editor:compendium") and is_instance_valid(shell._test_compendium), "editor opens independent compendium overlay")
+	_check(not editor.press("test:editor:apply") and not hud.press("test:save"), "catalogue isolates editor and HUD inputs")
+	_check(shell.press("compendium:tab:monsters") and shell.press("compendium:back"), "read-only monster tab and return work")
+	_check(editor.is_open() and shell.page == room and editor.draft_count() == 1, "return preserves room and draft")
+	_check(session.test_service().state.state_hash() == hash, "browsing preserves test state")
+	_check(editor._buttons["test:search:cards"].text == card, "return preserves search")
+	_check(editor.press("test:editor:apply"), "apply staged card on return")
+	var patch := session.apply_test_patch(shell._test_context(), {"ops": [{
+		"op": "set_card_field", "scope": "definition", "target": card, "field": "cost", "value": 7,
+	}]})
+	_check(patch.accepted, "apply live definition overlay")
+	shell.refresh()
+	_check(editor.press("test:editor:compendium"), "reopen catalogue after a definition change")
+	var catalogue := shell._test_compendium
+	if is_instance_valid(catalogue):
+		catalogue.show_tab("cards")
+		catalogue.search(card)
+		var entry: Dictionary = catalogue._entries.cards.get(card, {})
+		_check(not entry.is_empty() and int(entry.variants[0].face.cost) == 7, "compendium resolves edited definition")
+		_check(CompendiumText.card_text(entry.variants[0]).contains("专注 7"), "overridden effect preview uses actual cost")
+		shell.press("compendium:back")
 	session.close_test_room()
 	shell.queue_free()
 
@@ -517,8 +610,8 @@ func _check_default_battle_costs(reload_snapshot: bool = false) -> void:
 			var snapshot_id := str(snapshots[0].id)
 			var stored := session.test_service().store.load_file("snapshot", snapshot_id)
 			var hash_before := FileAccess.get_sha256(str(stored.data.path))
-			shell._handle_test_command("test.load_snapshot", {"id": snapshot_id})
-			opened = session.has_test_room() and shell.page is BattleScreen
+			opened = shell.press("menu:test") and shell.press("test:home:files") and shell.press("test:load_snapshot:" + snapshot_id)
+			opened = opened and session.has_test_room() and shell.page is BattleScreen
 			_check(opened, "reload saved opening battle through UI")
 			_check(FileAccess.get_sha256(str(stored.data.path)) == hash_before, "loading preserves existing snapshot bytes")
 	if opened:

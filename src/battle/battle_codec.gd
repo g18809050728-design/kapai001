@@ -115,6 +115,16 @@ static func decode(data: Dictionary, catalog: ContentDB) -> GameResult:
 		return RunCodec.corrupt(["stable battle cannot contain resolution"])
 	if catalog == null or catalog.get_info() == null:
 		return RunCodec.missing(["catalog is not loaded"])
+	# Drop retired status instances and their historical source entries without
+	# changing instance counters or the original save bytes.
+	var retired := ContentDB.RETIRED_EXTRA_REQUIREMENTS
+	record.statuses = record.statuses.filter(func(status: Dictionary): return status.status_id != retired)
+	for id in record.source_registry.keys():
+		var source: Dictionary = record.source_registry[id]
+		if source.kind == "status" and source.definition_id == retired:
+			record.source_registry.erase(id)
+	for task: Dictionary in record.tasks:
+		ContentDB.strip_retired_intent_effect(task.intent_snapshot)
 	var references: Array[String] = []
 	RunCodec._reference(
 		catalog, "character", record.character_id, "battle.character_id", references

@@ -7,6 +7,7 @@ var definition_id := ""
 var detail: Dictionary = {}
 var selected := false
 var inspection_hint := "悬停查看 · I 固定详情"
+var short_relic_face := false
 var _face: Control
 var _base_height := 0.0
 var _caption: Label
@@ -20,8 +21,8 @@ func configure(id: String, data: Dictionary, caption: String, picked: bool, reli
 	selected = picked
 	_relic = relic
 	text = caption
-	var width := (160.0 if compact else 194.0) * UiStyle.text_scale
-	custom_minimum_size = Vector2(width, width * (1.05 if relic else 244.0 / 168) + 36 * UiStyle.text_scale)
+	var width := (160.0 if compact else 194.0) * (minf(UiStyle.text_scale, 1.15) if relic else UiStyle.text_scale)
+	custom_minimum_size = Vector2(width, width * _face_ratio() + 36 * UiStyle.text_scale)
 	_base_height = custom_minimum_size.y
 	clip_text = true
 	size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -43,7 +44,7 @@ func configure(id: String, data: Dictionary, caption: String, picked: bool, reli
 		art.texture = UiStyle.texture(id)
 		art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		art.custom_minimum_size.y = 88*minf(UiStyle.text_scale,1.25)
+		art.custom_minimum_size.y = (50.0 if short_relic_face else 88.0) * minf(UiStyle.text_scale, 1.25)
 		art.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		column.add_child(art)
 		var category := Label.new()
@@ -52,14 +53,15 @@ func configure(id: String, data: Dictionary, caption: String, picked: bool, reli
 		category.add_theme_font_size_override("font_size", roundi(12 * UiStyle.text_scale))
 		category.add_theme_color_override("font_color", Color("d6bf8b"))
 		column.add_child(category)
-		var description := Label.new()
-		description.text = UiContentText.describe_relic(data)
-		description.add_theme_color_override("font_color",UiStyle.CREAM)
-		description.max_lines_visible = 2
-		description.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-		description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		description.add_theme_font_size_override("font_size", roundi(14 * UiStyle.text_scale))
-		column.add_child(description)
+		if not short_relic_face:
+			var description := Label.new()
+			description.text = UiContentText.describe_relic(data)
+			description.add_theme_color_override("font_color",UiStyle.CREAM)
+			description.max_lines_visible = 2
+			description.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+			description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			description.add_theme_font_size_override("font_size", roundi(14 * UiStyle.text_scale))
+			column.add_child(description)
 	else:
 		var face := CardFaceView.new()
 		face.configure(CardDisplayModel.from_card(data, id), picked)
@@ -89,11 +91,19 @@ func configure(id: String, data: Dictionary, caption: String, picked: bool, reli
 	focus_exited.connect(func(): _lift(false))
 
 
+func _face_ratio() -> float:
+	if not _relic:
+		return 244.0 / 168
+	return .58 if short_relic_face else 1.05
+
+
 func _fit_contents() -> void:
 	if not is_instance_valid(_face):
 		return
 	var width := minf(size.x, custom_minimum_size.x)
-	var height := width * (1.05 if _relic else 244.0 / 168)
+	var height := width * _face_ratio()
+	if _relic:
+		height = maxf(height, _face.get_combined_minimum_size().y)
 	_face.position = Vector2((size.x - width) * .5, 0)
 	_face.size = Vector2(width, height)
 	_caption.position = Vector2(0,height + 5)

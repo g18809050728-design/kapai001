@@ -16,6 +16,7 @@ var _state_label: Label
 var _pause_button: Button
 var _buttons: Dictionary = {}
 var _open := false
+var _return_focus: Control
 
 
 func _ready() -> void:
@@ -31,6 +32,7 @@ func _ready() -> void:
 		test_command.emit(command_type, payload)
 	)
 	editor.close_requested.connect(_close_editor)
+	editor.catalogue_requested.connect(func(): test_command.emit("test.compendium", {}))
 
 
 func setup(p_session: GameSession) -> void:
@@ -45,7 +47,15 @@ func render(view: Dictionary) -> void:
 	var result: Dictionary = view.get("result", {})
 	var overlay: Dictionary = view.get("overlay", {})
 	if _identity != null:
-		_identity.text = "测试房间 · %s · 分支 %s · rev %s · 干预 %s · 覆盖 %s" % [
+		var run: Dictionary = view.get("run", {})
+		var character := UiStyle.label(str(view.get("config", {}).get("character_id", ""))).split("·")[0]
+		var term := int(run.get("term", 0))
+		var location := "测试房间 · %s" % character
+		if term > 0:
+			location += " · 第 %d 学年" % term
+		_identity.text = "测试房间" if size.x < 1100 and UiStyle.text_scale > 1.0 else location
+		_identity.tooltip_text = "%s\n%s · 分支 %s · 版本 %s\n干预 %s 次 · 定义覆盖 %s 项" % [
+			location,
 			_short_id(str(test_state.get("test_id", ""))),
 			test_state.get("branch_id", 0),
 			test_state.get("revision", 0),
@@ -62,9 +72,24 @@ func render(view: Dictionary) -> void:
 			marker = "待选"
 		if not str(result.get("outcome", "")).is_empty():
 			marker = "实验结束"
+		elif marker == "运行中" and bool(test_state.get("dirty", false)):
+			marker += " · 未保存"
 		_state_label.text = marker
+		_state_label.tooltip_text = "本次实验有未保存的进度" if bool(test_state.get("dirty", false)) else ""
 		if _pause_button != null:
 			_pause_button.text = "继续" if bool(test_state.get("paused", false)) else "暂停"
+	var history: Dictionary = view.get("history", {})
+	var editing := bool(test_state.get("editing", false))
+	for direction in ["undo", "redo"]:
+		var button: Button = _buttons["test:" + direction]
+		var available := bool(history.get("can_" + direction, false))
+		button.disabled = editing or not available
+		button.tooltip_text = ""
+		if editing:
+			button.tooltip_text = "可在编辑器的历史与存档中操作"
+		elif not available:
+			button.tooltip_text = "没有可撤销的操作" if direction == "undo" else "没有可重做的操作"
+	_buttons["test:jump"].disabled = (view.get("nodes", []) as Array).is_empty()
 	if editor != null:
 		editor.render(view)
 
@@ -76,6 +101,7 @@ func is_editor_open() -> bool:
 func open_editor() -> void:
 	if _open:
 		return
+	_return_focus = get_viewport().gui_get_focus_owner()
 	_open = true
 	test_command.emit("test.begin_edit", {})
 	if editor != null:
@@ -89,12 +115,22 @@ func _close_editor() -> void:
 	if editor != null:
 		editor.close()
 	test_command.emit("test.cancel_edit", {})
+	if is_instance_valid(_return_focus) and _return_focus.is_visible_in_tree():
+		_return_focus.grab_focus()
+	else:
+		_buttons["test:open_editor"].grab_focus()
 
 
 func open_node_map(node_key: String = "", confirm_start: bool = false) -> void:
 	open_editor()
 	if editor != null:
 		editor.open_node_map(node_key, confirm_start)
+
+
+func _jump_to_room() -> void:
+	var from_room := not _open
+	open_editor()
+	editor.open_node_map("", false, from_room)
 
 
 func _toggle_editor() -> void:
@@ -121,7 +157,7 @@ func button_uids() -> Array:
 
 
 func press(uid: String) -> bool:
-	if not _buttons.has(uid) or not is_instance_valid(_buttons[uid]):
+	if not is_visible_in_tree() or not _buttons.has(uid) or not is_instance_valid(_buttons[uid]):
 		return false
 	var button: Button = _buttons[uid]
 	if button.disabled:
@@ -171,10 +207,12 @@ func _build_bar() -> void:
 	_state_label.add_theme_color_override("font_color", UiStyle.GOLD)
 	row.add_child(_state_label)
 	_pause_button = _button(row, "test:pause", "暂停", func(): test_command.emit("test.pause", {}))
-	_button(row, "test:open_editor", "编辑器", func(): _toggle_editor())
+	_button(row, "test:jump", "跳转地图", _jump_to_room).tooltip_text = "查看四学年地图，选择要测试的房间"
+	_button(row, "test:open_editor", "编辑实验", func(): _toggle_editor()).tooltip_text = "编辑实验（F2）"
+	_button(row, "test:compendium", "图鉴", func(): test_command.emit("test.compendium", {}))
 	_button(row, "test:undo", "撤销", func(): test_command.emit("test.undo", {}))
 	_button(row, "test:redo", "重做", func(): test_command.emit("test.redo", {}))
-	_button(row, "test:save", "保存", func(): test_command.emit("test.save_snapshot", {}))
+	_button(row, "test:save", "保存快照", func(): test_command.emit("test.save_snapshot", {}))
 	_button(row, "test:close", "退出", func(): test_command.emit("test.close", {}))
 
 

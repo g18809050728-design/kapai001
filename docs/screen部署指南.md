@@ -242,6 +242,13 @@ screen -S kapai-build
 
 核对时本机内存约 1.8 GiB、磁盘可用约 1.9 GiB，当前单份 Web 构建约 277 MiB；导入缓存还会占用空间。只运行一份导出，预留工作空间并保留当前版本和回滚版本。不要直接在 `current` 指向的目录导出，也不要自动删除存档、美术或历史验证证据来腾空间。
 
+首次导出前，在同一台服务器安装 Web 打包依赖：
+
+```bash
+python3.11 -m venv /opt/kapai-web-export-venv
+/opt/kapai-web-export-venv/bin/python -m pip install -r /opt/kapai001/tools/requirements-web.txt
+```
+
 在 `kapai-build` 会话中运行：
 
 ```bash
@@ -257,6 +264,7 @@ screen -S kapai-build
         godot --headless --editor --path . --import \
         > "$kapai_web_output/import.log" 2>&1
     KAPAI_BUILD_VERSION="$kapai_web_version" \
+        PYTHON_BIN=/opt/kapai-web-export-venv/bin/python \
         timeout --signal=TERM --kill-after=30s 30m \
         sh tools/export_web.sh "$kapai_web_output" \
         > "$kapai_web_output/export.log" 2>&1
@@ -266,7 +274,8 @@ screen -S kapai-build
     test -s "$kapai_web_output/index.wasm"
     test -s "$kapai_web_output/index.wasm.gz"
     test -s "$kapai_web_output/accounts.js"
-    printf '导出成功，等待内测验证：%s\n' "$kapai_web_output"
+    test -d "$kapai_web_output/game-assets/pack"
+    printf '导出成功，待核对候选构建：%s\n' "$kapai_web_output"
 )
 ```
 
@@ -274,7 +283,7 @@ screen -S kapai-build
 
 **这台机器已有导出被内存中断、打包后等待退出的历史。** 超时或退出非零均按失败处理；目录里存在文件不代表构建成功，不据此发布。超时只是避免无限等待，不解决资源不足。
 
-用内测 Nginx 配置 `/etc/nginx/conf.d/kapai-stage.nginx.conf` 的 `root` 指向新目录，先备份原配置，执行 `nginx -t` 通过后 `systemctl reload nginx`。通过 SSH 隧道访问内测：
+使用内测入口核对候选时，用内测 Nginx 配置 `/etc/nginx/conf.d/kapai-stage.nginx.conf` 的 `root` 指向新目录，并沿用仓库内测配置中的 `/game-assets/` 路由。资源块由 Nginx 发送预压缩文件或按客户端能力解压。先备份原配置，执行 `nginx -t` 通过后 `systemctl reload nginx`。通过 SSH 隧道访问内测：
 
 ```bash
 # 在自己的电脑上运行，用户名替换为实际 SSH 账号。
@@ -285,7 +294,7 @@ ssh -N -L 18443:127.0.0.1:18443 你的SSH用户名@47.93.245.237
 
 ### 6.2 发布已经验证的 Web 构建
 
-下面的版本号必须替换成上一节实际生成并通过内测的目录名。本段只切换网页；后端有不兼容变更时，先完成相应迁移及 API 发布验证。
+公网是游戏运行改动的默认交付入口。替换为实际生成并完成相关路径验证的版本号，候选包可使用本机或内测入口核对。静态网页切换沿用当前账号服务；涉及后端不兼容变更时，同步完成相应迁移与 API 验证。[公网交付约定](../agent.md)
 
 ```bash
 (
@@ -293,7 +302,9 @@ ssh -N -L 18443:127.0.0.1:18443 你的SSH用户名@47.93.245.237
     kapai_web_version='替换为已验证的版本号'
     kapai_web_source="/var/www/kapai001/staging/$kapai_web_version"
     kapai_web_target="/var/www/kapai001/releases/$kapai_web_version"
-    test -s "$kapai_web_source/index.pck"
+    test -s "$kapai_web_source/index.html"
+    test -s "$kapai_web_source/accounts.js"
+    test -d "$kapai_web_source/game-assets/pack"
     test ! -e "$kapai_web_target"
     test ! -e /var/www/kapai001/.current-next
     test ! -L /var/www/kapai001/.current-next
@@ -301,9 +312,11 @@ ssh -N -L 18443:127.0.0.1:18443 你的SSH用户名@47.93.245.237
 
     # 记录旧指向，保留原目录，以便回滚。
     readlink -f /var/www/kapai001/current > /etc/kapai001/web-previous-release
-    cp -a "$kapai_web_source" "$kapai_web_target"
+    cp -al "$kapai_web_source" "$kapai_web_target"
     # 构建日志保留在 staging，不放到公网目录。
     rm -f "$kapai_web_target/import.log" "$kapai_web_target/export.log"
+    mkdir -p /var/www/kapai001/game-assets
+    cp -aln "$kapai_web_target/game-assets/." /var/www/kapai001/game-assets/
     ln -s "$kapai_web_target" /var/www/kapai001/.current-next
     mv -Tf /var/www/kapai001/.current-next /var/www/kapai001/current
     systemctl reload nginx

@@ -4,18 +4,17 @@ extends Button
 const GLYPHS := {
 	"inspiration": "focus",
 	"work_boost": "work",
-	"anxiety": "focus",
+	"anxiety": "anxiety",
 	"procrastination": "clock",
-	"drowsiness": "clock",
+	"drowsiness": "drowsiness",
 	"erosion": "erosion",
 	"induced": "induced",
-	"brittle": "break",
-	"feebleness": "relax",
-	"weakness": "relax",
-	"vulnerability": "work",
+	"brittle": "brittle",
+	"feebleness": "feebleness",
+	"weakness": "weakness",
+	"vulnerability": "vulnerability",
 	"guard": "relax",
 	"attack_immunity": "relax",
-	"extra_requirements": "next",
 	"brainstorm": "focus",
 	"confusion": "status"
 }
@@ -30,96 +29,79 @@ const NEGATIVES := [
 	"weakness",
 	"vulnerability"
 ]
-const SHORT_NAMES := {
-	"work_boost": "增益",
-	"pending_work_bonus": "准备",
-	"discount": "减费",
-	"extra_requirements": "要求",
-	"attack_immunity": "免疫",
-	"brainstorm": "脑汁",
-	"publication_discount": "发表",
-	"erosion_draws": "检索"
-}
 var entry: Dictionary
+var _accent := Color("a8edd7")
+var _counter_style: StyleBoxFlat
 
 
 func configure(value: Dictionary, edge: float) -> void:
 	entry = value
 	text = str(entry.title)
+	accessibility_description = str(entry.body)
 	custom_minimum_size = Vector2(edge, edge)
 	size = custom_minimum_size
 	clip_text = true
-	add_theme_font_size_override("font_size", 12)
-	add_theme_color_override("font_outline_color", Color.TRANSPARENT)
+	# The spoken name belongs to the button. The painted emblem carries the visual identity.
+	for state in ["font_color", "font_hover_color", "font_hover_pressed_color", "font_pressed_color", "font_focus_color", "font_disabled_color"]:
+		add_theme_color_override(state, Color.TRANSPARENT)
 	add_theme_constant_override("outline_size", 0)
 	mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	for state in ["normal", "hover", "pressed", "disabled", "focus"]:
-		var style := UiStyle.surface(
-			Color("27333e") if entry.get("negative", false) else Color("233f3e"),
-			Color("e9a092") if entry.get("negative", false) else Color("a5c9b1"),
-			5
-		)
-		if state in ["hover", "focus"]:
-			style.border_color = UiStyle.BRASS
-			style.set_border_width_all(2)
-		style.set_content_margin_all(0)
-		add_theme_stylebox_override(state, style)
+	if entry.has("mechanic"):
+		_accent = Color("ffdc8c")
+	elif entry.get("negative", false):
+		_accent = Color("ffc1a9")
+	var empty := StyleBoxEmpty.new()
+	for state in ["normal", "pressed", "disabled"]:
+		add_theme_stylebox_override(state, empty)
+	var highlight := UiStyle.surface(Color("263745"), Color("e2d4a5"), 8)
+	highlight.shadow_size = 0
+	highlight.set_content_margin_all(0)
+	add_theme_stylebox_override("hover", highlight)
+	var focus := highlight.duplicate() as StyleBoxFlat
+	focus.draw_center = false
+	focus.set_border_width_all(2)
+	add_theme_stylebox_override("focus", focus)
+	_counter_style = UiStyle.surface(Color("10202b"), _accent.darkened(.3), 5)
+	_counter_style.shadow_size = 0
 
 
 func _draw() -> void:
-	# Draw the short identity and count ourselves; text remains the accessible full name.
-	var font := get_theme_font("font")
-	var ink := Color("ffe2d9") if entry.get("negative", false) else Color("e2f3df")
-	EffectGlyph.paint(
-		self,
-		str(entry.get("glyph", "status")),
-		Vector2(size.x * .5, size.y * .29),
-		size.y * .19,
-		ink
-	)
-	var caption := str(SHORT_NAMES.get(str(entry.key), str(entry.title).left(2)))
+	var center := size * .5
+	var radius := size.y * .39
+	draw_circle(center + Vector2(0, 2), radius, Color("0a131c"), true, -1, true)
+	draw_circle(center, radius, Color("172936"), true, -1, true)
+	draw_circle(center, radius, _accent.darkened(.25), false, maxf(1.3, size.y * .035), true)
+	EffectGlyph.paint(self, str(entry.get("glyph", "status")), center, radius * .65, _accent)
 	var count := str(entry.get("count", ""))
-	var font_size := roundi(size.y * .28 * UiStyle.text_scale)
-	draw_string(
-		font,
-		Vector2(3, size.y * .84),
-		caption,
-		HORIZONTAL_ALIGNMENT_CENTER,
-		size.x - 6,
-		font_size,
-		ink
-	)
-	if not count.is_empty():
-		draw_string_outline(
-			font,
-			Vector2(1, size.y * .45),
-			count,
-			HORIZONTAL_ALIGNMENT_RIGHT,
-			size.x - 4,
-			font_size,
-			4,
-			Color("14212a")
-		)
-		draw_string(
-			font,
-			Vector2(1, size.y * .45),
-			count,
-			HORIZONTAL_ALIGNMENT_RIGHT,
-			size.x - 4,
-			font_size,
-			Color.WHITE
-		)
+	if count.is_empty():
+		return
+	var font := get_theme_font("font")
+	var font_size := roundi(size.y * .29 * minf(UiStyle.text_scale, 1.22))
+	while font.get_string_size(count, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x > size.x - 8 and font_size > 8:
+		font_size -= 1
+	var width := maxf(size.y * .32, font.get_string_size(count, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x + 5)
+	var height := font.get_height(font_size)
+	var badge := Rect2(size.x - width - 1, size.y - height - 1, width, height)
+	draw_style_box(_counter_style, badge)
+	draw_string(font, badge.position + Vector2(0, font.get_ascent(font_size)), count, HORIZONTAL_ALIGNMENT_CENTER, badge.size.x, font_size, Color.WHITE)
 
 
 static func entries(view: Dictionary, target: String, player: bool) -> Array[Dictionary]:
 	var result: Array[Dictionary] = []
 	var rules: Dictionary = view.get("status_rules", {})
+	if not player:
+		for task: Dictionary in view.get("tasks", []):
+			if str(task.get("task_id", "")) != target:
+				continue
+			result.append_array(TaskIntentText.mechanics(task, rules))
+			break
 	for status: Dictionary in view.get("statuses", []):
 		if str(status.get("target_id", "")) != target or int(status.get("stacks", 0)) <= 0:
 			continue
 		var key := str(status.get("status_id", ""))
 		var stacks := int(status.stacks)
 		var body := UiGlossary.describe(key)
+		var count_label := "当前层数"
 		match key:
 			"inspiration":
 				body = (
@@ -133,11 +115,12 @@ static func entries(view: Dictionary, target: String, player: bool) -> Array[Dic
 					"每段压力先减去 层数×%s，最低0，再计算虚弱；任务实例内保持。" % rules.get(key, {}).get("pressure_flat", 1)
 				)
 			"brainstorm":
-				body = "任务每层增加 %s 压力，任务实例内持续。" % rules.get(key, {}).get("pressure_per_stack", 1)
+				body = "每层使本任务的每段压力增加 %s 点。该状态在本任务实例内持续。" % rules.get(key, {}).get("pressure_per_stack", 1)
 			"confusion":
 				body = "每层使任务每次获得的屏障增加 %s，任务实例内持续。" % rules.get(key, {}).get("shield_per_stack", 1)
 			"attack_immunity":
 				body = "抵消下一张工作牌对本任务的直接完成量，同张牌多段只消耗一次；不免疫状态或自动输出。"
+				count_label = "剩余次数"
 			"compile":
 				body = "历史兼容资源，当前角色不以编译作为核心机制。"
 		result.append(
@@ -147,7 +130,7 @@ static func entries(view: Dictionary, target: String, player: bool) -> Array[Dic
 				"count": stacks,
 				"glyph": GLYPHS.get(key, "status"),
 				"negative": key in NEGATIVES,
-				"body": body + "\n当前层数：%s" % stacks
+				"body": body + "\n%s %s" % [count_label, stacks]
 			}
 		)
 	if not player:

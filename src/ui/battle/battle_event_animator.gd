@@ -69,6 +69,10 @@ func pending_count() -> int:
 	return _queue.size()
 
 
+func is_playing() -> bool:
+	return _remaining > 0.0 or not _queue.is_empty()
+
+
 func pending_type_count(type: String) -> int:
 	var count := 0
 	for item in _queue:

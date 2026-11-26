@@ -167,12 +167,12 @@ func _targets(page: BattleScreen, parent: Node) -> void:
 		column.add_child(meter)
 		var work_label := page.add_text(column, "剩余 %s/%s · 屏障 %s" % [task.work_remaining, task.work_max, task.shield], 14)
 		page._task_meters[id] = {"fill": meter, "label": work_label, "maximum": maxi(1, int(task.work_max))}
-		page.add_text(column, page._intent_text(task.get("intent_snapshot", {})), 14)
+		page.add_text(column, page._task_intent_text(task), 14)
 		var status := descriptions._task_status_text(id)
 		if not status.is_empty():
 			page.add_text(column, status, 14)
 		page.add_button(column, "task:" + id, "选择目标", {}, page._bind_task(id))
-		page.add_button(column, "detail:task:" + id, "详情", {}, func(): page._open_detail_for_uid("task:" + id))
+		page.add_button(column, "detail:task:" + id, "意图与特性", {}, func(): page._open_detail_for_uid("detail:task:" + id))
 	var statuses := page._status_text(page.view.get("statuses", []).filter(func(status): return str(status.get("target_id", "")) == str(page.view.get("player", {}).get("entity_id", ""))))
 	if not statuses.is_empty():
 		page.add_button(parent, "statuses:player", statuses, {}, func(): page._open_detail_for_uid("statuses:player"))
@@ -208,14 +208,22 @@ func _hand(page: BattleScreen, parent: Node) -> void:
 
 func _choice(page: BattleScreen) -> void:
 	var choice := page._choice_dict(page.view.get("pending_choice"))
-	page.add_text(page.body, "必须完成当前效果 · 已选%d / %s—%s项" % [page._choice_selected_ids.size(), choice.get("min_count", 0), choice.get("max_count", 0)], 20)
+	var kind := str(choice.get("kind", ""))
+	var labels := page._choice_labels(kind)
+	page.add_text(page.body, labels[0], 22)
+	page._choice_status = page.add_text(page.body, "", 18)
 	var grid := GridContainer.new()
 	grid.columns = 3
 	page.body.add_child(grid)
 	for option in choice.get("candidates", []):
 		var id := str(option.get("id", option.get("candidate_id", "")))
+		if kind == "change_topic":
+			page.add_button(grid, "choice:" + id, UiStyle.label(str(option.get("label_key", id))), {}, page._bind_choice(id))
+			continue
 		var detail: Dictionary = option.get("preview", {})
 		var definition := str(detail.get("definition_id", option.get("label_key", id)))
 		page.add_card(grid, "choice:" + id, definition, detail.get("face", detail.get("detail", detail)), UiStyle.label(definition), page._choice_selected_ids.has(id), page._bind_choice(id))
-	page.add_button(page.footer, "choice:confirm", "确认必选结果", page._choice_draft())
 	page.add_button(page.footer, "choice:menu", "返回主页", {"type": "ui.menu", "payload": {}})
+	page.add_button(page.footer, "choice:clear", "清空选择", {}, page._clear_choice_selection)
+	page.add_button(page.footer, "choice:confirm", labels[1], page._choice_draft())
+	page._sync_choice_controls()

@@ -199,8 +199,8 @@ func _check_content_contract(catalog: ContentDB, failures: Array[String]) -> voi
 	_check(UiStyle.label("X03") != "X03", "X03 has a display label", failures)
 	_check(UiStyle.label("work_boost") != "work_boost", "work_boost has a display label", failures)
 	_check(
-		UiStyle.label("task.n20.intent.b") == "复制自身",
-		"N20 intent labels describe the copy action",
+		UiStyle.label("task.n20.intent.b") == "施加压力",
+		"N20 intent describes pressure while the copy remains a recurring trait",
 		failures
 	)
 

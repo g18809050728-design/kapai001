@@ -103,7 +103,7 @@ func _test_intro_then_battle() -> void:
 	highlight = shell._tutorial.highlight_rect()
 	_check(highlight.has_area(), "battle step 1 highlights task intent and values")
 	var text_1 := _text_of(shell._tutorial)
-	for required in ["下回合意图", "屏障", "DDL", "精力"]:
+	for required in ["任务意图", "屏障", "DDL", "精力"]:
 		_check(text_1.contains(required), "battle step 1 explains " + required)
 
 	_check(shell.press("tutorial:next"), "next advances the battle tutorial")

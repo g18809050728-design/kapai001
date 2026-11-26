@@ -172,6 +172,7 @@ func add_text(
 
 func add_card(parent: Node, uid: String, id: String, detail: Dictionary, caption: String, picked: bool, callback: Callable, relic: bool = false) -> UiOfferCard:
 	var card := UiOfferCard.new()
+	card.short_relic_face = relic and bool(parent.get_meta("short_relic_cards", false))
 	if not automatic_card_details:
 		card.inspection_hint = "停留查看 · I 固定 / 取消"
 	card.configure(id, detail, caption, picked, relic, size.y < 580 or bool(get_meta("compact_cards", false)))

@@ -12,6 +12,7 @@ func run() -> Array[String]:
 	_check_retain_choice(root)
 	_check_remove_status_choice(root)
 	_check_passive_retrieve_choice(root)
+	_check_change_topic(root)
 	_check_end_turn_while_editing(root)
 	if shell.is_inside_tree():
 		shell.queue_free()
@@ -264,6 +265,42 @@ func _check_end_turn_while_editing(root: String) -> void:
 		"editor end-turn advances the battle revision"
 	)
 	shell.queue_free()
+
+
+func _check_change_topic(root: String) -> void:
+	var session := GameSession.new(SaveStore.new(root + "-topic"))
+	var shell := _helpers.attach_shell(session) as GameShell
+	var started := session.start_test_room({"character_id": "P02", "seed": "42"})
+	_check(started.accepted, "change-topic test battle starts")
+	if not started.accepted:
+		shell.free()
+		return
+	var patch := session.apply_test_patch(_context(session.get_test_view()), {"ops": [
+		{"op": "add_card", "definition_id": "R3-P02-01", "zone": "hand"},
+		{"op": "add_card", "definition_id": "R3-P02-03", "zone": "hand"},
+		{"op": "add_card", "definition_id": "R3-P02-04", "zone": "hand"},
+		{"op": "add_card", "definition_id": "R3-P02-21", "zone": "hand"},
+		{"op": "add_relic", "relic_id": "RX-P02-14"},
+	]})
+	if not _ok_patch(patch, "change-topic cards are in hand"):
+		shell.free()
+		return
+	shell.refresh()
+	for id in ["R3-P02-01", "R3-P02-03", "R3-P02-04", "R3-P02-21"]:
+		_check(shell.press("card:" + _hand_card(shell, id)), "plays " + id + " through the battle UI")
+	var pending: Variant = session.get_test_view().get("pending_choice")
+	_check(pending is Dictionary and pending.get("kind") == "change_topic", "change-topic opens the choice panel")
+	if pending is Dictionary:
+		var page := shell.page as BattleScreen
+		_check(page._buttons["choice:confirm"].text == "仅抽牌", "change-topic offers an explicit skip")
+		var candidate := "choice:R3-P02-04"
+		_check(page._buttons.has(candidate) and page._buttons[candidate].text == UiStyle.label("R3-P02-04"), "change-topic shows the actual card name")
+		_check(shell.press(candidate) and page._buttons["choice:confirm"].text == "重置牌名并抽牌", "choice changes the confirm action")
+		_check(shell.press("choice:confirm"), "change-topic confirms through the battle UI")
+		var paper: Dictionary = session.test_service().state.battle.v3.paper
+		_check(session.get_test_view().get("pending_choice") == null and paper.used_names.has("R3-P02-03") and not paper.used_names.has("R3-P02-04"), "confirm resets the chosen name only")
+		_check(session.test_service().state.battle.player.relax == 10, "the first reset adds five relax from 转题夹")
+	shell.free()
 
 
 func _context(view: Dictionary) -> Dictionary:

@@ -11,6 +11,7 @@ var _current := ""
 var _current_year := 1
 var _draft_count := 0
 var _selection_only := false
+var _return_to_room := false
 var _fixed_node_key := ""
 var _submitted := false
 var _generation := 0
@@ -42,7 +43,7 @@ func _ready() -> void:
 	hide()
 
 
-func open(view: Dictionary, selected_key: String = "", draft_count: int = 0, selection_only: bool = false, fixed_node_key: String = "") -> void:
+func open(view: Dictionary, selected_key: String = "", draft_count: int = 0, selection_only: bool = false, fixed_node_key: String = "", return_to_room: bool = false) -> void:
 	_nodes = view.get("nodes", []).duplicate(true)
 	_current = str(view.get("run", {}).get("current_node_id", "")).get_slice("|", 1)
 	_current_year = int(view.get("run", {}).get("term", 1))
@@ -51,6 +52,7 @@ func open(view: Dictionary, selected_key: String = "", draft_count: int = 0, sel
 	_selected = _fixed_node_key if not _fixed_node_key.is_empty() else selected_key
 	_draft_count = draft_count
 	_selection_only = selection_only
+	_return_to_room = return_to_room
 	_submitted = false
 	for node in _nodes:
 		if str(node.key) == _selected:
@@ -159,7 +161,12 @@ func _build() -> void:
 	var footer := HBoxContainer.new()
 	footer.add_theme_constant_override("separation", 12)
 	_column.add_child(footer)
-	_button(footer, "test:map:cancel", "返回配置" if _selection_only else "返回编辑器", _cancel)
+	var back_label := "返回编辑器"
+	if _selection_only:
+		back_label = "返回配置"
+	elif _return_to_room:
+		back_label = "返回当前房间"
+	_button(footer, "test:map:cancel", back_label, _cancel)
 	var hint := _label(footer, "选好后返回配置，点击“开始实验”启动" if _selection_only else ("确认时同时应用已有 %d 项草稿" % _draft_count if _draft_count > 0 else "确认后进入所选房间，可在编辑器撤销"), 12)
 	hint.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	_button(footer, "test:map:enter", "选择此节点" if _selection_only else "进入此节点", _confirm, true)

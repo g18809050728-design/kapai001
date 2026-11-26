@@ -54,6 +54,15 @@
     "numeric_rule_key": "extra_requirements"
   },
   {
+    "id": "brainstorm",
+    "name_key": "status.brainstorm.name",
+    "target": "task",
+    "stack_policy": "capped",
+    "duration_policy": "battle",
+    "dispel_policy": "explicit",
+    "numeric_rule_key": "brainstorm"
+  },
+  {
     "id": "guard",
     "name_key": "status.guard.name",
     "target": "unit",

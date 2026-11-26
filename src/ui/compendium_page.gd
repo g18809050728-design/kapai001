@@ -5,6 +5,7 @@ const PAGE_SIZE := 8
 const TABS := {"cards": "卡牌", "monsters": "怪物", "relics": "饰品"}
 
 var tab := "cards"
+var test_context := false
 var filtered_ids: Array[String] = []
 var visible_ids: Array[String] = []
 var detail: UiCompendiumDetail
@@ -49,7 +50,7 @@ func render(data: Dictionary) -> void:
 				for variant in entry.variants:
 					search_parts.append(CompendiumText.card_text(variant))
 			elif kind_name == "relics":
-				search_parts.append(UiContentText.describe_relic(entry.definition) + " " + CompendiumText.relic_group_text(entry) + " " + CompendiumText.relic_source(entry))
+				search_parts.append(CompendiumText.relic_text(entry) + " " + CompendiumText.relic_group_text(entry) + " " + CompendiumText.relic_source(entry))
 			else:
 				for section in CompendiumText.monster_sections(entry):
 					search_parts.append(section.title + " " + section.text)
@@ -119,7 +120,7 @@ func render(data: Dictionary) -> void:
 	var actions := HBoxContainer.new()
 	actions.add_theme_constant_override("separation", 10)
 	footer.add_child(actions)
-	var back := add_button(actions, "compendium:back", "返回  Esc", {"type": "ui.compendium_back", "payload": {}})
+	var back := add_button(actions, "compendium:back", "返回测试房间  Esc" if test_context else "返回  Esc", {"type": "ui.compendium_back", "payload": {}})
 	back.custom_minimum_size.x = 140 * UiStyle.text_scale
 	back.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	UiStyle.button_skin(back, "quiet", true)
@@ -269,7 +270,7 @@ func _render_results(restore: bool = false) -> void:
 	for id in _order[tab]:
 		if _matches(_entries[tab][id]):
 			filtered_ids.append(id)
-	_count.text = "四学年全集 · 全部开放    %s / %s 种%s    点击查看详情" % [filtered_ids.size(), _order[tab].size(), str(TABS[tab])]
+	_count.text = "%s    %s / %s 种%s    点击查看详情" % ["测试目录" if test_context else "四学年全集 · 全部开放", filtered_ids.size(), _order[tab].size(), str(TABS[tab])]
 	if not str(view.get("error", "")).is_empty():
 		_count.text = "图鉴加载失败：" + str(view.error)
 	_grid = GridContainer.new()

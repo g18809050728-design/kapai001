@@ -6,27 +6,32 @@ extends Control
 
 signal command(command_type: String, payload: Dictionary)
 signal close_requested
+signal catalogue_requested
 
-const TABS := [
-	["nodes", "节点"],
-	["character", "角色"],
-	["cards", "牌区"],
-	["resources", "资源"],
-	["enemies", "敌人"],
-	["allies", "伙伴饰品"],
-	["statuses", "状态"],
-	["time", "时间随机"],
-	["rules", "规则覆盖"],
-	["history", "检查点"],
+const TAB_GROUPS := [
+	["实验设置", [["nodes", "地图跳转"], ["character", "角色"], ["resources", "数值资源"]]],
+	["战斗调试", [["cards", "卡牌与牌堆"], ["enemies", "敌人与遭遇"], ["allies", "伙伴与饰品"], ["statuses", "状态效果"]]],
+	["高级工具", [["time", "回合与随机"], ["rules", "规则与定义"], ["history", "历史与存档"]]],
 ]
-const DRAWER_WIDTH := 520.0
 const MapPicker = preload("res://src/ui/test_map_picker.gd")
+const Catalogue = preload("res://src/ui/test_editor_catalogue.gd")
+const RESULTS_BATCH := 12
 
 var session: GameSession
 var _view: Dictionary = {}
 var _options: Dictionary = {}
+var _catalogue: Dictionary = {}
+var _catalogue_hash := ""
+var _catalogue_filters: Dictionary = {}
+var _catalogue_counts: Dictionary = {}
+var _catalogue_expanded: Dictionary = {}
 var _open := false
-var _tab := "character"
+var _tab := ""
+var _map_return_to_room := false
+var _scrim: ColorRect
+var _navigation: ScrollContainer
+var _scroll_by_tab: Dictionary = {}
+var _queries: Dictionary = {}
 var _keep_character_deck := false
 var _zone := "hand"
 var _card_persistence := "battle"
@@ -35,7 +40,6 @@ var _definition_kind := 0
 var _definition_id := ""
 var _definition_json := ""
 var map_picker: Control
-var _search := ""
 var _status_target := ""
 var _status_text := ""
 var _draft: Dictionary = {}
@@ -57,12 +61,18 @@ var _column: VBoxContainer
 var _scroll: ScrollContainer
 var _content: VBoxContainer
 var _search_input: LineEdit
-var _draft_label: Label
 
 
 func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_scrim = ColorRect.new()
+	_scrim.color = Color(0.02, 0.04, 0.07, 0.50)
+	_scrim.mouse_filter = Control.MOUSE_FILTER_STOP
+	add_child(_scrim)
+	_scrim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_scrim.offset_top = TestHud.bar_height()
+	_scrim.hide()
 	_panel = PanelContainer.new()
 	_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	_panel.add_theme_stylebox_override("panel", TestUiTokens.panel_style())
@@ -81,7 +91,8 @@ func _ready() -> void:
 	add_child(map_picker)
 	map_picker.connect("cancelled", _close_node_map)
 	map_picker.connect("node_confirmed", func(key: String):
-		_panel.visible = true
+		_map_return_to_room = false
+		_panel.show()
 		_set_draft("node", {"op": "enter_node", "node_key": key})
 		_begin_apply())
 	notification(NOTIFICATION_RESIZED)
@@ -93,19 +104,13 @@ func _notification(what: int) -> void:
 
 
 func _update_layout() -> void:
-	var compact := size.x < 1100 or size.y < 700 or UiStyle.text_scale > 1.0
-	if compact:
-		_panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-		_panel.offset_left = 8
-		_panel.offset_right = -8
-		_panel.offset_top = TestUiTokens.height(50)
-		_panel.offset_bottom = -8
-	else:
-		_panel.set_anchors_and_offsets_preset(Control.PRESET_RIGHT_WIDE)
-		_panel.offset_left = -TestUiTokens.PANEL_WIDTH
-		_panel.offset_right = -8
-		_panel.offset_top = TestUiTokens.height(50)
-		_panel.offset_bottom = -8
+	_panel.set_anchors_and_offsets_preset(Control.PRESET_RIGHT_WIDE)
+	var panel_width := 850.0 if UiStyle.text_scale <= 1.0 else 1040.0
+	_panel.offset_left = -minf(panel_width, size.x - 8.0)
+	_panel.offset_right = -8
+	_panel.offset_top = TestHud.bar_height() + 8
+	_panel.offset_bottom = -8
+	_scrim.offset_top = TestHud.bar_height()
 
 
 func setup(p_session: GameSession) -> void:
@@ -136,22 +141,25 @@ func clear_feedback() -> void:
 
 func open() -> void:
 	_open = true
-	_panel.visible = true
+	if _tab.is_empty():
+		_tab = "resources" if str(_view.get("screen", "")) == "test_room_battle" else "nodes"
+	_scrim.show()
+	_panel.show()
+	_update_options()
 	_render_all()
+	_focus_control.call_deferred("test:editor:tab:" + _tab)
 
 
 func close() -> void:
 	_open = false
-	_panel.visible = false
+	_map_return_to_room = false
+	_scrim.hide()
+	_panel.hide()
 	map_picker.hide()
 
 
 func render(view: Dictionary) -> void:
 	_view = view
-	if _options.is_empty() and session != null:
-		var options := session.get_test_room_options()
-		if options.ok:
-			_options = options.data
 	if _status_target.is_empty() or not _holder_exists(_status_target):
 		_status_target = str(_player().get("entity_id", ""))
 	if not _open:
@@ -159,8 +167,20 @@ func render(view: Dictionary) -> void:
 		return
 	if map_picker.visible:
 		return
+	_update_options()
 	_panel.visible = true
 	_render_all()
+
+
+func _update_options() -> void:
+	var hash := str(_view.get("overlay", {}).get("hash", ""))
+	if session == null or (not _options.is_empty() and hash == _catalogue_hash):
+		return
+	var options := session.get_test_room_options(true)
+	if options.ok and not options.data.has("error"):
+		_options = options.data
+		_catalogue = Catalogue.build(_options)
+		_catalogue_hash = hash
 
 
 func button_uids() -> Array:
@@ -168,7 +188,7 @@ func button_uids() -> Array:
 
 
 func press(uid: String) -> bool:
-	if not _buttons.has(uid) or not is_instance_valid(_buttons[uid]):
+	if not is_visible_in_tree() or not _buttons.has(uid) or not is_instance_valid(_buttons[uid]):
 		return false
 	var control: Control = _buttons[uid]
 	if control is BaseButton and (control as BaseButton).disabled:
@@ -183,11 +203,12 @@ func press(uid: String) -> bool:
 	return false
 
 
-func set_search(query: String) -> bool:
-	if not is_instance_valid(_search_input):
+func set_search(query: String, category: String = "") -> bool:
+	var input: LineEdit = _search_input if category.is_empty() else _buttons.get("test:search:" + category)
+	if not is_instance_valid(input):
 		return false
-	_search_input.text = query
-	_search_input.text_changed.emit(query)
+	input.text = query
+	input.text_changed.emit(query)
 	return true
 
 
@@ -203,109 +224,115 @@ func handle_result(accepted: bool) -> void:
 	if accepted:
 		_draft.clear()
 		_status_text = "已应用修改"
-		_options = {}
-		if session != null:
-			var options := session.get_test_room_options()
-			if options.ok:
-				_options = options.data
 	else:
 		_status_text = "应用失败，草稿保留"
 	_render_all()
 
 
 func _render_all() -> void:
-	if _panel == null:
+	if _column == null:
 		return
-	var scroll_value := _scroll.scroll_vertical if is_instance_valid(_scroll) else 0
-	var column := _column
-	if column == null:
-		return
-	# Read controls before rebuilding too: setting a LineEdit.text property does
-	# not emit text_changed, and validation must retain the actual input.
-	var definition_id := column.find_child("DefinitionId", true, false) as LineEdit
-	var definition_json := column.find_child("DefinitionJson", true, false) as TextEdit
+	var focused := get_viewport().gui_get_focus_owner()
+	var focus_id := str(focused.get_meta("uid", "")) if is_instance_valid(focused) else ""
+	var scroll_value := _scroll_by_tab.get(_tab, 0) as int
+	var nav_scroll := _navigation.scroll_vertical if is_instance_valid(_navigation) else 0
+	if is_instance_valid(_scroll) and _scroll.get_meta("tab") == _tab:
+		scroll_value = _scroll.scroll_vertical
+	var definition_id := _column.find_child("DefinitionId", true, false) as LineEdit
+	var definition_json := _column.find_child("DefinitionJson", true, false) as TextEdit
 	if definition_id != null:
 		_definition_id = definition_id.text
 	if definition_json != null:
 		_definition_json = definition_json.text
-	for child in column.get_children():
-		column.remove_child(child)
+	for child in _column.get_children():
+		_column.remove_child(child)
 		child.queue_free()
 	_buttons.clear()
-	_build_header(column)
-	_build_tabs(column)
-	_build_content(column)
-	_build_footer(column)
-	_style_input_tree(column)
-	call_deferred("_restore_scroll", scroll_value)
+	_search_input = null
+	_build_header(_column)
+	var workspace := HBoxContainer.new()
+	workspace.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	workspace.add_theme_constant_override("separation", TestUiTokens.SPACE_LG)
+	_column.add_child(workspace)
+	_build_tabs(workspace)
+	_build_content(workspace)
+	_build_footer(_column)
+	_style_input_tree(_column)
+	_restore_workspace.call_deferred(_scroll, scroll_value, nav_scroll, focus_id)
 
 
-func _restore_scroll(value: int) -> void:
-	if is_instance_valid(_scroll):
-		_scroll.scroll_vertical = value
+func _restore_workspace(scroll: ScrollContainer, value: int, nav_scroll: int, focus_id: String) -> void:
+	if not is_inside_tree() or not is_instance_valid(scroll) or scroll != _scroll:
+		return
+	_scroll.scroll_vertical = value
+	_navigation.scroll_vertical = nav_scroll
+	var tab: Button = _buttons.get("test:editor:tab:" + _tab)
+	if is_instance_valid(tab):
+		_navigation.ensure_control_visible.call_deferred(tab)
+	if not focus_id.is_empty():
+		_focus_control(focus_id)
+
+
+func _focus_control(uid: String) -> void:
+	var control: Control = _buttons.get(uid)
+	if is_instance_valid(control) and control.is_visible_in_tree() and not (control is BaseButton and control.disabled):
+		control.grab_focus()
 
 
 func _build_header(parent: VBoxContainer) -> void:
-	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", TestUiTokens.SPACE_SM)
-	parent.add_child(row)
-	var identity := VBoxContainer.new()
-	identity.add_theme_constant_override("separation", 2)
-	identity.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	row.add_child(identity)
-	var eyebrow := Label.new()
-	eyebrow.text = "TEST ROOM / EDITOR"
-	eyebrow.add_theme_font_size_override("font_size", TestUiTokens.font(10))
-	eyebrow.add_theme_color_override("font_color", TestUiTokens.ACCENT_TEXT)
-	identity.add_child(eyebrow)
-	var title := Label.new()
-	title.text = "测试编辑器"
-	title.add_theme_font_size_override("font_size", TestUiTokens.font(22))
-	title.add_theme_color_override("font_color", TestUiTokens.INK)
-	identity.add_child(title)
-	var chips := HBoxContainer.new()
-	chips.add_theme_constant_override("separation", TestUiTokens.SPACE_XS)
-	row.add_child(chips)
-	var test_state := _test()
-	_chip(chips, "分支 %s" % test_state.get("branch_id", 0))
-	_chip(chips, "REV %s" % test_state.get("revision", 0))
-	if not _draft.is_empty():
-		_chip(chips, "草稿 %d" % _draft.size(), true)
-	var close := _button(row, "test:editor:close", "关闭", func(): _request_close(), "ghost")
-	close.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	var row := _row(parent)
+	var title := _label(row, "编辑实验", 23)
+	title.add_theme_font_override("font", UiStyle.title_font())
+	var context := _label(row, UiStyle.label(str(_config().get("character_id", ""))), 13, TestUiTokens.INK_SOFT)
+	context.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	context.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	_button(row, "test:editor:compendium", "图鉴", func(): catalogue_requested.emit(), "secondary")
+	_button(row, "test:editor:close", "返回实验", _request_close, "ghost")
 
 
-func _build_tabs(parent: VBoxContainer) -> void:
-	var grid := GridContainer.new()
-	grid.columns = 5
-	grid.add_theme_constant_override("h_separation", TestUiTokens.SPACE_XS)
-	grid.add_theme_constant_override("v_separation", TestUiTokens.SPACE_XS)
-	parent.add_child(grid)
-	for entry in TABS:
-		var tab_id: String = entry[0]
-		var active := tab_id == _tab
-		var button := _button(
-			grid,
-			"test:editor:tab:" + tab_id,
-			entry[1],
-			func():
-				_tab = tab_id
-				_render_all()
-				if tab_id == "nodes":
-					open_node_map(),
-			"tab_active" if active else "tab"
-		)
-		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		button.custom_minimum_size = Vector2(84, maxf(44, TestUiTokens.height(32)))
-		button.add_theme_color_override(
-			"font_color", TestUiTokens.INK if active else TestUiTokens.INK_SOFT
-		)
+func _build_tabs(parent: HBoxContainer) -> void:
+	_navigation = ScrollContainer.new()
+	_navigation.name = "TestEditorNavigation"
+	_navigation.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	_navigation.follow_focus = true
+	_navigation.custom_minimum_size.x = maxf(144, TestUiTokens.height(119))
+	parent.add_child(_navigation)
+	var groups := VBoxContainer.new()
+	groups.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	groups.add_theme_constant_override("separation", 2)
+	_navigation.add_child(groups)
+	for group in TAB_GROUPS:
+		_label(groups, group[0], 12, TestUiTokens.INK_SOFT)
+		for entry in group[1]:
+			var tab_id: String = entry[0]
+			var active := tab_id == _tab
+			var button := _button(groups, "test:editor:tab:" + tab_id, entry[1], _select_tab.bind(tab_id),
+				"tab_active" if active else "tab")
+			button.alignment = HORIZONTAL_ALIGNMENT_LEFT
+			button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			button.toggle_mode = true
+			button.set_pressed_no_signal(active)
 
 
-func _build_content(parent: VBoxContainer) -> void:
+func _select_tab(tab_id: String) -> void:
+	if is_instance_valid(_scroll):
+		_scroll_by_tab[_tab] = _scroll.scroll_vertical
+	_tab = tab_id
+	_render_all()
+	if tab_id == "nodes":
+		open_node_map()
+	else:
+		_focus_control.call_deferred("test:editor:tab:" + tab_id)
+
+
+func _build_content(parent: HBoxContainer) -> void:
 	_scroll = ScrollContainer.new()
+	_scroll.name = "TestEditorContent"
+	_scroll.set_meta("tab", _tab)
+	_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	_scroll.follow_focus = true
 	parent.add_child(_scroll)
 	_content = VBoxContainer.new()
 	_content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -341,23 +368,22 @@ func _build_nodes() -> void:
 	_hint("先查看四学年节点位置，确认后进入。跳转保留整局牌组和饰品；仅限当前战斗的临时牌与饰品不带入下一场。可任意跳转并撤销。")
 
 
-func open_node_map(selected_key: String = "", confirm_start: bool = false) -> void:
+func open_node_map(selected_key: String = "", confirm_start: bool = false, return_to_room: bool = false) -> void:
 	_tab = "nodes"
-	_panel.visible = false
+	_map_return_to_room = return_to_room
+	_panel.hide()
 	var key := selected_key if not selected_key.is_empty() else str(_draft.get("node", {}).get("node_key", ""))
-	map_picker.call("open", _view, key, _draft.size(), false, key if confirm_start else "")
+	map_picker.call("open", _view, key, _draft.size(), false, key if confirm_start else "", return_to_room)
 
 
 func _close_node_map() -> void:
-	_panel.visible = true
+	if _map_return_to_room:
+		_map_return_to_room = false
+		close_requested.emit()
+		return
+	_panel.show()
 	_render_all()
-	_focus_map_entry.call_deferred()
-
-
-func _focus_map_entry() -> void:
-	var button: Button = _buttons.get("test:editor:open_map")
-	if is_inside_tree() and is_instance_valid(button) and button.is_inside_tree() and _open and not map_picker.visible:
-		button.grab_focus()
+	_focus_control.call_deferred("test:editor:open_map")
 
 
 func _build_character() -> void:
@@ -380,7 +406,14 @@ func _build_character() -> void:
 	for character in _options.get("characters", []):
 		var row := _row(_content)
 		var id := str(character.get("id", ""))
-		_label(row, "%s · 被动 %s" % [UiStyle.label(id), str(character.get("passive_id", ""))], 14)
+		_thumbnail(row, id, "partner", 58)
+		var words := VBoxContainer.new()
+		words.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		row.add_child(words)
+		_label(words, UiStyle.label(id), 15)
+		var passive := UiContentText.describe_character_passive(str(character.passive_id))
+		if not passive.is_empty():
+			_label(words, passive, 13, TestUiTokens.INK_SOFT)
 		var switch := _button(
 			row,
 			"test:editor:character:" + id,
@@ -396,6 +429,9 @@ func _build_character() -> void:
 
 
 func _build_cards() -> void:
+	var tools := _row(_content)
+	_label(tools, "当前牌堆", 16)
+	_button(tools, "test:editor:find_card", "搜索并添加卡牌", _focus_search.bind("cards"))
 	_persistence_selector(_content, "cards", _card_persistence)
 	var zone_row := _row(_content)
 	for zone in ["hand", "draw", "discard", "exhaust", "chapter"]:
@@ -415,7 +451,9 @@ func _build_cards() -> void:
 		var card_box := VBoxContainer.new()
 		_content.add_child(card_box)
 		var identity := _row(card_box)
-		var name := UiStyle.label(str(entry.get("definition_id", "")))
+		var definition_id := str(entry.get("definition_id", ""))
+		_thumbnail(identity, definition_id, "work", 52)
+		var name := UiStyle.label(definition_id)
 		if int(entry.get("upgrade_level", 0)) > 0:
 			name += " +%s" % entry.get("upgrade_level", 0)
 		_label(identity, name, 15)
@@ -487,7 +525,7 @@ func _build_cards() -> void:
 	_button(raw_actions, "test:editor:rawcard:chapter", "章节", func():
 		_add_card_by_id(raw_input.text, "chapter")
 	)
-	_search_card_list(_content, "搜索任意卡牌")
+	_build_search("cards", "添加卡牌")
 	var actions := _row(_content)
 	_button(actions, "test:editor:cards:shuffle", "洗抽牌堆", func():
 		_set_draft("cards.shuffle", {"op": "shuffle_zone", "zone": "draw"})
@@ -556,6 +594,7 @@ func _build_resources() -> void:
 
 
 func _build_enemies() -> void:
+	_catalogue_links([["tasks", "查找敌怪"], ["encounters", "查找遭遇"]])
 	var battle := _battle()
 	_label(_content, "遭遇 %s · DDL %s · 回合 %s" % [
 		battle.get("encounter_id", ""), battle.get("ddl", 0), battle.get("round_index", 0)
@@ -573,6 +612,7 @@ func _build_enemies() -> void:
 	for task in battle.get("tasks", []):
 		var row := _row(_content)
 		var task_id := str(task.get("task_id", ""))
+		_thumbnail(row, str(task.get("definition_id", "")), "pressure", 52)
 		_label(row, "%s · %s/%s · 屏障 %s" % [
 			UiStyle.label(str(task.get("definition_id", ""))),
 			task.get("work_remaining", 0),
@@ -607,8 +647,8 @@ func _build_enemies() -> void:
 			_set_draft("addtask.raw.%d" % _seq, {"op": "add_task", "definition_id": id})
 			_seq += 1
 	)
-	_search_task_list(_content, "搜索任意任务")
-	_search_encounter_list(_content, "替换遭遇")
+	_build_search("tasks", "添加敌怪")
+	_build_search("encounters", "替换遭遇")
 
 
 func _build_task_detail(task: Dictionary) -> void:
@@ -754,6 +794,7 @@ func _find_option(kind: String, id: String) -> Dictionary:
 
 
 func _build_allies() -> void:
+	_catalogue_links([["units", "查找伙伴"], ["relics", "查找饰品"], ["scenes", "查找场景"]])
 	_section("伙伴/单位")
 	if _battle().get("units", []).is_empty():
 		_empty("当前没有伙伴/单位。")
@@ -774,7 +815,7 @@ func _build_allies() -> void:
 		_button(row, "test:editor:unit:%s:rm" % unit_id, "移除", func():
 			_set_draft("unit.%s.rm" % unit_id, {"op": "remove_unit", "unit_id": unit_id})
 		)
-	_search_unit_list(_content, "加入伙伴")
+	_build_search("units", "加入伙伴")
 	var raw_unit_row := _row(_content)
 	_label(raw_unit_row, "按单位 ID 加入", 13, TestUiTokens.INK_SOFT)
 	var raw_unit_input := LineEdit.new()
@@ -797,7 +838,7 @@ func _build_allies() -> void:
 		_button(row, "test:editor:relic:%s:rm" % str(relic_id), "移除", func():
 			_set_draft("relic.%s.rm" % str(relic_id), {"op": "remove_relic", "relic_id": str(relic_id)})
 		)
-	_search_relic_list(_content, "加入饰品")
+	_build_search("relics", "加入饰品")
 	var raw_relic_row := _row(_content)
 	_label(raw_relic_row, "按饰品 ID 加入", 13, TestUiTokens.INK_SOFT)
 	var raw_relic_input := LineEdit.new()
@@ -818,6 +859,7 @@ func _build_allies() -> void:
 		_button(row, "test:editor:scene:clear", "清除", func():
 			_set_draft("scene.clear", {"op": "clear_scene"})
 		)
+	_build_search("scenes", "加入场景")
 	var scene_row := _row(_content)
 	_label(scene_row, "按场景 ID 加入", 13, TestUiTokens.INK_SOFT)
 	var scene_input := LineEdit.new()
@@ -854,7 +896,7 @@ func _build_statuses() -> void:
 	)
 	target_row.add_child(selector)
 	_label(_content, "给该目标添加状态", 15)
-	_search_status_list(_content)
+	_build_search("statuses", "添加状态")
 	var raw_status_row := _row(_content)
 	_label(raw_status_row, "按状态 ID 添加", 13, TestUiTokens.INK_SOFT)
 	var raw_status_input := LineEdit.new()
@@ -1145,12 +1187,21 @@ func _build_history() -> void:
 			checkpoint.get("label", ""), checkpoint.get("revision", 0), checkpoint.get("round_index", 0)
 		], 14)
 		var checkpoint_id := str(checkpoint.get("id", ""))
-		_button(row, "test:editor:checkpoint:" + checkpoint_id, "恢复", func():
+		var restore := _button(row, "test:editor:checkpoint:" + checkpoint_id, "恢复", func():
 			command.emit("test.restore_checkpoint", {"checkpoint_id": checkpoint_id})
 		)
+		restore.disabled = not _draft.is_empty()
+		if restore.disabled:
+			restore.tooltip_text = "请先应用或丢弃草稿"
 	var actions := _row(_content)
-	_button(actions, "test:editor:undo", "撤销", func(): command.emit("test.undo", {}))
-	_button(actions, "test:editor:redo", "重做", func(): command.emit("test.redo", {}))
+	var history: Dictionary = _view.get("history", {})
+	var undo := _button(actions, "test:editor:undo", "撤销", func(): command.emit("test.undo", {}))
+	var redo := _button(actions, "test:editor:redo", "重做", func(): command.emit("test.redo", {}))
+	undo.disabled = not _draft.is_empty() or not bool(history.get("can_undo", false))
+	redo.disabled = not _draft.is_empty() or not bool(history.get("can_redo", false))
+	if not _draft.is_empty():
+		for button in [undo, redo]:
+			button.tooltip_text = "请先应用或丢弃草稿"
 	var save_row := _row(_content)
 	_button(save_row, "test:editor:save_snapshot", "保存快照", func(): command.emit("test.save_snapshot", {}))
 	_button(save_row, "test:editor:save_preset", "保存预设", func(): command.emit("test.save_preset", {}))
@@ -1239,22 +1290,16 @@ func _build_footer(parent: VBoxContainer) -> void:
 	summary.add_theme_constant_override("separation", 0)
 	summary.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	line.add_child(summary)
-	_draft_label = Label.new()
-	_draft_label.text = "待应用 %d 项" % _draft.size()
-	_draft_label.add_theme_font_size_override("font_size", TestUiTokens.font(15))
-	_draft_label.add_theme_color_override("font_color", TestUiTokens.INK)
-	summary.add_child(_draft_label)
-	var meta := Label.new()
-	meta.text = "基于 rev %s · 草稿只在本次编辑器内生效" % _test().get("revision", 0)
-	meta.add_theme_font_size_override("font_size", TestUiTokens.font(11))
-	meta.add_theme_color_override("font_color", TestUiTokens.INK_SOFT)
-	summary.add_child(meta)
-	var preview := _button(line, "test:editor:preview", "预览", func(): _preview_draft(), "secondary")
-	preview.disabled = _draft.is_empty()
-	var apply := _button(line, "test:editor:apply", "应用", func(): _begin_apply(), "primary")
-	apply.disabled = _draft.is_empty()
-	var discard := _button(line, "test:editor:discard", "丢弃草稿", func(): _request_discard(), "ghost")
-	discard.disabled = _draft.is_empty()
+	var draft_label := _label(summary, "%d 项修改待应用" % _draft.size() if not _draft.is_empty() else "没有待应用的修改", 14)
+	draft_label.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	var discard := _button(line, "test:editor:discard", "丢弃草稿", _request_discard, "ghost")
+	var preview := _button(line, "test:editor:preview", "预览修改", _preview_draft, "secondary")
+	var apply := _button(line, "test:editor:apply", "应用修改", _begin_apply, "primary")
+	for button in [discard, preview, apply]:
+		button.disabled = _draft.is_empty()
+		if button.disabled:
+			button.tooltip_text = "修改参数后，草稿会显示在这里"
+
 	for button in [preview, apply, discard]:
 		button.custom_minimum_size.y = maxf(44.0, button.custom_minimum_size.y)
 		button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
@@ -1280,8 +1325,10 @@ func _begin_apply() -> void:
 		_status_text = "没有待应用修改"
 		_render_all()
 		return
-	if _view.get("pending_choice") is Dictionary and not _show_policy:
+	if _view.get("pending_choice") is Dictionary:
 		_show_policy = true
+		_confirm_close = false
+		_confirm_discard = false
 		_render_all()
 		return
 	_send_apply("rollback")
@@ -1320,12 +1367,12 @@ func _preview_draft() -> void:
 	var ops := _draft_ops()
 	var result := session.preview_test_patch(_context(), {"schema_version": 1, "ops": ops})
 	if not result.ok:
-		_status_text = "错误：" + result.error.message_key
+		_status_text = "错误：" + UiStyle.error_text(result.error)
 		_render_all()
 		return
 	var preview: ActionPreview = result.data
 	if not preview.blocking_errors.is_empty():
-		_status_text = "错误：" + preview.blocking_errors[0].message_key
+		_status_text = "错误：" + UiStyle.error_text(preview.blocking_errors[0])
 	else:
 		_status_text = "%d 项可应用 · 级联 %d 项" % [ops.size(), preview.known_effects.size()]
 	_render_all()
@@ -1361,21 +1408,21 @@ func _draft_value(key: String, actual: Variant) -> Variant:
 
 
 func _player_row(caption: String, key: String, actual: int, step: int, minimum: int, maximum: int, field: String) -> void:
-	var lock_row := _row(_content)
+	var row := _row(_content)
+	var draft_value := int(_draft_value(key, actual))
+	var amount_label := "%d" % actual if draft_value == actual else "%d → %d" % [actual, draft_value]
+	_label(row, "%s  %s" % [caption, amount_label], 14).size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	var lock := CheckBox.new()
-	lock.text = "锁定%s数值" % caption
+	lock.text = "锁定"
 	lock.add_theme_color_override("font_color", TestUiTokens.INK)
 	lock.add_theme_font_size_override("font_size", TestUiTokens.font(13))
 	var locks: Dictionary = _test().get("player_locks", {})
 	lock.button_pressed = bool(_draft.get("lock." + field, {}).get("locked", locks.get(field, false)))
-	lock.tooltip_text = "应用后保留该数值；解除锁定后恢复正常变化。"
+	lock.tooltip_text = "锁定%s。应用后维持当前数值，解除锁定后恢复正常变化。" % caption
 	lock.toggled.connect(func(locked: bool):
 		_set_draft("lock." + field, {"op": "set_player_lock", "field": field, "locked": locked}))
 	_buttons["test:editor:lock:" + field] = lock
-	lock_row.add_child(lock)
-	var row := _row(_content)
-	_row_label(row, "%s %s" % [caption, _draft_value(key, actual)])
-	_spacer(row)
+	row.add_child(lock)
 	_button(row, "test:editor:field:%s:minus" % key, "-%d" % step, func():
 		var value := int(_draft_value(key, actual))
 		_set_draft(key, {"op": "set_player_field", "field": field, "value": maxi(minimum, value - step)})
@@ -1450,199 +1497,207 @@ func _clear_results(box: Node) -> void:
 		child.queue_free()
 
 
-func _search_card_list(parent: VBoxContainer, caption: String) -> void:
-	_label(parent, caption, 15)
+func _catalogue_links(sections: Array) -> void:
+	var links := HFlowContainer.new()
+	_content.add_child(links)
+	for section in sections:
+		_button(links, "test:editor:find:" + str(section[0]), section[1],
+			_focus_search.bind(str(section[0])), "tab")
+
+
+func _focus_search(kind: String) -> void:
+	var input: LineEdit = _buttons.get("test:search:" + kind)
+	if not is_instance_valid(input):
+		return
+	_focus_search_input(input)
+
+
+func _focus_search_input(input: LineEdit) -> void:
+	input.grab_focus()
+	_scroll.set_deferred("scroll_vertical", roundi(input.position.y))
+
+
+func _build_search(kind: String, caption: String) -> void:
+	_section(caption)
 	var input := LineEdit.new()
-	input.placeholder_text = "按名称或 ID 搜索卡牌"
+	input.placeholder_text = "搜索名称、ID、效果或分类"
+	input.clear_button_enabled = true
+	input.text = str(_queries.get(kind, ""))
 	input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	parent.add_child(input)
-	_search_input = input
-	var box := VBoxContainer.new()
+	input.add_theme_font_size_override("font_size", TestUiTokens.font(14))
+	input.set_meta("uid", "test:search:" + kind)
+	_buttons["test:search:" + kind] = input
+	_content.add_child(input)
+	if not is_instance_valid(_search_input):
+		_search_input = input
+	var row := HFlowContainer.new()
+	row.add_theme_constant_override("h_separation", 6)
+	row.add_theme_constant_override("v_separation", 5)
+	_content.add_child(row)
+	var count := _label(_content, "", 13, TestUiTokens.INK_SOFT)
+	var results := VBoxContainer.new()
+	results.add_theme_constant_override("separation", 7)
+	_content.add_child(results)
+	var selectors: Array[OptionButton] = []
+	var refresh := func(): _render_catalogue(kind, count, results)
+	for field in Catalogue.FILTERS[kind]:
+		var key: String = field[0]
+		var select := OptionButton.new()
+		var uid := "test:filter:%s:%s" % [kind, key]
+		select.name = ("TestFilter_" + kind + "_" + key).validate_node_name()
+		select.set_meta("uid", uid)
+		_buttons[uid] = select
+		_style_option(select)
+		select.add_item(field[1] + " · 全部")
+		select.set_item_metadata(0, "")
+		var labels: Dictionary = field[2]
+		for value in labels:
+			select.add_item(field[1] + " · " + labels[value])
+			select.set_item_metadata(select.item_count - 1, value)
+			if value == _catalogue_filters.get(kind, {}).get(key, ""):
+				select.select(select.item_count - 1)
+		row.add_child(select)
+		selectors.append(select)
+		select.item_selected.connect(func(index: int):
+			if not _catalogue_filters.has(kind):
+				_catalogue_filters[kind] = {}
+			_catalogue_filters[kind][key] = select.get_item_metadata(index)
+			_catalogue_counts.erase(kind)
+			refresh.call())
+	_button(row, "test:filter:" + kind + ":reset", "重置", func():
+		for select in selectors:
+			select.select(0)
+		_catalogue_filters.erase(kind)
+		_catalogue_counts.erase(kind)
+		_queries.erase(kind)
+		input.text = ""
+		refresh.call()
+		input.grab_focus(), "ghost")
+	input.text_changed.connect(func(query: String):
+		_queries[kind] = query
+		_catalogue_counts.erase(kind)
+		refresh.call())
+	refresh.call()
+
+
+func _render_catalogue(kind: String, count: Label, results: VBoxContainer) -> void:
+	_clear_results(results)
+	var entries: Array = _catalogue.get(kind, [])
+	var query := str(_queries.get(kind, ""))
+	var filters: Dictionary = _catalogue_filters.get(kind, {})
+	var matches := entries.filter(func(entry): return Catalogue.matches(entry, query, filters))
+	var shown := mini(matches.size(), int(_catalogue_counts.get(kind, RESULTS_BATCH)))
+	count.text = "%d / %d 项" % [matches.size(), entries.size()]
+	if matches.is_empty():
+		_label(results, "没有匹配结果", 14, TestUiTokens.INK_SOFT)
+		return
+	for index in shown:
+		_catalogue_result(results, count, kind, matches[index])
+	if shown < matches.size():
+		_button(results, "test:catalogue:%s:more" % kind, "继续显示（已显示 %d 项）" % shown, func():
+			_catalogue_counts[kind] = shown + RESULTS_BATCH
+			_render_catalogue(kind, count, results)
+			var next: Dictionary = matches[shown]
+			_focus_control("test:inspect:%s:%s" % [kind, next.id]))
+
+
+func _catalogue_result(parent: VBoxContainer, count: Label, kind: String, entry: Dictionary) -> void:
+	var id: String = entry.id
+	var box := PanelContainer.new()
+	var style := UiStyle.surface(TestUiTokens.SURFACE_ALT, TestUiTokens.LINE, 6)
+	style.shadow_size = 0
+	box.add_theme_stylebox_override("panel", style)
 	parent.add_child(box)
-	_fill_card_results(box, "")
-	input.text_changed.connect(func(text: String): _fill_card_results(box, text))
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 10)
+	box.add_child(row)
+	_thumbnail(row, entry.art, entry.glyph, 58)
+	var words := VBoxContainer.new()
+	words.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	words.add_theme_constant_override("separation", 3)
+	row.add_child(words)
+	_label(words, entry.title, 16)
+	_label(words, ("%s · %s" % [id, entry.tags]) if not str(entry.tags).is_empty() else id, 12, TestUiTokens.INK_SOFT)
+	var detail := _label(words, entry.details, 14)
+	detail.name = "TestCatalogueEffect"
+	detail.visible = _catalogue_expanded.get(kind) == id and not str(entry.details).is_empty()
+	var summary := _label(words, str(entry.summary).replace("
+", " · "), 13, TestUiTokens.INK_SOFT)
+	summary.max_lines_visible = 2
+	summary.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	summary.visible = not detail.visible and not str(entry.summary).is_empty()
+	var actions := HFlowContainer.new()
+	actions.add_theme_constant_override("h_separation", 6)
+	words.add_child(actions)
+	var uid := "test:inspect:%s:%s" % [kind, id]
+	var inspect := _button(actions, uid, "收起说明" if detail.visible else "查看效果", func():
+		var opening := not detail.visible
+		if opening:
+			_catalogue_expanded[kind] = id
+		else:
+			_catalogue_expanded.erase(kind)
+		_render_catalogue(kind, count, parent)
+		_focus_control(uid)
+		if opening:
+			_reveal_catalogue_effect.call_deferred(_buttons.get(uid)), "ghost")
+	inspect.disabled = str(entry.details).is_empty()
+	if inspect.disabled:
+		inspect.tooltip_text = "该定义暂无效果说明"
+	match kind:
+		"cards":
+			_button(actions, "test:editor:add:%s:0" % id, "加到手牌", _add_card_to.bind(id, "hand"))
+			_button(actions, "test:editor:adddiscard:%s:0" % id, "加到弃牌堆", _add_card_to.bind(id, "discard"))
+			_button(actions, "test:editor:addchapter:%s:0" % id, "加到章节", _add_card_to.bind(id, "chapter"))
+		"encounters":
+			_button(actions, "test:editor:encounter:%s:0" % id, "替换遭遇", func():
+				_set_draft("encounter", {"op": "replace_encounter", "encounter_id": id}))
+		"tasks", "units":
+			var target := "task" if kind == "tasks" else "unit"
+			_button(actions, "test:editor:add%s:%s:0" % [target, id], "加入", func():
+				_queue_catalogue_op("add_" + target, {"definition_id": id}))
+		"relics":
+			_button(actions, "test:editor:addrelic:%s:0" % id, "加入饰品", func():
+				_queue_catalogue_op("add_relic", {"relic_id": id}))
+		"statuses":
+			_button(actions, "test:editor:addstatus:%s:0" % id, "添加 1 层", func():
+				_queue_catalogue_op("add_status", {"status_id": id, "target_id": _status_target, "stacks": 1}))
+		"scenes":
+			_button(actions, "test:editor:addscene:%s:0" % id, "加入场景", func():
+				_queue_catalogue_op("add_scene", {"scene_id": id}))
+	words.move_child(detail, -1)
 
 
-func _fill_card_results(box: VBoxContainer, query: String) -> void:
-	_clear_results(box)
-	var cards: Array = _options.get("cards", [])
-	var shown := 0
-	for card in cards:
-		if not _matches(card, query):
-			continue
-		var row := HBoxContainer.new()
-		row.add_theme_constant_override("separation", 4)
-		box.add_child(row)
-		_label(row, "%s · %s费 · %s" % [
-			UiStyle.label(str(card.get("id", ""))),
-			card.get("cost", 0),
-			card.get("type", ""),
-		], 13)
-		var card_id := str(card.get("id", ""))
-		_button(row, "test:editor:add:%s:%d" % [card_id, _seq], "加手", func(): _add_card_to(card_id, "hand"))
-		_seq += 1
-		_button(row, "test:editor:adddiscard:%s:%d" % [card_id, _seq], "弃牌", func(): _add_card_to(card_id, "discard"))
-		_seq += 1
-		_button(row, "test:editor:addchapter:%s:%d" % [card_id, _seq], "章节", func(): _add_card_to(card_id, "chapter"))
-		_seq += 1
-		shown += 1
-	if shown == 0:
-		_label(box, "没有匹配卡牌", 13, TestUiTokens.INK_SOFT)
+func _reveal_catalogue_effect(button: Control) -> void:
+	await get_tree().process_frame
+	if not is_instance_valid(button) or not _content.is_ancestor_of(button):
+		return
+	var y := 0.0
+	var control := button
+	while control != _content:
+		y += control.position.y
+		control = control.get_parent_control()
+	_scroll.scroll_vertical = roundi(y - TestUiTokens.height(60))
 
 
-func _search_task_list(parent: VBoxContainer, caption: String) -> void:
-	_label(parent, caption, 15)
-	var input := LineEdit.new()
-	input.placeholder_text = "搜索任务定义"
-	input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	parent.add_child(input)
-	var box := VBoxContainer.new()
-	parent.add_child(box)
-	_fill_task_results(box, "")
-	input.text_changed.connect(func(text: String): _fill_task_results(box, text))
+func _queue_catalogue_op(operation: String, fields: Dictionary) -> void:
+	_seq += 1
+	fields["op"] = operation
+	_set_draft("%s.%d" % [operation, _seq], fields)
 
 
-func _fill_task_results(box: VBoxContainer, query: String) -> void:
-	_clear_results(box)
-	var shown := 0
-	for task in _options.get("tasks", []):
-		if not _matches(task, query):
-			continue
-		var row := HBoxContainer.new()
-		box.add_child(row)
-		_label(row, "%s · %s" % [UiStyle.label(str(task.get("id", ""))), task.get("work_max", 0)], 13)
-		var definition_id := str(task.get("id", ""))
-		_button(row, "test:editor:addtask:%s:%d" % [definition_id, _seq], "加入", func():
-			_set_draft("addtask.%d" % _seq, {"op": "add_task", "definition_id": definition_id})
-		)
-		_seq += 1
-		shown += 1
-
-
-func _search_encounter_list(parent: VBoxContainer, caption: String) -> void:
-	_label(parent, caption, 15)
-	var input := LineEdit.new()
-	input.placeholder_text = "搜索遭遇"
-	input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	parent.add_child(input)
-	var box := VBoxContainer.new()
-	parent.add_child(box)
-	_fill_encounter_results(box, "")
-	input.text_changed.connect(func(text: String): _fill_encounter_results(box, text))
-
-
-func _fill_encounter_results(box: VBoxContainer, query: String) -> void:
-	_clear_results(box)
-	var shown := 0
-	for encounter in _options.get("encounters", []):
-		if not _matches(encounter, query):
-			continue
-		var row := HBoxContainer.new()
-		box.add_child(row)
-		_label(row, "%s · DDL %s" % [
-			UiStyle.label(str(encounter.get("id", ""))), encounter.get("base_ddl", 0)
-		], 13)
-		var encounter_id := str(encounter.get("id", ""))
-		_button(row, "test:editor:encounter:%s:%d" % [encounter_id, _seq], "替换", func():
-			_set_draft("encounter", {"op": "replace_encounter", "encounter_id": encounter_id})
-		)
-		_seq += 1
-		shown += 1
-
-
-func _search_unit_list(parent: VBoxContainer, caption: String) -> void:
-	_label(parent, caption, 15)
-	var input := LineEdit.new()
-	input.placeholder_text = "搜索伙伴/单位"
-	input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	parent.add_child(input)
-	var box := VBoxContainer.new()
-	parent.add_child(box)
-	_fill_unit_results(box, "")
-	input.text_changed.connect(func(text: String): _fill_unit_results(box, text))
-
-
-func _fill_unit_results(box: VBoxContainer, query: String) -> void:
-	_clear_results(box)
-	var shown := 0
-	for unit in _options.get("units", []):
-		if not _matches(unit, query):
-			continue
-		var row := HBoxContainer.new()
-		box.add_child(row)
-		_label(row, "%s · 精力 %s" % [UiStyle.label(str(unit.get("id", ""))), unit.get("vitality", 0)], 13)
-		var definition_id := str(unit.get("id", ""))
-		_button(row, "test:editor:addunit:%s:%d" % [definition_id, _seq], "加入", func():
-			_set_draft("addunit.%d" % _seq, {"op": "add_unit", "definition_id": definition_id})
-		)
-		_seq += 1
-		shown += 1
-
-
-func _search_relic_list(parent: VBoxContainer, caption: String) -> void:
-	_label(parent, caption, 15)
-	var input := LineEdit.new()
-	input.placeholder_text = "搜索饰品"
-	input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	parent.add_child(input)
-	var box := VBoxContainer.new()
-	parent.add_child(box)
-	_fill_relic_results(box, "")
-	input.text_changed.connect(func(text: String): _fill_relic_results(box, text))
-
-
-func _fill_relic_results(box: VBoxContainer, query: String) -> void:
-	_clear_results(box)
-	var shown := 0
-	for relic in _options.get("relics", []):
-		if not _matches(relic, query):
-			continue
-		var row := HBoxContainer.new()
-		box.add_child(row)
-		_label(row, "%s · %s" % [UiStyle.label(str(relic.get("id", ""))), relic.get("rarity", "")], 13)
-		var relic_id := str(relic.get("id", ""))
-		_button(row, "test:editor:addrelic:%s:%d" % [relic_id, _seq], "加入", func():
-			_set_draft("addrelic.%d" % _seq, {"op": "add_relic", "relic_id": relic_id})
-		)
-		_seq += 1
-		shown += 1
-
-
-func _search_status_list(parent: VBoxContainer) -> void:
-	var input := LineEdit.new()
-	input.placeholder_text = "搜索状态并添加 1 层"
-	input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	parent.add_child(input)
-	_search_input = input
-	var box := VBoxContainer.new()
-	parent.add_child(box)
-	_fill_status_results(box, "")
-	input.text_changed.connect(func(text: String): _fill_status_results(box, text))
-
-
-func _fill_status_results(box: VBoxContainer, query: String) -> void:
-	_clear_results(box)
-	var shown := 0
-	for status in _options.get("statuses", []):
-		if not _matches(status, query):
-			continue
-		var row := HBoxContainer.new()
-		box.add_child(row)
-		_label(row, "%s" % UiStyle.label(str(status.get("id", ""))), 13)
-		var status_id := str(status.get("id", ""))
-		_button(row, "test:editor:addstatus:%s:%d" % [status_id, _seq], "添加", func():
-			_set_draft(
-				"addstatus.%d" % _seq,
-				{
-					"op": "add_status",
-					"status_id": status_id,
-					"target_id": _status_target,
-					"stacks": 1,
-				}
-			)
-		)
-		_seq += 1
-		shown += 1
+func _thumbnail(parent: Node, id: String, glyph: String, extent: float) -> void:
+	var art := TextureRect.new()
+	art.name = "TestCatalogueArt"
+	art.texture = UiStyle.texture(id) if not id.is_empty() else null
+	var edge := TestUiTokens.height(extent)
+	art.custom_minimum_size = Vector2(edge, edge)
+	art.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
+	art.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	parent.add_child(art)
+	if art.texture == null:
+		art.draw.connect(func(): EffectGlyph.paint(art, glyph, art.size * .5, edge * .24, TestUiTokens.INK_SOFT))
 
 
 func _search_override_cards(parent: VBoxContainer) -> void:
@@ -1810,6 +1865,7 @@ func _button(
 	button.add_theme_font_size_override("font_size", TestUiTokens.font(13))
 	button.focus_mode = Control.FOCUS_ALL
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	button.set_meta("uid", uid)
 	button.pressed.connect(callback)
 	_style_button(button, kind)
 	parent.add_child(button)
@@ -1881,18 +1937,6 @@ func _label(parent: Node, text: String, size: int = 14, color: Color = TestUiTok
 	label.add_theme_color_override("font_color", color)
 	parent.add_child(label)
 	return label
-
-
-func _chip(parent: Node, text: String, accent: bool = false) -> void:
-	var chip := PanelContainer.new()
-	chip.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	chip.add_theme_stylebox_override("panel", TestUiTokens.chip_style(accent))
-	parent.add_child(chip)
-	var label := Label.new()
-	label.text = text
-	label.add_theme_font_size_override("font_size", TestUiTokens.font(11))
-	label.add_theme_color_override("font_color", TestUiTokens.ACCENT_TEXT if accent else TestUiTokens.INK_SOFT)
-	chip.add_child(label)
 
 
 func _section(title: String) -> void:
@@ -1976,12 +2020,23 @@ func _input(event: InputEvent) -> void:
 	if key.keycode == KEY_ESCAPE:
 		_request_close()
 		accept_event()
-	elif key.keycode == KEY_SLASH and not typing:
+	elif key.keycode == KEY_TAB and not focus is TextEdit:
+		var controls := _column.find_children("*", "Control", true, false).filter(func(control):
+			return control.is_visible_in_tree() and control.focus_mode == Control.FOCUS_ALL and not (control is BaseButton and control.disabled))
+		if not controls.is_empty():
+			var index := controls.find(focus)
+			if index == -1:
+				index = 0 if key.shift_pressed else -1
+			controls[posmod(index + (-1 if key.shift_pressed else 1), controls.size())].grab_focus()
+		accept_event()
+	elif (key.keycode == KEY_SLASH and not typing) or (key.ctrl_pressed and key.keycode == KEY_F):
 		if is_instance_valid(_search_input):
-			_search_input.grab_focus()
+			_focus_search_input(_search_input)
 		accept_event()
 	elif key.ctrl_pressed and key.keycode == KEY_Z and not typing:
-		command.emit("test.redo" if key.shift_pressed else "test.undo", {})
+		var direction := "redo" if key.shift_pressed else "undo"
+		if _draft.is_empty() and bool(_view.get("history", {}).get("can_" + direction, false)):
+			command.emit("test." + direction, {})
 		accept_event()
 
 

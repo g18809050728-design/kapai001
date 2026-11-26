@@ -356,17 +356,47 @@ func _check_amplify_and_topic(engine: BattleEngine, failures: Array[String]) -> 
 	_move_to_hand(state, "R3-P02-01", 1)
 	_move_to_hand(state, "R3-P02-21", 1)
 	opened = _play(engine, begun, "R3-P02-01", [])
-	_paper(opened).used_names = ["R3-P02-03"]
-	var topic := _play(engine, opened, "R3-P02-21", [])
+	var no_names := _play_pending(engine, opened, "R3-P02-21", [])
+	_check(no_names.ok and no_names.data.pending_choice == null and _paper(no_names).modifier == 0, "P02 change-topic draws immediately with no candidates", failures)
+	_paper(opened).used_names = ["R3-P02-03", "R3-P02-23"]
+	_paper(opened).turn_names = ["R3-P02-23"]
+	_paper(opened).progress = 2
+	var pending := _play_pending(engine, opened, "R3-P02-21", [])
+	_check(pending.ok and pending.data.pending_choice != null, "P02 change-topic asks which used name to reset: " + ("no choice" if pending.ok else str(pending.error.to_dictionary())), failures)
+	if not pending.ok or pending.data.pending_choice == null:
+		return
+	var choice: Dictionary = pending.data.pending_choice
+	var ids: Array = choice.candidates.map(func(candidate: Dictionary): return candidate.id)
+	_check(ids == ["R3-P02-03", "R3-P02-23"] and choice.min_count == 0 and choice.max_count == 1, "P02 change-topic offers zero or one used name", failures)
+	var invalid := _confirm_topic(engine, pending, ["R3-P02-01"])
+	_check(not invalid.ok and _paper(pending).modifier == 0, "P02 change-topic rejects names outside the choice", failures)
+	var skipped := _confirm_topic(engine, pending, [])
+	_check(skipped.ok and _paper(skipped).used_names == ["R3-P02-03", "R3-P02-23", "R3-P02-21"] and _paper(skipped).modifier == 0, "skipping change-topic keeps the names and modifier", failures)
+	var topic := _confirm_topic(engine, pending, ["R3-P02-23"])
 	_check(
 		(
 			topic.ok
-			and not _paper(topic).used_names.has("R3-P02-03")
+			and _paper(topic).used_names == ["R3-P02-03", "R3-P02-21"]
 			and int(_paper(topic).modifier) == -1
+			and int(_paper(topic).progress) == 3
 		),
-		"P02 change-topic resets a name and lowers the modifier",
+		"P02 change-topic resets the selected name and lowers the modifier",
 		failures
 	)
+	if topic.ok:
+		_move_to_hand(topic.data.state, "R3-P02-23", 1)
+		_check(not _play(engine, topic, "R3-P02-23", []).ok, "resetting a name preserves the current turn limit", failures)
+	_paper(opened).used_names = ["R3-P02-21"]
+	var self_reset := _confirm_topic(engine, _play_pending(engine, opened, "R3-P02-21", []), ["R3-P02-21"])
+	_check(self_reset.ok and _paper(self_reset).used_names.is_empty() and _paper(self_reset).progress == 2 and _paper(self_reset).citations == 1, "resetting change-topic itself uses the pre-play citation snapshot", failures)
+
+
+func _confirm_topic(engine: BattleEngine, pending: GameResult, selected: Array) -> GameResult:
+	if not pending.ok:
+		return pending
+	return engine.apply(pending.data.state, ActionDraft.new(GameConstants.ACTION_CONFIRM_CHOICE, {
+		"choice_id": pending.data.pending_choice.choice_id, "selected_ids": selected,
+	}), pending.data.rng_state)
 
 
 func _check_abilities(engine: BattleEngine, failures: Array[String]) -> void:

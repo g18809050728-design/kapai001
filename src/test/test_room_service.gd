@@ -600,218 +600,70 @@ func _submit_room_action(draft: Dictionary) -> ActionResult:
 	return _accepted_result(published.data, state.pending_choice == null)
 
 
-func options() -> Dictionary:
-	var loaded := ContentDB.new(MANIFEST_ROOT)
-	if not loaded.load(_manifest_id).ok:
+func read_catalogue() -> GameResult:
+	if state != null:
+		return GameResult.success(catalog)
+	var source := ContentDB.new(MANIFEST_ROOT)
+	var loaded := source.load(_manifest_id)
+	return GameResult.success(source) if loaded.ok else loaded
+
+
+func options(include_details: bool = false) -> Dictionary:
+	var loaded := read_catalogue()
+	if not loaded.ok:
 		return {"error": "content.load"}
-	var info := loaded.get_info()
-	var characters: Array[Dictionary] = []
-	for id in info.enabled.get("character", []):
-		var definition := _definition(loaded, "character", str(id))
-		characters.append(
-			{
-				"id": str(id),
-				"name_key": str(definition.get("name_key", id)),
-				"starter_cards": definition.get("starter_cards", []).duplicate(),
-				"passive_id": str(definition.get("passive", {}).get("id", "")),
-			}
-		)
-	var encounters: Array[Dictionary] = []
-	for id in info.enabled.get("encounter", []):
-		var definition := _definition(loaded, "encounter", str(id))
-		encounters.append(
-			{
-				"id": str(id),
-				"name_key": str(definition.get("name_key", id)),
-				"kind": str(definition.get("kind", "")),
-				"base_ddl": int(definition.get("base_ddl", 0)),
-				"members": definition.get("members", []).duplicate(),
-			}
-		)
-	var cards: Array[Dictionary] = []
-	for id in info.enabled.get("card", []):
-		var definition := _definition(loaded, "card", str(id))
-		cards.append(
-			{
-				"id": str(id),
-				"name_key": str(definition.get("name_key", id)),
-				"type": str(definition.get("type", "")),
-				"cost": int(definition.get("cost", 0)),
-				"rarity": str(definition.get("rarity", "")),
-				"owner": str(definition.get("owner", "")),
-			}
-		)
-	var statuses: Array[Dictionary] = []
-	for id in info.enabled.get("status", []):
-		var definition := _definition(loaded, "status", str(id))
-		statuses.append(
-			{
-				"id": str(id),
-				"name_key": str(definition.get("name_key", id)),
-				"target": str(definition.get("target", "")),
-			}
-		)
-	var tasks: Array[Dictionary] = []
-	for id in info.enabled.get("task", []):
-		var definition := _definition(loaded, "task", str(id))
-		var phases: Array = definition.get("phases", [])
-		var work_max := int((phases[0] as Dictionary).get("work_max", 0)) if not phases.is_empty() else 0
-		var phase_list: Array[Dictionary] = []
-		for phase in phases:
-			phase_list.append(
-				{
-					"phase_key": str(phase.get("phase_key", "")),
-					"work_max": int(phase.get("work_max", 0)),
-					"intent_count": (phase.get("intents", []) as Array).size(),
-				}
-			)
-		tasks.append(
-			{
-				"id": str(id),
-				"name_key": str(definition.get("name_key", id)),
-				"kind": str(definition.get("kind", "")),
-				"work_max": work_max,
-				"phases": phase_list,
-			}
-		)
-	var units: Array[Dictionary] = []
-	for id in info.enabled.get("unit", []):
-		var definition := _definition(loaded, "unit", str(id))
-		units.append(
-			{
-				"id": str(id),
-				"name_key": str(definition.get("name_key", id)),
-				"vitality": int(definition.get("vitality", 0)),
-				"cooperation": int(definition.get("cooperation", 0)),
-			}
-		)
-	var ruleset := _definition(loaded, "ruleset", info.ruleset_id)
-	var relics: Array[Dictionary] = []
-	for id in info.enabled.get("relic", []):
-		var definition := _definition(loaded, "relic", str(id))
-		relics.append(
-			{
-				"id": str(id),
-				"name_key": str(definition.get("name_key", id)),
-				"rarity": str(definition.get("rarity", "")),
-			}
-		)
-	var switches: Array[Dictionary] = []
-	for key in SWITCHES:
-		switches.append(
-			{"key": key, "description": SWITCHES[key], "default": false}
-		)
-	var scenes: Array[Dictionary] = []
-	for id in info.enabled.get("scene", []):
-		var definition := _definition(loaded, "scene", str(id))
-		scenes.append({"id": str(id), "name_key": str(definition.get("name_key", id))})
-	if state != null and state.overlay != null:
-		for id in state.overlay.definitions.get("card", {}):
-			if not _has_option(cards, str(id)):
-				var definition: Dictionary = state.overlay.definitions.card[id]
-				cards.append(
-					{
-						"id": str(id),
-						"name_key": str(definition.get("name_key", id)),
-						"type": str(definition.get("type", "")),
-						"cost": int(definition.get("cost", 0)),
-						"rarity": str(definition.get("rarity", "")),
-						"owner": str(definition.get("owner", "")),
-					}
-				)
-		for id in state.overlay.definitions.get("task", {}):
-			if not _has_option(tasks, str(id)):
-				var definition: Dictionary = state.overlay.definitions.task[id]
-				var phases: Array = definition.get("phases", [])
-				var phase_list: Array[Dictionary] = []
-				for phase in phases:
-					phase_list.append(
-						{
-							"phase_key": str(phase.get("phase_key", "")),
-							"work_max": int(phase.get("work_max", 0)),
-							"intent_count": (phase.get("intents", []) as Array).size(),
-						}
-					)
-				tasks.append(
-					{
-						"id": str(id),
-						"name_key": str(definition.get("name_key", id)),
-						"kind": str(definition.get("kind", "")),
-						"work_max": int((phases[0] as Dictionary).get("work_max", 0)) if not phases.is_empty() else 0,
-						"phases": phase_list,
-					}
-				)
-		for id in state.overlay.definitions.get("unit", {}):
-			if not _has_option(units, str(id)):
-				var definition: Dictionary = state.overlay.definitions.unit[id]
-				units.append(
-					{
-						"id": str(id),
-						"name_key": str(definition.get("name_key", id)),
-						"vitality": int(definition.get("vitality", 0)),
-						"cooperation": int(definition.get("cooperation", 0)),
-					}
-				)
-		for id in state.overlay.definitions.get("relic", {}):
-			if not _has_option(relics, str(id)):
-				var definition: Dictionary = state.overlay.definitions.relic[id]
-				relics.append(
-					{
-						"id": str(id),
-						"name_key": str(definition.get("name_key", id)),
-						"rarity": str(definition.get("rarity", "")),
-					}
-				)
-		for id in state.overlay.definitions.get("status", {}):
-			if not _has_option(statuses, str(id)):
-				var definition: Dictionary = state.overlay.definitions.status[id]
-				statuses.append(
-					{
-						"id": str(id),
-						"name_key": str(definition.get("name_key", id)),
-						"target": str(definition.get("target", "")),
-					}
-				)
-		for id in state.overlay.definitions.get("encounter", {}):
-			if not _has_option(encounters, str(id)):
-				var definition: Dictionary = state.overlay.definitions.encounter[id]
-				encounters.append(
-					{
-						"id": str(id),
-						"name_key": str(definition.get("name_key", id)),
-						"kind": str(definition.get("kind", "")),
-						"base_ddl": int(definition.get("base_ddl", 0)),
-						"members": definition.get("members", []).duplicate(),
-					}
-				)
-		for id in state.overlay.definitions.get("scene", {}):
-			if not _has_option(scenes, str(id)):
-				var definition: Dictionary = state.overlay.definitions.scene[id]
-				scenes.append({"id": str(id), "name_key": str(definition.get("name_key", id))})
-	return {
+	var source: ContentDB = loaded.data
+	var info := source.get_info()
+	var result := {
 		"manifest_id": info.id,
 		"content_version": info.content_version,
 		"content_hash": info.content_hash,
 		"ruleset_id": info.ruleset_id,
-		"characters": characters,
-		"encounters": encounters,
-		"cards": cards,
-		"tasks": tasks,
-		"units": units,
-		"relics": relics,
-		"statuses": statuses,
-		"scenes": scenes,
-		"ruleset": ruleset,
-		"switches": switches,
+		"ruleset": _definition(source, "ruleset", info.ruleset_id),
+		"switches": [],
 		"limits": LIMITS.duplicate(true),
 	}
-
-
-func _has_option(entries: Array, id: String) -> bool:
-	for entry in entries:
-		if typeof(entry) == TYPE_DICTIONARY and str(entry.get("id", "")) == id:
-			return true
-	return false
+	for key in SWITCHES:
+		result.switches.append({"key": key, "description": SWITCHES[key], "default": false})
+	for group in [
+		["characters", "character", ["starter_cards"]],
+		["encounters", "encounter", ["kind", "base_ddl", "members"]],
+		["cards", "card", ["type", "cost", "rarity", "owner"]],
+		["tasks", "task", ["kind"]],
+		["units", "unit", ["vitality", "cooperation"]],
+		["relics", "relic", ["rarity"]],
+		["statuses", "status", ["target"]],
+		["scenes", "scene", []],
+	]:
+		var kind: String = group[1]
+		var ids: Array = info.enabled.get(kind, []).duplicate()
+		if source is TestContent:
+			for id in source.overlay.definitions.get(kind, {}):
+				if not ids.has(id):
+					ids.append(id)
+		var entries: Array[Dictionary] = []
+		for id in ids:
+			var definition := _definition(source, kind, str(id))
+			var item := {"id": str(id), "name_key": str(definition.get("name_key", id))}
+			for key in group[2]:
+				item[key] = definition.get(key, [] if key in ["members", "starter_cards"] else (0 if key in ["cost", "base_ddl", "vitality", "cooperation"] else ""))
+			match kind:
+				"character":
+					item.passive_id = str(definition.get("passive", {}).get("id", ""))
+				"task":
+					var phases: Array = definition.get("phases", [])
+					item.work_max = int(phases[0].get("work_max", 0)) if not phases.is_empty() else 0
+					item.phases = phases.map(func(phase):
+						return {"phase_key": str(phase.get("phase_key", "")), "work_max": int(phase.get("work_max", 0)), "intent_count": phase.get("intents", []).size()})
+			if include_details:
+				item.definition = definition
+			entries.append(item)
+		result[group[0]] = entries
+	if include_details:
+		var reference := CompendiumView.build(source, true)
+		if reference.ok:
+			result.reference = reference.data
+	return result
 
 
 func begin_edit(context: Variant) -> ActionResult:

@@ -2,19 +2,32 @@ class_name CompendiumView
 extends RefCounted
 
 ## A definition snapshot. Never receives a live session, run, RNG, or save store.
-static func build(catalog: ContentDB) -> GameResult:
+static func build(catalog: ContentDB, include_all_cards: bool = false) -> GameResult:
 	var info := catalog.get_info()
 	if info == null:
 		return GameResult.failure(ApiError.new(&"CONTENT_INVALID", "compendium.catalog.unavailable"))
+	var ruleset := catalog.get_definition("ruleset", info.ruleset_id)
+	if not ruleset.ok:
+		return ruleset
+	var status_rules: Dictionary = ruleset.data.get("statuses", {})
 	var cards: Array[Dictionary] = []
 	var monsters: Array[Dictionary] = []
 	var resolver := BattleCardRules.new(catalog)
-	for id in catalog.get_candidates({"kind": "card"}):
+	var overlay: TestOverlay = catalog.overlay if catalog is TestContent else null
+	var card_ids := catalog.get_candidates({"kind": "card"})
+	if include_all_cards:
+		for id in info.enabled.get("card", []):
+			if not card_ids.has(str(id)):
+				card_ids.append(str(id))
+		card_ids.sort()
+	for id in card_ids:
 		var definition := catalog.get_definition("card", id)
 		if not definition.ok:
 			return definition
 		var entry := {"id": id, "definition": definition.data, "variants": []}
-		var levels := [0, 1] if bool(definition.data.get("flags", {}).get("upgradable", not definition.data.get("upgrade", {}).is_empty())) else [0]
+		var has_upgrade: bool = not definition.data.get("upgrade", {}).is_empty()
+		var upgradable := bool(definition.data.get("flags", {}).get("upgradable", has_upgrade))
+		var levels := [0, 1] if upgradable and (overlay == null or has_upgrade) else [0]
 		var exam: Dictionary = definition.data.get("exam", {})
 		for exam_mode in [false, true] if not exam.is_empty() else [false]:
 			for level in levels:
@@ -28,21 +41,40 @@ static func build(catalog: ContentDB) -> GameResult:
 				face.related_units = {}
 				face.related_scenes = {}
 				_attach_related(catalog, resolved.data.duplicate(true), face)
-				entry.variants.append({"level": level, "exam": exam_mode, "face": face})
+				entry.variants.append({"level": level, "exam": exam_mode, "face": face, "test_override": _overrides(overlay, "card", id)})
 		cards.append(entry)
 	var encounters: Array[Dictionary] = []
 	for id in catalog.get_candidates({"kind": "encounter"}):
 		encounters.append(catalog.get_definition("encounter", id).data)
+	# A grouped normal encounter draws from the normal solo pool for the current year.
+	var solo_years := {}
+	for encounter in encounters:
+		if encounter.get("kind") != "normal" or encounter.has("spawn"):
+			continue
+		for member in encounter.get("members", []):
+			if not solo_years.has(member):
+				solo_years[member] = []
+			for year in encounter.get("terms", []):
+				if int(year) in [1, 2, 3, 4] and not solo_years[member].has(year):
+					solo_years[member].append(year)
 	var by_id: Dictionary = {}
 	for id in catalog.get_candidates({"kind": "task"}):
 		var definition: Dictionary = catalog.get_definition("task", id).data
-		var entry := {"id": id, "definition": definition, "sources": [], "parents": [], "terms": []}
+		var entry := {"id": id, "definition": definition, "sources": [], "parents": [], "terms": [], "status_rules": status_rules.duplicate(true)}
 		for encounter in encounters:
-			if encounter.get("members", []).has(id):
-				entry.sources.append(encounter.duplicate(true))
-				for term in encounter.get("terms", []):
-					if not entry.terms.has(term):
-						entry.terms.append(term)
+			if not encounter.get("members", []).has(id):
+				continue
+			var years: Array = encounter.get("terms", []).filter(func(year): return int(year) in [1, 2, 3, 4])
+			if encounter.has("spawn"):
+				years = years.filter(func(year): return solo_years.get(id, []).has(year))
+				if years.is_empty():
+					continue
+			var source := encounter.duplicate(true)
+			source.terms = years
+			entry.sources.append(source)
+			for year in years:
+				if not entry.terms.has(year):
+					entry.terms.append(year)
 		by_id[id] = entry
 		monsters.append(entry)
 	for entry in monsters:
@@ -71,10 +103,14 @@ static func build(catalog: ContentDB) -> GameResult:
 	for id in catalog.get_candidates({"kind": "relic"}):
 		var definition: Dictionary = catalog.get_definition("relic", id).data
 		var year := int(definition.get("campaign", {}).get("year", 0))
-		var terms := [year] if year > 0 else ([3, 4] if definition.rarity == "gold" else [1, 2, 3, 4])
-		relics.append({"id": id, "definition": definition, "terms": terms})
+		var terms := [year] if year > 0 else ([3, 4] if definition.get("rarity", "") == "gold" else [1, 2, 3, 4])
+		relics.append({"id": id, "definition": definition, "terms": terms, "test_override": _overrides(overlay, "relic", id)})
 	relics.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return a.id < b.id)
 	return GameResult.success({"relics": relics, "manifest_id": info.id, "content_hash": info.content_hash, "cards": cards, "monsters": monsters})
+
+
+static func _overrides(overlay: TestOverlay, kind: String, id: String) -> bool:
+	return overlay != null and (overlay.definitions.get(kind, {}).has(id) or overlay.fields.get(kind, {}).has(id))
 
 
 static func _attach_related(catalog: ContentDB, value: Variant, face: Dictionary) -> void:

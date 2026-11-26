@@ -4728,7 +4728,7 @@
   },
   "expression": {
     "part": "head",
-    "blink": "res://assets/art/actor-proportions/P02/head_hit.png",
+    "blink": "res://assets/art/actor-proportions/P02/head_blink.png",
     "intervals": [
       [
         1.12,

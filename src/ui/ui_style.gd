@@ -44,10 +44,17 @@ static func title_font() -> Font:
 		if OS.has_feature("web"):
 			_title_font = load("res://assets/fonts/NotoSerifCJKsc-Regular.otf") as Font
 		else:
-			var font := SystemFont.new()
-			font.font_names = PackedStringArray(["STZhongsong", "SimSun", "Noto Serif CJK SC", "serif"])
-			_title_font = font
+			_title_font = _system_font(
+				["STZhongsong", "SimSun", "Noto Serif CJK SC", "serif"],
+				"res://assets/fonts/NotoSerifCJKsc-Regular.otf"
+			)
 	return _title_font
+
+
+static func _system_font(names: PackedStringArray, chinese_fallback: String) -> Font:
+	var font := SystemFont.new()
+	font.font_names = names
+	return font if font.has_char("学".unicode_at(0)) else load(chinese_fallback) as Font
 
 
 static func surface(color: Color = CREAM, border: Color = Color("c3b79c"), radius: int = 4) -> StyleBoxFlat:
@@ -172,6 +179,7 @@ static func cut_surface(color: Color, border: Color = BRASS) -> StyleBoxTexture:
 
 static func label(id: String) -> String:
 	var labels: Dictionary = LABELS.data.get("labels", {})
+	var intent_titles: Dictionary = LABELS.data.get("intent_titles", {})
 	var value := ""
 	var key := id
 	var rarities := {"basic": "初始", "common": "普通", "advanced": "进阶", "rare": "稀有", "uncommon": "少见", "starter": "初始"}
@@ -183,6 +191,8 @@ static func label(id: String) -> String:
 		value = "能力"
 	elif labels.has(id):
 		value = str(labels[id])
+	elif intent_titles.has(id):
+		value = str(intent_titles[id])
 	elif id.begins_with("run_"):
 		value = "我方" if id.ends_with("|p1") else "当前战斗"
 	else:
@@ -388,7 +398,7 @@ static func _describe_effect_details(effect: Dictionary) -> String:
 		if effect.has("modifier_per_chapter"):
 			details.append("每收回 1 章，论文修正 %+d" % int(effect.modifier_per_chapter))
 	if op == "change_topic":
-		details.append("若有已用牌名，移除最早记录，论文修正 %+d" % int(effect.get("modifier", -1)))
+		details.append("可选一个已用牌名重置，成功时论文修正 %+d" % int(effect.get("modifier", -1)))
 	if op == "cost_discount_next":
 		details.append("用于下一张基础费用至少 %s 的卡牌" % effect.get("min_base_cost", 2))
 	if op == "summon_partner":
@@ -557,11 +567,10 @@ static func make_theme() -> Theme:
 	if OS.has_feature("web"):
 		theme.default_font = load("res://assets/fonts/NotoSansCJKsc-Regular.otf") as Font
 	else:
-		var font := SystemFont.new()
-		font.font_names = PackedStringArray(
-			["Microsoft YaHei UI", "Microsoft YaHei", "Noto Sans CJK SC", "sans-serif"]
+		theme.default_font = _system_font(
+			["Microsoft YaHei UI", "Microsoft YaHei", "Noto Sans CJK SC", "sans-serif"],
+			"res://assets/fonts/NotoSansCJKsc-Regular.otf"
 		)
-		theme.default_font = font
 	theme.set_color("font_color", "Label", INK)
 	theme.set_color("font_color", "Button", INK)
 	theme.set_color("font_hover_color", "Button", INK)

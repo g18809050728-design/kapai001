@@ -385,7 +385,9 @@ func _update_expression() -> void:
 		for interval: Array in specification.expression.intervals:
 			closed = closed or (clock >= float(interval[0]) and clock < float(interval[1]))
 	var sprite: Sprite2D = parts[str(specification.expression.part)]
-	sprite.texture = _blink_face if closed else _neutral_face
+	var face_texture := _blink_face if closed else _neutral_face
+	if sprite.texture != face_texture:
+		sprite.texture = face_texture
 	_face_state = drawing_face if drawing_face != "neutral" else ("blink" if closed else "neutral")
 
 

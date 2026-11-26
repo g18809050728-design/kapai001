@@ -4,6 +4,8 @@ extends RefCounted
 const LIGHT := Color("f4eedf")
 const SOFT := Color("c1d0c7")
 const DARK := Color("192f35")
+const MAX_FAN_ANGLE := 16.0
+const STATUS_ROW_INSET := 24.0
 var page: BattleScreen
 var stage: Control
 var short := false
@@ -12,43 +14,35 @@ var top := 84.0
 var hand_top := 548.0
 var touch_height := 52.0
 var minimum_text := 0
+var extra_width := 0.0
+var hand_scale := 1.0
+var status_edge := 44.0
 
 
 func build(screen: BattleScreen) -> void:
 	page = screen
 	page._reset_stage()
 	stage = page._stage
-	short = page._short_web
+	short = stage.size.y < 800.0 or page._short_web
 	mobile = UiStyle.web_touch
+	extra_width = stage.size.x - 1280.0
+	var viewport_scale := maxf(.1, minf(page.size.x / stage.size.x, page.size.y / stage.size.y))
+	status_edge = ceilf((UiStyle.MOBILE_TARGET if mobile else 44) / viewport_scale)
 	if short:
-		var scale := maxf(.1, minf(page.size.x / stage.size.x, page.size.y / stage.size.y))
-		top = UiRunToolbar.HEIGHT / scale + 4
+		top = UiRunToolbar.HEIGHT / viewport_scale + 4
 		hand_top = stage.size.y - (235 if mobile else 197)
-		touch_height = ceilf((UiStyle.MOBILE_TARGET if mobile else 44) / scale)
-		minimum_text = ceili((14 if mobile else 12) * minf(UiStyle.text_scale, 1.2) / scale)
-	var background := TextureRect.new()
-	background.texture = UiStyle.texture("BG_classroom")
-	if BattleActorView.pilot_enabled and not BattleActorView.pilot_stage_background.is_empty():
-		background.texture = load(BattleActorView.pilot_stage_background) as Texture2D
-	background.name = "BattleRoomBackground"
-	background.size = stage.size
-	background.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	background.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
-	background.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	stage.add_child(background)
-	_rect(stage, Rect2(Vector2.ZERO, stage.size), Color(0.035, 0.07, 0.11, 0.34))
-	var gradient := Gradient.new()
-	gradient.colors = PackedColorArray([Color(0.03, 0.08, 0.1, 0.0), Color(0.03, 0.08, 0.1, 0.96)])
-	var texture := GradientTexture2D.new()
-	texture.gradient = gradient
-	texture.fill_from = Vector2(0, 0)
-	texture.fill_to = Vector2(0, 1)
-	var shade := TextureRect.new()
-	shade.texture = texture
-	shade.position = Vector2(0, stage.size.y - 430)
-	shade.size = Vector2(stage.size.x, 430)
-	shade.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	stage.add_child(shade)
+		touch_height = status_edge
+		minimum_text = ceili((14 if mobile else 12) * minf(UiStyle.text_scale, 1.2) / viewport_scale)
+		if not page._short_web:
+			touch_height = maxf(62.0, touch_height)
+	hand_scale = .92 if mobile else (.76 if page._short_web else lerpf(.88, 1.0, (stage.size.y - 690.0) / 110.0))
+	# Reserve the same resting card envelope for every hand size.
+	var half_size := BattleCard.FACE_SIZE * hand_scale * 0.5
+	var angle := deg_to_rad(MAX_FAN_ANGLE)
+	var bottom := half_size.y + half_size.y * cos(angle) + half_size.x * sin(angle)
+	hand_top = minf(hand_top, stage.size.y - _fan_depth_limit() - bottom - 12)
+	page._hand_top = hand_top
+	_background()
 	_header()
 	_player()
 	_tasks()
@@ -61,12 +55,15 @@ func build(screen: BattleScreen) -> void:
 	page._aim.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	page._aim.z_index = 70
 	stage.add_child(page._aim)
-	page._feedback_label = _text(
-		stage, Rect2(410, top + 62, 460, 28), page._feedback_text, 13 if not page._dict(page.view.get("v3")).is_empty() else 16, LIGHT, HORIZONTAL_ALIGNMENT_CENTER
+	page._feedback_label = _readable(
+		Rect2(212 + extra_width * .5, top + 66, 856, 27), page._visible_feedback(), 16, LIGHT
 	)
-	page._feedback_label.visible = not page._feedback_text.is_empty()
-	page._hint_label = _text(
-		stage, Rect2(250, top + 39, 780, 24), _selection_hint(), 14, LIGHT, HORIZONTAL_ALIGNMENT_CENTER
+	page._feedback_label.name = "BattleEventNotice"
+	page._feedback_label.max_lines_visible = 1
+	page._feedback_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	page._feedback_label.visible = not page._feedback_label.text.is_empty()
+	page._hint_label = _readable(
+		Rect2(315 + extra_width * .5, top + 37, 650, 27), _selection_hint(), 16, LIGHT
 	)
 	page._hint_label.name = "HandActionHint"
 	page._hint_label.max_lines_visible = 1
@@ -82,11 +79,40 @@ func build(screen: BattleScreen) -> void:
 	page._fit_stage()
 
 
+func _background() -> void:
+	var background := TextureRect.new()
+	background.texture = UiStyle.texture("BG_classroom")
+	if BattleActorView.pilot_enabled and not BattleActorView.pilot_stage_background.is_empty():
+		background.texture = load(BattleActorView.pilot_stage_background) as Texture2D
+	background.name = "BattleRoomBackground"
+	background.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	background.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	background.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	page.add_child(background)
+	page.move_child(background, 0)
+	background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	var tint := _rect(background, Rect2(), Color(0.035, 0.07, 0.11, 0.34))
+	tint.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	var gradient := Gradient.new()
+	gradient.colors = PackedColorArray([Color(0.03, 0.08, 0.1, 0.0), Color(0.03, 0.08, 0.1, 0.96)])
+	var texture := GradientTexture2D.new()
+	texture.gradient = gradient
+	texture.fill_from = Vector2(0, 0)
+	texture.fill_to = Vector2(0, 1)
+	var shade := TextureRect.new()
+	shade.texture = texture
+	shade.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	shade.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	background.add_child(shade)
+	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	shade.anchor_top = 0.46
+
+
 func _field(bounds: Rect2) -> Rect2:
-	if not short:
-		return bounds
-	var field_top := minf(top + (83 if mobile else 92), hand_top - 96)
-	var scale := (hand_top - field_top - 24) / 388.0
+	bounds.position.x += extra_width * bounds.get_center().x / 1280.0
+	var field_top := minf(top + (106 if short else 98), hand_top - 96)
+	var field_bottom := hand_top - status_edge - STATUS_ROW_INSET - 4
+	var scale := clampf((field_bottom - field_top) / 286.0, .1, 1.0)
 	return Rect2(bounds.position.x, field_top + (bounds.position.y - 180) * scale, bounds.size.x, bounds.size.y * scale)
 
 
@@ -132,7 +158,7 @@ func _header() -> void:
 	page._toolbar = UiRunToolbar.new()
 	page.add_child(page._toolbar)
 	page._toolbar.configure(page, {
-		"battle": true, "vitality": player.get("vitality", 0), "max_vitality": page.view.get("max_vitality", 0), "money": page.view.get("money", 0),
+		"battle": true, "vitality": player.get("vitality", 0), "max_vitality": player.get("max_vitality", page.view.get("max_vitality", 0)), "money": page.view.get("money", 0),
 		"journey": "%s  ·  %s" % [page.view.get("year_label", ""), page._battle_subtitle()],
 		"relics_uid": "battle:relics", "relics_count": page._array(page.view.get("relics")).size(), "relics_callback": Callable(page, "_show_relics"),
 		"map_uid": "battle:map", "map_callback": Callable(page, "_show_map"),
@@ -143,7 +169,7 @@ func _header() -> void:
 	})
 	page._toolbar.mark_active("deck", page._panel_zone == "deck" and not page._panel_text.is_empty())
 	var urgent := int(page.view.get("ddl",0)) <= 3
-	var ddl_label := _text(stage,Rect2(470,top,340,30),"第 %s 回合  ·  DDL %s 次轮末" % [page.view.get("round_index",0),page.view.get("ddl",0)],18,Color("ffb18e") if urgent else Color("d9c99e"),HORIZONTAL_ALIGNMENT_CENTER)
+	var ddl_label := _readable(Rect2(454 + extra_width * .5,top,372,33),"第 %s 回合  ·  DDL %s 次轮末" % [page.view.get("round_index",0),page.view.get("ddl",0)],21,Color("ffba9f") if urgent else Color("ffedc9"))
 	ddl_label.name = "TurnDdlValue"
 
 
@@ -152,14 +178,14 @@ func _player() -> void:
 	var player_id := str(player.get("entity_id", ""))
 	_actor(_field(Rect2(98,186,224,246)),player_id,str(page.view.get("character_id","P01")),"player")
 	var hp := int(player.get("vitality",0))
-	var max_hp := int(page.view.get("max_vitality",maxi(1,hp)))
+	var max_hp := int(player.get("max_vitality", page.view.get("max_vitality", maxi(1,hp))))
 	_bar(stage,_field(Rect2(115,423,190,14)),float(hp)/maxi(1,max_hp),Color("659fc5"))
-	var vitality := _text(stage,_field(Rect2(115,415,190,28)),"%s / %s" % [hp,max_hp],roundi(18*minf(UiStyle.text_scale,1.2)),LIGHT,HORIZONTAL_ALIGNMENT_CENTER)
+	var vitality := _readable(_field(Rect2(115,408,190,30)),"%s / %s" % [hp,max_hp],20,LIGHT,false)
 	vitality.name = "PlayerVitalityValue"
-	var relax_label := _text(stage,_field(Rect2(65,415,47,29)),"◇%s" % player.get("relax",0),19,Color("b4d7ed"),HORIZONTAL_ALIGNMENT_CENTER)
+	var relax_label := _readable(_field(Rect2(57,406,58,27)),"◇%s" % player.get("relax",0),18,Color("c3e5ff"),false)
 	relax_label.name = "PlayerRelaxValue"
 	_text(stage,_field(Rect2(102,439,218,22)),UiStyle.label(str(page.view.get("character_id","P01"))).split("·")[0],16,LIGHT,HORIZONTAL_ALIGNMENT_CENTER)
-	_status_bar(player_id, _field(Rect2(70,466,246,26)), true)
+	_status_bar(player_id, _field(Rect2(87,466,246,26)), true)
 
 
 func _v3_summary() -> void:
@@ -215,35 +241,72 @@ func _tasks() -> void:
 		var task := page._dict(tasks[index])
 		var id := str(task.get("task_id",""))
 		var x := start+index*(width+12)
-		var intent := page._task_intent_text(task)
-		var intent_label := _text(stage,_field(Rect2(x-5,180,width+10,56)),intent,roundi(20*minf(UiStyle.text_scale,1.2)),Color("ffe4b9"),HORIZONTAL_ALIGNMENT_CENTER)
+		var intent_bounds := _field(Rect2(x-3,180,width+6,57))
+		var intent_pixels := maxi(minimum_text, roundi(18 * minf(UiStyle.text_scale, 1.2)))
+		var intent_font := stage.get_theme_font("font", "Label")
+		var intent_line_height := intent_font.get_height(intent_pixels)
+		intent_bounds.size.y = maxf(status_edge, maxf(intent_bounds.size.y, 2 * intent_line_height + 8))
+		var intent := TaskIntentText.hud_caption(task, intent_font, intent_pixels, intent_bounds.size.x - 8)
+		var intent_label := _readable(intent_bounds,intent,18,Color("ffedce"))
 		intent_label.name = "TaskIntent_"+id.validate_node_name()
+		intent_label.autowrap_mode = TextServer.AUTOWRAP_OFF
+		intent_label.max_lines_visible = 2
+		intent_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 		intent_label.add_theme_color_override("font_shadow_color",Color.BLACK)
 		intent_label.add_theme_constant_override("shadow_offset_y",2)
+		var intent_hit := _button(intent_bounds, "detail:task:" + id, "", {}, func(): page._open_detail_for_uid("detail:task:" + id))
+		_transparent_target(intent_hit)
+		intent_hit.accessibility_name = "查看 %s 的意图和特性" % UiStyle.label(str(task.get("definition_id", "")))
+		intent_hit.accessibility_description = page._task_intent_text(task)
 		var phase_count := int(task.get("phase_count",1))
+		var actor_bounds := _field(Rect2(x,250,width,167))
 		if phase_count > 1:
-			_text(stage,_field(Rect2(x,237,width,36)),"第 %s / %s 阶段 · " % [task.get("phase_index",1),phase_count]+("最终阶段" if int(task.get("phase_index",1)) == phase_count else "完成后进入下一阶段"),13,SOFT,HORIZONTAL_ALIGNMENT_CENTER)
-		var frame := _actor(_field(Rect2(x,250,width,167)),id,str(task.get("definition_id","")),"task",int(task.get("phase_index",1)))
+			var phase_bounds := _field(Rect2(x,237,width,24))
+			phase_bounds.position.y = maxf(phase_bounds.position.y, intent_bounds.end.y + 2)
+			var phase_index := int(task.get("phase_index", 1))
+			var phase_caption := "第 %d / %d 阶段" % [phase_index, phase_count]
+			var phase_transition := "最终阶段" if phase_index == phase_count else "完成后进入下一阶段"
+			var phase_pixels := maxi(13, minimum_text)
+			var phase_font := stage.get_theme_font("font", "Label")
+			var phase_text := phase_caption + " · " + phase_transition
+			if phase_font.get_string_size(phase_text, HORIZONTAL_ALIGNMENT_LEFT, -1, phase_pixels).x > width:
+				phase_text = phase_caption + "\n" + phase_transition
+				phase_bounds.size.y = maxf(phase_bounds.size.y, phase_font.get_height(phase_pixels) * 2)
+			var phase_label := _text(stage, phase_bounds, phase_text, 13, SOFT, HORIZONTAL_ALIGNMENT_CENTER)
+			phase_label.autowrap_mode = TextServer.AUTOWRAP_OFF
+			phase_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+			var actor_top := maxf(actor_bounds.position.y, phase_label.position.y + phase_label.size.y)
+			actor_bounds.size.y = maxf(1, actor_bounds.end.y - actor_top)
+			actor_bounds.position.y = actor_top
+		var frame := _actor(actor_bounds,id,str(task.get("definition_id","")),"task",int(task.get("phase_index",1)))
 		var remaining := int(task.get("work_remaining",0))
 		var maximum := maxi(1,int(task.get("work_max",1)))
 		var fill := _bar(stage,_field(Rect2(x,423,width,14)),float(remaining)/maximum,Color("c85d5b"))
 		var work_bounds := _field(Rect2(x-4,414,width+8,32))
 		var title_bounds := _field(Rect2(x,440,width,25))
+		var work_pixels := 16 if tasks.size() >= 4 else 19
 		if short:
-			work_bounds.size.y = minimum_text + 4
+			work_bounds.size.y = maxf(minimum_text, work_pixels * minf(UiStyle.text_scale, 1.2)) + 5
 			title_bounds.position.y = work_bounds.end.y
-			title_bounds.size.y = minimum_text + 4
-		var work_caption := "%s/%s · 盾%s" if mobile else "%s / %s  ·  屏障 %s"
-		var work_label := _text(stage,work_bounds,work_caption % [remaining,maximum,task.get("shield",0)],roundi((16 if tasks.size() >= 4 else 18)*minf(UiStyle.text_scale,1.2)),LIGHT,HORIZONTAL_ALIGNMENT_CENTER)
+			title_bounds.size.y = maxi(minimum_text, 16) + 4
+		var work_values := [remaining, maximum, task.get("shield", 0)]
+		var work_caption := "%s / %s · 屏障 %s"
+		var work_font_size := maxi(minimum_text, roundi(work_pixels * minf(UiStyle.text_scale, 1.2)))
+		if mobile or intent_font.get_string_size(work_caption % work_values, HORIZONTAL_ALIGNMENT_LEFT, -1, work_font_size).x > work_bounds.size.x - 6:
+			work_caption = "%s/%s · 盾%s"
+		var work_label := _readable(work_bounds, work_caption % work_values, work_pixels, LIGHT, false)
 		work_label.name = "TaskWorkValue_"+id.validate_node_name()
-		if mobile:
-			work_label.set_meta("compact_work", true)
-		page._task_meters[id] = {"fill":fill,"label":work_label,"width":width,"maximum":maximum}
+		work_label.autowrap_mode = TextServer.AUTOWRAP_OFF
+		work_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		page._task_meters[id] = {"fill": fill, "label": work_label, "width": width, "maximum": maximum, "caption": work_caption}
 		var task_title := _text(stage,title_bounds,UiStyle.label(str(task.get("definition_id",""))),16,LIGHT,HORIZONTAL_ALIGNMENT_CENTER)
 		task_title.name = "TaskTitle_"+id.validate_node_name()
 		task_title.max_lines_visible = 1
 		task_title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 		var target_bounds := _field(Rect2(x,243,width,174))
+		var target_top := maxf(target_bounds.position.y, intent_bounds.end.y + 2)
+		target_bounds.size.y = maxf(1, target_bounds.end.y - target_top)
+		target_bounds.position.y = target_top
 		if mobile:
 			var hit_height := maxf(touch_height, title_bounds.end.y - target_bounds.position.y)
 			target_bounds.size.y = minf(hit_height, hand_top - target_bounds.position.y)
@@ -251,18 +314,19 @@ func _tasks() -> void:
 		_transparent_target(target)
 		page._target_frames["task:"+id] = frame
 		var bounds := _field(Rect2(x,466,width,42))
-		if short:
-			bounds.position.y = title_bounds.end.y
+		var title_height := maxf(task_title.size.y, task_title.get_minimum_size().y)
+		bounds.position.y = maxf(bounds.position.y, task_title.position.y + title_height + 3)
 		_status_bar(id, bounds, false)
 
 
 func _status_bar(id: String, bounds: Rect2, player: bool) -> void:
-	var factor := maxf(.1, minf(page.size.x / stage.size.x, page.size.y / stage.size.y))
-	var edge := ceilf((UiStyle.MOBILE_TARGET if mobile else 44) / factor)
+	var edge := status_edge
 	var entries := BattleStatusSlot.entries(page.view, id, player)
+	if entries.is_empty():
+		return
 	var scroll := ScrollContainer.new()
 	scroll.name = "PlayerStatusBar" if player else "TaskStatusBar_" + id.validate_node_name()
-	scroll.position = Vector2(bounds.position.x, minf(bounds.position.y, hand_top - edge - 20))
+	scroll.position = Vector2(bounds.position.x, minf(bounds.position.y, hand_top - edge - STATUS_ROW_INSET))
 	scroll.size = Vector2(bounds.size.x, edge + 12)
 	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
@@ -270,18 +334,14 @@ func _status_bar(id: String, bounds: Rect2, player: bool) -> void:
 	scroll.z_index = 5
 	stage.add_child(scroll)
 	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 4)
+	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.alignment = BoxContainer.ALIGNMENT_CENTER
+	row.add_theme_constant_override("separation", 3)
 	scroll.add_child(row)
-	if entries.is_empty():
-		_text(row, Rect2(0,0,bounds.size.x,edge), "暂无状态", 13, SOFT, HORIZONTAL_ALIGNMENT_CENTER)
-		return
 	for entry in entries:
 		var uid := "buff:" + id + ":" + str(entry.key)
 		var slot := BattleStatusSlot.new()
 		slot.configure(entry, edge)
-		# Custom paint replaces the default text, retaining Button.text for accessibility.
-		for state in ["font_color", "font_hover_color", "font_pressed_color", "font_focus_color", "font_disabled_color"]:
-			slot.add_theme_color_override(state, Color.TRANSPARENT)
 		slot.set_meta("uid", uid)
 		slot.set_meta("status_scroll", scroll)
 		row.add_child(slot)
@@ -329,12 +389,23 @@ func _actor(bounds: Rect2, id: String, definition: String, kind: String, phase: 
 	return actor
 
 
+func _hand_angle(offset: float) -> float:
+	return deg_to_rad(clampf(offset * (3.0 if mobile else 5.0), -MAX_FAN_ANGLE, MAX_FAN_ANGLE))
+
+
+func _fan_depth(offset: float) -> float:
+	return minf(offset * offset * 2.0, _fan_depth_limit())
+
+
+func _fan_depth_limit() -> float:
+	return 14.0 if short else 30.0
+
+
 func _hand() -> void:
 	var cards := page._array(page.view.get("hand"))
-	var span := 888.0 if mobile else (810.0 if short else 660.0)
+	var span := (888.0 if mobile else (810.0 if short else 660.0)) + extra_width
 	var step := minf(148.0 if mobile else 126.0, span / maxi(1, cards.size() - 1))
-	var face_scale := .92 if mobile else (.76 if short else 1.0)
-	var start := (603 if mobile else 640) - (step * (cards.size() - 1) + BattleCard.FACE_SIZE.x * face_scale) * 0.5
+	var start := stage.size.x * .5 - (37 if mobile else 0) - (step * (cards.size() - 1) + BattleCard.FACE_SIZE.x * hand_scale) * .5
 	for index in cards.size():
 		var data := page._dict(cards[index])
 		var id := str(data.get("card_id", ""))
@@ -344,11 +415,10 @@ func _hand() -> void:
 		card.set_meta("uid", "card:" + id)
 		card.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		var offset := float(index) - (cards.size() - 1) * 0.5
-		card.home_rotation = deg_to_rad(clampf(offset * (3.0 if mobile else 5.0), -16, 16))
-		card.home_scale = face_scale
-		card.scale = Vector2.ONE * face_scale
-		var fan_depth := minf(offset * offset * 2.0, 14 if short else 30)
-		card.home_position = Vector2(start + index * step, hand_top + fan_depth) + card.pivot_offset * (face_scale - 1.0)
+		card.home_rotation = _hand_angle(offset)
+		card.home_scale = hand_scale
+		card.scale = Vector2.ONE * hand_scale
+		card.home_position = Vector2(start + index * step, hand_top + _fan_depth(offset)) + card.pivot_offset * (hand_scale - 1.0)
 		card.home_order = 10 + index
 		card.position = card.home_position
 		card.rotation = card.home_rotation
@@ -360,7 +430,7 @@ func _hand() -> void:
 	if cards.is_empty():
 		_text(
 			stage,
-			Rect2(350, hand_top + 70, 580, 60),
+			Rect2(350 + extra_width * .5, hand_top + 70, 580, 60),
 			"手牌已空  ·  结束回合以继续",
 			22,
 			SOFT,
@@ -369,7 +439,7 @@ func _hand() -> void:
 	if not short:
 		_text(
 			stage,
-			Rect2(310, 782, 660, 17),
+			Rect2(310 + extra_width * .5, 782, 660, 17),
 			"1—9 选牌 / 点击或拖拽出牌 / I 详情 / 右键或 Esc 取消",
 			11,
 			SOFT,
@@ -388,21 +458,21 @@ func _controls() -> void:
 	orb.tooltip_text = "专注用于支付卡牌费用，准备阶段恢复。"
 	orb.focus_mode = Control.FOCUS_NONE
 	stage.add_child(orb)
-	var turn := Rect2(1094, 610, 172, 62)
-	var cancel_bounds := Rect2(1094, 570, 172, 33)
+	var turn := Rect2(1094 + extra_width, 610, 172, 62)
+	var cancel_bounds := Rect2(1094 + extra_width, 570, 172, 33)
 	if short:
 		var pile_top := stage.size.y - touch_height - 6
 		var pile_width := maxf(96, touch_height) if mobile else 96.0
-		var piles_right := 1264.0
+		var piles_right := stage.size.x - 16
 		_pile_button(Rect2(12, pile_top, pile_width, touch_height), "draw", Callable(page, "_show_draw"))
 		_pile_button(Rect2(piles_right - pile_width, pile_top, pile_width, touch_height), "discard", Callable(page, "_show_discard"))
 		_pile_button(Rect2(piles_right - pile_width * 2 - 8, pile_top, pile_width, touch_height), "exhaust", Callable(page, "_show_exhaust"))
-		turn = Rect2(1086 if mobile else 1094, pile_top - touch_height - 6, 178 if mobile else 172, touch_height)
-		cancel_bounds = Rect2(1094, turn.position.y - touch_height - 6, 172, touch_height)
+		turn = Rect2((1086 if mobile else 1094) + extra_width, pile_top - touch_height - 6, 178 if mobile else 172, touch_height)
+		cancel_bounds = Rect2(1094 + extra_width, turn.position.y - touch_height - 6, 172, touch_height)
 	else:
 		_pile_button(Rect2(12, 716, 86, 78), "draw", Callable(page, "_show_draw"))
-		_pile_button(Rect2(1166, 706, 92, 88), "discard", Callable(page, "_show_discard"))
-		_pile_button(Rect2(1088, 739, 66, 55), "exhaust", Callable(page, "_show_exhaust"))
+		_pile_button(Rect2(1166 + extra_width, 706, 92, 88), "discard", Callable(page, "_show_discard"))
+		_pile_button(Rect2(1088 + extra_width, 739, 66, 55), "exhaust", Callable(page, "_show_exhaust"))
 	var end_turn := page.add_end_turn(stage, turn)
 	if mobile:
 		end_turn.add_theme_font_size_override("font_size", roundi(minimum_text * 1.18))
@@ -436,7 +506,7 @@ func _retention() -> void:
 		var candidates := page._array(selection.get("candidates"))
 		_text(
 			stage,
-			Rect2(1102, 360, 150, 28),
+			Rect2(1102 + extra_width, 360, 150, 28),
 			"保留 · 最多 %s 张" % selection.get("max_count", 0),
 			14,
 			LIGHT
@@ -445,7 +515,7 @@ func _retention() -> void:
 			var candidate := page._dict(candidates[i])
 			var id := str(candidate.get("id", ""))
 			var button := _button(
-				Rect2(1102, 392 + i * 30, 150, 28),
+				Rect2(1102 + extra_width, 392 + i * 30, 150, 28),
 				"retain:" + id,
 				(
 					("● " if page._retained_card_ids.has(id) else "○ ")
@@ -486,79 +556,108 @@ func _hint_for(screen: BattleScreen) -> String:
 func _choice_panel() -> void:
 	var overlay := _modal()
 	var choice := page._choice_dict(page.view.get("pending_choice"))
-	var title: String = (
-		{
-			"discard": "选择要弃置的卡牌",
-			"recall": "选择要回忆的卡牌",
-			"retain": "选择要保留的卡牌",
-			"retrieve_strategy": "是否取回上一张策略",
-			"purify": "选择要净化的状态",
-			"chapter_replace": "选择要撤下的章节"
-		}
-		. get(str(choice.get("kind", "")), "完成卡牌效果")
-	)
-	_text(overlay, Rect2(30, 24, 1020, 48), title, 28, LIGHT, HORIZONTAL_ALIGNMENT_CENTER)
-	var choice_prompt := (
-		"请选择 %s—%s 项  ·  已选 %s 项"
-		% [
-			choice.get("min_count", 0),
-			choice.get("max_count", 0),
-			page._choice_selected_ids.size()
-		]
-	)
-	if str(choice.get("kind", "")) == "retrieve_strategy":
-		choice_prompt = "选择要取回的牌；不选直接确认则放弃（本回合机会已消耗）"
-	_text(
-		overlay,
-		Rect2(30, 76, 1020, 32),
-		choice_prompt,
-		17,
-		Color("edcc8e"),
-		HORIZONTAL_ALIGNMENT_CENTER
-	)
+	var kind := str(choice.get("kind", ""))
+	var labels := page._choice_labels(kind)
+	var candidates := page._array(choice.get("candidates"))
+	var crowded := candidates.size() * (BattleCard.FACE_SIZE.x + 16) - 16 > 1024
+	var choice_height := maxf(touch_height, status_edge)
+	var arrow_width := maxf(60, status_edge)
+	var scroll_inset := 30 + arrow_width if crowded else 28.0
+	var footer_y := 494 - choice_height
+	var card_top := 120.0
+	_text(overlay, Rect2(30, 21, 1020, 48), labels[0], roundi(28 * minf(UiStyle.text_scale, 1.25)), LIGHT, HORIZONTAL_ALIGNMENT_CENTER)
+	page._choice_status = _text(overlay, Rect2(30, 75, 1020, 34), "", roundi(17 * minf(UiStyle.text_scale, 1.25)), Color("edcc8e"), HORIZONTAL_ALIGNMENT_CENTER)
 	var scroll := ScrollContainer.new()
-	scroll.position = Vector2(28, 128)
-	scroll.size = Vector2(1024, minf(285, 490 - touch_height - 140) if mobile else 285)
-	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	scroll.name = "ChoiceCandidates"
+	scroll.position = Vector2(scroll_inset, card_top)
+	scroll.size = Vector2(1080 - 2 * scroll_inset, minf(280, footer_y - card_top - 10))
+	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO if scroll.size.y < BattleCard.FACE_SIZE.y + 36 else ScrollContainer.SCROLL_MODE_DISABLED
+	scroll.follow_focus = true
 	overlay.add_child(scroll)
+	page._choice_scroll = scroll
 	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 20)
+	row.add_theme_constant_override("separation", 16)
 	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.alignment = BoxContainer.ALIGNMENT_CENTER
 	scroll.add_child(row)
-	for value in page._array(choice.get("candidates")):
+	for value in candidates:
 		var option := page._dict(value)
 		var id := str(option.get("id", option.get("candidate_id", "")))
+		if kind == "change_topic":
+			var name := UiStyle.label(str(option.get("label_key", id)))
+			var name_button := page.add_button(row, "choice:" + id, name, {}, page._bind_choice(id))
+			name_button.custom_minimum_size = Vector2(168, choice_height)
+			name_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+			continue
+		if kind in ["remove_status", "purify"]:
+			var status := page.add_button(row, "choice:" + id, UiGlossary.label(id), {}, page._bind_choice(id))
+			status.tooltip_text = UiGlossary.describe(id)
+			status.custom_minimum_size.x = 150
+			continue
 		var data := page._dict(option.get("preview")).duplicate(true)
-		for hand_value in page._array(page.view.get("hand")):
-			var hand_card := page._dict(hand_value)
-			if str(hand_card.get("card_id", "")) == id:
-				data.merge(hand_card, true)
+		var zones := [page._array(page.view.get("hand"))]
 		for zone_name in ["discard", "exhaust"]:
-			for zone_value in page._array(page._dict(page.view.get("zones_public")).get(zone_name, [])):
-				var zone_card := page._dict(zone_value)
-				if str(zone_card.get("card_id", "")) == id:
-					data.merge(zone_card, true)
+			zones.append(page._array(page._dict(page.view.get("zones_public")).get(zone_name, [])))
+		for zone in zones:
+			for value_in_zone in zone:
+				var card_entry := page._dict(value_in_zone)
+				if str(card_entry.get("card_id", "")) == id:
+					data.merge(card_entry, true)
 		data.definition_id = str(data.get("definition_id", option.get("label_key", id)))
 		data.description = UiStyle.label(str(option.get("label_key", id)))
+		var column := VBoxContainer.new()
+		column.add_theme_constant_override("separation", 0)
+		row.add_child(column)
 		var card := BattleCard.new()
 		card.configure(data, page._choice_selected_ids.has(id))
-		row.add_child(card)
+		column.add_child(card)
+		var marker := page.add_text(column, "", 12, UiStyle.GOLD)
+		marker.custom_minimum_size.y = 23
+		marker.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		marker.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		card.set_meta("choice_marker", marker)
 		card.set_meta("uid", "choice:" + id)
 		page._buttons["choice:" + id] = card
 		card.pressed.connect(page._bind_choice(id))
-		card.tooltip_text = page._choice_preview_text(data)
-	var confirm := page.add_button(overlay, "choice:confirm", "确认选择", page._choice_draft())
-	confirm.position = Vector2(410, 490 - touch_height)
-	confirm.size = Vector2(260, touch_height)
-	_style_button(confirm)
-	var restart := page.add_button(
-		overlay, "choice:menu", "返回主页", {"type": "ui.menu", "payload": {}}
-	)
-	_style_button(restart)
-	restart.position = Vector2(40, 444)
-	restart.size = Vector2(210, 42)
-	confirm.position.x = 770
+	if crowded:
+		var bar := scroll.get_h_scroll_bar()
+		var arrows: Array[Button] = []
+		for direction in [-1, 1]:
+			var side := "previous" if direction < 0 else "next"
+			var arrow := page.add_button(overlay, "choice:scroll:" + side, "‹" if direction < 0 else "›", {}, func(): scroll.scroll_horizontal += direction * roundi(BattleCard.FACE_SIZE.x + 16))
+			arrow.accessibility_name = "查看左侧候选" if direction < 0 else "查看右侧候选"
+			arrow.custom_minimum_size = Vector2.ZERO
+			arrow.position = Vector2(24 if direction < 0 else 1056 - arrow_width, card_top + 84)
+			arrow.size = Vector2(arrow_width, choice_height)
+			_style_button(arrow)
+			arrows.append(arrow)
+		var sync_arrows := page._sync_choice_arrows.bind(bar, arrows[0], arrows[1])
+		bar.value_changed.connect(sync_arrows.unbind(1))
+		bar.changed.connect(sync_arrows)
+		sync_arrows.call_deferred()
+		scroll.gui_input.connect(func(event: InputEvent):
+			if event is InputEventMouseButton and event.pressed and event.button_index in [MOUSE_BUTTON_WHEEL_UP, MOUSE_BUTTON_WHEEL_DOWN] and scroll.vertical_scroll_mode == ScrollContainer.SCROLL_MODE_DISABLED:
+				scroll.scroll_horizontal += -184 if event.button_index == MOUSE_BUTTON_WHEEL_UP else 184
+				scroll.accept_event()
+		)
+	var actions: Array[Button] = [
+		page.add_button(overlay, "choice:menu", "返回主页", {"type": "ui.menu", "payload": {}}),
+		page.add_button(overlay, "choice:clear", "清空选择", {}, page._clear_choice_selection),
+		page.add_button(overlay, "choice:confirm", labels[1], page._choice_draft())
+	]
+	for index in actions.size():
+		var button := actions[index]
+		button.custom_minimum_size = Vector2.ZERO
+		button.position = Vector2([30.0, 586.0, 780.0][index], footer_y)
+		button.size = Vector2([190.0, 174.0, 270.0][index], choice_height)
+		_style_button(button)
+		button.add_theme_font_size_override("font_size", maxi(minimum_text, roundi(18 * minf(UiStyle.text_scale, 1.25))))
+	UiStyle.button_skin(actions.back(), "primary", true)
+	page._sync_choice_controls()
+	scroll.set_deferred("scroll_horizontal", page._choice_scroll_x)
+	var previous_focus := page._buttons.get(page._choice_focus_uid) as Button
+	if is_instance_valid(previous_focus) and not previous_focus.disabled:
+		previous_focus.grab_focus.call_deferred()
 
 
 func _info_panel() -> void:
@@ -582,7 +681,7 @@ func _info_panel() -> void:
 		terms_row.size = Vector2(1000, 32)
 		terms_row.add_theme_constant_override("separation", 8)
 		overlay.add_child(terms_row)
-		var terms_label := page.add_text(terms_row, "词条：", 14, LIGHT)
+		var terms_label := page.add_text(terms_row, "词条", 14, LIGHT)
 		terms_label.custom_minimum_size = Vector2(48, 0)
 		terms_label.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 		for term in page._detail_terms:
@@ -607,7 +706,7 @@ func _modal() -> Control:
 	layer.mouse_filter = Control.MOUSE_FILTER_STOP
 	stage.add_child(layer)
 	_rect(layer, Rect2(Vector2.ZERO, stage.size), Color(0.02, 0.05, 0.07, 0.8))
-	return _panel(layer, Rect2(100, (stage.size.y - 540) * .5, 1080, 520), DARK, Color("c7ae78"))
+	return _panel(layer, Rect2(100 + extra_width * .5, (stage.size.y - 540) * .5, 1080, 520), DARK, Color("c7ae78"))
 
 
 func _button(
@@ -642,6 +741,21 @@ func _transparent_target(button: Button) -> void:
 			style.border_color = Color("f3d38a")
 			style.set_border_width_all(3)
 		button.add_theme_stylebox_override(state, style)
+
+
+func _readable(bounds: Rect2, value: String, pixels: int, color: Color, plate_enabled := true) -> Label:
+	var label := _text(stage, bounds, value, roundi(pixels * minf(UiStyle.text_scale, 1.2)), color, HORIZONTAL_ALIGNMENT_CENTER)
+	if not plate_enabled:
+		label.add_theme_constant_override("outline_size", 3)
+		return label
+	var plate := UiStyle.surface(Color("172630"), Color("81755a"), 5)
+	plate.shadow_size = 0
+	plate.set_border_width_all(1)
+	plate.set_content_margin_all(2)
+	label.add_theme_stylebox_override("normal", plate)
+	label.remove_theme_color_override("font_shadow_color")
+	label.add_theme_constant_override("outline_size", 0)
+	return label
 
 
 func _text(
@@ -697,13 +811,14 @@ func _art(parent: Node, id: String, bounds: Rect2) -> void:
 	art.size = bounds.size
 
 
-func _rect(parent: Node, bounds: Rect2, color: Color) -> void:
+func _rect(parent: Node, bounds: Rect2, color: Color) -> ColorRect:
 	var rect := ColorRect.new()
 	rect.color = color
 	rect.position = bounds.position
 	rect.size = bounds.size
 	rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	parent.add_child(rect)
+	return rect
 
 
 func _bar(parent: Node, bounds: Rect2, fraction: float, color: Color) -> Control:

@@ -57,6 +57,8 @@ func _test_character(id: String) -> void:
 	if is_instance_valid(hero) and is_instance_valid(hero.rig):
 		_check(int(hero.rig.specification.version) == int(CharacterArt.VERSIONS[id]), id + " battle preserves selected version")
 		_check(not hero.rig.loop_player.is_playing(), id + " battle respects animations off")
+		if id in ["P02", "P03", "P04"]:
+			_check_blink(id, hero.rig)
 		var identity := hero.get_instance_id()
 		shell.refresh()
 		_check(_hero(page).get_instance_id() == identity, id + " refresh retains actor identity")
@@ -71,6 +73,22 @@ func _test_character(id: String) -> void:
 	_check(resumed.page is BattleScreen and is_instance_valid(_hero(resumed.page)) and int(_hero(resumed.page).rig.specification.version) == int(CharacterArt.VERSIONS[id]), id + " continued battle loads selected art")
 	resumed.free()
 	shell.free()
+
+
+func _check_blink(id: String, rig: NativeActorRig) -> void:
+	var head: Sprite2D = rig.parts.head
+	var neutral := head.texture
+	var hit: Dictionary = rig.specification.drawings.filter(func(drawing): return drawing.part == "head").front().variants[1]
+	rig.set_motion(true)
+	for interval: Array in rig.specification.expression.intervals:
+		rig.loop_player.seek(float(interval[0]) + 0.01, true)
+		rig._update_expression()
+		_check(rig.debug_snapshot().face == "blink" and head.texture.resource_path.ends_with("/head_blink.png"), id + " closes eyes with a dedicated frame")
+		_check(head.texture.resource_path != hit.file and head.texture.get_size() == neutral.get_size(), id + " blink uses the neutral head bounds")
+		rig.loop_player.seek(float(interval[1]) + 0.01, true)
+		rig._update_expression()
+		_check(rig.debug_snapshot().face == "neutral" and head.texture == neutral, id + " restores the same neutral texture after blinking")
+	rig.set_motion(false)
 
 
 func _hero(page: BattleScreen) -> BattleActorView:

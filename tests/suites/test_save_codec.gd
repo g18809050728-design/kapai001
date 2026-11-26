@@ -360,7 +360,7 @@ func _rich_battle(state: BattleState) -> void:
 	for spec in [
 		["anxiety", rich.player.entity_id],
 		["guard", unit.unit_id],
-		["extra_requirements", rich.tasks[0].task_id]
+		["brainstorm", rich.tasks[0].task_id]
 	]:
 		var id := _id(rich, "st")
 		rich.statuses.append(
@@ -385,6 +385,25 @@ func _rich_battle(state: BattleState) -> void:
 	rich.counters[BattleState.counter_key(&"battle", "test_L02", &"prepare")] = 2
 	rich.retained_card_ids.append(rich.zones.hand[0])
 	_roundtrip_battle(rich, "units/status holders/scene frozen result/counters")
+	var before_retirement := rich.copy()
+	var retired_id := _id(before_retirement, "st")
+	_register(before_retirement, retired_id, "status", "extra_requirements")
+	var legacy := before_retirement.to_dictionary()
+	var retired: Dictionary = legacy.statuses.back().duplicate()
+	retired.merge({"status_id": "extra_requirements", "instance_id": retired_id}, true)
+	legacy.statuses.append(retired)
+	legacy.tasks[0].intent_snapshot["extra_requirements"] = 2
+	var saved_bytes := SnapshotCodec.canonical_json(legacy)
+	var migrated := BattleCodec.decode(legacy, _catalog)
+	_check(migrated.ok, "battle containing a retired status still loads: " + ("" if migrated.ok else str(migrated.error.to_dictionary())))
+	if migrated.ok:
+		var decoded: BattleState = migrated.data
+		_check(decoded.statuses == rich.statuses and not decoded.source_registry.has(retired_id), "only retired status instances and sources are removed")
+		_check(decoded.tasks == rich.tasks and decoded.next_instance_seq == before_retirement.next_instance_seq, "retired intent is stripped without resetting sequences")
+	_check(SnapshotCodec.canonical_json(legacy) == saved_bytes, "retirement leaves the original save record intact")
+	_check(not _catalog.get_definition("status", "extra_requirements").ok, "legacy status has no live definition")
+	var legacy_card: Dictionary = _catalog.get_definition("card", "test_K60").data
+	_check(legacy_card.target == "self" and legacy_card.effects.size() == 2 and legacy_card.upgrade.effects.size() == 2, "legacy card retains draw and relax without a task target")
 	var bad := rich.to_dictionary()
 	bad.statuses[0].target_id = "departed_entity"
 	_reject_battle(bad, &"SAVE_CORRUPT", "unknown status holder")

@@ -173,7 +173,7 @@ func show_entry(id: String) -> void:
 		_visual.add_child(_relic_art)
 		_clear_words()
 		add_text(_words, "装备效果", 20, UiStyle.BRASS)
-		add_text(_words, UiContentText.describe_relic(entry.definition), 17, UiStyle.CREAM)
+		add_text(_words, CompendiumText.relic_text(entry), 17, UiStyle.CREAM)
 		add_text(_words, "获取方式", 20, UiStyle.BRASS)
 		add_text(_words, CompendiumText.relic_source(entry), 16, UiStyle.CREAM)
 		add_text(_words, "只在佩戴时生效 · 同时最多装备三件", 14, Color("aebcc2"))
@@ -183,7 +183,7 @@ func show_entry(id: String) -> void:
 		_actor.configure(id, "task")
 		_actor.set_motion(_motion_enabled)
 		_clear_words()
-		add_text(_words, "以下为基础定义值；实战还受难度、状态与规则修正。", 14, Color("aebcc2"))
+		add_text(_words, "意图在结束回合后结算。下列为基础数值。", 14, Color("aebcc2"))
 		add_text(_words, CompendiumText.years(entry.get("terms", [])) + " · %s 个阶段" % entry.definition.get("phases", []).size(), 16, UiStyle.BRASS)
 		for section in CompendiumText.monster_sections(entry):
 			add_text(_words, section.title, 20, UiStyle.BRASS)

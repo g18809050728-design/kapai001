@@ -428,6 +428,7 @@ const STATUS_POLICY := {
 	"erosion": ["task", "capped", "battle", "explicit"],
 	"induced": ["task", "capped", "next_player_action_end", "explicit"],
 }
+const RETIRED_EXTRA_REQUIREMENTS := "extra_requirements"
 const STATUS_RULE_FIELDS := {
 	"inspiration": ["cap", "completion_per_stack"],
 	"compile": ["cap"],
@@ -593,6 +594,9 @@ func _load_manifest(manifest_id: String, legacy_relic_pool: bool) -> GameResult:
 				old_indexes[kind].erase(id)
 		if _sha256(_canonical_json({"manifest": old_manifest, "definitions": _enabled_definitions(old_indexes)})) == LEGACY_FOUR_YEAR_HASH:
 			_legacy_four_year_hash = LEGACY_FOUR_YEAR_HASH
+	# The digest above identifies the original package in existing saves.
+	# The runtime catalog omits the retired status and its old card effect.
+	_retire_extra_requirements(enabled, indexes)
 	var info := ContentInfo.new(manifest_id, manifest.content_version, digest, ruleset_id, enabled)
 	_definitions = indexes
 	_enabled = enabled.duplicate(true)
@@ -606,6 +610,34 @@ func accepts_legacy_four_year_hash(digest: String) -> bool:
 
 func accepts_previous_four_year_hash(digest: String) -> bool:
 	return not _previous_four_year_hash.is_empty() and digest == _previous_four_year_hash
+
+
+static func _retire_extra_requirements(enabled: Dictionary, indexes: Dictionary) -> void:
+	if not indexes.status.erase(RETIRED_EXTRA_REQUIREMENTS):
+		return
+	enabled.status.erase(RETIRED_EXTRA_REQUIREMENTS)
+	for ruleset: Dictionary in indexes.ruleset.values():
+		ruleset.statuses.erase(RETIRED_EXTRA_REQUIREMENTS)
+	for task: Dictionary in indexes.task.values():
+		for phase: Dictionary in task.phases:
+			for intent: Dictionary in phase.intents:
+				strip_retired_intent_effect(intent)
+	for id in ["K60", "test_K60"]:
+		if not indexes.card.has(id):
+			continue
+		var card: Dictionary = indexes.card[id]
+		card.target = "self"
+		for face: Dictionary in [card, card.upgrade]:
+			face.effects = face.effects.filter(
+				func(effect: Dictionary): return effect.get("status") != RETIRED_EXTRA_REQUIREMENTS
+			)
+
+
+static func strip_retired_intent_effect(intent: Dictionary) -> void:
+	intent.erase(RETIRED_EXTRA_REQUIREMENTS)
+	var gain: Variant = intent.get("gain_status")
+	if gain is Dictionary and gain.get("status") == RETIRED_EXTRA_REQUIREMENTS:
+		intent.erase("gain_status")
 
 
 func get_definition(kind: String, id: String) -> GameResult:

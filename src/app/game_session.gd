@@ -899,9 +899,24 @@ func _battle_view(
 		if rules.ok:
 			status_rules = rules.data.get("statuses", {}).duplicate(true)
 	var tasks: Array = []
+	var intent_previews := engine.preview_enemy_intents(battle)
 	for task in battle.tasks:
-		var item := _task_view(task, catalog_override)
-		item.effective_pressure = engine.intent_pressure(battle, task)
+		var item := _task_view(task, status_catalog)
+		item.merge(intent_previews.get(str(task.get("task_id", "")), {}), true)
+		item.intent_waiting = int(item.get("eligible_round", 1)) > battle.round_index
+		var intent: Dictionary = item.get("intent_snapshot", {})
+		if status_catalog != null and intent.has("add_card"):
+			var card := status_catalog.get_definition("card", str(intent.add_card.get("card", "")))
+			item.intent_adds_burden = card.ok and (card.data.get("type") == "burden" or card.data.get("unplayable", false))
+		var summon_key := BattleState.counter_key(
+			GameConstants.COUNTER_SCOPE_BATTLE, str(item.get("task_id", "")), &"summon"
+		)
+		item.intent_summon_used = int(battle.counters.get(summon_key, 0)) > 0
+		item.taunting = (
+			bool(item.get("taunt", false))
+			and int(item.get("work_remaining", 0)) > 0
+			and int(item.get("eligible_round", 1)) <= battle.round_index
+		)
 		tasks.append(item)
 	return {
 		"battle_id": battle.battle_id,
@@ -959,11 +974,24 @@ func _task_view(task: Dictionary, catalog_override: ContentDB = null) -> Diction
 	var definition := source.get_definition("task", str(task.get("definition_id", "")))
 	if not definition.ok:
 		return view
+	if bool(definition.data.get("taunt", false)):
+		view["taunt"] = true
+	var traits := {}
+	for key in [
+		"victory_required", "shield_persistent", "self_copy_every_round",
+		"self_copy_interval", "self_copy_work_percent", "draw_reduction",
+		"first_card_cost_bonus", "discard_on_first_card", "max_vitality_reduction",
+		"on_complete_effects",
+	]:
+		if definition.data.has(key):
+			traits[key] = definition.data[key]
+	view["traits"] = traits
 	var phases: Array = definition.data.get("phases", [])
 	view["phase_count"] = phases.size()
 	for index in phases.size():
 		if str(phases[index].get("phase_key", "")) == str(task.get("phase_key", "")):
 			view["phase_index"] = index + 1
+			view["intent_phase"] = phases[index]
 			break
 	return view
 
@@ -1005,8 +1033,13 @@ func has_test_room() -> bool:
 	return _test_service != null and _test_service.active()
 
 
-func get_test_room_options() -> GameResult:
-	return GameResult.success(test_service().options())
+func get_test_room_options(include_details: bool = false) -> GameResult:
+	return GameResult.success(test_service().options(include_details))
+
+
+func get_test_compendium() -> GameResult:
+	var loaded := test_service().read_catalogue()
+	return CompendiumView.build(loaded.data, true) if loaded.ok else loaded
 
 
 func get_test_node_options(seed: String) -> Array[Dictionary]:

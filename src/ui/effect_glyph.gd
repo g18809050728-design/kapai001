@@ -8,11 +8,42 @@ static func paint(canvas: CanvasItem, kind: String, center: Vector2, radius: flo
 		"relax":
 			shape = [[-.78,-.64],[0,-.95],[.78,-.64],[.64,.35],[0,.95],[-.64,.35],[-.78,-.64]]
 			line(canvas, center, radius, [[0,-.86],[0,.68]], Color(ink, .5))
+		"taunt":
+			shape = [[-.88,-.62],[0,-.92],[.88,-.62],[.67,.32],[0,.9],[-.67,.32],[-.88,-.62]]
+			line(canvas, center, radius, [[0,-.51],[0,.12]], ink)
+			canvas.draw_circle(center + Vector2(0,.42) * radius, radius * .12, ink, true, -1, true)
+		"anxiety":
+			shape = [[-1,.15],[-.57,.15],[-.3,-.74],[.02,.74],[.36,-.4],[.54,.15],[1,.15]]
+		"drowsiness":
+			shape = [[-.9,-.6],[.14,-.6],[-.89,.45],[.14,.45]]
+			line(canvas, center, radius, [[.43,-.12],[1,-.12],[.43,.54],[1,.54]], ink)
+		"weakness":
+			shape = [[-.74,-.74],[0,-.15],[.74,-.74]]
+			line(canvas, center, radius, [[-.74,.16],[0,.76],[.74,.16]], ink)
+		"feebleness":
+			shape = [[-.93,-.45],[-.35,-.05],[.08,-.3],[.81,.68],[.23,.66],[.81,.68],[.77,.06]]
+		"vulnerability":
+			shape = [[-.25,-.92],[-.9,-.92],[-.9,-.25]]
+			line(canvas, center, radius, [[.25,-.92],[.9,-.92],[.9,-.25]], ink)
+			line(canvas, center, radius, [[-.9,.25],[-.9,.92],[-.25,.92]], ink)
+			line(canvas, center, radius, [[.9,.25],[.9,.92],[.25,.92]], ink)
+			canvas.draw_circle(center, radius * .27, ink, true, -1, true)
+		"brittle":
+			shape = [[0,-.95],[.82,0],[0,.95],[-.82,0],[0,-.95]]
+			line(canvas, center, radius, [[-.36,-.54],[.13,-.16],[-.2,.15],[.37,.52]], ink)
 		"work", "next":
 			shape = [[-.65,-.85],[.38,-.85],[.72,-.5],[.72,.85],[-.65,.85],[-.65,-.85]]
 			line(canvas, center, radius, [[-.4,.1],[-.1,.4],[.47,-.25]], ink)
 			if kind == "next":
 				line(canvas, center, radius, [[.3,-.9],[.9,-.9],[.9,-.35]], ink)
+		"copy":
+			shape = [[-.78,.38],[-.78,-.83],[.34,-.83],[.34,.38],[-.78,.38]]
+			line(canvas, center, radius, [[.63,-.48],[.63,.77],[-.48,.77]], ink)
+		"summon":
+			shape = [[-.82,.23],[-.82,.74],[.82,.74],[.82,.23]]
+			line(canvas, center, radius, [[0,.43],[0,-.84],[-.48,-.32],[0,-.84],[.48,-.32]], ink)
+		"pressure":
+			shape = [[.2,-.94],[-.64,.1],[-.1,.1],[-.34,.94],[.68,-.22],[.16,-.22],[.2,-.94]]
 		"draw", "discard", "exhaust", "retrieve", "search":
 			shape = [[-.8,.5],[-.8,-.82],[.33,-.82],[.33,.5],[-.8,.5]]
 			line(canvas, center, radius, [[-.5,.76],[.65,.76],[.65,-.5]], ink)
