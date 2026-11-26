@@ -6,6 +6,10 @@ var _helpers = preload("res://tests/suites/test_ui_shell_pages.gd").new()
 
 
 func run() -> Array[String]:
+	# This suite owns its session and pointer geometry; do not inherit a prior suite's
+	# accessibility scale or reduced-motion state.
+	UiStyle.text_scale = 1.0
+	UiStyle.reduced_motion = false
 	_shell = _helpers.attach_shell(
 		GameSession.new(SaveStore.new("user://g7-pointer-%s" % Time.get_ticks_usec()))
 	)

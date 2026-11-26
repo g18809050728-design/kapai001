@@ -262,7 +262,7 @@ static func _entry(
 		"category": category,
 		"id": id,
 		"title": title,
-		"default": text,
+		"default": TextOverrides.default_text(uid, text),
 		"source": source,
 		"note": note,
 	}

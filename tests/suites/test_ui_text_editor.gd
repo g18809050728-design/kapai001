@@ -54,6 +54,11 @@ func _check_library(data: Dictionary) -> void:
 	_check(int(data.get("field_count", 0)) == 1690, "1690 logical fields")
 	_check(int(data.get("uid_count", 0)) == 1711, "1711 backing UIDs")
 	_check(int(data.get("source_uid_count", 0)) == 1699, "1699 original library UIDs are retained")
+	_check(TextOverrides.defaults_error().is_empty(), "bundled default text parses cleanly")
+	_check(TextOverrides.default_text("glossary:anxiety.short", "").begins_with("每层减少"), "bundled glossary default applies")
+	_check(TextOverrides.default_text("card:R3-C-04:0:detail", "").contains("放松 3"), "bundled card detail default applies")
+	_check(TextOverrides.default_text("relic:RX-C07", "").contains("每战首次"), "bundled relic default applies")
+	_check(TextOverrides.default_text("passive:r3_p03_compound_reaction", "").contains("额外 +1 层"), "bundled passive default applies")
 	var by_id: Dictionary = {}
 	var by_uid: Dictionary = {}
 	for entity in entities:
@@ -80,6 +85,9 @@ func _check_library(data: Dictionary) -> void:
 	var glossary: Dictionary = by_id["glossary:focus"]
 	var name_field: Dictionary = _field_for_uid(glossary, "glossary:focus.name")
 	_check(not name_field.is_empty() and name_field.uids.has("label:focus"), "glossary name aliases shared label")
+	var anxiety: Dictionary = by_id["glossary:anxiety"]
+	var anxiety_short: Dictionary = _field_for_uid(anxiety, "glossary:anxiety.short")
+	_check(str(anxiety_short.get("default", "")).begins_with("每层减少"), "editor default shows bundled text")
 	var option_field: Dictionary = _field_for_uid(story, "story:events.V01.option_titles.leave")
 	_check(not option_field.is_empty(), "all event options have editable fields")
 	var monster: Dictionary = by_id["monster:N03"]

@@ -81,7 +81,7 @@ func _card_semantics() -> void:
 	_check(texts["R3-P02-10"].contains("抽牌 1") and texts["R3-P02-10"].contains("放松 2"), "paper ability includes both effects")
 	_check(texts["R3-P02-11"].contains("章节常驻") and texts["R3-P02-11"].contains("下回合生效"), "chapter resident timing")
 	_check(texts["R3-P01-06"].contains("连携") and texts["R3-P01-06"].contains("抽牌 1"), "conditional combo draw")
-	_check(texts["R3-P03-05"].contains("所选源任务") and texts["R3-P03-05"].contains("最多 3"), "readable dynamic status cap")
+	_check(texts["R3-P03-05"].contains("所选第一个任务") and texts["R3-P03-05"].contains("最多 3层"), "readable dynamic status cap")
 	_check(texts["R3-P04-01"].contains("正常合作"), "related partner behavior")
 	_check(texts["R3-P04-25"].contains("放松 5") and texts["R3-P04-25"].contains("每消耗 1 协同额外 +3") and texts["R3-P04-25"].contains("焦虑"), "synergy details include nested scaling benefit and final cleanse")
 	_check(texts["R3-P04-30"].contains("完成量 12") and texts["R3-P04-30"].contains("协同为 0 也执行后续"), "all-synergy card shows its base benefit even at zero synergy")

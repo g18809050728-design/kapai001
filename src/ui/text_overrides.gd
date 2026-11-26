@@ -3,11 +3,14 @@ extends RefCounted
 
 ## User-editable display text layered over the original content files.
 ##
-## Only presentation strings are stored here. Gameplay definitions, numbers,
-## commands, RNG, saves and schema never read this file. The original text is
-## always kept in the source JSON/GDScript data so an entry can be reset.
+## Bundled defaults are loaded from res://data/text_defaults.json; user edits in
+## user://text_overrides.json take precedence. Only presentation strings are
+## stored here. Gameplay definitions, numbers, commands, RNG, saves and schema
+## never read these files. The original text is always kept in the source
+## JSON/GDScript data so an entry can be reset.
 
 const DEFAULT_PATH := "user://text_overrides.json"
+const DEFAULT_TEXT_PATH := "res://data/text_defaults.json"
 const SCHEMA_VERSION := 1
 const MAX_ENTRIES := 4000
 const MAX_UID_LENGTH := 256
@@ -17,6 +20,10 @@ static var _path := DEFAULT_PATH
 static var _values: Dictionary = {}
 static var _loaded := false
 static var _load_error := ""
+static var _defaults_path := DEFAULT_TEXT_PATH
+static var _defaults: Dictionary = {}
+static var _defaults_loaded := false
+static var _defaults_error := ""
 
 
 static func use_path(path: String) -> void:
@@ -24,6 +31,22 @@ static func use_path(path: String) -> void:
 	_values = {}
 	_loaded = false
 	_load_error = ""
+
+
+static func use_defaults_path(path: String) -> void:
+	_defaults_path = path.strip_edges()
+	_defaults = {}
+	_defaults_loaded = false
+	_defaults_error = ""
+
+
+static func defaults_path() -> String:
+	return _defaults_path
+
+
+static func defaults_error() -> String:
+	ensure_defaults_loaded()
+	return _defaults_error
 
 
 static func current_path() -> String:
@@ -76,6 +99,47 @@ static func ensure_loaded() -> void:
 			break
 
 
+static func ensure_defaults_loaded() -> void:
+	if _defaults_loaded:
+		return
+	_defaults_loaded = true
+	_defaults = {}
+	_defaults_error = ""
+	if _defaults_path.is_empty() or not FileAccess.file_exists(_defaults_path):
+		return
+	var file := FileAccess.open(_defaults_path, FileAccess.READ)
+	if file == null:
+		_defaults_error = "无法读取内置默认文本（%s）。" % error_string(FileAccess.get_open_error())
+		return
+	var raw := file.get_as_text()
+	file.close()
+	var parser := JSON.new()
+	if parser.parse(raw) != OK:
+		_defaults_error = "内置默认文本格式无效，已按原始文本运行。"
+		return
+	var parsed: Variant = parser.data
+	if not parsed is Dictionary:
+		_defaults_error = "内置默认文本格式无效，已按原始文本运行。"
+		return
+	if int(parsed.get("schema_version", 0)) != SCHEMA_VERSION:
+		_defaults_error = "内置默认文本版本不支持，已按原始文本运行。"
+		return
+	var entries: Variant = parsed.get("entries", {})
+	if not entries is Dictionary:
+		_defaults_error = "内置默认文本条目格式无效，已按原始文本运行。"
+		return
+	for raw_key in entries:
+		var uid := str(raw_key)
+		var value: Variant = entries[raw_key]
+		if uid.is_empty() or uid.length() > MAX_UID_LENGTH:
+			continue
+		if not value is String or str(value).length() > MAX_TEXT_LENGTH:
+			continue
+		_defaults[uid] = str(value)
+		if _defaults.size() >= MAX_ENTRIES:
+			break
+
+
 static func reload_from_disk() -> void:
 	_loaded = false
 	ensure_loaded()
@@ -83,7 +147,25 @@ static func reload_from_disk() -> void:
 
 static func get_optional(uid: String) -> Variant:
 	ensure_loaded()
-	return _values[uid] if _values.has(uid) else null
+	if _values.has(uid):
+		return _values[uid]
+	ensure_defaults_loaded()
+	return _defaults[uid] if _defaults.has(uid) else null
+
+
+static func default_text(uid: String, fallback: String) -> String:
+	ensure_defaults_loaded()
+	return str(_defaults[uid]) if _defaults.has(uid) else fallback
+
+
+static func default_snapshot() -> Dictionary:
+	ensure_defaults_loaded()
+	return _defaults.duplicate(true)
+
+
+static func has_default(uid: String) -> bool:
+	ensure_defaults_loaded()
+	return _defaults.has(uid)
 
 
 static func has(uid: String) -> bool:
