@@ -15,9 +15,9 @@
 | 源工程 | `/opt/kapai001` | 修改源码、导出用，不需要持续运行 Godot |
 | 正式游戏 | `https://47.93.245.237/` | Nginx 提供 Web 构建 |
 | 网页当前指向 | `/var/www/kapai001/current` | 指向已发布版本的符号链接 |
-| 核对时的 Web 版本 | `/var/www/kapai001/releases/20261121-account-records-polish-v2` | 与源工程的后续修改不自动同步 |
+| 核对时的 Web 版本 | `/var/www/kapai001/releases/20261127-player-feedback` | 与源工程的后续修改不自动同步 |
 | 正式账号 API | `127.0.0.1:18445` | `kapai-api-prod.service` |
-| 正式后端快照 | `/opt/kapai-api/releases/20261121-admin-developer-tools` | API 从此目录加载代码 |
+| 正式后端快照 | `/opt/kapai-api/releases/20261127-player-feedback` | API 从此目录加载代码 |
 | 后端 Python 环境 | `/opt/kapai-api-venv` | 已安装后端依赖 |
 | 正式数据库 | `kapai_prod` | `kapai-mysql.service`，MySQL 8.0.45 |
 | 数据库 socket / 数据目录 | `/run/kapai-mysql/mysql.sock` / `/var/lib/kapai-mysql` | 仅本机 socket 连接 |
@@ -36,7 +36,7 @@ readlink -f /var/www/kapai001/current
 curl --fail --max-time 10 http://127.0.0.1:18445/internal/ready
 ```
 
-目前就绪响应为 `{"status":"ok","migration":"0004_direct_signup"}`。没有 screen 会话时，`screen -ls` 显示 `No Sockets found`，并不表示游戏停止了。
+目前就绪响应为 `{"status":"ok","migration":"0005_feedback"}`。没有 screen 会话时，`screen -ls` 显示 `No Sockets found`，并不表示游戏停止了。
 
 **screen 的作用是保留终端和其中的进程。** 它能让任务在 SSH 断开后继续执行；服务器重启、API 崩溃或进程被系统终止后，screen 本身不会自动恢复任务。现有 systemd 服务已经提供开机启动及 API 失败重启。因此本文保留 MySQL、Nginx、证书续期和每日数据清理的原有管理方式，只提供 API 的可选 screen 接管步骤。
 
@@ -334,7 +334,7 @@ curl --fail --head --max-time 10 https://47.93.245.237/
 仅修改游戏界面或图片时，无需重启 API。后端改动按[账号服务说明](../server/README.md)和[发布记录](plans/2026-11-21-production-accounts-release.md)准备新快照、依赖与验证：
 
 1. 将已经验证的 `server/` 内容复制到新的 `/opt/kapai-api/releases/<版本>`，确保低权限账号可读取；不要覆盖运行中的旧快照。记录旧目录和依赖版本。
-2. 有新迁移时先备份，以生产迁移配置运行 Alembic；API 日常仍使用应用账号。当前库已是 `0004_direct_signup`，单纯重启不需要再次迁移。
+2. 有新迁移时先备份，再以生产迁移配置运行 Alembic。API 日常使用应用账号。当前生产库已是 `0005_feedback`，单纯重启无需再次迁移。
 3. screen 模式：正常停止 API，把 `/etc/kapai001/screen-api-release` 改成新快照的绝对路径，再执行第 3.2 节的 screen 启动及检查。无需重新从旧 systemd 配置生成该文件。
 4. systemd 模式：调整服务 `WorkingDirectory`，运行 `systemctl daemon-reload`、`systemctl restart kapai-api-prod`，再检查 `/internal/ready`。
 5. 同步每日清理服务 `kapai-api-prod-prune.service` 的 `WorkingDirectory`，执行 `systemctl daemon-reload`；它是独立进程，不会跟着 screen 自动换目录。

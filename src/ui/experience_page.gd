@@ -348,8 +348,11 @@ func _render_menu() -> void:
 		add_button(options,"menu:compendium","图鉴",_ui("compendium"))
 		add_button(options,"menu:tutorial","新手教程",_ui("tutorial"))
 		add_button(options,"menu:records","游戏记录",_ui("records"))
-		if account_state == "ready" and bool(view.get("team_tools_available", false)):
-			add_button(options,"menu:admin","管理统计",_ui("web_stats"))
+		if account_state == "ready":
+			add_button(options,"menu:feedback","问题反馈",_ui("web_feedback"))
+			if bool(view.get("team_tools_available", false)):
+				add_button(options,"menu:feedback_admin","反馈管理",_ui("web_feedback_admin"))
+				add_button(options,"menu:admin","管理统计",_ui("web_stats"))
 		if bool(view.get("team_tools_available", true)):
 			add_button(options,"menu:text_editor","文本编辑",_ui("text_editor"))
 			add_button(options,"menu:test","测试房间",_ui("test_room"))
@@ -360,7 +363,7 @@ func _render_menu() -> void:
 		add_button(options, "menu:guest", "游客登录", _ui("web_guest"))
 	add_button(options,"menu:settings","设置与存档",_ui("settings"))
 	add_button(options,"menu:quit","退出游戏",_ui("quit"))
-	for uid in ["menu:continue","menu:new","menu:compendium","menu:tutorial","menu:records","menu:admin","menu:text_editor","menu:test","menu:settings","menu:account","menu:register","menu:guest","menu:quit"]:
+	for uid in ["menu:continue","menu:new","menu:compendium","menu:tutorial","menu:records","menu:feedback","menu:feedback_admin","menu:admin","menu:text_editor","menu:test","menu:settings","menu:account","menu:register","menu:guest","menu:quit"]:
 		if not _buttons.has(uid):
 			continue
 		var option: Button = _buttons[uid]
@@ -1480,6 +1483,8 @@ func _render_settings() -> void:
 	if bool(view.get("web_privacy_available", false)):
 		add_button(body, "settings:web_privacy", "隐私设置", _ui("web_privacy"))
 	if view.get("account_state", "") == "ready":
+		var feedback := add_button(body, "settings:feedback", "问题反馈", _ui("web_feedback"))
+		body.move_child(feedback, 0)
 		var cloud := add_panel(body)
 		add_text(cloud, "云存档", 23)
 		add_text(cloud, "同步当前冒险和个人进度，处理设备冲突或恢复上一份云端备份。", 17)

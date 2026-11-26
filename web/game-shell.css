@@ -252,7 +252,9 @@
 }
 
 #account-panel button,
-#account-panel input:not([type="checkbox"]) {
+#account-panel input:not([type="checkbox"]),
+#account-panel select,
+#account-panel textarea {
     min-height: 44px;
     box-sizing: border-box;
     padding: 8px 13px;
@@ -261,7 +263,9 @@
     font: inherit;
 }
 
-#account-panel input:not([type="checkbox"]) {
+#account-panel input:not([type="checkbox"]),
+#account-panel select,
+#account-panel textarea {
     display: block;
     width: 100%;
     min-width: 0;
@@ -270,9 +274,80 @@
 }
 
 #account-panel input:focus-visible,
-#account-panel button:focus-visible {
+#account-panel button:focus-visible,
+#account-panel select:focus-visible,
+#account-panel textarea:focus-visible,
+#account-panel a:focus-visible {
     outline: 2px solid #326c71;
     outline-offset: 2px;
+}
+
+#account-panel textarea {
+    resize: vertical;
+}
+
+#account-panel .feedback-file-input[hidden] {
+    display: none;
+}
+
+.feedback-list {
+    display: grid;
+    gap: 8px;
+    margin-top: 14px;
+}
+
+#account-panel .feedback-list > button {
+    display: grid;
+    gap: 3px;
+    text-align: left;
+    overflow-wrap: anywhere;
+}
+
+.feedback-text {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.feedback-screenshots {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 115px), 1fr));
+    gap: 8px;
+    list-style: none;
+    padding: 0;
+    margin: 0 0 8px;
+}
+
+.feedback-screenshots:empty {
+    display: none;
+}
+
+.feedback-screenshots li {
+    min-width: 0;
+    display: grid;
+    gap: 4px;
+    align-content: start;
+}
+
+.feedback-screenshots img {
+    display: block;
+    width: 100%;
+    height: 96px;
+    object-fit: contain;
+    background: #e8dbc5;
+    border: 1px solid var(--account-edge);
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+.feedback-screenshots a {
+    color: var(--account-accent);
+    text-align: center;
+}
+
+.feedback-screenshots a span {
+    display: grid;
+    min-height: 44px;
+    place-items: center;
 }
 
 #account-panel button {

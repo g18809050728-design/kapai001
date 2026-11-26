@@ -19,12 +19,21 @@
         email_invalid: '请输入有效的邮箱地址。',
         login_required: '登录已过期，请重新登录。',
         admin_required: '此功能需要管理员权限。',
+        feedback_conflict: '这次反馈已提交，请关闭面板后重新填写。',
+        feedback_not_found: '这条反馈已不可用。',
+        screenshot_invalid: '请选择可打开的静态 PNG、JPEG 或 WebP 截图。',
+        screenshot_too_large: '截图过大，请裁剪或压缩后重试。',
+        screenshot_dimensions: '截图分辨率过高，请裁剪后重试。',
+        screenshots_loading: '正在读取截图，请稍等片刻再提交。',
         result_conflict: '该局已有不同结算，请核对本地对局。',
         database_unavailable: '账号服务暂时不可用，本机进度仍可保存。',
     };
     const playerNames = { P01: '林序', P02: '许知微', P03: '沈见章', P04: '唐以宁' };
     const difficultyNames = { relaxed: '轻松', normal: '标准', hard: '困难' };
     const results = { won: '胜利', lost: '失败', abandoned: '已放弃' };
+    const feedbackCategories = { bug: '游戏问题', suggestion: '改进建议', other: '其他反馈' };
+    const screenshotTypes = ['image/png', 'image/jpeg', 'image/webp'];
+    const screenshotSizeLimit = 2 * 1024 * 1024;
     const slots = ['current_run', 'profile'];
     const prefix = 'kapai-account:';
     const guestChoice = prefix + 'guest-selected';
@@ -135,6 +144,7 @@
     dialog.addEventListener('keyup', event => event.stopPropagation());
     dialog.addEventListener('close', () => {
         if (!dialog.open) {
+            if (showing.startsWith('feedback')) body.replaceChildren();
             showing = '';
             document.getElementById('canvas')?.focus({ preventScroll: true });
         }
@@ -169,16 +179,21 @@
     }
 
     function field(form, label, key, type = 'text', value = '') {
-        const group = element('div', '', form);
-        group.className = 'account-field';
-        const caption = element('label', label, group);
-        const input = element('input', '', group);
-        input.id = 'account-field-' + key;
-        caption.htmlFor = input.id;
-        input.name = key;
+        const input = labeledControl(form, label, key, 'input');
         input.type = type;
         input.value = value;
         input.required = true;
+        return input;
+    }
+
+    function labeledControl(form, label, key, tag) {
+        const group = element('div', '', form);
+        group.className = 'account-field';
+        const caption = element('label', label, group);
+        const input = element(tag, '', group);
+        input.id = 'account-field-' + key;
+        caption.htmlFor = input.id;
+        input.name = key;
         return input;
     }
 
@@ -562,7 +577,7 @@
 
     function showDelete() {
         startPanel('delete', '删除账号和云端数据');
-        element('p', '删除账号会清除该账号的云存档和对局记录。请输入密码确认。', body);
+        element('p', '删除账号会清除该账号的云存档、对局记录、反馈和截图。请输入密码确认。', body);
         const form = element('form', '', body);
         passwordField(form, '密码', 'password');
         formSubmit(form, '确认删除账号', async values => {
@@ -613,6 +628,194 @@
         if (offset) button('上一页', actions, () => showHistory(Math.max(0, offset - 20)));
         if (data.next_offset !== null) button('下一页', actions, () => showHistory(data.next_offset));
         button('返回游戏记录', actions, closePanel);
+    }
+
+    function feedbackCategory(parent, label, selected, all = false) {
+        const select = labeledControl(parent, label, 'category', 'select');
+        if (all) element('option', '全部类型', select).value = '';
+        for (const [value, name] of Object.entries(feedbackCategories)) {
+            element('option', name, select).value = value;
+        }
+        select.value = selected;
+        return select;
+    }
+
+    function readScreenshot(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(String(reader.result));
+            reader.onerror = () => reject(new Error('screenshot_invalid'));
+            reader.readAsDataURL(file);
+        });
+    }
+
+    function showFeedback() {
+        startPanel('feedback', '问题反馈');
+        const form = element('form', '', body);
+        feedbackCategory(form, '反馈类型', 'bug');
+        const subject = field(form, '标题', 'title');
+        subject.maxLength = 100;
+        const description = labeledControl(form, '详细说明', 'description', 'textarea');
+        description.required = true;
+        description.maxLength = 3000;
+        description.rows = 5;
+        description.placeholder = '你当时在哪个页面？做了什么？实际发生了什么？';
+        const input = field(form, '添加截图（选填）', 'screenshots', 'file');
+        input.accept = screenshotTypes.join(',');
+        input.multiple = true;
+        input.required = false;
+        input.hidden = true;
+        input.className = 'feedback-file-input';
+        const choose = button('选择截图', input.parentElement, () => input.click());
+        hint(input, '最多 3 张，每张不超过 2 MiB。支持 PNG、JPEG、WebP。提交后仅管理员可查看。');
+        choose.setAttribute('aria-describedby', input.id + '-hint');
+        const uploadStatus = element('small', '', input.parentElement);
+        uploadStatus.setAttribute('role', 'status');
+        const gallery = element('ul', '', form);
+        gallery.className = 'feedback-screenshots';
+        const screenshots = [];
+        let submissionId;
+        form.addEventListener('input', event => { if (event.target !== input) submissionId = undefined; });
+        input.addEventListener('change', async () => {
+            const files = Array.from(input.files);
+            input.value = '';
+            if (dialog.dataset.busy || !files.length) return;
+            if (files.length + screenshots.length > 3) {
+                uploadStatus.textContent = '最多可添加 3 张截图，请移除一张或减少选择。';
+                return;
+            }
+            if (files.some(file => file.size > screenshotSizeLimit)) {
+                uploadStatus.textContent = statuses.screenshot_too_large;
+                return;
+            }
+            if (files.some(file => !screenshotTypes.includes(file.type) || !file.size)) {
+                uploadStatus.textContent = statuses.screenshot_invalid;
+                return;
+            }
+            input.disabled = true;
+            choose.disabled = true;
+            try {
+                const previews = await Promise.all(files.map(readScreenshot));
+                if (!gallery.isConnected || !dialog.open) return;
+                for (const [index, data] of previews.entries()) {
+                    const entry = { data, file: files[index] };
+                    screenshots.push(entry);
+                    const item = element('li', '', gallery);
+                    const img = element('img', '', item);
+                    img.alt = entry.file.name;
+                    img.src = data;
+                    const remove = button('移除', item, () => {
+                        screenshots.splice(screenshots.indexOf(entry), 1);
+                        item.remove();
+                        submissionId = undefined;
+                        uploadStatus.textContent = `已选 ${screenshots.length} 张截图`;
+                        choose.focus();
+                    });
+                    remove.setAttribute('aria-label', '移除截图 ' + entry.file.name);
+                }
+                submissionId = undefined;
+                uploadStatus.textContent = `已选 ${screenshots.length} 张截图`;
+            } catch (error) {
+                uploadStatus.textContent = statuses[error.message] || statuses.screenshot_invalid;
+            } finally {
+                input.disabled = false;
+                choose.disabled = false;
+            }
+        });
+        formSubmit(form, '提交反馈', async values => {
+            if (input.disabled) throw new Error('screenshots_loading');
+            if (!values.title.trim() || !values.description.trim()) throw new Error('invalid_input');
+            submissionId ??= crypto.randomUUID();
+            const receipt = await request('/feedback', 'POST', {
+                submission_id: submissionId,
+                category: values.category,
+                title: values.title.trim(),
+                description: values.description.trim(),
+                build_version: buildVersion,
+                screenshots: screenshots.map(({data}) => data.slice(data.indexOf(',') + 1)),
+            });
+            startPanel('feedback-sent', '反馈已提交', '管理员可以查看你的反馈。');
+            element('p', '反馈编号 ' + receipt.feedback_id, body).className = 'feedback-text';
+            button('返回游戏', body, closePanel);
+        });
+    }
+
+    function feedbackSummary(item) {
+        const time = new Date(item.created_at).toLocaleString('zh-CN', {timeZone: 'Asia/Shanghai', hour12: false});
+        return `${feedbackCategories[item.category]} · ${item.nickname} · ${time}（北京时间）`;
+    }
+
+    async function showFeedbackInbox(category = '', offset = 0) {
+        if (!flags.admin || account?.role !== 'admin') throw new Error('admin_required');
+        startPanel('feedback-admin', '反馈管理');
+        const select = feedbackCategory(body, '筛选类型', category, true);
+        select.addEventListener('change', () => { void perform(() => showFeedbackInbox(select.value)); });
+        const list = element('div', '正在读取反馈…', body);
+        list.className = 'feedback-list';
+        list.setAttribute('aria-live', 'polite');
+        const query = new URLSearchParams({offset});
+        if (category) query.set('category', category);
+        let page;
+        try {
+            page = await request('/admin/feedback?' + query);
+        } catch (error) {
+            if (!list.isConnected || !dialog.open) return;
+            list.textContent = '暂时无法读取反馈。';
+            if (error.status !== 401 && error.status !== 403) {
+                button('重试', list, () => showFeedbackInbox(category, offset));
+            }
+            throw error;
+        }
+        if (!list.isConnected || !dialog.open) return;
+        list.replaceChildren();
+        if (!page.items.length) element('p', '当前筛选下还没有反馈。', list);
+        for (const item of page.items) {
+            const row = button('', list, () => showFeedbackDetail(item.feedback_id, category, offset));
+            element('strong', item.title, row);
+            element('small', feedbackSummary(item) + (item.screenshot_count ? ` · ${item.screenshot_count} 张截图` : ''), row);
+        }
+        const actions = element('div', '', list);
+        actions.className = 'history-actions';
+        if (offset) button('上一页', actions, () => showFeedbackInbox(category, Math.max(0, offset - 20)));
+        if (page.next_offset !== null) button('下一页', actions, () => showFeedbackInbox(category, page.next_offset));
+        button('刷新', actions, () => showFeedbackInbox(category, offset));
+    }
+
+    async function showFeedbackDetail(id, category, offset) {
+        startPanel('feedback-detail', '反馈详情');
+        button('返回列表', body, () => showFeedbackInbox(category, offset));
+        const details = element('article', '正在读取详情…', body);
+        details.setAttribute('aria-live', 'polite');
+        const route = '/admin/feedback/' + encodeURIComponent(id);
+        let item;
+        try {
+            item = await request(route);
+        } catch (error) {
+            if (!details.isConnected || !dialog.open) return;
+            details.textContent = '暂时无法读取详情。';
+            throw error;
+        }
+        if (!details.isConnected || !dialog.open) return;
+        details.replaceChildren();
+        element('h3', item.title, details).className = 'feedback-text';
+        element('p', feedbackSummary(item) + (item.username && item.username !== item.nickname ? ` · ${item.username}` : ''), details).className = 'account-intro feedback-text';
+        if (item.build_version) element('small', '游戏版本 ' + item.build_version, details).className = 'feedback-text';
+        element('p', item.description, details).className = 'feedback-text';
+        if (!item.screenshots.length) return;
+        element('h4', '截图', details);
+        const gallery = element('ul', '', details);
+        gallery.className = 'feedback-screenshots';
+        for (const shot of item.screenshots) {
+            const link = element('a', '', element('li', '', gallery));
+            link.href = api + route + '/screenshots/' + shot.position;
+            link.target = '_blank';
+            link.rel = 'noopener';
+            const img = element('img', '', link);
+            img.alt = `截图 ${shot.position}（${shot.width} × ${shot.height}）`;
+            img.loading = 'lazy';
+            img.src = link.href;
+            element('span', `查看截图 ${shot.position} 大图`, link);
+        }
     }
 
     async function showStats() {
@@ -1063,6 +1266,8 @@
                 if (section === 'saves' && flags.cloud) requireClosed('云存档', showSaves, 'settings');
                 else if (section === 'history') await showHistory();
                 else if (section === 'stats') await showStats();
+                else if (section === 'feedback') showFeedback();
+                else if (section === 'feedback_admin') await showFeedbackInbox();
             }));
         },
         confirmPlay(developerTools = false) { queueMicrotask(() => confirmPlay(developerTools)); },

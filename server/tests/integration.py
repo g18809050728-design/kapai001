@@ -1,5 +1,6 @@
 """Run on the isolated development MySQL schema with the application credentials."""
 
+import base64
 import hashlib
 import io
 import json
@@ -12,6 +13,7 @@ from unittest.mock import patch
 from uuid import uuid4
 
 from fastapi.testclient import TestClient
+from PIL import Image
 from sqlalchemy.exc import OperationalError
 
 assert os.environ["KAPAI_DB_NAME"] == "kapai_dev"
@@ -161,10 +163,51 @@ with tempfile.TemporaryDirectory() as mailbox:
         "identifier": admin_username, "password": password,
     }))["role"] == "admin"
     check(administrator.get(stats))
+
+    feedback = route + "/feedback"
+    inbox = route + "/admin/feedback"
+    image_buffer = io.BytesIO()
+    Image.new("RGB", (128, 72), "steelblue").save(image_buffer, "PNG")
+    encoded = base64.b64encode(image_buffer.getvalue()).decode()
+    report = {"submission_id": str(uuid4()), "category": "bug", "title": "  <b>提交后卡住</b>  ",
+              "description": "第一步\n第二步 <tag>", "build_version": "integration", "screenshots": [encoded]}
+    check(client().post(feedback, json=report), 401)
+    check(register.post(feedback, headers={"Origin": "https://unrelated.test"}, json=report), 403)
+    check(register.post(feedback, json={**report, "screenshots": [encoded] * 4}), 422)
+    check(register.post(feedback, json={**report, "description": "   "}), 422)
+    assert check(register.post(feedback, json={**report, "screenshots": ["bGF0ZQ=="]}), 422)["detail"] == "screenshot_invalid"
+    receipt = check(register.post(feedback, json=report), 201)
+    assert check(register.post(feedback, json=report), 201) == receipt
+    check(register.post(feedback, json={**report, "title": "内容已变更"}), 409)
+    suggestion = {**report, "submission_id": str(uuid4()), "category": "suggestion", "screenshots": []}
+    suggestion_id = check(register.post(feedback, json=suggestion), 201)["feedback_id"]
+    detail = inbox + "/" + receipt["feedback_id"]
+    attachment = detail + "/screenshots/1"
+    for path in (inbox, detail, attachment):
+        check(client().get(path), 401)
+        check(register.get(path), 403)
+    page = check(administrator.get(inbox + "?category=bug"))
+    assert page["items"][0]["feedback_id"] == receipt["feedback_id"]
+    assert page["items"][0]["screenshot_count"] == 1
+    item = check(administrator.get(detail))
+    assert item["title"] == report["title"].strip() and item["description"] == report["description"]
+    assert item["username"] == username and item["build_version"] == "integration"
+    assert item["screenshots"] == [{"position": 1, "width": 128, "height": 72}]
+    assert check(administrator.get(inbox + "/" + suggestion_id))["screenshots"] == []
+    assert check(administrator.get(inbox + "?category=suggestion"))["items"][0]["feedback_id"] == suggestion_id
+    response = administrator.get(attachment)
+    assert response.status_code == 200 and response.headers["content-type"] == "image/webp"
+    assert response.headers["cache-control"] == "no-store" and response.headers["x-content-type-options"] == "nosniff"
+    with Image.open(io.BytesIO(response.content)) as screenshot:
+        assert screenshot.format == "WEBP" and screenshot.size == (128, 72)
+    check(administrator.get(detail + "/screenshots/2"), 404)
+
     with engine.begin() as db:
         execute(db, "UPDATE users SET role='player' WHERE user_id=:user", user=administrator_id)
     assert check(administrator.get(route + "/auth/session"))["user"]["role"] == "player"
     check(administrator.get(stats), 403)
+    for path in (inbox, detail, attachment):
+        check(administrator.get(path), 403)
     assert check(administrator.get(route + "/me/matches"))["items"] == []
     print("ADMIN-01 CLI creation, password-only admin login, legacy MFA compatibility, statistics and live role changes passed")
 
@@ -208,7 +251,10 @@ with tempfile.TemporaryDirectory() as mailbox:
     with engine.begin() as db:
         assert not one(db, "SELECT * FROM save_slots WHERE user_id=:user", user=user_id)
         assert not one(db, "SELECT * FROM matches WHERE match_id=:match", match=match)
+        assert not one(db, "SELECT feedback_id FROM player_feedback WHERE user_id=:user", user=user_id)
+        assert not one(db, "SELECT feedback_id FROM feedback_screenshots WHERE feedback_id=:id", id=receipt["feedback_id"])
         execute(db, "DELETE FROM game_events WHERE visitor_id=:visitor", visitor=visitor)
         execute(db, "DELETE FROM admin_audit_log WHERE actor_id=:user", user=administrator_id)
         execute(db, "DELETE FROM users WHERE user_id=:user", user=administrator_id)
     print("SYNC-01 round-trip bytes, revision conflicts, idempotency, backup, transactional write failure and deletion passed")
+    print("FEEDBACK-01 text and screenshot submission, filters, retries, private image, live role and deletion passed")

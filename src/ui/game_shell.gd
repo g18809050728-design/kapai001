@@ -567,6 +567,7 @@ func _regate() -> void:
 					"ui.web_register",
 					"ui.web_guest",
 					"ui.web_guest_logout", "ui.records", "ui.records_back", "ui.web_history", "ui.web_stats", "ui.quit",
+					"ui.web_feedback", "ui.web_feedback_admin",
 					"ui.compendium", "ui.compendium_back",
 					"ui.text_editor", "ui.text_editor_back"
 				]
@@ -1257,9 +1258,9 @@ func _navigate(type: String, payload: Dictionary) -> void:
 			_ui_screen = "menu"
 		"ui.tutorial":
 			_tutorial_replay_requested = true
-		"ui.web_saves", "ui.web_history", "ui.web_stats":
+		"ui.web_saves", "ui.web_history", "ui.web_stats", "ui.web_feedback", "ui.web_feedback_admin":
 			var section := type.trim_prefix("ui.web_")
-			if web_account_state == "ready" and (section != "stats" or _developer_tools_allowed()):
+			if web_account_state == "ready" and (section not in ["stats", "feedback_admin"] or _developer_tools_allowed()):
 				web_section_requested.emit(section)
 			return
 		"ui.compendium":

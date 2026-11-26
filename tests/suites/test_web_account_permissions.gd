@@ -3,6 +3,7 @@ extends RefCounted
 var _failures: Array[String] = []
 var _checks := 0
 var _requests: Array[bool] = []
+var _sections: Array[String] = []
 
 
 func run() -> Array[String]:
@@ -16,6 +17,8 @@ func run() -> Array[String]:
 	shell.session = session
 	tree.root.add_child(shell)
 	shell.web_play_requested.connect(func(developer_tools: bool): _requests.append(developer_tools))
+	shell.web_section_requested.connect(func(section: String): _sections.append(section))
+	_expect_feedback(shell, false, false, "native development")
 	_expect_tools(shell, true, "native development")
 	_check(shell.press("menu:text_editor"), "native text editor entry exists")
 	_check(shell.page is UiTextEditorPage, "native text editor opens without web authentication")
@@ -23,12 +26,20 @@ func run() -> Array[String]:
 	for state in ["checking", "login", "unavailable", "guest", "bundle_unavailable"]:
 		shell.set_web_account_state(state, true, "", "", "admin")
 		_expect_tools(shell, false, state)
+		_expect_feedback(shell, false, false, state)
 		_check_denied(shell, state)
 	shell.set_web_account_state("ready", true, "player", "", "player")
 	_expect_tools(shell, false, "ordinary account")
+	_expect_feedback(shell, true, false, "ordinary account")
+	shell.show_screen("settings")
+	_sections.clear()
+	_check(shell.press("settings:feedback") and _sections == ["feedback"], "settings opens feedback")
+	_check(shell._ui_screen == "settings", "feedback leaves the current settings page in place")
+	shell.show_screen("menu")
 	_check_denied(shell, "ordinary account")
 	shell.set_web_account_state("ready", true, "administrator", "", "admin")
 	_expect_tools(shell, true, "administrator")
+	_expect_feedback(shell, true, true, "administrator")
 	for entry in ["menu:test", "menu:text_editor"]:
 		_requests.clear()
 		_check(shell.press(entry), "administrator can request " + entry)
@@ -46,10 +57,12 @@ func run() -> Array[String]:
 	shell.resolve_web_play(false)
 	shell.set_web_account_state("ready", true, "former administrator", "", "player")
 	_expect_tools(shell, false, "role revoked")
+	_expect_feedback(shell, true, false, "role revoked")
 	_check_denied(shell, "role revoked")
 	shell.set_web_account_state("ready", true, "administrator", "", "admin")
 	shell.set_web_account_state("login", true, "", "")
 	_expect_tools(shell, false, "logout")
+	_expect_feedback(shell, false, false, "logout")
 	_check_denied(shell, "logout")
 	_check(not session.has_test_room() and session.get_view().run_id == null, "permission checks do not create formal or test runs")
 	shell.queue_free()
@@ -62,6 +75,18 @@ func run() -> Array[String]:
 func _expect_tools(shell: GameShell, expected: bool, label: String) -> void:
 	for uid in ["menu:test", "menu:text_editor"]:
 		_check(shell.page.button_uids().has(uid) == expected, label + ": " + uid)
+
+
+func _expect_feedback(shell: GameShell, player: bool, admin: bool, label: String) -> void:
+	for section in ["feedback", "feedback_admin"]:
+		var allowed := player if section == "feedback" else admin
+		_sections.clear()
+		_check(shell.page.button_uids().has("menu:" + section) == allowed, label + ": " + section + " visibility")
+		if allowed:
+			_check(shell.press("menu:" + section) and _sections == [section], label + ": opens " + section)
+		else:
+			shell.submit_action({"type": "ui.web_" + section, "payload": {}})
+			_check(_sections.is_empty(), label + ": denies direct " + section)
 
 
 func _check_denied(shell: GameShell, label: String) -> void:

@@ -3,7 +3,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from sqlalchemy.exc import OperationalError, ProgrammingError
 
-from kapai import accounts, matches, saves
+from kapai import accounts, feedback, matches, saves
 from kapai.db import one
 from kapai.runtime import ORIGIN, engine
 
@@ -48,12 +48,12 @@ def ready():
         if error.orig.args[0] != 1146:
             raise
         raise HTTPException(503, "database_not_migrated") from None
-    if row is None or row["version_num"] != "0004_direct_signup":
+    if row is None or row["version_num"] != "0005_feedback":
         raise HTTPException(503, "database_not_migrated")
     return {"status": "ok", "migration": row["version_num"]}
 
 
 
 
-for module in (accounts, matches, saves):
+for module in (accounts, feedback, matches, saves):
     api.include_router(module.router, prefix="/api/v1")

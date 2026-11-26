@@ -4,9 +4,9 @@ Windows 开发、当前 Linux 服务启动、数据库实查与管理员创建�
 
 当前服务器的 screen 后台运行、API 接管、更新及恢复步骤见 [screen 部署与长期运行指南](../docs/screen部署指南.md)。
 
-当前主程序为 `https://47.93.245.237/`，生产 API 由 `kapai-api-prod.service` 监听回环 18445，连接 `kapai_prod`。生产配置位于 `/etc/kapai001/prod-app.env` 与 `/etc/kapai001/prod-api.env`，工作目录是后端发布快照 `/opt/kapai-api/releases/20261121-admin-developer-tools`。注册使用用户名和密码，管理员同样通过密码登录。邮件找回密码待配置 SMTP。生产网关及回滚步骤见[发布记录](../docs/plans/2026-11-21-production-accounts-release.md)。
+当前主程序为 `https://47.93.245.237/`，生产 API 由 `kapai-api-prod.service` 监听回环 18445，连接 `kapai_prod`。生产配置位于 `/etc/kapai001/prod-app.env` 与 `/etc/kapai001/prod-api.env`，工作目录是后端发布快照 `/opt/kapai-api/releases/20261127-player-feedback`。注册使用用户名和密码，管理员同样通过密码登录。邮件找回密码待配置 SMTP。[生产网关](../docs/plans/2026-11-21-production-accounts-release.md) · [当前发布与回滚](../docs/plans/2026-11-27-player-feedback-release.md)
 
-本服务由 FastAPI、SQLAlchemy、PyMySQL 和 Alembic 组成。单人规则照常在 Godot 执行。MySQL 负责账号、会话、对局摘要、统计与云同步副本。[实施计划](../docs/plans/2026-11-21-account-cloud-save-plan.md)
+本服务由 FastAPI、SQLAlchemy、PyMySQL 和 Alembic 组成。单人规则照常在 Godot 执行。MySQL 负责账号、会话、对局摘要、统计、云同步副本和玩家反馈。[实施计划](../docs/plans/2026-11-21-account-cloud-save-plan.md)
 
 ## 开发数据库
 
@@ -19,6 +19,8 @@ python3.11 -m venv .venv
 ```
 
 迁移 `0004_direct_signup` 将账号启用与邮箱验证分开，已有验证邮箱的账号继续可用。应用就绪入口核对迁移版本。开发机也可以用 PowerShell 调用对应的虚拟环境解释器并用 `$env:` 设置环境。启动时使用应用凭据，从 `server/` 运行 `uvicorn kapai.main:api`，生产通过反向代理暴露同站点的 `/api/v1/`。就绪入口 `/internal/ready` 和存活入口 `/internal/live` 仅供内网或本机检查。
+
+迁移 `0005_feedback` 新建反馈与截图表。登录玩家从「问题反馈」提交文字、发布版本和最多三张静态 PNG、JPEG 或 WebP，每张最多 2 MiB。服务端将截图重新编码为 WebP，反馈与截图一并保存。管理员通过「反馈管理」按类型查看；列表、详情和图片读取均复查当前管理员角色，详情读取记录在管理员审计表。删除账号时一并删除其反馈和截图。
 
 ## 本机内测
 
