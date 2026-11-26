@@ -33,6 +33,7 @@ func _run_suites() -> Array[String]:
 		"test_ui_card_categories",
 		"test_ui_semantic_vfx",
 		"test_ui_shell_pages",
+		"test_ui_tutorial",
 		"test_ui_save_seed",
 		"test_ui_flow_feedback",
 		"test_ui_flow_revision",

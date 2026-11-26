@@ -60,6 +60,14 @@ var _text_library_loaded := false
 var _quit_dialog: ConfirmationDialog
 var _test_exit_dialog: ConfirmationDialog
 var _test_exit_was_editing := false
+var _tutorial: UiTutorialOverlay
+var _tutorial_mode := ""
+var _tutorial_replay := false
+var _tutorial_pending := ""
+var _tutorial_replay_requested := false
+var _tutorial_intro_done := false
+var _tutorial_battle_done := false
+var _tutorial_run_id := ""
 
 
 func _ready() -> void:
@@ -338,6 +346,85 @@ func refresh() -> void:
 	if screen == "battle" and last_error != null:
 		_notice_label.visible = true
 		_notice_label.custom_minimum_size.y = 28
+	if (
+		screen == "battle"
+		and _tutorial_intro_done
+		and not _tutorial_battle_done
+		and not tutorial_visible()
+		and not session.has_test_room()
+		and _tutorial_run_id == str(current.run_id)
+	):
+		_tutorial_pending = "battle"
+	if _tutorial_replay_requested:
+		_tutorial_replay_requested = false
+		_show_tutorial("intro", true)
+	_flush_tutorial_pending()
+
+
+func _flush_tutorial_pending() -> void:
+	if _tutorial_pending.is_empty() or tutorial_visible() or not is_instance_valid(page):
+		return
+	var mode := _tutorial_pending
+	_tutorial_pending = ""
+	_show_tutorial(mode)
+
+
+func _show_tutorial(mode: String, replay: bool = false) -> void:
+	if tutorial_visible() or not is_instance_valid(page):
+		return
+	if replay:
+		_tutorial_pending = ""
+	var steps: Array = (
+		UiTutorialContent.intro_steps() if mode == "intro" else UiTutorialContent.battle_steps()
+	)
+	if steps.is_empty():
+		return
+	var overlay := UiTutorialOverlay.new()
+	overlay.steps = steps
+	overlay.anchor_provider = Callable(self, "_tutorial_anchor")
+	overlay.finished.connect(_on_tutorial_finished.bind(mode, replay))
+	add_child(overlay)
+	_tutorial = overlay
+	_tutorial_mode = mode
+	_tutorial_replay = replay
+	if is_instance_valid(page):
+		page.set_process_input(false)
+
+
+func _on_tutorial_finished(skipped: bool, mode: String, replay: bool) -> void:
+	_tutorial = null
+	_tutorial_mode = ""
+	_tutorial_replay = false
+	if is_instance_valid(page):
+		page.set_process_input(true)
+	if replay:
+		return
+	if mode == "intro":
+		_tutorial_intro_done = true
+		if skipped:
+			_tutorial_battle_done = true
+	elif mode == "battle":
+		_tutorial_battle_done = true
+
+
+func _tutorial_anchor(key: String) -> Rect2:
+	if not is_instance_valid(page):
+		return Rect2()
+	var value: Variant = page.call("tutorial_anchor", key)
+	return value if value is Rect2 else Rect2()
+
+
+func tutorial_visible() -> bool:
+	return is_instance_valid(_tutorial) and _tutorial.visible
+
+
+func tutorial_state() -> Dictionary:
+	if not tutorial_visible():
+		return {}
+	var state := _tutorial.state()
+	state["mode"] = _tutorial_mode
+	state["replay"] = _tutorial_replay
+	return state
 
 
 func set_web_account_state(state: String, registration: bool, nickname: String, message: String, role: String = "") -> void:
@@ -497,6 +584,12 @@ func draft_requires_selection(draft: Dictionary) -> bool:
 
 
 func press(uid: String) -> bool:
+	if tutorial_visible():
+		if _tutorial.has_uid(uid):
+			return _tutorial.press(uid)
+		# Programmatic play (tests, capture tools) may act through the page even
+		# while the teaching layer is open; a real pointer cannot reach it.
+		_tutorial.close(true)
 	return page.press(uid) if page != null else false
 
 
@@ -504,6 +597,10 @@ func submit_action(draft: Dictionary) -> void:
 	if _waiting_for_battle or draft.is_empty():
 		return
 	var type := str(draft.get("type", ""))
+	if tutorial_visible():
+		if type.begins_with("tutorial."):
+			return
+		_tutorial.close(true)
 	var payload: Dictionary = draft.get("payload", {})
 	if (type.begins_with("test.") or type in DEVELOPER_TOOL_ACTIONS) and not _developer_tools_allowed():
 		return
@@ -1158,6 +1255,8 @@ func _navigate(type: String, payload: Dictionary) -> void:
 			_ui_screen = "records"
 		"ui.records_back":
 			_ui_screen = "menu"
+		"ui.tutorial":
+			_tutorial_replay_requested = true
 		"ui.web_saves", "ui.web_history", "ui.web_stats":
 			var section := type.trim_prefix("ui.web_")
 			if web_account_state == "ready" and (section != "stats" or _developer_tools_allowed()):
@@ -1240,6 +1339,10 @@ func _navigate(type: String, payload: Dictionary) -> void:
 				_ui_screen = ""
 				_restart_confirmation = false
 				_advance_paused = started.persistence == &"failed"
+				_tutorial_run_id = str(session.get_view().run_id)
+				_tutorial_intro_done = false
+				_tutorial_battle_done = false
+				_tutorial_pending = "intro"
 				notice = (
 					"冒险开始。选择地图上的第一个节点。 "
 					+ _persistence_notice(

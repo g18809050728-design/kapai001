@@ -346,6 +346,7 @@ func _render_menu() -> void:
 				resume.tooltip_text = "还没有可以继续的冒险。"
 		add_button(options,"menu:new","新的四年",_ui("new_run"))
 		add_button(options,"menu:compendium","图鉴",_ui("compendium"))
+		add_button(options,"menu:tutorial","新手教程",_ui("tutorial"))
 		add_button(options,"menu:records","游戏记录",_ui("records"))
 		if account_state == "ready" and bool(view.get("team_tools_available", false)):
 			add_button(options,"menu:admin","管理统计",_ui("web_stats"))
@@ -359,7 +360,7 @@ func _render_menu() -> void:
 		add_button(options, "menu:guest", "游客登录", _ui("web_guest"))
 	add_button(options,"menu:settings","设置与存档",_ui("settings"))
 	add_button(options,"menu:quit","退出游戏",_ui("quit"))
-	for uid in ["menu:continue","menu:new","menu:compendium","menu:records","menu:admin","menu:text_editor","menu:test","menu:settings","menu:account","menu:register","menu:guest","menu:quit"]:
+	for uid in ["menu:continue","menu:new","menu:compendium","menu:tutorial","menu:records","menu:admin","menu:text_editor","menu:test","menu:settings","menu:account","menu:register","menu:guest","menu:quit"]:
 		if not _buttons.has(uid):
 			continue
 		var option: Button = _buttons[uid]
@@ -506,6 +507,24 @@ func _overview_locate(id: String) -> void:
 
 func _flow_navigation(_prefix: String) -> void:
 	pass
+
+
+func tutorial_anchor(key: String) -> Rect2:
+	if key != "map_node":
+		return Rect2()
+	var canvas := find_child("RouteMap", true, false)
+	if not canvas is Control:
+		return Rect2()
+	var reachable: Array = _array(view.get("reachable_node_ids"))
+	var fallback: Control = null
+	for child in canvas.get_children():
+		if not child is Button or not child.has_meta("node_id"):
+			continue
+		if fallback == null:
+			fallback = child
+		if reachable.has(str(child.get_meta("node_id"))):
+			return (child as Control).get_global_rect()
+	return fallback.get_global_rect() if fallback != null else Rect2()
 
 
 func _bottom(text: String) -> HBoxContainer:

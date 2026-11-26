@@ -143,7 +143,8 @@ func _header() -> void:
 	})
 	page._toolbar.mark_active("deck", page._panel_zone == "deck" and not page._panel_text.is_empty())
 	var urgent := int(page.view.get("ddl",0)) <= 3
-	_text(stage,Rect2(470,top,340,30),"第 %s 回合  ·  DDL %s 次轮末" % [page.view.get("round_index",0),page.view.get("ddl",0)],18,Color("ffb18e") if urgent else Color("d9c99e"),HORIZONTAL_ALIGNMENT_CENTER)
+	var ddl_label := _text(stage,Rect2(470,top,340,30),"第 %s 回合  ·  DDL %s 次轮末" % [page.view.get("round_index",0),page.view.get("ddl",0)],18,Color("ffb18e") if urgent else Color("d9c99e"),HORIZONTAL_ALIGNMENT_CENTER)
+	ddl_label.name = "TurnDdlValue"
 
 
 func _player() -> void:
@@ -155,7 +156,8 @@ func _player() -> void:
 	_bar(stage,_field(Rect2(115,483,190,14)),float(hp)/maxi(1,max_hp),Color("659fc5"))
 	var vitality := _text(stage,_field(Rect2(115,475,190,28)),"%s / %s" % [hp,max_hp],roundi(18*minf(UiStyle.text_scale,1.2)),LIGHT,HORIZONTAL_ALIGNMENT_CENTER)
 	vitality.name = "PlayerVitalityValue"
-	_text(stage,_field(Rect2(65,475,47,29)),"◇%s" % player.get("relax",0),19,Color("b4d7ed"),HORIZONTAL_ALIGNMENT_CENTER)
+	var relax_label := _text(stage,_field(Rect2(65,475,47,29)),"◇%s" % player.get("relax",0),19,Color("b4d7ed"),HORIZONTAL_ALIGNMENT_CENTER)
+	relax_label.name = "PlayerRelaxValue"
 	_text(stage,_field(Rect2(102,499,218,22)),UiStyle.label(str(page.view.get("character_id","P01"))).split("·")[0],16,LIGHT,HORIZONTAL_ALIGNMENT_CENTER)
 	var statuses: Array = []
 	for value in page._array(page.view.get("statuses")):

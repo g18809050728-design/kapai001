@@ -2041,6 +2041,56 @@ func _battle_subtitle() -> String:
 	return UiStyle.label(encounter) if not encounter.is_empty() else "公开任务与行动"
 
 
+func tutorial_anchor(key: String) -> Rect2:
+	match key:
+		"battle_intents":
+			var intent_rect := Rect2()
+			for node in find_children("TaskIntent_*", "Label", true, false):
+				if node is Control and node.is_visible_in_tree():
+					intent_rect = _merge_rect(intent_rect, (node as Control).get_global_rect())
+			var turn := find_child("TurnDdlValue", true, false)
+			if turn is Control and turn.is_visible_in_tree():
+				intent_rect = _merge_rect(intent_rect, (turn as Control).get_global_rect())
+			return intent_rect
+		"battle_tasks":
+			var rect := Rect2()
+			for prefix in ["TaskIntent_", "TaskWorkValue_", "TaskTitle_"]:
+				for node in find_children(prefix + "*", "Label", true, false):
+					if node is Control and node.is_visible_in_tree():
+						rect = _merge_rect(rect, (node as Control).get_global_rect())
+			var ddl := find_child("TurnDdlValue", true, false)
+			if ddl is Control and ddl.is_visible_in_tree():
+				rect = _merge_rect(rect, (ddl as Control).get_global_rect())
+			return rect
+		"battle_focus":
+			var focus := find_child("FocusDevice", true, false)
+			if focus is Control:
+				return (focus as Control).get_global_rect()
+		"battle_end_turn":
+			var end_turn: Variant = _buttons.get("battle:end_turn")
+			if end_turn is Control:
+				return (end_turn as Control).get_global_rect()
+		"battle_piles":
+			var rect := Rect2()
+			for uid in ["battle:draw", "battle:discard", "battle:exhaust"]:
+				var pile: Variant = _buttons.get(uid)
+				if pile is Control:
+					rect = _merge_rect(rect, (pile as Control).get_global_rect())
+			return rect
+		"battle_player":
+			var rect := Rect2()
+			for node_name in ["PlayerVitalityValue", "PlayerRelaxValue"]:
+				var value := find_child(node_name, true, false)
+				if value is Control:
+					rect = _merge_rect(rect, (value as Control).get_global_rect())
+			return rect
+	return Rect2()
+
+
+func _merge_rect(current: Rect2, addition: Rect2) -> Rect2:
+	return addition if not current.has_area() else current.merge(addition)
+
+
 func _locked(prefix: String) -> bool:
 	for uid in button_uids():
 		if str(uid).begins_with(prefix):
