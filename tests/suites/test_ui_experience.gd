@@ -227,7 +227,7 @@ func _status_and_settings() -> void:
 
 
 func _all_text(node: Node) -> String:
-	var value: String = node.text + "\n" if node is Label else ""
+	var value: String = node.text + "\n" if node is Label or node is BattleStatusSlot else ""
 	for child in node.get_children():
 		value += _all_text(child)
 	return value

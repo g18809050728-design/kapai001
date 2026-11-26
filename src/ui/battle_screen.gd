@@ -76,6 +76,8 @@ var _task_meters: Dictionary = {}
 var _presentation: BattlePresentation
 var _result_pending := false
 var _result_events_done := false
+var _status_return_uid := ""
+var _status_return_scroll := 0
 
 
 func effect_speed() -> float:
@@ -572,6 +574,8 @@ func _update_pointer(delta: float) -> void:
 				var focus := get_viewport().gui_get_focus_owner()
 				if focus is BattlePileButton and not focus.disabled:
 					_hover_target = focus.hover_content()
+				elif focus is BattleStatusSlot and not focus.disabled:
+					_hover_target = _buff_hover_target(str(focus.get_meta("uid", "")))
 	else:
 		_hovered_card = null
 		_hover_target = {} if reading_pinned or _dragging else _hover_card_at(_pointer_position)
@@ -753,6 +757,12 @@ func _hover_target_at(point: Vector2) -> Dictionary:
 	if not card_target.is_empty():
 		return card_target
 	for uid in _buttons:
+		if _buttons[uid] is BattleStatusSlot and _button_hit(str(uid), point):
+			var slot: BattleStatusSlot = _buttons[uid]
+			var scroll: ScrollContainer = slot.get_meta("status_scroll")
+			if scroll.get_global_rect().has_point(point):
+				return _buff_hover_target(str(uid))
+	for uid in _buttons:
 		var key := str(uid)
 		if _buttons[uid] is BattlePileButton and not _buttons[uid].disabled and _button_hit(key, point):
 			return _buttons[uid].hover_content()
@@ -760,8 +770,6 @@ func _hover_target_at(point: Vector2) -> Dictionary:
 			return _task_hover_target(key.trim_prefix("task:"))
 		if key.begins_with("unit:") and _button_hit(key, point):
 			return _unit_hover_target(key.trim_prefix("unit:"))
-	if _buttons.has("statuses:player") and _button_hit("statuses:player", point):
-		return _status_hover_target()
 	return {}
 
 
@@ -1019,32 +1027,17 @@ func _unit_hover_target(unit_id: String) -> Dictionary:
 	}
 
 
-func _status_hover_target() -> Dictionary:
-	var player := _dict(view.get("player"))
-	var statuses := _statuses_for(str(player.get("entity_id", "")))
-	if statuses.is_empty():
+func _buff_hover_target(uid: String) -> Dictionary:
+	var slot: BattleStatusSlot = _buttons.get(uid)
+	if not is_instance_valid(slot):
 		return {}
-	var names: PackedStringArray = []
-	var lines: Array[String] = ["我的状态"]
-	var terms: Array[String] = []
-	for value in statuses:
-		var status := _dict(value)
-		var key := str(status.get("status_id", ""))
-		var stacks := int(status.get("stacks", 0))
-		names.append("%s×%s" % [UiStyle.label(key), stacks])
-		lines.append("\n%s\n当前层数：%s" % [UiGlossary.describe(key), stacks])
-		if not key.is_empty() and not terms.has(key):
-			terms.append(key)
-	return {
-		"uid": "statuses:player",
-		"title": "我的状态",
-		"meta": "、".join(names),
-		"body": "共 %s 项状态；点击状态区或按 I 查看详情" % statuses.size(),
-		"summary": "我的状态：" + "、".join(names),
-		"detail": "\n".join(lines),
-		"terms": terms,
-		"rect": _button_rect("statuses:player"),
-	}
+	var entry := slot.entry
+	var title := str(entry.title)
+	var count := str(entry.get("count", ""))
+	var meta := "负面状态" if entry.get("negative", false) else "增益 / 持续效果"
+	if not count.is_empty():
+		meta += " · " + ("下回合生效" if count == "待" else "当前 %s" % count)
+	return {"uid":uid, "title":title, "meta":meta, "body":str(entry.body), "detail":title + "\n" + meta + "\n\n" + str(entry.body), "terms":[], "rect":slot.get_global_rect().intersection((slot.get_meta("status_scroll") as Control).get_global_rect())}
 
 
 func _statuses_for(target_id: String) -> Array:
@@ -1091,6 +1084,8 @@ func _run_card_entry(card_id: String, definition_id: String) -> Dictionary:
 
 
 func _target_for_uid(uid: String) -> Dictionary:
+	if uid.begins_with("buff:"):
+		return _buff_hover_target(uid)
 	if _buttons.get(uid) is UiOfferCard:
 		return _offer_card_hover_target(_buttons[uid])
 	if _buttons.get(uid) is BattlePileButton:
@@ -1108,8 +1103,6 @@ func _target_for_uid(uid: String) -> Dictionary:
 		return _task_hover_target(uid.trim_prefix("task:"))
 	if uid.begins_with("unit:"):
 		return _unit_hover_target(uid.trim_prefix("unit:"))
-	if uid == "statuses:player":
-		return _status_hover_target()
 	if uid == "battle:resources":
 		var id := str(view.get("character_id", ""))
 		var passive := str({"P01": "r3_p01_link_replay", "P02": "r3_p02_paper_record", "P03": "r3_p03_compound_reaction", "P04": "r3_p04_teamwork"}.get(id, ""))
@@ -1180,10 +1173,16 @@ func _toggle_detail() -> void:
 		return
 	if not _panel_text.is_empty():
 		return
-	_open_detail(target)
+	if str(target.get("uid", "")).begins_with("buff:"):
+		_open_detail_for_uid(str(target.uid))
+	else:
+		_open_detail(target)
 
 
 func _open_detail_for_uid(uid: String) -> void:
+	if uid.begins_with("buff:") and _buttons.has(uid):
+		_status_return_uid = uid
+		_status_return_scroll = (_buttons[uid].get_meta("status_scroll") as ScrollContainer).scroll_horizontal
 	_open_detail(_target_for_uid(uid))
 
 
@@ -2034,6 +2033,16 @@ func _close_panel() -> void:
 	_detail_terms.clear()
 	_inspect_open = false
 	_render_from_local()
+	if not _status_return_uid.is_empty():
+		_restore_status_focus.call_deferred()
+
+
+func _restore_status_focus() -> void:
+	var slot: Button = _buttons.get(_status_return_uid)
+	_status_return_uid = ""
+	if is_instance_valid(slot):
+		slot.grab_focus()
+		(slot.get_meta("status_scroll") as ScrollContainer).set_deferred("scroll_horizontal", _status_return_scroll)
 
 
 func _battle_subtitle() -> String:

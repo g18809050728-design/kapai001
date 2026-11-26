@@ -120,13 +120,14 @@ func run() -> Array[String]:
 		display.statuses.append({"target_id": display.player.entity_id, "status_id": "weakness", "stacks": 1})
 		_battle().render(display)
 		await _frames()
-		var status: Label = _battle()._stage.get_node("TaskStatus_" + str(task.task_id).validate_node_name())
-		_check(status.text.contains("虚弱") and status.text.contains("乏力"), "both task status names remain visible")
+		var status: ScrollContainer = _battle()._stage.get_node("TaskStatusBar_" + str(task.task_id).validate_node_name())
+		var slots := status.find_children("*", "Button", true, false)
+		_check(slots.any(func(slot): return slot.text == "虚弱") and slots.any(func(slot): return slot.text == "乏力"), "both task status names remain accessible")
 		# HUD is independent of the animated entity and its stable hit region.
 		var title := _battle()._stage.get_node("TaskTitle_" + str(task.task_id).validate_node_name()) as Label
 		_check(title != null and not status.get_global_rect().intersects(title.get_global_rect()), "status strip avoids task title with %d phases" % phases)
 		for card in _battle()._hand_cards:
-			_check(not _card_bounds(card, true).intersects(_battle()._buttons["statuses:player"].get_global_rect()), "player statuses avoid hand")
+			_check(not _card_bounds(card, true).intersects((_battle()._stage.get_node("PlayerStatusBar") as Control).get_global_rect()), "player statuses avoid hand")
 	_shell.free()
 	tree.root.size = old_size
 	UiStyle.text_scale = 1.0

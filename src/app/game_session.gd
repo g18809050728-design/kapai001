@@ -892,6 +892,12 @@ func _battle_view(
 			"task", "unit":
 				effect_sources[id] = str(id)
 	var engine := engine_override if engine_override != null else _battle_engine
+	var status_catalog := catalog_override if catalog_override != null else _catalog
+	var status_rules := {}
+	if status_catalog != null and status_catalog.get_info() != null:
+		var rules := status_catalog.get_definition("ruleset", status_catalog.get_info().ruleset_id)
+		if rules.ok:
+			status_rules = rules.data.get("statuses", {}).duplicate(true)
 	var tasks: Array = []
 	for task in battle.tasks:
 		var item := _task_view(task, catalog_override)
@@ -911,6 +917,7 @@ func _battle_view(
 		"units": battle.units.duplicate(true),
 		"tasks": tasks,
 		"statuses": battle.statuses.duplicate(true),
+		"status_rules": status_rules,
 		"scene": battle.scene.duplicate(true) if battle.scene is Dictionary else null,
 		"zone_counts": counts,
 		"zones_public": zones_public,

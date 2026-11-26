@@ -149,24 +149,15 @@ func _header() -> void:
 func _player() -> void:
 	var player := page._dict(page.view.get("player"))
 	var player_id := str(player.get("entity_id", ""))
-	_actor(_field(Rect2(98,206,224,284)),player_id,str(page.view.get("character_id","P01")),"player")
+	_actor(_field(Rect2(98,186,224,246)),player_id,str(page.view.get("character_id","P01")),"player")
 	var hp := int(player.get("vitality",0))
 	var max_hp := int(page.view.get("max_vitality",maxi(1,hp)))
-	_bar(stage,_field(Rect2(115,483,190,14)),float(hp)/maxi(1,max_hp),Color("659fc5"))
-	var vitality := _text(stage,_field(Rect2(115,475,190,28)),"%s / %s" % [hp,max_hp],roundi(18*minf(UiStyle.text_scale,1.2)),LIGHT,HORIZONTAL_ALIGNMENT_CENTER)
+	_bar(stage,_field(Rect2(115,423,190,14)),float(hp)/maxi(1,max_hp),Color("659fc5"))
+	var vitality := _text(stage,_field(Rect2(115,415,190,28)),"%s / %s" % [hp,max_hp],roundi(18*minf(UiStyle.text_scale,1.2)),LIGHT,HORIZONTAL_ALIGNMENT_CENTER)
 	vitality.name = "PlayerVitalityValue"
-	_text(stage,_field(Rect2(65,475,47,29)),"◇%s" % player.get("relax",0),19,Color("b4d7ed"),HORIZONTAL_ALIGNMENT_CENTER)
-	_text(stage,_field(Rect2(102,499,218,22)),UiStyle.label(str(page.view.get("character_id","P01"))).split("·")[0],16,LIGHT,HORIZONTAL_ALIGNMENT_CENTER)
-	var statuses: Array = []
-	for value in page._array(page.view.get("statuses")):
-		if str(page._dict(value).get("target_id","")) == player_id:
-			statuses.append(value)
-	if not statuses.is_empty():
-		var label := _text(stage,_field(Rect2(70,522,210,26)),page._status_text(statuses),13,Color("e8d3a4"),HORIZONTAL_ALIGNMENT_CENTER)
-		label.max_lines_visible = 1
-		label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-		var hit := _button(_field(Rect2(70,522,210,26)),"statuses:player","",{},Callable(page,"_open_detail_for_uid").bind("statuses:player"))
-		_transparent_target(hit)
+	_text(stage,_field(Rect2(65,415,47,29)),"◇%s" % player.get("relax",0),19,Color("b4d7ed"),HORIZONTAL_ALIGNMENT_CENTER)
+	_text(stage,_field(Rect2(102,439,218,22)),UiStyle.label(str(page.view.get("character_id","P01"))).split("·")[0],16,LIGHT,HORIZONTAL_ALIGNMENT_CENTER)
+	_status_bar(player_id, _field(Rect2(70,466,246,26)), true)
 
 
 func _v3_summary() -> void:
@@ -230,12 +221,12 @@ func _tasks() -> void:
 		var phase_count := int(task.get("phase_count",1))
 		if phase_count > 1:
 			_text(stage,_field(Rect2(x,237,width,36)),"第 %s / %s 阶段 · " % [task.get("phase_index",1),phase_count]+("最终阶段" if int(task.get("phase_index",1)) == phase_count else "完成后进入下一阶段"),13,SOFT,HORIZONTAL_ALIGNMENT_CENTER)
-		var frame := _actor(_field(Rect2(x,270,width,207)),id,str(task.get("definition_id","")),"task",int(task.get("phase_index",1)))
+		var frame := _actor(_field(Rect2(x,250,width,167)),id,str(task.get("definition_id","")),"task",int(task.get("phase_index",1)))
 		var remaining := int(task.get("work_remaining",0))
 		var maximum := maxi(1,int(task.get("work_max",1)))
-		var fill := _bar(stage,_field(Rect2(x,483,width,14)),float(remaining)/maximum,Color("c85d5b"))
-		var work_bounds := _field(Rect2(x-4,474,width+8,32))
-		var title_bounds := _field(Rect2(x,500,width,25))
+		var fill := _bar(stage,_field(Rect2(x,423,width,14)),float(remaining)/maximum,Color("c85d5b"))
+		var work_bounds := _field(Rect2(x-4,414,width+8,32))
+		var title_bounds := _field(Rect2(x,440,width,25))
 		if short:
 			work_bounds.size.y = minimum_text + 4
 			title_bounds.position.y = work_bounds.end.y
@@ -248,37 +239,58 @@ func _tasks() -> void:
 		page._task_meters[id] = {"fill":fill,"label":work_label,"width":width,"maximum":maximum}
 		var task_title := _text(stage,title_bounds,UiStyle.label(str(task.get("definition_id",""))),16,LIGHT,HORIZONTAL_ALIGNMENT_CENTER)
 		task_title.name = "TaskTitle_"+id.validate_node_name()
-		if short:
-			task_title.max_lines_visible = 1
-			task_title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-		var target_bounds := _field(Rect2(x,263,width,214))
+		task_title.max_lines_visible = 1
+		task_title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		var target_bounds := _field(Rect2(x,243,width,174))
 		if mobile:
 			var hit_height := maxf(touch_height, title_bounds.end.y - target_bounds.position.y)
 			target_bounds.size.y = minf(hit_height, hand_top - target_bounds.position.y)
 		var target := _button(target_bounds,"task:"+id,"",{},page._bind_task(id))
 		_transparent_target(target)
 		page._target_frames["task:"+id] = frame
-		var status_text := _task_status_text(id)
-		if not status_text.is_empty():
-			var bounds := _field(Rect2(x,526,width,42))
-			if short:
-				bounds.position.y = title_bounds.end.y
-			var statuses := _text(stage,bounds,status_text,13,Color("ffe0aa"),HORIZONTAL_ALIGNMENT_CENTER)
-			statuses.name = "TaskStatus_"+id.validate_node_name()
-			statuses.max_lines_visible = 2
-			statuses.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		var bounds := _field(Rect2(x,466,width,42))
+		if short:
+			bounds.position.y = title_bounds.end.y
+		_status_bar(id, bounds, false)
 
 
-func _task_status_text(task_id: String) -> String:
-	var parts: PackedStringArray = []
-	for value in page._array(page.view.get("statuses")):
-		var status := page._dict(value)
-		if str(status.get("target_id", "")) != task_id:
-			continue
-		parts.append(
-			"%s×%s" % [UiStyle.label(str(status.get("status_id", ""))), status.get("stacks", 0)]
-		)
-	return "、".join(parts)
+func _status_bar(id: String, bounds: Rect2, player: bool) -> void:
+	var factor := maxf(.1, minf(page.size.x / stage.size.x, page.size.y / stage.size.y))
+	var edge := ceilf((UiStyle.MOBILE_TARGET if mobile else 44) / factor)
+	var entries := BattleStatusSlot.entries(page.view, id, player)
+	var scroll := ScrollContainer.new()
+	scroll.name = "PlayerStatusBar" if player else "TaskStatusBar_" + id.validate_node_name()
+	scroll.position = Vector2(bounds.position.x, minf(bounds.position.y, hand_top - edge - 20))
+	scroll.size = Vector2(bounds.size.x, edge + 12)
+	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	scroll.follow_focus = true
+	scroll.z_index = 5
+	stage.add_child(scroll)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 4)
+	scroll.add_child(row)
+	if entries.is_empty():
+		_text(row, Rect2(0,0,bounds.size.x,edge), "暂无状态", 13, SOFT, HORIZONTAL_ALIGNMENT_CENTER)
+		return
+	for entry in entries:
+		var uid := "buff:" + id + ":" + str(entry.key)
+		var slot := BattleStatusSlot.new()
+		slot.configure(entry, edge)
+		# Custom paint replaces the default text, retaining Button.text for accessibility.
+		for state in ["font_color", "font_hover_color", "font_pressed_color", "font_focus_color", "font_disabled_color"]:
+			slot.add_theme_color_override(state, Color.TRANSPARENT)
+		slot.set_meta("uid", uid)
+		slot.set_meta("status_scroll", scroll)
+		row.add_child(slot)
+		page._buttons[uid] = slot
+		slot.pressed.connect(func():
+			if not page.is_locked() and page._panel_text.is_empty() and not page._result_pending:
+				page._open_detail_for_uid(uid))
+		slot.gui_input.connect(func(event: InputEvent):
+			if event is InputEventMouseButton and event.pressed and event.button_index in [MOUSE_BUTTON_WHEEL_DOWN, MOUSE_BUTTON_WHEEL_UP]:
+				scroll.scroll_horizontal += roundi(edge) * (1 if event.button_index == MOUSE_BUTTON_WHEEL_DOWN else -1)
+				slot.accept_event())
 
 
 func _units() -> void:
