@@ -97,6 +97,7 @@ static func ensure_loaded() -> void:
 		_values[uid] = str(value)
 		if _values.size() >= MAX_ENTRIES:
 			break
+	_migrate_battle_glossary(_values)
 
 
 static func ensure_defaults_loaded() -> void:
@@ -138,6 +139,46 @@ static func ensure_defaults_loaded() -> void:
 		_defaults[uid] = str(value)
 		if _defaults.size() >= MAX_ENTRIES:
 			break
+	_migrate_battle_glossary(_defaults)
+
+
+## Battle explanations used to carry their glossary at the end of one string,
+## and an old ordered-resolution heading at the start of the effect block.
+## Clean both once on load so the editor and battle window use the current
+## split text without losing any other line.
+static func _migrate_battle_glossary(values: Dictionary) -> void:
+	var marker := "名词解释："
+	var split_values: Dictionary = {}
+	for raw_uid in values.keys():
+		var uid := str(raw_uid)
+		if not uid.ends_with(":battle"):
+			continue
+		var value := str(values[raw_uid])
+		var index := value.find(marker)
+		var effect := value
+		var glossary := ""
+		if index >= 0:
+			effect = value.substr(0, index).strip_edges()
+			glossary = value.substr(index + marker.length()).strip_edges()
+		var cleaned := _strip_battle_heading(effect)
+		if cleaned != value:
+			split_values[uid] = cleaned
+		if index >= 0:
+			var glossary_uid := uid.trim_suffix(":battle") + ":battle_glossary"
+			if not values.has(glossary_uid):
+				split_values[glossary_uid] = glossary
+	for uid in split_values:
+		values[uid] = split_values[uid]
+
+
+static func _strip_battle_heading(value: String) -> String:
+	var heading := "打出后按顺序结算："
+	var lines := value.split("\n")
+	for index in lines.size():
+		if lines[index].strip_edges() == heading:
+			lines.remove_at(index)
+			return "\n".join(lines)
+	return value
 
 
 static func reload_from_disk() -> void:

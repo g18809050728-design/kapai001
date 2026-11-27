@@ -64,12 +64,61 @@ static func describe_battle_card(detail: Dictionary) -> String:
 	if not uid.is_empty():
 		var value: Variant = TextOverrides.get_optional(uid)
 		if value != null:
-			return str(value)
+			return str(battle_explanation_parts(str(value)).get("effect", ""))
 	return describe_battle_card_default(detail)
 
 
 static func describe_battle_card_default(detail: Dictionary) -> String:
 	return _describe_card(_normalize_battle_numbers(detail), true)
+
+
+static func describe_battle_card_glossary(detail: Dictionary) -> String:
+	var uid := card_description_uid(detail, "battle_glossary")
+	if not uid.is_empty():
+		var value: Variant = TextOverrides.get_optional(uid)
+		if value != null:
+			return str(value)
+	var battle_uid := card_description_uid(detail, "battle")
+	if not battle_uid.is_empty():
+		var battle_value: Variant = TextOverrides.get_optional(battle_uid)
+		if battle_value != null:
+			var legacy := str(battle_explanation_parts(str(battle_value)).get("glossary", ""))
+			if not legacy.is_empty():
+				return legacy
+	return describe_battle_card_glossary_default(detail)
+
+
+static func describe_battle_card_glossary_default(detail: Dictionary) -> String:
+	var effect_text := _describe_card(_normalize_battle_numbers(detail), true)
+	return "\n".join(_battle_keyword_help(effect_text))
+
+
+## Split older single-window battle text into its effect explanation and the
+## "名词解释" block so both can be rendered separately. Entries without the
+## marker keep the whole text as the effect part.
+static func battle_explanation_parts(text: String) -> Dictionary:
+	var marker := "名词解释："
+	var index := text.find(marker)
+	if index < 0:
+		return {"effect": strip_battle_heading(text), "glossary": "", "split": false}
+	return {
+		"effect": strip_battle_heading(text.substr(0, index).strip_edges()),
+		"glossary": text.substr(index + marker.length()).strip_edges(),
+		"split": true,
+	}
+
+
+## The ordered-resolution line is no longer part of the battle explanation.
+## Overrides saved before that change are cleaned here without touching any
+## other line.
+static func strip_battle_heading(text: String) -> String:
+	var heading := "打出后按顺序结算："
+	var lines := text.split("\n")
+	for index in lines.size():
+		if lines[index].strip_edges() == heading:
+			lines.remove_at(index)
+			return "\n".join(lines)
+	return text
 
 
 static func card_description_uid(detail: Dictionary, surface: String = "detail") -> String:
@@ -113,7 +162,6 @@ static func _describe_card(detail: Dictionary, battle_explanation: bool) -> Stri
 			lines.append("先执行：" + UiStyle.describe_effects(detail.pre_effects))
 	if not detail.get("effects", []).is_empty():
 		if battle_explanation:
-			lines.append("打出后按顺序结算：")
 			lines.append_array(_battle_effect_steps(detail.effects, target))
 		else:
 			lines.append(UiStyle.describe_effects(detail.effects))
@@ -171,11 +219,6 @@ static func _describe_card(detail: Dictionary, battle_explanation: bool) -> Stri
 	if detail.has("exam_effects"):
 		if not battle_explanation:
 			lines.append("考试替代效果：" + UiStyle.describe_effects(detail.exam_effects))
-	if battle_explanation:
-		var glossary := _battle_keyword_help("\n".join(lines))
-		if not glossary.is_empty():
-			lines.append("名词解释：")
-			lines.append_array(glossary)
 	return "\n".join(lines)
 
 

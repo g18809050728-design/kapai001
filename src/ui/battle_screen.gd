@@ -54,6 +54,12 @@ var _hover_meta: Label
 var _hover_body: Label
 var _hover_scroll: ScrollContainer
 var _hover_hint: Label
+var _glossary_toggle: Button
+var _glossary_box: PanelContainer
+var _glossary_scroll: ScrollContainer
+var _glossary_body: Label
+var _glossary_open := false
+var _glossary_uid := ""
 var _hint_label: Label
 var _hovered_card: BattleCard
 var _hover_target: Dictionary = {}
@@ -169,6 +175,8 @@ func render(data: Dictionary) -> void:
 		_remember_effect_origins()
 		_presentation.capture_hand(self)
 		_hover_pinned = false
+		_glossary_open = false
+		_glossary_uid = ""
 		_selected_card_id = ""
 		_selected_unit_id = ""
 		_target_ids.clear()
@@ -440,7 +448,8 @@ func _input(event: InputEvent) -> void:
 		_touch_pointer = event.device == InputEvent.DEVICE_ID_EMULATION
 		_pointer_position = event.position
 		_update_pointer(0.0)
-		if not _pinned_card_detail.is_empty() and _hover_panel.visible and _hover_panel.get_global_rect().has_point(event.position):
+		var detail_target := _pinned_card_detail if not _pinned_card_detail.is_empty() else _hover_target
+		if _hover_panel.visible and _is_card_detail(detail_target) and _over_card_detail_panel(event.position):
 			return
 	if event is InputEventKey and event.pressed and not event.echo and not event.ctrl_pressed and not event.alt_pressed and not event.meta_pressed and not is_locked():
 		match event.keycode:
@@ -587,6 +596,40 @@ func _card_at(point: Vector2) -> BattleCard:
 	return null
 
 
+func _over_card_detail_panel(point: Vector2) -> bool:
+	if not is_instance_valid(_hover_panel):
+		return false
+	var panel_rect := _hover_panel.get_global_rect()
+	if panel_rect.has_point(point):
+		return true
+	var target := _pinned_card_detail if not _pinned_card_detail.is_empty() else _hover_target
+	var raw_rect: Variant = target.get("rect", Rect2())
+	if not raw_rect is Rect2:
+		return false
+	var card_rect: Rect2 = raw_rect
+	var top := maxf(card_rect.position.y, panel_rect.position.y)
+	var bottom := minf(card_rect.end.y, panel_rect.end.y)
+	if bottom <= top:
+		return false
+	# Let the pointer cross the narrow gap into the side panel without the
+	# hover target disappearing before it can reach the dropdown.
+	if card_rect.end.x <= panel_rect.position.x:
+		return (
+			point.x >= card_rect.end.x
+			and point.x <= panel_rect.position.x
+			and point.y >= top
+			and point.y <= bottom
+		)
+	if panel_rect.end.x <= card_rect.position.x:
+		return (
+			point.x >= panel_rect.end.x
+			and point.x <= card_rect.position.x
+			and point.y >= top
+			and point.y <= bottom
+		)
+	return false
+
+
 func _update_pointer(delta: float) -> void:
 	if is_instance_valid(_toolbar) and _toolbar.is_menu_open():
 		_hover_target = {}
@@ -595,12 +638,20 @@ func _update_pointer(delta: float) -> void:
 		return
 	if not is_instance_valid(_stage):
 		return
+	var pinned_target := _pinned_card_detail if not _pinned_card_detail.is_empty() else _hover_target
 	var reading_pinned := not _pinned_card_detail.is_empty() and _hover_panel.visible and _hover_panel.get_global_rect().has_point(_pointer_position)
+	var reading_card_panel := (
+		_hover_panel.visible
+		and _is_card_detail(pinned_target)
+		and _over_card_detail_panel(_pointer_position)
+	)
+	var reading_detail := reading_pinned or reading_card_panel
 	if not is_locked() and _panel_text.is_empty() and not is_instance_valid(_card_preview):
-		_hovered_card = null if _touch_pointer or _dragging or reading_pinned else _card_at(_pointer_position)
+		_hovered_card = null if _touch_pointer or _dragging or reading_detail else _card_at(_pointer_position)
 		if not _hover_pinned:
-			_hover_target = {} if _touch_pointer or _dragging or reading_pinned else _hover_target_at(_pointer_position)
-			if _hover_target.is_empty():
+			if not reading_detail:
+				_hover_target = {} if _touch_pointer or _dragging else _hover_target_at(_pointer_position)
+			if _hover_target.is_empty() and not reading_detail:
 				var focus := get_viewport().gui_get_focus_owner()
 				if focus is BattlePileButton and not focus.disabled:
 					_hover_target = focus.hover_content()
@@ -610,7 +661,7 @@ func _update_pointer(delta: float) -> void:
 					_hover_target = _target_for_uid(str(focus.get_meta("uid")))
 	else:
 		_hovered_card = null
-		_hover_target = {} if reading_pinned or _dragging else _hover_card_at(_pointer_position)
+		_hover_target = {} if reading_detail or _dragging else _hover_card_at(_pointer_position)
 	var hover_uid := str(_hover_target.get("uid", ""))
 	if hover_uid != _last_hover_uid:
 		_last_hover_uid = hover_uid
@@ -664,6 +715,8 @@ func _update_hover_window() -> void:
 		show = show and not is_locked() and _panel_text.is_empty()
 	_hover_panel.visible = show
 	if not show:
+		_glossary_open = false
+		_glossary_uid = ""
 		return
 	_hover_title.text = str(target.get("title", ""))
 	_hover_meta.text = str(target.get("meta", ""))
@@ -676,9 +729,11 @@ func _update_hover_window() -> void:
 		height = minf(height,maxf(150,header.size.y-24))
 	_hover_panel.size = Vector2(width, height)
 	_hover_panel.z_index = 350 if card_detail else 120
-	_hover_panel.mouse_filter = Control.MOUSE_FILTER_STOP if pinned else Control.MOUSE_FILTER_IGNORE
-	_hover_scroll.mouse_filter = Control.MOUSE_FILTER_STOP if pinned else Control.MOUSE_FILTER_IGNORE
-	_hover_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO if pinned else ScrollContainer.SCROLL_MODE_DISABLED
+	# Card details now own a clickable dropdown, so the unfixed window also
+	# keeps pointer input while it is open. Summaries still pass events through.
+	_hover_panel.mouse_filter = Control.MOUSE_FILTER_STOP if card_detail else Control.MOUSE_FILTER_IGNORE
+	_hover_scroll.mouse_filter = Control.MOUSE_FILTER_STOP if card_detail else Control.MOUSE_FILTER_IGNORE
+	_hover_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO if card_detail else ScrollContainer.SCROLL_MODE_DISABLED
 	_hover_body.max_lines_visible = -1 if card_detail else 4
 	if card_detail:
 		_place_card_detail(target)
@@ -687,15 +742,85 @@ func _update_hover_window() -> void:
 	width = _hover_panel.size.x
 	_hover_title.size.x = width - 32 * factor
 	_hover_meta.size.x = width - 32 * factor
-	_hover_scroll.size = Vector2(width - 32 * factor, height - 92 * factor)
-	_hover_body.custom_minimum_size.x = _hover_scroll.size.x - 16
 	var text := str(target.get("detail" if card_detail else "body", ""))
 	if _hover_body.text != text:
 		_hover_scroll.scroll_vertical = 0
 		_hover_body.text = text
-	_hover_hint.position = Vector2(16 * factor, height - 22 * factor)
-	_hover_hint.size.x = width - 32 * factor
-	_hover_hint.text = ("已固定 · 滚轮阅读 · I 取消固定" if pinned else "移开收起 · I 固定介绍") if card_detail else "I 查看详情"
+	if card_detail:
+		var glossary_uid := str(target.get("uid", ""))
+		if glossary_uid != _glossary_uid:
+			_glossary_uid = glossary_uid
+			_glossary_open = false
+		_glossary_body.text = str(target.get("glossary", ""))
+		if _glossary_scroll.scroll_vertical != 0 and not _glossary_open:
+			_glossary_scroll.scroll_vertical = 0
+	else:
+		_glossary_uid = ""
+		_glossary_open = false
+		_glossary_body.text = ""
+	_layout_hover_sections(width, height, factor, card_detail)
+	var has_glossary := card_detail and not _glossary_body.text.strip_edges().is_empty()
+	var glossary_action := "收起" if _glossary_open else "展开"
+	if card_detail:
+		if pinned:
+			_hover_hint.text = (
+				"点名词解释%s · I 取消固定" % glossary_action
+				if has_glossary
+				else "已固定 · 滚轮阅读 · I 取消固定"
+			)
+		else:
+			_hover_hint.text = (
+				"点名词解释%s · I 固定介绍" % glossary_action
+				if has_glossary
+				else "移开收起 · I 固定介绍"
+			)
+	else:
+		_hover_hint.text = "I 查看详情"
+
+
+func _layout_hover_sections(width: float, height: float, factor: float, card_detail: bool) -> void:
+	var content_left := 16.0 * factor
+	var content_width := width - 32.0 * factor
+	var content_top := 62.0 * factor
+	var hint_top := height - 22.0 * factor
+	_hover_hint.position = Vector2(content_left, hint_top)
+	_hover_hint.size.x = content_width
+	var toggle_height := maxf(32.0, 32.0 * factor)
+	var toggle_top := hint_top - toggle_height - 4.0 * factor
+	var body_bottom := hint_top - 8.0 * factor
+	var has_glossary := card_detail and not _glossary_body.text.strip_edges().is_empty()
+	if has_glossary:
+		_glossary_toggle.visible = true
+		_glossary_toggle.position = Vector2(content_left, toggle_top)
+		_glossary_toggle.size = Vector2(content_width, toggle_height)
+		_glossary_toggle.text = ("▾  名词解释" if _glossary_open else "▸  名词解释")
+		body_bottom = toggle_top - 8.0 * factor
+		if _glossary_open:
+			var available := maxf(0.0, toggle_top - 8.0 * factor - content_top)
+			var glossary_height := minf(150.0 * factor, maxf(64.0 * factor, available * 0.45))
+			glossary_height = minf(glossary_height, maxf(0.0, available - 72.0 * factor))
+			_glossary_box.visible = glossary_height > 0
+			if _glossary_box.visible:
+				_glossary_box.position = Vector2(content_left, toggle_top - glossary_height - 6.0 * factor)
+				_glossary_box.size = Vector2(content_width, glossary_height)
+				body_bottom = _glossary_box.position.y - 8.0 * factor
+		else:
+			_glossary_box.visible = false
+	else:
+		_glossary_toggle.visible = false
+		_glossary_box.visible = false
+	_hover_scroll.position = Vector2(content_left, content_top)
+	_hover_scroll.size = Vector2(content_width, maxf(40.0 * factor, body_bottom - content_top))
+	_hover_body.custom_minimum_size.x = _hover_scroll.size.x - 16
+
+
+func _toggle_glossary() -> void:
+	if _glossary_body.text.strip_edges().is_empty():
+		return
+	_glossary_open = not _glossary_open
+	if _glossary_open:
+		_glossary_scroll.scroll_vertical = 0
+	_update_hover_window()
 
 
 func _is_card_detail(target: Dictionary) -> bool:
@@ -844,6 +969,7 @@ func _offer_card_hover_target(card: UiOfferCard) -> Dictionary:
 		"meta": "%s · 专注 %s" % [UiStyle.label(str(detail.get("type", ""))), detail.get("cost", 0)],
 		"body": UiContentText.card_summary(detail),
 		"detail": UiStyle.label(card.definition_id) + "\n" + UiContentText.describe_battle_card(detail),
+		"glossary": UiContentText.describe_battle_card_glossary(detail),
 		"terms": [], "rect": _visible_card_rect(card),
 	}
 
@@ -897,6 +1023,7 @@ func _card_hover_target(card: BattleCard) -> Dictionary:
 		"body": effect_text if reason.is_empty() else "无法打出：" + reason,
 		"summary": summary,
 		"detail": UiStyle.label(definition_id) + "\n" + body,
+		"glossary": UiContentText.describe_battle_card_glossary(detail_data),
 		"terms": terms,
 		"rect": _visible_card_rect(card),
 	}
@@ -912,6 +1039,8 @@ func close_card_preview() -> void:
 	_pinned_card_detail = {}
 	_card_hover_uid = ""
 	_card_hover_elapsed = 0.0
+	_glossary_open = false
+	_glossary_uid = ""
 	if is_instance_valid(_hover_panel):
 		_hover_panel.visible = false
 

@@ -56,7 +56,7 @@ func _run() -> void:
 		return
 	_shell.press("node:" + str(reachable[0]))
 	_shell.press("map:enter")
-	await create_timer(1.6).timeout
+	await create_timer(3.0).timeout
 	await _snap("04-battle-intent")
 	_shell.press("tutorial:next")
 	await create_timer(0.4).timeout

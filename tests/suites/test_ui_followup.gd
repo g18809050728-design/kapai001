@@ -51,6 +51,7 @@ func _card_copy_coverage() -> void:
 	var upgraded_count := 0
 	var exam_count := 0
 	var surface_count := 0
+	var heading_seen := false
 	var session := _production_session()
 	var card_rules := BattleCardRules.new(session._catalog)
 	var evidence: Array = []
@@ -89,6 +90,8 @@ func _card_copy_coverage() -> void:
 			var explanation := UiContentText.describe_battle_card(surface)
 			_check(not explanation.is_empty(), "card detail explanation is present: " + str(definition.get("id", "unknown")))
 			_check(not explanation.contains("详细说明待补"), "card detail has no generic placeholder: " + str(definition.get("id", "unknown")))
+			if explanation.contains("打出后按顺序结算："):
+				heading_seen = true
 			var raw_token := ""
 			for token in tokens:
 				if token.length() > 2 and explanation.contains(token):
@@ -97,6 +100,7 @@ func _card_copy_coverage() -> void:
 			_check(raw_token.is_empty(), "effect/condition identifiers stay out of player copy: " + str(definition.get("id", "unknown")) + " " + raw_token)
 			evidence.append({"definition_id": str(definition.id), "upgrade_level": surface.get("upgrade_level", 0), "target": surface.get("target", ""), "effects": surface.get("effects", []), "explanation": explanation})
 			surface_count += 1
+	_check(not heading_seen, "every runtime-resolved battle surface omits the removed ordered-resolution heading")
 	var output := "res://artifacts/verification/card-dwell-20261106"
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(output))
 	var evidence_file := FileAccess.open(output.path_join("card-copy-coverage.json"), FileAccess.WRITE)
@@ -124,7 +128,10 @@ func _card_copy_coverage() -> void:
 	var first_work: Dictionary = definitions.filter(func(card): return str(card.get("id", "")) == "R3-C-06")[0]
 	var first_work_text := UiContentText.describe_battle_card(first_work)
 	_check(first_work_text.contains("本次工作牌的首段完成量增加2点") and not first_work_text.contains("下一张工作牌"), "first-work trigger boosts the resolving card")
-	_check(first_work_text.contains("消耗：这张牌"), "exhausting a card retains its keyword explanation")
+	_check(
+		UiContentText.describe_battle_card_glossary(first_work).contains("消耗：这张牌"),
+		"exhausting a card retains its separate keyword explanation"
+	)
 	var retrieved: Dictionary = definitions.filter(func(card): return str(card.get("id", "")) == "R3-P01-14")[0]
 	_check(UiContentText.describe_battle_card(retrieved).contains("手牌满时也算"), "passive retrieval condition reflects the implemented full-hand counter")
 	print("BATTLE_CARD_COPY_COVERAGE=", JSON.stringify({"definitions": definitions.size(), "upgraded": upgraded_count, "exam": exam_count, "surfaces": surface_count}))
@@ -376,7 +383,12 @@ func _battle_and_map(suffix: String) -> void:
 		inspect_event.keycode = KEY_I
 		inspect_event.pressed = true
 		_check(not battle._pinned_card_detail.is_empty() and battle._panel_text.is_empty(), "I details remain beside the card without opening the global modal")
-		_check(battle._hover_body.text.contains("名词解释：") or battle._hover_body.text.contains("打出后按顺序结算"), "fixed details include the expanded explanation")
+		_check(
+			not battle._glossary_body.text.is_empty()
+			and battle._glossary_toggle.visible
+			and not battle._glossary_box.visible,
+			"fixed details expose a separate collapsed glossary dropdown"
+		)
 		await _save("battle-card-copy-" + suffix)
 		battle._input(inspect_event)
 		_check(battle._pinned_card_detail.is_empty() and not battle._hover_panel.visible, "I cancels the fixed battle card details")
@@ -411,7 +423,12 @@ func _battle_and_map(suffix: String) -> void:
 		battle._update_hover_window()
 		_check(battle._hover_panel.visible and battle._hover_title.text != "记录", "fixed card details cannot be replaced by background summaries")
 		var text: String = battle._hover_body.text
-		_check(text.contains("打出后按顺序结算") and text.contains("名词解释："), "compact preview displays the same plain explanation")
+		_check(
+			text.contains("1. ")
+			and not text.contains("打出后按顺序结算：")
+			and not battle._glossary_body.text.is_empty(),
+			"compact preview shows ordered effects without the removed heading and with a separate glossary"
+		)
 		await _save("battle-card-copy-" + suffix)
 		battle.close_card_preview()
 		_check(_helpers.fingerprint(session) == fingerprint, "compact card inspection preserves domain/RNG/revision")
@@ -499,7 +516,15 @@ func _card_face_inspection(battle: BattleScreen, session: GameSession, suffix: S
 		if str(sample.exam).is_empty():
 			battle._hover_scroll.scroll_vertical = 10000
 			await _frames()
-			_check(battle._hover_scroll.scroll_vertical > 0, "fixed long upgraded details remain scrollable")
+			var effect_scrolled := battle._hover_scroll.scroll_vertical > 0
+			battle._toggle_glossary()
+			await _frames()
+			battle._glossary_scroll.scroll_vertical = 10000
+			await _frames()
+			_check(
+				effect_scrolled or battle._glossary_scroll.scroll_vertical > 0,
+				"fixed long upgraded details or their glossary remain scrollable"
+			)
 			await _save("card-variant-scrolled-" + str(sample.id) + "-" + suffix)
 		battle._close_panel()
 		battle._hover_pinned = false

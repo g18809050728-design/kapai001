@@ -218,6 +218,7 @@ func _present_step() -> void:
 	]
 	_title.text = str(step.get("title", ""))
 	_body_label.text = str(step.get("body", ""))
+	_body_label.visible = not _body_label.text.is_empty()
 	_icon.texture = UiNavIcon.texture(str(step.get("icon", "rules")))
 	for child in _bullets.get_children():
 		_bullets.remove_child(child)

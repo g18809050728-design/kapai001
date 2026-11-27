@@ -7,11 +7,17 @@ extends RefCounted
 var _failures: Array[String] = []
 var _helpers = preload("res://tests/suites/test_ui_shell_pages.gd").new()
 var _tree: SceneTree
+var _previous_path := ""
+var _override_path := ""
 
 
 func run() -> Array[String]:
 	_tree = Engine.get_main_loop() as SceneTree
 	var old_size := _tree.root.size
+	_previous_path = TextOverrides.current_path()
+	_override_path = "user://tutorial-text-%s-%s.json" % [OS.get_process_id(), Time.get_ticks_usec()]
+	DirAccess.remove_absolute(ProjectSettings.globalize_path(_override_path))
+	TextOverrides.use_path(_override_path)
 	UiStyle.text_scale = 1.0
 	UiStyle.web_touch = false
 	_tree.root.size = Vector2i(1280, 800)
@@ -21,6 +27,8 @@ func run() -> Array[String]:
 	await _test_external_action_dismisses()
 	_tree.root.size = old_size
 	UiStyle.text_scale = 1.0
+	TextOverrides.use_path(_previous_path)
+	DirAccess.remove_absolute(ProjectSettings.globalize_path(_override_path))
 	return _failures
 
 
@@ -40,7 +48,7 @@ func _test_intro_then_battle() -> void:
 	_check(int(state.get("step", 0)) == 1 and int(state.get("count", 0)) == 3, "intro starts at step 1 / 3")
 	_check(str(state.get("mode", "")) == "intro", "first layer is the intro")
 	var text := _text_of(shell._tutorial)
-	for required in ["精力", "金钱", "DDL", "战斗结束不会自动回满", "归零"]:
+	for required in ["基础数值", "精力", "金钱", "DDL", "失败"]:
 		_check(text.contains(required), "intro 1 explains " + required)
 	_check(shell._tutorial.mouse_filter == Control.MOUSE_FILTER_STOP, "tutorial blocks pointer input to the page")
 	_check(shell._tutorial.get_global_rect().size == Vector2(_tree.root.size), "tutorial covers the viewport")
@@ -103,7 +111,7 @@ func _test_intro_then_battle() -> void:
 	highlight = shell._tutorial.highlight_rect()
 	_check(highlight.has_area(), "battle step 1 highlights task intent and values")
 	var text_1 := _text_of(shell._tutorial)
-	for required in ["任务意图", "屏障", "DDL", "精力"]:
+	for required in ["意图", "屏障", "完成量", "DDL", "精力"]:
 		_check(text_1.contains(required), "battle step 1 explains " + required)
 
 	_check(shell.press("tutorial:next"), "next advances the battle tutorial")

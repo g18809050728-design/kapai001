@@ -71,8 +71,11 @@ func run() -> Array[String]:
 	await _frames()
 	var inspect_panel: String = _battle()._hover_body.text
 	_check(
-		inspect_panel.contains("专注") and inspect_panel.contains("名词解释") and not _battle()._pinned_card_detail.is_empty(),
-		"keyboard I opens the selected card detail and glossary terms"
+		inspect_panel.contains("专注")
+		and not _battle()._glossary_body.text.is_empty()
+		and _battle()._glossary_toggle.visible
+		and not _battle()._pinned_card_detail.is_empty(),
+		"keyboard I opens the selected card detail and a separate glossary dropdown"
 	)
 	_check(_fingerprint() == inspect_before, "keyboard detail preserves state and RNG")
 	_key(KEY_ESCAPE)
