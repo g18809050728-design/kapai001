@@ -52,7 +52,7 @@ func run() -> Array[String]:
 		await tree.create_timer(.38).timeout
 		_check(not battle._hover_panel.visible, label + " switching resets the dwell timer")
 		await tree.create_timer(.38).timeout
-		_check(battle._hover_panel.visible and battle._hover_body.text == str(battle._hover_target.get("detail", "")), label + " sustained hover opens complete details")
+		_check(battle._hover_panel.visible and battle._hover_rich_body.get_parsed_text() == str(battle._hover_target.get("detail", "")), label + " sustained hover opens complete details")
 		_check(battle._hover_panel.mouse_filter == Control.MOUSE_FILTER_STOP, label + " unfixed details own pointer input for their glossary dropdown")
 		_check_side(battle, battle._hover_target, label)
 		await _save("dwell-open-" + label)
@@ -66,17 +66,17 @@ func run() -> Array[String]:
 		_check(str(fixed.get("uid", "")) == "card:dwell-card-0" and battle._hover_panel.visible, label + " I pins the current card immediately")
 		_move(Vector2(5, fixture.size.y * .5))
 		await tree.create_timer(.75).timeout
-		_check(battle._hover_panel.visible and battle._hover_body.text == str(fixed.get("detail", "")), label + " fixed content survives pointer departure")
+		_check(battle._hover_panel.visible and battle._hover_rich_body.get_parsed_text() == str(fixed.get("detail", "")), label + " fixed content survives pointer departure")
 		_move(_point(second))
 		await tree.create_timer(.75).timeout
-		_check(battle._pinned_card_detail == fixed and battle._hover_body.text == str(fixed.get("detail", "")), label + " another card cannot replace the fixed introduction")
+		_check(battle._pinned_card_detail == fixed and battle._hover_rich_body.get_parsed_text() == str(fixed.get("detail", "")), label + " another card cannot replace the fixed introduction")
 		_check(not is_instance_valid(battle._card_preview) and battle._panel_text.is_empty(), label + " only one card introduction exists")
 		_check_side(battle, fixed, label + " fixed")
 		battle._toggle_glossary()
 		await _frames(2)
 		var glossary_box := battle._glossary_box.get_global_rect()
 		_check(battle._glossary_box.visible, label + " glossary dropdown expands")
-		_check(battle._glossary_body.text != "", label + " expanded glossary has term text")
+		_check(battle._glossary_body.get_parsed_text() != "", label + " expanded glossary has term text")
 		_check(battle._glossary_toggle.size.y >= 32, label + " glossary arrow keeps a readable hit target")
 		_check(battle._hover_scroll.get_global_rect().end.y <= glossary_box.position.y + 1, label + " effect text ends above the glossary")
 		_check(glossary_box.end.y <= battle._glossary_toggle.get_global_rect().position.y + 1, label + " glossary sits above its bottom arrow")

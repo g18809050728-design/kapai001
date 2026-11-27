@@ -11,6 +11,9 @@ const NIGHT := Color("172731")
 const BRASS := Color("c9a86b")
 const CREAM := Color("fbf5e8")
 const FOREST := Color("304d5b")
+# Battle card descriptions use this warm gold for glossary terms. The same
+# color plus an underline keeps the cue readable without changing line metrics.
+const TERM_HIGHLIGHT := Color("f0cf8a")
 const LABELS = preload("res://src/ui/ui_labels.json")
 static var _textures: Dictionary = {}
 static var text_scale := 1.0

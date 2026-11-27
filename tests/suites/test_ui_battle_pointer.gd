@@ -36,7 +36,7 @@ func run() -> Array[String]:
 		(
 			_battle()._hover_panel.visible
 			and not _battle()._hover_title.text.is_empty()
-			and not _battle()._hover_body.text.is_empty()
+			and not _battle()._hover_rich_body.get_parsed_text().is_empty()
 		),
 		"hover popup is visible with title and body"
 	)
@@ -87,20 +87,30 @@ func run() -> Array[String]:
 	var detail_before := _fingerprint()
 	_key(KEY_I)
 	await _frames()
-	var detail_panel: String = _battle()._hover_body.text
+	var detail_panel: String = _battle()._hover_rich_body.get_parsed_text()
+	_check(_battle()._hover_rich_body.visible and not _battle()._hover_body.visible, "card detail uses the rich body without the summary label")
 	_check(detail_panel.contains("专注"), "I opens card detail with cost text")
 	_check(not detail_panel.contains("打出后按顺序结算："), "battle detail omits the removed ordered-resolution heading")
-	_check(not _battle()._pinned_card_detail.is_empty() and not _battle()._glossary_body.text.is_empty(), "fixed card explanation exposes a separate glossary section")
+	_check(not _battle()._pinned_card_detail.is_empty() and not _battle()._glossary_body.get_parsed_text().is_empty(), "fixed card explanation exposes a separate glossary section")
 	_check(_battle()._glossary_toggle.visible and _battle()._glossary_toggle.text.contains("名词解释"), "fixed card explanation shows the glossary dropdown toggle")
 	_check(not _battle()._glossary_box.visible, "glossary dropdown starts collapsed")
 	_check(not detail_panel.contains("名词解释："), "effect text no longer mixes in the glossary")
+	_check(_battle()._hover_highlight_terms.has("专注"), "card detail resolves the displayed glossary terms for highlighting")
+	_check(
+		_battle()._hover_highlight_segments.any(func(segment): return bool(segment.get("highlighted", false))),
+		"card detail builds highlighted keyword segments"
+	)
+	_check(
+		_battle()._glossary_highlight_segments.any(func(segment): return bool(segment.get("highlighted", false))),
+		"glossary builds highlighted term-name segments"
+	)
 	var toggle_point := _battle()._glossary_toggle.get_global_rect().get_center()
 	_mouse_move(toggle_point)
 	_mouse_button(toggle_point, true)
 	_mouse_button(toggle_point, false)
 	await _frames()
-	_check(_battle()._glossary_box.visible and _battle()._glossary_body.text.contains("专注"), "clicking the arrow expands the glossary dropdown")
-	_check(_battle()._hover_body.text == detail_panel, "expanding the glossary does not rewrite the effect text")
+	_check(_battle()._glossary_box.visible and _battle()._glossary_body.get_parsed_text().contains("专注"), "clicking the arrow expands the glossary dropdown")
+	_check(_battle()._hover_rich_body.get_parsed_text() == detail_panel, "expanding the glossary does not rewrite the effect text")
 	_mouse_button(toggle_point, true)
 	_mouse_button(toggle_point, false)
 	await _frames()
@@ -110,6 +120,22 @@ func run() -> Array[String]:
 	_key(KEY_ESCAPE)
 	await _frames()
 	_check(_battle()._pinned_card_detail.is_empty() and not _battle()._hover_panel.visible, "Esc closes fixed card detail")
+	var task_id := str(_shell.session.get_view().battle.tasks[0].task_id)
+	var target: Button = _battle()._buttons["task:" + task_id]
+	var destination := target.get_global_rect().get_center()
+	_mouse_move(destination)
+	await _frames()
+	_check(_battle()._hover_panel.visible and _battle()._hover_body.visible, "task summary replaces the card detail")
+	_mouse_move(source)
+	await _frames()
+	_key(KEY_I)
+	await _frames()
+	_check(
+		_battle()._glossary_highlight_segments.any(func(segment): return bool(segment.get("highlighted", false))),
+		"returning to the same card after a task summary restores glossary highlighting"
+	)
+	_key(KEY_ESCAPE)
+	await _frames()
 	# Drag out, then drop back in the hand: no command is submitted.
 	_mouse_button(source, true)
 	_mouse_move(_stage_point(Vector2(650, 300)), true)
@@ -142,9 +168,6 @@ func run() -> Array[String]:
 			"pointer cancellation preserves complete state"
 		)
 	# A legal target drop submits exactly one real play_card command.
-	var task_id := str(_shell.session.get_view().battle.tasks[0].task_id)
-	var target: Button = _battle()._buttons["task:" + task_id]
-	var destination := target.get_global_rect().get_center()
 	_mouse_move(destination)
 	await _frames()
 	_check(
