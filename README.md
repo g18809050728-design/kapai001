@@ -2,9 +2,9 @@
 
 2026-11-26 新手教程（UIR-082）：新游戏开局在地图显示 3 页（精力/金钱/DDL、路线预选、专注/手牌/回合），首场战斗继续 3 页并指向真实任务意图/DDL、专注装置和结束回合；可跳过、可从主菜单重看。只改显示与输入隔离，不写档案教程标记，不改规则/数值/命令/RNG/存档。见[设计](docs/plans/2026-11-26-new-game-tutorial-design.md)、[需求](动作或者图片描述/需求台账.md)与[实渲/验证](artifacts/verification/tutorial-20261126/README.md)。
 
-2026-11-27 教程文本实体（UIR-083）：文本编辑器新增「教程」分类，6 个分页实体共 60 个字段可编辑（章节、标题、正文、词条、末页按钮）；保存后下次打开教程生效，重置回到当前默认；不改触发、页数、锚点、规则、命令、RNG 与存档。见[设计与验证](docs/plans/2026-11-27-tutorial-text-entities.md)与[编辑器实渲](artifacts/verification/tutorial-20261127/text-editor/editor-tutorial-entity.png)。
+2026-11-27 教程文本实体（UIR-094）：文本编辑器新增「教程」分类，6 个分页实体共 60 个字段可编辑（章节、标题、正文、词条、末页按钮）；保存后下次打开教程生效，重置回到当前默认；不改触发、页数、锚点、规则、命令、RNG 与存档。见[设计与验证](docs/plans/2026-11-27-tutorial-text-entities.md)与[编辑器实渲](artifacts/verification/tutorial-20261127/text-editor/editor-tutorial-entity.png)。
 
-2026-11-27 教程编辑文本作为默认（UIR-084）：已把用户编辑的 24 条教程字段并入内置默认（237→261 条），并清空本机这 24 条教程覆盖，保留 8 条非教程覆盖；空正文保持为空并在面板隐藏。编辑器默认、字段恢复、全部重置和新局教程都显示新文本。见[设计与验证](docs/plans/2026-11-27-tutorial-defaults.md)与[备份/报告](artifacts/verification/tutorial-defaults-20261127/report.json)。
+2026-11-27 教程编辑文本作为默认（UIR-095）：已把用户编辑的 24 条教程字段并入内置默认（237→261 条），并清空本机这 24 条教程覆盖，保留 8 条非教程覆盖；空正文保持为空并在面板隐藏。编辑器默认、字段恢复、全部重置和新局教程都显示新文本。见[设计与验证](docs/plans/2026-11-27-tutorial-defaults.md)与[备份/报告](artifacts/verification/tutorial-defaults-20261127/report.json)。
 
 2026-11-27 战斗卡牌说明与名词解释分离（UIR-092）：悬停或按 `I` 打开的卡牌说明窗口只显示效果说明，名词解释进入底部可展开/收起的下拉框；所有基础/升级战斗说明只去掉单独一行的“打出后按顺序结算：”，文本编辑器把名词解释拆成独立字段。说明中命中的术语与下拉框术语名使用同色+下划线高亮。只改显示，不改规则/数值/命令/RNG/存档。见[设计与验证](docs/plans/2026-11-27-card-glossary-split.md)与[实渲/检查](artifacts/verification/card-glossary-20261127/README.md)。
 

@@ -1,4 +1,4 @@
-# 新手教程文本实体（UIR-083）
+# 新手教程文本实体（UIR-094）
 
 2026-11-27
 
@@ -61,7 +61,7 @@ tutorial:<page_id>.next
 - 后端 UID：1766（+60）
 - 源文本库 UID：1754（+60）
 
-`data/text_defaults.json` 原有 237 条；2026-11-27 已把用户编辑的 24 条教程字段并入（UIR-084），共 261 条。未编辑的教程字段仍回退到 `src/ui/tutorial_content.gd` 源文案；用户覆盖单独保存到现有 `user://text_overrides.json`。
+`data/text_defaults.json` 原有 237 条；2026-11-27 已把用户编辑的 24 条教程字段并入（UIR-095），共 261 条。未编辑的教程字段仍回退到 `src/ui/tutorial_content.gd` 源文案；用户覆盖单独保存到现有 `user://text_overrides.json`。
 
 ## 实现位置
 

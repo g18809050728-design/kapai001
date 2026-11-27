@@ -11,6 +11,8 @@ from pathlib import Path
 from contextlib import redirect_stdout
 from unittest.mock import patch
 from uuid import uuid4
+from xml.etree import ElementTree as ET
+from zipfile import ZipFile
 
 from fastapi.testclient import TestClient
 from PIL import Image
@@ -164,6 +166,55 @@ with tempfile.TemporaryDirectory() as mailbox:
     }))["role"] == "admin"
     check(administrator.get(stats))
 
+    records = route + "/admin/stats/records"
+    target = records + "/" + match
+    query = stats.split("?", 1)[1]
+    manual_version = "manual-" + seed[:12]
+    values = {"started_at": local_date + "T12:00:00+08:00", "game_version": manual_version,
+              "character_id": "P03", "difficulty": "hard", "first_battle": True,
+              "finished": False, "reason": "integration supplement"}
+    check(client().get(records + "?" + query), 401)
+    check(register.get(records + "?" + query), 403)
+    check(register.post(records, json=values), 403)
+    check(administrator.post(records, json={**values, "reason": "  "}), 422)
+    check(administrator.post(records, json={**values, "started_at": local_date + "T12:00:00"}), 422)
+    check(administrator.get(records + "?start=2024-02-01&end=2024-01-01"), 422)
+    original = check(administrator.get(target))
+    assert original["source"] == "automatic" and original["revision"] == 0 and original["finished"]
+    created = check(administrator.post(records, json=values), 201)
+    manual = records + "/" + created["record_id"]
+    assert created["source"] == "manual" and created["started_at"].startswith(local_date + "T04:00")
+    page = check(administrator.get(records + "?" + query + "&source=manual&q=" + manual_version))
+    assert page["total"] == 1 and page["items"][0]["record_id"] == created["record_id"]
+    assert "user_id" not in page["items"][0]
+    summary = check(administrator.get(stats + "&version=" + manual_version))
+    assert all(row["accounts"] == 0 and row["started"] == row["manual"] == 1 for row in summary["activity"])
+    check(register.patch(target, json={**values, "revision": 0}), 403)
+    check(register.request("DELETE", target, json={"revision": 0, "reason": "not authorized"}), 403)
+    changed = check(administrator.patch(manual, json={**values, "finished": True, "revision": created["revision"]}))
+    assert changed["finished"] and changed["revision"] == created["revision"] + 1
+    check(administrator.patch(manual, json={**values, "revision": created["revision"]}), 409)
+    hidden = check(administrator.request("DELETE", manual, json={"revision": changed["revision"], "reason": "hide sample"}))
+    assert hidden["excluded"]
+    assert check(administrator.get(records + "?" + query + "&q=" + manual_version))["items"] == []
+    assert check(administrator.get(records + "?" + query + "&state=excluded&q=" + manual_version))["total"] == 1
+    assert not any(row["started"] for row in check(administrator.get(stats + "&version=" + manual_version))["activity"])
+    restored = check(administrator.post(manual + "/restore", json={"revision": hidden["revision"], "reason": "restore sample"}))
+    assert not restored["excluded"] and restored["finished"]
+    corrected = check(administrator.patch(target, json={**values, "revision": 0}))
+    assert corrected["source"] == "adjusted" and corrected["game_version"] == manual_version
+    with engine.connect() as db:
+        assert one(db, "SELECT game_version FROM matches WHERE match_id=:id", id=match)["game_version"] == original["game_version"]
+    restored = check(administrator.post(target + "/restore", json={"revision": corrected["revision"], "reason": "restore original"}))
+    assert restored["source"] == "automatic" and restored["game_version"] == original["game_version"] and restored["finished"]
+    assert check(administrator.get(records + "?" + query + "&q=%25"))["items"] == []
+    with engine.begin() as db:
+        for operation in ("create", "update", "exclude", "restore"):
+            assert one(db, "SELECT audit_id FROM admin_audit_log WHERE operation=:op AND object_id=:id",
+                       op="stats.record." + operation, id=created["record_id"])
+        execute(db, "DELETE FROM stats_adjustments WHERE record_id=:id", id=created["record_id"])
+    print("ADMIN-STATS CRUD, permission checks, aggregates, revisions, auditing and original record preservation passed")
+
     feedback = route + "/feedback"
     inbox = route + "/admin/feedback"
     image_buffer = io.BytesIO()
@@ -202,10 +253,109 @@ with tempfile.TemporaryDirectory() as mailbox:
         assert screenshot.format == "WEBP" and screenshot.size == (128, 72)
     check(administrator.get(detail + "/screenshots/2"), 404)
 
+    assert item["status"] == "new" and item["note"] == "" and item["updated_at"] is None
+    assert check(administrator.get(inbox + "?q=%3Ctag%3E&state=active"))["total"] >= 2
+    update = {"status": "archived", "note": "internal note", "updated_at": None}
+    check(register.patch(detail, json=update), 403)
+    triage = check(administrator.patch(detail, json=update))
+    assert triage["status"] == "archived" and triage["note"] == "internal note"
+    check(administrator.patch(detail, json=update), 409)
+    feedback_id = receipt["feedback_id"]
+    assert check(administrator.get(inbox + "?state=active&q=" + feedback_id))["items"] == []
+    assert check(administrator.get(inbox + "?state=archived&q=" + feedback_id))["total"] == 1
+    assert administrator.get(attachment).content == response.content
+    assert check(register.post(feedback, json=report), 201) == receipt
+    reopened = check(administrator.patch(detail, json={"status": "reviewing", "note": "reopen", "updated_at": triage["updated_at"]}))
+    assert reopened["status"] == "reviewing" and check(administrator.get(detail))["description"] == item["description"]
+    print("FEEDBACK-TRIAGE list, search, status, compatibility, concurrency and archiving passed")
+
+    data_route = route + "/admin/data/players"
+    user_route = data_route + "/" + user_id
+    nickname_route = user_route + "/nickname"
+    check(client().get(data_route), 401)
+    check(register.get(data_route), 403)
+    assert [r["user_id"] for r in check(administrator.get(data_route + "?q=" + username))["items"]] == [user_id]
+    check(administrator.get(data_route + "/" + administrator_id), 404)
+    profile = check(administrator.get(user_route))
+    assert set(profile) == {"user_id", "username", "nickname", "created_at", "revision", "history", "can_restore"}
+    control = {"revision": profile["revision"], "expected_nickname": profile["nickname"], "reason": "rename test"}
+    # Spreadsheet metacharacters and URLs are valid display data, not workbook markup.
+    new_name = "=1+1"
+    change = {**control, "nickname": new_name}
+    check(register.patch(nickname_route, json=change), 403)
+    check(administrator.patch(nickname_route, json={**change, "nickname": "a\x00b"}), 422)
+    check(administrator.patch(nickname_route, json={**change, "expected_nickname": "stale"}), 409)
+    check(administrator.patch(nickname_route, json=change))
+    check(administrator.patch(nickname_route, json=change), 409)
+    actual = check(register.get(route + "/me"))
+    assert actual["nickname"] == new_name and actual["username"] == username and actual["role"] == "player"
+    latest = check(administrator.get(user_route))
+    assert latest["history"][0]["old_nickname"] == profile["nickname"] and latest["can_restore"]
+
+    exports = route + "/admin/exports/"
+    book_route = exports + "feedback?q=" + feedback_id
+    check(client().get(book_route), 401)
+    check(register.get(book_route), 403)
+    ns = {"x": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"}
+
+    def xlsx(response, sheet_name):
+        assert response.status_code == 200 and response.headers["content-type"] == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        assert response.headers["cache-control"] == "no-store" and response.headers["content-disposition"].endswith('.xlsx"')
+        with ZipFile(io.BytesIO(response.content)) as file:
+            assert file.testzip() is None
+            names = file.namelist()
+            assert not any("/media/" in name or "externalLink" in name for name in names)
+            workbook = ET.fromstring(file.read("xl/workbook.xml"))
+            assert workbook.find("x:sheets/x:sheet", ns).get("name") == sheet_name
+            shared = ET.fromstring(file.read("xl/sharedStrings.xml"))
+            strings = ["".join(node.itertext()) for node in shared]
+            page = ET.fromstring(file.read("xl/worksheets/sheet1.xml"))
+            assert page.find(".//x:f", ns) is None and page.find(".//x:hyperlink", ns) is None
+            data = []
+            for row in page.findall("x:sheetData/x:row", ns):
+                cells = {}
+                for cell in row:
+                    value = cell.find("x:v", ns).text
+                    column = cell.get("r").rstrip("0123456789")
+                    cells[column] = strings[int(value)] if cell.get("t") == "s" else float(value)
+                data.append(cells)
+        return data
+
+    # More than a page of records still exports all matching rows.
+    with engine.begin() as db:
+        for i in range(22):
+            execute(db, """
+                INSERT INTO player_feedback (feedback_id,user_id,submission_id,payload_hash,category,title,description,build_version)
+                VALUES (:id,:user,:submission,'hash','other',:title,'=2+2','archive-integration')
+            """, id=str(uuid4()), user=user_id, submission=str(uuid4()), title="bulk-xlsx-" + seed)
+    pages = check(administrator.get(inbox + "?q=bulk-xlsx-" + seed))
+    assert len(pages["items"]) == 20 and pages["next_offset"] == 20
+    feedback_rows = xlsx(administrator.get(book_route), "玩家反馈")
+    assert len(feedback_rows) == 2 and feedback_rows[1]["C"] == new_name and feedback_rows[1]["H"] == item["description"] and feedback_rows[1]["J"] == 1
+    bulk = xlsx(administrator.get(exports + "feedback?q=bulk-xlsx-" + seed), "玩家反馈")
+    assert len(bulk) == 23 and all(row["H"] == "=2+2" for row in bulk[1:])
+    with patch("kapai.exports.EXPORT_LIMIT", 20):
+        assert check(administrator.get(exports + "feedback?q=bulk-xlsx-" + seed), 422)["detail"] == "export_too_many_rows"
+    record_rows = xlsx(administrator.get(exports + "records?" + query + "&q=" + match), "对局明细")
+    assert len(record_rows) == 2 and record_rows[1]["A"] == match and record_rows[1]["C"] == new_name
+    overall_rows = xlsx(administrator.get(exports + "stats?" + query + "&version=" + original["game_version"]), "统计概览")
+    assert overall_rows[1]["B"] >= 1 and len(overall_rows) == 8
+    check(administrator.post(nickname_route + "/restore", json={**control, "revision": latest["revision"], "expected_nickname": new_name}))
+    assert check(register.get(route + "/me"))["nickname"] == profile["nickname"]
+    with engine.connect() as db:
+        for operation in ("export.feedback", "export.stats", "export.records", "data.player.nickname.update", "data.player.nickname.restore"):
+            assert one(db, "SELECT audit_id FROM admin_audit_log WHERE operation=:op AND actor_id=:admin", op=operation, admin=administrator_id)
+    print("ADMIN-DATA nickname DB write, stale/invalid rejection, audit, restore and filtered XLSX workbook content passed")
+
     with engine.begin() as db:
         execute(db, "UPDATE users SET role='player' WHERE user_id=:user", user=administrator_id)
     assert check(administrator.get(route + "/auth/session"))["user"]["role"] == "player"
     check(administrator.get(stats), 403)
+    check(administrator.get(records + "?" + query), 403)
+    check(administrator.post(records, json=values), 403)
+    check(administrator.get(book_route), 403)
+    check(administrator.patch(nickname_route, json=change), 403)
+    check(administrator.patch(detail, json=update), 403)
     for path in (inbox, detail, attachment):
         check(administrator.get(path), 403)
     assert check(administrator.get(route + "/me/matches"))["items"] == []

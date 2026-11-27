@@ -21,6 +21,16 @@
         admin_required: '此功能需要管理员权限。',
         feedback_conflict: '这次反馈已提交，请关闭面板后重新填写。',
         feedback_not_found: '这条反馈已不可用。',
+        feedback_changed: '反馈已被其他管理员更新，请重新打开详情后再保存。',
+        export_too_many_rows: '结果超过 5000 行，请缩小查询范围后再导出。',
+        export_invalid_file: '未收到有效的 XLSX 文件，请稍后重试。',
+        maintenance_nickname_unchanged: '新昵称与当前昵称相同。',
+        maintenance_player_missing: '此账号不存在，或已不在可维护范围内。',
+        maintenance_player_changed: '资料已被修改，请返回玩家资料重新检查。',
+        invalid_range: '请选择有效日期，结束日期不能早于开始日期，范围最多 367 天。',
+        stats_record_not_found: '这条统计记录已不可用。',
+        stats_record_changed: '记录已更新，请重新打开详情后再操作。',
+        stats_record_excluded: '该记录已移出统计，请先恢复。',
         screenshot_invalid: '请选择可打开的静态 PNG、JPEG 或 WebP 截图。',
         screenshot_too_large: '截图过大，请裁剪或压缩后重试。',
         screenshot_dimensions: '截图分辨率过高，请裁剪后重试。',
@@ -144,7 +154,7 @@
     dialog.addEventListener('keyup', event => event.stopPropagation());
     dialog.addEventListener('close', () => {
         if (!dialog.open) {
-            if (showing.startsWith('feedback')) body.replaceChildren();
+            if (showing.startsWith('feedback') || showing.startsWith('admin')) body.replaceChildren();
             showing = '';
             document.getElementById('canvas')?.focus({ preventScroll: true });
         }
@@ -167,6 +177,7 @@
     function startPanel(name, heading, description = '') {
         showing = name;
         dialog.dataset.panel = name;
+        dialog.classList.toggle('workspace-dialog', name.startsWith('feedback') || name.startsWith('admin'));
         dialog.dataset.view = authPanels.includes(name) ? 'auth' : 'account';
         title.textContent = heading;
         body.replaceChildren();
@@ -237,11 +248,11 @@
         return input;
     }
 
-    function formSubmit(form, label, handler) {
+    function formSubmit(form, label, handler, actions = null) {
         const feedback = element('p', '', form);
         feedback.className = 'account-form-error';
         feedback.setAttribute('role', 'alert');
-        const submit = element('button', label, form);
+        const submit = element('button', label, actions || form);
         submit.type = 'submit';
         submit.className = 'account-primary';
         form.addEventListener('input', () => { feedback.textContent = ''; });
@@ -253,11 +264,16 @@
             form.setAttribute('aria-busy', 'true');
             closeButton.disabled = true;
             submit.disabled = true;
+            const values = Object.fromEntries(new FormData(form));
+            const mutable = form.classList.contains('workspace-form')
+                ? [...body.querySelectorAll('button, input, textarea, select')].filter(control => !control.disabled) : [];
+            mutable.forEach(control => { control.disabled = true; });
             try {
-                await handler(Object.fromEntries(new FormData(form)));
+                await handler(values);
             } catch (error) {
                 feedback.textContent = statuses[error.message] || '操作失败，请稍后重试。';
             } finally {
+                mutable.forEach(control => { control.disabled = false; });
                 submit.disabled = false;
                 closeButton.disabled = false;
                 form.removeAttribute('aria-busy');
@@ -650,31 +666,41 @@
     }
 
     function showFeedback() {
-        startPanel('feedback', '问题反馈');
+        startPanel('feedback', '问题反馈', '遇到问题或有改进想法？告诉我们发生了什么。');
         const form = element('form', '', body);
-        feedbackCategory(form, '反馈类型', 'bug');
-        const subject = field(form, '标题', 'title');
+        form.className = 'workspace-form';
+        const basics = workspaceGrid(form, 'workspace-compose');
+        feedbackCategory(basics, '反馈类型（必填）', 'bug');
+        const subject = field(basics, '标题（必填）', 'title');
+        subject.placeholder = '例如：首战结束后无法领取奖励';
         subject.maxLength = 100;
-        const description = labeledControl(form, '详细说明', 'description', 'textarea');
+        const description = labeledControl(form, '详细说明（必填）', 'description', 'textarea');
         description.required = true;
         description.maxLength = 3000;
-        description.rows = 5;
+        description.rows = 4;
+        counter(subject);
+        counter(description);
         description.placeholder = '你当时在哪个页面？做了什么？实际发生了什么？';
-        const input = field(form, '添加截图（选填）', 'screenshots', 'file');
+        const attachPanel = element('section', '', form);
+        attachPanel.className = 'workspace-attachments';
+        element('h3', '问题截图（选填）', attachPanel);
+        const input = field(attachPanel, '添加截图（选填）', 'screenshots', 'file');
         input.accept = screenshotTypes.join(',');
         input.multiple = true;
         input.required = false;
         input.hidden = true;
         input.className = 'feedback-file-input';
+        input.parentElement.firstElementChild.hidden = true;
         const choose = button('选择截图', input.parentElement, () => input.click());
         hint(input, '最多 3 张，每张不超过 2 MiB。支持 PNG、JPEG、WebP。提交后仅管理员可查看。');
         choose.setAttribute('aria-describedby', input.id + '-hint');
         const uploadStatus = element('small', '', input.parentElement);
         uploadStatus.setAttribute('role', 'status');
-        const gallery = element('ul', '', form);
+        const gallery = element('ul', '', attachPanel);
         gallery.className = 'feedback-screenshots';
         const screenshots = [];
         let submissionId;
+        let uploading = false;
         form.addEventListener('input', event => { if (event.target !== input) submissionId = undefined; });
         input.addEventListener('change', async () => {
             const files = Array.from(input.files);
@@ -692,6 +718,7 @@
                 uploadStatus.textContent = statuses.screenshot_invalid;
                 return;
             }
+            uploading = true;
             input.disabled = true;
             choose.disabled = true;
             try {
@@ -718,12 +745,15 @@
             } catch (error) {
                 uploadStatus.textContent = statuses[error.message] || statuses.screenshot_invalid;
             } finally {
+                uploading = false;
                 input.disabled = false;
                 choose.disabled = false;
             }
         });
+        const actions = workspaceActions(form);
+        button('取消', actions, closePanel);
         formSubmit(form, '提交反馈', async values => {
-            if (input.disabled) throw new Error('screenshots_loading');
+            if (uploading) throw new Error('screenshots_loading');
             if (!values.title.trim() || !values.description.trim()) throw new Error('invalid_input');
             submissionId ??= crypto.randomUUID();
             const receipt = await request('/feedback', 'POST', {
@@ -736,155 +766,597 @@
             });
             startPanel('feedback-sent', '反馈已提交', '管理员可以查看你的反馈。');
             element('p', '反馈编号 ' + receipt.feedback_id, body).className = 'feedback-text';
-            button('返回游戏', body, closePanel);
-        });
+            button('返回游戏', body, closePanel).className = 'account-primary';
+        }, actions);
     }
 
-    function feedbackSummary(item) {
-        const time = new Date(item.created_at).toLocaleString('zh-CN', {timeZone: 'Asia/Shanghai', hour12: false});
-        return `${feedbackCategories[item.category]} · ${item.nickname} · ${time}（北京时间）`;
+    const feedbackStates = {new: '待处理', reviewing: '处理中', resolved: '已解决', archived: '已归档'};
+    const sortOptions = {newest: '从新到旧', oldest: '从旧到新'};
+    const statsSources = {automatic: '自动记录', adjusted: '已修正', manual: '人工补录'};
+    const characters = Object.fromEntries(Object.entries(playerNames).map(([id, name]) => [id, `${name} · ${id}`]));
+    const difficulties = difficultyNames;
+    const bjDate = days => new Date(Date.now() + (8 + 24 * days) * 3600000).toISOString().slice(0, 10);
+    const bjTime = time => new Date(time).toLocaleString('zh-CN', {timeZone: 'Asia/Shanghai', hour12: false});
+    const statsDefaults = () => ({start: bjDate(-6), end: bjDate(0), version: '', character: '', difficulty: '',
+        q: '', source: '', state: 'included', sort: 'newest', offset: 0});
+    const feedbackDefaults = {q: '', category: '', state: 'all', sort: 'newest', offset: 0};
+
+    function workspaceGrid(parent, extra = '') {
+        const grid = element('div', '', parent);
+        grid.className = `workspace-grid ${extra}`;
+        return grid;
     }
 
-    async function showFeedbackInbox(category = '', offset = 0) {
+    function workspaceActions(parent) {
+        const actions = element('div', '', parent);
+        actions.className = 'workspace-actions';
+        return actions;
+    }
+
+    function counter(input) {
+        const count = element('small', '', input.parentElement);
+        count.className = 'workspace-counter';
+        count.id = input.id + '-count';
+        input.setAttribute('aria-describedby', count.id);
+        const update = () => { count.textContent = `${input.value.length} / ${input.maxLength}`; };
+        input.addEventListener('input', update);
+        update();
+    }
+
+    function options(parent, label, name, values, selected) {
+        const select = labeledControl(parent, label, name, 'select');
+        for (const [value, text] of Object.entries(values)) element('option', text, select).value = value;
+        if (selected && !Object.hasOwn(values, selected)) element('option', selected, select).value = selected;
+        select.value = selected;
+        return select;
+    }
+
+    function optional(parent, label, name, value, max = 100, type = 'text', placeholder = '') {
+        const input = field(parent, label, name, type, value);
+        input.required = false;
+        input.maxLength = max;
+        input.placeholder = placeholder;
+        return input;
+    }
+
+    function badge(parent, text, tone = '') {
+        const node = element('span', text, parent);
+        node.className = 'workspace-badge';
+        node.dataset.tone = tone;
+        return node;
+    }
+
+    function workspaceResult(parent) {
+        const region = element('section', '', parent);
+        region.className = 'workspace-result';
+        return region;
+    }
+
+    function resultText(parent, text) {
+        const line = element('p', text, parent);
+        line.className = 'workspace-result-text';
+        line.setAttribute('role', 'status');
+        return line;
+    }
+
+    function pager(parent, page, offset, openPage) {
+        const actions = workspaceActions(parent);
+        if (offset) button('上一页', actions, () => openPage(Math.max(0, offset - 20)));
+        if (page.next_offset !== null) button('下一页', actions, () => openPage(page.next_offset));
+    }
+
+    function recordCard(parent, heading, meta, tags, open) {
+        const row = button('', parent, open);
+        row.className = 'workspace-record';
+        const info = element('span', '', row);
+        info.className = 'workspace-record-info';
+        element('strong', heading, info);
+        element('small', meta, info);
+        const labels = element('span', '', row);
+        labels.className = 'workspace-record-tags';
+        for (const [text, tone] of tags) badge(labels, text, tone);
+        const arrow = element('span', '›', row);
+        arrow.setAttribute('aria-hidden', 'true');
+        arrow.className = 'workspace-chevron';
+        return row;
+    }
+
+    async function showFeedbackInbox(state = feedbackDefaults, message = '') {
         if (!flags.admin || account?.role !== 'admin') throw new Error('admin_required');
-        startPanel('feedback-admin', '反馈管理');
-        const select = feedbackCategory(body, '筛选类型', category, true);
-        select.addEventListener('change', () => { void perform(() => showFeedbackInbox(select.value)); });
-        const list = element('div', '正在读取反馈…', body);
-        list.className = 'feedback-list';
-        list.setAttribute('aria-live', 'polite');
-        const query = new URLSearchParams({offset});
-        if (category) query.set('category', category);
-        let page;
-        try {
-            page = await request('/admin/feedback?' + query);
-        } catch (error) {
-            if (!list.isConnected || !dialog.open) return;
-            list.textContent = '暂时无法读取反馈。';
-            if (error.status !== 401 && error.status !== 403) {
-                button('重试', list, () => showFeedbackInbox(category, offset));
+        startPanel('feedback-admin', '反馈管理', '检索玩家提交的问题与建议，并记录处理进度。');
+        let activeFilters = state;
+        button('数据库维护', workspaceActions(body), () => showDataMaintenance(undefined, () => showFeedbackInbox(activeFilters)));
+        const form = element('form', '', body);
+        form.className = 'workspace-form workspace-filters';
+        optional(form, '搜索反馈', 'q', state.q, 100, 'search', '标题、正文、玩家、版本或反馈编号');
+        const filters = workspaceGrid(form);
+        feedbackCategory(filters, '反馈类型', state.category, true);
+        options(filters, '处理状态', 'state', {all: '全部状态', active: '待处理与处理中', ...feedbackStates}, state.state);
+        options(filters, '排序', 'sort', sortOptions, state.sort);
+        const actions = workspaceActions(form);
+        button('清空筛选', actions, () => showFeedbackInbox());
+        const list = workspaceResult(body);
+        formSubmit(form, '搜索', values => render({...values, offset: 0}), actions);
+
+        async function render(filters, banner = '') {
+            list.replaceChildren();
+            if (banner) resultText(list, banner);
+            const progress = resultText(list, '正在读取反馈…');
+            const params = new URLSearchParams(filters);
+            if (!filters.category) params.delete('category');
+            let page;
+            try { page = await request('/admin/feedback?' + params); }
+            catch (error) {
+                progress.textContent = '暂时无法读取反馈。';
+                if (error.status !== 401 && error.status !== 403) button('重试', list, () => render(filters));
+                if (list.isConnected && dialog.open) throw error;
+                return;
             }
-            throw error;
+            if (!list.isConnected || !dialog.open || !progress.isConnected) return;
+            if (!page.items.length && filters.offset) return render({...filters, offset: Math.max(0, filters.offset - 20)}, banner);
+            progress.textContent = page.items.length ? `共 ${page.total} 条反馈 · 第 ${1 + Math.floor(filters.offset / 20)} 页` : '没有符合条件的反馈。';
+            activeFilters = filters;
+            exportControls(list, 'feedback', params);
+            const rows = element('div', '', list);
+            rows.className = 'feedback-list';
+            for (const item of page.items) {
+                const tags = [[feedbackCategories[item.category] || item.category, ''], [feedbackStates[item.status], item.status]];
+                if (item.screenshot_count) tags.push([`${item.screenshot_count} 张截图`, '']);
+                recordCard(rows, item.title, `${item.nickname} · ${bjTime(item.created_at)}${item.build_version ? ' · ' + item.build_version : ''}`,
+                    tags, () => showFeedbackDetail(item.feedback_id, filters));
+            }
+            pager(list, page, filters.offset, offset => showFeedbackInbox({...filters, offset}));
         }
-        if (!list.isConnected || !dialog.open) return;
-        list.replaceChildren();
-        if (!page.items.length) element('p', '当前筛选下还没有反馈。', list);
-        for (const item of page.items) {
-            const row = button('', list, () => showFeedbackDetail(item.feedback_id, category, offset));
-            element('strong', item.title, row);
-            element('small', feedbackSummary(item) + (item.screenshot_count ? ` · ${item.screenshot_count} 张截图` : ''), row);
-        }
-        const actions = element('div', '', list);
-        actions.className = 'history-actions';
-        if (offset) button('上一页', actions, () => showFeedbackInbox(category, Math.max(0, offset - 20)));
-        if (page.next_offset !== null) button('下一页', actions, () => showFeedbackInbox(category, page.next_offset));
-        button('刷新', actions, () => showFeedbackInbox(category, offset));
+        await render(state, message);
     }
 
-    async function showFeedbackDetail(id, category, offset) {
+    async function showFeedbackDetail(id, filters) {
         startPanel('feedback-detail', '反馈详情');
-        button('返回列表', body, () => showFeedbackInbox(category, offset));
-        const details = element('article', '正在读取详情…', body);
-        details.setAttribute('aria-live', 'polite');
+        button('← 返回反馈列表', workspaceActions(body), () => showFeedbackInbox(filters));
+        const details = workspaceResult(body);
+        const progress = resultText(details, '正在读取详情…');
         const route = '/admin/feedback/' + encodeURIComponent(id);
         let item;
-        try {
-            item = await request(route);
-        } catch (error) {
+        try { item = await request(route); }
+        catch (error) {
             if (!details.isConnected || !dialog.open) return;
-            details.textContent = '暂时无法读取详情。';
+            progress.textContent = '暂时无法读取详情。';
             throw error;
         }
         if (!details.isConnected || !dialog.open) return;
         details.replaceChildren();
-        element('h3', item.title, details).className = 'feedback-text';
-        element('p', feedbackSummary(item) + (item.username && item.username !== item.nickname ? ` · ${item.username}` : ''), details).className = 'account-intro feedback-text';
-        if (item.build_version) element('small', '游戏版本 ' + item.build_version, details).className = 'feedback-text';
-        element('p', item.description, details).className = 'feedback-text';
-        if (!item.screenshots.length) return;
-        element('h4', '截图', details);
-        const gallery = element('ul', '', details);
-        gallery.className = 'feedback-screenshots';
-        for (const shot of item.screenshots) {
-            const link = element('a', '', element('li', '', gallery));
-            link.href = api + route + '/screenshots/' + shot.position;
-            link.target = '_blank';
-            link.rel = 'noopener';
-            const img = element('img', '', link);
-            img.alt = `截图 ${shot.position}（${shot.width} × ${shot.height}）`;
-            img.loading = 'lazy';
-            img.src = link.href;
-            element('span', `查看截图 ${shot.position} 大图`, link);
+        const article = element('article', '', details);
+        article.className = 'workspace-sheet';
+        const tags = workspaceActions(article);
+        badge(tags, feedbackCategories[item.category] || item.category);
+        badge(tags, feedbackStates[item.status], item.status);
+        element('h3', item.title, article).className = 'feedback-text';
+        element('p', `${item.nickname}${item.username && item.username !== item.nickname ? ' · ' + item.username : ''} · ${bjTime(item.created_at)}（北京时间）`, article).className = 'account-intro feedback-text';
+        element('small', `编号 ${id}${item.build_version ? ' · 版本 ' + item.build_version : ''}`, article).className = 'feedback-text';
+        element('p', item.description, article).className = 'feedback-text workspace-description';
+        if (item.screenshots.length) {
+            element('h4', `截图 · ${item.screenshots.length} 张`, article);
+            const gallery = element('ul', '', article);
+            gallery.className = 'feedback-screenshots';
+            for (const shot of item.screenshots) {
+                const link = element('a', '', element('li', '', gallery));
+                link.href = api + route + '/screenshots/' + shot.position;
+                link.target = '_blank';
+                link.rel = 'noopener';
+                const img = element('img', '', link);
+                img.alt = `截图 ${shot.position}（${shot.width} × ${shot.height}）`;
+                img.loading = 'lazy';
+                img.src = link.href;
+                element('span', `查看截图 ${shot.position} 大图`, link);
+            }
+        }
+        const form = element('form', '', details);
+        form.className = 'workspace-sheet workspace-form';
+        element('h3', '处理反馈', form);
+        options(form, '处理状态', 'status', feedbackStates, item.status);
+        const note = labeledControl(form, '内部备注（仅管理员可见）', 'note', 'textarea');
+        note.maxLength = 1600;
+        note.rows = 3;
+        note.value = item.note;
+        counter(note);
+        element('small', '归档不会删除玩家原文或截图，可随时更改状态恢复。', form);
+        formSubmit(form, '保存处理结果', async values => {
+            await request(route, 'PATCH', {...values, updated_at: item.updated_at});
+            await showFeedbackInbox(filters, '处理结果已保存。');
+        }, workspaceActions(form));
+    }
+
+    async function checkAdminWorkspace() {
+        if (!flags.admin || menuState !== 'ready' || account?.role !== 'admin') throw new Error('admin_required');
+        const user = await readAccount();
+        if (user?.user_id !== account?.user_id || user?.role !== 'admin') {
+            if (user && user.user_id === account?.user_id) { account = user; publishMenu('ready', statuses.admin_required); }
+            dialog.close();
+            throw new Error('admin_required');
         }
     }
 
     async function showStats() {
-        if (!flags.admin || menuState !== 'ready' || account?.role !== 'admin') throw new Error('admin_required');
-        const user = await readAccount();
-        if (user?.user_id !== account.user_id || user?.role !== 'admin') {
-            if (user?.user_id === account.user_id) { account = user; publishMenu('ready', statuses.admin_required); }
-            dialog.close();
-            throw new Error('admin_required');
+        await checkAdminWorkspace();
+        await statsWorkspace();
+    }
+
+    function statsDates(parent, filters, form) {
+        const group = workspaceGrid(parent);
+        for (const [name, label] of [['start', '开始日期（北京时间）'], ['end', '结束日期（北京时间）']]) {
+            const input = field(group, label, name, 'date', filters[name]);
+            input.min = '2000-01-01';
+            input.max = '9998-12-31';
         }
-        startPanel('admin', '管理统计', '玩家活跃与对局完成情况');
-        const metrics = element('section', '', body);
-        metrics.setAttribute('aria-live', 'polite');
-        element('p', '正在读取统计…', metrics);
-        const filters = element('details', '', body);
-        filters.className = 'account-stats-filters';
-        element('summary', '筛选与日期', filters);
-        const form = element('form', '', filters);
-        form.className = 'account-stats-form';
-        const now = new Date(Date.now() + 8 * 3600000).toISOString().slice(0, 10);
-        const week = new Date(Date.now() - 6 * 86400000 + 8 * 3600000).toISOString().slice(0, 10);
-        field(form, '北京时间起日', 'start', 'date', week);
-        field(form, '北京时间止日', 'end', 'date', now);
-        for (const [key, text] of [['version', '版本'], ['character', '角色编号'], ['difficulty', '难度']]) {
-            field(form, text, key).required = false;
+        const buttons = workspaceActions(parent);
+        for (const days of [7, 30, 90]) button(`近 ${days} 天`, buttons, () => {
+            form.elements.start.value = bjDate(1 - days);
+            form.elements.end.value = bjDate(0);
+            form.requestSubmit();
+        });
+    }
+
+    async function statsWorkspace(view = 'overview', filters = statsDefaults(), message = '') {
+        const records = view === 'records';
+        startPanel('admin', '管理统计', '查看玩家活跃和对局漏斗，检索并维护纳入统计的对局。');
+        const nav = element('nav', '', body);
+        nav.className = 'workspace-tabs';
+        nav.setAttribute('aria-label', '统计视图');
+        let current = filters;
+        for (const [key, label] of [['overview', '统计概览'], ['records', '对局明细']]) {
+            const tab = button(label, nav, () => statsWorkspace(key, {...current, offset: 0}));
+            if (key === view) tab.setAttribute('aria-current', 'page');
         }
-        formSubmit(form, '查询', async values => {
-            let rows;
-            try { rows = await request('/admin/stats?' + new URLSearchParams(values)); }
+        button('数据库维护', nav, () => showDataMaintenance(undefined, () => statsWorkspace(view, current)));
+        const form = element('form', '', body);
+        form.className = 'workspace-form workspace-filters';
+        if (records) optional(form, '搜索对局明细', 'q', filters.q, 100, 'search', '对局编号、玩家、版本或操作理由');
+        const advanced = element('details', '', form);
+        advanced.className = 'workspace-advanced';
+        advanced.open = matchMedia('(min-width: 670px)').matches;
+        const filterHeading = element('summary', '', advanced);
+        const controls = element('div', '', advanced);
+        statsDates(controls, filters, form);
+        const group = workspaceGrid(controls);
+        optional(group, '游戏版本', 'version', filters.version, 80, 'text', '全部版本或完整版本号');
+        options(group, '角色', 'character', {'': '全部角色', ...characters}, filters.character);
+        options(group, '难度', 'difficulty', {'': '全部难度', ...difficulties}, filters.difficulty);
+        if (records) {
+            const detailFilters = workspaceGrid(controls);
+            options(detailFilters, '记录来源', 'source', {'': '全部来源', ...statsSources}, filters.source);
+            options(detailFilters, '统计状态', 'state', {included: '计入统计', excluded: '已移出', all: '全部记录'}, filters.state);
+            options(detailFilters, '排序', 'sort', sortOptions, filters.sort);
+        }
+        const actions = workspaceActions(form);
+        button('重置筛选', actions, () => statsWorkspace(view));
+        if (records) button('＋ 新增统计记录', actions, () => editStatsRecord(null, current));
+        const results = workspaceResult(body);
+        formSubmit(form, '查询', values => render({...current, ...values, offset: 0}), actions);
+
+        async function render(options, banner = '') {
+            current = options;
+            results.replaceChildren();
+            if (banner) resultText(results, banner);
+            const progress = resultText(results, '正在读取统计…');
+            const {start, end, version, character, difficulty, q, source, state, sort, offset} = options;
+            const count = [version, character, difficulty, ...(records ? [source, state !== 'included', sort !== 'newest'] : [])].filter(Boolean).length;
+            filterHeading.textContent = `日期与筛选 · ${start} 至 ${end}${count ? ` · ${count} 项条件` : ''}`;
+            const params = new URLSearchParams({start, end, version, character, difficulty,
+                ...(records ? {q, source, state, sort, offset} : {})});
+            let data;
+            try { data = await request('/admin/stats' + (records ? '/records?' : '?') + params); }
             catch (error) {
-                metrics.replaceChildren();
-                element('p', '统计暂不可用，请重试查询。', metrics);
-                filters.open = true;
-                throw error;
+                progress.textContent = '暂时无法读取统计，请调整筛选或重试。';
+                advanced.open = true;
+                if (results.isConnected && dialog.open) throw error;
+                return;
             }
-            if (showing !== 'admin') return;
-            metrics.replaceChildren();
-            element('p', values.start + ' 至 ' + values.end + ' · 北京时间', metrics).className = 'account-intro';
-            const totals = element('div', '', metrics);
-            totals.className = 'account-stats-totals';
-            totals.setAttribute('aria-label', '注册账号 ' + rows.registered + ' · 独立游客浏览器 ' + rows.visitors);
-            for (const [label, count] of [['当前注册账号', rows.registered], ['区间独立游客浏览器', rows.visitors]]) {
-                const card = element('div', '', totals);
-                element('small', label, card);
-                element('strong', String(count), card);
+            if (!results.isConnected || !dialog.open || !progress.isConnected) return;
+            if (!records) {
+                progress.textContent = `${start} 至 ${end} · 北京时间`;
+                exportControls(results, 'stats', params);
+                renderStatsOverview(results, data, options);
+                return;
             }
-            const scroller = element('div', '', metrics);
-            scroller.className = 'account-stats-table';
+            if (!data.items.length && offset) return render({...options, offset: Math.max(0, offset - 20)}, banner);
+            progress.textContent = data.items.length ? `共 ${data.total} 条对局记录 · 第 ${1 + Math.floor(offset / 20)} 页` : '没有符合条件的对局记录。';
+            exportControls(results, 'records', params);
+            const list = element('div', '', results);
+            list.className = 'feedback-list';
+            for (const item of data.items) {
+                const tags = [[statsSources[item.source], item.source], [item.excluded ? '已移出' : item.finished ? '已结算' : '未结算', item.excluded ? 'archived' : '']];
+                recordCard(list, item.nickname || '人工补录', `${bjTime(item.started_at)} · ${item.game_version} · ${item.character_id} · ${difficulties[item.difficulty] || item.difficulty}`,
+                    tags, () => showStatsRecord(item.record_id, options));
+            }
+            pager(results, data, offset, next => statsWorkspace(view, {...options, offset: next}));
+        }
+        await render(filters, message);
+    }
+
+    function renderStatsOverview(parent, data, filters) {
+        const format = value => new Intl.NumberFormat('zh-CN').format(Number(value || 0));
+        const totals = data.activity.find(row => row.game_version === null);
+        const metrics = workspaceGrid(parent, 'workspace-metrics');
+        for (const [label, value] of [['累计注册账号', data.registered], ['区间独立游客浏览器', data.visitors],
+            ['开局账号', totals?.accounts], ['对局开局', totals?.started]]) {
+            const card = element('div', '', metrics);
+            element('small', label, card);
+            element('strong', format(value), card);
+        }
+        const funnel = element('section', '', parent);
+        funnel.className = 'workspace-sheet';
+        element('h3', '对局漏斗', funnel);
+        const base = Number(totals?.started || 0);
+        for (const [label, value] of [['开局', base], ['完成首战', totals?.first_battles], ['完成整局', totals?.finished]]) {
+            const line = element('div', '', funnel);
+            line.className = 'workspace-funnel';
+            const n = Number(value || 0);
+            element('span', label, line);
+            const bar = element('progress', '', line);
+            bar.max = base || 1;
+            bar.value = n;
+            bar.setAttribute('aria-label', label);
+            element('strong', `${format(n)} · ${base ? Math.round(n / base * 100) + '%' : '—'}`, line);
+        }
+        element('small', '完成整局表示已结算，不限胜败；人工补录只计对局，不增加开局账号。', funnel);
+        const versions = data.activity.filter(row => row.game_version !== null);
+        if (!versions.length) resultText(parent, '此筛选范围内还没有计入统计的对局。');
+        else {
+            const scroller = element('div', '', parent);
+            scroller.className = 'account-stats-table workspace-stats-table';
             scroller.tabIndex = 0;
             scroller.setAttribute('role', 'region');
-            scroller.setAttribute('aria-label', '各版本对局统计，可横向滚动');
+            scroller.setAttribute('aria-label', '版本统计，可横向滚动');
             const table = element('table', '', scroller);
-            element('caption', '对局漏斗 · 按开局日期统计', table);
+            element('caption', '各版本对局', table);
             const header = element('tr', '', element('thead', '', table));
-            for (const label of ['版本', '开局账号', '开局', '完成首战', '完成整局']) {
-                element('th', label, header).scope = 'col';
+            for (const label of ['版本', '开局账号', '开局', '首战完成', '已结算', '人工补录']) element('th', label, header).scope = 'col';
+            const rows = element('tbody', '', table);
+            for (const row of versions) {
+                const entry = element('tr', '', rows);
+                const cell = element('th', '', entry);
+                cell.scope = 'row';
+                button(row.game_version, cell, () => statsWorkspace('records', {...filters, version: row.game_version, offset: 0}));
+                for (const value of [row.accounts, row.started, row.first_battles, row.finished, row.manual]) element('td', format(value), entry);
             }
-            const entries = element('tbody', '', table);
-            for (const row of rows.activity) {
-                const entry = element('tr', '', entries);
-                for (const value of [row.game_version || '全部版本', row.accounts, row.started, row.first_battles, row.finished])
-                    element('td', String(value), entry);
-            }
-            if (!rows.activity.length) element('p', '此筛选范围内还没有开局记录。', metrics);
-            element('small', '游客按浏览器去重，跨设备可能重复。注册账号数不受版本筛选影响。', metrics);
-        });
-        button('返回主菜单', body, closePanel);
-        form.requestSubmit();
+        }
+        element('small', '游客按浏览器去重，可能跨设备重复；游客数只受日期影响，累计注册数不受筛选影响。', parent);
     }
+
+    const statsRoute = id => '/admin/stats/records' + (id ? '/' + encodeURIComponent(id) : '');
+
+    async function showStatsRecord(id, filters, message = '') {
+        startPanel('admin-detail', '对局统计详情');
+        button('← 返回对局明细', workspaceActions(body), () => statsWorkspace('records', filters));
+        const details = workspaceResult(body);
+        const progress = resultText(details, '正在读取记录…');
+        let item;
+        try { item = await request(statsRoute(id)); }
+        catch (error) {
+            if (!details.isConnected || !dialog.open) return;
+            progress.textContent = '暂时无法读取记录。';
+            throw error;
+        }
+        if (!details.isConnected || !dialog.open) return;
+        details.replaceChildren();
+        if (message) resultText(details, message);
+        const sheet = element('section', '', details);
+        sheet.className = 'workspace-sheet';
+        const tags = workspaceActions(sheet);
+        badge(tags, statsSources[item.source], item.source);
+        badge(tags, item.excluded ? '已移出' : '计入统计', item.excluded ? 'archived' : 'resolved');
+        element('h3', item.nickname || '人工补录', sheet);
+        const facts = element('dl', '', sheet);
+        facts.className = 'workspace-facts';
+        for (const [label, value] of [['记录编号', id], ['开局时间（北京时间）', bjTime(item.started_at)], ['游戏版本', item.game_version],
+            ['角色', characters[item.character_id] || item.character_id], ['难度', difficulties[item.difficulty] || item.difficulty],
+            ['首战完成', item.first_battle ? '是' : '否'], ['整局结算', item.finished ? '是' : '否'], ['最近操作理由', item.reason || '—']]) {
+            element('dt', label, facts);
+            element('dd', value, facts);
+        }
+        const actions = workspaceActions(details);
+        if (!item.excluded) {
+            button('编辑统计记录', actions, () => editStatsRecord(item, filters)).className = 'account-primary';
+            button('移出统计', actions, () => changeStatsState(item, filters, false)).className = 'workspace-danger';
+        }
+        if (item.excluded || item.source === 'adjusted') button(item.source === 'manual' ? '恢复计入' : '恢复原始数据', actions, () => changeStatsState(item, filters, true));
+    }
+
+    function editStatsRecord(item, filters) {
+        startPanel('admin-edit', item ? '编辑统计记录' : '新增统计记录', '仅用于汇总和检索，不会修改玩家原始对局、存档或游客统计。');
+        const form = element('form', '', body);
+        form.className = 'workspace-sheet workspace-form';
+        const grid = workspaceGrid(form);
+        const shifted = item ? new Date(Date.parse(item.started_at) + 8 * 3600000).toISOString().slice(0, 23) : bjDate(0) + 'T12:00';
+        const when = field(grid, '开局时间（北京时间）', 'started_at', 'datetime-local', shifted);
+        when.step = 'any';
+        const version = field(grid, '游戏版本', 'game_version', 'text', item?.game_version || buildVersion);
+        version.maxLength = 80;
+        version.pattern = '[a-zA-Z0-9_.:\\-]+';
+        options(grid, '角色', 'character_id', characters, item?.character_id || 'P01');
+        options(grid, '难度', 'difficulty', difficulties, item?.difficulty || 'normal');
+        options(grid, '首战完成', 'first_battle', {'0': '否', '1': '是'}, item?.first_battle ? '1' : '0');
+        options(grid, '整局结算', 'finished', {'0': '否', '1': '是'}, item?.finished ? '1' : '0');
+        const reason = field(form, '操作理由（必填）', 'reason');
+        reason.maxLength = 500;
+        const actions = workspaceActions(form);
+        button('取消', actions, () => item ? showStatsRecord(item.record_id, filters) : statsWorkspace('records', filters));
+        formSubmit(form, item ? '保存修正' : '新增记录', async values => {
+            const data = {...values, started_at: values.started_at + '+08:00', first_battle: values.first_battle === '1', finished: values.finished === '1'};
+            if (item) data.revision = item.revision;
+            const saved = await request(statsRoute(item?.record_id), item ? 'PATCH' : 'POST', data);
+            await showStatsRecord(saved.record_id, filters, item ? '统计修正已保存。' : '记录已新增；若不在当前筛选范围内，请调整筛选。');
+        }, actions);
+    }
+
+    function changeStatsState(item, filters, restore) {
+        const label = restore ? (item.source === 'manual' ? '恢复计入' : '恢复原始数据') : '移出统计';
+        startPanel('admin-confirm', label, restore ? '记录将重新计入统计。自动记录的人工修正也会同时清除。' : '这条记录将不再计入汇总。可在「已移出」中找到并恢复，玩家原始对局不会删除。');
+        const form = element('form', '', body);
+        form.className = 'workspace-sheet workspace-form';
+        element('p', `${item.game_version} · ${bjTime(item.started_at)} · ${item.record_id}`, form).className = 'feedback-text';
+        field(form, '操作理由（必填）', 'reason').maxLength = 500;
+        const actions = workspaceActions(form);
+        button('取消', actions, () => showStatsRecord(item.record_id, filters));
+        formSubmit(form, '确认' + label, async values => {
+            await request(statsRoute(item.record_id) + (restore ? '/restore' : ''), restore ? 'POST' : 'DELETE', {...values, revision: item.revision});
+            await showStatsRecord(item.record_id, filters, restore ? '已恢复。' : '已移出统计。');
+        }, actions);
+    }
+
+
+    async function downloadReport(kind, query, trigger, statusLine) {
+        trigger.disabled = true;
+        statusLine.textContent = '正在生成 XLSX…';
+        try {
+            const response = await fetch(api + '/admin/exports/' + kind + '?' + query, {
+                headers: {'X-Kapai-Account': account.user_id}, cache: 'no-store', credentials: 'same-origin',
+                signal: AbortSignal.timeout(30000),
+            });
+            if (!response.ok) throw new Error((await response.json()).detail);
+            if (!response.headers.get('content-type')?.startsWith('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'))
+                throw new Error('export_invalid_file');
+            const blob = await response.blob();
+            if (!trigger.isConnected || !dialog.open) return;
+            const url = URL.createObjectURL(blob);
+            const link = element('a', '', document.body);
+            link.href = url;
+            link.download = response.headers.get('content-disposition')?.match(/filename="(kapai-[a-z]+-[\d-]+\.xlsx)"/)?.[1] || 'kapai-export.xlsx';
+            link.click();
+            link.remove();
+            setTimeout(() => URL.revokeObjectURL(url), 30000);
+            statusLine.textContent = 'XLSX 已生成，请查看浏览器下载列表。';
+        } catch (error) {
+            statusLine.textContent = statuses[error.message] || '暂时无法导出，请稍后重试。';
+        } finally {
+            trigger.disabled = false;
+        }
+    }
+
+    function exportControls(parent, kind, query) {
+        const params = new URLSearchParams(query);
+        params.delete('offset');
+        const actions = workspaceActions(parent);
+        actions.classList.add('workspace-export');
+        const trigger = button('导出 XLSX', actions, () => downloadReport(kind, params, trigger, note));
+        const note = element('small', '导出当前查询条件下的全部结果，最多 5000 行。', actions);
+        note.setAttribute('role', 'status');
+    }
+
+    const playerDataRoute = id => '/admin/data/players' + (id ? '/' + encodeURIComponent(id) : '');
+
+    async function showDataMaintenance(filters = {q: '', offset: 0}, back = showStats, message = '') {
+        startPanel('admin-data', '数据库维护', '修改普通玩家的显示昵称。不会修改登录名、权限、密码或存档。');
+        const nav = workspaceActions(body);
+        button('← 返回管理页面', nav, back);
+        const form = element('form', '', body);
+        form.className = 'workspace-form workspace-filters';
+        optional(form, '搜索玩家', 'q', filters.q, 100, 'search', '昵称、登录名或账号编号');
+        const actions = workspaceActions(form);
+        button('清空筛选', actions, () => showDataMaintenance({q: '', offset: 0}, back));
+        const results = workspaceResult(body);
+        formSubmit(form, '查询玩家', values => render({...values, offset: 0}), actions);
+
+        async function render(state, banner = '') {
+            results.replaceChildren();
+            if (banner) resultText(results, banner);
+            const progress = resultText(results, '正在读取玩家…');
+            let data;
+            try { data = await request(playerDataRoute() + '?' + new URLSearchParams(state)); }
+            catch (error) {
+                progress.textContent = '暂时无法读取玩家，请重试。';
+                if (results.isConnected && dialog.open) throw error;
+                return;
+            }
+            if (!progress.isConnected || !dialog.open) return;
+            progress.textContent = data.items.length ? `共 ${data.total} 个玩家 · 第 ${1 + Math.floor(state.offset / 20)} 页` : '没有符合条件的普通玩家。';
+            const list = element('div', '', results);
+            list.className = 'feedback-list';
+            for (const item of data.items) {
+                recordCard(list, item.nickname, `${item.username || '未设置登录名'} · ${item.user_id}`,
+                    [['普通玩家', '']], () => showPlayerMaintenance(item.user_id, state, back));
+            }
+            pager(results, data, state.offset, offset => showDataMaintenance({...state, offset}, back));
+        }
+        await render(filters, message);
+    }
+
+    async function showPlayerMaintenance(id, filters, back, message = '') {
+        startPanel('admin-data-detail', '玩家资料', '数据库中的显示昵称会用于账号、反馈和对局管理。');
+        button('← 返回数据库维护', workspaceActions(body), () => showDataMaintenance(filters, back));
+        const details = workspaceResult(body);
+        const progress = resultText(details, '正在读取账号…');
+        let item;
+        try { item = await request(playerDataRoute(id)); }
+        catch (error) {
+            progress.textContent = '暂时无法读取账号。';
+            if (details.isConnected && dialog.open) throw error;
+            return;
+        }
+        if (!details.isConnected || !dialog.open) return;
+        details.replaceChildren();
+        if (message) resultText(details, message);
+        const profile = element('section', '', details);
+        profile.className = 'workspace-sheet';
+        element('h3', item.nickname, profile);
+        const dl = element('dl', '', profile);
+        dl.className = 'workspace-facts';
+        for (const [key, value] of [['账号编号', id], ['登录名', item.username || '未设置'], ['注册时间（北京时间）', bjTime(item.created_at)]]) {
+            element('dt', key, dl);
+            element('dd', value, dl);
+        }
+        const actions = workspaceActions(details);
+        button('修改显示昵称', actions, () => editPlayerNickname(item, filters, back)).className = 'account-primary';
+        if (item.can_restore) button('撤回上一笔修改', actions, () => confirmPlayerNickname(item, filters, back));
+        const history = element('section', '', details);
+        history.className = 'workspace-sheet';
+        element('h3', '最近修改记录', history);
+        if (!item.history.length) element('p', '还没有修改记录。', history);
+        for (const change of item.history) {
+            const row = element('article', '', history);
+            row.className = 'workspace-change';
+            element('strong', `${change.old_nickname} → ${change.new_nickname}`, row);
+            element('p', change.reason, row).className = 'feedback-text';
+            element('small', bjTime(change.changed_at) + '（北京时间）', row);
+        }
+    }
+
+    function editPlayerNickname(item, filters, back) {
+        startPanel('admin-data-edit', '修改显示昵称', '登录名保持不变；确认前可核对新旧昵称。');
+        const form = element('form', '', body);
+        form.className = 'workspace-sheet workspace-form';
+        element('p', '当前昵称：' + item.nickname, form).className = 'feedback-text';
+        const nickname = field(form, '新显示昵称', 'nickname', 'text', item.nickname);
+        nickname.maxLength = 40;
+        counter(nickname);
+        const actions = workspaceActions(form);
+        button('取消', actions, () => showPlayerMaintenance(item.user_id, filters, back));
+        formSubmit(form, '下一步', values => {
+            const name = values.nickname.trim();
+            if (!name) throw new Error('invalid_input');
+            if (name === item.nickname) throw new Error('maintenance_nickname_unchanged');
+            confirmPlayerNickname(item, filters, back, name);
+        }, actions);
+    }
+
+    function confirmPlayerNickname(item, filters, back, newName = null) {
+        const restore = newName === null;
+        startPanel('admin-data-confirm', restore ? '撤回上一笔修改' : '确认修改显示昵称', '确认后会写入数据库并保留操作记录。');
+        const form = element('form', '', body);
+        form.className = 'workspace-sheet workspace-form';
+        element('p', `昵称：${item.nickname} → ${newName ?? item.history[0].old_nickname}`, form).className = 'feedback-text';
+        field(form, '操作原因（必填）', 'reason').maxLength = 500;
+        const actions = workspaceActions(form);
+        button('取消', actions, () => showPlayerMaintenance(item.user_id, filters, back));
+        formSubmit(form, restore ? '确认撤回' : '确认写入数据库', async values => {
+            const route = playerDataRoute(item.user_id) + '/nickname';
+            const payload = {reason: values.reason, revision: item.revision, expected_nickname: item.nickname};
+            if (!restore) payload.nickname = newName;
+            await request(route + (restore ? '/restore' : ''), restore ? 'POST' : 'PATCH', payload);
+            await showPlayerMaintenance(item.user_id, filters, back, restore ? '已撤回修改。' : '显示昵称已写入数据库。');
+        }, actions);
+    }
+
 
     function decode(text) {
         if (!text || text === 'invalid') return null;
@@ -1234,6 +1706,8 @@
                 callback(...args);
                 return reply;
             };
+            const loopback = ['localhost', '127.0.0.1', '[::1]'].includes(location.hostname);
+            game('tutorial_online', String(!loopback));
             void boot();
         },
         reply(value) { reply = value; },
@@ -1267,7 +1741,10 @@
                 else if (section === 'history') await showHistory();
                 else if (section === 'stats') await showStats();
                 else if (section === 'feedback') showFeedback();
-                else if (section === 'feedback_admin') await showFeedbackInbox();
+                else if (section === 'feedback_admin') {
+                    await checkAdminWorkspace();
+                    await showFeedbackInbox();
+                }
             }));
         },
         confirmPlay(developerTools = false) { queueMicrotask(() => confirmPlay(developerTools)); },

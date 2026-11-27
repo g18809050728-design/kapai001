@@ -363,7 +363,8 @@ func _render_menu() -> void:
 			add_button(options, "menu:register", "创建账号", _ui("web_register"))
 		add_button(options, "menu:guest", "游客登录", _ui("web_guest"))
 	add_button(options,"menu:settings","设置与存档",_ui("settings"))
-	add_button(options,"menu:quit","退出游戏",_ui("quit"))
+	if not UiStyle.web_touch:
+		add_button(options,"menu:quit","退出游戏",_ui("quit"))
 	for uid in ["menu:continue","menu:new","menu:compendium","menu:tutorial","menu:records","menu:feedback","menu:feedback_admin","menu:admin","menu:text_editor","menu:test","menu:settings","menu:account","menu:register","menu:guest","menu:quit"]:
 		if not _buttons.has(uid):
 			continue
@@ -1029,6 +1030,7 @@ func _render_map() -> void:
 		body.add_child(overview)
 		overview.arrange.call_deferred()
 		_fit_map_overview.call_deferred(weakref(overview), _render_generation)
+	_scroll.scroll_started.connect(func(): _map_press_dragged = true)
 	var canvas := RouteCanvas.new()
 	canvas.name = "RouteMap"
 	canvas.configure(nodes, reachable, current_id, selected)
@@ -1045,10 +1047,12 @@ func _render_map() -> void:
 		var id := str(node.node_id)
 		var current := id == current_id
 		var status := "当前" if current else ("已过" if node.get("status", "") == "completed" else ("可入" if reachable.has(id) else ("后续" if forward.has(id) else "不可达")))
-		var button := add_button(canvas, "node:" + id, "", {}, func(): _choose("map:node", id))
+		var activate := _tap_map_node.bind(id, node_generation) if UiStyle.web_touch else func(): _choose("map:node", id)
+		var button := add_button(canvas, "node:" + id, "", {}, activate)
 		button.set_script(RouteCanvas.NodeStamp)
 		button.set_meta("node_id", id)
-		button.gui_input.connect(_map_node_input.bind(id,node_generation))
+		if not UiStyle.web_touch:
+			button.gui_input.connect(_map_node_input.bind(id,node_generation))
 		button.size_flags_horizontal = 0
 		button.autowrap_mode = TextServer.AUTOWRAP_OFF
 		button.add_theme_font_size_override("font_size", roundi(14 * UiStyle.text_scale))
@@ -1113,7 +1117,7 @@ func _render_map() -> void:
 			node_button.focus_entered.connect(func(): _map_preview_node(node,reachable))
 	_layout_regions.call_deferred()
 
-	var row := _bottom(description + ("  ·  再点已选节点可进入" if UiStyle.web_touch else "  ·  再次点击已选节点进入 / 可双击"))
+	var row := _bottom(description + ("  ·  上下滑地图 / 再点已选节点进入" if UiStyle.web_touch else "  ·  再次点击已选节点进入 / 可双击"))
 	_map_selection_hint = footer.get_child(0) as Label
 	# Selection text cannot resize the footer and shift the node under a second click.
 	_map_selection_hint.autowrap_mode = TextServer.AUTOWRAP_OFF
@@ -1166,6 +1170,19 @@ func _select_map_node(id: String) -> void:
 	local_selection_changed.emit(_choices.duplicate(true))
 
 
+func _tap_map_node(id: String, generation: int) -> void:
+	# Let the native button release only after a tap; ScrollContainer cancels its
+	# press when this finger turns into a drag. Desktop keeps double-click support.
+	if not is_inside_tree() or generation != _render_generation or _map_entry_generation == generation:
+		return
+	var enter := str(_choices.get("map:node", "")) == id and _array(view.get("reachable_node_ids")).has(id)
+	_choose("map:node", id)
+	if enter:
+		_map_entry_generation = generation
+		if not press("map:enter"):
+			_map_entry_generation = -1
+
+
 func _map_node_input(event: InputEvent, id: String, generation: int) -> void:
 	if not is_inside_tree() or screen != "map" or generation != _render_generation or _map_entry_generation == generation:
 		return
@@ -1189,7 +1206,7 @@ func _map_node_input(event: InputEvent, id: String, generation: int) -> void:
 	if _map_press_id != id:
 		return
 	_map_press_id = ""
-	if _map_press_dragged or not Rect2(Vector2.ZERO, button.size).has_point(event.position):
+	if event.canceled or _map_press_dragged or not Rect2(Vector2.ZERO, button.size).has_point(event.position):
 		return
 	var enter := (_map_press_selected or _map_press_double) and _array(view.get("reachable_node_ids")).has(id)
 	_choose("map:node", id)

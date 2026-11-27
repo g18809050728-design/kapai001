@@ -1,0 +1,75 @@
+{
+  "purpose": "Student project listing and detail-page collateral only; no game files changed.",
+  "created_local_date": "2026-11-26",
+  "image_api": {
+    "model": "gpt-image-2.5-sunburst",
+    "mode": "image edit with two references",
+    "provider": "configured jiji.cc service",
+    "outputs_this_batch": 1,
+    "quality": "high",
+    "raw_sha256": "304206b65233ed140b5f9313d2387e475322071b4be75de03ce757f651cbe7cd",
+    "requested_dimensions": [
+      1536,
+      1024
+    ],
+    "actual_dimensions": [
+      1536,
+      1024
+    ],
+    "cost": "not reported"
+  },
+  "reference_source": {
+    "page": "https://emt.bjtu.edu.cn/cn/campus/",
+    "use": "Siyuan Building architectural reference; photograph not included in end-user bundle.",
+    "photo_sha256": "6fbdcda99299edbf1231487cb39ebc6c71c7017c48b3fcf7780780bb1a04aa62",
+    "character_source": [
+      "assets/art/characters/P01/neutral.png",
+      "assets/art/characters/P02/neutral.png",
+      "assets/art/characters/P03/neutral.png",
+      "assets/art/characters/P04/neutral.png"
+    ]
+  },
+  "derivations": {
+    "cover": "[420,0,1444,1024] crop, slight contrast and saturation change.",
+    "poster": "Dark 16:9 layout extending illustration on the left with locally typeset title and tagline.",
+    "sign": "Corrected pseudo-glyphs to exact six-character signage following the building plane."
+  },
+  "checks": {
+    "image_decode_size_uniqueness": "pass",
+    "visual_review": "four faces and Siyuan Building visible; title, tagline, facade sign checked; 78 px and 58 px cover reviewed.",
+    "qr_decode_full_and_half_size": "https://47.93.245.237/",
+    "public_https_status": 200,
+    "public_page_title": "BJTU DDL project page",
+    "zip_integrity": "pass"
+  },
+  "deliverables": [
+    {
+      "filename": "01-project-cover.jpg",
+      "size": [
+        1024,
+        1024
+      ],
+      "bytes": 503387,
+      "sha256": "7673e07a64bdaf5034bd148d8c96acfa243ca9d4578003860e79776bb9fb44b5"
+    },
+    {
+      "filename": "02-promo-poster.jpg",
+      "size": [
+        1920,
+        1080
+      ],
+      "bytes": 785235,
+      "sha256": "c138c5ca1907d69cb7f068bc92e6d0c38f5c2c3ea3b013e828470f3630f62bba"
+    },
+    {
+      "filename": "03-play-qr.png",
+      "size": [
+        518,
+        518
+      ],
+      "bytes": 1985,
+      "sha256": "c4ad0148cd74cc6fb693d6d6b61005954e145d205d7eacf7a31cd0fd8cfe4137"
+    }
+  ],
+  "archive_sha256": "1254ca635abe5e6f6333622c444b21d632ad7e00126faad77db2817f6c63b18b"
+}

@@ -35,7 +35,7 @@ fullscreen.id = 'game-fullscreen';
 const controls = document.createElement('div');
 controls.id = 'game-controls';
 controls.append(fullscreen);
-workspace.append(controls);
+frame.append(controls);
 
 const rotate = document.createElement('section');
 rotate.id = 'game-rotate';
@@ -87,31 +87,35 @@ function resize() {
   if (canvas.height !== height) canvas.height = height;
 }
 
-function fullscreenChanged() {
+let showFullscreenEntry = true;
+window.kapaiShowFullscreenEntry = visible => {
+  showFullscreenEntry = visible;
+  updateFullscreenControls();
+};
+
+function updateFullscreenControls() {
   const active = Boolean(fullscreenElement());
-  fullscreen.textContent = active ? '退出' : '全屏';
-  fullscreen.setAttribute('aria-label', active ? '退出全屏' : '进入全屏');
-  fullscreen.setAttribute('aria-pressed', String(active));
+  fullscreen.textContent = '全屏';
+  fullscreen.setAttribute('aria-label', '进入全屏');
   const installed = standalone.matches || navigator.standalone === true;
-  controls.hidden = !coarse.matches || (installed && !active);
-  rotateFullscreen.hidden = installed;
-  gestureHint.hidden = installed;
+  controls.hidden = !coarse.matches || !showFullscreenEntry || active || installed;
+  rotateFullscreen.hidden = active || installed;
+  gestureHint.hidden = active || installed || !supportsFullscreen();
+}
+
+function fullscreenChanged() {
+  updateFullscreenControls();
   notice.hidden = true;
   resize();
 }
 
-async function toggleFullscreen() {
-  if (!coarse.matches) return;
+async function enterFullscreen() {
+  if (!coarse.matches || fullscreenElement()) return;
   notice.hidden = true;
   try {
-    if (fullscreenElement()) {
-      if (screen.orientation && screen.orientation.unlock) screen.orientation.unlock();
-      await (document.exitFullscreen || document.webkitExitFullscreen).call(document);
-      canvas.focus({ preventScroll: true });
-      return;
-    }
     if (!supportsFullscreen()) throw new Error('Fullscreen is unavailable');
-    await (root.requestFullscreen || root.webkitRequestFullscreen).call(root);
+    if (root.requestFullscreen) await root.requestFullscreen({ navigationUI: 'hide' });
+    else await root.webkitRequestFullscreen();
     if (coarse.matches && screen.orientation && screen.orientation.lock) {
       try { await screen.orientation.lock('landscape'); } catch { /* The rotate prompt remains visible. */ }
     }
@@ -126,12 +130,8 @@ async function toggleFullscreen() {
 
 function installFullscreenGesture() {
   const capture = { capture: true, passive: false };
-  const secondFingerWindow = 85;
-  const tapWindow = 300;
-  const doubleTapWindow = 450;
-  const movementLimit = 18;
-  let heldStart = null;
-  let forwardedTouch = null;
+  const movementLimit = 12;
+  let primary = null;
   let replaying = false;
   let chord = null;
   let firstTap = null;
@@ -141,45 +141,33 @@ function installFullscreenGesture() {
     if (event.cancelable) event.preventDefault();
   }
 
-  function flushSingle() {
-    if (!heldStart) return;
-    clearTimeout(heldStart.timer);
-    const { event } = heldStart;
-    heldStart = null;
-    forwardedTouch = event.changedTouches[0];
-    replaying = true;
-    event.target.dispatchEvent(new TouchEvent('touchstart', {
-      bubbles: true, cancelable: true, touches: [...event.touches],
-      targetTouches: [...event.targetTouches], changedTouches: [...event.changedTouches],
-    }));
-    replaying = false;
-  }
-
-  frame.addEventListener('touchstart', event => {
-    if (!coarse.matches || replaying || fullscreenElement() ||
-        event.target.closest('button, input, textarea')) return;
+  canvas.addEventListener('touchstart', event => {
+    if (!coarse.matches || replaying || fullscreenElement() || standalone.matches ||
+        navigator.standalone === true || !supportsFullscreen()) return;
     if (chord) {
       chord.valid = false;
       consume(event);
       return;
     }
-    if (event.touches.length === 2) {
-      if (heldStart) clearTimeout(heldStart.timer);
-      heldStart = null;
-      if (forwardedTouch) {
-        // Release the first finger outside the game before suppressing the chord.
-        const release = new Touch({identifier: forwardedTouch.identifier, target: forwardedTouch.target, clientX: -100, clientY: -100});
-        forwardedTouch = null;
-        replaying = true;
-        release.target.dispatchEvent(new TouchEvent('touchcancel', {bubbles: true, changedTouches: [release]}));
-        replaying = false;
-      }
+    if (event.touches.length === 1) {
+      // An ordinary swipe or tap uses the original event without any timer.
+      primary = { touch: event.changedTouches[0], time: event.timeStamp };
+    } else if (event.touches.length === 2 && primary && event.timeStamp - primary.time <= 85) {
+      const previous = primary.touch;
+      primary = null;
+      // Cancel the first finger's gameplay press only for an actual chord.
+      replaying = true;
+      try {
+        canvas.dispatchEvent(new TouchEvent('touchcancel', {
+          bubbles: true, changedTouches: [previous],
+        }));
+      } finally { replaying = false; }
       const fingers = new Map([...event.touches].map(touch => [touch.identifier, touch]));
       chord = { fingers, started: event.timeStamp, valid: true };
       consume(event);
-    } else if (event.touches.length === 1) {
-      heldStart = { event, timer: setTimeout(flushSingle, secondFingerWindow) };
-      consume(event);
+    } else {
+      primary = null;
+      firstTap = null;
     }
   }, capture);
 
@@ -193,14 +181,14 @@ function installFullscreenGesture() {
       }
       if (event.type === 'touchcancel') chord.valid = false;
       if (event.touches.length) return;
-      if (chord.valid && event.timeStamp - chord.started <= tapWindow) {
+      if (chord.valid && event.timeStamp - chord.started <= 300) {
         const fingers = [...chord.fingers.values()];
         const x = (fingers[0].clientX + fingers[1].clientX) / 2;
         const y = (fingers[0].clientY + fingers[1].clientY) / 2;
-        if (firstTap && event.timeStamp - firstTap.time <= doubleTapWindow &&
+        if (firstTap && event.timeStamp - firstTap.time <= 450 &&
             Math.hypot(firstTap.x - x, firstTap.y - y) < 64) {
           firstTap = null;
-          toggleFullscreen();
+          enterFullscreen();
         } else {
           firstTap = { x, y, time: event.timeStamp };
         }
@@ -210,15 +198,22 @@ function installFullscreenGesture() {
       chord = null;
       return;
     }
-    if (heldStart) flushSingle();
-    if (forwardedTouch && !event.touches.length) {
-      forwardedTouch = null;
+    if (primary && event.type === 'touchmove') {
+      const { touch } = primary;
+      const moved = [...event.changedTouches].find(point => point.identifier === touch.identifier);
+      if (moved && Math.hypot(moved.clientX - touch.clientX, moved.clientY - touch.clientY) > movementLimit) {
+        primary = null;
+        firstTap = null;
+      }
+    }
+    if (!event.touches.length) {
+      primary = null;
       firstTap = null;
     }
   }
 
   for (const type of ['touchmove', 'touchend', 'touchcancel']) {
-    frame.addEventListener(type, moveOrEnd, capture);
+    canvas.addEventListener(type, moveOrEnd, capture);
   }
 }
 
@@ -257,8 +252,8 @@ function installKeyboardBar() {
   window.visualViewport?.addEventListener('scroll', positionKeyboardBar);
 }
 
-fullscreen.addEventListener('click', toggleFullscreen);
-rotateFullscreen.addEventListener('click', toggleFullscreen);
+fullscreen.addEventListener('click', enterFullscreen);
+rotateFullscreen.addEventListener('click', enterFullscreen);
 document.addEventListener('fullscreenchange', fullscreenChanged);
 document.addEventListener('webkitfullscreenchange', fullscreenChanged);
 standalone.addEventListener('change', fullscreenChanged);

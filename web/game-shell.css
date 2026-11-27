@@ -24,6 +24,7 @@
 }
 
 #game-frame #canvas {
+    display: block;
     width: 100%;
     height: 100%;
     touch-action: none;
@@ -34,12 +35,11 @@
 }
 
 #game-controls {
-    flex: 0 0 54px;
-    display: grid;
-    align-content: start;
-    justify-content: end;
-    padding-top: 4px;
-    background: #172731;
+    position: absolute;
+    z-index: 2;
+    top: 4px;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 #game-controls[hidden], .game-portrait #game-controls, #game-rotate[hidden], #game-fullscreen-notice[hidden], #game-keyboard-done[hidden] {
@@ -559,3 +559,123 @@
 .history-empty { margin: 28px 0; padding: 32px 24px; border: 1px solid #ddd1bb; border-radius: 8px; text-align: center; background: #f6f0e5; }
 .history-empty strong { font-size: 1.2rem; }
 .history-empty p { color: var(--account-muted); }
+
+/* Feedback and statistics share the game's parchment, ink and brass control hierarchy. */
+#account-panel.workspace-dialog {
+    width: min(58rem, calc(100% - 24px));
+    border-color: #94764e;
+    border-top: 4px solid #94764e;
+}
+#account-panel[data-panel="feedback"], #account-panel[data-panel="feedback-sent"],
+#account-panel[data-panel="admin-edit"], #account-panel[data-panel="admin-confirm"] {
+    width: min(43rem, calc(100% - 24px));
+}
+.workspace-dialog .account-content {
+    max-height: min(calc(100dvh - 29px), calc(var(--account-viewport, 100dvh) - 29px));
+}
+.workspace-dialog #account-title { color: #203d3c; }
+#account-panel .workspace-form { gap: 12px; }
+.workspace-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr));
+    align-items: start;
+    gap: 10px 14px;
+}
+.workspace-compose { grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); }
+.workspace-dialog .account-field > :is(input, select, textarea) { width: 100%; min-width: 0; }
+.workspace-dialog textarea { resize: vertical; }
+.workspace-filters, .workspace-sheet, .workspace-attachments {
+    background: #f4ebd9;
+    border: 1px solid #cbb899;
+    border-radius: 9px;
+    padding: clamp(10px, 2vw, 18px);
+    min-width: 0;
+}
+.workspace-attachments { border-style: dashed; }
+.workspace-sheet, .workspace-stats-table { margin-block: 10px; }
+.workspace-sheet h3, .workspace-attachments h3 { margin: 0 0 8px; font-size: 1.12rem; }
+.workspace-sheet > .workspace-actions:first-child { margin-bottom: 8px; }
+.workspace-sheet h4 { margin: 12px 0 6px; }
+.workspace-attachments .feedback-screenshots { margin: 10px 0 0; }
+.workspace-attachments .feedback-screenshots:empty { margin: 0; }
+.workspace-description { border-top: 1px solid #cebea5; padding-top: 12px; }
+.workspace-counter { justify-self: end; font-variant-numeric: tabular-nums; }
+.workspace-actions, .workspace-tabs, .workspace-record-tags {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+}
+.workspace-actions .account-primary { width: auto !important; }
+.workspace-dialog form > .workspace-actions:has(.account-primary) { justify-content: end; }
+.workspace-tabs { border-bottom: 1px solid var(--account-edge); margin-bottom: 14px; padding-bottom: 8px; }
+#account-panel .workspace-tabs [aria-current] { background: var(--account-accent); color: #fff9ec; }
+.workspace-result { margin-top: 16px; }
+.workspace-result .workspace-actions:empty { display: none; }
+.workspace-result .workspace-actions + .workspace-actions { margin-top: 8px; }
+.workspace-result :is(.workspace-actions, .account-stats-table):last-child { margin-top: 10px; }
+.workspace-dialog .feedback-list { margin-block: 8px 14px; }
+#account-panel .feedback-list > .workspace-record {
+    width: 100%;
+    grid-template-columns: minmax(0, 1fr) minmax(0, auto) auto;
+    align-items: center;
+    gap: 7px 12px;
+    background: #fffbf2;
+}
+#account-panel .feedback-list > .workspace-record:hover { background: #f1e5ce; }
+.workspace-record-info { display: grid; gap: 3px; min-width: 0; }
+.workspace-record-tags { justify-content: end; }
+.workspace-chevron { font: 1.5rem/1 system-ui, sans-serif; color: #72583e; }
+.workspace-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border: 1px solid #bfa98a;
+    border-radius: 5px;
+    background: #f4e8d2;
+    color: #483827;
+    font: 600 .75rem/1.5 "Game Shell", system-ui, sans-serif;
+}
+.workspace-badge:is([data-tone="new"], [data-tone="manual"]) { background: #f5e0b4; color: #563b13; }
+.workspace-badge:is([data-tone="reviewing"], [data-tone="adjusted"]) { background: #e0ebeb; color: #1e474d; }
+.workspace-badge[data-tone="resolved"] { background: #dfebd6; color: #2c4b22; }
+.workspace-badge[data-tone="archived"] { background: #eae6e1; color: #534e48; }
+.workspace-metrics { grid-template-columns: repeat(auto-fit, minmax(min(100%, 8rem), 1fr)); margin-block: 10px; }
+.workspace-metrics > div { display: grid; align-content: start; padding: 10px 13px; background: #ede3cd; border: 1px solid #cbb899; border-radius: 8px; }
+.workspace-metrics strong { font-size: 1.5rem; font-variant-numeric: tabular-nums; color: #203d3c; }
+.workspace-funnel { display: grid; grid-template-columns: 5em minmax(0, 1fr) auto; gap: 8px; align-items: center; margin-bottom: 8px; font-size: .875rem; }
+.workspace-funnel progress { width: 100%; height: 12px; accent-color: #315f60; }
+.workspace-facts { display: grid; grid-template-columns: minmax(0, auto) minmax(0, 1fr); gap: 6px 16px; margin: 10px 0 0; }
+.workspace-facts dt { color: var(--account-muted); }
+.workspace-facts dd { margin: 0; }
+#account-panel .workspace-danger { color: #852e24; border-color: #a45a49; }
+.workspace-dialog .workspace-stats-table :is(th, td) { text-align: start; }
+@media (max-width: 590px) {
+    #account-panel .feedback-list > .workspace-record { grid-template-columns: minmax(0, 1fr) auto; }
+    .workspace-record-tags { grid-row: 2; grid-column: 1; justify-content: start; }
+    .workspace-chevron { grid-column: 2; grid-row: 1 / 3; }
+    .workspace-compose { grid-template-columns: minmax(0, 1fr); }
+    .workspace-facts { grid-template-columns: minmax(0, 1fr); }
+    .workspace-facts dd { margin-bottom: 5px; }
+}
+.workspace-attachments .feedback-screenshots {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 8rem), 1fr));
+}
+#account-panel[data-panel="feedback"] .workspace-form > .workspace-actions {
+    position: sticky;
+    bottom: -2px;
+    padding-block: 6px;
+    background: #fcf7ec;
+}
+.workspace-advanced > summary {
+    min-height: 44px;
+    box-sizing: border-box;
+    padding: 9px 4px;
+    color: var(--account-accent);
+    font-weight: 700;
+    cursor: pointer;
+}
+.workspace-advanced > div { display: grid; gap: 10px; padding-top: 4px; }
+.workspace-export { margin: 8px 0; }
+#account-panel .workspace-export [role="status"] { margin: 0; }
+.workspace-change + .workspace-change { border-top: 1px solid #cbb899; margin-top: 9px; padding-top: 9px; }
+.workspace-change p { margin: 4px 0; }
