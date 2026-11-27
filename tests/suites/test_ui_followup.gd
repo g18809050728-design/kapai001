@@ -376,7 +376,7 @@ func _battle_and_map(suffix: String) -> void:
 		_check(str(hover.get("detail", "")).ends_with(expected_detail) and not str(hover.get("detail", "")).contains("升级后："), "battle hover explains the actual active card face")
 		battle._pin_card_detail(hover)
 		await _frames()
-		_check(battle._hover_body.text == str(hover.detail) and battle._hover_body.max_lines_visible == -1, "side panel shows the complete active-face explanation")
+		_check(battle._hover_rich_body.get_parsed_text() == str(hover.detail) and battle._hover_rich_body.visible, "side panel shows the complete active-face explanation")
 		_check(battle._hover_panel.mouse_filter == Control.MOUSE_FILTER_STOP and battle._hover_scroll.mouse_filter == Control.MOUSE_FILTER_STOP, "fixed explanation supports reading and scrolling")
 		await _save("battle-card-hover-" + suffix)
 		var inspect_event := InputEventKey.new()
@@ -384,7 +384,7 @@ func _battle_and_map(suffix: String) -> void:
 		inspect_event.pressed = true
 		_check(not battle._pinned_card_detail.is_empty() and battle._panel_text.is_empty(), "I details remain beside the card without opening the global modal")
 		_check(
-			not battle._glossary_body.text.is_empty()
+			not battle._glossary_body.get_parsed_text().is_empty()
 			and battle._glossary_toggle.visible
 			and not battle._glossary_box.visible,
 			"fixed details expose a separate collapsed glossary dropdown"
@@ -422,11 +422,11 @@ func _battle_and_map(suffix: String) -> void:
 		battle._hover_target = {"uid": "battle:log", "title": "记录", "body": "查看本场记录"}
 		battle._update_hover_window()
 		_check(battle._hover_panel.visible and battle._hover_title.text != "记录", "fixed card details cannot be replaced by background summaries")
-		var text: String = battle._hover_body.text
+		var text: String = battle._hover_rich_body.get_parsed_text()
 		_check(
 			text.contains("1. ")
 			and not text.contains("打出后按顺序结算：")
-			and not battle._glossary_body.text.is_empty(),
+			and not battle._glossary_body.get_parsed_text().is_empty(),
 			"compact preview shows ordered effects without the removed heading and with a separate glossary"
 		)
 		await _save("battle-card-copy-" + suffix)
@@ -496,9 +496,9 @@ func _card_face_inspection(battle: BattleScreen, session: GameSession, suffix: S
 		if not battle._hand_cards.is_empty():
 			battle._pin_card_detail(battle._card_hover_target(battle._hand_cards[0]))
 			await _frames()
-			_check(battle._hover_body.text.contains(str(sample.term)), "upgraded/exam explanation uses the resolved face")
+			_check(battle._hover_rich_body.get_parsed_text().contains(str(sample.term)), "upgraded/exam explanation uses the resolved face")
 			await _save("card-variant-hover-" + str(sample.id) + "-" + suffix)
-			text = battle._hover_body.text
+			text = battle._hover_rich_body.get_parsed_text()
 		else:
 			var button := battle._buttons["card:" + str(card_data.card_id)] as UiOfferCard
 			button.grab_focus()
@@ -507,7 +507,7 @@ func _card_face_inspection(battle: BattleScreen, session: GameSession, suffix: S
 			battle._pin_card_detail(battle._offer_card_hover_target(button))
 			battle._update_pointer(.016)
 			_check(not battle._pinned_card_detail.is_empty() and battle._hover_panel.visible and not is_instance_valid(battle._card_preview), "compact active-face details use a single side panel")
-			text = battle._hover_body.text
+			text = battle._hover_rich_body.get_parsed_text()
 		_check(text.contains(str(sample.term)) and text.contains("专注 0"), "upgraded/exam detail uses the active effects and effective cost")
 		if not str(sample.exam).is_empty():
 			_check(not text.contains("召入伙伴") and not text.contains("正常合作"), "exam detail excludes ordinary partner effects")

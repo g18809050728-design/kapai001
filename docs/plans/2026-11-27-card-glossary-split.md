@@ -10,6 +10,9 @@
 - 展开/收起只改变显示，不提交任何游戏命令。切换卡牌或关闭窗口时回到收起状态。
 - 没有名词解释文本的卡牌隐藏箭头，窗口保持原有效果说明高度。
 - 说明窗口在显示卡牌详情时接收指针输入，以便点击箭头和滚动内容；非卡牌摘要仍不拦截指针。指针可以跨过卡牌与侧窗之间的小间隙进入下拉框。
+- 效果说明中出现的名词解释术语、以及下拉框中的术语名，统一使用暖金色 `#f0cf8a` + 下划线标识；解释正文和普通文字保持原色。
+- 术语来源是当前显示的名词解释文本（包含用户编辑），按长度优先、不重叠匹配；没有名词解释时不做高亮。
+- 高亮只发生在渲染层，不写回覆盖文本；文本编辑器中的字段仍是纯文本。
 - 底部提示在可展开时显示“点名词解释展开 · I 固定介绍/取消固定”；无可展开内容时保留原提示。
 
 ## 文本与数据
@@ -23,17 +26,20 @@
 
 ## 实现位置
 
-- `src/ui/ui_content_text.gd`：拆分默认值、覆盖值、旧值兼容和术语生成。
+- `src/ui/ui_content_text.gd`：拆分默认值、覆盖值、旧值兼容、术语生成、术语解析和高亮分段。
 - `src/ui/text_overrides.gd`：旧 `:battle` 值的加载迁移。
 - `src/ui/text_library.gd`、`src/ui/text_entity_library.gd`：新增卡牌名词解释条目和编辑字段。
-- `src/ui/battle_layout.gd`、`src/ui/battle_screen.gd`：说明窗口底部箭头、下拉框、布局和指针保持。
-- `tests/suites/test_ui_battle_pointer.gd`、`test_ui_battle_card_inspection.gd`、`test_ui_battle_polish.gd`、`test_ui_followup.gd`、`test_ui_text_editor.gd`：显示、点击、几何和编辑分离检查。
+- `src/ui/battle_layout.gd`、`src/ui/battle_screen.gd`：说明窗口底部箭头、下拉框、布局、指针保持、`RichTextLabel` 高亮渲染和缓存。
+- `src/ui/ui_style.gd`：术语高亮颜色。
+- `tests/suites/test_ui_battle_keyword_highlight.gd`：术语解析、最长优先、不重叠、纯文本保持和名词解释术语名高亮的纯函数测试。
+- `tests/suites/test_ui_battle_pointer.gd`、`test_ui_battle_card_inspection.gd`、`test_ui_battle_polish.gd`、`test_ui_followup.gd`、`test_ui_text_editor.gd`：显示、点击、几何、高亮分段和编辑分离检查。
 
 ## 验证
 
 ```powershell
 $env:GODOT_BIN = 'D:\Godot\Godot_v4.7.2-stable_win64_console.exe'
 & $env:GODOT_BIN --headless --path . --script res://tools/run_text_editor_tests.gd
+& $env:GODOT_BIN --headless --path . --script res://tests/run_ui_battle_keyword_highlight_tests.gd
 & $env:GODOT_BIN --headless --path . --script res://tests/run_ui_battle_layout_tests.gd
 & $env:GODOT_BIN --path . --script res://tools/run_card_glossary_capture.gd -- res://artifacts/verification/card-glossary-20261127/battle
 & $env:GODOT_BIN --path . --script res://tools/run_text_editor_capture.gd -- res://artifacts/verification/card-glossary-20261127/text-editor
@@ -47,6 +53,7 @@ $env:GODOT_BIN = 'D:\Godot\Godot_v4.7.2-stable_win64_console.exe'
 
 - 只影响显示文本与窗口布局；不改变卡牌效果、费用、条件、触发、结算顺序、RNG、命令或存档。
 - 下拉框只显示当前卡牌实际命中的原有术语集；不新增规则术语，也不改变全局“词条”分类。
+- 高亮从当前显示文本派生，只存在于 `RichTextLabel` 分段中，不写入覆盖文件；文本编辑器字段仍是纯文本。
 - 固定/悬停窗口仍使用原有卡牌详情位置规则；说明窗口与源卡牌保持不重叠。
 - 旧覆盖文件迁移只在内存中发生，下一次保存才写入新 UID；未保存时原始文件不被改写。
 

@@ -93,6 +93,104 @@ static func describe_battle_card_glossary_default(detail: Dictionary) -> String:
 	return "\n".join(_battle_keyword_help(effect_text))
 
 
+## Parse the displayed glossary text into its term names. The displayed text is
+## the source of truth so user-edited term names participate in highlighting.
+static func glossary_terms(glossary_text: String) -> Array[String]:
+	var terms: Array[String] = []
+	for raw_line in glossary_text.split("\n"):
+		var line := str(raw_line).strip_edges()
+		if line.is_empty():
+			continue
+		var separator := line.find("：")
+		if separator < 0:
+			separator = line.find(":")
+		if separator <= 0:
+			continue
+		var term := line.substr(0, separator).strip_edges()
+		if term.length() >= 2 and not terms.has(term):
+			terms.append(term)
+	return terms
+
+
+## Build renderer-agnostic plain/highlighted segments. Terms are matched
+## longest-first so "状态完成量" is not split into a shorter term. Every
+## occurrence is highlighted, but ranges never overlap.
+static func highlight_segments(text: String, terms: Array) -> Array[Dictionary]:
+	var segments: Array[Dictionary] = []
+	if text.is_empty():
+		return segments
+	var sorted: Array = terms.duplicate()
+	sorted.sort_custom(func(a, b): return str(a).length() > str(b).length())
+	var ranges: Array[Vector2i] = []
+	for raw_term in sorted:
+		var term := str(raw_term)
+		if term.length() < 2:
+			continue
+		var from := 0
+		while true:
+			var index := text.find(term, from)
+			if index < 0:
+				break
+			var candidate := Vector2i(index, index + term.length())
+			if not _range_overlaps(ranges, candidate):
+				ranges.append(candidate)
+			from = index + 1
+	ranges.sort_custom(func(a, b): return a.x < b.x)
+	var cursor := 0
+	for interval in ranges:
+		if interval.x > cursor:
+			segments.append({"text": text.substr(cursor, interval.x - cursor), "highlighted": false})
+		segments.append({"text": text.substr(interval.x, interval.y - interval.x), "highlighted": true})
+		cursor = interval.y
+	if cursor < text.length():
+		segments.append({"text": text.substr(cursor), "highlighted": false})
+	return segments
+
+
+## Highlight only the term name before the colon on each glossary line. The
+## explanation after the colon stays plain so the eye can map term to text.
+static func glossary_segments(glossary_text: String, terms: Array) -> Array[Dictionary]:
+	var segments: Array[Dictionary] = []
+	var term_set: Dictionary = {}
+	for term in terms:
+		term_set[str(term)] = true
+	var lines := glossary_text.split("\n")
+	for line_index in lines.size():
+		var line := str(lines[line_index])
+		var trimmed := line.strip_edges()
+		var separator := trimmed.find("：")
+		if separator < 0:
+			separator = trimmed.find(":")
+		var term := ""
+		if separator > 0:
+			var candidate := trimmed.substr(0, separator).strip_edges()
+			if term_set.has(candidate):
+				term = candidate
+		if term.is_empty():
+			segments.append({"text": line, "highlighted": false})
+		else:
+			var index := line.find(term)
+			if index < 0:
+				segments.append({"text": line, "highlighted": false})
+			else:
+				if index > 0:
+					segments.append({"text": line.substr(0, index), "highlighted": false})
+				segments.append({"text": term, "highlighted": true})
+				var end := index + term.length()
+				if end < line.length():
+					segments.append({"text": line.substr(end), "highlighted": false})
+		if line_index < lines.size() - 1:
+			segments.append({"text": "\n", "highlighted": false})
+	return segments
+
+
+static func _range_overlaps(ranges: Array[Vector2i], candidate: Vector2i) -> bool:
+	for used in ranges:
+		if candidate.x < used.y and used.x < candidate.y:
+			return true
+	return false
+
+
 ## Split older single-window battle text into its effect explanation and the
 ## "名词解释" block so both can be rendered separately. Entries without the
 ## marker keep the whole text as the effect part.

@@ -52,14 +52,21 @@ var _hover_panel: Control
 var _hover_title: Label
 var _hover_meta: Label
 var _hover_body: Label
+var _hover_rich_body: RichTextLabel
 var _hover_scroll: ScrollContainer
 var _hover_hint: Label
 var _glossary_toggle: Button
 var _glossary_box: PanelContainer
 var _glossary_scroll: ScrollContainer
-var _glossary_body: Label
+var _glossary_body: RichTextLabel
 var _glossary_open := false
 var _glossary_uid := ""
+var _glossary_plain := ""
+var _hover_render_key := ""
+var _glossary_render_key := ""
+var _hover_highlight_terms: Array[String] = []
+var _hover_highlight_segments: Array[Dictionary] = []
+var _glossary_highlight_segments: Array[Dictionary] = []
 var _hint_label: Label
 var _hovered_card: BattleCard
 var _hover_target: Dictionary = {}
@@ -335,6 +342,9 @@ func _render_battle() -> void:
 	_short_web = UiStyle.short_web(size)
 	set_meta("compact_cards", false)
 	_battle_layout_size = size
+	_hover_render_key = ""
+	_glossary_render_key = ""
+	_glossary_plain = ""
 	BattleLayout.new().build(self)
 	_release_pilot_actor_cache()
 
@@ -734,7 +744,6 @@ func _update_hover_window() -> void:
 	_hover_panel.mouse_filter = Control.MOUSE_FILTER_STOP if card_detail else Control.MOUSE_FILTER_IGNORE
 	_hover_scroll.mouse_filter = Control.MOUSE_FILTER_STOP if card_detail else Control.MOUSE_FILTER_IGNORE
 	_hover_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO if card_detail else ScrollContainer.SCROLL_MODE_DISABLED
-	_hover_body.max_lines_visible = -1 if card_detail else 4
 	if card_detail:
 		_place_card_detail(target)
 	else:
@@ -743,23 +752,46 @@ func _update_hover_window() -> void:
 	_hover_title.size.x = width - 32 * factor
 	_hover_meta.size.x = width - 32 * factor
 	var text := str(target.get("detail" if card_detail else "body", ""))
-	if _hover_body.text != text:
-		_hover_scroll.scroll_vertical = 0
-		_hover_body.text = text
 	if card_detail:
+		_hover_body.visible = false
+		_hover_rich_body.visible = true
+		var glossary_text := str(target.get("glossary", ""))
+		var render_key := "%s|%d|%d" % [str(target.get("uid", "")), text.hash(), glossary_text.hash()]
+		if render_key != _hover_render_key:
+			_hover_render_key = render_key
+			_hover_highlight_terms = UiContentText.glossary_terms(glossary_text)
+			_hover_highlight_segments = UiContentText.highlight_segments(text, _hover_highlight_terms)
+			_render_rich_segments(_hover_rich_body, _hover_highlight_segments)
+			_hover_scroll.scroll_vertical = 0
 		var glossary_uid := str(target.get("uid", ""))
 		if glossary_uid != _glossary_uid:
 			_glossary_uid = glossary_uid
 			_glossary_open = false
-		_glossary_body.text = str(target.get("glossary", ""))
+		_glossary_plain = glossary_text
+		var glossary_key := "%s|%d" % [glossary_uid, glossary_text.hash()]
+		if glossary_key != _glossary_render_key:
+			_glossary_render_key = glossary_key
+			_glossary_highlight_segments = UiContentText.glossary_segments(glossary_text, _hover_highlight_terms)
+			_render_rich_segments(_glossary_body, _glossary_highlight_segments)
 		if _glossary_scroll.scroll_vertical != 0 and not _glossary_open:
 			_glossary_scroll.scroll_vertical = 0
 	else:
+		_hover_body.visible = true
+		_hover_rich_body.visible = false
+		_hover_body.max_lines_visible = 4
+		if _hover_body.text != text:
+			_hover_scroll.scroll_vertical = 0
+			_hover_body.text = text
 		_glossary_uid = ""
 		_glossary_open = false
-		_glossary_body.text = ""
+		_glossary_plain = ""
+		_glossary_render_key = ""
+		_glossary_body.clear()
+		_hover_highlight_terms.clear()
+		_hover_highlight_segments.clear()
+		_glossary_highlight_segments.clear()
 	_layout_hover_sections(width, height, factor, card_detail)
-	var has_glossary := card_detail and not _glossary_body.text.strip_edges().is_empty()
+	var has_glossary := card_detail and not _glossary_plain.strip_edges().is_empty()
 	var glossary_action := "收起" if _glossary_open else "展开"
 	if card_detail:
 		if pinned:
@@ -788,7 +820,7 @@ func _layout_hover_sections(width: float, height: float, factor: float, card_det
 	var toggle_height := maxf(32.0, 32.0 * factor)
 	var toggle_top := hint_top - toggle_height - 4.0 * factor
 	var body_bottom := hint_top - 8.0 * factor
-	var has_glossary := card_detail and not _glossary_body.text.strip_edges().is_empty()
+	var has_glossary := card_detail and not _glossary_plain.strip_edges().is_empty()
 	if has_glossary:
 		_glossary_toggle.visible = true
 		_glossary_toggle.position = Vector2(content_left, toggle_top)
@@ -812,10 +844,29 @@ func _layout_hover_sections(width: float, height: float, factor: float, card_det
 	_hover_scroll.position = Vector2(content_left, content_top)
 	_hover_scroll.size = Vector2(content_width, maxf(40.0 * factor, body_bottom - content_top))
 	_hover_body.custom_minimum_size.x = _hover_scroll.size.x - 16
+	_hover_rich_body.custom_minimum_size.x = _hover_scroll.size.x - 16
+
+
+func _render_rich_segments(label: RichTextLabel, segments: Array) -> void:
+	label.clear()
+	for segment in segments:
+		var value := str(segment.get("text", ""))
+		if value.is_empty():
+			continue
+		if bool(segment.get("highlighted", false)):
+			label.push_color(UiStyle.TERM_HIGHLIGHT)
+			label.push_underline()
+			label.add_text(value)
+			label.pop()
+			label.pop()
+		else:
+			label.add_text(value)
+	label.reset_size()
+	label.update_minimum_size()
 
 
 func _toggle_glossary() -> void:
-	if _glossary_body.text.strip_edges().is_empty():
+	if _glossary_plain.strip_edges().is_empty():
 		return
 	_glossary_open = not _glossary_open
 	if _glossary_open:

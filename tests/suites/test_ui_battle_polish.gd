@@ -69,10 +69,10 @@ func run() -> Array[String]:
 	var inspect_before := _fingerprint()
 	_key(KEY_I)
 	await _frames()
-	var inspect_panel: String = _battle()._hover_body.text
+	var inspect_panel: String = _battle()._hover_rich_body.get_parsed_text()
 	_check(
 		inspect_panel.contains("专注")
-		and not _battle()._glossary_body.text.is_empty()
+		and not _battle()._glossary_body.get_parsed_text().is_empty()
 		and _battle()._glossary_toggle.visible
 		and not _battle()._pinned_card_detail.is_empty(),
 		"keyboard I opens the selected card detail and a separate glossary dropdown"
