@@ -64,6 +64,7 @@ var _text_library_loaded := false
 var _quit_dialog: ConfirmationDialog
 var _test_exit_dialog: ConfirmationDialog
 var _test_exit_was_editing := false
+var web_first_play_tutorial := false
 var _tutorial: UiTutorialOverlay
 var _tutorial_mode := ""
 var _tutorial_replay := false
@@ -1397,6 +1398,7 @@ func _navigate(type: String, payload: Dictionary) -> void:
 				str(payload.get("manifest_id", "")),
 				str(payload.get("seed", "0"))
 			)
+			var first_play := web_first_play_tutorial and session.qualifies_for_first_play_tutorial()
 			var started := (
 				session.restart_run(request, true) if replacing or session.get_view().run_id != null else session.start_run(request)
 			)
@@ -1406,10 +1408,11 @@ func _navigate(type: String, payload: Dictionary) -> void:
 				_ui_screen = ""
 				_restart_confirmation = false
 				_advance_paused = started.persistence == &"failed"
-				_tutorial_run_id = str(session.get_view().run_id)
+				var guide := first_play and session.mark_first_play_tutorial_started()
+				_tutorial_run_id = str(session.get_view().run_id) if guide else ""
 				_tutorial_intro_done = false
-				_tutorial_battle_done = false
-				_tutorial_pending = "intro"
+				_tutorial_battle_done = not guide
+				_tutorial_pending = "intro" if guide else ""
 				notice = (
 					"冒险开始。选择地图上的第一个节点。 "
 					+ _persistence_notice(

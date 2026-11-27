@@ -8,6 +8,8 @@ func _ready() -> void:
 	if OS.has_feature("web"):
 		UiStyle.web_touch = bool(JavaScriptBridge.eval("window.kapaiMobile === true"))
 		get_window().content_scale_factor = float(JavaScriptBridge.eval("window.kapaiRenderScale || 1"))
+		if UiStyle.web_touch:
+			get_tree().node_added.connect(MobileScroll.prepare_node)
 	else:
 		get_window().min_size = Vector2i(960, 640)
 	var relic_pilot := "--relic-pilot" in OS.get_cmdline_user_args()

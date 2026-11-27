@@ -69,10 +69,10 @@ func render(data: Dictionary) -> void:
 	for side in ["left", "right"]:
 		margin.add_theme_constant_override("margin_" + side, 14 if UiStyle.web_touch else 28)
 	for side in ["top", "bottom"]:
-		margin.add_theme_constant_override("margin_" + side, 14)
+		margin.add_theme_constant_override("margin_" + side, 8 if UiStyle.web_touch else 14)
 	add_child(margin)
 	var column := VBoxContainer.new()
-	column.add_theme_constant_override("separation", 12)
+	column.add_theme_constant_override("separation", 6 if UiStyle.web_touch else 12)
 	margin.add_child(column)
 	header = VBoxContainer.new()
 	column.add_child(header)
@@ -313,7 +313,7 @@ func _append_batch(count: int = PAGE_SIZE) -> void:
 			_art_tile(entry, tab == "relics")
 		_buttons["compendium:item:" + id].focus_entered.connect(func(): _prefetch_for_focus(id))
 	_states[tab].loaded = visible_ids.size()
-	_page_count.text = ("已显示全部 %s 项" % visible_ids.size()) if visible_ids.size() == filtered_ids.size() else ("已显示 %s / %s · 每批 8 项 · 继续下滑" % [visible_ids.size(), filtered_ids.size()])
+	_page_count.text = ("已显示全部 %s 项" % visible_ids.size()) if visible_ids.size() == filtered_ids.size() else ("已显示 %s / %s · 滑动继续浏览" % [visible_ids.size(), filtered_ids.size()])
 	_update_item_focus()
 
 
@@ -322,7 +322,8 @@ func _gallery_scrolled(value: float) -> void:
 		return
 	_states[tab].scroll = roundi(value)
 	var bar := _scroll.get_v_scroll_bar()
-	if value > 0 and value + bar.page >= bar.max_value - maxf(48, bar.page * .2):
+	var reserve := maxf(144, bar.page * .85) if UiStyle.web_touch else maxf(48, bar.page * .2)
+	if value > 0 and value + bar.page >= bar.max_value - reserve:
 		_queue_append()
 
 
@@ -485,6 +486,10 @@ func _restore_gallery_scroll(generation: int) -> void:
 	if is_inside_tree() and generation == _render_generation and is_instance_valid(_scroll):
 		_scroll.scroll_vertical = int(_states[tab].scroll)
 		_restoring_scroll = false
+		if UiStyle.web_touch:
+			var bar := _scroll.get_v_scroll_bar()
+			if bar.value + bar.page * 1.85 >= bar.max_value:
+				_queue_append()
 
 
 func _queue_focus(uid: String) -> void:
@@ -501,6 +506,12 @@ func _focus_uid(uid: String, generation: int) -> void:
 func _input(event: InputEvent) -> void:
 	if is_instance_valid(detail) or not visible:
 		return
+	if UiStyle.web_touch and is_instance_valid(_scroll):
+		if event is InputEventScreenTouch or (event is InputEventMouseButton and event.device == InputEvent.DEVICE_ID_EMULATION):
+			# A finger down must not snap a partly visible tile into view.
+			_scroll.follow_focus = false
+		elif event is InputEventKey:
+			_scroll.follow_focus = true
 	# A complete first batch can fit on screen; its first wheel step still needs to continue.
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_WHEEL_DOWN and not _restoring_scroll and _scroll.get_global_rect().has_point(event.position):
 		var bar := _scroll.get_v_scroll_bar()

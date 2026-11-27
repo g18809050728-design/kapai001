@@ -1,5 +1,4 @@
 import json
-from datetime import date, datetime, time, timedelta
 from typing import Literal
 from uuid import UUID, uuid4
 
@@ -140,44 +139,6 @@ def record(data: Event, request: Request):
              WHERE match_id=:match AND first_battle_at IS NULL
         """, match=str(data.match_id))
     return {}
-
-
-@router.get("/admin/stats")
-def statistics(request: Request, start: date, end: date, version: str = Query("", max_length=80),
-               character: str = Query("", max_length=80), difficulty: str = Query("", max_length=20)):
-    require("ADMIN")
-    if not 0 <= (end - start).days <= 366:
-        raise HTTPException(422, "invalid_range")
-    # Dates are inclusive Beijing calendar days.
-    scope = dict(start=datetime.combine(start, time()) - timedelta(hours=8),
-                 end=datetime.combine(end + timedelta(days=1), time()) - timedelta(hours=8),
-                 version=version, character=character, difficulty=difficulty)
-    with engine.begin() as db:
-        user = session_user(db, request)
-        if user["role"] != "admin":
-            raise HTTPException(403, "admin_required")
-        execute(db, """
-            INSERT INTO admin_audit_log (actor_id,operation,result,request_id)
-            VALUES (:user,'stats.read','ok',:request)
-        """, user=user["user_id"], request=str(uuid4()))
-        totals = one(db, """
-            SELECT (SELECT COUNT(*) FROM users WHERE activated_at IS NOT NULL) AS registered,
-            (SELECT COUNT(DISTINCT visitor_id) FROM game_events
-             WHERE event_type='menu_opened' AND received_at>=:start AND received_at<:end) AS visitors
-        """, **scope)
-        groups = execute(db, """
-            SELECT m.game_version, COUNT(DISTINCT p.user_id) AS accounts,
-                COUNT(*) AS started, COALESCE(SUM(m.first_battle_at IS NOT NULL),0) AS first_battles,
-                COALESCE(SUM(m.status='finished'),0) AS finished
-            FROM matches m JOIN match_players p ON p.match_id=m.match_id
-            WHERE m.mode='solo' AND m.source='client_reported'
-            AND m.started_at>=:start AND m.started_at<:end
-            AND (:version='' OR m.game_version=:version) AND (:character='' OR p.character_id=:character)
-            AND (:difficulty='' OR p.difficulty=:difficulty)
-            GROUP BY m.game_version WITH ROLLUP
-        """, **scope).mappings().all()
-    return {"registered": totals["registered"], "visitors": totals["visitors"],
-            "activity": [dict(group) for group in groups]}
 
 
 class ImportedRun(Run):

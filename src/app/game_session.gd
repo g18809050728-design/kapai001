@@ -16,6 +16,7 @@ const MANIFEST_ROOTS := {
 	RelicPilot.ROSTER: "res://data/four_year",
 }
 const EVENT_LOG_LIMIT := 1000
+const FIRST_PLAY_TUTORIAL := "first_play_tutorial_started"
 
 var _catalog: ContentDB
 var _run_service: RunService
@@ -417,6 +418,26 @@ func get_profile() -> ProfileView:
 		elif id.begins_with("E"):
 			view.unlocked_endings.append(id)
 	return view
+
+
+func qualifies_for_first_play_tutorial() -> bool:
+	if _state != null or _relic_pilot:
+		return false
+	# Existing saves (including a recoverable or unreadable one) identify returning players.
+	for result in [_store.load("current_run"), _store.load_backup("current_run")]:
+		if result.ok or result.error.code != GameConstants.ERROR_SAVE_NOT_FOUND:
+			return false
+	var profile := _read_profile()
+	return profile.ok and profile.data.completed_runs == 0 and not bool(profile.data.tutorial_flags.get(FIRST_PLAY_TUTORIAL, false))
+
+
+func mark_first_play_tutorial_started() -> bool:
+	var profile := _read_profile()
+	if not profile.ok:
+		return false
+	profile.data.tutorial_flags[FIRST_PLAY_TUTORIAL] = true
+	var encoded := SnapshotCodec.encode_document("profile", profile.data)
+	return encoded.ok and _write_checkpoint("profile", encoded.data).ok
 
 
 func update_settings(settings: Variant) -> GameResult:

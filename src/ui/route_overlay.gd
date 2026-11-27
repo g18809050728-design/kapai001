@@ -5,6 +5,7 @@ signal closed
 
 var _nodes: Array = []
 var _current := ""
+var _route_scroll: ScrollContainer
 var _reachable: Array = []
 var _return_focus: Control
 var _focus_modes: Dictionary = {}
@@ -69,13 +70,22 @@ func configure(nodes: Array, current: String, reachable: Array, year_title: Stri
 	column.add_child(content)
 	_route = UiRouteCanvas.new()
 	_route.name = "CompleteAnnualMap"
-	_route.overview = true
+	_route.overview = not UiStyle.web_touch
 	_route.detailed_overview = true
 	_route.overview_height = 160
 	_route.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_route.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_route.configure(_nodes, _reachable, _current)
-	content.add_child(_route)
+	if UiStyle.web_touch:
+		_route_scroll = ScrollContainer.new()
+		_route_scroll.name = "AnnualMapScroll"
+		_route_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+		_route_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		_route_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		content.add_child(_route_scroll)
+		_route_scroll.add_child(_route)
+	else:
+		content.add_child(_route)
 	_route.node_inspected.connect(_inspect)
 	for node in _nodes:
 		var id := str(node.node_id)
@@ -83,12 +93,22 @@ func configure(nodes: Array, current: String, reachable: Array, year_title: Stri
 		marker.set_meta("node_id", id)
 		marker.name = "MapRead_" + id.validate_node_name()
 		marker.tooltip_text = "第%d层 · %s" % [int(node.get("layer", 0)), str(node.get("title", "校园节点"))]
-		marker.size = Vector2(36, 28)
-		for state in ["normal", "hover", "pressed", "focus"]:
-			marker.add_theme_stylebox_override(state, StyleBoxEmpty.new())
-		marker.pressed.connect(func(): _inspect(id))
-		marker.focus_entered.connect(func(): _inspect(id))
 		_route.add_child(marker)
+		if UiStyle.web_touch:
+			marker.set_script(UiRouteCanvas.NodeStamp)
+			marker.toggle_mode = true
+			var kind := str(node.get("kind", ""))
+			var subtype := str(node.get("subtype", ""))
+			if subtype.is_empty():
+				subtype = str({"normal": "N", "elite": "EL", "boss": "B", "shop": "S", "rest": "R", "event": "E"}.get(kind, "E"))
+			var status := "当前" if id == _current else ("已过" if node.get("status") == "completed" else ("可入" if _reachable.has(id) else "后续"))
+			marker.call("configure", subtype, "", status, false, _route.node_textures.get(id))
+		else:
+			marker.size = Vector2(36, 28)
+			for state in ["normal", "hover", "pressed", "focus"]:
+				marker.add_theme_stylebox_override(state, StyleBoxEmpty.new())
+			marker.focus_entered.connect(func(): _inspect(id))
+		marker.pressed.connect(func(): _inspect(id))
 	var reading := ScrollContainer.new()
 	reading.custom_minimum_size.x = 220
 	reading.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
@@ -96,7 +116,7 @@ func configure(nodes: Array, current: String, reachable: Array, year_title: Stri
 	_details = _label(reading, "点击节点查看房间与后续路线。\n\n地图查看不会前进，也不会改变当前选择。", 15)
 	_details.custom_minimum_size.x = 200
 	_details.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_label(column, "圈记当前与已走路线 · 圈记可达节点 · 点击图标查看详情", 14)
+	_label(column, "上下滑查看本学年路线 · 点按节点查看详情" if UiStyle.web_touch else "圈记当前与已走路线 · 圈记可达节点 · 点击图标查看详情", 14)
 	_label(column, "仅展示已生成的本学年 · 关闭后继续原来的行动", 13)
 	if _nodes.is_empty():
 		_details.text = "本学年尚未生成，确认方向或去向后生成；不会提前揭示未来学年。"
@@ -105,6 +125,8 @@ func configure(nodes: Array, current: String, reachable: Array, year_title: Stri
 	_focus_close.call_deferred()
 	if not _current.is_empty():
 		_inspect(_current)
+	if UiStyle.web_touch:
+		_focus_route.call_deferred()
 	tree_exiting.connect(_restore_focus)
 
 
@@ -123,6 +145,15 @@ func _fit() -> void:
 		_route.arrange.call_deferred()
 
 
+func _focus_route() -> void:
+	await get_tree().process_frame
+	if not is_inside_tree() or is_queued_for_deletion():
+		return
+	var target := _current if not _current.is_empty() else str(_reachable[0]) if not _reachable.is_empty() else ""
+	if _route.positions.has(target):
+		_route_scroll.scroll_vertical = roundi(float(_route.positions[target].y) - _route_scroll.size.y * .5)
+
+
 func _focus_close() -> void:
 	if is_inside_tree() and not is_queued_for_deletion() and is_instance_valid(_close):
 		_close.grab_focus()
@@ -130,6 +161,13 @@ func _focus_close() -> void:
 
 func _inspect(id: String) -> void:
 	_route.select_node(id)
+	if is_instance_valid(_route_scroll):
+		for marker in _route.get_children():
+			if marker is Button:
+				var marker_id := str(marker.get_meta("node_id", ""))
+				marker.set_pressed_no_signal(marker_id == id)
+				marker.set("forecast", _route.forecast_node_ids.has(marker_id))
+				marker.queue_redraw()
 	for node in _nodes:
 		if str(node.node_id) == id:
 			var status := "当前房间" if id == _current else ("下一站可达" if _reachable.has(id) else ("已完成" if node.get("status") == "completed" else "后续 / 其他路线"))

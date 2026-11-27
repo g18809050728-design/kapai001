@@ -142,8 +142,6 @@ func _targets(page: BattleScreen, parent: Node) -> void:
 	player_actor.custom_minimum_size = Vector2(92, 116)
 	parent.add_child(player_actor)
 	page._actors[str(page.view.get("player", {}).get("entity_id", ""))] = player_actor
-	var descriptions := BattleLayout.new()
-	descriptions.page = page
 	for task in page.view.get("tasks", []):
 		var id := str(task.task_id)
 		var row := page.add_row(parent)
@@ -168,7 +166,7 @@ func _targets(page: BattleScreen, parent: Node) -> void:
 		var work_label := page.add_text(column, "剩余 %s/%s · 屏障 %s" % [task.work_remaining, task.work_max, task.shield], 14)
 		page._task_meters[id] = {"fill": meter, "label": work_label, "maximum": maxi(1, int(task.work_max))}
 		page.add_text(column, page._task_intent_text(task), 14)
-		var status := descriptions._task_status_text(id)
+		var status: String = page._status_text(page._statuses_for(id))
 		if not status.is_empty():
 			page.add_text(column, status, 14)
 		page.add_button(column, "task:" + id, "选择目标", {}, page._bind_task(id))

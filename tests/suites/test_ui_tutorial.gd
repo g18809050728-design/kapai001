@@ -19,13 +19,15 @@ func run() -> Array[String]:
 	await _test_skip_all()
 	await _test_replay_from_menu()
 	await _test_external_action_dismisses()
+	await _test_activation_scope()
 	_tree.root.size = old_size
 	UiStyle.text_scale = 1.0
 	return _failures
 
 
-func _start(path: String) -> GameShell:
+func _start(path: String, online: bool = true) -> GameShell:
 	var shell := _helpers.attach_shell(_helpers.fixture_session(path)) as GameShell
+	shell.web_first_play_tutorial = online
 	shell.session.update_settings({"autosave": false})
 	_check(shell.press("menu:new"), "menu opens new-run setup")
 	_check(shell.press("setup:character:test_P01"), "fixture character is available")
@@ -179,6 +181,33 @@ func _test_external_action_dismisses() -> void:
 	await _frames(10)
 	_check(not shell.tutorial_visible(), "dismissed tutorial does not reopen in battle")
 	shell.free()
+
+
+func _test_activation_scope() -> void:
+	var local := _start("user://tutorial-local-%d" % Time.get_ticks_usec(), false)
+	_check(not local.tutorial_visible(), "local play does not auto-open the lesson")
+	_check(local.session.get_profile().tutorial_flags.is_empty(), "local play does not claim the online tutorial")
+	local.queue_free()
+	await _frames(1)
+	var path := "user://tutorial-once-%d" % Time.get_ticks_usec()
+	var first := _start(path)
+	_check(first.tutorial_visible(), "online first play opens the lesson")
+	_check(bool(first.session.get_profile().tutorial_flags.get(GameSession.FIRST_PLAY_TUTORIAL)), "first play persists the existing profile flag even without autosave")
+	first.queue_free()
+	await _frames(1)
+	var returning := _start(path)
+	_check(not returning.tutorial_visible(), "a new shell and unsaved previous run still do not replay the lesson")
+	returning.queue_free()
+	await _frames(1)
+	var old_path := "user://tutorial-old-save-%d" % Time.get_ticks_usec()
+	var existing := _start(old_path, false)
+	_check(existing.session.save_current().ok, "existing run fixture has a real save")
+	_check(not existing.session.qualifies_for_first_play_tutorial(), "an active existing run is not first play")
+	var stored := _helpers.fixture_session(old_path) as GameSession
+	_check(not stored.qualifies_for_first_play_tutorial(), "a returning player with a save but without a tutorial flag is not first play")
+	stored.free()
+	existing.queue_free()
+	await _frames(1)
 
 
 func _text_of(node: Node) -> String:

@@ -1,0 +1,129 @@
+{
+  "date": "2026-11-26",
+  "scope": "Promotional detail page only; no runtime or production publication changes.",
+  "image_api": {
+    "outputs_this_batch": 1,
+    "model": "gpt-image-2.5-sunburst",
+    "service": "configured jiji.cc",
+    "mode": "edit, n=1, with gameplay screenshot and actual character art reference",
+    "quality": "high",
+    "pixels": [
+      1024,
+      1024
+    ],
+    "prompt_sha256": "81418227f144578f8182d541184f2aa9c5caf0d31d50ec6f0e6c6d2598560d4d",
+    "price": "not reported"
+  },
+  "layout_reference": "https://partner.steamgames.com/doc/store/page/description?language=english",
+  "assets": [
+    {
+      "filename": "01-beat-the-deadline.jpg",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "bytes": 701728,
+      "sha256": "32ed22188e1099bde8caf2b742381a06dcefa85e9dfccae3ad0863a26e595c44",
+      "sources": [
+        {
+          "path": "artifacts/verification/relic-removal-20261120/review/screens/equipped-battle.png",
+          "sha256": "dc9c863896afaea6cae2ec7ae1f9228030456bd91f990c95360c363677d30f50"
+        },
+        {
+          "path": "output/imagegen/bjtu-steam-features-20261126/production/battle-illustration.png",
+          "sha256": "00aac7969de0ec728bcd8fa45a98b659c0f60773c68952e583de478a85493952"
+        }
+      ]
+    },
+    {
+      "filename": "02-four-playstyles.jpg",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "bytes": 473449,
+      "sha256": "508354b3e11f2be1e34811c6932064bf72c2e2ef777570df077a714c7990bdf1",
+      "sources": [
+        {
+          "path": "assets/art/characters/P01/neutral.png",
+          "sha256": "fb5ca7391439e2743dabc2ad440cd8e01db145fb4ec5b6743e3a67b4050143e8"
+        },
+        {
+          "path": "assets/art/characters/P02/neutral.png",
+          "sha256": "a77e1be6c9fab833286fa356946638676e5ffbee02b89d1d0f1cd62b6ba6a127"
+        },
+        {
+          "path": "assets/art/characters/P03/neutral.png",
+          "sha256": "4ae18adf0d6b75b77a8cb7c04add37f866984ad7819a4f7615c9e0efa1f4a93e"
+        },
+        {
+          "path": "assets/art/characters/P04/neutral.png",
+          "sha256": "2eb80332a7b6bf56b59e840468bff49aaf8dd424cc098d02292b10bbd9daf74e"
+        }
+      ]
+    },
+    {
+      "filename": "03-chart-your-campus-route.jpg",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "bytes": 589906,
+      "sha256": "bb745eb2da36de09cd5af70581787d1eb9c991d3ef2f1ae1ee1b89ca91b13add",
+      "sources": [
+        {
+          "path": "artifacts/verification/relic-removal-20261120/review/screens/normal-map.png",
+          "sha256": "177fe2ba9025967f3afc59e3404d9ff239ca499c098e2293fddeca931bb03128"
+        },
+        {
+          "path": "assets/art/events/V01/illustration.png",
+          "sha256": "f94a82781b22172a8827c0bbc6c93982b8533cb6f2de088bd8f798dc8435be49"
+        }
+      ]
+    },
+    {
+      "filename": "04-campus-encounters.jpg",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "bytes": 526521,
+      "sha256": "f6c257acfa9e328d99565733f787e2a35066e26503ec684a3eb04b89b1f3bf41",
+      "sources": [
+        {
+          "path": "artifacts/verification/event-polish-20261115/render-02/V04-1280-100.png",
+          "sha256": "d2e8fa3e0f1211e29b2379f1621f2a4895fbbb0aaad3ec6dfc835b9c50f4b8d2"
+        },
+        {
+          "path": "assets/art/events/V03/illustration.png",
+          "sha256": "60957ee152ae33fa69c6195d86ce7f5e3f61d7b943f70d47766f6ebbbb72e619"
+        },
+        {
+          "path": "assets/art/events/V04/illustration.png",
+          "sha256": "10a4e73f6a5e5fd9860ae97df4018ccc9e42802b5ebf43e56fd9abc36e867e19"
+        },
+        {
+          "path": "assets/art/events/V10/illustration.png",
+          "sha256": "1947128a510b32fee6da1d49cc61cf0206c166437747c5e4a556d187a322e545"
+        }
+      ]
+    },
+    {
+      "filename": "bonus-classroom-key-art.jpg",
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "bytes": 577114,
+      "sha256": "6799b27396986133df68c21bff577683f8dcb0721b9c8b80a1054101e94afa8c",
+      "sources": [
+        {
+          "path": "output/imagegen/bjtu-steam-features-20261126/production/battle-illustration.png",
+          "sha256": "00aac7969de0ec728bcd8fa45a98b659c0f60773c68952e583de478a85493952"
+        }
+      ]
+    }
+  ],
+  "visual_qa": "Visually reviewed all four panels, full-size battle panel and raw key art. Screenshots resized without changing the game UI.",
+  "zip_sha256": "3932c4fff81641794a6c897ce0f845f41c8ebe8eede064ef4a2c82ea28ced2a5"
+}

@@ -29,6 +29,7 @@ func _ready() -> void:
 
 func _menu_visible(visible: bool) -> void:
 	_bridge.showMenu(visible, session.get_view().run_id == null and not session.has_test_room())
+	JavaScriptBridge.get_interface("window").kapaiShowFullscreenEntry(visible)
 
 
 func _checkpoint_saved(slot: String, snapshot: Dictionary) -> void:
@@ -51,6 +52,8 @@ func _dispatch(args: Array) -> Variant:
 	var operation := str(args[0])
 	var argument := str(args[1])
 	match operation:
+		"tutorial_online":
+			shell.web_first_play_tutorial = argument == "true"
 		"account_features":
 			shell.web_privacy_available = argument == "true"
 			shell.refresh()
