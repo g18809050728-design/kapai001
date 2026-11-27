@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "note": "Bundled default display text. User overrides in user://text_overrides.json layer on top.",
+  "note": "Bundled default display text. Includes 24 baked tutorial defaults. User overrides in user://text_overrides.json layer on top.",
   "entries": {
     "card:R3-C-04:0:detail": "策略 · 专注 0 · 自身\n放松 3\n消耗",
     "card:R3-C-04:1:detail": "策略 · 专注 0 · 自身\n放松 5\n消耗",
@@ -238,6 +238,30 @@
     "passive:r3_p03_compound_reaction": "被动 · 复合反应\n每回合一次：卡牌主效果在已有其他负面的任务上新施加一种负面，结算后使该新负面额外 +1 层",
     "relic:RX-C07": "每战首次将弃牌堆洗入抽牌堆后，在本次抽牌结算收尾获得 4 放松。",
     "relic:RX-C09": "每战最先符合条件的 2 张基础费用≥2、实付≥1的工作牌，对主目标的完成度首段 +4；每回合最多一次。",
-    "relic:RX-C12": "打出的永久牌因自身卡文进入消耗堆后，获得 2 放松并抽 1。每回合最多一次、每战最多 2 次。"
+    "relic:RX-C12": "打出的永久牌因自身卡文进入消耗堆后，获得 2 放松并抽 1。每回合最多一次、每战最多 2 次。",
+    "tutorial:battle_1.body": "先看敌人意图，再决定自己的行动。",
+    "tutorial:battle_1.bullet_2.text": "敌人的护盾 可抵消工作牌的完成量",
+    "tutorial:battle_1.bullet_3.text": "回合结束时减 1；为0时若仍有任务未完成则失败。",
+    "tutorial:battle_1.bullet_4.text": "通过卡牌获得的放松可抵消任务造成的压力 放松不足时压力的超出部分会减少精力",
+    "tutorial:battle_1.title": "敌人",
+    "tutorial:battle_2.body": "左下是当前剩余的专注 此时有3点",
+    "tutorial:battle_2.bullet_1.term": "专注的获得",
+    "tutorial:battle_2.bullet_1.text": "每回合开始时获得3点专注，部分怪物死亡或使用部分牌可获得专注 专注上限为 10。",
+    "tutorial:battle_2.bullet_2.term": "卡牌费用",
+    "tutorial:battle_2.bullet_2.text": "打出牌需要消耗专注 剩余的专注不足时卡牌会变暗，不能打出。",
+    "tutorial:battle_2.bullet_3.text": "左下与右下分别为抽牌堆与弃牌堆，抽牌堆空时弃牌会自动移入抽牌堆 点击可查看牌堆内容",
+    "tutorial:battle_3.body": "有目标牌从卡牌拖拽向目标打出；无目标牌直接打出。",
+    "tutorial:battle_3.bullet_2.text": "结束回合时未使用的手牌进入弃牌堆，随后敌人行动",
+    "tutorial:battle_3.bullet_3.term": "注意时间",
+    "tutorial:battle_3.bullet_3.text": "当前战斗的DDL为0时游戏失败，DDL每次回合结束都会减少 抓紧时间",
+    "tutorial:intro_1.body": "",
+    "tutorial:intro_1.bullet_1.text": "生命；受到压力时减少，为0时失败",
+    "tutorial:intro_1.bullet_3.text": "回合结束时减 1；为0时若仍有任务未完成则失败。",
+    "tutorial:intro_1.title": "基础数值",
+    "tutorial:intro_2.body": "每个学年对应一张地图 从最底部开始 到最顶部结束",
+    "tutorial:intro_2.bullet_1.term": "进入地点",
+    "tutorial:intro_2.bullet_1.text": "点击一次可达地点以选中，再点一次进入地点。",
+    "tutorial:intro_2.bullet_2.text": "点击地点可查看简介。",
+    "tutorial:intro_3.body": "每回合开始时抽 5 张牌并获得 3 点专注。"
   }
 }

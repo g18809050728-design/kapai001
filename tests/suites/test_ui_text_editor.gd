@@ -43,17 +43,18 @@ func run() -> Array[String]:
 func _check_library(data: Dictionary) -> void:
 	var entities: Array = data.get("entities", [])
 	var counts: Dictionary = data.get("counts", {})
-	_check(entities.size() == 594, "entity count is exact for the RX roster")
+	_check(entities.size() == 600, "entity count is exact for the RX roster and tutorial")
 	_check(int(counts.get("cards", 0)) == 174, "174 card entities")
 	_check(int(counts.get("relics", 0)) == 104, "104 RX relic entities")
 	_check(int(counts.get("characters", 0)) == 4, "4 character entities")
 	_check(int(counts.get("stories", 0)) == 11, "11 story entities")
 	_check(int(counts.get("glossary", 0)) == 43, "43 glossary entities")
 	_check(int(counts.get("monsters", 0)) == 60, "60 monster entities")
+	_check(int(counts.get("tutorial", 0)) == 6, "6 tutorial page entities")
 	_check(int(counts.get("terms", 0)) == 198, "198 fallback name entities")
-	_check(int(data.get("field_count", 0)) == 1686, "1686 logical fields")
-	_check(int(data.get("uid_count", 0)) == 1706, "1706 backing UIDs")
-	_check(int(data.get("source_uid_count", 0)) == 1694, "1694 source library UIDs")
+	_check(int(data.get("field_count", 0)) == 2092, "2092 logical fields")
+	_check(int(data.get("uid_count", 0)) == 2112, "2112 backing UIDs")
+	_check(int(data.get("source_uid_count", 0)) == 2100, "2100 source library UIDs")
 	_check(TextOverrides.defaults_error().is_empty(), "bundled default text parses cleanly")
 	_check(TextOverrides.default_text("glossary:anxiety.short", "").begins_with("每层减少"), "bundled glossary default applies")
 	_check(TextOverrides.default_text("card:R3-C-04:0:detail", "").contains("放松 3"), "bundled card detail default applies")
@@ -76,7 +77,23 @@ func _check_library(data: Dictionary) -> void:
 	for uid in TextLibrary.build(_catalog).data.entries:
 		_check(by_uid.has(uid.uid), "every original UID belongs to a field: " + uid.uid)
 	var card: Dictionary = by_id["card:R3-C-01"]
-	_check(card.fields.size() == 5, "card entity exposes name, detail/battle base/upgrade")
+	_check(card.fields.size() == 7, "card entity exposes name, detail/battle/glossary base/upgrade")
+	_check(_field_for_uid(card, "card:R3-C-01:0:battle_glossary").get("label", "") == "基础名词解释", "card glossary is a separate labeled field")
+	_check(not str(_field_for_uid(card, "card:R3-C-01:0:battle_glossary").get("default", "")).contains("名词解释："), "card glossary default stores only term lines")
+	_check(
+		not str(_field_for_uid(card, "card:R3-C-01:0:battle").get("default", "")).contains("打出后按顺序结算：")
+		and not str(_field_for_uid(card, "card:R3-C-01:1:battle").get("default", "")).contains("打出后按顺序结算："),
+		"base and upgraded battle defaults omit the removed ordered-resolution heading"
+	)
+	var clean_battle_defaults := true
+	for entity in entities:
+		if str(entity.type) != "cards":
+			continue
+		for field in entity.fields:
+			for uid in field.uids:
+				if str(uid).ends_with(":battle") and str(field.default).contains("打出后按顺序结算："):
+					clean_battle_defaults = false
+	_check(clean_battle_defaults, "every card base and upgraded battle field omits the removed heading")
 	_check(str(card.meta.owner) == "C", "card metadata keeps owner for filtering")
 	var story: Dictionary = by_id["story:events.V01"]
 	_check(story.fields.size() >= 6, "event entity exposes title/location/narrative/options")
@@ -95,6 +112,27 @@ func _check_library(data: Dictionary) -> void:
 	_check(_field_for_uid(monster, "label:N03").uids.has("label:N03"), "monster name maps to its label")
 	_check(by_id.has("term:N03") == false, "monster name is no longer in the other bucket")
 	_check(by_id.has("term:K01"), "unmapped legacy labels are preserved as fallback entities")
+	var tutorial: Dictionary = by_id["tutorial:intro_1"]
+	_check(tutorial.fields.size() == 9, "tutorial page exposes chapter, title, body and three bullets")
+	_check(
+		str(_field_for_uid(tutorial, "tutorial:intro_1.title").default) == "基础数值",
+		"tutorial title default uses the baked user edit"
+	)
+	_check(
+		TextOverrides.default_text("tutorial:intro_1.body", "fallback") == "",
+		"tutorial empty body is preserved as a default"
+	)
+	_check(
+		str(_field_for_uid(by_id["tutorial:battle_1"], "tutorial:battle_1.title").default)
+		== "敌人",
+		"battle tutorial title default uses the baked user edit"
+	)
+	_check(
+		str(_field_for_uid(by_id["tutorial:intro_3"], "tutorial:intro_3.next").default)
+		== "开始冒险",
+		"tutorial final button copy is editable"
+	)
+	_check(by_id.has("tutorial:battle_3"), "all six tutorial pages are entities")
 	_check(not by_id.has("relic:FY_Y1_1"), "retired FY relic text is not editable")
 	_check(UiStyle.label("status.inspiration.name") == "灵感", "dotted status keys keep their canonical fallback")
 	_check(UiStyle.label("task.n01.intent.pressure5") == "施加压力", "dotted task intent keys still resolve")
@@ -138,7 +176,7 @@ func _exercise_ui(data: Dictionary) -> void:
 	_check(page.counts == data.counts, "page counts are entity counts")
 	_check(page.filtered.size() == data.entities.size(), "all entities are initially browsable")
 	_check(page.selected_id == "card:R3-P01-09", "first entity is selected for immediate editing")
-	_check(page._field_blocks.size() == 5, "selected card exposes five field blocks")
+	_check(page._field_blocks.size() == 7, "selected card exposes seven field blocks")
 	_check(page._buttons.has("text_editor:save_entity"), "entity-level save is visible")
 	_check(page._buttons.has("text_editor:save"), "global save is visible")
 	_search_checks(page)
@@ -168,8 +206,11 @@ func _search_checks(page: UiTextEditorPage) -> void:
 	_check(page.filtered.size() == 1, "exact card ID returns one entity")
 	_check(page.selected_id == "card:R3-C-01", "exact card search selects the entity")
 	_check(page._entity_modified_count(page._selected) == 0, "clean entity has no modified fields")
-	page.search("打出后按顺序")
-	_check(not page.filtered.is_empty(), "battle phrase returns owning card entities")
+	page.search("战斗说明")
+	_check(not page.filtered.is_empty(), "battle field label returns owning card entities")
+	page.search("名词解释")
+	_check(not page.filtered.is_empty(), "card glossary field is searchable")
+	page.search("战斗说明")
 	page.select_entity_matching("card:R3-P01-09")
 	_check(page.selected_id == "card:R3-P01-09", "field-matched entity is selected")
 	_check(str(page._expanded_field).ends_with(":battle_0"), "matched battle field is expanded")
@@ -204,6 +245,15 @@ func _search_checks(page: UiTextEditorPage) -> void:
 	for entity in page.filtered:
 		_check(str(entity.meta.kind) == "boss", "monster filter only returns bosses")
 	page.set_filter("")
+	page.show_tab("tutorial")
+	page.search("")
+	_check(page.filtered.size() == 6, "tutorial tab has all six pages")
+	_check(str(page.filtered[0].id) == "tutorial:intro_1", "tutorial list starts at the first page")
+	_check(str(page.filtered[5].id) == "tutorial:battle_3", "tutorial list ends at the last page")
+	page.search("精力")
+	_check(page.filtered.size() >= 1, "tutorial search finds the resources page")
+	page.search("")
+	_check(page.select_entity("tutorial:intro_1"), "first tutorial page is selectable")
 	page.show_tab("terms")
 	page.search("")
 	_check(page.filtered.size() == 198, "other tab keeps remaining legacy and shared label entities")
@@ -216,10 +266,13 @@ func _edit_checks(page: UiTextEditorPage, session: GameSession, before: String) 
 	page.search("")
 	_check(page.select_entity("card:R3-C-01"), "card entity is selectable")
 	var keys: Array = page.entity_field_keys("card:R3-C-01")
-	_check(keys.size() == 5, "card field keys are complete")
+	_check(keys.size() == 7, "card field keys are complete")
 	var detail_key := "card:R3-C-01:detail_0"
 	var name_key := "card:R3-C-01:name"
 	var battle_key := "card:R3-C-01:battle_0"
+	var glossary_key := "card:R3-C-01:battle_glossary_0"
+	_check(page._field_blocks[glossary_key].field.label == "基础名词解释", "card glossary field has its own label")
+	_check(page.field_text(glossary_key).contains("专注："), "card glossary field starts from the generated term lines")
 	page.expand_field(detail_key)
 	page.set_field_text(detail_key, "测试基础说明")
 	_check(page.dirty_count() == 1, "one field edit is one dirty field")
@@ -234,6 +287,17 @@ func _edit_checks(page: UiTextEditorPage, session: GameSession, before: String) 
 	_check(face.ok, "card face resolves")
 	if face.ok:
 		_check(UiContentText.describe_card(face.data) == "测试基础说明", "card override applies to the live description")
+		page.set_field_text(battle_key, "测试战斗说明")
+		page.set_field_text(glossary_key, "专注：测试名词解释")
+		page.save_entity()
+		_check(UiContentText.describe_battle_card(face.data) == "测试战斗说明", "battle description field edits only the effect text")
+		_check(
+			UiContentText.describe_battle_card_glossary(face.data) == "专注：测试名词解释",
+			"glossary field edits only the glossary text"
+		)
+		page._reset_field(battle_key)
+		page._reset_field(glossary_key)
+		page.save_entity()
 	_check(
 		SnapshotCodec.canonical_json(session.get_view().to_dictionary()) == before,
 		"card entity edit leaves the session untouched"
@@ -284,6 +348,25 @@ func _edit_checks(page: UiTextEditorPage, session: GameSession, before: String) 
 		UiContentText.describe_character_passive("r3_p01_link_replay") == "测试被动说明",
 		"character passive applies"
 	)
+	page.show_tab("tutorial")
+	page.search("")
+	_check(page.select_entity("tutorial:intro_1"), "tutorial page is selectable")
+	_check(page.entity_field_keys("tutorial:intro_1").size() == 9, "tutorial page has nine field keys")
+	page.set_field_text("tutorial:intro_1:title", "测试数值页")
+	page.set_field_text("tutorial:intro_1:bullet_0_text", "测试精力说明")
+	page.save_entity()
+	_check(TextOverrides.text("tutorial:intro_1.title", "") == "测试数值页", "tutorial title override writes its UID")
+	_check(
+		UiTutorialContent.intro_steps()[0].title == "测试数值页",
+		"tutorial overlay reads the edited title"
+	)
+	_check(
+		UiTutorialContent.intro_steps()[0].bullets[0].text == "测试精力说明",
+		"tutorial overlay reads the edited bullet"
+	)
+	page._reset_entity()
+	page.save_entity()
+	_check(UiTutorialContent.intro_steps()[0].title == "基础数值", "tutorial reset restores the baked default title")
 	page.show_tab("monsters")
 	page.search("")
 	_check(page.select_entity("monster:N03"), "monster entity is selectable")
@@ -347,6 +430,22 @@ func _compat_checks(page: UiTextEditorPage) -> void:
 	page._reset_entity()
 	page.save_entity()
 	_check(UiStyle.label("P01") == "林序", "migrated entity reset restores default")
+	var legacy_battle := {"card:R3-C-01:0:battle": "旧战斗说明\n打出后按顺序结算：\n1. 旧步骤\n名词解释：\n专注：旧术语"}
+	var migration_error := TextOverrides.save_values(legacy_battle)
+	_check(migration_error.is_empty(), "legacy single-window battle override writes")
+	TextOverrides.reload_from_disk()
+	_check(TextOverrides.text("card:R3-C-01:0:battle", "") == "旧战斗说明\n1. 旧步骤", "legacy battle override keeps other lines and drops only the removed heading")
+	_check(
+		TextOverrides.text("card:R3-C-01:0:battle_glossary", "") == "专注：旧术语",
+		"legacy glossary block migrates to the separate UID"
+	)
+	page.initial_state = {}
+	page.render(TextEntityLibrary.build(_catalog).data)
+	page.select_entity("card:R3-C-01")
+	_check(page.field_text("card:R3-C-01:battle_0") == "旧战斗说明\n1. 旧步骤", "migrated battle field drops only the removed heading")
+	_check(page.field_text("card:R3-C-01:battle_glossary_0") == "专注：旧术语", "migrated glossary field shows term text")
+	page._reset_entity()
+	page.save_entity()
 	var bad := _path + ".bad"
 	var file := FileAccess.open(bad, FileAccess.WRITE)
 	file.store_string("{bad")
@@ -420,7 +519,7 @@ func _layout_checks(shell: GameShell, data: Dictionary) -> void:
 			await _frames()
 			_check(page.size.x > 0 and page.size.y > 0, "page lays out at %s / %d%%" % [str(dimensions), scale])
 			_check(page._left_scroll.size.x > 0 and page._left_scroll.size.y > 0, "entity list visible at %s / %d%%" % [str(dimensions), scale])
-			_check(page._field_blocks.size() == 5, "card fields exist at %s / %d%%" % [str(dimensions), scale])
+			_check(page._field_blocks.size() == 7, "card fields exist at %s / %d%%" % [str(dimensions), scale])
 			_check(page._buttons["text_editor:save"].size.y >= 44, "global save target at %s / %d%%" % [str(dimensions), scale])
 			_check(page._buttons["text_editor:save_entity"].size.y >= 44, "entity save target at %s / %d%%" % [str(dimensions), scale])
 			_check(page._buttons["text_editor:back"].size.y >= 44, "back target at %s / %d%%" % [str(dimensions), scale])

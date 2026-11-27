@@ -8,7 +8,7 @@ const MANIFEST := RelicPilot.ROSTER
 const ROOT := "res://data/four_year"
 const CATEGORY_ORDER := [
 	"人物", "卡牌", "任务 / 怪物", "饰品", "伙伴", "事件", "状态 / 术语",
-	"场景 / 房间", "背景", "界面提示", "其他"
+	"场景 / 房间", "背景", "界面提示", "教程", "其他"
 ]
 
 
@@ -25,6 +25,7 @@ static func build(catalog: ContentDB = null) -> GameResult:
 	_add_labels(entries, db)
 	_add_stories(entries)
 	_add_glossary(entries)
+	_add_tutorials(entries)
 	var catalogue := CompendiumView.build(db)
 	if not catalogue.ok:
 		return catalogue
@@ -161,8 +162,67 @@ static func _add_glossary(entries: Array[Dictionary]) -> void:
 			)
 
 
-static func _add_card_descriptions(entries: Array[Dictionary], catalogue: Dictionary) -> void:
-	for card in catalogue.get("cards", []):
+static func _add_tutorials(entries: Array[Dictionary]) -> void:
+	for page in UiTutorialContent.entity_pages():
+		var page_id := str(page.get("id", ""))
+		if page_id.is_empty():
+			continue
+		var chapter := TextOverrides.default_text(
+			UiTutorialContent.page_uid(page_id, "chapter"), str(page.get("chapter", ""))
+		)
+		var title := TextOverrides.default_text(
+			UiTutorialContent.page_uid(page_id, "title"), str(page.get("title", ""))
+		)
+		var label := "%s · %s" % [chapter, title]
+		var source := "src/ui/tutorial_content.gd"
+		var note := "新手教程分页显示文字；只影响显示，不改变触发、指示位置或规则。"
+		for field in ["chapter", "title", "body"]:
+			var suffix: String = {"chapter": "章节", "title": "标题", "body": "正文"}[field]
+			entries.append(
+				_entry(
+					UiTutorialContent.page_uid(page_id, field),
+					"tutorial",
+					"教程",
+					page_id,
+					"%s · %s" % [label, suffix],
+					str(page.get(field, "")),
+					source,
+					note
+				)
+			)
+		var bullets: Array = page.get("bullets", [])
+		for index in bullets.size():
+			var bullet: Dictionary = bullets[index]
+			for field in ["term", "text"]:
+				var suffix := "名词" if field == "term" else "说明"
+				entries.append(
+					_entry(
+						UiTutorialContent.bullet_uid(page_id, index, field),
+						"tutorial",
+						"教程",
+						page_id,
+						"%s · 词条 %d · %s" % [label, index + 1, suffix],
+						str(bullet.get(field, "")),
+						source,
+						note
+					)
+				)
+		if page.has("next"):
+			entries.append(
+				_entry(
+					UiTutorialContent.page_uid(page_id, "next"),
+					"tutorial",
+					"教程",
+					page_id,
+					"%s · 末页按钮" % label,
+					str(page.get("next", "")),
+					source,
+					note
+				)
+			)
+
+
+static func _add_card_descriptions(entries: Array[Dictionary], catalogue: Dictionary) -> void:	for card in catalogue.get("cards", []):
 		var name := _raw_label(str(card.id))
 		for variant in card.get("variants", []):
 			if bool(variant.get("exam", false)):
@@ -192,6 +252,18 @@ static func _add_card_descriptions(entries: Array[Dictionary], catalogue: Dictio
 					UiContentText.describe_battle_card_default(face),
 					"data/four_year/definitions/cards.json",
 					"战斗内逐步说明；不改变结算顺序、数值或规则。"
+				)
+			)
+			entries.append(
+				_entry(
+					"card:%s:%d:battle_glossary" % [card.id, level],
+					"descriptions",
+					"卡牌",
+					str(card.id),
+					"%s · %s战斗名词解释" % [name, suffix],
+					UiContentText.describe_battle_card_glossary_default(face),
+					"data/four_year/definitions/cards.json",
+					"战斗说明下拉框中的名词解释；只改显示文字，不改变术语含义或规则。"
 				)
 			)
 
@@ -313,7 +385,7 @@ static func _label_category(key: String) -> String:
 
 
 static func _entry_before(a: Dictionary, b: Dictionary) -> bool:
-	var group_rank := {"names": 0, "descriptions": 1, "story": 2, "glossary": 3}
+	var group_rank := {"names": 0, "descriptions": 1, "story": 2, "glossary": 3, "tutorial": 4}
 	var left_group := int(group_rank.get(a.get("group", ""), 9))
 	var right_group := int(group_rank.get(b.get("group", ""), 9))
 	if left_group != right_group:

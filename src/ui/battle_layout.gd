@@ -150,6 +150,50 @@ func _hover_window() -> void:
 	page._hover_body.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	page._hover_body.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	page._hover_scroll.add_child(page._hover_body)
+	page._glossary_toggle = Button.new()
+	page._glossary_toggle.name = "CardGlossaryToggle"
+	page._glossary_toggle.text = "▸  名词解释"
+	page._glossary_toggle.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	page._glossary_toggle.focus_mode = Control.FOCUS_ALL
+	page._glossary_toggle.mouse_filter = Control.MOUSE_FILTER_STOP
+	page._glossary_toggle.add_theme_font_size_override("font_size", roundi(13 * factor))
+	page._glossary_toggle.add_theme_color_override("font_color", Color("e5c894"))
+	page._glossary_toggle.add_theme_color_override("font_hover_color", LIGHT)
+	page._glossary_toggle.add_theme_color_override("font_pressed_color", LIGHT)
+	page._glossary_toggle.tooltip_text = "展开或收起这张牌的名词解释"
+	page._glossary_toggle.visible = false
+	UiStyle.button_skin(page._glossary_toggle, "quiet", true)
+	page._glossary_toggle.pressed.connect(page._toggle_glossary)
+	panel.add_child(page._glossary_toggle)
+	page._glossary_box = PanelContainer.new()
+	page._glossary_box.name = "CardGlossaryBox"
+	page._glossary_box.mouse_filter = Control.MOUSE_FILTER_STOP
+	page._glossary_box.visible = false
+	var glossary_style := UiStyle.box(Color("0d1b22"))
+	glossary_style.border_color = Color("5d747e")
+	glossary_style.set_border_width_all(1)
+	glossary_style.set_corner_radius_all(4)
+	glossary_style.set_content_margin_all(roundi(7 * factor))
+	glossary_style.shadow_color = Color(0, 0, 0, 0.24)
+	glossary_style.shadow_size = 5
+	glossary_style.shadow_offset = Vector2(0, 2)
+	page._glossary_box.add_theme_stylebox_override("panel", glossary_style)
+	panel.add_child(page._glossary_box)
+	page._glossary_scroll = ScrollContainer.new()
+	page._glossary_scroll.name = "CardGlossaryScroll"
+	page._glossary_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	page._glossary_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	page._glossary_scroll.mouse_filter = Control.MOUSE_FILTER_STOP
+	page._glossary_scroll.mouse_force_pass_scroll_events = true
+	page._glossary_box.add_child(page._glossary_scroll)
+	page._glossary_body = Label.new()
+	page._glossary_body.name = "CardGlossaryBody"
+	page._glossary_body.add_theme_font_size_override("font_size", roundi(14 * factor))
+	page._glossary_body.add_theme_color_override("font_color", Color("cfe0d6"))
+	page._glossary_body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	page._glossary_body.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	page._glossary_body.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	page._glossary_scroll.add_child(page._glossary_body)
 	page._hover_hint = _text(panel, Rect2(Vector2(16, 146) * factor, Vector2(328, 16) * factor), "I 查看详情", roundi(12 * factor), Color("f1c989"), HORIZONTAL_ALIGNMENT_RIGHT)
 
 

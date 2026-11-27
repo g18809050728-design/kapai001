@@ -31,6 +31,7 @@ func _run() -> void:
 	session.update_settings({"presentation": preferences})
 	_shell = GameShell.new()
 	_shell.session = session
+	_shell.web_first_play_tutorial = true
 	root.add_child(_shell)
 	await create_timer(0.5).timeout
 	if not _shell.press("menu:new"):
@@ -41,6 +42,9 @@ func _run() -> void:
 		_fail("setup:start")
 		return
 	await create_timer(0.6).timeout
+	if not _shell.tutorial_visible():
+		_fail("first-play intro is not visible")
+		return
 	await _snap("01-intro-values")
 	_shell.press("tutorial:next")
 	await create_timer(0.4).timeout
@@ -56,7 +60,10 @@ func _run() -> void:
 		return
 	_shell.press("node:" + str(reachable[0]))
 	_shell.press("map:enter")
-	await create_timer(1.6).timeout
+	await create_timer(3.0).timeout
+	if not _shell.tutorial_visible():
+		_fail("first-battle tutorial is not visible")
+		return
 	await _snap("04-battle-intent")
 	_shell.press("tutorial:next")
 	await create_timer(0.4).timeout

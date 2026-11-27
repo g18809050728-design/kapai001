@@ -10,9 +10,10 @@ const TABS := [
 	["stories", "剧情"],
 	["glossary", "词条"],
 	["monsters", "怪物"],
+	["tutorial", "教程"],
 	["terms", "其他"],
 ]
-const TYPE_ORDER := ["cards", "relics", "characters", "stories", "glossary", "monsters", "terms"]
+const TYPE_ORDER := ["cards", "relics", "characters", "stories", "glossary", "monsters", "tutorial", "terms"]
 
 var library: Array[Dictionary] = []
 var counts: Dictionary = {}
@@ -222,7 +223,7 @@ func _build_ui() -> void:
 	_count.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	add_text(
 		header,
-		"按实体检索：卡牌、饰品、人物、剧情、词条、怪物；选中后编辑该实体的全部字段。只改显示，不改规则/数值/命令/存档。",
+		"按实体检索：卡牌、饰品、人物、剧情、词条、怪物、教程、其他；选中后编辑该实体的全部字段。只改显示，不改规则/数值/命令/存档。",
 		14,
 		Color("b9c7bf")
 	)
@@ -707,6 +708,8 @@ func _match_before(a: Dictionary, b: Dictionary) -> bool:
 	var b_type := TYPE_ORDER.find(str(b.type))
 	if a_type != b_type:
 		return a_type < b_type
+	if str(a.type) == "tutorial" and str(b.type) == "tutorial":
+		return int(a.meta.get("page", 0)) < int(b.meta.get("page", 0))
 	if str(a.category) != str(b.category):
 		return str(a.category) < str(b.category)
 	if str(a.title) != str(b.title):

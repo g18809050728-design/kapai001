@@ -5,7 +5,7 @@ extends RefCounted
 ## override UIDs (for example a glossary name and its shared label); saving a
 ## field writes the same text to every UID and reset clears all of them.
 
-const TYPE_ORDER := ["cards", "relics", "characters", "stories", "glossary", "monsters", "terms"]
+const TYPE_ORDER := ["cards", "relics", "characters", "stories", "glossary", "monsters", "tutorial", "terms"]
 const TYPE_NAMES := {
 	"cards": "卡牌",
 	"relics": "饰品",
@@ -13,6 +13,7 @@ const TYPE_NAMES := {
 	"stories": "剧情",
 	"glossary": "词条",
 	"monsters": "怪物",
+	"tutorial": "教程",
 	"terms": "其他",
 }
 const MONSTER_KIND_NAMES := {
@@ -69,6 +70,7 @@ static func build(catalog: ContentDB = null) -> GameResult:
 	_add_stories(entities, by_uid, assigned, db)
 	_add_glossary(entities, by_uid, assigned)
 	_add_monsters(entities, by_uid, assigned, db)
+	_add_tutorials(entities, by_uid, assigned)
 	_add_terms(entities, by_uid, assigned)
 	for entity in entities:
 		entity["search"] = _entity_search(entity)
@@ -145,13 +147,16 @@ static func _add_cards(
 				)
 			)
 			assigned["label:" + str(id)] = true
-		for surface in ["detail", "battle"]:
-			for level in [0, 1]:
+		for level in [0, 1]:
+			for surface in ["detail", "battle", "battle_glossary"]:
 				var uid := "card:%s:%d:%s" % [id, level, surface]
 				var entry: Variant = by_uid.get(uid)
 				if not entry is Dictionary:
 					continue
-				var label := ("升级" if level > 0 else "基础") + ("说明" if surface == "detail" else "战斗说明")
+				var suffix := str(
+					{"detail": "说明", "battle": "战斗说明", "battle_glossary": "名词解释"}.get(surface, surface)
+				)
+				var label := ("升级" if level > 0 else "基础") + suffix
 				entity.fields.append(
 					_field(
 						entity.id + ":%s_%d" % [surface, level],
@@ -160,7 +165,7 @@ static func _add_cards(
 						str(entry.default),
 						str(entry.source),
 						str(entry.note),
-						surface == "detail" or surface == "battle",
+						true,
 						by_uid
 					)
 				)
@@ -549,6 +554,70 @@ static func _add_monsters(
 		entities.append(entity)
 
 
+static func _add_tutorials(
+	entities: Array[Dictionary],
+	by_uid: Dictionary,
+	assigned: Dictionary
+) -> void:
+	var pages: Array = UiTutorialContent.entity_pages()
+	for index in pages.size():
+		var page: Dictionary = pages[index]
+		var page_id := str(page.get("id", ""))
+		if page_id.is_empty():
+			continue
+		var title_uid := UiTutorialContent.page_uid(page_id, "title")
+		var title_entry: Variant = by_uid.get(title_uid)
+		var title := str(title_entry.default) if title_entry is Dictionary else str(page.get("title", ""))
+		var kind_label := UiTutorialContent.page_kind_label(page)
+		var entity := _entity(
+			"tutorial:" + page_id,
+			"tutorial",
+			kind_label,
+			title,
+			"%d / %d 页 · %s" % [index + 1, pages.size(), kind_label],
+			{"tutorial_kind": kind_label, "page": index + 1},
+			"新手教程显示文字；只改文案，不改变触发、指示位置或规则。"
+		)
+		_add_named_field(
+			entity, by_uid, assigned, UiTutorialContent.page_uid(page_id, "chapter"),
+			"chapter", "章节", false, "教程页眉中的章节名。"
+		)
+		_add_named_field(
+			entity, by_uid, assigned, title_uid,
+			"title", "标题", false, "教程页标题。"
+		)
+		_add_named_field(
+			entity, by_uid, assigned, UiTutorialContent.page_uid(page_id, "body"),
+			"body", "正文", true, "教程标题下的一句说明。"
+		)
+		var bullets: Array = page.get("bullets", [])
+		for bullet_index in bullets.size():
+			var bullet_label := "词条 %d" % (bullet_index + 1)
+			_add_named_field(
+				entity, by_uid, assigned,
+				UiTutorialContent.bullet_uid(page_id, bullet_index, "term"),
+				"bullet_%d_term" % bullet_index,
+				bullet_label + " · 名词",
+				false,
+				"教程词条左侧的名词。"
+			)
+			_add_named_field(
+				entity, by_uid, assigned,
+				UiTutorialContent.bullet_uid(page_id, bullet_index, "text"),
+				"bullet_%d_text" % bullet_index,
+				bullet_label + " · 说明",
+				false,
+				"教程词条右侧的短说明。"
+			)
+		if page.has("next"):
+			_add_named_field(
+				entity, by_uid, assigned, UiTutorialContent.page_uid(page_id, "next"),
+				"next", "末页按钮", false, "最后一页的主按钮文字。"
+			)
+		if not entity.fields.is_empty():
+			entities.append(entity)
+
+
 static func _add_terms(
 	entities: Array[Dictionary],
 	by_uid: Dictionary,
@@ -725,6 +794,8 @@ static func _entity_before(a: Dictionary, b: Dictionary) -> bool:
 	var right_type := TYPE_ORDER.find(str(b.type))
 	if left_type != right_type:
 		return left_type < right_type
+	if str(a.type) == "tutorial" and str(b.type) == "tutorial":
+		return int(a.meta.get("page", 0)) < int(b.meta.get("page", 0))
 	if str(a.category) != str(b.category):
 		return str(a.category) < str(b.category)
 	if str(a.title) != str(b.title):
