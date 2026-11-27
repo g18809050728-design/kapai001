@@ -27,6 +27,7 @@
         maintenance_nickname_unchanged: '新昵称与当前昵称相同。',
         maintenance_player_missing: '此账号不存在，或已不在可维护范围内。',
         maintenance_player_changed: '资料已被修改，请返回玩家资料重新检查。',
+        maintenance_role_changed: '该账号已是管理员，请返回玩家资料确认。',
         invalid_range: '请选择有效日期，结束日期不能早于开始日期，范围最多 367 天。',
         stats_record_not_found: '这条统计记录已不可用。',
         stats_record_changed: '记录已更新，请重新打开详情后再操作。',
@@ -777,8 +778,9 @@
     const difficulties = difficultyNames;
     const bjDate = days => new Date(Date.now() + (8 + 24 * days) * 3600000).toISOString().slice(0, 10);
     const bjTime = time => new Date(time).toLocaleString('zh-CN', {timeZone: 'Asia/Shanghai', hour12: false});
-    const statsDefaults = () => ({start: bjDate(-6), end: bjDate(0), version: '', character: '', difficulty: '',
-        q: '', source: '', state: 'included', sort: 'newest', offset: 0});
+    const statsOutcomes = {won: '胜利', lost: '失败', abandoned: '主动放弃', settled: '已结算 · 结局未知', pending: '未结算'};
+    const statsDefaults = () => ({start: bjDate(-6), end: bjDate(0), character: '', difficulty: '',
+        q: '', source: '', state: 'included', outcome: '', sort: 'newest', offset: 0});
     const feedbackDefaults = {q: '', category: '', state: 'all', sort: 'newest', offset: 0};
 
     function workspaceGrid(parent, extra = '') {
@@ -851,7 +853,7 @@
         const info = element('span', '', row);
         info.className = 'workspace-record-info';
         element('strong', heading, info);
-        element('small', meta, info);
+        for (const line of [].concat(meta)) element('small', line, info);
         const labels = element('span', '', row);
         labels.className = 'workspace-record-tags';
         for (const [text, tone] of tags) badge(labels, text, tone);
@@ -865,7 +867,9 @@
         if (!flags.admin || account?.role !== 'admin') throw new Error('admin_required');
         startPanel('feedback-admin', '反馈管理', '检索玩家提交的问题与建议，并记录处理进度。');
         let activeFilters = state;
-        button('数据库维护', workspaceActions(body), () => showDataMaintenance(undefined, () => showFeedbackInbox(activeFilters)));
+        button('玩家管理', workspaceActions(body), () => showPlayerDirectory(undefined, {
+            label: '← 返回反馈管理', open: () => showFeedbackInbox(activeFilters),
+        }));
         const form = element('form', '', body);
         form.className = 'workspace-form workspace-filters';
         optional(form, '搜索反馈', 'q', state.q, 100, 'search', '标题、正文、玩家、版本或反馈编号');
@@ -978,7 +982,7 @@
 
     async function showStats() {
         await checkAdminWorkspace();
-        await statsWorkspace();
+        await showPlayerDirectory();
     }
 
     function statsDates(parent, filters, form) {
@@ -998,36 +1002,38 @@
 
     async function statsWorkspace(view = 'overview', filters = statsDefaults(), message = '') {
         const records = view === 'records';
-        startPanel('admin', '管理统计', '查看玩家活跃和对局漏斗，检索并维护纳入统计的对局。');
+        startPanel('admin-activity', '活动汇总');
         const nav = element('nav', '', body);
         nav.className = 'workspace-tabs';
         nav.setAttribute('aria-label', '统计视图');
         let current = filters;
+        button('玩家管理', nav, () => showPlayerDirectory(undefined, {
+            label: '← 返回活动汇总', open: () => statsWorkspace(view, current),
+        }));
         for (const [key, label] of [['overview', '统计概览'], ['records', '对局明细']]) {
             const tab = button(label, nav, () => statsWorkspace(key, {...current, offset: 0}));
             if (key === view) tab.setAttribute('aria-current', 'page');
         }
-        button('数据库维护', nav, () => showDataMaintenance(undefined, () => statsWorkspace(view, current)));
         const form = element('form', '', body);
         form.className = 'workspace-form workspace-filters';
-        if (records) optional(form, '搜索对局明细', 'q', filters.q, 100, 'search', '对局编号、玩家、版本或操作理由');
+        if (records) optional(form, '搜索对局明细', 'q', filters.q, 100, 'search', '对局编号、玩家昵称、登录名或操作理由');
         const advanced = element('details', '', form);
         advanced.className = 'workspace-advanced';
-        advanced.open = matchMedia('(min-width: 670px)').matches;
+        advanced.open = records && matchMedia('(min-width: 670px)').matches;
         const filterHeading = element('summary', '', advanced);
         const controls = element('div', '', advanced);
         statsDates(controls, filters, form);
         const group = workspaceGrid(controls);
-        optional(group, '游戏版本', 'version', filters.version, 80, 'text', '全部版本或完整版本号');
-        options(group, '角色', 'character', {'': '全部角色', ...characters}, filters.character);
-        options(group, '难度', 'difficulty', {'': '全部难度', ...difficulties}, filters.difficulty);
+        options(group, '对局角色', 'character', {'': '全部角色', ...characters}, filters.character);
+        options(group, '对局难度', 'difficulty', {'': '全部难度', ...difficulties}, filters.difficulty);
         if (records) {
             const detailFilters = workspaceGrid(controls);
+            options(detailFilters, '对局结局', 'outcome', {'': '全部结局', ...statsOutcomes}, filters.outcome);
             options(detailFilters, '记录来源', 'source', {'': '全部来源', ...statsSources}, filters.source);
             options(detailFilters, '统计状态', 'state', {included: '计入统计', excluded: '已移出', all: '全部记录'}, filters.state);
             options(detailFilters, '排序', 'sort', sortOptions, filters.sort);
         }
-        const actions = workspaceActions(form);
+        const actions = workspaceActions(records ? form : controls);
         button('重置筛选', actions, () => statsWorkspace(view));
         if (records) button('＋ 新增统计记录', actions, () => editStatsRecord(null, current));
         const results = workspaceResult(body);
@@ -1038,11 +1044,11 @@
             results.replaceChildren();
             if (banner) resultText(results, banner);
             const progress = resultText(results, '正在读取统计…');
-            const {start, end, version, character, difficulty, q, source, state, sort, offset} = options;
-            const count = [version, character, difficulty, ...(records ? [source, state !== 'included', sort !== 'newest'] : [])].filter(Boolean).length;
+            const {start, end, character, difficulty, q, source, state, outcome, sort, offset} = options;
+            const count = [character, difficulty, ...(records ? [source, outcome, state !== 'included', sort !== 'newest'] : [])].filter(Boolean).length;
             filterHeading.textContent = `日期与筛选 · ${start} 至 ${end}${count ? ` · ${count} 项条件` : ''}`;
-            const params = new URLSearchParams({start, end, version, character, difficulty,
-                ...(records ? {q, source, state, sort, offset} : {})});
+            const params = new URLSearchParams({start, end, character, difficulty,
+                ...(records ? {q, source, state, outcome, sort, offset} : {})});
             let data;
             try { data = await request('/admin/stats' + (records ? '/records?' : '?') + params); }
             catch (error) {
@@ -1055,7 +1061,7 @@
             if (!records) {
                 progress.textContent = `${start} 至 ${end} · 北京时间`;
                 exportControls(results, 'stats', params);
-                renderStatsOverview(results, data, options);
+                renderStatsOverview(results, data);
                 return;
             }
             if (!data.items.length && offset) return render({...options, offset: Math.max(0, offset - 20)}, banner);
@@ -1064,8 +1070,9 @@
             const list = element('div', '', results);
             list.className = 'feedback-list';
             for (const item of data.items) {
-                const tags = [[statsSources[item.source], item.source], [item.excluded ? '已移出' : item.finished ? '已结算' : '未结算', item.excluded ? 'archived' : '']];
-                recordCard(list, item.nickname || '人工补录', `${bjTime(item.started_at)} · ${item.game_version} · ${item.character_id} · ${difficulties[item.difficulty] || item.difficulty}`,
+                const tags = [[statsOutcomes[item.outcome], ''], [statsSources[item.source], item.source]];
+                if (item.excluded) tags.push(['已移出', 'archived']);
+                recordCard(list, item.nickname || '人工补录', `${bjTime(item.started_at)} · ${characters[item.character_id] || item.character_id} · ${difficulties[item.difficulty] || item.difficulty}`,
                     tags, () => showStatsRecord(item.record_id, options));
             }
             pager(results, data, offset, next => statsWorkspace(view, {...options, offset: next}));
@@ -1073,54 +1080,64 @@
         await render(filters, message);
     }
 
-    function renderStatsOverview(parent, data, filters) {
-        const format = value => new Intl.NumberFormat('zh-CN').format(Number(value || 0));
-        const totals = data.activity.find(row => row.game_version === null);
+    const statsFormat = new Intl.NumberFormat('zh-CN');
+
+    function statsMetrics(parent, values) {
         const metrics = workspaceGrid(parent, 'workspace-metrics');
-        for (const [label, value] of [['累计注册账号', data.registered], ['区间独立游客浏览器', data.visitors],
-            ['开局账号', totals?.accounts], ['对局开局', totals?.started]]) {
+        for (const [label, value] of values) {
             const card = element('div', '', metrics);
             element('small', label, card);
-            element('strong', format(value), card);
+            element('strong', statsFormat.format(value), card);
         }
+    }
+
+    function renderStatsOverview(parent, data) {
+        const players = element('section', '', parent);
+        players.className = 'workspace-sheet';
+        element('h3', '玩家活动', players);
+        statsMetrics(players, [['活跃账号', data.active_players], ['新增启用账号', data.new_accounts],
+            ['累计启用账号', data.registered], ['独立游客浏览器', data.visitors]]);
+        element('small', '活跃账号按开局、完成首战或结束对局去重。游客只包含同意匿名统计的浏览器。', players);
+
+        const runs = data.runs;
         const funnel = element('section', '', parent);
         funnel.className = 'workspace-sheet';
         element('h3', '对局漏斗', funnel);
-        const base = Number(totals?.started || 0);
-        for (const [label, value] of [['开局', base], ['完成首战', totals?.first_battles], ['完成整局', totals?.finished]]) {
+        element('p', `${statsFormat.format(runs.accounts)} 个账号开局 · ${statsFormat.format(runs.manual)} 局人工补录`, funnel);
+        for (const [label, value] of [['开局', runs.started], ['完成首战', runs.first_battles], ['完成整局', runs.finished]]) {
             const line = element('div', '', funnel);
             line.className = 'workspace-funnel';
-            const n = Number(value || 0);
             element('span', label, line);
             const bar = element('progress', '', line);
-            bar.max = base || 1;
-            bar.value = n;
+            bar.max = runs.started || 1;
+            bar.value = value;
             bar.setAttribute('aria-label', label);
-            element('strong', `${format(n)} · ${base ? Math.round(n / base * 100) + '%' : '—'}`, line);
+            element('strong', `${statsFormat.format(value)} · ${runs.started ? Math.round(value / runs.started * 100) + '%' : '—'}`, line);
         }
-        element('small', '完成整局表示已结算，不限胜败；人工补录只计对局，不增加开局账号。', funnel);
-        const versions = data.activity.filter(row => row.game_version !== null);
-        if (!versions.length) resultText(parent, '此筛选范围内还没有计入统计的对局。');
-        else {
-            const scroller = element('div', '', parent);
-            scroller.className = 'account-stats-table workspace-stats-table';
-            scroller.tabIndex = 0;
-            scroller.setAttribute('role', 'region');
-            scroller.setAttribute('aria-label', '版本统计，可横向滚动');
-            const table = element('table', '', scroller);
-            element('caption', '各版本对局', table);
-            const header = element('tr', '', element('thead', '', table));
-            for (const label of ['版本', '开局账号', '开局', '首战完成', '已结算', '人工补录']) element('th', label, header).scope = 'col';
-            const rows = element('tbody', '', table);
-            for (const row of versions) {
-                const entry = element('tr', '', rows);
-                const cell = element('th', '', entry);
-                cell.scope = 'row';
-                button(row.game_version, cell, () => statsWorkspace('records', {...filters, version: row.game_version, offset: 0}));
-                for (const value of [row.accounts, row.started, row.first_battles, row.finished, row.manual]) element('td', format(value), entry);
-            }
+        element('small', '按开局日期归组，应用角色、难度及统计修正。完成整局含胜利、失败及结局未知的结算。', funnel);
+        const outcomes = element('section', '', parent);
+        outcomes.className = 'workspace-sheet';
+        element('h3', '对局结局', outcomes);
+        statsMetrics(outcomes, Object.entries(statsOutcomes).map(([key, label]) => [label, runs[key]]));
+
+        const scroller = element('div', '', parent);
+        scroller.className = 'account-stats-table workspace-stats-table';
+        scroller.tabIndex = 0;
+        scroller.setAttribute('role', 'region');
+        scroller.setAttribute('aria-label', '每日事件，可横向滚动');
+        const table = element('table', '', scroller);
+        element('caption', '每日事件', table);
+        const header = element('tr', '', element('thead', '', table));
+        const columns = [['new_accounts', '新增启用账号'], ['active_players', '活跃账号'], ['visitors', '独立游客浏览器'],
+            ['started', '开局'], ['first_battles', '完成首战'], ['ended', '结束对局']];
+        for (const label of ['日期', ...columns.map(([, label]) => label)]) element('th', label, header).scope = 'col';
+        const rows = element('tbody', '', table);
+        for (const day of data.daily) {
+            const row = element('tr', '', rows);
+            element('th', day.day, row).scope = 'row';
+            for (const [key] of columns) element('td', statsFormat.format(day[key]), row);
         }
-        element('small', '游客按浏览器去重，可能跨设备重复；游客数只受日期影响，累计注册数不受筛选影响。', parent);
+        element('small', '每日事件按北京时间实际发生日统计，只受日期筛选影响。结束对局含主动放弃。', parent);
     }
 
     const statsRoute = id => '/admin/stats/records' + (id ? '/' + encodeURIComponent(id) : '');
@@ -1148,9 +1165,9 @@
         element('h3', item.nickname || '人工补录', sheet);
         const facts = element('dl', '', sheet);
         facts.className = 'workspace-facts';
-        for (const [label, value] of [['记录编号', id], ['开局时间（北京时间）', bjTime(item.started_at)], ['游戏版本', item.game_version],
+        for (const [label, value] of [['记录编号', id], ['开局时间（北京时间）', bjTime(item.started_at)],
             ['角色', characters[item.character_id] || item.character_id], ['难度', difficulties[item.difficulty] || item.difficulty],
-            ['首战完成', item.first_battle ? '是' : '否'], ['整局结算', item.finished ? '是' : '否'], ['最近操作理由', item.reason || '—']]) {
+            ['首战完成', item.first_battle ? '是' : '否'], ['对局结局', statsOutcomes[item.outcome]], ['最近操作理由', item.reason || '—']]) {
             element('dt', label, facts);
             element('dd', value, facts);
         }
@@ -1170,9 +1187,6 @@
         const shifted = item ? new Date(Date.parse(item.started_at) + 8 * 3600000).toISOString().slice(0, 23) : bjDate(0) + 'T12:00';
         const when = field(grid, '开局时间（北京时间）', 'started_at', 'datetime-local', shifted);
         when.step = 'any';
-        const version = field(grid, '游戏版本', 'game_version', 'text', item?.game_version || buildVersion);
-        version.maxLength = 80;
-        version.pattern = '[a-zA-Z0-9_.:\\-]+';
         options(grid, '角色', 'character_id', characters, item?.character_id || 'P01');
         options(grid, '难度', 'difficulty', difficulties, item?.difficulty || 'normal');
         options(grid, '首战完成', 'first_battle', {'0': '否', '1': '是'}, item?.first_battle ? '1' : '0');
@@ -1194,7 +1208,7 @@
         startPanel('admin-confirm', label, restore ? '记录将重新计入统计。自动记录的人工修正也会同时清除。' : '这条记录将不再计入汇总。可在「已移出」中找到并恢复，玩家原始对局不会删除。');
         const form = element('form', '', body);
         form.className = 'workspace-sheet workspace-form';
-        element('p', `${item.game_version} · ${bjTime(item.started_at)} · ${item.record_id}`, form).className = 'feedback-text';
+        element('p', `${item.nickname || '人工补录'} · ${bjTime(item.started_at)} · ${item.record_id}`, form).className = 'feedback-text';
         field(form, '操作理由（必填）', 'reason').maxLength = 500;
         const actions = workspaceActions(form);
         button('取消', actions, () => showStatsRecord(item.record_id, filters));
@@ -1244,46 +1258,88 @@
     }
 
     const playerDataRoute = id => '/admin/data/players' + (id ? '/' + encodeURIComponent(id) : '');
+    const playerRoles = {player: '普通玩家', admin: '管理员'};
+    const playerSorts = {created_newest: '创建时间 · 最新优先', created_oldest: '创建时间 · 最早优先',
+        login_newest: '最后登录 · 最新优先', login_oldest: '最后登录 · 最早优先'};
+    const roleActions = {'data.player.role.promote': '升为管理员', 'admin-create': '创建管理员', 'admin-revoke': '撤销管理员'};
+    const playerDates = [['created_from', '创建开始日期'], ['created_to', '创建结束日期'],
+        ['login_from', '登录开始日期'], ['login_to', '登录结束日期']];
+    const playerDefaults = () => ({q: '', role: '', sort: 'created_newest',
+        created_from: '', created_to: '', login_from: '', login_to: '', offset: 0});
+    const recordedTime = value => value ? bjTime(value) : '暂无记录';
+    const matchStatuses = {active: statsOutcomes.pending, finished: statsOutcomes.settled, abandoned: statsOutcomes.abandoned};
+    const matchOutcome = match => statsOutcomes[match.result?.result] || matchStatuses[match.status];
 
-    async function showDataMaintenance(filters = {q: '', offset: 0}, back = showStats, message = '') {
-        startPanel('admin-data', '数据库维护', '修改普通玩家的显示昵称。不会修改登录名、权限、密码或存档。');
-        const nav = workspaceActions(body);
-        button('← 返回管理页面', nav, back);
+    async function showPlayerDirectory(filters = playerDefaults(), from = null) {
+        startPanel('admin-data', '玩家管理');
+        const nav = element('nav', '', body);
+        nav.className = 'workspace-tabs';
+        nav.setAttribute('aria-label', '管理视图');
+        let current = filters;
+        if (from) button(from.label, nav, from.open);
+        button('权限记录', nav, () => showRoleEvents(null, () => showPlayerDirectory(current, from)));
+        if (!from) button('活动汇总', nav, () => statsWorkspace());
         const form = element('form', '', body);
         form.className = 'workspace-form workspace-filters';
         optional(form, '搜索玩家', 'q', filters.q, 100, 'search', '昵称、登录名或账号编号');
+        const preference = workspaceGrid(form);
+        options(preference, '账号角色', 'role', {'': '全部角色', ...playerRoles}, filters.role);
+        options(preference, '排序', 'sort', playerSorts, filters.sort);
+        const dates = element('details', '', form);
+        dates.className = 'workspace-advanced';
+        dates.open = playerDates.some(([name]) => filters[name]);
+        element('summary', '时间筛选（北京时间）', dates);
+        const group = workspaceGrid(dates);
+        for (const [name, label] of playerDates) {
+            const input = optional(group, label, name, filters[name], 10, 'date');
+            input.min = '2000-01-01';
+            input.max = '9998-12-31';
+        }
         const actions = workspaceActions(form);
-        button('清空筛选', actions, () => showDataMaintenance({q: '', offset: 0}, back));
+        button('清空筛选', actions, () => showPlayerDirectory(undefined, from));
         const results = workspaceResult(body);
         formSubmit(form, '查询玩家', values => render({...values, offset: 0}), actions);
 
-        async function render(state, banner = '') {
+        async function render(state) {
+            current = state;
             results.replaceChildren();
-            if (banner) resultText(results, banner);
             const progress = resultText(results, '正在读取玩家…');
+            const params = new URLSearchParams(Object.entries(state).filter(([, value]) => value !== ''));
             let data;
-            try { data = await request(playerDataRoute() + '?' + new URLSearchParams(state)); }
+            try { data = await request(playerDataRoute() + '?' + params); }
             catch (error) {
                 progress.textContent = '暂时无法读取玩家，请重试。';
-                if (results.isConnected && dialog.open) throw error;
+                if (progress.isConnected && dialog.open) throw error;
                 return;
             }
             if (!progress.isConnected || !dialog.open) return;
-            progress.textContent = data.items.length ? `共 ${data.total} 个玩家 · 第 ${1 + Math.floor(state.offset / 20)} 页` : '没有符合条件的普通玩家。';
+            if (!data.items.length && state.offset) return render({...state, offset: Math.max(0, state.offset - 20)});
+            progress.textContent = data.items.length ? `共 ${data.total} 个账号 · 第 ${1 + Math.floor(state.offset / 20)} 页 · 北京时间` : '没有符合查询条件的账号。';
             const list = element('div', '', results);
             list.className = 'feedback-list';
             for (const item of data.items) {
-                recordCard(list, item.nickname, `${item.username || '未设置登录名'} · ${item.user_id}`,
-                    [['普通玩家', '']], () => showPlayerMaintenance(item.user_id, state, back));
+                recordCard(list, item.nickname, [item.username || '未设置登录名',
+                    '创建 ' + bjTime(item.created_at), '最后登录 ' + recordedTime(item.last_login_at)],
+                    [[playerRoles[item.role], item.role === 'admin' ? 'reviewing' : ''], [`${item.match_count} 局`, '']],
+                    () => showPlayerMaintenance(item.user_id, () => showPlayerDirectory(state, from)));
             }
-            pager(results, data, state.offset, offset => showDataMaintenance({...state, offset}, back));
+            pager(results, data, state.offset, offset => showPlayerDirectory({...state, offset}, from));
         }
-        await render(filters, message);
+        await render(filters);
     }
 
-    async function showPlayerMaintenance(id, filters, back, message = '') {
-        startPanel('admin-data-detail', '玩家资料', '数据库中的显示昵称会用于账号、反馈和对局管理。');
-        button('← 返回数据库维护', workspaceActions(body), () => showDataMaintenance(filters, back));
+    function facts(parent, entries) {
+        const list = element('dl', '', parent);
+        list.className = 'workspace-facts';
+        for (const [label, value] of entries) {
+            element('dt', label, list);
+            element('dd', value, list);
+        }
+    }
+
+    async function showPlayerMaintenance(id, back, message = '', matchOffset = 0) {
+        startPanel('admin-data-detail', '玩家资料');
+        button('← 返回玩家管理', workspaceActions(body), back);
         const details = workspaceResult(body);
         const progress = resultText(details, '正在读取账号…');
         let item;
@@ -1299,29 +1355,123 @@
         const profile = element('section', '', details);
         profile.className = 'workspace-sheet';
         element('h3', item.nickname, profile);
-        const dl = element('dl', '', profile);
-        dl.className = 'workspace-facts';
-        for (const [key, value] of [['账号编号', id], ['登录名', item.username || '未设置'], ['注册时间（北京时间）', bjTime(item.created_at)]]) {
-            element('dt', key, dl);
-            element('dd', value, dl);
-        }
+        facts(profile, [['角色', playerRoles[item.role]], ['登录名', item.username || '未设置'],
+            ['账号编号', id], ['创建时间（北京时间）', bjTime(item.created_at)],
+            ['最后登录（北京时间）', recordedTime(item.last_login_at)]]);
         const actions = workspaceActions(details);
-        button('修改显示昵称', actions, () => editPlayerNickname(item, filters, back)).className = 'account-primary';
-        if (item.can_restore) button('撤回上一笔修改', actions, () => confirmPlayerNickname(item, filters, back));
-        const history = element('section', '', details);
-        history.className = 'workspace-sheet';
-        element('h3', '最近修改记录', history);
-        if (!item.history.length) element('p', '还没有修改记录。', history);
-        for (const change of item.history) {
-            const row = element('article', '', history);
-            row.className = 'workspace-change';
-            element('strong', `${change.old_nickname} → ${change.new_nickname}`, row);
-            element('p', change.reason, row).className = 'feedback-text';
-            element('small', bjTime(change.changed_at) + '（北京时间）', row);
+        if (item.role === 'player') {
+            button('升为管理员', actions, () => confirmPlayerPromotion(item, back)).className = 'account-primary';
+            button('修改显示昵称', actions, () => editPlayerNickname(item, back));
+        }
+        button('权限记录', actions, () => showRoleEvents(item, () => showPlayerMaintenance(id, back)));
+        await renderPlayerMatches(details, item, matchOffset, offset => showPlayerMaintenance(id, back, '', offset));
+        if (item.history.length) {
+            const history = element('details', '', details);
+            history.className = 'workspace-sheet workspace-advanced';
+            element('summary', '昵称修改记录', history);
+            if (item.can_restore) button('撤回上一笔修改', history, () => confirmPlayerNickname(item, back));
+            for (const change of item.history) {
+                const row = element('article', '', history);
+                row.className = 'workspace-change';
+                element('strong', `${change.old_nickname} → ${change.new_nickname}`, row);
+                element('p', change.reason, row).className = 'feedback-text';
+                element('small', bjTime(change.changed_at) + '（北京时间）', row);
+            }
         }
     }
 
-    function editPlayerNickname(item, filters, back) {
+    async function renderPlayerMatches(parent, item, startOffset, back) {
+        const matches = element('section', '', parent);
+        matches.className = 'workspace-sheet';
+        element('h3', `对局记录（${item.match_count}）`, matches);
+        const results = element('div', '', matches);
+        async function load(offset) {
+            results.replaceChildren();
+            const progress = resultText(results, '正在读取对局…');
+            let page;
+            try { page = await request(playerDataRoute(item.user_id) + '/matches?offset=' + offset); }
+            catch (error) {
+                progress.textContent = '暂时无法读取对局。';
+                if (progress.isConnected && dialog.open) throw error;
+                return;
+            }
+            if (!progress.isConnected || !dialog.open) return;
+            if (!page.items.length && offset) return load(Math.max(0, offset - 20));
+            progress.textContent = page.items.length ? `第 ${1 + Math.floor(offset / 20)} 页 · 北京时间` : '这个账号还没有对局记录。';
+            const list = element('div', '', results);
+            list.className = 'feedback-list';
+            for (const match of page.items) {
+                const imported = match.source === 'imported';
+                const title = characters[match.character_id] || match.character_id;
+                const dateLabel = imported ? '导入 ' : '开局 ';
+                const tags = [[matchOutcome(match), '']];
+                if (imported) tags.push(['历史导入', '']);
+                recordCard(list, `${title} · ${difficulties[match.difficulty] || match.difficulty}`, dateLabel + bjTime(match.started_at), tags,
+                    () => showPlayerMatch(item, match, () => back(offset)));
+            }
+            pager(results, page, offset, load);
+        }
+        await load(startOffset);
+    }
+
+    function showPlayerMatch(item, match, back) {
+        startPanel('admin-data-match', '玩家对局', item.nickname);
+        button('← 返回玩家资料', workspaceActions(body), back);
+        const detail = element('section', '', body);
+        detail.className = 'workspace-sheet';
+        const imported = match.source === 'imported';
+        facts(detail, [['对局编号', match.match_id], ['对局来源', imported ? '历史导入' : '联网记录'],
+            ['角色', characters[match.character_id] || match.character_id], ['难度', difficulties[match.difficulty] || match.difficulty],
+            [imported ? '导入时间（北京时间）' : '开局时间（北京时间）', bjTime(match.started_at)],
+            ['首战完成（北京时间）', recordedTime(match.first_battle_at)],
+            ['结束时间（北京时间）', imported ? '暂无记录' : recordedTime(match.finished_at)],
+            ['对局结局', matchOutcome(match)],
+            ['最后学年', match.result?.term ? String(match.result.term) : '暂无记录']]);
+    }
+
+    async function showRoleEvents(item, back, offset = 0) {
+        startPanel('admin-role-events', '权限记录', item?.nickname);
+        button(item ? '← 返回玩家资料' : '← 返回玩家管理', workspaceActions(body), back);
+        const results = workspaceResult(body);
+        const progress = resultText(results, '正在读取权限记录…');
+        const params = new URLSearchParams({offset, ...(item ? {user_id: item.user_id} : {})});
+        let page;
+        try { page = await request('/admin/data/role-events?' + params); }
+        catch (error) {
+            progress.textContent = '暂时无法读取权限记录。';
+            if (progress.isConnected && dialog.open) throw error;
+            return;
+        }
+        if (!progress.isConnected || !dialog.open) return;
+        progress.textContent = page.items.length ? `第 ${1 + Math.floor(offset / 20)} 页 · 北京时间` : '暂无权限记录。';
+        for (const event of page.items) {
+            const log = element('article', '', results);
+            log.className = 'workspace-sheet';
+            element('h3', roleActions[event.operation], log);
+            const actor = event.actor_nickname || event.actor_id ||
+                (event.operation === 'data.player.role.promote' ? '已删除的管理员' : '服务器命令');
+            facts(log, [['目标账号', event.user_nickname || event.user_id], ['账号编号', event.user_id],
+                ['操作者', actor], ['时间', bjTime(event.created_at)], ['原因', event.reason || '暂无记录']]);
+        }
+        pager(results, page, offset, next => showRoleEvents(item, back, next));
+    }
+
+    function confirmPlayerPromotion(item, back) {
+        startPanel('admin-data-promote', '升为管理员', '管理员拥有玩家管理、测试房间和文本编辑权限。此账号需要重新登录。');
+        const form = element('form', '', body);
+        form.className = 'workspace-sheet workspace-form';
+        facts(form, [['目标账号', item.nickname], ['登录名', item.username || '未设置'],
+            ['账号编号', item.user_id], ['角色变更', '普通玩家 → 管理员']]);
+        field(form, '操作原因（必填）', 'reason').maxLength = 500;
+        const actions = workspaceActions(form);
+        button('取消', actions, () => showPlayerMaintenance(item.user_id, back));
+        formSubmit(form, '确认升为管理员', async values => {
+            await request(playerDataRoute(item.user_id) + '/promote', 'POST', {reason: values.reason});
+            await showPlayerMaintenance(item.user_id, back, '已升为管理员，重新登录后生效。');
+        }, actions);
+    }
+
+    function editPlayerNickname(item, back) {
         startPanel('admin-data-edit', '修改显示昵称', '登录名保持不变；确认前可核对新旧昵称。');
         const form = element('form', '', body);
         form.className = 'workspace-sheet workspace-form';
@@ -1330,16 +1480,16 @@
         nickname.maxLength = 40;
         counter(nickname);
         const actions = workspaceActions(form);
-        button('取消', actions, () => showPlayerMaintenance(item.user_id, filters, back));
+        button('取消', actions, () => showPlayerMaintenance(item.user_id, back));
         formSubmit(form, '下一步', values => {
             const name = values.nickname.trim();
             if (!name) throw new Error('invalid_input');
             if (name === item.nickname) throw new Error('maintenance_nickname_unchanged');
-            confirmPlayerNickname(item, filters, back, name);
+            confirmPlayerNickname(item, back, name);
         }, actions);
     }
 
-    function confirmPlayerNickname(item, filters, back, newName = null) {
+    function confirmPlayerNickname(item, back, newName = null) {
         const restore = newName === null;
         startPanel('admin-data-confirm', restore ? '撤回上一笔修改' : '确认修改显示昵称', '确认后会写入数据库并保留操作记录。');
         const form = element('form', '', body);
@@ -1347,13 +1497,13 @@
         element('p', `昵称：${item.nickname} → ${newName ?? item.history[0].old_nickname}`, form).className = 'feedback-text';
         field(form, '操作原因（必填）', 'reason').maxLength = 500;
         const actions = workspaceActions(form);
-        button('取消', actions, () => showPlayerMaintenance(item.user_id, filters, back));
+        button('取消', actions, () => showPlayerMaintenance(item.user_id, back));
         formSubmit(form, restore ? '确认撤回' : '确认写入数据库', async values => {
             const route = playerDataRoute(item.user_id) + '/nickname';
             const payload = {reason: values.reason, revision: item.revision, expected_nickname: item.nickname};
             if (!restore) payload.nickname = newName;
             await request(route + (restore ? '/restore' : ''), restore ? 'POST' : 'PATCH', payload);
-            await showPlayerMaintenance(item.user_id, filters, back, restore ? '已撤回修改。' : '显示昵称已写入数据库。');
+            await showPlayerMaintenance(item.user_id, back, restore ? '已撤回修改。' : '显示昵称已写入数据库。');
         }, actions);
     }
 

@@ -63,14 +63,21 @@ with tempfile.TemporaryDirectory() as mailbox:
     assert check(register.get(route + "/auth/session"))["user"]["user_id"] == user_id
     assert not list(Path(mailbox).iterdir())
     with engine.connect() as db:
-        account = one(db, "SELECT email,verified_at,activated_at FROM users WHERE user_id=:user", user=user_id)
+        account = one(db, "SELECT email,verified_at,activated_at,last_login_at FROM users WHERE user_id=:user", user=user_id)
         assert account["email"] is None and account["verified_at"] is None and account["activated_at"]
+        assert account["last_login_at"] is not None
     check(register.post(route + "/auth/register", json={
         **signup, "username": username.upper(),
     }), 409)
     auth = register.post(route + "/auth/login", json={"identifier": username.upper(), "password": password})
     assert check(auth)["user_id"] == user_id and check(auth)["username"] == username
+    with engine.connect() as db:
+        success_at = one(db, "SELECT last_login_at FROM users WHERE user_id=:user", user=user_id)["last_login_at"]
+    assert success_at > account["last_login_at"]
     check(register.post(route + "/auth/login", json={"identifier": username, "password": "wrong"}), 401)
+    check(register.get(route + "/auth/session"))
+    with engine.connect() as db:
+        assert success_at == one(db, "SELECT last_login_at FROM users WHERE user_id=:user", user=user_id)["last_login_at"]
     assert all(flag in auth.headers["set-cookie"].lower() for flag in ["secure", "httponly", "samesite=lax"])
     check(register.get(route + "/me", headers={"X-Kapai-Account": str(uuid4())}), 401)
     check(register.post(route + "/auth/logout", headers={"Origin": "https://unrelated.test"}, json={}), 403)
@@ -153,7 +160,9 @@ with tempfile.TemporaryDirectory() as mailbox:
         assert not one(db, "SELECT mfa FROM auth_sessions WHERE user_id=:user", user=administrator_id)["mfa"]
     summary = check(administrator.get(stats + "&version=campus_four_year_relics.v2"))
     assert summary["visitors"] >= 1
-    assert any(item["started"] >= 1 and item["first_battles"] >= 1 and item["finished"] >= 1 for item in summary["activity"])
+    assert summary["active_players"] >= 1 and summary["new_accounts"] >= 1
+    assert summary["runs"]["lost"] >= 1 and summary["runs"]["first_battles"] >= 1
+    assert len(summary["activity"]) == 1 and summary["activity"][0]["game_version"] is None
     with engine.begin() as db:
         assert one(db, "SELECT operation FROM admin_audit_log WHERE actor_id=:user", user=administrator_id)["operation"] == "stats.read"
         execute(db, "UPDATE users SET totp_secret='LEGACYCONFIGUREDSECRET',last_totp_step=999999999 WHERE user_id=:user",
@@ -169,10 +178,61 @@ with tempfile.TemporaryDirectory() as mailbox:
     records = route + "/admin/stats/records"
     target = records + "/" + match
     query = stats.split("?", 1)[1]
+    # Put the reported milestones around midnight in Beijing. An imported run does not
+    # become activity, and a real account/browser seen on both days still counts once.
+    historical_query = "start=2024-09-01&end=2024-09-02"
+    historical_matches = {}
+    for outcome in ("won", "abandoned"):
+        record = {**run, "run_id": f"{run['run_id']}_{outcome}", "game_version": f"old-{outcome}"}
+        match_id = check(register.post(route + "/matches/start", json=record))["match_id"]
+        check(register.post(route + f"/matches/{match_id}/finish", json={"result": outcome, "term": 1}))
+        historical_matches[outcome] = match_id
+    historical_visitor = str(uuid4())
+    with engine.begin() as db:
+        previous = one(db, "SELECT activated_at FROM users WHERE user_id=:id", id=user_id)["activated_at"]
+        execute(db, "UPDATE users SET activated_at='2024-08-31 16:00:00' WHERE user_id=:id", id=user_id)
+        execute(db, """
+            UPDATE matches SET started_at='2024-08-31 16:00:00',
+                first_battle_at='2024-09-01 16:00:00',finished_at='2024-09-01 16:01:00'
+            WHERE match_id=:id
+        """, id=historical_matches["won"])
+        execute(db, """
+            UPDATE matches SET started_at='2024-09-01 16:00:00',finished_at='2024-09-01 16:02:00'
+            WHERE match_id=:id OR source='imported' AND match_id IN
+                (SELECT match_id FROM match_players WHERE user_id=:user)
+        """, id=historical_matches["abandoned"], user=user_id)
+        for received in ("2024-08-31 15:59:59", "2024-08-31 16:00:00", "2024-09-01 16:00:00", "2024-09-01 16:01:00"):
+            execute(db, """
+                INSERT INTO game_events (event_id,event_type,visitor_id,received_at)
+                VALUES (:id,'menu_opened',:visitor,:received)
+            """, id=str(uuid4()), visitor=historical_visitor, received=received)
+    sample = check(administrator.get(route + "/admin/stats?" + historical_query + "&version=old-won"))
+    assert (sample["new_accounts"], sample["active_players"], sample["visitors"]) == (1, 1, 1)
+    assert sample["runs"] == {"accounts": 1, "started": 2, "first_battles": 1, "finished": 1, "manual": 0,
+                              "won": 1, "lost": 0, "abandoned": 1, "settled": 0, "pending": 0}
+    assert sample["daily"] == [
+        {"day": "2024-09-02", "new_accounts": 0, "visitors": 1, "active_players": 1, "started": 1, "first_battles": 1, "ended": 2},
+        {"day": "2024-09-01", "new_accounts": 1, "visitors": 1, "active_players": 1, "started": 1, "first_battles": 0, "ended": 0},
+    ]
+    cohort = check(administrator.get(route + "/admin/stats?start=2024-09-01&end=2024-09-01"))
+    assert cohort["runs"]["finished"] == 1 and cohort["daily"][0]["ended"] == 0
+    filtered = check(administrator.get(route + "/admin/stats?" + historical_query + "&character=P04"))
+    assert filtered["runs"]["started"] == 0 and filtered["daily"] == sample["daily"]
+    page = check(administrator.get(records + "?" + historical_query + "&outcome=abandoned&q=" + username))
+    assert [row["record_id"] for row in page["items"]] == [historical_matches["abandoned"]]
+    with engine.begin() as db:
+        for match_id in historical_matches.values():
+            execute(db, "DELETE FROM matches WHERE match_id=:id", id=match_id)
+        execute(db, "DELETE FROM game_events WHERE visitor_id=:visitor", visitor=historical_visitor)
+        execute(db, "UPDATE users SET activated_at=:activated WHERE user_id=:id", id=user_id, activated=previous)
+
     manual_version = "manual-" + seed[:12]
-    values = {"started_at": local_date + "T12:00:00+08:00", "game_version": manual_version,
+    manual_reason = "integration supplement " + seed
+    values = {"started_at": local_date + "T12:00:00+08:00",
               "character_id": "P03", "difficulty": "hard", "first_battle": True,
-              "finished": False, "reason": "integration supplement"}
+              "finished": False, "reason": manual_reason}
+    manual_scope = stats + "&character=P03&difficulty=hard"
+    before = check(administrator.get(manual_scope))
     check(client().get(records + "?" + query), 401)
     check(register.get(records + "?" + query), 403)
     check(register.post(records, json=values), 403)
@@ -184,25 +244,28 @@ with tempfile.TemporaryDirectory() as mailbox:
     created = check(administrator.post(records, json=values), 201)
     manual = records + "/" + created["record_id"]
     assert created["source"] == "manual" and created["started_at"].startswith(local_date + "T04:00")
-    page = check(administrator.get(records + "?" + query + "&source=manual&q=" + manual_version))
+    page = check(administrator.get(records + "?" + query + "&source=manual&q=" + manual_reason))
     assert page["total"] == 1 and page["items"][0]["record_id"] == created["record_id"]
     assert "user_id" not in page["items"][0]
-    summary = check(administrator.get(stats + "&version=" + manual_version))
-    assert all(row["accounts"] == 0 and row["started"] == row["manual"] == 1 for row in summary["activity"])
+    summary = check(administrator.get(manual_scope))
+    assert summary["runs"]["manual"] == before["runs"]["manual"] + 1
+    assert summary["runs"]["accounts"] == before["runs"]["accounts"] and summary["daily"] == before["daily"]
     check(register.patch(target, json={**values, "revision": 0}), 403)
     check(register.request("DELETE", target, json={"revision": 0, "reason": "not authorized"}), 403)
     changed = check(administrator.patch(manual, json={**values, "finished": True, "revision": created["revision"]}))
-    assert changed["finished"] and changed["revision"] == created["revision"] + 1
+    assert changed["finished"] and changed["outcome"] == "settled" and changed["revision"] == created["revision"] + 1
     check(administrator.patch(manual, json={**values, "revision": created["revision"]}), 409)
     hidden = check(administrator.request("DELETE", manual, json={"revision": changed["revision"], "reason": "hide sample"}))
     assert hidden["excluded"]
-    assert check(administrator.get(records + "?" + query + "&q=" + manual_version))["items"] == []
-    assert check(administrator.get(records + "?" + query + "&state=excluded&q=" + manual_version))["total"] == 1
-    assert not any(row["started"] for row in check(administrator.get(stats + "&version=" + manual_version))["activity"])
+    assert check(administrator.get(records + "?" + query + "&q=" + created["record_id"]))["items"] == []
+    assert check(administrator.get(records + "?" + query + "&state=excluded&q=" + created["record_id"]))["total"] == 1
+    assert check(administrator.get(manual_scope))["runs"] == before["runs"]
     restored = check(administrator.post(manual + "/restore", json={"revision": hidden["revision"], "reason": "restore sample"}))
     assert not restored["excluded"] and restored["finished"]
-    corrected = check(administrator.patch(target, json={**values, "revision": 0}))
-    assert corrected["source"] == "adjusted" and corrected["game_version"] == manual_version
+    corrected = check(administrator.patch(target, json={**values, "game_version": manual_version, "revision": 0}))
+    assert corrected["source"] == "adjusted" and corrected["game_version"] == manual_version and corrected["outcome"] == "pending"
+    corrected = check(administrator.patch(target, json={**values, "revision": corrected["revision"]}))
+    assert corrected["game_version"] == manual_version
     with engine.connect() as db:
         assert one(db, "SELECT game_version FROM matches WHERE match_id=:id", id=match)["game_version"] == original["game_version"]
     restored = check(administrator.post(target + "/restore", json={"revision": corrected["revision"], "reason": "restore original"}))
@@ -275,9 +338,18 @@ with tempfile.TemporaryDirectory() as mailbox:
     check(client().get(data_route), 401)
     check(register.get(data_route), 403)
     assert [r["user_id"] for r in check(administrator.get(data_route + "?q=" + username))["items"]] == [user_id]
-    check(administrator.get(data_route + "/" + administrator_id), 404)
+    assert check(administrator.get(data_route + "/" + administrator_id))["role"] == "admin"
     profile = check(administrator.get(user_route))
-    assert set(profile) == {"user_id", "username", "nickname", "created_at", "revision", "history", "can_restore"}
+    assert set(profile) == {"user_id", "username", "nickname", "role", "created_at", "last_login_at",
+                            "match_count", "revision", "history", "can_restore"}
+    assert profile["last_login_at"] and profile["match_count"] == 2 and profile["role"] == "player"
+    check(register.get(user_route + "/matches"), 403)
+    actual_matches = check(administrator.get(user_route + "/matches"))["items"]
+    assert {r["source"] for r in actual_matches} == {"client_reported", "imported"}
+    raw = next(r for r in actual_matches if r["match_id"] == match)
+    assert raw["result"] == result | {"ending_id": ""} and raw["first_battle_at"].endswith("+00:00")
+    assert check(administrator.get(data_route + "/" + administrator_id + "/matches"))["items"] == []
+    check(administrator.get(data_route + "/" + str(uuid4()) + "/matches"), 404)
     control = {"revision": profile["revision"], "expected_nickname": profile["nickname"], "reason": "rename test"}
     # Spreadsheet metacharacters and URLs are valid display data, not workbook markup.
     new_name = "=1+1"
@@ -298,7 +370,7 @@ with tempfile.TemporaryDirectory() as mailbox:
     check(register.get(book_route), 403)
     ns = {"x": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"}
 
-    def xlsx(response, sheet_name):
+    def xlsx(response, sheet_name, sheet_index=1):
         assert response.status_code == 200 and response.headers["content-type"] == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         assert response.headers["cache-control"] == "no-store" and response.headers["content-disposition"].endswith('.xlsx"')
         with ZipFile(io.BytesIO(response.content)) as file:
@@ -306,10 +378,11 @@ with tempfile.TemporaryDirectory() as mailbox:
             names = file.namelist()
             assert not any("/media/" in name or "externalLink" in name for name in names)
             workbook = ET.fromstring(file.read("xl/workbook.xml"))
-            assert workbook.find("x:sheets/x:sheet", ns).get("name") == sheet_name
+            sheets = [node.get("name") for node in workbook.findall("x:sheets/x:sheet", ns)]
+            assert sheets[sheet_index - 1] == sheet_name
             shared = ET.fromstring(file.read("xl/sharedStrings.xml"))
             strings = ["".join(node.itertext()) for node in shared]
-            page = ET.fromstring(file.read("xl/worksheets/sheet1.xml"))
+            page = ET.fromstring(file.read(f"xl/worksheets/sheet{sheet_index}.xml"))
             assert page.find(".//x:f", ns) is None and page.find(".//x:hyperlink", ns) is None
             data = []
             for row in page.findall("x:sheetData/x:row", ns):
@@ -336,10 +409,14 @@ with tempfile.TemporaryDirectory() as mailbox:
     assert len(bulk) == 23 and all(row["H"] == "=2+2" for row in bulk[1:])
     with patch("kapai.exports.EXPORT_LIMIT", 20):
         assert check(administrator.get(exports + "feedback?q=bulk-xlsx-" + seed), 422)["detail"] == "export_too_many_rows"
-    record_rows = xlsx(administrator.get(exports + "records?" + query + "&q=" + match), "对局明细")
+    record_rows = xlsx(administrator.get(exports + "records?" + query + "&outcome=lost&q=" + match), "对局明细")
     assert len(record_rows) == 2 and record_rows[1]["A"] == match and record_rows[1]["C"] == new_name
-    overall_rows = xlsx(administrator.get(exports + "stats?" + query + "&version=" + original["game_version"]), "统计概览")
-    assert overall_rows[1]["B"] >= 1 and len(overall_rows) == 8
+    assert record_rows[1]["G"] == "失败" and "游戏版本" not in record_rows[0].values()
+    report = administrator.get(exports + "stats?" + query)
+    overall_rows = xlsx(report, "统计概览")
+    assert overall_rows[1]["B"] >= 1 and len(overall_rows) == 15
+    daily_rows = xlsx(report, "每日事件", sheet_index=2)
+    assert len(daily_rows) == 2 and daily_rows[1]["A"] == local_date and daily_rows[1]["C"] >= 1
     check(administrator.post(nickname_route + "/restore", json={**control, "revision": latest["revision"], "expected_nickname": new_name}))
     assert check(register.get(route + "/me"))["nickname"] == profile["nickname"]
     with engine.connect() as db:
@@ -347,10 +424,72 @@ with tempfile.TemporaryDirectory() as mailbox:
             assert one(db, "SELECT audit_id FROM admin_audit_log WHERE operation=:op AND actor_id=:admin", op=operation, admin=administrator_id)
     print("ADMIN-DATA nickname DB write, stale/invalid rejection, audit, restore and filtered XLSX workbook content passed")
 
+    directory_seed = "dir_" + seed[:10]
+    fixture_ids = [str(uuid4()) for _ in range(4)]
+    with engine.begin() as db:
+        for index, (created, last_login, active) in enumerate([
+            ("2024-10-01 15:59:59", "2024-10-02 16:00:00", True),
+            ("2024-10-01 16:00:00", "2024-10-02 15:59:59", True),
+            ("2024-10-02 15:59:59", None, True),
+            ("2024-10-02 16:00:00", None, False),
+        ]):
+            execute(db, """
+                INSERT INTO users (user_id,username,nickname,password_hash,created_at,activated_at,last_login_at)
+                VALUES (:id,:name,:name,:password,:created,:activated,:login)
+            """, id=fixture_ids[index], name=f"{directory_seed}_{index}", password=password_hasher.hash(password),
+                created=created, activated=created if active else None, login=last_login)
+    query_players = data_route + "?q=" + directory_seed
+
+    def account_ids(extra=""):
+        return [row["user_id"] for row in check(administrator.get(query_players + extra))["items"]]
+
+    a, b, c, _ = fixture_ids
+    assert account_ids() == [c, b, a]
+    assert account_ids("&sort=created_oldest") == [a, b, c]
+    assert account_ids("&sort=login_newest") == [a, b, c]
+    assert account_ids("&sort=login_oldest") == [b, a, c]
+    assert account_ids("&created_from=2024-10-02&created_to=2024-10-02") == [c, b]
+    assert account_ids("&login_from=2024-10-03&login_to=2024-10-03") == [a]
+    assert account_ids("&login_to=2024-10-02") == [b]
+    check(administrator.get(query_players + "&login_from=2024-10-03&login_to=2024-10-02"), 422)
+
+    promote_route = data_route + "/" + a + "/promote"
+    role_route = route + "/admin/data/role-events"
+    role_reason = "Verify role change"
+    grantee = client()
+    check(grantee.post(route + "/auth/login", json={"identifier": directory_seed + "_0", "password": password}))
+    check(client().post(promote_route, json={"reason": role_reason}), 401)
+    check(register.post(promote_route, json={"reason": role_reason}), 403)
+    check(register.get(role_route), 403)
+    check(administrator.post(promote_route, json={"reason": " "}), 422)
+    check(administrator.post(data_route + "/" + fixture_ids[3] + "/promote", json={"reason": role_reason}), 404)
+    check(administrator.post(data_route + "/" + administrator_id + "/promote", json={"reason": role_reason}), 409)
+    assert check(administrator.post(promote_route, json={"reason": role_reason}))["role"] == "admin"
+    check(administrator.post(promote_route, json={"reason": role_reason}), 409)
+    assert account_ids("&role=admin") == [a] and account_ids("&role=player") == [c, b]
+    assert check(grantee.get(route + "/auth/session"))["user"] is None
+    check(grantee.get(data_route), 401)
+    assert check(grantee.post(route + "/auth/login", json={
+        "identifier": directory_seed + "_0", "password": password,
+    }))["role"] == "admin"
+    events = check(grantee.get(role_route + "?user_id=" + a))["items"]
+    assert len(events) == 1
+    assert events[0]["operation"] == "data.player.role.promote" and events[0]["actor_id"] == administrator_id
+    assert events[0]["reason"] == role_reason and events[0]["user_id"] == a
+    assert check(administrator.get(role_route + "?user_id=" + administrator_id))["items"][0]["operation"] == "admin-create"
+    with engine.begin() as db:
+        execute(db, "DELETE FROM admin_audit_log WHERE object_id=:id", id=a)
+        for id_ in fixture_ids:
+            execute(db, "DELETE FROM users WHERE user_id=:id", id=id_)
+    print("ADMIN-DIRECTORY Beijing date boundaries, login ordering, raw matches, role promotion and audit passed")
+
     with engine.begin() as db:
         execute(db, "UPDATE users SET role='player' WHERE user_id=:user", user=administrator_id)
     assert check(administrator.get(route + "/auth/session"))["user"]["role"] == "player"
     check(administrator.get(stats), 403)
+    check(administrator.get(data_route), 403)
+    check(administrator.get(role_route), 403)
+    check(administrator.post(promote_route, json={"reason": role_reason}), 403)
     check(administrator.get(records + "?" + query), 403)
     check(administrator.post(records, json=values), 403)
     check(administrator.get(book_route), 403)

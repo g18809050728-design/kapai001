@@ -393,6 +393,8 @@ du -sh /var/log/kapai001-screen /var/backups/kapai001
 
 公网安全组保持 80/443 和受限的 SSH 入口即可。18445、18444、18443 均为本机入口，MySQL 通过 socket 使用，不需要向公网新增 API 或数据库端口。HTTPS 证书继续由现有续期任务维护。
 
+旧回环网页预览 18080 与 Mihomo 监控接口 9090 已停用。需要核对候选时使用回环 HTTPS 18443 和现有 SSH 隧道。[变更与回滚](plans/2026-11-27-player-run-statistics.md)
+
 ## 8. 常见问题
 
 | 现象 | 处理 |

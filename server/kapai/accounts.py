@@ -292,8 +292,10 @@ def create_session(db, request, user_id):
     if old := request.cookies.get(COOKIE):
         execute(db, "DELETE FROM auth_sessions WHERE token_hash=:token", token=digest(old))
     token = secrets.token_urlsafe(32)
+    now = utcnow()
     execute(db, "INSERT INTO auth_sessions (token_hash,user_id,expires_at) VALUES (:token,:user,:expires)",
-            token=digest(token), user=user_id, expires=utcnow() + timedelta(seconds=SESSION_AGE))
+            token=digest(token), user=user_id, expires=now + timedelta(seconds=SESSION_AGE))
+    execute(db, "UPDATE users SET last_login_at=:now WHERE user_id=:user", now=now, user=user_id)
     return token
 
 

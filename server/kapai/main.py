@@ -48,7 +48,7 @@ def ready():
         if error.orig.args[0] != 1146:
             raise
         raise HTTPException(503, "database_not_migrated") from None
-    if row is None or row["version_num"] != "0007_admin_data":
+    if row is None or row["version_num"] != "0008_player_directory":
         raise HTTPException(503, "database_not_migrated")
     return {"status": "ok", "migration": row["version_num"]}
 

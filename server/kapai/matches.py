@@ -108,11 +108,19 @@ def finish(match_id: UUID, summary: Summary, request: Request):
 def history(request: Request, offset: int = Query(0, ge=0), limit: int = Query(20, ge=1, le=50)):
     with engine.connect() as db:
         user = session_user(db, request)["user_id"]
-        rows = execute(db, """
-            SELECT m.match_id,m.mode,m.source,m.status,m.started_at,m.finished_at,p.character_id,p.difficulty,p.result
-            FROM matches m JOIN match_players p ON m.match_id=p.match_id
-            WHERE p.user_id=:user ORDER BY m.started_at DESC,m.match_id LIMIT :limit OFFSET :offset
-        """, user=user, limit=limit + 1, offset=offset).mappings().all()
+        page = match_history(db, user, limit, offset)
+    for item in page["items"]:
+        del item["first_battle_at"]
+    return page
+
+
+def match_history(db, user, limit, offset):
+    rows = execute(db, """
+        SELECT m.match_id,m.mode,m.source,m.status,m.started_at,m.first_battle_at,m.finished_at,
+               p.character_id,p.difficulty,p.result
+        FROM matches m JOIN match_players p ON m.match_id=p.match_id
+        WHERE p.user_id=:user ORDER BY m.started_at DESC,m.match_id LIMIT :limit OFFSET :offset
+    """, user=user, limit=limit + 1, offset=offset).mappings().all()
     entries = [dict(row, result=json.loads(row["result"]) if row["result"] else None) for row in rows[:limit]]
     return {"items": entries, "next_offset": offset + limit if len(rows) > limit else None}
 

@@ -15,11 +15,11 @@ def require_admin(db, request):
     return user["user_id"]
 
 
-def audit(db, actor, operation, object_id=None):
+def audit(db, actor, operation, object_id=None, *, reason=None):
     execute(db, """
-        INSERT INTO admin_audit_log (actor_id, operation, object_id, result, request_id)
-        VALUES (:actor, :operation, :object, 'ok', :request)
-    """, actor=actor, operation=operation, object=object_id, request=str(uuid4()))
+        INSERT INTO admin_audit_log (actor_id, operation, object_id, result, request_id, reason)
+        VALUES (:actor, :operation, :object, 'ok', :request, :reason)
+    """, actor=actor, operation=operation, object=object_id, request=str(uuid4()), reason=reason)
 
 
 def utc_iso(value):
