@@ -118,11 +118,28 @@ with tempfile.TemporaryDirectory() as mailbox:
     check(register.post(route + "/events", json={**battle, "event_id": str(uuid4())}))
     finish = route + "/matches/" + match + "/finish"
     result = {"result": "lost", "term": 1, "reason": "deadline"}
+    detail_path = route + "/me/matches/" + match
+    assert check(register.get(detail_path)) == {"detail": None}
+    detail = {
+        "cards": [{"definition_id": "P01-K01", "upgrade_level": 1}],
+        "relics": [{"definition_id": "RX-C38", "slot": 0}],
+        "route": [{"term": 1, "layer": 1, "kind": "normal", "status": "battle_lost",
+                   "encounter_id": "FY_N01", "event_id": ""}],
+        "money": 19, "vitality": 7, "max_vitality": 40,
+    }
+    check(register.post(finish, json={**result, "detail": {**detail, "money": -1}}), 422)
+    check(register.post(finish, json={**result, "detail": {**detail, "vitality": 41}}), 422)
     check(register.post(finish, json=result))
-    check(register.post(finish, json=result))
+    assert check(register.get(detail_path)) == {"detail": None}
+    check(register.post(finish, json={**result, "detail": detail}))
+    check(register.post(finish, json={**result, "detail": {**detail, "money": 20}}))
+    assert check(register.get(detail_path)) == {"detail": detail}
+    check(client().get(detail_path), 401)
     check(register.post(finish, json={**result, "term": 2}), 409)
     check(client().post(finish, json=result), 401)
-    assert check(register.get(route + "/me/matches"))["items"][0]["result"]["term"] == 1
+    match_row = check(register.get(route + "/me/matches"))["items"][0]
+    assert match_row["result"]["term"] == 1 and match_row["has_detail"] and "detail" not in match_row
+    assert match_row["resources"] == {"vitality": 7, "max_vitality": 40, "money": 19}
     visitor = str(uuid4())
     for _ in range(2):
         check(client().post(route + "/events", json={
@@ -132,7 +149,28 @@ with tempfile.TemporaryDirectory() as mailbox:
     check(register.post(route + "/me/matches/import", json=[imported]))
     check(register.post(route + "/me/matches/import", json=[imported]))
     assert len(check(register.get(route + "/me/matches"))["items"]) == 2
-    print("AUTH-01 duplicates, terminal conflict, unauthorized write, history and import passed")
+    legacy_run = {**run, "run_id": run["run_id"] + "_legacy", "manifest_id": "campus_four_year"}
+    replacement_run = {**run, "run_id": run["run_id"] + "_replacement"}
+    legacy_match = check(register.post(route + "/matches/start", json=legacy_run))["match_id"]
+    assert check(register.post(route + "/matches/start", json={**legacy_run, "manifest_id": run["manifest_id"]}))["match_id"] == legacy_match
+    check(register.post(route + "/matches/start", json={**legacy_run, "character_id": "P02"}), 409)
+    assert check(register.get(route + "/me/matches/" + legacy_match)) == {"detail": None}
+    replaced_detail = {**detail, "vitality": 0, "money": 0, "completed_nodes": 0, "settled_battles": 1}
+    replaced = {"result": "abandoned", "term": 1, "reason": "replaced_by_new_run", "detail": replaced_detail}
+    check(register.post(route + "/matches/" + legacy_match + "/finish", json=replaced))
+    check(register.post(route + "/matches/" + legacy_match + "/finish", json=replaced))
+    replacement = check(register.post(route + "/matches/start", json=replacement_run))["match_id"]
+    page = check(register.get(route + "/me/matches"))
+    rows = {row["match_id"]: row for row in page["items"]}
+    assert rows[legacy_match]["result"]["reason"] == "replaced_by_new_run" and rows[legacy_match]["has_detail"]
+    assert rows[replacement]["result"] is None and not rows[replacement]["has_detail"] and not rows[replacement]["resources"]
+    assert rows[legacy_match]["resources"] == {"vitality": 0, "max_vitality": 40, "money": 0}
+    assert check(register.get(route + "/me/matches/" + legacy_match))["detail"] == replaced_detail
+    assert page["stats"]["settled"] == 3
+    with engine.begin() as db:
+        for match_id in (legacy_match, replacement):
+            execute(db, "DELETE FROM matches WHERE match_id=:id", id=match_id)
+    print("AUTH-01 deduplication, replacement settlement, legacy manifest, ownership and history passed")
 
     second = client()
     check(second.post(route + "/auth/login", json={"identifier": username, "password": password}))
@@ -349,6 +387,7 @@ with tempfile.TemporaryDirectory() as mailbox:
     raw = next(r for r in actual_matches if r["match_id"] == match)
     assert raw["result"] == result | {"ending_id": ""} and raw["first_battle_at"].endswith("+00:00")
     assert check(administrator.get(data_route + "/" + administrator_id + "/matches"))["items"] == []
+    check(administrator.get(detail_path), 404)
     check(administrator.get(data_route + "/" + str(uuid4()) + "/matches"), 404)
     control = {"revision": profile["revision"], "expected_nickname": profile["nickname"], "reason": "rename test"}
     # Spreadsheet metacharacters and URLs are valid display data, not workbook markup.
