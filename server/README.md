@@ -4,7 +4,7 @@ Windows 开发、当前 Linux 服务启动、数据库实查与管理员创建�
 
 当前服务器的 screen 后台运行、API 接管、更新及恢复步骤见 [screen 部署与长期运行指南](../docs/screen部署指南.md)。
 
-当前主程序为 `https://47.93.245.237/`，生产 API 由 `kapai-api-prod.service` 监听回环 18445，连接 `kapai_prod`。生产配置位于 `/etc/kapai001/prod-app.env` 与 `/etc/kapai001/prod-api.env`，工作目录是后端发布快照 `/opt/kapai-api/releases/20261127-player-admin-workspace`。注册使用用户名和密码，管理员同样通过密码登录。邮件找回密码待配置 SMTP。[生产网关](../docs/plans/2026-11-21-production-accounts-release.md) · [当前发布与回滚](../docs/plans/2026-11-27-player-admin-workspace.md)
+当前主程序为 `https://47.93.245.237/`，生产 API 由 `kapai-api-prod.service` 监听回环 18445，连接 `kapai_prod`。生产配置位于 `/etc/kapai001/prod-app.env` 与 `/etc/kapai001/prod-api.env`，工作目录是后端发布快照 `/opt/kapai-api/releases/20261128-record-resources-settings`。注册使用用户名和密码，管理员同样通过密码登录。邮件找回密码待配置 SMTP。[生产网关](../docs/plans/2026-11-21-production-accounts-release.md) · [当前发布与回滚](../docs/plans/2026-11-28-record-resources-settings.md#验证与发布)
 
 本服务由 FastAPI、SQLAlchemy、PyMySQL 和 Alembic 组成。单人规则照常在 Godot 执行。MySQL 负责账号、会话、对局摘要、统计、云同步副本和玩家反馈。[实施计划](../docs/plans/2026-11-21-account-cloud-save-plan.md)
 
@@ -29,6 +29,8 @@ python3.11 -m venv .venv
 管理统计概览和 XLSX 展示独立活跃账号、新增启用账号、独立游客浏览器、每日事件、开局漏斗与结局。每日事件按北京时间记录日期统计，对局漏斗及结局按开局日归组。对局明细可按角色、难度和结局筛选。详见[统计口径](../docs/plans/2026-11-27-player-run-statistics.md)。
 
 迁移 `0008_player_directory` 新增最后登录时间和角色授予原因。管理统计默认到玩家管理，可按创建、最后登录和角色筛选，打开资料可查看该账号的原始对局。现有管理员可从玩家资料提升普通玩家，权限记录显示操作者、目标、原因与时间。受提升的账号重新登录后获得现行管理员权限。[工作台口径](../docs/plans/2026-11-27-player-admin-workspace.md)
+
+迁移 `0009_match_details` 为玩家对局增加可选结算详情。账号只能从 `GET /me/matches` 与 `GET /me/matches/{match_id}` 读取自己的战绩。牌组、饰品、路线与结算摘要一起保存，旧摘要兼容，账号删除仍经现有外键清理记录。
 
 ## 本机内测
 
