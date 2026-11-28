@@ -12,7 +12,6 @@ var _seed_revision := -1
 var _autosave: bool = true
 var _settings_loaded: bool = false
 var _audio_settings: Dictionary = {}
-var _confirm_abandon: bool = false
 var _inspector: Control
 var _inspect_return_focus: Control
 var _inspector_focus_modes: Dictionary = {}
@@ -280,19 +279,41 @@ func _render_map() -> void:
 	var footer: HBoxContainer = add_row(body)
 	add_button(footer, "map:save", "保存进度", _ui("save"))
 	add_button(footer, "map:menu", "主菜单", _ui("menu"))
-	add_button(
-		footer,
-		"map:abandon",
-		"放弃本局",
-		{},
-		func() -> void:
-			_confirm_abandon = not _confirm_abandon
-			refresh_local()
-	)
-	if _confirm_abandon:
-		add_text(body, "确定放弃本局？此操作会结束当前冒险。", 18)
-		add_button(body, "map:abandon_confirm", "确认放弃", _action("abandon_run", {"confirmed": true}))
+	_add_abandon_button(footer)
 	_deck_summary(body)
+
+
+func _add_abandon_button(row: HBoxContainer) -> void:
+	var slot := Control.new()
+	slot.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_child(slot)
+	var confirm := add_button(slot, "map:abandon_confirm", "确认放弃本局", _action("abandon_run", {"confirmed": true}))
+	UiStyle.button_skin(confirm, "primary", true)
+	confirm.hide()
+	_buttons.erase("map:abandon_confirm")
+	var abandon := add_button(slot, "map:abandon", "放弃本局", {}, func():
+		var confirming := not confirm.visible
+		confirm.visible = confirming
+		var cancel: Button = _buttons["map:abandon"]
+		cancel.text = "取消放弃" if confirming else "放弃本局"
+		cancel.offset_top = -slot.size.y - 4 if confirming else 0.0
+		cancel.offset_bottom = -slot.size.y - 4 if confirming else 0.0
+		if confirming:
+			_buttons["map:abandon_confirm"] = confirm
+			local_selection_changed.emit(_choices.duplicate(true))
+			confirm.grab_focus()
+		else:
+			_buttons.erase("map:abandon_confirm")
+			cancel.grab_focus())
+	UiStyle.button_skin(abandon, "secondary", true)
+	for button in [abandon, confirm]:
+		if UiStyle.web_touch:
+			UiStyle.compact_button(button, 15, 0)
+		else:
+			button.autowrap_mode = TextServer.AUTOWRAP_OFF
+			button.custom_minimum_size = Vector2(0, 44)
+		button.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	slot.custom_minimum_size = confirm.get_combined_minimum_size().max(abandon.get_combined_minimum_size())
 
 
 func _render_reward() -> void:
@@ -777,10 +798,7 @@ func _render_summary() -> void:
 
 
 func _render_settings() -> void:
-	if not _settings_loaded:
-		_autosave = bool(_dict(view.get("settings")).get("autosave", true))
-		_audio_settings = _dict(view.get("settings")).get("audio", {"Master": 100, "Music": 70, "Ambience": 50, "SFX": 80, "UI": 70, "muted": false}).duplicate(true)
-		_settings_loaded = true
+	_load_settings_draft()
 	reset_page("设置与存档", "管理自动保存，或显式恢复备份中的进度。")
 	var panel: VBoxContainer = add_panel(body)
 	add_text(panel, "自动保存", 23)
@@ -804,38 +822,7 @@ func _render_settings() -> void:
 	)
 	var audio_panel: VBoxContainer = add_panel(body)
 	add_text(audio_panel, "音效", 23)
-	add_text(audio_panel, "音量与声音开关可即时试听，点击“应用设置”后保存。音乐与环境声尚未配置正式资源。", 17)
-	for bus in ["Master", "Music", "Ambience", "SFX", "UI"]:
-		var volume_row := add_row(audio_panel)
-		var volume_label := add_text(volume_row, str({"Master": "总音量", "Music": "音乐", "Ambience": "环境", "SFX": "效果", "UI": "界面"}[bus]) + " %d%%" % int(_audio_settings.get(bus, 100)), 18)
-		volume_label.custom_minimum_size.x = 170
-		var slider := HSlider.new()
-		slider.name = "Volume" + bus
-		slider.min_value = 0
-		slider.max_value = 100
-		slider.step = 1
-		slider.value = int(_audio_settings.get(bus, 100))
-		slider.custom_minimum_size = Vector2(250, 40)
-		slider.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		volume_row.add_child(slider)
-		slider.value_changed.connect(func(value: float) -> void:
-			_audio_settings[bus] = int(value)
-			if audio != null:
-				audio.set_bus_volume(bus, value / 100.0)
-			volume_label.text = str({"Master": "总音量", "Music": "音乐", "Ambience": "环境", "SFX": "效果", "UI": "界面"}[bus]) + " %d%%" % int(value))
-	var audio_row: HBoxContainer = add_row(audio_panel)
-	if audio != null:
-		for muted in [false, true]:
-			add_button(
-				audio_row,
-				"settings:audio:" + str(muted),
-				("● " if bool(_audio_settings.get("muted", false)) == muted else "○ ") + ("静音" if muted else "开启"),
-				{},
-				func() -> void:
-					_audio_settings.muted = muted
-					audio.set_muted(muted)
-					refresh_local()
-			)
+	_render_audio_settings(audio_panel)
 	var saves: VBoxContainer = add_panel(body)
 	add_text(saves, "冒险进度", 23)
 	add_text(saves, "正式存档：" + _save_description(view.get("save_meta")), 17)
@@ -853,6 +840,55 @@ func _render_settings() -> void:
 		add_text(saves, "当前难度：%s（开局后锁定）" % _difficulty_name(str(view.difficulty)), 16)
 	add_button(body, "settings:back", "返回", _ui("back"))
 
+
+func _load_settings_draft() -> void:
+	if not _settings_loaded:
+		_autosave = bool(_dict(view.get("settings")).get("autosave", true))
+		_audio_settings = _dict(view.get("settings")).get("audio", {"Master": 100, "Music": 70, "Ambience": 50, "SFX": 80, "UI": 70, "muted": false}).duplicate(true)
+		_settings_loaded = true
+
+
+func _render_audio_settings(audio_panel: VBoxContainer) -> void:
+	for bus in ["Master", "Music", "Ambience", "SFX", "UI"]:
+		var volume_row := add_row(audio_panel)
+		var caption: String = {"Master": "总音量", "Music": "音乐", "Ambience": "环境", "SFX": "效果", "UI": "界面"}[bus]
+		var volume_label := add_text(volume_row, caption, 16)
+		volume_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		volume_label.size_flags_horizontal = Control.SIZE_FILL
+		volume_label.custom_minimum_size.x = 76 * UiStyle.text_scale
+		var slider := HSlider.new()
+		slider.name = "Volume" + bus
+		slider.min_value = 0
+		slider.max_value = 100
+		slider.step = 1
+		slider.value = int(_audio_settings.get(bus, 100))
+		slider.custom_minimum_size = Vector2(100, 44)
+		slider.accessibility_name = caption
+		slider.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		volume_row.add_child(slider)
+		var readout := add_text(volume_row, "%d%%" % slider.value, 16)
+		readout.size_flags_horizontal = Control.SIZE_FILL
+		readout.custom_minimum_size.x = 50 * UiStyle.text_scale
+		readout.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+		readout.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		slider.value_changed.connect(func(value: float) -> void:
+			_audio_settings[bus] = int(value)
+			if audio != null:
+				audio.set_bus_volume(bus, value / 100.0)
+			readout.text = "%d%%" % int(value))
+	var audio_row: HBoxContainer = add_row(audio_panel)
+	if audio != null:
+		for muted in [false, true]:
+			add_button(
+				audio_row,
+				"settings:audio:" + str(muted),
+				("● " if bool(_audio_settings.get("muted", false)) == muted else "○ ") + ("静音" if muted else "开启"),
+				{},
+				func() -> void:
+					_audio_settings.muted = muted
+					audio.set_muted(muted)
+					refresh_local()
+			)
 
 func _event_action(event: Dictionary, option: Dictionary) -> Dictionary:
 	var option_id: String = str(option.get("option_id", ""))
@@ -959,7 +995,7 @@ func _card_comparison(parent: Node, card: Dictionary, upgrading: bool) -> void:
 		)
 
 
-func _open_inspector(kind: String) -> void:
+func _open_inspector(kind: String, populate: bool = true) -> void:
 	_close_inspector()
 	_inspect_return_focus = get_viewport().gui_get_focus_owner()
 	for control in find_children("*", "Control", true, false):
@@ -977,23 +1013,42 @@ func _open_inspector(kind: String) -> void:
 	_inspector.add_child(shade)
 	var margin := MarginContainer.new()
 	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	var touch_deck := kind == "deck" and UiStyle.web_touch
 	for side in ["left", "right", "top", "bottom"]:
-		margin.add_theme_constant_override("margin_" + side, 24)
+		margin.add_theme_constant_override("margin_" + side, 8 if touch_deck else 24)
 	_inspector.add_child(margin)
 	var panel := add_panel(margin)
 	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	if touch_deck:
+		var skin := UiStyle.surface(Color("1b303c"), Color("9c8d6d"), 5)
+		skin.set_content_margin_all(8)
+		panel.get_parent().add_theme_stylebox_override("panel", skin)
+		panel.add_theme_constant_override("separation", 6)
 	var header := add_row(panel)
+	header.name = "CollectionHeader"
 	var entries := _array(view.get("cards" if kind == "deck" else "relics"))
-	add_text(header, ("我的牌组 · %s 张" if kind == "deck" else "携带饰品 · %s 件") % entries.size(), 26)
-	var close := add_button(header, "inspect:close", "关闭 · Esc", {}, _close_inspector)
+	var title := add_text(header, ("我的牌组 · %s 张" if kind == "deck" else "携带饰品 · %s 件") % entries.size(), 17 if touch_deck else 26)
+	if touch_deck:
+		title.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+		title.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		title.autowrap_mode = TextServer.AUTOWRAP_OFF
+	var close := add_button(header, "inspect:close", "关闭" if touch_deck else "关闭 · Esc", {}, _close_inspector)
 	close.size_flags_horizontal = Control.SIZE_SHRINK_END
+	if touch_deck:
+		close.custom_minimum_size = Vector2(68, 46)
+		close.add_theme_font_size_override("font_size", roundi(15 * UiStyle.text_scale))
+		close.autowrap_mode = TextServer.AUTOWRAP_OFF
+	else:
+		add_text(panel, "显示整副牌组的当前等级效果；不代表抽牌顺序。" if kind == "deck" else "饰品的触发条件与效果如下。", 16)
 	close.grab_focus()
-	add_text(panel, "显示整副牌组的当前等级效果；不代表抽牌顺序。" if kind == "deck" else "饰品的触发条件与效果如下。", 16)
-	var scroll := ScrollContainer.new()
+	var scroll := MobileScroll.TapScroll.new()
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	scroll.name = "CollectionScroll"
+	scroll.follow_focus = not touch_deck
 	panel.add_child(scroll)
 	var grid := GridContainer.new()
+	grid.name = "CollectionGrid"
 	grid.columns = maxi(2,mini(5,int((size.x-100)/(204*UiStyle.text_scale))))
 	grid.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	grid.add_theme_constant_override("h_separation",18)
@@ -1001,6 +1056,8 @@ func _open_inspector(kind: String) -> void:
 	scroll.add_child(grid)
 	if entries.is_empty():
 		add_text(grid,"暂未携带饰品。" if kind == "relics" else "牌组为空。",18)
+	if not populate:
+		return
 	for entry in entries:
 		var id := str(entry.get("definition_id",""))
 		var item_id := str(entry.get("card_id",entry.get("relic_id",id)))

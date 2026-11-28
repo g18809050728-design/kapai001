@@ -1,7 +1,7 @@
 class_name SaveStore
 extends RefCounted
 
-const SLOTS := ["current_run", "profile", "settings"]
+const SLOTS := ["current_run", "profile", "settings", "records", "replacement_record"]
 
 var debug_hooks: Dictionary = {}
 var _base_path: String

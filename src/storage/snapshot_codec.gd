@@ -13,7 +13,7 @@ const FIELDS := [
 	"checksum"
 ]
 const SESSION_FIELDS := ["run", "battle", "terminal_summary", "profile_merge_pending", "event_log"]
-const DOCUMENT_KINDS := ["profile", "settings"]
+const DOCUMENT_KINDS := ["profile", "settings", "records", "replacement_record"]
 const MAX_EXACT_INTEGER := 9007199254740991
 
 

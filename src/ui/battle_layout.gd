@@ -229,8 +229,13 @@ func _header() -> void:
 		"speed_callback": Callable(page, "_cycle_speed"), "animation_callback": Callable(page, "_toggle_animation")
 	})
 	page._toolbar.mark_active("deck", page._panel_zone == "deck" and not page._panel_text.is_empty())
+	if mobile:
+		return
 	var urgent := int(page.view.get("ddl",0)) <= 3
-	var ddl_label := _readable(Rect2(454 + extra_width * .5,top,372,33),"第 %s 回合  ·  DDL %s 次轮末" % [page.view.get("round_index",0),page.view.get("ddl",0)],21,Color("ffba9f") if urgent else Color("ffedc9"))
+	var bounds := Rect2(454 + extra_width * .5, top, 372, 33)
+	var caption := "第 %s 回合  ·  DDL %s 次轮末" % [page.view.get("round_index",0),page.view.get("ddl",0)]
+	var pixels := 21
+	var ddl_label := _readable(bounds, caption, pixels, Color("ffba9f") if urgent else Color("ffedc9"))
 	ddl_label.name = "TurnDdlValue"
 
 
@@ -387,10 +392,10 @@ func _status_bar(id: String, bounds: Rect2, player: bool) -> void:
 		return
 	var scroll := ScrollContainer.new()
 	scroll.name = "PlayerStatusBar" if player else "TaskStatusBar_" + id.validate_node_name()
-	scroll.position = Vector2(bounds.position.x, minf(bounds.position.y, hand_top - edge - STATUS_ROW_INSET))
-	scroll.size = Vector2(bounds.size.x, edge + 12)
+	scroll.position = bounds.position if UiStyle.web_touch else Vector2(bounds.position.x, minf(bounds.position.y, hand_top - edge - STATUS_ROW_INSET))
+	scroll.size = Vector2(bounds.size.x, edge if UiStyle.web_touch else edge + 12)
 	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER if UiStyle.web_touch else ScrollContainer.SCROLL_MODE_AUTO
 	scroll.follow_focus = true
 	scroll.z_index = 5
 	stage.add_child(scroll)
@@ -439,6 +444,7 @@ func _actor(bounds: Rect2, id: String, definition: String, kind: String, phase: 
 	if fresh:
 		actor = BattleActorView.new()
 		actor.configure(definition, kind, phase)
+	actor.fit_mobile_stage = mobile
 	actor.position = bounds.position
 	actor.size = bounds.size
 	stage.add_child(actor)
@@ -589,9 +595,9 @@ func _retention() -> void:
 
 
 func _selection_hint() -> String:
-	var focus := int(page._dict(page.view.get("player")).get("focus", 0))
 	if page.is_locked():
 		return "完成卡牌效果后继续行动"
+	var focus := int(page._dict(page.view.get("player")).get("focus", 0))
 	if not page._selected_card_id.is_empty():
 		return (
 			"剩余专注 %s · 已选【%s】· %s"
@@ -606,7 +612,7 @@ func _selection_hint() -> String:
 			"剩余专注 %s · 已选【%s】· 选择高亮任务进行协作"
 			% [focus, UiStyle.label(page._unit_definition(page._selected_unit_id))]
 		)
-	return ("剩余专注 %s · 点击出牌 / 长按读卡" if UiStyle.web_touch else "剩余专注 %s · 选择手牌，或结束回合恢复专注") % focus
+	return "剩余专注 %s · 选择手牌，或结束回合恢复专注" % focus
 
 
 func _hint_for(screen: BattleScreen) -> String:
@@ -620,19 +626,25 @@ func _choice_panel() -> void:
 	var kind := str(choice.get("kind", ""))
 	var labels := page._choice_labels(kind)
 	var candidates := page._array(choice.get("candidates"))
-	var crowded := candidates.size() * (BattleCard.FACE_SIZE.x + 16) - 16 > 1024
+	var overlay_width := overlay.size.x
+	var overlay_height := overlay.size.y
+	var card_size := BattleCard.FACE_SIZE
+	if UiStyle.web_touch:
+		card_size *= clampf((overlay_height - 170) / card_size.y, .45, 1.0)
+	var crowded := candidates.size() * (card_size.x + 16) - 16 > overlay_width - 56
 	var choice_height := maxf(touch_height, status_edge)
 	var arrow_width := maxf(60, status_edge)
-	var scroll_inset := 30 + arrow_width if crowded else 28.0
-	var footer_y := 494 - choice_height
-	var card_top := 120.0
-	_text(overlay, Rect2(30, 21, 1020, 48), labels[0], roundi(28 * minf(UiStyle.text_scale, 1.25)), LIGHT, HORIZONTAL_ALIGNMENT_CENTER)
-	page._choice_status = _text(overlay, Rect2(30, 75, 1020, 34), "", roundi(17 * minf(UiStyle.text_scale, 1.25)), Color("edcc8e"), HORIZONTAL_ALIGNMENT_CENTER)
+	var use_arrows := crowded and not UiStyle.web_touch
+	var scroll_inset := 30 + arrow_width if use_arrows else (10.0 if UiStyle.web_touch else 28.0)
+	var footer_y := overlay_height - (10 if UiStyle.web_touch else 26) - choice_height
+	var card_top := 86.0 if UiStyle.web_touch else 120.0
+	_text(overlay, Rect2(12 if UiStyle.web_touch else 30, 5 if UiStyle.web_touch else 21, overlay_width - (24 if UiStyle.web_touch else 60), 48), labels[0], roundi(28 * minf(UiStyle.text_scale, 1.25)), LIGHT, HORIZONTAL_ALIGNMENT_CENTER)
+	page._choice_status = _text(overlay, Rect2(12 if UiStyle.web_touch else 30, 50 if UiStyle.web_touch else 75, overlay_width - (24 if UiStyle.web_touch else 60), 34), "", roundi(17 * minf(UiStyle.text_scale, 1.25)), Color("edcc8e"), HORIZONTAL_ALIGNMENT_CENTER)
 	var scroll := ScrollContainer.new()
 	scroll.name = "ChoiceCandidates"
 	scroll.position = Vector2(scroll_inset, card_top)
-	scroll.size = Vector2(1080 - 2 * scroll_inset, minf(280, footer_y - card_top - 10))
-	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO if scroll.size.y < BattleCard.FACE_SIZE.y + 36 else ScrollContainer.SCROLL_MODE_DISABLED
+	scroll.size = Vector2(overlay_width - 2 * scroll_inset, minf(280, footer_y - card_top - 10))
+	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO if scroll.size.y < card_size.y + 30 else ScrollContainer.SCROLL_MODE_DISABLED
 	scroll.follow_focus = true
 	overlay.add_child(scroll)
 	page._choice_scroll = scroll
@@ -670,7 +682,7 @@ func _choice_panel() -> void:
 		column.add_theme_constant_override("separation", 0)
 		row.add_child(column)
 		var card := BattleCard.new()
-		card.configure(data, page._choice_selected_ids.has(id))
+		card.configure(data, page._choice_selected_ids.has(id), card_size)
 		column.add_child(card)
 		var marker := page.add_text(column, "", 12, UiStyle.GOLD)
 		marker.custom_minimum_size.y = 23
@@ -679,8 +691,10 @@ func _choice_panel() -> void:
 		card.set_meta("choice_marker", marker)
 		card.set_meta("uid", "choice:" + id)
 		page._buttons["choice:" + id] = card
-		card.pressed.connect(page._bind_choice(id))
-	if crowded:
+		card.pressed.connect(func():
+			if page._pinned_card_detail.is_empty():
+				page._on_choice_pressed(id))
+	if use_arrows:
 		var bar := scroll.get_h_scroll_bar()
 		var arrows: Array[Button] = []
 		for direction in [-1, 1]:
@@ -711,6 +725,10 @@ func _choice_panel() -> void:
 		button.custom_minimum_size = Vector2.ZERO
 		button.position = Vector2([30.0, 586.0, 780.0][index], footer_y)
 		button.size = Vector2([190.0, 174.0, 270.0][index], choice_height)
+		if UiStyle.web_touch:
+			var width := (overlay_width - 32) / 3
+			button.position = Vector2(8 + index * (width + 8), footer_y)
+			button.size = Vector2(width, choice_height)
 		_style_button(button)
 		button.add_theme_font_size_override("font_size", maxi(minimum_text, roundi(18 * minf(UiStyle.text_scale, 1.25))))
 	UiStyle.button_skin(actions.back(), "primary", true)
@@ -761,13 +779,20 @@ func _info_panel() -> void:
 
 
 func _modal() -> Control:
+	# Canvas Z controls drawing. GUI picking follows sibling order.
+	if UiStyle.web_touch:
+		page.move_child(stage, page.get_child_count() - 1)
 	var layer := Control.new()
 	layer.size = stage.size
 	layer.z_index = 200
 	layer.mouse_filter = Control.MOUSE_FILTER_STOP
 	stage.add_child(layer)
 	_rect(layer, Rect2(Vector2.ZERO, stage.size), Color(0.02, 0.05, 0.07, 0.8))
-	return _panel(layer, Rect2(100 + extra_width * .5, (stage.size.y - 540) * .5, 1080, 520), DARK, Color("c7ae78"))
+	var bounds := Rect2(100 + extra_width * .5, (stage.size.y - 540) * .5, 1080, 520)
+	if UiStyle.web_touch:
+		var dimensions := Vector2(minf(760, stage.size.x - 18), minf(600, stage.size.y - 16))
+		bounds = Rect2((stage.size - dimensions) * .5, dimensions)
+	return _panel(layer, bounds, DARK, Color("c7ae78"))
 
 
 func _button(

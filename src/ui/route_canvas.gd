@@ -19,6 +19,7 @@ var positions: Dictionary = {}
 var forecast_node_ids: Array[String] = []
 var overview := false
 var detailed_overview := false
+var compact_rows := false
 var overview_height := 210.0
 var background_texture: Texture2D
 var node_textures: Dictionary = {}
@@ -27,7 +28,7 @@ var edge_segments: Dictionary = {}
 
 
 func row_height() -> float:
-	return ROW_HEIGHT + maxf(0, UiStyle.text_scale - 1) * 24
+	return (82.0 if compact_rows else ROW_HEIGHT) + maxf(0, UiStyle.text_scale - 1) * 24
 
 
 func configure(entries: Array, available: Array, current_id: String, selected_id: String = "", depth: int = 3) -> void:
@@ -78,18 +79,25 @@ func arrange() -> void:
 		if not layers.has(layer):
 			layers[layer] = []
 		layers[layer].append(node)
-	var width := minf(ROUTE_SPAN, maxf(1, size.x - (48 if overview else NODE_WIDTH + 16)))
+	var touch_route := UiStyle.web_touch and not overview
+	var node_inset := 24.0 if overview or touch_route else NODE_WIDTH * .5 + 8
+	var width := minf(ROUTE_SPAN, maxf(1, size.x - 2 * node_inset))
 	var padding := (size.x - width) * .5
 	var row_step := (size.y - 48) / maxi(1, last_layer - 1) if overview else row_height()
 	for layer in layers:
 		var entries: Array = layers[layer]
-		entries.sort_custom(func(a, b): return str(a.node_id) < str(b.node_id))
+		entries.sort_custom(func(a, b):
+			if touch_route and a.has("column") and b.has("column") and int(a.column) != int(b.column):
+				return int(a.column) < int(b.column)
+			return str(a.node_id) < str(b.node_id))
 		var columns: Array[float] = []
 		for index in entries.size():
 			columns.append(clampf(float(entries[index].column), 0, 6) if entries[index].has("column") else (index + 1) * 6.0 / (entries.size() + 1))
-		var left_limit: float = (24.0 if overview else NODE_WIDTH * .5 + 8) - padding - columns.min() * width / 6.0
-		var right_limit: float = size.x - (24.0 if overview else NODE_WIDTH * .5 + 8) - padding - columns.max() * width / 6.0
+		var left_limit: float = node_inset - padding - columns.min() * width / 6.0
+		var right_limit: float = size.x - node_inset - padding - columns.max() * width / 6.0
 		var drift := clampf(sin(float(layer) * 1.13) * minf(29, width * .05), left_limit, right_limit)
+		var spacing := minf(48, width / maxi(1, entries.size() - 1))
+		var previous_x := node_inset - spacing
 		for index in entries.size():
 			var node: Dictionary = entries[index]
 			var column: float = columns[index]
@@ -98,7 +106,12 @@ func arrange() -> void:
 			var wave := sin(float(layer) * 1.27 + column * .63) * sin(column * PI / 6.0)
 			var offset_x := wave * minf(4, width / 130)
 			var offset_y := sin(float(layer) * 1.73 + column * 1.17) * minf(7, row_step * .07)
-			positions[str(node.node_id)] = Vector2(padding + column * width / 6.0 + drift + offset_x, (24 if overview else 52) + (last_layer - int(layer)) * row_step + offset_y)
+			var x := padding + column * width / 6.0 + drift + offset_x
+			if touch_route:
+				var remaining := entries.size() - index - 1
+				x = clampf(x, previous_x + spacing, size.x - node_inset - spacing * remaining)
+				previous_x = x
+			positions[str(node.node_id)] = Vector2(x, (24 if overview else 52) + (last_layer - int(layer)) * row_step + offset_y)
 	for child in get_children():
 		var id := str(child.get_meta("node_id", ""))
 		if child is Control and positions.has(id):

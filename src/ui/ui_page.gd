@@ -128,7 +128,7 @@ func add_button(
 ) -> Button:
 	var button := Button.new()
 	button.text = caption
-	button.custom_minimum_size = Vector2(120, UiStyle.MOBILE_TARGET if UiStyle.web_touch else 44)
+	button.custom_minimum_size = Vector2(78 if UiStyle.narrow_touch(size) else 120, UiStyle.MOBILE_TARGET if UiStyle.web_touch else 44)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	button.add_theme_font_size_override("font_size", roundi((18 if UiStyle.web_touch else 16) * UiStyle.text_scale))
@@ -181,7 +181,7 @@ func add_card(parent: Node, uid: String, id: String, detail: Dictionary, caption
 	_buttons[uid] = card
 	card.pressed.connect(callback)
 	card.inspect_requested.connect(func(value: UiOfferCard, immediate: bool):
-		if value.get_meta("draw_pending", false) or value.get_meta("card_in_flight", false):
+		if value.get_meta("tap_only", false) or value.get_meta("draw_pending", false) or value.get_meta("card_in_flight", false):
 			return
 		if not automatic_card_details:
 			_preview_card = value
@@ -265,7 +265,7 @@ func _show_card_preview(pinned: bool) -> void:
 	if not keyword_help.is_empty():
 		add_text(text_column, keyword_help, 14, Color("d2b989"))
 	var controls := add_row(column)
-	var pin := add_button(controls, "card:pin", "关闭 · Esc" if pinned else "固定 · I", {}, close_card_preview if pinned else func(): _show_card_preview(true))
+	var pin := add_button(controls, "card:pin", ("关闭" if UiStyle.web_touch else "关闭 · Esc") if pinned else "固定 · I", {}, close_card_preview if pinned else func(): _show_card_preview(true))
 	if pinned:
 		_preview_focus = get_viewport().gui_get_focus_owner()
 		for control in find_children("*", "Control", true, false):
@@ -348,7 +348,7 @@ func add_art(parent: Node, id: String, art_size: Vector2) -> TextureRect:
 	art.texture = UiStyle.texture(id)
 	art.set_meta("art_id", id)
 	art.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	art.custom_minimum_size = art_size
+	art.custom_minimum_size = Vector2(minf(art_size.x, size.x - 44), minf(art_size.y, size.y * .45)) if UiStyle.narrow_touch(size) else art_size
 	art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	art.size_flags_horizontal = Control.SIZE_EXPAND_FILL

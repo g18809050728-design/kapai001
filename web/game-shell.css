@@ -30,10 +30,6 @@
     touch-action: none;
 }
 
-#game-frame #canvas.game-covered {
-    visibility: hidden;
-}
-
 #game-controls {
     position: absolute;
     z-index: 2;
@@ -42,7 +38,7 @@
     transform: translateX(-50%);
 }
 
-#game-controls[hidden], .game-portrait #game-controls, #game-rotate[hidden], #game-fullscreen-notice[hidden], #game-keyboard-done[hidden] {
+#game-controls[hidden], #game-rotate[hidden], #game-fullscreen-notice[hidden], #game-keyboard-done[hidden] {
     display: none;
 }
 
@@ -92,26 +88,32 @@
     outline-offset: -4px;
 }
 
+.game-portrait #canvas,
+.game-portrait #game-controls {
+    visibility: hidden;
+}
+
 #game-rotate {
     position: absolute;
-    z-index: 2;
+    z-index: 3;
     inset: 0;
     display: grid;
     place-content: center;
-    justify-items: center;
-    padding: 18px;
+    gap: 10px;
+    padding: 24px;
+    color: #fbf5e8;
     background: #172731;
     text-align: center;
 }
 
 #game-rotate h1 {
     margin: 0;
-    font-size: 24px;
+    font-size: 26px;
 }
 
 #game-rotate p {
-    margin: 8px 0 16px;
-    color: #d1d7d0;
+    margin: 0;
+    color: #d5e1dc;
 }
 
 #game-fullscreen-notice {
@@ -547,18 +549,6 @@
 @media (max-width: 480px) { #account-panel .account-stats-form { grid-template-columns: 1fr; } }
 
 #account-panel[data-panel="history"] { width: min(40rem, calc(100% - 28px)); }
-.history-list { display: grid; gap: 12px; margin: 24px 0; }
-.history-entry { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 18px 20px; border: 1px solid #d7cbb6; border-radius: 8px; background: #f4eedf; }
-.history-entry h3 { margin: 0 0 6px; font-size: 1.15rem; }
-.history-entry small { display: block; }
-.history-outcome { flex-shrink: 0; text-align: right; }
-.history-outcome strong { color: #405a58; }
-.history-outcome[data-result="won"] strong { color: #87692c; }
-.history-outcome[data-result="lost"] strong { color: #985f50; }
-.history-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
-.history-empty { margin: 28px 0; padding: 32px 24px; border: 1px solid #ddd1bb; border-radius: 8px; text-align: center; background: #f6f0e5; }
-.history-empty strong { font-size: 1.2rem; }
-.history-empty p { color: var(--account-muted); }
 
 /* Feedback and statistics share the game's parchment, ink and brass control hierarchy. */
 #account-panel.workspace-dialog {

@@ -15,6 +15,8 @@ var _route: UiRouteCanvas
 var _title: Label
 var _details: Label
 var _close: Button
+var _content: BoxContainer
+var _reading: ScrollContainer
 
 
 func configure(nodes: Array, current: String, reachable: Array, year_title: String) -> void:
@@ -43,10 +45,10 @@ func configure(nodes: Array, current: String, reachable: Array, year_title: Stri
 			close())
 	_panel = PanelContainer.new()
 	_panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	_panel.offset_left = 24
-	_panel.offset_top = 28
-	_panel.offset_right = -24
-	_panel.offset_bottom = -24
+	_panel.offset_left = 8 if UiStyle.web_touch else 24
+	_panel.offset_top = 8 if UiStyle.web_touch else 28
+	_panel.offset_right = -8 if UiStyle.web_touch else -24
+	_panel.offset_bottom = -8 if UiStyle.web_touch else -24
 	_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	_panel.add_theme_stylebox_override("panel", UiStyle.surface(UiStyle.NIGHT, UiStyle.BRASS))
 	add_child(_panel)
@@ -59,12 +61,13 @@ func configure(nodes: Array, current: String, reachable: Array, year_title: Stri
 	_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_close = Button.new()
 	_close.name = "CloseFullMap"
-	_close.text = "关闭  M / Esc"
-	_close.custom_minimum_size = Vector2(136, 42)
+	_close.text = "关闭" if UiStyle.web_touch else "关闭  M / Esc"
+	_close.custom_minimum_size = Vector2(80, UiStyle.MOBILE_TARGET) if UiStyle.web_touch else Vector2(136, 42)
 	UiStyle.button_skin(_close, "secondary", true)
 	_close.pressed.connect(close)
 	heading.add_child(_close)
-	var content := HBoxContainer.new()
+	var content := BoxContainer.new()
+	_content = content
 	content.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	content.add_theme_constant_override("separation", 14)
 	column.add_child(content)
@@ -110,6 +113,7 @@ func configure(nodes: Array, current: String, reachable: Array, year_title: Stri
 			marker.focus_entered.connect(func(): _inspect(id))
 		marker.pressed.connect(func(): _inspect(id))
 	var reading := ScrollContainer.new()
+	_reading = reading
 	reading.custom_minimum_size.x = 220
 	reading.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	content.add_child(reading)
@@ -117,7 +121,8 @@ func configure(nodes: Array, current: String, reachable: Array, year_title: Stri
 	_details.custom_minimum_size.x = 200
 	_details.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_label(column, "上下滑查看本学年路线 · 点按节点查看详情" if UiStyle.web_touch else "圈记当前与已走路线 · 圈记可达节点 · 点击图标查看详情", 14)
-	_label(column, "仅展示已生成的本学年 · 关闭后继续原来的行动", 13)
+	if not UiStyle.web_touch:
+		_label(column, "仅展示已生成的本学年 · 关闭后继续原来的行动", 13)
 	if _nodes.is_empty():
 		_details.text = "本学年尚未生成，确认方向或去向后生成；不会提前揭示未来学年。"
 	resized.connect(_fit)
@@ -141,6 +146,10 @@ func _label(parent: Node, caption: String, pixels: int) -> Label:
 
 
 func _fit() -> void:
+	if is_instance_valid(_reading):
+		var stacked := UiStyle.narrow_touch(size)
+		_content.vertical = stacked
+		_reading.custom_minimum_size = Vector2(0, clampf(size.y * .22, 90, 180)) if stacked else Vector2(220, 0)
 	if is_instance_valid(_route):
 		_route.arrange.call_deferred()
 

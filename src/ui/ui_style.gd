@@ -20,13 +20,18 @@ static var text_scale := 1.0
 static var reduced_motion := false
 static var web_touch := false
 static var _title_font: Font
+static var _touch_reading_font: FontVariation
 static var _gradients: Dictionary = {}
 static var _cut_styles: Dictionary = {}
 const MOBILE_TARGET := 52.0
 
 
+static func narrow_touch(area: Vector2) -> bool:
+	return web_touch and area.x < 600.0
+
+
 static func short_web(area: Vector2) -> bool:
-	return OS.has_feature("web") and (web_touch or area.x < 900 or area.y < 540)
+	return web_touch or (OS.has_feature("web") and (area.x < 900 or area.y < 540))
 
 
 static func gradient(first: Color, last: Color, horizontal: bool = false) -> GradientTexture2D:
@@ -52,6 +57,14 @@ static func title_font() -> Font:
 				"res://assets/fonts/NotoSerifCJKsc-Regular.otf"
 			)
 	return _title_font
+
+
+static func touch_reading_font() -> Font:
+	if _touch_reading_font == null:
+		_touch_reading_font = FontVariation.new()
+		_touch_reading_font.base_font = load("res://assets/fonts/NotoSansCJKsc-Regular.otf") as Font
+		_touch_reading_font.variation_embolden = .28
+	return _touch_reading_font
 
 
 static func _system_font(names: PackedStringArray, chinese_fallback: String) -> Font:
@@ -108,6 +121,17 @@ static func button_skin(button: Button, role: String = "secondary", dark: bool =
 	button.add_theme_color_override("font_disabled_color",Color("98a5ad"))
 	button.add_theme_color_override("font_shadow_color", Color(0,0,0,.75))
 	button.add_theme_constant_override("shadow_offset_y", 2)
+
+
+static func compact_button(button: Button, font_size: int, min_width: float, height: float = 48) -> void:
+	button.autowrap_mode = TextServer.AUTOWRAP_OFF
+	button.custom_minimum_size = Vector2(min_width, height)
+	button.add_theme_font_size_override("font_size", roundi(font_size * minf(text_scale, 1.25)))
+	for state in ["normal", "hover", "pressed", "hover_pressed", "disabled", "focus"]:
+		var style := button.get_theme_stylebox(state).duplicate() as StyleBox
+		style.content_margin_left = 7
+		style.content_margin_right = 7
+		button.add_theme_stylebox_override(state, style)
 
 
 static func story_choice(button: Button) -> void:
@@ -568,7 +592,7 @@ static func make_theme() -> Theme:
 	var theme := Theme.new()
 	theme.default_font_size = 18
 	if OS.has_feature("web"):
-		theme.default_font = load("res://assets/fonts/NotoSansCJKsc-Regular.otf") as Font
+		theme.default_font = touch_reading_font() if web_touch else load("res://assets/fonts/NotoSansCJKsc-Regular.otf") as Font
 	else:
 		theme.default_font = _system_font(
 			["Microsoft YaHei UI", "Microsoft YaHei", "Noto Sans CJK SC", "sans-serif"],

@@ -8,7 +8,9 @@ signal web_guest_requested
 signal web_guest_logout_requested
 signal web_play_requested(developer_tools: bool)
 signal web_section_requested(section: String)
+signal web_records_requested(token: String, offset: int, match_id: String)
 
+const RecordsPage = preload("res://src/ui/records_page.gd")
 const BattleDamagePopup = preload("res://src/ui/battle/battle_damage_popup_layer.gd")
 const DEVELOPER_TOOL_ACTIONS := ["ui.test_room", "ui.text_editor"]
 const WEB_PLAY_ACTIONS := ["ui.new_run", "ui.start_run", "ui.retry", "ui.continue", "ui.start_battle", "ui.resume_battle", "ui.test_room", "ui.text_editor"]
@@ -190,10 +192,12 @@ func refresh() -> void:
 			data.account_message = web_account_message
 			data.registration_available = web_registration_available
 		"records":
-			var records := session.get_game_records()
-			data.records = records.data if records.ok else []
-			data.records_error = "" if records.ok else UiStyle.error_text(records.error)
+			data.records = []
 			data.account_state = web_account_state
+			if web_account_state.is_empty():
+				var records := session.get_game_records()
+				data.records = records.data if records.ok else []
+				data.records_error = "" if records.ok else UiStyle.error_text(records.error)
 		"setup":
 			var options := session.get_setup_options()
 			if not options.ok:
@@ -231,7 +235,7 @@ func refresh() -> void:
 			data = _text_library_cache
 		"settings":
 			if web_account_state in PLAYABLE_ACCOUNT_STATES:
-				data = _storage_view()
+				data = _storage_view(true)
 			data.web_privacy_available = web_privacy_available
 			data.account_state = web_account_state
 			data.settings = {"autosave": session.get_profile().autosave}
@@ -300,7 +304,9 @@ func refresh() -> void:
 				page.tab = str(_compendium_state.get("tab", "cards"))
 				page._states = _compendium_state.states.duplicate(true)
 		elif screen == "records":
-			page = preload("res://src/ui/records_page.gd").new()
+			var records_page := RecordsPage.new()
+			records_page.history_requested.connect(func(token, offset, id): web_records_requested.emit(token, offset, id))
+			page = records_page
 		elif screen == "text_editor":
 			page = UiTextEditorPage.new()
 			if not _text_editor_state.is_empty():
@@ -436,6 +442,11 @@ func tutorial_state() -> Dictionary:
 	return state
 
 
+func receive_web_records(token: String, data: Dictionary) -> void:
+	if page is RecordsPage:
+		page.receive_records(token, data)
+
+
 func set_web_account_state(state: String, registration: bool, nickname: String, message: String, role: String = "") -> void:
 	web_account_state = state
 	web_team_tools_available = state == "ready" and role == "admin"
@@ -483,8 +494,8 @@ func _set_battle_frame(battle: bool) -> void:
 		_frame_panel.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
 
 
-func _storage_view() -> Dictionary:
-	var inspected := session.inspect_saves()
+func _storage_view(check_backup: bool = false) -> Dictionary:
+	var inspected := session.inspect_saves(check_backup)
 	if not inspected.ok:
 		return {
 			"has_active_session": session.get_view().run_id != null and session.get_view().terminal_summary == null,
@@ -575,7 +586,7 @@ func _regate() -> void:
 					"ui.web_account",
 					"ui.web_register",
 					"ui.web_guest",
-					"ui.web_guest_logout", "ui.records", "ui.records_back", "ui.web_history", "ui.web_stats", "ui.quit",
+					"ui.web_guest_logout", "ui.records", "ui.records_back", "ui.web_stats", "ui.quit",
 					"ui.web_feedback", "ui.web_feedback_admin",
 					"ui.compendium", "ui.compendium_back",
 					"ui.text_editor", "ui.text_editor_back"
@@ -1325,7 +1336,7 @@ func _navigate(type: String, payload: Dictionary) -> void:
 			_ui_screen = "menu"
 		"ui.tutorial":
 			_tutorial_replay_requested = true
-		"ui.web_saves", "ui.web_history", "ui.web_stats", "ui.web_feedback", "ui.web_feedback_admin":
+		"ui.web_saves", "ui.web_stats", "ui.web_feedback", "ui.web_feedback_admin":
 			var section := type.trim_prefix("ui.web_")
 			if web_account_state == "ready" and (section not in ["stats", "feedback_admin"] or _developer_tools_allowed()):
 				web_section_requested.emit(section)
@@ -1455,13 +1466,18 @@ func _navigate(type: String, payload: Dictionary) -> void:
 				web_privacy_requested.emit()
 			return
 		"ui.back":
+			if _ui_screen == "settings":
+				audio.apply_settings(session.get_audio_settings())
 			_ui_screen = _back_screen
 		"ui.save":
 			if _handle_save(session.save_current()):
 				_advance_paused = false
-			if page != null:
-				page.view.save_status = _save_status
-			_regate()
+			if _ui_screen == "settings":
+				refresh()
+			else:
+				if page != null:
+					page.view.save_status = _save_status
+				_regate()
 			_show_ui_feedback(notice, last_error != null)
 			return
 		"ui.save_settings":

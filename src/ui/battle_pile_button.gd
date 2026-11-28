@@ -10,6 +10,7 @@ func configure(pile_kind: String, amount: int, dark_background: bool) -> void:
 	kind = pile_kind
 	count = amount
 	on_dark = dark_background
+	clip_text = UiStyle.web_touch
 	text = str({"deck": "牌组", "log": "记录", "draw": "抽牌堆", "discard": "弃牌堆", "exhaust": "消耗堆"}.get(kind, kind))
 	# Native Button input/focus remains intact; the paper stack supplies its visuals.
 	for state in ["normal", "hover", "pressed", "disabled", "focus"]:
@@ -53,6 +54,8 @@ func _draw() -> void:
 			draw_style_box(UiStyle.surface(Color("314654"),accent,3),Rect2(Vector2.ZERO,size))
 		draw_texture_rect(UiNavIcon.texture(kind),Rect2(Vector2(2,6),Vector2(23,23)),false,Color(1,1,1,.45) if disabled else Color.WHITE)
 		draw_string(font,Vector2(25,29),str(count),HORIZONTAL_ALIGNMENT_CENTER,maxf(18,size.x-25),13,UiStyle.CREAM)
+		if UiStyle.web_touch:
+			draw_string(font, Vector2(0, size.y - 4), text.trim_suffix("堆"), HORIZONTAL_ALIGNMENT_CENTER, size.x, 12, UiStyle.CREAM)
 		return
 	var h := size.y-20 if not small else size.y-8
 	var w := minf(size.x-22,h*.73)

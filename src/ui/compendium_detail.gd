@@ -50,27 +50,38 @@ func configure(owner: UiPage, kind_name: String, ids: Array[String], entries: Di
 	shade.color = Color("070b11")
 	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(shade)
+	var phone := UiStyle.web_touch
 	var margin := MarginContainer.new()
 	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	for side in ["left", "right"]:
-		margin.add_theme_constant_override("margin_" + side, 32)
+		margin.add_theme_constant_override("margin_" + side, 10 if UiStyle.web_touch else 32)
 	for side in ["top", "bottom"]:
-		margin.add_theme_constant_override("margin_" + side, 20)
+		margin.add_theme_constant_override("margin_" + side, 8 if UiStyle.web_touch else 20)
 	add_child(margin)
 	var column := VBoxContainer.new()
-	column.add_theme_constant_override("separation", 14)
+	column.add_theme_constant_override("separation", 5 if UiStyle.web_touch else 14)
 	margin.add_child(column)
-	_title = add_text(column, "", 28, UiStyle.BRASS)
+	var heading: Container = column
+	if phone:
+		heading = HBoxContainer.new()
+		heading.add_theme_constant_override("separation", 14)
+		column.add_child(heading)
+	_title = add_text(heading, "", 22 if phone else 28, UiStyle.BRASS)
 	_title.add_theme_font_override("font", UiStyle.title_font())
-	_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_meta = add_text(column, "", 14, Color("b9b09f"))
-	_meta.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT if phone else HORIZONTAL_ALIGNMENT_CENTER
+	_title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_meta = add_text(heading, "", 14, Color("b9b09f"))
+	_meta.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT if phone else HORIZONTAL_ALIGNMENT_CENTER
+	_meta.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	if phone:
+		_meta.size_flags_horizontal = Control.SIZE_SHRINK_END
+		_meta.autowrap_mode = TextServer.AUTOWRAP_OFF
 	var content := HBoxContainer.new()
-	content.add_theme_constant_override("separation", 28)
+	content.add_theme_constant_override("separation", 6 if UiStyle.web_touch else 28)
 	content.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	column.add_child(content)
 	var left := VBoxContainer.new()
-	left.custom_minimum_size.x = clampf(owner.size.x * .30, 220, 370)
+	left.custom_minimum_size.x = _visual_width(owner.size.x)
 	content.add_child(left)
 	_visual = Control.new()
 	_visual.name = "CompendiumVisual"
@@ -78,27 +89,35 @@ func configure(owner: UiPage, kind_name: String, ids: Array[String], entries: Di
 	left.add_child(_visual)
 	_visual.resized.connect(_fit_visual)
 	_motion = HBoxContainer.new()
-	_motion.add_theme_constant_override("separation", 8)
+	_motion.add_theme_constant_override("separation", 4 if phone else 8)
 	left.add_child(_motion)
 	for cue in [["idle", "待机"], ["attack", "出手"], ["hit", "受击"]]:
 		var button := add_button(_motion, "compendium:motion:" + cue[0], cue[1], {}, func(): _cue(cue[0]))
 		button.custom_minimum_size.x = 64
 		button.add_theme_font_size_override("font_size", roundi(14 * UiStyle.text_scale))
 		UiStyle.button_skin(button, "quiet", true)
+		if phone:
+			UiStyle.compact_button(button, 14, 52, 46)
 		button.disabled = not motion_enabled
 		button.tooltip_text = "已在设置中关闭动态表现" if not motion_enabled else "仅预览形象动作"
 	var right := VBoxContainer.new()
 	right.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	right.add_theme_constant_override("separation", 12)
+	right.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	right.add_theme_constant_override("separation", 6 if phone else 12)
 	content.add_child(right)
 	_variant_row = HBoxContainer.new()
 	right.add_child(_variant_row)
 	_variants = OptionButton.new()
 	_variants.name = "CompendiumVariants"
 	_variants.custom_minimum_size = Vector2(190, 44)
+	if UiStyle.web_touch:
+		_variants.fit_to_longest_item = false
+		_variants.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	_variants.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_variants.add_theme_font_size_override("font_size", roundi(17 * UiStyle.text_scale))
 	UiStyle.button_skin(_variants, "secondary", true)
+	if phone:
+		UiStyle.compact_button(_variants, 16, 140, 46)
 	_variant_row.add_child(_variants)
 	_variants.item_selected.connect(select_variant)
 	_scroll = ScrollContainer.new()
@@ -118,10 +137,12 @@ func configure(owner: UiPage, kind_name: String, ids: Array[String], entries: Di
 	var actions := HBoxContainer.new()
 	actions.add_theme_constant_override("separation", 10)
 	column.add_child(actions)
-	var close_button := add_button(actions, "compendium:detail:close", "关闭  Esc", {}, close)
+	var close_button := add_button(actions, "compendium:detail:close", "关闭" if UiStyle.web_touch else "关闭  Esc", {}, close)
 	close_button.custom_minimum_size.x = 130 * UiStyle.text_scale
 	close_button.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	UiStyle.button_skin(close_button, "quiet", true)
+	if phone:
+		UiStyle.compact_button(close_button, 16, 64, 46)
 	_counter = add_text(actions, "", 15, Color("cfc6b2"))
 	_counter.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	_counter.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -130,9 +151,16 @@ func configure(owner: UiPage, kind_name: String, ids: Array[String], entries: Di
 		button.size_flags_horizontal = Control.SIZE_SHRINK_END
 		button.custom_minimum_size.x = 100 * UiStyle.text_scale
 		UiStyle.button_skin(button, "secondary", true)
+		if phone:
+			UiStyle.compact_button(button, 16, 86, 46)
+	resized.connect(func(): left.custom_minimum_size.x = _visual_width(size.x))
 	show_entry(id)
 	close_button.grab_focus()
 	tree_exiting.connect(_restore)
+
+
+func _visual_width(width: float) -> float:
+	return clampf(width * .34, 176, 370) if UiStyle.web_touch else clampf(width * .30, 220, 370)
 
 
 func show_entry(id: String) -> void:
@@ -179,6 +207,7 @@ func show_entry(id: String) -> void:
 		add_text(_words, "只在佩戴时生效 · 同时最多装备三件", 14, Color("aebcc2"))
 	else:
 		_actor = BattleActorView.new()
+		_actor.fit_mobile_stage = UiStyle.web_touch
 		_visual.add_child(_actor)
 		_actor.configure(id, "task")
 		_actor.set_motion(_motion_enabled)
@@ -217,7 +246,7 @@ func _fit_visual() -> void:
 		_relic_art.size = _visual.size - Vector2(20, 20)
 		_relic_art.position = Vector2(10, 10)
 	if is_instance_valid(_face):
-		var width := minf(_visual.size.x - 12, _visual.size.y * 168.0 / 244.0)
+		var width := maxf(0, minf(_visual.size.x - 12, _visual.size.y * 168.0 / 244.0))
 		_face.size = Vector2(width, width * 244.0 / 168.0)
 		_face.position = (_visual.size - _face.size) * .5
 		_face.queue_redraw()

@@ -11,6 +11,7 @@ var definition_id := ""
 var actor_kind := "task"
 var phase_index := 1
 var targeted := false
+var fit_mobile_stage := false
 var action_strength := 0.0:
 	set(value):
 		action_strength = value
@@ -69,7 +70,10 @@ func configure(id: String, kind: String, phase: int = 1) -> void:
 
 func _fit_rig() -> void:
 	if is_instance_valid(rig):
-		rig.fit(self.size)
+		if fit_mobile_stage:
+			rig.fit_visible_art(size)
+		else:
+			rig.fit(size)
 
 func set_targeted(value: bool) -> void:
 	targeted = value

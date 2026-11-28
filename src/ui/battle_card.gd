@@ -13,12 +13,12 @@ var shortcut_index: int = 0
 var accent := Color("739d95")
 
 
-func configure(data: Dictionary, is_selected: bool = false) -> void:
+func configure(data: Dictionary, is_selected: bool = false, face_size: Vector2 = FACE_SIZE) -> void:
 	card_data = data.duplicate(true)
 	selected = is_selected
-	size = FACE_SIZE
-	custom_minimum_size = FACE_SIZE
-	pivot_offset = FACE_SIZE * 0.5
+	size = face_size
+	custom_minimum_size = face_size
+	pivot_offset = face_size * 0.5
 	text = UiStyle.label(str(data.get("definition_id", "")))
 	var face: Dictionary = data.get("face", data.get("effective_card", {}))
 	var kind := str(face.get("type", face.get("card_type", "work")))
@@ -35,7 +35,7 @@ func configure(data: Dictionary, is_selected: bool = false) -> void:
 
 
 func _draw() -> void:
-	CardFaceView.paint(self, Rect2(Vector2.ZERO, FACE_SIZE), CardDisplayModel.from_card(card_data), selected or highlighted, disabled, shortcut_index, true)
+	CardFaceView.paint(self, Rect2(Vector2.ZERO, size), CardDisplayModel.from_card(card_data), selected or highlighted, disabled, shortcut_index, true)
 
 
 func contains_global(point: Vector2) -> bool:

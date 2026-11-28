@@ -38,7 +38,7 @@ static func paint(button: Button) -> void:
 	var texture := UiNavIcon.primary_texture(str(button.get_meta("nav_icon", "map")))
 	button.draw_texture_rect(texture, Rect2(Vector2(button.size.x * .5 - 17, 2), Vector2(34, 34)), false, tint)
 	var font := button.get_theme_font("font")
-	var pixels := roundi(12 * UiStyle.text_scale)
+	var pixels := roundi((13 if UiStyle.web_touch else 12) * UiStyle.text_scale)
 	var ink := Color("899597") if button.disabled else UiStyle.CREAM
 	button.draw_string(font, Vector2(0, button.size.y - 5), button.text, HORIZONTAL_ALIGNMENT_CENTER, button.size.x, pixels, ink)
 	var count := int(button.get_meta("nav_count", -1))

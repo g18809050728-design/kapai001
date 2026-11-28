@@ -31,28 +31,38 @@ func configure(owner: UiPage, options: Dictionary) -> void:
 	var row := HBoxContainer.new()
 	row.name = "NavigationRow"
 	row.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	row.offset_left = 16
-	row.offset_right = -12
+	row.offset_left = 8 if UiStyle.web_touch else 16
+	row.offset_right = -8 if UiStyle.web_touch else -12
 	row.offset_top = 2
 	row.offset_bottom = -2
-	row.add_theme_constant_override("separation", 12)
+	row.add_theme_constant_override("separation", 5 if UiStyle.web_touch else 12)
 	add_child(row)
-	var stats := HBoxContainer.new()
-	stats.add_theme_constant_override("separation", 12)
+	var stacked_stats := UiStyle.web_touch and page.size.x < 430
+	var stats := BoxContainer.new()
+	stats.vertical = stacked_stats
+	stats.alignment = BoxContainer.ALIGNMENT_CENTER
+	stats.add_theme_constant_override("separation", 0 if stacked_stats else (5 if UiStyle.web_touch else 12))
 	row.add_child(stats)
-	var hp := _label(stats, "♥ %s/%s" % [options.get("vitality", 0), options.get("max_vitality", 0)], 19, Color("f2877d"))
+	var hp := _label(stats, "♥ %s/%s" % [options.get("vitality", 0), options.get("max_vitality", 0)], 15 if UiStyle.web_touch else 19, Color("f2877d"))
 	hp.name = "TopVitality"
 	hp.tooltip_text = "精力 %s / %s" % [options.get("vitality", 0), options.get("max_vitality", 0)]
-	var coins := _label(stats, "◉ %s" % options.get("money", 0), 18, Color("efd18a"))
+	var coins := _label(stats, "◉ %s" % options.get("money", 0), 14 if UiStyle.web_touch else 18, Color("efd18a"))
 	coins.name = "TopMoney"
 	coins.tooltip_text = "当前金币；服务和商品会在确认前展示实际价格。"
+	if stacked_stats:
+		hp.add_theme_font_size_override("font_size", roundi(15 * minf(UiStyle.text_scale, 1.25)))
+		coins.add_theme_font_size_override("font_size", roundi(14 * minf(UiStyle.text_scale, 1.25)))
 	_main(row, "relics", str(options.relics_uid), "饰品", int(options.get("relics_count", 0)), options.relics_callback, "查看携带饰品的实际效果")
 	var equipment := HBoxContainer.new()
 	equipment.name = "EquippedRelics"
 	equipment.add_theme_constant_override("separation", 4)
 	row.add_child(equipment)
+	equipment.visible = not UiStyle.narrow_touch(page.size)
 	var relics: Array = page.view.get("relics", [])
-	for slot in mini(3, int(page.view.get("relic_slots", 3))):
+	var slot_limit := mini(3, int(page.view.get("relic_slots", 3)))
+	if UiStyle.web_touch and bool(options.get("battle", false)):
+		slot_limit = relics.size() if page.size.x >= 760 else 0
+	for slot in range(0 if UiStyle.narrow_touch(page.size) else slot_limit):
 		var entry: Dictionary = {}
 		for relic in relics:
 			if int(relic.get("slot", relics.find(relic))) == slot:
@@ -71,8 +81,17 @@ func configure(owner: UiPage, options: Dictionary) -> void:
 	journey.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	journey.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	journey.tooltip_text = journey.text
+	if UiStyle.web_touch and bool(options.get("battle", false)):
+		journey.name = "TurnDdlValue"
+		journey.text = "第 %s 回合    DDL %s" % [page.view.get("round_index", 0), page.view.get("ddl", 0)]
+		journey.add_theme_font_override("font", UiStyle.touch_reading_font())
+		journey.add_theme_font_size_override("font_size", roundi(17 * minf(UiStyle.text_scale, 1.25)))
+		var urgent := int(page.view.get("ddl", 0)) <= 3
+		journey.add_theme_color_override("font_color", Color("ffb59f") if urgent else Color("fff1cf"))
+	elif UiStyle.narrow_touch(page.size) and bool(options.get("show_map", true)):
+		journey.text = ""
 	var navigation := HBoxContainer.new()
-	navigation.add_theme_constant_override("separation", 6)
+	navigation.add_theme_constant_override("separation", 2 if UiStyle.web_touch else 6)
 	row.add_child(navigation)
 	if bool(options.get("show_map", true)):
 		_main(navigation, "map", str(options.map_uid), "地图", -1, options.map_callback, "查看完整本学年地图 · M")
@@ -95,7 +114,7 @@ func _main(parent: Node, kind: String, uid: String, title: String, count: int, c
 		if kind != "settings":
 			close_menu()
 		callback.call()
-	if pile:
+	if pile and not UiStyle.web_touch:
 		button = page.call("_add_pile_button", parent, "deck", activate, true)
 		button.set_meta("nav_icon", kind)
 		button.set_meta("nav_count", count)
@@ -106,7 +125,9 @@ func _main(parent: Node, kind: String, uid: String, title: String, count: int, c
 		button = page.add_button(parent, uid, title, {}, activate)
 		button.set_script(UiNavigationButton)
 		button.call("configure", kind, title, count)
-	button.tooltip_text = "" if pile else hint
+		if UiStyle.web_touch:
+			button.custom_minimum_size.x = UiStyle.MOBILE_TARGET
+	button.tooltip_text = "" if pile and not UiStyle.web_touch else hint
 	button.set_meta("navigation_hint", hint)
 	_main_buttons.append(button)
 	return button
@@ -116,6 +137,8 @@ func _label(parent: Node, text: String, pixels: int, color: Color = UiStyle.CREA
 	var label := Label.new()
 	label.text = text
 	label.add_theme_font_size_override("font_size", roundi(pixels * UiStyle.text_scale))
+	if UiStyle.web_touch:
+		label.add_theme_font_override("font", UiStyle.touch_reading_font())
 	label.add_theme_color_override("font_color", color)
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	parent.add_child(label)
@@ -312,7 +335,7 @@ func _fit_menu() -> void:
 	if not is_inside_tree() or is_queued_for_deletion() or not is_instance_valid(page) or not is_instance_valid(_panel):
 		return
 	_menu.size = page.size
-	var width := 376.0 * minf(UiStyle.text_scale, 1.25)
+	var width := minf(page.size.x - 24, 376.0 * minf(UiStyle.text_scale, 1.25))
 	var height := minf(page.size.y - HEIGHT - 12, 694 * UiStyle.text_scale)
 	_panel.position = Vector2(page.size.x - width - 12, HEIGHT + 4)
 	_panel.size = Vector2(width, height)

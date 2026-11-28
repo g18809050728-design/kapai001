@@ -87,6 +87,14 @@ var _card_hover_elapsed := 0.0
 var _pinned_card_detail: Dictionary = {}
 var _compact_layout := false
 var _short_web := false
+var _touch_hand: ScrollContainer
+var _touch_tasks: ScrollContainer
+var _touch_hand_x := 0
+var _touch_tasks_x := 0
+var _touch_detail_close: Button
+var _touch_detail_cover: ColorRect
+var _touch_detail_focus: Control
+var _touch_card_started_ms := 0
 var _battle_layout_size := Vector2.ZERO
 var _battle_resize_pending := false
 var _hand_top := 548.0
@@ -153,9 +161,13 @@ func _process(delta: float) -> void:
 		return
 	_refresh_end_turn()
 	_update_pointer(delta)
-	if _touch_pointer and is_instance_valid(_pointer_card) and not _dragging:
+	if not is_instance_valid(_pointer_card) or _dragging:
+		return
+	if UiStyle.web_touch:
+		_check_touch_card_hold()
+	elif _touch_pointer and not is_locked():
 		_held_for += delta
-		if _held_for >= 0.5 and not is_locked():
+		if _held_for >= 0.5:
 			var detail := _card_hover_target(_pointer_card)
 			_pointer_card = null
 			_open_detail(detail)
@@ -345,7 +357,10 @@ func _render_battle() -> void:
 	_hover_render_key = ""
 	_glossary_render_key = ""
 	_glossary_plain = ""
-	BattleLayout.new().build(self)
+	if UiStyle.web_touch:
+		preload("res://src/ui/battle_touch_layout.gd").new().build(self)
+	else:
+		BattleLayout.new().build(self)
 	_release_pilot_actor_cache()
 
 
@@ -367,6 +382,13 @@ func _release_pilot_actor_cache() -> void:
 
 
 func _reset_stage() -> void:
+	if is_instance_valid(_touch_hand):
+		_touch_hand_x = _touch_hand.scroll_horizontal
+	if is_instance_valid(_touch_tasks):
+		_touch_tasks_x = _touch_tasks.scroll_horizontal
+	_touch_hand = null
+	_touch_tasks = null
+	_touch_detail_close = null
 	if is_instance_valid(_choice_scroll):
 		_choice_scroll_x = _choice_scroll.scroll_horizontal
 		var focused := get_viewport().gui_get_focus_owner()
@@ -401,7 +423,7 @@ func _reset_stage() -> void:
 	_stage = Control.new()
 	var aspect := size.x / maxf(size.y, 1.0)
 	var height := clampf(1280.0 / maxf(aspect, 0.1), 560.0 if _short_web else 690.0, 800.0)
-	_stage.size = Vector2(maxf(1280.0, aspect * height), height)
+	_stage.size = size if UiStyle.web_touch else Vector2(maxf(1280.0, aspect * height), height)
 	_stage.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_stage)
 	if not resized.is_connected(_fit_stage):
@@ -414,7 +436,7 @@ func _fit_stage() -> void:
 	if size != _battle_layout_size and not _battle_resize_pending:
 		_battle_resize_pending = true
 		_rebuild_for_size.call_deferred()
-	var factor := minf(size.x / _stage.size.x, size.y / _stage.size.y)
+	var factor := minf(size.x / maxf(1, _stage.size.x), size.y / maxf(1, _stage.size.y))
 	_stage.scale = Vector2.ONE*factor
 	_stage.position = (size-_stage.size*factor)*.5
 
@@ -454,6 +476,24 @@ func _input(event: InputEvent) -> void:
 		if event is InputEventMouseButton and not _card_preview.get_global_rect().has_point(get_global_mouse_position()):
 			get_viewport().set_input_as_handled()
 		return
+	if UiStyle.web_touch and not _pinned_card_detail.is_empty():
+		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+			if event.pressed and not _hover_panel.get_global_rect().has_point(event.position):
+				close_card_preview()
+				get_viewport().set_input_as_handled()
+		if event is InputEventKey and event.pressed and event.keycode in [KEY_ESCAPE, KEY_I]:
+			close_card_preview()
+			get_viewport().set_input_as_handled()
+		return
+	if UiStyle.web_touch:
+		if event is InputEventScreenTouch:
+			if event.pressed:
+				_begin_touch_card_hold(event.position)
+			else:
+				_finish_touch_card_hold(event.position)
+			return
+		if event is InputEventScreenDrag and event.position.distance_to(_pointer_start) >= 10:
+			_pointer_card = null
 	if event is InputEventMouse:
 		_touch_pointer = event.device == InputEvent.DEVICE_ID_EMULATION
 		_pointer_position = event.position
@@ -522,6 +562,9 @@ func _input(event: InputEvent) -> void:
 		if not is_locked() and _panel_text.is_empty():
 			_cancel_selection()
 			get_viewport().set_input_as_handled()
+		return
+	if UiStyle.web_touch and event is InputEventMouse:
+		_track_touch_card(event)
 		return
 	if is_locked() or not _panel_text.is_empty():
 		return
@@ -593,7 +636,55 @@ func _input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 
 
+func _begin_touch_card_hold(point: Vector2) -> void:
+	var target := _hover_card_at(point)
+	var card := _buttons.get(target.get("uid", "")) as BattleCard
+	if card == _pointer_card:
+		return
+	_pointer_card = card
+	_pointer_start = point
+	_touch_card_started_ms = Time.get_ticks_msec()
+
+
+func _check_touch_card_hold() -> bool:
+	if not is_instance_valid(_pointer_card) or Time.get_ticks_msec() - _touch_card_started_ms < 500:
+		return false
+	var target := _card_hover_target(_pointer_card)
+	_pointer_card = null
+	_pin_card_detail(target)
+	return true
+
+
+func _finish_touch_card_hold(point: Vector2) -> void:
+	if not is_instance_valid(_pointer_card):
+		return
+	var card := _pointer_card
+	var stationary := point.distance_to(_pointer_start) < 10
+	if stationary and _check_touch_card_hold():
+		return
+	_pointer_card = null
+	if stationary and card.disabled and not is_locked():
+		_show_disabled_card_feedback(card)
+
+
+func _track_touch_card(event: InputEventMouse) -> void:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		if event.pressed:
+			_begin_touch_card_hold(event.position)
+		else:
+			_finish_touch_card_hold(event.position)
+	if event is InputEventMouseMotion and event.position.distance_to(_pointer_start) >= 10:
+		_pointer_card = null
+
+
 func _card_at(point: Vector2) -> BattleCard:
+	if UiStyle.web_touch:
+		if not is_instance_valid(_touch_hand) or not _touch_hand.get_global_rect().has_point(point):
+			return null
+		for card in _hand_cards:
+			if not card.get_meta("draw_pending", false) and not card.get_meta("card_in_flight", false) and card.contains_global(point):
+				return card
+		return null
 	# Within the fan, stable home slots win over a raised card's expanded face.
 	# Otherwise the current card traps the pointer while crossing its neighbour.
 	for index in range(_hand_cards.size() - 1, -1, -1):
@@ -678,7 +769,7 @@ func _update_pointer(delta: float) -> void:
 		if not hover_uid.is_empty() and audio != null:
 			audio.play_ui("ui_hover")
 	for card in _hand_cards:
-		if card.get_meta("card_in_flight", false) or card.get_meta("draw_pending", false):
+		if UiStyle.web_touch or card.get_meta("card_in_flight", false) or card.get_meta("draw_pending", false):
 			continue
 		var raised := card == _hovered_card or card.selected
 		var destination := card.home_position + (Vector2(0, -34 if _stage.size.y < 800.0 else -60) if raised else Vector2.ZERO)
@@ -719,6 +810,8 @@ func _update_hover_window() -> void:
 	var target := _pinned_card_detail if pinned else _hover_target
 	var card_detail := _is_card_detail(target)
 	var show := not target.is_empty() and not _result_pending and not is_instance_valid(_card_preview)
+	if UiStyle.web_touch:
+		show = show and pinned
 	if card_detail:
 		show = show and (pinned or _card_hover_elapsed >= CARD_DETAIL_DELAY)
 	else:
@@ -729,10 +822,14 @@ func _update_hover_window() -> void:
 		_glossary_uid = ""
 		return
 	_hover_title.text = str(target.get("title", ""))
+	if UiStyle.web_touch:
+		_hover_title.max_lines_visible = 1
+		_hover_title.autowrap_mode = TextServer.AUTOWRAP_OFF
+		_hover_title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	_hover_meta.text = str(target.get("meta", ""))
 	var factor := UiStyle.text_scale
 	var width := minf((380.0 if card_detail else 360.0) * minf(factor, 1.2), _stage.size.x - 24)
-	var height := minf(440.0 * factor, _stage.size.y - 100) if card_detail else 168.0 * factor
+	var height := minf(500.0 * factor, _stage.size.y - (32 if UiStyle.web_touch else 100)) if card_detail else 168.0 * factor
 	if _compact_layout and not card_detail and is_instance_valid(header):
 		# Large text still needs a summary above the protected hand/action zones.
 		# Full content remains in I details, with the existing scrolling behavior.
@@ -744,12 +841,16 @@ func _update_hover_window() -> void:
 	_hover_panel.mouse_filter = Control.MOUSE_FILTER_STOP if card_detail else Control.MOUSE_FILTER_IGNORE
 	_hover_scroll.mouse_filter = Control.MOUSE_FILTER_STOP if card_detail else Control.MOUSE_FILTER_IGNORE
 	_hover_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO if card_detail else ScrollContainer.SCROLL_MODE_DISABLED
-	if card_detail:
+	if card_detail and UiStyle.web_touch:
+		_hover_panel.position = (_stage.size - _hover_panel.size) * .5
+		_touch_detail_close.position = Vector2(width - 62, 8)
+		_touch_detail_close.show()
+	elif card_detail:
 		_place_card_detail(target)
 	else:
 		_place_hover_panel()
 	width = _hover_panel.size.x
-	_hover_title.size.x = width - 32 * factor
+	_hover_title.size.x = width - 32 * factor - (58 if UiStyle.web_touch else 0)
 	_hover_meta.size.x = width - 32 * factor
 	var text := str(target.get("detail" if card_detail else "body", ""))
 	if card_detail:
@@ -809,16 +910,18 @@ func _update_hover_window() -> void:
 			)
 	else:
 		_hover_hint.text = "I 查看详情"
+	if UiStyle.web_touch:
+		_hover_hint.hide()
 
 
 func _layout_hover_sections(width: float, height: float, factor: float, card_detail: bool) -> void:
 	var content_left := 16.0 * factor
 	var content_width := width - 32.0 * factor
 	var content_top := 62.0 * factor
-	var hint_top := height - 22.0 * factor
+	var hint_top := height - (12.0 if UiStyle.web_touch else 22.0 * factor)
 	_hover_hint.position = Vector2(content_left, hint_top)
 	_hover_hint.size.x = content_width
-	var toggle_height := maxf(32.0, 32.0 * factor)
+	var toggle_height := UiStyle.MOBILE_TARGET if UiStyle.web_touch else maxf(32.0, 32.0 * factor)
 	var toggle_top := hint_top - toggle_height - 4.0 * factor
 	var body_bottom := hint_top - 8.0 * factor
 	var has_glossary := card_detail and not _glossary_plain.strip_edges().is_empty()
@@ -1095,6 +1198,11 @@ func close_card_preview() -> void:
 	_glossary_uid = ""
 	if is_instance_valid(_hover_panel):
 		_hover_panel.visible = false
+	if is_instance_valid(_touch_detail_cover):
+		_touch_detail_cover.hide()
+	if is_instance_valid(_touch_detail_focus) and _touch_detail_focus.is_inside_tree() and _touch_detail_focus.is_visible_in_tree():
+		_touch_detail_focus.grab_focus()
+	_touch_detail_focus = null
 
 
 func _pin_card_detail(target: Dictionary) -> void:
@@ -1102,7 +1210,16 @@ func _pin_card_detail(target: Dictionary) -> void:
 		return
 	_pinned_card_detail = target.duplicate(true)
 	_hover_pinned = false
+	if UiStyle.web_touch and is_instance_valid(_hover_panel):
+		# Keep the visible close button above both the toolbar and the pile it covers.
+		_touch_detail_focus = get_viewport().gui_get_focus_owner()
+		move_child(_stage, get_child_count() - 1)
+		_stage.move_child(_touch_detail_cover, _stage.get_child_count() - 1)
+		_stage.move_child(_hover_panel, _stage.get_child_count() - 1)
+		_touch_detail_cover.show()
 	_update_hover_window()
+	if UiStyle.web_touch:
+		_touch_detail_close.grab_focus()
 
 
 func _card_preview_text(detail: Dictionary) -> String:
@@ -1556,7 +1673,7 @@ func _on_card_pressed(card_id: String) -> void:
 	if _preview_can_submit(_active_preview) and _required(_active_preview).is_empty():
 		_emit_draft(_preview_draft)
 		return
-	_feedback_text = _preview_error(_active_preview)
+	_feedback_text = "" if UiStyle.web_touch and _may_select(_active_preview) and not _required(_active_preview).is_empty() else _preview_error(_active_preview)
 	_render_from_local()
 
 
@@ -1574,7 +1691,7 @@ func _on_task_pressed(task_id: String) -> void:
 				"payload": {"unit_instance_id": _selected_unit_id, "task_instance_id": task_id}
 			}
 		)
-	elif _touch_pointer:
+	elif _touch_pointer or UiStyle.web_touch:
 		_open_detail_for_uid("task:" + task_id)
 
 
@@ -2271,6 +2388,7 @@ func _show_map() -> void:
 func _show_deck() -> void:
 	if is_locked():
 		return
+	_detail_return_uid = "battle:deck"
 	_detail_terms.clear()
 	_panel_zone = "deck"
 	_inspect_open = false
@@ -2322,6 +2440,7 @@ func _show_exhaust() -> void:
 func _show_zone(zone: String, title: String) -> void:
 	if is_locked():
 		return
+	_detail_return_uid = "battle:" + zone
 	_detail_terms.clear()
 	_inspect_open = false
 	_panel_zone = zone
@@ -2355,7 +2474,7 @@ func populate_info(parent: Node, on_dark: bool = false) -> void:
 	if cards.is_empty():
 		add_text(column, "这里暂时没有卡牌。", 19, ink)
 	var grid := GridContainer.new()
-	grid.columns = 4 if UiStyle.text_scale <= 1.0 else (3 if UiStyle.text_scale <= 1.25 else 2)
+	grid.columns = maxi(1, int((size.x - 52) / (166 * UiStyle.text_scale + 18))) if UiStyle.web_touch else (4 if UiStyle.text_scale <= 1.0 else (3 if UiStyle.text_scale <= 1.25 else 2))
 	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	grid.add_theme_constant_override("h_separation", 18)
 	grid.add_theme_constant_override("v_separation", 18)
@@ -2455,7 +2574,9 @@ func tutorial_anchor(key: String) -> Rect2:
 			var intent_rect := Rect2()
 			for node in find_children("TaskIntent_*", "Label", true, false):
 				if node is Control and node.is_visible_in_tree():
-					intent_rect = _merge_rect(intent_rect, (node as Control).get_global_rect())
+					var visible := _visible_card_rect(node)
+					if visible.has_area():
+						intent_rect = _merge_rect(intent_rect, visible)
 			var turn := find_child("TurnDdlValue", true, false)
 			if turn is Control and turn.is_visible_in_tree():
 				intent_rect = _merge_rect(intent_rect, (turn as Control).get_global_rect())
@@ -2465,7 +2586,9 @@ func tutorial_anchor(key: String) -> Rect2:
 			for prefix in ["TaskIntent_", "TaskWorkValue_", "TaskTitle_"]:
 				for node in find_children(prefix + "*", "Label", true, false):
 					if node is Control and node.is_visible_in_tree():
-						rect = _merge_rect(rect, (node as Control).get_global_rect())
+						var visible := _visible_card_rect(node)
+						if visible.has_area():
+							rect = _merge_rect(rect, visible)
 			var ddl := find_child("TurnDdlValue", true, false)
 			if ddl is Control and ddl.is_visible_in_tree():
 				rect = _merge_rect(rect, (ddl as Control).get_global_rect())

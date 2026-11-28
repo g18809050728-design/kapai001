@@ -15,6 +15,7 @@ func _ready() -> void:
 	_callback = JavaScriptBridge.create_callback(_browser_request)
 	session.checkpoint_saved.connect(_checkpoint_saved)
 	session.run_recorded.connect(_run_recorded)
+	session.replacement_record_sink = _queue_replacement
 	session.checkpoint_priority.connect(func(): _bridge.priority())
 	shell.web_menu_visible.connect(_menu_visible)
 	shell.web_privacy_requested.connect(func(): _bridge.openPrivacy())
@@ -23,13 +24,14 @@ func _ready() -> void:
 	shell.web_guest_logout_requested.connect(func(): _bridge.exitGuest())
 	shell.web_play_requested.connect(func(developer_tools: bool): _bridge.confirmPlay(developer_tools))
 	shell.web_section_requested.connect(func(section: String): _bridge.openSection(section))
+	shell.web_records_requested.connect(func(token: String, offset: int, id: String): _bridge.readRecords(token, offset, id))
 	_bridge.connectGame(_callback)
 	_menu_visible(true)
 
 
 func _menu_visible(visible: bool) -> void:
 	_bridge.showMenu(visible, session.get_view().run_id == null and not session.has_test_room())
-	JavaScriptBridge.get_interface("window").kapaiShowFullscreenEntry(visible)
+	JavaScriptBridge.get_interface("window").kapaiShowFullscreenEntry(visible and shell._ui_screen == "menu")
 
 
 func _checkpoint_saved(slot: String, snapshot: Dictionary) -> void:
@@ -38,8 +40,11 @@ func _checkpoint_saved(slot: String, snapshot: Dictionary) -> void:
 
 
 func _run_recorded(kind: String, run: Dictionary, detail: Dictionary) -> void:
-	if not _account_id.is_empty():
-		_bridge.record(kind, JSON.stringify(run), JSON.stringify(detail))
+	_bridge.record(kind, JSON.stringify(run), JSON.stringify(detail))
+
+
+func _queue_replacement(run: Dictionary, detail: Dictionary) -> bool:
+	return _bridge.record("finish", JSON.stringify(run), JSON.stringify(detail)) == true
 
 
 func _browser_request(args: Array) -> void:
@@ -59,6 +64,14 @@ func _dispatch(args: Array) -> Variant:
 			shell.refresh()
 		"account_menu":
 			shell.set_web_account_state(argument, str(args[2]) == "true", str(args[3]), str(args[4]), str(args[5]) if args.size() > 5 else "")
+		"recover_records":
+			session.record_scope = argument
+			return session.recover_replaced_run().ok
+		"records":
+			if args.size() == 3:
+				var data: Variant = JSON.parse_string(str(args[2]))
+				if data is Dictionary:
+					shell.receive_web_records(argument, data)
 		"play_confirmed":
 			shell.resolve_web_play(argument == "true")
 		"erase":

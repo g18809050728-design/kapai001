@@ -44,9 +44,10 @@ func _draw() -> void:
 		draw_string(font, c + Vector2(-radius, pixels * .31), str(amount), HORIZONTAL_ALIGNMENT_CENTER, radius * 2, pixels, Color("f2f5e6"))
 		draw_string(font, Vector2(0, size.y - 4), "专注", HORIZONTAL_ALIGNMENT_CENTER, size.x, roundi(15 * UiStyle.text_scale), Color("ede0c2"))
 	else:
-		var color := Color("475563") if not disabled else Color("28333e")
+		var color := (Color("6f5632") if UiStyle.web_touch else Color("475563")) if not disabled else Color("28333e")
 		draw_style_box(UiStyle.cut_surface(color.lightened(.15) if active else color,UiStyle.GOLD if active else UiStyle.BRASS),Rect2(2,2,size.x-4,size.y-4))
-		var pixels := mini(roundi((size.x - 18) / maxf(4.0, text.length())), get_theme_font_size("font_size")) if UiStyle.web_touch else 20
+		var pixels := mini(floori((size.x - 18) / maxf(4.0, text.length())), get_theme_font_size("font_size")) if UiStyle.web_touch else 20
 		var baseline := Vector2(9, size.y * .5 + (font.get_ascent(pixels) - font.get_descent(pixels)) * .5) if UiStyle.web_touch else Vector2(9, size.y * .5 + 7)
-		draw_string_outline(font,baseline,text,HORIZONTAL_ALIGNMENT_CENTER,size.x-18,pixels,3,Color("1d252b"))
+		if not UiStyle.web_touch:
+			draw_string_outline(font,baseline,text,HORIZONTAL_ALIGNMENT_CENTER,size.x-18,pixels,3,Color("1d252b"))
 		draw_string(font,baseline,text,HORIZONTAL_ALIGNMENT_CENTER,size.x-18,pixels,ink)

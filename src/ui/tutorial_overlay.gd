@@ -113,6 +113,8 @@ func _build() -> void:
 	_kicker.add_theme_font_size_override("font_size", roundi(14 * UiStyle.text_scale))
 	_kicker.add_theme_color_override("font_color", Color("d9bd85"))
 	_kicker.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	if UiStyle.web_touch:
+		_kicker.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	top.add_child(_kicker)
 	_skip = _make_button("跳过教程", "quiet")
 	_skip.name = "TutorialSkip"
@@ -172,7 +174,7 @@ func _build() -> void:
 	_prev = _make_button("上一步", "secondary")
 	_prev.name = "TutorialPrev"
 	_prev.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
-	_prev.custom_minimum_size = Vector2(128, _touch_height())
+	_prev.custom_minimum_size = Vector2(80 if UiStyle.web_touch else 128, _touch_height())
 	_prev.pressed.connect(_back)
 	footer.add_child(_prev)
 	_buttons["tutorial:prev"] = _prev
@@ -186,7 +188,7 @@ func _build() -> void:
 	_next = _make_button("下一步", "primary")
 	_next.name = "TutorialNext"
 	_next.size_flags_horizontal = Control.SIZE_SHRINK_END
-	_next.custom_minimum_size = Vector2(168, _touch_height())
+	_next.custom_minimum_size = Vector2(100 if UiStyle.web_touch else 168, _touch_height())
 	_next.pressed.connect(_advance)
 	footer.add_child(_next)
 	_buttons["tutorial:next"] = _next
@@ -238,7 +240,7 @@ func _present_step() -> void:
 		row.add_child(dot)
 		var term := Label.new()
 		term.text = str(bullet.get("term", ""))
-		term.custom_minimum_size.x = 108 * UiStyle.text_scale
+		term.custom_minimum_size.x = (76 if UiStyle.narrow_touch(size) else 108) * UiStyle.text_scale
 		term.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		term.add_theme_font_size_override("font_size", roundi(16 * UiStyle.text_scale))
 		term.add_theme_color_override("font_color", Color("f0d092"))
@@ -303,6 +305,10 @@ func _layout() -> void:
 	panel_height = minf(panel_height, size.y - 32.0)
 	_body_min_height = maxf(90.0, panel_height - 238.0 - 30.0 * (scale - 1.0))
 	if is_instance_valid(_body_scroll) and absf(_body_scroll.custom_minimum_size.y - _body_min_height) > .5:
+		_body_scroll.custom_minimum_size.y = _body_min_height
+	if UiStyle.web_touch:
+		panel_height = minf(size.y - 24, MAX_HEIGHT if UiStyle.narrow_touch(size) else 340)
+		_body_min_height = maxf(40, panel_height - 236)
 		_body_scroll.custom_minimum_size.y = _body_min_height
 	var panel_size := Vector2(panel_width, panel_height)
 	if _panel.size != panel_size:

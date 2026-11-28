@@ -32,6 +32,8 @@ var _settings_error: ApiError
 var _last_receipt: SaveReceipt
 var _profile_status: Dictionary = {}
 var _relic_pilot := false
+var replacement_record_sink: Callable
+var record_scope := ""
 
 
 func _init(store: SaveStore = null, catalog_factory: Callable = Callable(), relic_pilot: bool = false) -> void:
@@ -124,6 +126,9 @@ func start_run(request: StartRunRequest) -> ActionResult:
 	var prepared := _prepare_run(request)
 	if not prepared.ok:
 		return ActionResult.rejected(prepared.error, get_view())
+	var recovered := recover_replaced_run()
+	if not recovered.ok:
+		return ActionResult.rejected(recovered.error, get_view())
 	_activate_run(prepared.data)
 	return _accepted(prepared.data.events, {}, true)
 
@@ -134,11 +139,34 @@ func restart_run(request: StartRunRequest, confirmed: bool = false) -> ActionRes
 	var prepared := _prepare_run(request)
 	if not prepared.ok:
 		return ActionResult.rejected(prepared.error, get_view())
-	var merged := _merge_previous_summary()
-	if not merged.ok:
-		return ActionResult.rejected(merged.error, get_view())
-	# Persist the replacement before publishing it, even when autosave is off.
-	# A pending old battle is discarded, never serialized as a stable snapshot.
+	var recovered := recover_replaced_run()
+	if not recovered.ok:
+		return ActionResult.rejected(recovered.error, get_view())
+	var previous := _previous_run_for_restart()
+	if not previous.ok:
+		return ActionResult.rejected(previous.error, get_view())
+	var old: SessionState = previous.data.get("state")
+	if old != null and old.profile_merge_pending:
+		var merged := _merge_run_summary(old.terminal_summary)
+		if not merged.ok:
+			return ActionResult.rejected(merged.error, get_view())
+	if old != null and old.terminal_summary == null and not _relic_pilot:
+		var old_catalog: ContentDB = previous.data.catalog
+		var summary := RunService.new(old_catalog).summarize_replacement(old.run)
+		if old.battle != null:
+			summary.statistics["vitality"] = int(old.battle.player.vitality)
+		var prepared_state: SessionState = prepared.data.state
+		var staged := _save_replacement_record({
+			"replacement_run_id": str(prepared_state.run.run_id),
+			"scope": record_scope,
+			"run": _record_identity(old.run, old_catalog.get_info()),
+			"summary": summary.to_dictionary(),
+			"finish": _finish_record(old.run, summary, "", old.battle),
+		})
+		if not staged.ok:
+			return ActionResult.rejected(staged.error, get_view())
+	# Persist the replacement before publishing either record. Pending choice
+	# state is read for its run summary without serializing the old battle.
 	var saved := _save_state(prepared.data.state, prepared.data.catalog)
 	if not saved.ok:
 		return ActionResult.rejected(saved.error, get_view())
@@ -148,7 +176,11 @@ func restart_run(request: StartRunRequest, confirmed: bool = false) -> ActionRes
 	result.accepted = true
 	result.events.assign(prepared.data.events)
 	result.persistence = GameConstants.PERSISTENCE_SAVED
-	result.archived_save_path = merged.data if merged.data is String else ""
+	result.archived_save_path = str(previous.data.get("archived_path", ""))
+	var recorded := recover_replaced_run()
+	if not recorded.ok:
+		result.profile_merge = &"pending"
+		result.profile_error = recorded.error
 	_record_run_events(result.events, true)
 	return result
 
@@ -197,32 +229,59 @@ func _activate_run(prepared: Dictionary) -> void:
 	_profile_status = {}
 
 
-func _merge_previous_summary() -> GameResult:
-	var previous := _state
-	if previous == null:
-		var loaded := _store.load("current_run")
-		if not loaded.ok and loaded.error.code == GameConstants.ERROR_SAVE_NOT_FOUND:
-			loaded = _store.load_backup("current_run")
-		if not loaded.ok:
-			return (
-				GameResult.success(true)
-				if loaded.error.code == GameConstants.ERROR_SAVE_NOT_FOUND
-				else _archive_unreadable_run(loaded)
-			)
-		var decoded := _decode_saved_run(loaded.data)
-		if not decoded.ok:
-			return _archive_unreadable_run(decoded)
-		previous = decoded.data.state
-	if not previous.profile_merge_pending:
-		return GameResult.success(true)
+func _previous_run_for_restart() -> GameResult:
+	if _state != null:
+		return GameResult.success({"state": _state, "catalog": _catalog})
+	var loaded := _store.load("current_run")
+	if not loaded.ok and loaded.error.code == GameConstants.ERROR_SAVE_NOT_FOUND:
+		loaded = _store.load_backup("current_run")
+	if not loaded.ok and loaded.error.code == GameConstants.ERROR_SAVE_NOT_FOUND:
+		return GameResult.success({})
+	var decoded := _decode_saved_run(loaded.data) if loaded.ok else loaded
+	if decoded.ok:
+		return decoded
+	var archived := _archive_unreadable_run(decoded)
+	return GameResult.success({"archived_path": archived.data}) if archived.ok else archived
+
+
+func _merge_run_summary(summary: RunSummary) -> GameResult:
 	var profile := _read_profile()
 	if not profile.ok:
 		return profile
-	var merged := ProfileMerge.merge(profile.data, previous.terminal_summary)
+	var merged := ProfileMerge.merge(profile.data, summary)
 	if not merged.ok:
 		return merged
 	var encoded := SnapshotCodec.encode_document("profile", merged.data)
 	return _write_checkpoint("profile", encoded.data) if encoded.ok else encoded
+
+
+func _save_replacement_record(data: Dictionary) -> GameResult:
+	var encoded := SnapshotCodec.encode_document("replacement_record", data)
+	return _store.save("replacement_record", encoded.data) if encoded.ok else encoded
+
+
+func recover_replaced_run() -> GameResult:
+	var stored := _store.load("replacement_record")
+	if not stored.ok:
+		return GameResult.success(true) if stored.error.code == GameConstants.ERROR_SAVE_NOT_FOUND else stored
+	var payload: Dictionary = stored.data.payload
+	if payload.is_empty():
+		return GameResult.success(true)
+	var current := _store.load("current_run")
+	if not current.ok or current.data.run_id != payload.replacement_run_id:
+		# A failed replacement may leave a prepared record beside the old save.
+		return GameResult.success(true)
+	var merged := _merge_run_summary(RunSummary.new(payload.summary))
+	if not merged.ok:
+		return merged
+	if not OS.has_feature("web"):
+		var archived := _archive_run_record(payload.run, payload.finish)
+		if not archived.ok:
+			return archived
+	elif payload.scope == record_scope:
+		if not replacement_record_sink.is_valid() or replacement_record_sink.call(payload.run, payload.finish) != true:
+			return _failure(GameConstants.ERROR_SAVE_IO_ERROR, "error.records.queue_pending")
+	return _save_replacement_record({})
 
 
 func _archive_unreadable_run(result: GameResult) -> GameResult:
@@ -361,6 +420,7 @@ func save_current(immediate: bool = true) -> GameResult:
 	result.profile_error = committed.data.profile_error
 	result.cleanup_error = committed.data.cleanup_error
 	if immediate:
+		recover_replaced_run()
 		checkpoint_priority.emit()
 	return GameResult.success(result)
 
@@ -376,10 +436,79 @@ func has_unsaved_progress() -> bool:
 
 
 func get_game_records() -> GameResult:
+	var recovered := recover_replaced_run()
+	if not recovered.ok:
+		return recovered
 	var profile := _read_profile()
-	if not profile.ok:
+	var records := _read_record_archive()
+	if not records.ok:
+		return records
+	var combined: Dictionary = profile.data.summaries_by_run_id.duplicate(true) if profile.ok else {}
+	combined.merge(records.data, true)
+	if combined.is_empty() and not profile.ok:
 		return profile
-	return GameResult.success(profile.data.summaries_by_run_id.values().duplicate(true))
+	var rows := combined.values()
+	rows.reverse()
+	rows.sort_custom(func(a, b): return str(a.get("finished_at", "")) > str(b.get("finished_at", "")))
+	return GameResult.success(rows)
+
+
+func _read_record_archive() -> GameResult:
+	var loaded := _store.load("records")
+	if not loaded.ok:
+		return GameResult.success({}) if loaded.error.code == GameConstants.ERROR_SAVE_NOT_FOUND else loaded
+	var decoded := SnapshotCodec.decode_document(loaded.data, "records")
+	return GameResult.success(decoded.data.payload) if decoded.ok else decoded
+
+
+func _archive_run_record(run: Dictionary, finish: Dictionary) -> GameResult:
+	var archive := _read_record_archive()
+	if not archive.ok:
+		return archive
+	if archive.data.has(run.run_id):
+		return GameResult.success(true)
+	var row := run.duplicate()
+	row.merge(finish)
+	row["finished_at"] = Time.get_datetime_string_from_system(true) + "Z"
+	archive.data[run.run_id] = row
+	var encoded := SnapshotCodec.encode_document("records", archive.data)
+	return _store.save("records", encoded.data) if encoded.ok else encoded
+
+
+func _record_snapshot(run: RunState, battle_result: String, battle: BattleState) -> Dictionary:
+	var cards: Array[Dictionary] = []
+	for card in run.cards:
+		cards.append({"definition_id": str(card.definition_id), "upgrade_level": int(card.get("upgrade_level", 0))})
+	var relics: Array[Dictionary] = []
+	for relic in run.relics:
+		relics.append({"definition_id": str(relic.definition_id), "slot": int(relic.slot)})
+	relics.sort_custom(func(a, b): return a.slot < b.slot)
+	var path := run.node_path.duplicate()
+	if not run.current_node_id.is_empty() and not path.has(run.current_node_id):
+		path.append(run.current_node_id)
+	var route: Array[Dictionary] = []
+	for id in path:
+		var node := run.find_node(id)
+		if node == null:
+			continue
+		var status := "cleared" if node.status == "completed" else "stopped"
+		if status == "stopped" and node.context.get("settled", false):
+			status = "battle_lost" if battle_result == "lost" else "battle_won"
+		var event: Variant = node.context.get("event")
+		var event_id := ""
+		if event is EventState or event is Dictionary:
+			event_id = str(event.definition_id)
+		route.append({
+			"term": node.term, "layer": node.layer, "kind": node.kind, "status": status,
+			"encounter_id": str(node.context.get("encounter_id", "")), "event_id": event_id,
+		})
+	return {
+		"cards": cards, "relics": relics, "route": route, "money": run.money,
+		"vitality": int(battle.player.vitality) if battle != null else run.vitality,
+		"max_vitality": int(battle.player.max_vitality) if battle != null else run.max_vitality,
+		"completed_nodes": run.node_path.size(),
+		"settled_battles": run.settled_battle_ids.size(),
+	}
 
 
 func save_and_exit() -> GameResult:
@@ -462,7 +591,7 @@ func update_settings(settings: Variant) -> GameResult:
 	return GameResult.success(get_profile())
 
 
-func inspect_saves() -> GameResult:
+func inspect_saves(check_backup: bool = false) -> GameResult:
 	var view := SessionStorageView.new()
 	view.has_active_session = _state != null and _state.terminal_summary == null
 	var formal := _store.inspect("current_run")
@@ -474,8 +603,9 @@ func inspect_saves() -> GameResult:
 			var decoded := _decode_saved_run(loaded.data) if loaded.ok else loaded
 			view.can_continue = decoded.ok and decoded.data.state.terminal_summary == null
 			if decoded.ok:
-				view.save_meta["unfinished"] = decoded.data.state.terminal_summary == null
-			if not decoded.ok:
+				_set_slot_progress(view.save_meta, decoded.data.state)
+			else:
+				view.save_meta["valid"] = false
 				view.save_error = decoded.error
 		else:
 			view.save_error = ApiError.new(
@@ -489,7 +619,15 @@ func inspect_saves() -> GameResult:
 	var backup := _store.inspect_backup("current_run")
 	if backup.ok:
 		view.backup_meta = backup.data.duplicate(true)
-		if not backup.data.valid:
+		if backup.data.valid and check_backup:
+			var loaded := _store.load_backup("current_run")
+			var decoded := _decode_saved_run(loaded.data) if loaded.ok else loaded
+			if decoded.ok:
+				_set_slot_progress(view.backup_meta, decoded.data.state)
+			else:
+				view.backup_meta["valid"] = false
+				view.backup_error = decoded.error
+		elif not backup.data.valid:
 			view.backup_error = ApiError.new(
 				GameConstants.ERROR_SAVE_CORRUPT,
 				"error.save.corrupt",
@@ -498,6 +636,11 @@ func inspect_saves() -> GameResult:
 	else:
 		view.backup_error = backup.error
 	return GameResult.success(view)
+
+
+func _set_slot_progress(slot: Dictionary, saved: SessionState) -> void:
+	slot["unfinished"] = saved.terminal_summary == null
+	slot["term"] = saved.run.term
 
 
 func generate_run_seed() -> GameResult:
@@ -592,6 +735,8 @@ func _restore(backup: bool) -> GameResult:
 	# until an explicit save; restoring never replaces the formal current_run.
 	if _state.profile_merge_pending:
 		_commit_pending_profile(backup)
+	if _state.terminal_summary == null and not _relic_pilot and run_recorded.has_connections():
+		run_recorded.emit("resume", _record_identity(_state.run, _catalog.get_info()), {})
 	return GameResult.success(get_view())
 
 
@@ -614,32 +759,47 @@ func _write_checkpoint(slot: String, snapshot: Dictionary) -> GameResult:
 	return result
 
 
-func _record_run_events(events: Array[RuleEvent], starting: bool = false) -> void:
-	if _relic_pilot or not run_recorded.has_connections():
-		return
-	var info := _catalog.get_info()
-	var run := {
-		"run_id": _state.run.run_id,
-		"character_id": _state.run.character_id,
-		"difficulty": _state.run.difficulty,
+func _record_identity(run: RunState, info: ContentInfo) -> Dictionary:
+	return {
+		"run_id": str(run.run_id),
+		"character_id": str(run.character_id),
+		"difficulty": str(run.difficulty),
 		"manifest_id": info.id,
 		"game_version": info.content_version,
 	}
+
+
+func _finish_record(run: RunState, summary: RunSummary, battle_result: String, battle: BattleState = null) -> Dictionary:
+	return {
+		"result": summary.result,
+		"reason": summary.reason,
+		"ending_id": summary.ending_id,
+		"term": summary.term,
+		"detail": _record_snapshot(run, battle_result, battle),
+	}
+
+
+func _record_run_events(events: Array[RuleEvent], starting: bool = false) -> void:
+	if _relic_pilot or has_test_room():
+		return
+	var run := _record_identity(_state.run, _catalog.get_info())
 	if starting:
 		run_recorded.emit("start", run, {})
+	var battle_result := ""
 	for event in events:
 		match event.type:
 			&"battle_finished":
+				battle_result = str(event.data.result)
 				if _state.run.settled_battle_ids.size() == 1:
 					run_recorded.emit("first_battle", run, {"result": event.data.result})
 			&"run_finished":
 				if _state.terminal_summary != null:
-					run_recorded.emit("finish", run, {
-						"result": _state.terminal_summary.result,
-						"reason": _state.terminal_summary.reason,
-						"ending_id": _state.terminal_summary.ending_id,
-						"term": _state.terminal_summary.term,
-					})
+					var finish := _finish_record(_state.run, _state.terminal_summary, battle_result)
+					if not OS.has_feature("web"):
+						var archived := _archive_run_record(run, finish)
+						if not archived.ok:
+							push_warning("Could not archive game record: %s" % str(archived.error.to_dictionary()))
+					run_recorded.emit("finish", run, finish)
 			&"node_completed", &"year_reward_created", &"year_advanced":
 				run_recorded.emit("checkpoint", run, {})
 

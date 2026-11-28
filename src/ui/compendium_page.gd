@@ -16,7 +16,7 @@ var _states := {
 	"relics": {"query": "", "owner": "", "rarity": "", "year": "", "loaded": PAGE_SIZE, "scroll": 0},
 	"monsters": {"query": "", "kind": "", "year": "", "loaded": PAGE_SIZE, "scroll": 0},
 }
-var _filters: HFlowContainer
+var _filters: Container
 var _search: LineEdit
 var _grid: GridContainer
 var _gallery: VBoxContainer
@@ -77,14 +77,17 @@ func render(data: Dictionary) -> void:
 	header = VBoxContainer.new()
 	column.add_child(header)
 	var heading := HBoxContainer.new()
-	heading.add_theme_constant_override("separation", 20)
+	heading.add_theme_constant_override("separation", 6 if UiStyle.web_touch else 20)
 	header.add_child(heading)
-	var title := add_text(heading, "图 鉴", 28, UiStyle.BRASS)
+	var title := add_text(heading, "图鉴", 20 if UiStyle.web_touch else 28, UiStyle.BRASS)
 	title.add_theme_font_override("font", UiStyle.title_font())
-	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	title.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN if UiStyle.web_touch else Control.SIZE_EXPAND_FILL
+	if UiStyle.web_touch:
+		title.autowrap_mode = TextServer.AUTOWRAP_OFF
 	var tabs := HBoxContainer.new()
 	tabs.alignment = BoxContainer.ALIGNMENT_CENTER
-	tabs.add_theme_constant_override("separation", 14)
+	tabs.add_theme_constant_override("separation", 4 if UiStyle.web_touch else 14)
 	heading.add_child(tabs)
 	_tabs.clear()
 	for kind_name in TABS:
@@ -92,15 +95,25 @@ func render(data: Dictionary) -> void:
 		if not UiStyle.web_touch:
 			caption += "  ·  %s" % _order[kind_name].size()
 		var button := add_button(tabs, "compendium:tab:" + kind_name, caption, {}, func(): show_tab(kind_name))
-		button.custom_minimum_size = Vector2((120 if UiStyle.web_touch else 150) * minf(UiStyle.text_scale, 1.25), UiStyle.MOBILE_TARGET if UiStyle.web_touch else 44)
+		button.custom_minimum_size = Vector2(64 if UiStyle.web_touch else 150 * minf(UiStyle.text_scale, 1.25), 46 if UiStyle.web_touch else 44)
 		button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 		_tabs[kind_name] = button
-	_filters = HFlowContainer.new()
-	_filters.add_theme_constant_override("h_separation", 6 if UiStyle.web_touch else 10)
-	_filters.add_theme_constant_override("v_separation", 8)
+	if UiStyle.web_touch:
+		_filters = HBoxContainer.new()
+		_filters.add_theme_constant_override("separation", 5)
+	else:
+		_filters = HFlowContainer.new()
+		_filters.add_theme_constant_override("h_separation", 10)
+		_filters.add_theme_constant_override("v_separation", 8)
 	column.add_child(_filters)
-	_count = add_text(column, "", 14, Color("c5b99f"))
+	_count = add_text(heading if UiStyle.web_touch else column, "", 14, Color("c5b99f"))
 	_count.name = "CompendiumCount"
+	if UiStyle.web_touch:
+		_count.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		_count.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+		_count.autowrap_mode = TextServer.AUTOWRAP_OFF
+		_count.clip_text = true
+		_count.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	_scroll = ScrollContainer.new()
 	_scroll.name = "CompendiumGalleryScroll"
 	_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -112,22 +125,31 @@ func render(data: Dictionary) -> void:
 	_gallery = VBoxContainer.new()
 	_gallery.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_scroll.add_child(_gallery)
-	footer = VBoxContainer.new()
-	column.add_child(footer)
-	var line := HSeparator.new()
-	line.modulate = Color(UiStyle.BRASS, .5)
-	footer.add_child(line)
-	var actions := HBoxContainer.new()
-	actions.add_theme_constant_override("separation", 10)
-	footer.add_child(actions)
-	var back := add_button(actions, "compendium:back", "返回测试房间  Esc" if test_context else "返回  Esc", {"type": "ui.compendium_back", "payload": {}})
-	back.custom_minimum_size.x = 140 * UiStyle.text_scale
+	var actions := heading
+	_page_count = null
+	if not UiStyle.web_touch:
+		footer = VBoxContainer.new()
+		column.add_child(footer)
+		var line := HSeparator.new()
+		line.modulate = Color(UiStyle.BRASS, .5)
+		footer.add_child(line)
+		actions = HBoxContainer.new()
+		actions.add_theme_constant_override("separation", 10)
+		footer.add_child(actions)
+	var back_text := "返回" if UiStyle.web_touch else ("返回测试房间  Esc" if test_context else "返回  Esc")
+	var back := add_button(actions, "compendium:back", back_text, {"type": "ui.compendium_back", "payload": {}})
+	back.custom_minimum_size = Vector2(56, 46) if UiStyle.web_touch else Vector2(140 * UiStyle.text_scale, 44)
 	back.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	UiStyle.button_skin(back, "quiet", true)
-	_page_count = add_text(actions, "", 15, UiStyle.CREAM)
-	_page_count.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_page_count.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	_page_count.tooltip_text = "向下滚动继续浏览 · PageUp / PageDown 滚动 · Home / End 到顶部 / 末尾"
+	if UiStyle.web_touch:
+		UiStyle.compact_button(back, 15, 56, 46)
+		actions.move_child(back, 0)
+		_scroll.resized.connect(_resize_gallery)
+	else:
+		_page_count = add_text(actions, "", 15, UiStyle.CREAM)
+		_page_count.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		_page_count.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		_page_count.tooltip_text = "向下滚动继续浏览 · PageUp / PageDown 滚动 · Home / End 到顶部 / 末尾"
 	_timer = Timer.new()
 	_timer.wait_time = .16
 	_timer.one_shot = true
@@ -151,6 +173,8 @@ func show_tab(value: String) -> void:
 	tab = value
 	for kind_name in _tabs:
 		UiStyle.button_skin(_tabs[kind_name], "primary" if kind_name == tab else "quiet", true)
+		if UiStyle.web_touch:
+			UiStyle.compact_button(_tabs[kind_name], 15, 64, 46)
 		_tabs[kind_name].tooltip_text = "当前分类" if kind_name == tab else "查看全部" + str(TABS[kind_name])
 	for key in _buttons.keys():
 		if str(key).begins_with("compendium:filter:"):
@@ -160,11 +184,12 @@ func show_tab(value: String) -> void:
 		child.queue_free()
 	_search = LineEdit.new()
 	_search.name = "CompendiumSearch"
-	_search.placeholder_text = "搜索名称、ID、说明  /"
+	_search.placeholder_text = "搜索图鉴" if UiStyle.web_touch else "搜索名称、ID、说明  /"
 	_search.text = _states[tab].query
 	_search.clear_button_enabled = true
-	_search.custom_minimum_size = Vector2((180 if UiStyle.web_touch else 260) * minf(UiStyle.text_scale, 1.2), UiStyle.MOBILE_TARGET if UiStyle.web_touch else 44)
-	_search.add_theme_font_size_override("font_size", roundi((18 if UiStyle.web_touch else 16) * UiStyle.text_scale))
+	_search.custom_minimum_size = Vector2(104, 46) if UiStyle.web_touch else Vector2(260 * minf(UiStyle.text_scale, 1.2), 44)
+	_search.add_theme_font_size_override("font_size", roundi(16 * (minf(UiStyle.text_scale, 1.25) if UiStyle.web_touch else UiStyle.text_scale)))
+	_search.size_flags_horizontal = Control.SIZE_EXPAND_FILL if UiStyle.web_touch else Control.SIZE_FILL
 	_filters.add_child(_search)
 	_search.text_changed.connect(func(value_text):
 		_states[tab].query = value_text
@@ -183,9 +208,11 @@ func show_tab(value: String) -> void:
 		_filter("kind", "类别", ["", "normal", "elite", "boss", "auxiliary"], ["全部", "普通", "精英", "首领", "附属"])
 		_filter("year", "学年", ["", "1", "2", "3", "4"], ["全部", "大一", "大二", "大三", "大四"])
 	var clear := add_button(_filters, "compendium:filter:reset", "重置", {}, reset_filters)
-	clear.custom_minimum_size.x = (64 if UiStyle.web_touch else 76) * UiStyle.text_scale
+	clear.custom_minimum_size.x = 76 * UiStyle.text_scale
 	clear.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	UiStyle.button_skin(clear, "quiet", true)
+	if UiStyle.web_touch:
+		UiStyle.compact_button(clear, 15, 52, 46)
 	_render_results(true)
 
 
@@ -193,14 +220,15 @@ func _filter(key: String, prefix: String, values: Array, captions: Array) -> voi
 	var option := OptionButton.new()
 	option.name = "CompendiumFilter_" + key
 	option.set_meta("uid", "compendium:filter:" + key)
-	option.custom_minimum_size = Vector2((104 if UiStyle.web_touch else (166 if key == "rarity" else 146)) * minf(UiStyle.text_scale, 1.25), UiStyle.MOBILE_TARGET if UiStyle.web_touch else 44)
-	option.add_theme_font_size_override("font_size", roundi((14 if UiStyle.web_touch else 15) * UiStyle.text_scale))
+	option.custom_minimum_size = Vector2((166 if key == "rarity" else 146) * minf(UiStyle.text_scale, 1.25), 44)
+	option.add_theme_font_size_override("font_size", roundi(15 * UiStyle.text_scale))
+	UiStyle.button_skin(option, "secondary", true)
 	if UiStyle.web_touch:
+		UiStyle.compact_button(option, 14, 118 if prefix.length() > 2 else 104, 46)
 		option.fit_to_longest_item = false
 		option.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	UiStyle.button_skin(option, "secondary", true)
 	for caption in captions:
-		option.add_item(prefix + " · " + caption)
+		option.add_item(prefix + (" " if UiStyle.web_touch else " · ") + caption)
 	option.select(maxi(0, values.find(_states[tab].get(key, ""))))
 	option.item_selected.connect(func(index): set_filter(key, str(values[index])))
 	_filters.add_child(option)
@@ -271,6 +299,8 @@ func _render_results(restore: bool = false) -> void:
 		if _matches(_entries[tab][id]):
 			filtered_ids.append(id)
 	_count.text = "%s    %s / %s 种%s    点击查看详情" % ["测试目录" if test_context else "四学年全集 · 全部开放", filtered_ids.size(), _order[tab].size(), str(TABS[tab])]
+	if UiStyle.web_touch:
+		_count.text = "%s / %s" % [filtered_ids.size(), _order[tab].size()]
 	if not str(view.get("error", "")).is_empty():
 		_count.text = "图鉴加载失败：" + str(view.error)
 	_grid = GridContainer.new()
@@ -278,8 +308,8 @@ func _render_results(restore: bool = false) -> void:
 	_layout_columns = _columns()
 	_grid.columns = _layout_columns
 	_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_grid.add_theme_constant_override("h_separation", 20)
-	_grid.add_theme_constant_override("v_separation", 16)
+	_grid.add_theme_constant_override("h_separation", 8 if UiStyle.web_touch else 20)
+	_grid.add_theme_constant_override("v_separation", 10 if UiStyle.web_touch else 16)
 	_gallery.add_child(_grid)
 	var initial_count := maxi(PAGE_SIZE, int(_states[tab].get("loaded", PAGE_SIZE))) if restore else PAGE_SIZE
 	_append_batch(initial_count)
@@ -311,9 +341,13 @@ func _append_batch(count: int = PAGE_SIZE) -> void:
 			card.pressed.connect(func(): open_detail(id))
 		else:
 			_art_tile(entry, tab == "relics")
-		_buttons["compendium:item:" + id].focus_entered.connect(func(): _prefetch_for_focus(id))
+		var tile: Button = _buttons["compendium:item:" + id]
+		if UiStyle.web_touch:
+			_fit_touch_tile(tile)
+		tile.focus_entered.connect(func(): _prefetch_for_focus(id))
 	_states[tab].loaded = visible_ids.size()
-	_page_count.text = ("已显示全部 %s 项" % visible_ids.size()) if visible_ids.size() == filtered_ids.size() else ("已显示 %s / %s · 滑动继续浏览" % [visible_ids.size(), filtered_ids.size()])
+	if is_instance_valid(_page_count):
+		_page_count.text = ("已显示全部 %s 项" % visible_ids.size()) if visible_ids.size() == filtered_ids.size() else ("已显示 %s / %s · 滑动继续浏览" % [visible_ids.size(), filtered_ids.size()])
 	_update_item_focus()
 
 
@@ -371,7 +405,7 @@ func _art_tile(entry: Dictionary, relic: bool) -> void:
 	margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	for side in ["left", "right", "top", "bottom"]:
-		margin.add_theme_constant_override("margin_" + side, 10)
+		margin.add_theme_constant_override("margin_" + side, 6 if UiStyle.web_touch else 10)
 	button.add_child(margin)
 	var column := VBoxContainer.new()
 	column.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -383,12 +417,18 @@ func _art_tile(entry: Dictionary, relic: bool) -> void:
 	art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	art.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	column.add_child(art)
-	var name_label := add_text(column, CompendiumText.title(entry, not relic), 18, UiStyle.CREAM)
+	var name_label := add_text(column, CompendiumText.title(entry, not relic), 15 if UiStyle.web_touch else 18, UiStyle.CREAM)
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var meta := add_text(column, CompendiumText.relic_group_text(entry) + " · " + CompendiumText.rarity(entry) if relic else CompendiumText.kind(entry), 13, Color(str({"white":"ddd4b7","blue":"94c6eb","purple":"c9a4ed","gold":"eac775"}.get(entry.definition.rarity,"ddd4b7"))) if relic else UiStyle.BRASS)
 	meta.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	meta.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	if UiStyle.web_touch:
+		for label in [name_label, meta]:
+			label.max_lines_visible = 1
+			label.clip_text = true
+			label.autowrap_mode = TextServer.AUTOWRAP_OFF
+			label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	button.pressed.connect(func(): open_detail(str(entry.id)))
 
 
@@ -461,7 +501,33 @@ func _reveal_item(uid: String, generation: int) -> void:
 
 func _columns() -> int:
 	var minimum_width := 160 if tab == "cards" else 194
+	if UiStyle.web_touch:
+		return clampi(int((size.x - 50) / (_touch_tile_width() + 8)), 1, 7)
 	return 4 if size.x - 72 >= 4 * minimum_width * UiStyle.text_scale + 60 else 2
+
+
+func _touch_tile_height() -> float:
+	var available := _scroll.size.y if _scroll.size.y > 20 else size.y - 120
+	return clampf(available - 5, 144, 300)
+
+
+func _touch_tile_width() -> float:
+	var height := _touch_tile_height()
+	return floorf((height - 42 * minf(UiStyle.text_scale, 1.25)) * 168.0 / 244.0) if tab == "cards" else floorf(height * .82)
+
+
+func _fit_touch_tile(tile: Button) -> void:
+	var bounds := Vector2(_touch_tile_width(), _touch_tile_height())
+	if tile is UiOfferCard:
+		tile._base_height = bounds.y
+		tile._caption.add_theme_font_size_override("font_size", roundi(13 * minf(UiStyle.text_scale, 1.25)))
+		tile._caption.autowrap_mode = TextServer.AUTOWRAP_OFF
+		tile._caption.clip_text = true
+		tile._caption.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		tile.custom_minimum_size = bounds
+		tile._fit_contents()
+	else:
+		tile.custom_minimum_size = bounds
 
 
 func _resize_gallery() -> void:
@@ -474,6 +540,9 @@ func _resize_gallery() -> void:
 func _apply_columns() -> void:
 	_layout_pending = false
 	if is_instance_valid(_grid):
+		if UiStyle.web_touch:
+			for tile in _grid.get_children():
+				_fit_touch_tile(tile)
 		_layout_columns = _columns()
 		_grid.columns = _layout_columns
 		_update_item_focus()

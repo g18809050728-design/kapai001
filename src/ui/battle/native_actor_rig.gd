@@ -26,6 +26,7 @@ var _drawing_layers: Array[Dictionary] = []
 var _drawing_origin: Dictionary = {}
 var _drawing_weights: Dictionary = {}
 var _drawing_states: Dictionary = {}
+var _rest_art_bounds := Rect2()
 
 
 func configure(file: String) -> bool:
@@ -366,6 +367,45 @@ func fit(bounds: Vector2) -> void:
 	scale = Vector2.ONE * factor
 	position = Vector2(bounds.x * 0.5, bounds.y - offset)
 	queue_redraw()
+
+
+func fit_visible_art(bounds: Vector2) -> void:
+	if not _rest_art_bounds.has_area():
+		_rest_art_bounds = _measure_rest_art()
+	var art := _rest_art_bounds
+	if not art.has_area() or bounds.x <= 8 or bounds.y <= 8:
+		fit(bounds)
+		return
+	# The authored origin is the ground. Flying tasks keep the space below their feet.
+	var art_bottom := maxf(0.0, art.end.y)
+	var usable_height := art_bottom - art.position.y
+	if usable_height <= 0:
+		fit(bounds)
+		return
+	var factor := minf((bounds.x - 6) * .93 / art.size.x, (bounds.y - 6) * .94 / usable_height)
+	scale = Vector2.ONE * factor
+	position = Vector2(bounds.x * .5 - art.get_center().x * factor, bounds.y - 4 - art_bottom * factor)
+
+
+func _measure_rest_art() -> Rect2:
+	var art := Rect2()
+	for item: Dictionary in specification.parts:
+		var part: Rect2
+		if item.get("mesh", false):
+			part = Rect2(_vector(item.position), _vector(item.size))
+		else:
+			var sprite := parts.get(str(item.id)) as Sprite2D
+			if not is_instance_valid(sprite) or sprite.texture == null:
+				continue
+			var origin := _vector(item.offset)
+			var bone := sprite.get_parent() as Bone2D
+			while is_instance_valid(bone):
+				origin += bone.rest.origin
+				bone = bone.get_parent() as Bone2D
+			part = Rect2(origin, sprite.texture.get_size() * sprite.scale)
+		if part.has_area():
+			art = art.merge(part) if art.has_area() else part
+	return art
 
 
 func _process(_delta: float) -> void:

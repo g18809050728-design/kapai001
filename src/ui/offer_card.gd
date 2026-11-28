@@ -108,7 +108,8 @@ func _fit_contents() -> void:
 	_face.size = Vector2(width, height)
 	_caption.position = Vector2(0,height + 5)
 	_caption.size = Vector2(size.x, 30 * UiStyle.text_scale)
-	custom_minimum_size.y = maxf(_base_height, height + _caption.get_minimum_size().y + 8)
+	var caption_height := _caption.get_minimum_size().y + 8 if _caption.visible else 0.0
+	custom_minimum_size.y = maxf(_base_height, height + caption_height)
 	queue_redraw()
 
 

@@ -25,7 +25,7 @@ func configure(type: String, title: String, status: String, highlighted: bool, t
 	caption.add_theme_font_override("font", UiStyle.title_font())
 	caption.add_theme_color_override("font_color", Color("928468") if status == "不可达" else (Color("786d54") if status == "后续" else Color("504a39")))
 	add_child(caption)
-	custom_minimum_size = Vector2(76, 48 + caption.get_minimum_size().y)
+	custom_minimum_size = Vector2(46 if UiStyle.web_touch else 76, 48 + caption.get_minimum_size().y)
 	size = custom_minimum_size
 	caption.position = Vector2(0, 46)
 	caption.size = Vector2(size.x, caption.get_minimum_size().y)

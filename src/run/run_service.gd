@@ -786,6 +786,10 @@ func eligible_endings(state: RunState) -> Array[String]:
 	return result
 
 
+func summarize_replacement(state: RunState) -> RunSummary:
+	return _finalize(state.copy_for_write(), "abandoned", "replaced_by_new_run")
+
+
 func _finalize(work: RunState, result: String, reason: String, ending: String = "") -> RunSummary:
 	work.outcome = result
 	work.awaiting_ending = false

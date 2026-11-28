@@ -41,13 +41,14 @@
     };
     const playerNames = { P01: '林序', P02: '许知微', P03: '沈见章', P04: '唐以宁' };
     const difficultyNames = { relaxed: '轻松', normal: '标准', hard: '困难' };
-    const results = { won: '胜利', lost: '失败', abandoned: '已放弃' };
     const feedbackCategories = { bug: '游戏问题', suggestion: '改进建议', other: '其他反馈' };
     const screenshotTypes = ['image/png', 'image/jpeg', 'image/webp'];
     const screenshotSizeLimit = 2 * 1024 * 1024;
     const slots = ['current_run', 'profile'];
     const prefix = 'kapai-account:';
     const guestChoice = prefix + 'guest-selected';
+    const guestRecordKey = prefix + 'guest-records';
+    const guestScopeKey = prefix + 'guest-record-scope';
     const api = '/api/v1';
     const buildVersion = '__KAPAI_BUILD_VERSION__';
     let flags = {};
@@ -59,6 +60,7 @@
     let active = false;
     let menuState = 'checking';
     let guestSelected = false;
+    let guestScope = "";
     let connecting = false;
     let exited = false;
     let releaseLock;
@@ -68,12 +70,28 @@
     let uploadSince = 0;
     let uploadBusy = false;
     let pullBusy = false;
-    let eventBusy = false;
+    let eventWork;
+    let eventsAdded = false;
+    const memoryEvents = new Map();
+    let guestRecords = new Map();
     let needsUpload = false;
     const conflicts = new Map();
 
-    try { guestSelected = sessionStorage.getItem(guestChoice) === 'true'; }
+    try {
+        guestSelected = sessionStorage.getItem(guestChoice) === 'true';
+        if (guestSelected) {
+            const rows = JSON.parse(sessionStorage.getItem(guestRecordKey) || '[]');
+            guestRecords = new Map(rows.map(row => [row.run_id, row]));
+            guestScope = sessionStorage.getItem(guestScopeKey) || '';
+        }
+    }
     catch { /* Guest play still works in this page when tab storage is unavailable. */ }
+    if (guestSelected && !guestScope) newGuestScope();
+
+    function newGuestScope() {
+        guestScope = crypto.randomUUID();
+        try { sessionStorage.setItem(guestScopeKey, guestScope); } catch { /* Keep the current session usable. */ }
+    }
 
     function storageGet(key, fallback) {
         try { return JSON.parse(localStorage.getItem(prefix + key)) ?? fallback; }
@@ -332,6 +350,7 @@
         uploadSince = 0;
         conflicts.clear();
         setStatus('');
+        if (user) game('recover_records', '');
         return true;
     }
 
@@ -341,10 +360,20 @@
 
     function publishMenu(state, message = '') {
         menuState = state;
+        if (state === 'guest' || state === 'ready') game('recover_records', state === 'guest' ? guestScope : '');
         game('account_menu', state, String(flags.registration === true), account?.nickname || '', message, account?.role || '');
     }
 
     function selectGuest(selected) {
+        if (!selected || !guestSelected) {
+            guestRecords.clear();
+            guestScope = '';
+            try {
+                sessionStorage.removeItem(guestRecordKey);
+                sessionStorage.removeItem(guestScopeKey);
+            } catch { /* The in-memory store is clear. */ }
+            if (selected) newGuestScope();
+        }
         guestSelected = selected;
         try {
             if (selected) sessionStorage.setItem(guestChoice, 'true');
@@ -611,40 +640,59 @@
         button('返回', body, showPanel);
     }
 
-    async function showHistory(offset = 0) {
-        startPanel('history', '账号对局', '每次出发，都在这里留下足迹。');
-        const data = await request('/me/matches?offset=' + offset);
-        if (showing !== 'history') return;
-        if (!data.items.length) {
-            const empty = element('div', '', body);
-            empty.className = 'history-empty';
-            element('strong', '还没有对局记录', empty);
-            element('p', '使用账号开始冒险后，进行中与已结算的对局会在这里显示。', empty);
+    async function readRecords(token, offset, id) {
+        const userId = account?.user_id;
+        const state = menuState;
+        let data;
+        try {
+            const recovered = game('recover_records', state === 'guest' ? guestScope : '');
+            if (state === 'guest' && guestSelected && !userId) {
+                if (id) data = { detail: guestRecords.get(id)?.detail || null };
+                else {
+                    const rows = [...guestRecords.values()].reverse();
+                    data = { items: rows.slice(offset, offset + 20).map(({ detail, ...row }) => ({
+                        ...row, has_detail: !!detail, match_id: row.run_id,
+                        resources: detail ? { vitality: detail.vitality, max_vitality: detail.max_vitality, money: detail.money } : {},
+                    })), next_offset: rows.length > offset + 20 ? offset + 20 : null };
+                    if (!offset) data.stats = rows.reduce((stats, row) => ({
+                        settled: stats.settled + Number(!!row.result),
+                        wins: stats.wins + Number(row.result === 'won'),
+                        furthest: Math.max(stats.furthest, row.term || 0),
+                    }), { settled: 0, wins: 0, furthest: 0 });
+                }
+            } else if (state === 'ready' && userId) {
+                if (id) data = await request('/me/matches/' + encodeURIComponent(id), 'GET', undefined, userId);
+                else {
+                    await flushEvents();
+                    const page = await request('/me/matches?offset=' + offset, 'GET', undefined, userId);
+                    const queued = queuedEvents(userId);
+                    const pending = new Set([...queued.values()].map(event => event.run.run_id)).size;
+                    const blocked = new Set([...queued.values()].filter(event => event.blocked).map(event => event.run.run_id)).size;
+                    data = { ...page, items: page.items.map(row => ({ ...row, ...row.result, result: row.result?.result || '' })),
+                        pending_sync: pending - blocked, blocked_sync: blocked };
+                }
+            } else return;
+            if (recovered !== true) data.recovery_pending = true;
+        } catch (error) {
+            data = { error: error.status === 401 || error.status === 403
+                ? '登录已失效，请重新登录后查看。' : '暂时无法读取游戏记录，请重试。' };
         }
-        const list = element('div', '', body);
-        list.className = 'history-list';
-        for (const row of data.items) {
-            const card = element('article', '', list);
-            card.className = 'history-entry';
-            const words = element('div', '', card);
-            element('h3', playerNames[row.character_id] || '冒险记录', words);
-            element('small', (difficultyNames[row.difficulty] || '标准') + '难度', words);
-            if (row.started_at) {
-                const timestamp = /([zZ]|[+-]\d{2}:\d{2})$/.test(row.started_at) ? row.started_at : row.started_at + 'Z';
-                element('small', new Date(timestamp).toLocaleDateString('zh-CN', { timeZone: 'Asia/Shanghai' }), words);
-            }
-            const result = row.result ? (results[row.result.result] || '已结算') : '进行中';
-            const outcome = element('div', '', card);
-            outcome.className = 'history-outcome';
-            outcome.dataset.result = row.result?.result || 'active';
-            element('strong', result, outcome);
-            if (row.result) element('small', '第 ' + row.result.term + ' 学年', outcome);
-        }
-        const actions = element('div', '', body);
-        actions.className = 'history-actions';
-        if (offset) button('上一页', actions, () => showHistory(Math.max(0, offset - 20)));
-        if (data.next_offset !== null) button('下一页', actions, () => showHistory(data.next_offset));
-        button('返回游戏记录', actions, closePanel);
+        if (menuState === state && account?.user_id === userId) game('records', token, JSON.stringify(data));
+    }
+
+    function recordGuest(kind, run, detail) {
+        if (!guestSelected || menuState !== 'guest' || !['start', 'resume', 'finish'].includes(kind)) return false;
+        const previous = guestRecords.get(run.run_id);
+        // Replacing an untouched save from an earlier guest login does not add it to this login's history.
+        if (kind === 'finish' && detail.reason === 'replaced_by_new_run' && !previous) return true;
+        if (previous?.result) return true;
+        const time = new Date().toISOString();
+        const row = { ...run, started_at: kind === 'start' ? time : '', ...previous };
+        if (kind === 'finish') Object.assign(row, detail, { finished_at: time });
+        guestRecords.set(run.run_id, row);
+        try { sessionStorage.setItem(guestRecordKey, JSON.stringify([...guestRecords.values()])); }
+        catch { /* The record remains readable in this page. */ }
+        return true;
     }
 
     function feedbackCategory(parent, label, selected, all = false) {
@@ -1696,8 +1744,7 @@
     function showImport(guest, profile) {
         startPanel('import', '导入本机游客进度');
         const local = game('read', 'current_run');
-        const history = Object.values(decode(profile)?.payload.summaries_by_run_id || {});
-        element('p', '游客 · ' + saveLabel(guest) + ' · ' + history.length + ' 条已结算对局。', body);
+        element('p', '游客 · ' + saveLabel(guest), body);
         element('p', '账号本机 · ' + saveLabel(local) + '。如与云端不同，导入后可以选择继续哪一份。', body);
         button('确认导入', body, async () => {
             if (decode(guest) && game('restore', 'current_run', guest) !== 'ok') throw new Error('import_failed');
@@ -1705,12 +1752,7 @@
                 const own = game('read', 'profile');
                 const merged = own ? game('merge_profile', own, profile) : profile;
                 if (!merged || game('restore', 'profile', merged) !== 'ok') throw new Error('import_failed');
-                const rows = history.map(row => ({
-                    run_id: row.run_id, character_id: row.character_id, difficulty: row.difficulty,
-                    manifest_id: row.manifest_id, game_version: 'imported', summary: summary(row),
-                }));
-                for (let index = 0; index < rows.length; index += 50)
-                    await request('/me/matches/import', 'POST', rows.slice(index, index + 50));
+
             }
             // Require explicit conflict selection when an existing cloud run differs.
             if (decode(guest)) storageSet(key('current_run'), undefined);
@@ -1719,38 +1761,71 @@
         button('返回', body, showSaves);
     }
 
-    function summary(row) {
-        return { result: row.result, reason: row.reason, term: row.term, ending_id: row.ending_id };
-    }
-
     function record(kind, runJson, detailsJson) {
-        if (!account) return;
-        if (kind === 'checkpoint') { scheduleUpload(true); return; }
+        if (kind === 'checkpoint') { if (account) scheduleUpload(true); return true; }
         const run = JSON.parse(runJson);
         if (buildVersion !== '__KAPAI_' + 'BUILD_VERSION__') run.game_version = buildVersion;
         const detail = JSON.parse(detailsJson);
+        if (!account) return recordGuest(kind, run, detail);
+        if (kind === 'resume') return true;
         const key = account.user_id + ':event:' + run.run_id + ':' + kind;
-        if (!storageGet(key, null))
-            storageSet(key, { kind, run, detail, event_id: crypto.randomUUID() });
+        const previous = storageGet(key, null);
+        const event = memoryEvents.get(key) || previous || { kind, run, detail, event_id: crypto.randomUUID() };
+        const stored = event === previous || storageSet(key, event);
+        if (stored) memoryEvents.delete(key);
+        else memoryEvents.set(key, event);
+        eventsAdded = true;
         if (kind !== 'start') scheduleUpload(true);
         queueMicrotask(flushEvents);
+        return stored;
     }
 
-    async function flushEvents() {
-        if (exited || !account || eventBusy) return;
-        eventBusy = true;
-        const id = account.user_id;
+    function queuedEvents(id) {
+        const owned = id + ':event:';
+        const entries = new Map();
         try {
-            const keys = Object.keys(localStorage).filter(key => key.startsWith(prefix + id + ':event:'));
-            const entries = keys.map(key => [key.slice(prefix.length), storageGet(key.slice(prefix.length), null)])
-                .filter(([, event]) => event);
-            const rank = { start: 0, first_battle: 1, finish: 2 };
-            entries.sort(([, a], [, b]) => rank[a.kind] - rank[b.kind]);
-            const blockedRuns = new Set(entries.filter(([, event]) => event.blocked)
-                .map(([, event]) => event.run.run_id));
+            for (const key of Object.keys(localStorage).filter(key => key.startsWith(prefix + owned))) {
+                const name = key.slice(prefix.length);
+                const event = storageGet(name, null);
+                if (event) entries.set(name, event);
+            }
+        } catch { /* Send queued in-memory events when storage is unavailable. */ }
+        for (const [key, event] of memoryEvents) {
+            if (key.startsWith(owned)) entries.set(key, event);
+        }
+        return entries;
+    }
+
+    function flushEvents() {
+        if (eventWork || exited || !account) return eventWork;
+        eventWork = drainEvents(account.user_id).finally(() => { eventWork = undefined; });
+        return eventWork;
+    }
+
+    async function drainEvents(id) {
+        do {
+            eventsAdded = false;
+            await sendEvents(id);
+        } while (eventsAdded && account?.user_id === id && !exited);
+    }
+
+    async function sendEvents(id) {
+        try {
+            const entries = [...queuedEvents(id)];
+            // An earlier run is flushed before the replacement start. Within
+            // each run, milestone writes still follow their original order.
+            const byRun = new Map();
             for (const [key, event] of entries) {
+                const group = byRun.get(event.run.run_id) || [];
+                group.push([key, event]);
+                byRun.set(event.run.run_id, group);
+            }
+            const rank = { start: 0, first_battle: 1, finish: 2 };
+            const ordered = [...byRun.values()].flatMap(group => group.sort(([, a], [, b]) => rank[a.kind] - rank[b.kind]));
+            const conflicts = new Set(ordered.filter(([, event]) => event.blocked === 'match_conflict').map(([, event]) => event.run.run_id));
+            for (const [key, event] of ordered) {
                 if (account?.user_id !== id) return;
-                if (blockedRuns.has(event.run.run_id)) continue;
+                if (typeof event.blocked === 'string' || conflicts.has(event.run.run_id)) continue;
                 try {
                     const { match_id } = await request('/matches/start', 'POST', event.run, id);
                     if (event.kind === 'first_battle') {
@@ -1762,16 +1837,18 @@
                         await request('/matches/' + match_id + '/finish', 'POST', event.detail, id);
                     }
                     storageSet(key, undefined);
+                    memoryEvents.delete(key);
                 } catch (error) {
-                    if (error.status !== 409) throw error;
-                    blockedRuns.add(event.run.run_id);
-                    storageSet(key, { ...event, blocked: true });
+                    if (error.status !== 409 && error.status !== 422) throw error;
+                    if (error.message === 'match_conflict') conflicts.add(event.run.run_id);
+                    const blocked = { ...event, blocked: error.status === 422 ? 'invalid' : error.message };
+                    if (!storageSet(key, blocked)) memoryEvents.set(key, blocked);
                     setStatus(statuses[error.message] || '该局记录有冲突，其他对局会继续同步。');
                 }
             }
         } catch {
             // A connectivity or session failure leaves the event queued.
-        } finally { eventBusy = false; }
+        }
     }
 
     function openAccountLink() {
@@ -1888,7 +1965,6 @@
                 }
                 if (menuState !== 'ready' || !account) return;
                 if (section === 'saves' && flags.cloud) requireClosed('云存档', showSaves, 'settings');
-                else if (section === 'history') await showHistory();
                 else if (section === 'stats') await showStats();
                 else if (section === 'feedback') showFeedback();
                 else if (section === 'feedback_admin') {
@@ -1900,6 +1976,7 @@
         confirmPlay(developerTools = false) { queueMicrotask(() => confirmPlay(developerTools)); },
         openPrivacy() { if (active) showPrivacy(); },
         record,
+        readRecords(token, offset, id) { return void readRecords(token, offset, id); },
     };
 
     window.addEventListener('online', () => {

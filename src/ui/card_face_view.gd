@@ -17,21 +17,14 @@ func _draw() -> void:
 static func paint(canvas: Control, bounds: Rect2, data: Dictionary, selected: bool = false, disabled: bool = false, shortcut: int = 0, hand: bool = false) -> void:
 	if data.is_empty():
 		return
-	canvas.draw_set_transform(bounds.position, 0, bounds.size / Vector2(168,244))
 	var category := str(data.get("category", "utility"))
 	var accent := category_color(category)
 	var identity := str(data.get("id", ""))
-	var frame_color := Color("327c84")
-	if identity.contains("P01"):
-		frame_color = Color("8b3d36")
-	elif identity.contains("P02"):
-		frame_color = Color("385f96")
-	elif identity.contains("P03"):
-		frame_color = Color("536c49")
-	elif identity.contains("P04"):
-		frame_color = Color("77538a")
-	if category == "burden":
-		frame_color = Color("605a68")
+	var frame_color := _frame_color(identity, category)
+	if hand and UiStyle.web_touch and bounds.size.y < 220:
+		_paint_touch_card(canvas, bounds, data, frame_color, selected, disabled)
+		return
+	canvas.draw_set_transform(bounds.position, 0, bounds.size / Vector2(168,244))
 	var rarity := str(data.get("rarity", "common"))
 	var edge := Color("bbad88")
 	if rarity in ["rare", "advanced"]:
@@ -53,15 +46,7 @@ static func paint(canvas: Control, bounds: Rect2, data: Dictionary, selected: bo
 	var art_height := 88.0 if hand else 103.0
 	var art_bounds := Rect2(10, 31, 148, art_height)
 	if art != null:
-		var source := Rect2(Vector2.ZERO,art.get_size())
-		var ratio := art_bounds.size.aspect()
-		if source.size.x / source.size.y > ratio:
-			source.size.x = source.size.y * ratio
-			source.position.x = (art.get_width()-source.size.x)*.5
-		else:
-			source.size.y = source.size.x / ratio
-			source.position.y = (art.get_height()-source.size.y)*.38
-		canvas.draw_texture_rect_region(art,art_bounds,source)
+		_paint_art(canvas, art, art_bounds)
 	else:
 		canvas.draw_rect(art_bounds,frame_color.darkened(.4))
 		EffectGlyph.paint(canvas,"book",art_bounds.get_center(),27,edge)
@@ -128,6 +113,86 @@ static func paint(canvas: Control, bounds: Rect2, data: Dictionary, selected: bo
 	if disabled:
 		canvas.draw_style_box(UiStyle.box(Color(.03,.06,.09,.20 if hand else .35)),Rect2(0,0,168,244))
 	canvas.draw_set_transform(Vector2.ZERO)
+
+
+static func _frame_color(identity: String, category: String) -> Color:
+	if category == "burden":
+		return Color("605a68")
+	for entry in [["P01", "8b3d36"], ["P02", "385f96"], ["P03", "536c49"], ["P04", "77538a"]]:
+		if identity.contains(entry[0]):
+			return Color(entry[1])
+	return Color("327c84")
+
+
+static func _paint_art(canvas: Control, art: Texture2D, bounds: Rect2) -> void:
+	var source := Rect2(Vector2.ZERO, art.get_size())
+	var ratio := bounds.size.aspect()
+	if source.size.aspect() > ratio:
+		source.size.x = source.size.y * ratio
+		source.position.x = (art.get_width() - source.size.x) * .5
+	else:
+		source.size.y = source.size.x / ratio
+		source.position.y = (art.get_height() - source.size.y) * .38
+	canvas.draw_texture_rect_region(art, bounds, source)
+
+
+static func _paint_touch_card(canvas: Control, bounds: Rect2, data: Dictionary, frame_color: Color, selected: bool, disabled: bool) -> void:
+	var edge := Color("ffe79e") if selected else Color("bbad88")
+	if not selected and str(data.get("rarity")) in ["rare", "advanced", "uncommon"]:
+		edge = Color("a9d0e5") if data.rarity == "uncommon" else Color("edc567")
+	var frame := UiStyle.surface(frame_color.darkened(.26), edge, 6)
+	frame.shadow_size = 0
+	frame.set_border_width_all(3 if selected else 2)
+	canvas.draw_style_box(frame, bounds)
+	var font := UiStyle.touch_reading_font()
+	var name := str(data.get("name", ""))
+	var title_width := bounds.size.x - 25
+	var title_pixels := roundi(13 * minf(UiStyle.text_scale, 1.2))
+	while title_pixels > 11 and font.get_string_size(name, HORIZONTAL_ALIGNMENT_LEFT, -1, title_pixels).x > title_width:
+		title_pixels -= 1
+	var title := TextParagraph.new()
+	title.add_string(name, font, title_pixels)
+	title.width = title_width
+	title.break_flags = TextServer.BREAK_WORD_BOUND | TextServer.BREAK_ADAPTIVE
+	title.max_lines_visible = 2
+	title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	var title_height := maxf(24, ceilf(title.get_size().y) + 5)
+	title.draw(canvas.get_canvas_item(), Vector2(21, 2), UiStyle.CREAM)
+	var category := str(data.get("category", "utility"))
+	paint_category_badge(canvas, category, Vector2(11, 12), 10)
+	paint_category_cost(canvas, font, category, str(data.get("cost", "—")), Vector2(11, 12), 10)
+
+	var pixels := roundi(13 * minf(UiStyle.text_scale, 1.25))
+	var line_height := font.get_height(pixels)
+	var art_height := maxf(29, floorf(bounds.size.y * .39))
+	var text_height := bounds.size.y - title_height - art_height - 10
+	var lines := clampi(floori(text_height / line_height), 1, 3)
+	var body_height := lines * line_height + 6
+	var body_top := bounds.size.y - body_height - 4
+	var art_bounds := Rect2(4, title_height, bounds.size.x - 8, maxf(6, body_top - title_height))
+	var art := UiStyle.texture(str(data.get("id", "")))
+	if art != null:
+		var dimensions := art.get_size()
+		var fitted := dimensions * minf(art_bounds.size.x / dimensions.x, art_bounds.size.y / dimensions.y)
+		canvas.draw_texture_rect(art, Rect2(art_bounds.get_center() - fitted * .5, fitted), false)
+	canvas.draw_rect(art_bounds, edge, false)
+	var paper := UiStyle.surface(Color("e8dcc4"), Color("bba780"), 3)
+	paper.shadow_size = 0
+	canvas.draw_style_box(paper, Rect2(4, body_top, bounds.size.x - 8, body_height))
+	var summary := str(data.get("summary", ""))
+	if not str(data.get("requirements", "")).is_empty():
+		summary = "需：" + str(data.requirements) + "\n" + summary
+	if int(data.get("vitality_cost", 0)) > 0:
+		summary = "支付%d精力\n" % data.vitality_cost + summary
+	var paragraph := TextParagraph.new()
+	paragraph.add_string(summary, font, pixels)
+	paragraph.width = bounds.size.x - 12
+	paragraph.break_flags = TextServer.BREAK_MANDATORY | TextServer.BREAK_WORD_BOUND | TextServer.BREAK_ADAPTIVE
+	paragraph.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	paragraph.max_lines_visible = lines
+	paragraph.draw(canvas.get_canvas_item(), Vector2(6, body_top + 3), Color("211d19"))
+	if disabled:
+		canvas.draw_style_box(UiStyle.box(Color(.03, .06, .09, .25)), bounds)
 
 
 static func category_color(category: String) -> Color:

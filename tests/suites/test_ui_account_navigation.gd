@@ -26,7 +26,7 @@ func run() -> Array[String]:
 		_check(not shell.page._buttons.has("menu:account"), "account removed from main options")
 		_check(shell.page._buttons.has("menu:quit"), "quit game is a main option")
 		_check(not shell.page._buttons.has("menu:admin"), "no management entry for " + state)
-		_check(shell.press("menu:records") and shell.page.view.records.is_empty(), "empty local records are accessible for " + state)
+		_check(shell.press("menu:records") and shell.page.view.records.is_empty(), "history starts without device records for " + state)
 		_check(shell.press("records:back"), "records return to menu")
 		shell.submit_action({"type": "ui.web_stats"})
 		_check(_sections.is_empty(), "ordinary identities cannot request statistics")
@@ -67,12 +67,18 @@ func run() -> Array[String]:
 	var encoded := SnapshotCodec.encode_document("profile", merged.data)
 	_check(session._store.save("profile", encoded.data).ok, "isolated completed record saved")
 	before = helpers.fingerprint(session)
+	for state in ["ready", "guest"]:
+		shell.set_web_account_state(state, true, "玩家", "", "player")
+		shell.show_screen("menu")
+		_check(shell.press("menu:records") and shell.page.view.records.is_empty(), "device records never leak to " + state)
+	shell.set_web_account_state("", false, "", "")
 	shell.show_screen("menu")
-	_check(shell.press("menu:records") and shell.page.view.records.size() == 1, "completed summaries render through records entry")
+	_check(shell.press("menu:records") and shell.page.view.records.size() == 1, "legacy device summaries remain available locally")
 	_check(helpers.fingerprint(session) == before, "records do not alter gameplay or random state")
 	var rows := session.get_game_records()
 	rows.data[0].reason = "changed outside session"
 	_check(session.get_game_records().data[0].reason == "completed", "records are copies")
+	shell.set_web_account_state("ready", true, "玩家", "", "player")
 	for dimensions in [Vector2i(1280, 800), Vector2i(960, 600)]:
 		tree.root.size = dimensions
 		for scale in [1.0, 1.25, 1.5]:

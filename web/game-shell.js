@@ -40,15 +40,13 @@ frame.append(controls);
 const rotate = document.createElement('section');
 rotate.id = 'game-rotate';
 rotate.hidden = true;
+rotate.setAttribute('aria-labelledby', 'game-rotate-title');
 const rotateTitle = document.createElement('h1');
+rotateTitle.id = 'game-rotate-title';
 rotateTitle.textContent = '横屏游玩';
 const rotateMessage = document.createElement('p');
-const rotateFullscreen = document.createElement('button');
-rotateFullscreen.type = 'button';
-rotateFullscreen.textContent = '全屏';
-const gestureHint = document.createElement('p');
-gestureHint.textContent = '双指轻点两次进入全屏';
-rotate.append(rotateTitle, rotateMessage, rotateFullscreen, gestureHint);
+rotateMessage.textContent = '请将手机横放。转回横屏即可继续当前进度。';
+rotate.append(rotateTitle, rotateMessage);
 frame.append(rotate);
 
 const notice = document.createElement('div');
@@ -59,7 +57,7 @@ workspace.append(notice);
 
 const coarse = matchMedia('(pointer: coarse) and (hover: none)');
 const standalone = matchMedia('(display-mode: standalone), (display-mode: fullscreen)');
-const renderScale = Math.min(coarse.matches ? 1.5 : 2, Math.max(1, devicePixelRatio));
+const renderScale = Math.min(coarse.matches ? 2.5 : 2, Math.max(1, devicePixelRatio));
 window.kapaiRenderScale = renderScale;
 window.kapaiMobile = coarse.matches;
 const ios = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
@@ -71,20 +69,25 @@ const supportsFullscreen = () => Boolean(
   (document.webkitFullscreenEnabled && root.webkitRequestFullscreen)
 );
 
+let hasLandscapeSize = false;
+
 function resize() {
   const portrait = coarse.matches && innerHeight > innerWidth;
+  const wasPortrait = !rotate.hidden;
   rotate.hidden = !portrait;
   workspace.classList.toggle('game-portrait', portrait);
-  rotateMessage.textContent = '请横放设备。切换方向会保留当前进度。';
-  canvas.inert = portrait;
-  canvas.classList.toggle('game-covered', portrait);
-  if (portrait) return;
+  canvas.inert = portrait || Boolean(document.getElementById('game-exit'));
+  if (portrait && frame.contains(document.activeElement)) document.activeElement.blur();
+  // Keep the last landscape backing size while the browser rotates.
+  if (portrait && hasLandscapeSize) return;
 
-  // Godot divides this backing resolution by the same scale for layout and input.
-  const width = Math.max(1, Math.round(frame.clientWidth * renderScale));
-  const height = Math.max(1, Math.round(frame.clientHeight * renderScale));
+  // Godot divides the backing resolution by the same scale for layout and input.
+  const width = Math.max(1, Math.round((portrait ? frame.clientHeight : frame.clientWidth) * renderScale));
+  const height = Math.max(1, Math.round((portrait ? frame.clientWidth : frame.clientHeight) * renderScale));
   if (canvas.width !== width) canvas.width = width;
   if (canvas.height !== height) canvas.height = height;
+  hasLandscapeSize = true;
+  if (wasPortrait && !portrait && !canvas.inert) canvas.focus({ preventScroll: true });
 }
 
 let showFullscreenEntry = true;
@@ -99,8 +102,6 @@ function updateFullscreenControls() {
   fullscreen.setAttribute('aria-label', '进入全屏');
   const installed = standalone.matches || navigator.standalone === true;
   controls.hidden = !coarse.matches || !showFullscreenEntry || active || installed;
-  rotateFullscreen.hidden = active || installed;
-  gestureHint.hidden = active || installed || !supportsFullscreen();
 }
 
 function fullscreenChanged() {
@@ -116,13 +117,13 @@ async function enterFullscreen() {
     if (!supportsFullscreen()) throw new Error('Fullscreen is unavailable');
     if (root.requestFullscreen) await root.requestFullscreen({ navigationUI: 'hide' });
     else await root.webkitRequestFullscreen();
-    if (coarse.matches && screen.orientation && screen.orientation.lock) {
-      try { await screen.orientation.lock('landscape'); } catch { /* The rotate prompt remains visible. */ }
+    if (screen.orientation?.lock) {
+      try { await screen.orientation.lock('landscape'); } catch { /* Rotation can be controlled by the device. */ }
     }
     if (rotate.hidden) canvas.focus({ preventScroll: true });
   } catch {
     notice.textContent = ios
-      ? '从 Safari 的共享菜单选择“添加到主屏幕”，再从图标打开，可使用独立横屏窗口。'
+      ? '从 Safari 的共享菜单选择“添加到主屏幕”，再从图标打开，可使用独立游戏窗口。'
       : '此浏览器未能进入全屏，仍可在当前窗口游玩。';
     notice.hidden = false;
   }
@@ -253,7 +254,6 @@ function installKeyboardBar() {
 }
 
 fullscreen.addEventListener('click', enterFullscreen);
-rotateFullscreen.addEventListener('click', enterFullscreen);
 document.addEventListener('fullscreenchange', fullscreenChanged);
 document.addEventListener('webkitfullscreenchange', fullscreenChanged);
 standalone.addEventListener('change', fullscreenChanged);
